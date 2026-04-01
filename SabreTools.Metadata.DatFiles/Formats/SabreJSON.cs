@@ -19,8 +19,12 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class SabreJSON : DatFile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
-            => Enum.GetValues(typeof(ItemType)) as ItemType[] ?? [];
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
+#if NET5_0_OR_GREATER
+            => Enum.GetValues<Data.Models.Metadata.ItemType>();
+#else
+            => Enum.GetValues(typeof(Data.Models.Metadata.ItemType)) as Data.Models.Metadata.ItemType[] ?? [];
+#endif
 
         /// <summary>
         /// Constructor designed for casting a base DatFile
@@ -250,140 +254,144 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 switch (datItemObj.Value<string>("type").AsItemType())
                 {
-                    case ItemType.Adjuster:
+                    case Data.Models.Metadata.ItemType.Adjuster:
                         datItem = datItemObj.ToObject<Adjuster>();
                         break;
-                    case ItemType.Analog:
+                    case Data.Models.Metadata.ItemType.Analog:
                         datItem = datItemObj.ToObject<Analog>();
                         break;
-                    case ItemType.Archive:
+                    case Data.Models.Metadata.ItemType.Archive:
                         datItem = datItemObj.ToObject<Archive>();
                         break;
-                    case ItemType.BiosSet:
+                    case Data.Models.Metadata.ItemType.BiosSet:
                         datItem = datItemObj.ToObject<BiosSet>();
                         break;
-                    case ItemType.Blank:
+                    case Data.Models.Metadata.ItemType.Blank:
                         datItem = datItemObj.ToObject<Blank>();
                         break;
-                    case ItemType.Chip:
+                    case Data.Models.Metadata.ItemType.Chip:
                         datItem = datItemObj.ToObject<Chip>();
                         break;
-                    case ItemType.Condition:
+                    case Data.Models.Metadata.ItemType.Condition:
                         datItem = datItemObj.ToObject<Condition>();
                         break;
-                    case ItemType.Configuration:
+                    case Data.Models.Metadata.ItemType.Configuration:
                         datItem = datItemObj.ToObject<Configuration>();
                         break;
-                    case ItemType.ConfLocation:
+                    case Data.Models.Metadata.ItemType.ConfLocation:
                         datItem = datItemObj.ToObject<ConfLocation>();
                         break;
-                    case ItemType.ConfSetting:
+                    case Data.Models.Metadata.ItemType.ConfSetting:
                         datItem = datItemObj.ToObject<ConfSetting>();
                         break;
-                    case ItemType.Control:
+                    case Data.Models.Metadata.ItemType.Control:
                         datItem = datItemObj.ToObject<Control>();
                         break;
-                    case ItemType.DataArea:
+                    case Data.Models.Metadata.ItemType.DataArea:
                         datItem = datItemObj.ToObject<DataArea>();
                         break;
-                    case ItemType.Device:
+                    case Data.Models.Metadata.ItemType.Device:
                         datItem = datItemObj.ToObject<Device>();
                         break;
-                    case ItemType.DeviceRef:
+                    case Data.Models.Metadata.ItemType.DeviceRef:
                         datItem = datItemObj.ToObject<DeviceRef>();
                         break;
-                    case ItemType.DipLocation:
+                    case Data.Models.Metadata.ItemType.DipLocation:
                         datItem = datItemObj.ToObject<DipLocation>();
                         break;
-                    case ItemType.DipValue:
+                    case Data.Models.Metadata.ItemType.DipValue:
                         datItem = datItemObj.ToObject<DipValue>();
                         break;
-                    case ItemType.DipSwitch:
+                    case Data.Models.Metadata.ItemType.DipSwitch:
                         datItem = datItemObj.ToObject<DipSwitch>();
                         break;
-                    case ItemType.Disk:
+                    case Data.Models.Metadata.ItemType.Disk:
                         datItem = datItemObj.ToObject<Disk>();
                         break;
-                    case ItemType.DiskArea:
+                    case Data.Models.Metadata.ItemType.DiskArea:
                         datItem = datItemObj.ToObject<DiskArea>();
                         break;
-                    case ItemType.Display:
+                    case Data.Models.Metadata.ItemType.Display:
                         datItem = datItemObj.ToObject<Display>();
                         break;
-                    case ItemType.Driver:
+                    case Data.Models.Metadata.ItemType.Driver:
                         datItem = datItemObj.ToObject<Driver>();
                         break;
-                    case ItemType.Extension:
+                    case Data.Models.Metadata.ItemType.Extension:
                         datItem = datItemObj.ToObject<Extension>();
                         break;
-                    case ItemType.Feature:
+                    case Data.Models.Metadata.ItemType.Feature:
                         datItem = datItemObj.ToObject<Feature>();
                         break;
-                    case ItemType.File:
+                    case Data.Models.Metadata.ItemType.File:
                         datItem = datItemObj.ToObject<DatItems.Formats.File>();
                         break;
-                    case ItemType.Info:
+                    case Data.Models.Metadata.ItemType.Info:
                         datItem = datItemObj.ToObject<Info>();
                         break;
-                    case ItemType.Input:
+                    case Data.Models.Metadata.ItemType.Input:
                         datItem = datItemObj.ToObject<Input>();
                         break;
-                    case ItemType.Instance:
+                    case Data.Models.Metadata.ItemType.Instance:
                         datItem = datItemObj.ToObject<Instance>();
                         break;
-                    case ItemType.Media:
+                    case Data.Models.Metadata.ItemType.Media:
                         datItem = datItemObj.ToObject<Media>();
                         break;
-                    case ItemType.Original:
+                    case Data.Models.Metadata.ItemType.Original:
                         // Cannot be converted to a DatItem
                         break;
-                    case ItemType.Part:
+                    case Data.Models.Metadata.ItemType.Part:
                         datItem = datItemObj.ToObject<Part>();
                         break;
-                    case ItemType.PartFeature:
+                    case Data.Models.Metadata.ItemType.PartFeature:
                         datItem = datItemObj.ToObject<PartFeature>();
                         break;
-                    case ItemType.Port:
+                    case Data.Models.Metadata.ItemType.Port:
                         datItem = datItemObj.ToObject<Port>();
                         break;
-                    case ItemType.RamOption:
+                    case Data.Models.Metadata.ItemType.RamOption:
                         datItem = datItemObj.ToObject<RamOption>();
                         break;
-                    case ItemType.Release:
+                    case Data.Models.Metadata.ItemType.Release:
                         datItem = datItemObj.ToObject<Release>();
                         break;
-                    case ItemType.ReleaseDetails:
+                    case Data.Models.Metadata.ItemType.ReleaseDetails:
                         datItem = datItemObj.ToObject<ReleaseDetails>();
                         break;
-                    case ItemType.Rom:
+                    case Data.Models.Metadata.ItemType.Rom:
                         datItem = datItemObj.ToObject<Rom>();
                         break;
-                    case ItemType.Sample:
+                    case Data.Models.Metadata.ItemType.Sample:
                         datItem = datItemObj.ToObject<Sample>();
                         break;
-                    case ItemType.Serials:
+                    case Data.Models.Metadata.ItemType.Serials:
                         datItem = datItemObj.ToObject<Serials>();
                         break;
-                    case ItemType.SharedFeat:
+                    case Data.Models.Metadata.ItemType.SharedFeat:
                         datItem = datItemObj.ToObject<SharedFeat>();
                         break;
-                    case ItemType.Slot:
+                    case Data.Models.Metadata.ItemType.Slot:
                         datItem = datItemObj.ToObject<Slot>();
                         break;
-                    case ItemType.SlotOption:
+                    case Data.Models.Metadata.ItemType.SlotOption:
                         datItem = datItemObj.ToObject<SlotOption>();
                         break;
-                    case ItemType.SoftwareList:
+                    case Data.Models.Metadata.ItemType.SoftwareList:
                         datItem = datItemObj.ToObject<DatItems.Formats.SoftwareList>();
                         break;
-                    case ItemType.Sound:
+                    case Data.Models.Metadata.ItemType.Sound:
                         datItem = datItemObj.ToObject<Sound>();
                         break;
-                    case ItemType.SourceDetails:
+                    case Data.Models.Metadata.ItemType.SourceDetails:
                         datItem = datItemObj.ToObject<SourceDetails>();
                         break;
 
-                    case ItemType.NULL:
+                    // TODO: Implement these?
+                    case Data.Models.Metadata.ItemType.Dump:
+                    case Data.Models.Metadata.ItemType.Software:
+                    case Data.Models.Metadata.ItemType.Video:
+                    case Data.Models.Metadata.ItemType.NULL:
                     default:
                         // This should never happen
                         break;

@@ -52,6 +52,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Display() => Type = ItemType.Display;
+        public Display() => ItemType = ItemType.Display;
     }
 }

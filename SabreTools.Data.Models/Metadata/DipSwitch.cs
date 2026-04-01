@@ -37,6 +37,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public DipSwitch() => Type = ItemType.DipSwitch;
+        public DipSwitch() => ItemType = ItemType.DipSwitch;
     }
 }

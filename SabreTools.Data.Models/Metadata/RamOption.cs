@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public RamOption() => Type = ItemType.RamOption;
+        public RamOption() => ItemType = ItemType.RamOption;
     }
 }

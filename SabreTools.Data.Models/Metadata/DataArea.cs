@@ -26,6 +26,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public DataArea() => Type = ItemType.DataArea;
+        public DataArea() => ItemType = ItemType.DataArea;
     }
 }

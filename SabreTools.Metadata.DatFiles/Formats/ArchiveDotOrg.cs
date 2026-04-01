@@ -1,6 +1,4 @@
-﻿using SabreTools.Metadata.DatItems;
-
-namespace SabreTools.Metadata.DatFiles.Formats
+﻿namespace SabreTools.Metadata.DatFiles.Formats
 {
     /// <summary>
     /// Represents a Archive.org file list
@@ -8,9 +6,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class ArchiveDotOrg : SerializableDatFile<Data.Models.ArchiveDotOrg.Files, Serialization.Readers.ArchiveDotOrg, Serialization.Writers.ArchiveDotOrg, Serialization.CrossModel.ArchiveDotOrg>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>

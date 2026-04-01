@@ -25,6 +25,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Media() => Type = ItemType.Media;
+        public Media() => ItemType = ItemType.Media;
     }
 }

@@ -27,7 +27,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Fields
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.File;
+        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.File;
 
         /// <summary>
         /// ID value
@@ -100,10 +100,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <summary>
         /// Create a default, empty File object
         /// </summary>
-        public File()
-        {
-            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
-        }
+        public File() { }
 
         #endregion
 
@@ -164,7 +161,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             bool dupefound = false;
 
             // If we don't have a file, return false
-            if (ReadString(Data.Models.Metadata.DatItem.TypeKey) != other?.ReadString(Data.Models.Metadata.DatItem.TypeKey))
+            if (ItemType != other?.ItemType)
                 return dupefound;
 
             // Otherwise, treat it as a File

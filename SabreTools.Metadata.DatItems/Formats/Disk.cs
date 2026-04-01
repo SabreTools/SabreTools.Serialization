@@ -29,7 +29,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Fields
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Disk;
+        internal override ItemType ItemType => ItemType.Disk;
 
         [JsonIgnore]
         public bool DiskAreaSpecified

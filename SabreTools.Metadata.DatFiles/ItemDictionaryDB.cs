@@ -976,9 +976,9 @@ namespace SabreTools.Metadata.DatFiles
         private ItemKey GetBestAvailable()
         {
             // Get the required counts
-            long diskCount = DatStatistics.GetItemCount(ItemType.Disk);
-            long mediaCount = DatStatistics.GetItemCount(ItemType.Media);
-            long romCount = DatStatistics.GetItemCount(ItemType.Rom);
+            long diskCount = DatStatistics.GetItemCount(Data.Models.Metadata.ItemType.Disk);
+            long mediaCount = DatStatistics.GetItemCount(Data.Models.Metadata.ItemType.Media);
+            long romCount = DatStatistics.GetItemCount(Data.Models.Metadata.ItemType.Rom);
             long nodumpCount = DatStatistics.GetStatusCount(ItemStatus.Nodump);
 
             // If all items are supposed to have a SHA-512, we bucket by that
@@ -1197,10 +1197,10 @@ namespace SabreTools.Metadata.DatFiles
                         return nc.Compare(xMachineName, yMachineName);
 
                     // If types don't match
-                    string? xType = x.Value.ReadString(Data.Models.Metadata.DatItem.TypeKey);
-                    string? yType = y.Value.ReadString(Data.Models.Metadata.DatItem.TypeKey);
+                    Data.Models.Metadata.ItemType xType = x.Value.ItemType;
+                    Data.Models.Metadata.ItemType yType = y.Value.ItemType;
                     if (xType != yType)
-                        return xType.AsItemType() - yType.AsItemType();
+                        return xType - yType;
 
                     // If directory names don't match
                     string? xDirectoryName = Path.GetDirectoryName(TextHelper.RemovePathUnsafeCharacters(x.Value.GetName()));

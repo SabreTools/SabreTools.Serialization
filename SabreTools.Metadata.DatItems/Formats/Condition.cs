@@ -13,7 +13,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Fields
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Condition;
+        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Condition;
 
         #endregion
 

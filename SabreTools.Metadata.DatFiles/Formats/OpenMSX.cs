@@ -47,9 +47,9 @@ The softwaredb.xml file contains information about rom mapper types
         #region Fields
 
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         #endregion

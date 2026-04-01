@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("blank"), XmlRoot("blank")]
     public class Blank : DatItem
     {
-        public Blank() => Type = ItemType.Blank;
+        public Blank() => ItemType = ItemType.Blank;
     }
 }

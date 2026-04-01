@@ -58,6 +58,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public ReleaseDetails() => Type = ItemType.ReleaseDetails;
+        public ReleaseDetails() => ItemType = ItemType.ReleaseDetails;
     }
 }

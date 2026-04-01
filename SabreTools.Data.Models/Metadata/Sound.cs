@@ -13,6 +13,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Sound() => Type = ItemType.Sound;
+        public Sound() => ItemType = ItemType.Sound;
     }
 }

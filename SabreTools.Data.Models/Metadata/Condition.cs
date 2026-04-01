@@ -22,6 +22,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Condition() => Type = ItemType.Condition;
+        public Condition() => ItemType = ItemType.Condition;
     }
 }

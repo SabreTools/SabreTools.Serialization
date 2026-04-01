@@ -82,6 +82,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public SourceDetails() => Type = ItemType.SourceDetails;
+        public SourceDetails() => ItemType = ItemType.SourceDetails;
     }
 }

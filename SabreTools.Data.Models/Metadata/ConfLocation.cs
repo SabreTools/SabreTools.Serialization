@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public ConfLocation() => Type = ItemType.ConfLocation;
+        public ConfLocation() => ItemType = ItemType.ConfLocation;
     }
 }

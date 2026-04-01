@@ -16,6 +16,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Original() => Type = ItemType.Original;
+        public Original() => ItemType = ItemType.Original;
     }
 }

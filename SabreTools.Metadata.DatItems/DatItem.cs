@@ -85,7 +85,7 @@ namespace SabreTools.Metadata.DatItems
         /// <summary>
         /// Item type for the object
         /// </summary>
-        protected abstract ItemType ItemType { get; }
+        internal abstract Data.Models.Metadata.ItemType ItemType { get; }
 
         #endregion
 
@@ -223,8 +223,8 @@ namespace SabreTools.Metadata.DatItems
                 return false;
 
             // Get the types for comparison
-            ItemType selfType = ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
-            ItemType otherType = other.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
+            Data.Models.Metadata.ItemType selfType = ItemType;
+            Data.Models.Metadata.ItemType otherType = other.ItemType;
 
             // If we don't have a matched type, return false
             if (selfType != otherType)

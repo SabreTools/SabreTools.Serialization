@@ -18,7 +18,6 @@ namespace SabreTools.Metadata.DatItems
             _internal = new T();
 
             SetName(string.Empty);
-            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
             Write(MachineKey, new Machine());
         }
 
@@ -29,7 +28,6 @@ namespace SabreTools.Metadata.DatItems
         {
             _internal = item;
 
-            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
             Write(MachineKey, new Machine());
         }
 
@@ -78,8 +76,8 @@ namespace SabreTools.Metadata.DatItems
                 return false;
 
             // Get the types for comparison
-            ItemType selfType = ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
-            ItemType otherType = other.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
+            Data.Models.Metadata.ItemType selfType = ItemType;
+            Data.Models.Metadata.ItemType otherType = other.ItemType;
 
             // If we don't have a matched type, return false
             if (selfType != otherType)

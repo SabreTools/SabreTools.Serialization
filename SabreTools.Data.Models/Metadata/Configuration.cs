@@ -31,6 +31,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Configuration() => Type = ItemType.Configuration;
+        public Configuration() => ItemType = ItemType.Configuration;
     }
 }

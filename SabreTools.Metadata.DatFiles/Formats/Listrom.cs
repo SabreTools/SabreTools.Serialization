@@ -10,10 +10,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class Listrom : SerializableDatFile<Data.Models.Listrom.MetadataFile, Serialization.Readers.Listrom, Serialization.Writers.Listrom, Serialization.CrossModel.Listrom>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Disk,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>

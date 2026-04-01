@@ -13,8 +13,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class Missfile : DatFile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
-            => Enum.GetValues(typeof(ItemType)) as ItemType[] ?? [];
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
+            => Enum.GetValues(typeof(Data.Models.Metadata.ItemType)) as Data.Models.Metadata.ItemType[] ?? [];
 
         /// <summary>
         /// Constructor designed for casting a base DatFile

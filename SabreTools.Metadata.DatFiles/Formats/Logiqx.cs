@@ -224,18 +224,18 @@ namespace SabreTools.Metadata.DatFiles.Formats
         #region Fields
 
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Archive,
-                ItemType.BiosSet,
-                ItemType.DeviceRef,
-                ItemType.Disk,
-                ItemType.Driver,
-                ItemType.Media,
-                ItemType.Release,
-                ItemType.Rom,
-                ItemType.Sample,
-                ItemType.SoftwareList,
+                Data.Models.Metadata.ItemType.Archive,
+                Data.Models.Metadata.ItemType.BiosSet,
+                Data.Models.Metadata.ItemType.DeviceRef,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Driver,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Release,
+                Data.Models.Metadata.ItemType.Rom,
+                Data.Models.Metadata.ItemType.Sample,
+                Data.Models.Metadata.ItemType.SoftwareList,
             ];
 
         /// <summary>

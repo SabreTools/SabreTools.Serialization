@@ -31,6 +31,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Video() => Type = ItemType.Video;
+        public Video() => ItemType = ItemType.Video;
     }
 }

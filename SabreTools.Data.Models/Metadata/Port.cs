@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Port() => Type = ItemType.Port;
+        public Port() => ItemType = ItemType.Port;
     }
 }

@@ -22,7 +22,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Number of items for each item type
         /// </summary>
-        private readonly Dictionary<ItemType, long> _itemCounts = [];
+        private readonly Dictionary<Data.Models.Metadata.ItemType, long> _itemCounts = [];
 
         /// <summary>
         /// Number of items for each item status
@@ -122,7 +122,7 @@ namespace SabreTools.Metadata.DatFiles
                     RemovedCount++;
 
                 // Increment the item count for the type
-                AddItemCount(item.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType());
+                AddItemCount(item.ItemType);
 
                 // Some item types require special processing
                 switch (item)
@@ -161,7 +161,7 @@ namespace SabreTools.Metadata.DatFiles
                     RemovedCount++;
 
                 // Increment the item count for the type
-                AddItemCount(item.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType());
+                AddItemCount(item.ItemType);
 
                 // Some item types require special processing
                 switch (item)
@@ -237,7 +237,7 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         /// <param name="itemType">Item type to retrieve</param>
         /// <returns>The number of items of that type, if it exists</returns>
-        public long GetItemCount(ItemType itemType)
+        public long GetItemCount(Data.Models.Metadata.ItemType itemType)
         {
             lock (_itemCounts)
             {
@@ -284,7 +284,7 @@ namespace SabreTools.Metadata.DatFiles
                     RemovedCount--;
 
                 // Decrement the item count for the type
-                RemoveItemCount(item.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType());
+                RemoveItemCount(item.ItemType);
 
                 // Some item types require special processing
                 switch (item)
@@ -329,7 +329,7 @@ namespace SabreTools.Metadata.DatFiles
                     RemovedCount--;
 
                 // Decrement the item count for the type
-                RemoveItemCount(item.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType());
+                RemoveItemCount(item.ItemType);
 
                 // Some item types require special processing
                 switch (item)
@@ -389,7 +389,7 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         /// <param name="itemType">Item type to increment</param>
         /// <param name="interval">Amount to increment by, defaults to 1</param>
-        private void AddItemCount(ItemType itemType, long interval = 1)
+        private void AddItemCount(Data.Models.Metadata.ItemType itemType, long interval = 1)
         {
             lock (_itemCounts)
             {
@@ -580,7 +580,7 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         /// <param name="itemType">Item type to decrement</param>
         /// <param name="interval">Amount to increment by, defaults to 1</param>
-        private void RemoveItemCount(ItemType itemType, long interval = 1)
+        private void RemoveItemCount(Data.Models.Metadata.ItemType itemType, long interval = 1)
         {
             lock (_itemCounts)
             {

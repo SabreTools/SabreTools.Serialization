@@ -13,6 +13,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Sample() => Type = ItemType.Sample;
+        public Sample() => ItemType = ItemType.Sample;
     }
 }

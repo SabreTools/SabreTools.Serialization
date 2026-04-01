@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatItems.Test
         {
             private readonly string? _nameKey;
 
-            protected override ItemType ItemType => ItemType.Blank;
+            internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Blank;
 
             public TestDatItem() => _nameKey = TestDatItemModel.NameKey;
 

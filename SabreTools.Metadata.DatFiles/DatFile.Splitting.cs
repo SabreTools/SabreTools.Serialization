@@ -702,7 +702,7 @@ namespace SabreTools.Metadata.DatFiles
                         foreach (DatItem item in devItems)
                         {
                             // If the parent machine doesn't already contain this item, add it
-                            if (!datItems.Exists(i => i.ReadString(Data.Models.Metadata.DatItem.TypeKey) == item.ReadString(Data.Models.Metadata.DatItem.TypeKey) && i.GetName() == item.GetName()))
+                            if (!datItems.Exists(i => i.ItemType == item.ItemType && i.GetName() == item.GetName()))
                             {
                                 // Set that we found new items
                                 foundnew = true;
@@ -752,7 +752,7 @@ namespace SabreTools.Metadata.DatFiles
                         foreach (DatItem item in slotItems)
                         {
                             // If the parent machine doesn't already contain this item, add it
-                            if (!datItems.Exists(i => i.ReadString(Data.Models.Metadata.DatItem.TypeKey) == item.ReadString(Data.Models.Metadata.DatItem.TypeKey) && i.GetName() == item.GetName()))
+                            if (!datItems.Exists(i => i.ItemType == item.ItemType && i.GetName() == item.GetName()))
                             {
                                 // Set that we found new items
                                 foundnew = true;
@@ -870,7 +870,7 @@ namespace SabreTools.Metadata.DatFiles
                         foreach (var item in devItems.Values)
                         {
                             // If the parent machine doesn't already contain this item, add it
-                            if (!items.Values.Any(i => i.ReadString(Data.Models.Metadata.DatItem.TypeKey) == item.ReadString(Data.Models.Metadata.DatItem.TypeKey)
+                            if (!items.Values.Any(i => i.ItemType == item.ItemType
                                 && i.GetName() == item.GetName()))
                             {
                                 // Set that we found new items
@@ -926,7 +926,7 @@ namespace SabreTools.Metadata.DatFiles
                         foreach (var item in slotItems.Values)
                         {
                             // If the parent machine doesn't already contain this item, add it
-                            if (!items.Values.Any(i => i.ReadString(Data.Models.Metadata.DatItem.TypeKey) == item.ReadString(Data.Models.Metadata.DatItem.TypeKey)
+                            if (!items.Values.Any(i => i.ItemType == item.ItemType
                                 && i.GetName() == item.GetName()))
                             {
                                 // Set that we found new items

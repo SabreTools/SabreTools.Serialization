@@ -78,14 +78,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
         #region Fields
 
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.DipSwitch,
-                ItemType.Disk,
-                ItemType.Info,
-                ItemType.PartFeature,
-                ItemType.Rom,
-                ItemType.SharedFeat,
+                Data.Models.Metadata.ItemType.DipSwitch,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Info,
+                Data.Models.Metadata.ItemType.PartFeature,
+                Data.Models.Metadata.ItemType.Rom,
+                Data.Models.Metadata.ItemType.SharedFeat,
             ];
 
         #endregion

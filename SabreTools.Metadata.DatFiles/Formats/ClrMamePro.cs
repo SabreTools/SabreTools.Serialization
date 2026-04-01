@@ -15,21 +15,21 @@ namespace SabreTools.Metadata.DatFiles.Formats
         #region Fields
 
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Archive,
-                ItemType.BiosSet,
-                ItemType.Chip,
-                ItemType.DipSwitch,
-                ItemType.Disk,
-                ItemType.Display,
-                ItemType.Driver,
-                ItemType.Input,
-                ItemType.Media,
-                ItemType.Release,
-                ItemType.Rom,
-                ItemType.Sample,
-                ItemType.Sound,
+                Data.Models.Metadata.ItemType.Archive,
+                Data.Models.Metadata.ItemType.BiosSet,
+                Data.Models.Metadata.ItemType.Chip,
+                Data.Models.Metadata.ItemType.DipSwitch,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Display,
+                Data.Models.Metadata.ItemType.Driver,
+                Data.Models.Metadata.ItemType.Input,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Release,
+                Data.Models.Metadata.ItemType.Rom,
+                Data.Models.Metadata.ItemType.Sample,
+                Data.Models.Metadata.ItemType.Sound,
             ];
 
         #endregion

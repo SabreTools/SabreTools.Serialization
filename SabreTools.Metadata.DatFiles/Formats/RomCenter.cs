@@ -10,9 +10,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class RomCenter : SerializableDatFile<Data.Models.RomCenter.MetadataFile, Serialization.Readers.RomCenter, Serialization.Writers.RomCenter, Serialization.CrossModel.RomCenter>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>

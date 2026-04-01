@@ -13,6 +13,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Analog() => Type = ItemType.Analog;
+        public Analog() => ItemType = ItemType.Analog;
     }
 }

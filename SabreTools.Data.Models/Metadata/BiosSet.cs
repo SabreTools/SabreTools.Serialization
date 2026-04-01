@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public BiosSet() => Type = ItemType.BiosSet;
+        public BiosSet() => ItemType = ItemType.BiosSet;
     }
 }

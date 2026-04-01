@@ -25,6 +25,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Release() => Type = ItemType.Release;
+        public Release() => ItemType = ItemType.Release;
     }
 }

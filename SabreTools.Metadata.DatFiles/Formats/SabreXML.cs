@@ -18,11 +18,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class SabreXML : DatFile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
 #if NET5_0_OR_GREATER
-            => Enum.GetValues<ItemType>();
+            => Enum.GetValues<Data.Models.Metadata.ItemType>();
 #else
-            => Enum.GetValues(typeof(ItemType)) as ItemType[] ?? [];
+            => Enum.GetValues(typeof(Data.Models.Metadata.ItemType)) as Data.Models.Metadata.ItemType[] ?? [];
 #endif
 
         /// <summary>

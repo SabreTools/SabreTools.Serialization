@@ -40,6 +40,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Disk() => Type = ItemType.Disk;
+        public Disk() => ItemType = ItemType.Disk;
     }
 }

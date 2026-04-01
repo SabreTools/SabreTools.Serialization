@@ -20,6 +20,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Adjuster() => Type = ItemType.Adjuster;
+        public Adjuster() => ItemType = ItemType.Adjuster;
     }
 }

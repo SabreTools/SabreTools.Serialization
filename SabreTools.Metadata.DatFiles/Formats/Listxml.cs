@@ -185,28 +185,28 @@ namespace SabreTools.Metadata.DatFiles.Formats
         #region Fields
 
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Adjuster,
-                ItemType.BiosSet,
-                ItemType.Chip,
-                ItemType.Condition,
-                ItemType.Configuration,
-                ItemType.Device,
-                ItemType.DeviceRef,
-                ItemType.DipSwitch,
-                ItemType.Disk,
-                ItemType.Display,
-                ItemType.Driver,
-                ItemType.Feature,
-                ItemType.Input,
-                ItemType.Port,
-                ItemType.RamOption,
-                ItemType.Rom,
-                ItemType.Sample,
-                ItemType.Slot,
-                ItemType.SoftwareList,
-                ItemType.Sound,
+                Data.Models.Metadata.ItemType.Adjuster,
+                Data.Models.Metadata.ItemType.BiosSet,
+                Data.Models.Metadata.ItemType.Chip,
+                Data.Models.Metadata.ItemType.Condition,
+                Data.Models.Metadata.ItemType.Configuration,
+                Data.Models.Metadata.ItemType.Device,
+                Data.Models.Metadata.ItemType.DeviceRef,
+                Data.Models.Metadata.ItemType.DipSwitch,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Display,
+                Data.Models.Metadata.ItemType.Driver,
+                Data.Models.Metadata.ItemType.Feature,
+                Data.Models.Metadata.ItemType.Input,
+                Data.Models.Metadata.ItemType.Port,
+                Data.Models.Metadata.ItemType.RamOption,
+                Data.Models.Metadata.ItemType.Rom,
+                Data.Models.Metadata.ItemType.Sample,
+                Data.Models.Metadata.ItemType.Slot,
+                Data.Models.Metadata.ItemType.SoftwareList,
+                Data.Models.Metadata.ItemType.Sound,
             ];
 
         #endregion

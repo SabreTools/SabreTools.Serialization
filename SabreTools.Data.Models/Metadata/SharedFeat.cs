@@ -16,6 +16,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public SharedFeat() => Type = ItemType.SharedFeat;
+        public SharedFeat() => ItemType = ItemType.SharedFeat;
     }
 }

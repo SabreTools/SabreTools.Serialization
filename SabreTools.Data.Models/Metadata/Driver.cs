@@ -46,6 +46,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Driver() => Type = ItemType.Driver;
+        public Driver() => ItemType = ItemType.Driver;
     }
 }

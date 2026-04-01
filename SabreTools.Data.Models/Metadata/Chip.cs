@@ -28,6 +28,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Chip() => Type = ItemType.Chip;
+        public Chip() => ItemType = ItemType.Chip;
     }
 }

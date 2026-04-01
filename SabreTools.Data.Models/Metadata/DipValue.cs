@@ -23,6 +23,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public DipValue() => Type = ItemType.DipValue;
+        public DipValue() => ItemType = ItemType.DipValue;
     }
 }

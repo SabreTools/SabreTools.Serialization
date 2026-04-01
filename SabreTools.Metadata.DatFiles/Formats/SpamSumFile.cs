@@ -11,10 +11,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class SpamSumFile : Hashfile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>

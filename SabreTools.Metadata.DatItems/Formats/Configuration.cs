@@ -14,7 +14,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Fields
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Configuration;
+        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Configuration;
 
         [JsonIgnore]
         public bool ConditionsSpecified

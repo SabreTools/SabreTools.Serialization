@@ -109,6 +109,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Archive() => Type = ItemType.Archive;
+        public Archive() => ItemType = ItemType.Archive;
     }
 }

@@ -13,7 +13,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Fields
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Adjuster;
+        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Adjuster;
 
         [JsonIgnore]
         public bool ConditionsSpecified

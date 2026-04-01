@@ -55,7 +55,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// List of supported types for writing
         /// </summary>
-        public abstract ItemType[] SupportedTypes { get; }
+        public abstract Data.Models.Metadata.ItemType[] SupportedTypes { get; }
 
         #endregion
 
@@ -581,13 +581,13 @@ namespace SabreTools.Metadata.DatFiles
         protected internal static string FormatPrefixPostfix(DatItem item, Machine? machine, string fix)
         {
             // Initialize strings
-            string? type = item.ReadString(Data.Models.Metadata.DatItem.TypeKey);
+            Data.Models.Metadata.ItemType type = item.ItemType;
             string
                 game = machine?.GetName() ?? string.Empty,
                 manufacturer = machine?.ReadString(Data.Models.Metadata.Machine.ManufacturerKey) ?? string.Empty,
                 publisher = machine?.ReadString(Data.Models.Metadata.Machine.PublisherKey) ?? string.Empty,
                 category = machine?.ReadString(Data.Models.Metadata.Machine.CategoryKey) ?? string.Empty,
-                name = item.GetName() ?? type.AsItemType().AsStringValue() ?? string.Empty,
+                name = item.GetName() ?? type.AsStringValue() ?? string.Empty,
                 crc16 = string.Empty,
                 crc = string.Empty,
                 crc64 = string.Empty,
@@ -741,7 +741,7 @@ namespace SabreTools.Metadata.DatFiles
 
             foreach (DatItem datItem in datItems)
             {
-                ItemType itemType = datItem.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
+                Data.Models.Metadata.ItemType itemType = datItem.ItemType;
                 if (Array.Exists(SupportedTypes, t => t == itemType))
                     return true;
             }
@@ -800,12 +800,12 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Get the last item name, if applicable
                 string lastItemName = lastItem.GetName()
-                    ?? lastItem.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue()
+                    ?? lastItem.ItemType.AsStringValue()
                     ?? string.Empty;
 
                 // Get the current item name, if applicable
                 string datItemName = datItem.GetName()
-                    ?? datItem.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue()
+                    ?? datItem.ItemType.AsStringValue()
                     ?? string.Empty;
 
                 // If the current item exactly matches the last item, then we don't add it
@@ -897,12 +897,12 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Get the last item name, if applicable
                 string lastItemName = lastItem.Value.Value.GetName()
-                    ?? lastItem.Value.Value.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue()
+                    ?? lastItem.Value.Value.ItemType.AsStringValue()
                     ?? string.Empty;
 
                 // Get the current item name, if applicable
                 string datItemName = datItem.Value.GetName()
-                    ?? datItem.Value.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue()
+                    ?? datItem.Value.ItemType.AsStringValue()
                     ?? string.Empty;
 
                 // Get sources for both items
@@ -1009,7 +1009,7 @@ namespace SabreTools.Metadata.DatFiles
             }
 
             // If we have an item type not in the list of supported values
-            ItemType itemType = datItem.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
+            Data.Models.Metadata.ItemType itemType = datItem.ItemType;
             if (!Array.Exists(SupportedTypes, t => t == itemType))
             {
                 string itemString = JsonConvert.SerializeObject(datItem, Formatting.None);
@@ -1182,8 +1182,8 @@ namespace SabreTools.Metadata.DatFiles
                         return nc.Compare(xMachineName, yMachineName);
 
                     // If types don't match
-                    string? xType = x.ReadString(Data.Models.Metadata.DatItem.TypeKey);
-                    string? yType = y.ReadString(Data.Models.Metadata.DatItem.TypeKey);
+                    string? xType = x.ItemType.AsStringValue();
+                    string? yType = y.ItemType.AsStringValue();
                     if (xType != yType)
                         return xType.AsItemType() - yType.AsItemType();
 
@@ -1239,8 +1239,8 @@ namespace SabreTools.Metadata.DatFiles
                         return nc.Compare(xMachineName, yMachineName);
 
                     // If types don't match
-                    string? xType = x.Value.ReadString(Data.Models.Metadata.DatItem.TypeKey);
-                    string? yType = y.Value.ReadString(Data.Models.Metadata.DatItem.TypeKey);
+                    string? xType = x.Value.ItemType.AsStringValue();
+                    string? yType = y.Value.ItemType.AsStringValue();
                     if (xType != yType)
                         return xType.AsItemType() - yType.AsItemType();
 

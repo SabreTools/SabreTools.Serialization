@@ -23,6 +23,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public ConfSetting() => Type = ItemType.ConfSetting;
+        public ConfSetting() => ItemType = ItemType.ConfSetting;
     }
 }

@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public SlotOption() => Type = ItemType.SlotOption;
+        public SlotOption() => ItemType = ItemType.SlotOption;
     }
 }

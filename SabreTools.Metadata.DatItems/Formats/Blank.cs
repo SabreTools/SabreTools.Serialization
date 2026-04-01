@@ -12,7 +12,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Fields
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Blank;
+        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Blank;
 
         #endregion
 
@@ -21,10 +21,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <summary>
         /// Create a default, empty Blank object
         /// </summary>
-        public Blank()
-        {
-            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
-        }
+        public Blank() { }
 
         #endregion
 
@@ -37,7 +34,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             blank.Write(MachineKey, GetMachine());
             blank.Write(RemoveKey, ReadBool(RemoveKey));
             blank.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
-            blank.Write<string?>(Data.Models.Metadata.DatItem.TypeKey, ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue());
 
             return blank;
         }
@@ -80,7 +76,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override bool Equals(DatItem? other)
         {
             // If we don't have a blank, return false
-            if (ReadString(Data.Models.Metadata.DatItem.TypeKey) != other?.ReadString(Data.Models.Metadata.DatItem.TypeKey))
+            if (ItemType != other?.ItemType)
                 return false;
 
             // Otherwise, treat it as a Blank

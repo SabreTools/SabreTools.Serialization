@@ -9,9 +9,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class AttractMode : SerializableDatFile<Data.Models.AttractMode.MetadataFile, Serialization.Readers.AttractMode, Serialization.Writers.AttractMode, Serialization.CrossModel.AttractMode>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>

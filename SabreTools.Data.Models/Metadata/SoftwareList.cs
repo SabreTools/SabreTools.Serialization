@@ -32,6 +32,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public SoftwareList() => Type = ItemType.SoftwareList;
+        public SoftwareList() => ItemType = ItemType.SoftwareList;
     }
 }

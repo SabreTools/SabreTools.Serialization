@@ -83,7 +83,6 @@ namespace SabreTools.Serialization.CrossModel
             {
                 var disk = new Data.Models.Metadata.Disk
                 {
-                    [Data.Models.Metadata.DatItem.TypeKey] = "disk",
                     [Data.Models.Metadata.Disk.NameKey] = item.Name,
                     [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
                     [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
@@ -100,7 +99,6 @@ namespace SabreTools.Serialization.CrossModel
             {
                 var rom = new Data.Models.Metadata.Rom
                 {
-                    [Data.Models.Metadata.DatItem.TypeKey] = "rom",
                     [Data.Models.Metadata.Rom.NameKey] = item.Name,
                     [Data.Models.Metadata.Rom.SizeKey] = item.Size,
                     [Data.Models.Metadata.Rom.CRCKey] = item.CRC,

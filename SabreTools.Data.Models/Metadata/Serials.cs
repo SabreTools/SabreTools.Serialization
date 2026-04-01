@@ -52,6 +52,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Serials() => Type = ItemType.Serials;
+        public Serials() => ItemType = ItemType.Serials;
     }
 }

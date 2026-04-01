@@ -33,6 +33,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Device() => Type = ItemType.Device;
+        public Device() => ItemType = ItemType.Device;
     }
 }

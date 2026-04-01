@@ -1004,7 +1004,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             _ = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: false);
 
             Assert.Equal(1, dict.DatStatistics.TotalCount);
-            Assert.Equal(1, dict.DatStatistics.GetItemCount(ItemType.Rom));
+            Assert.Equal(1, dict.DatStatistics.GetItemCount(Data.Models.Metadata.ItemType.Rom));
             Assert.Equal(12345, dict.DatStatistics.TotalSize);
             Assert.Equal(1, dict.DatStatistics.GetHashCount(HashType.CRC32));
             Assert.Equal(0, dict.DatStatistics.GetHashCount(HashType.MD5));
@@ -1014,7 +1014,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             dict.RecalculateStats();
 
             Assert.Equal(1, dict.DatStatistics.TotalCount);
-            Assert.Equal(1, dict.DatStatistics.GetItemCount(ItemType.Rom));
+            Assert.Equal(1, dict.DatStatistics.GetItemCount(Data.Models.Metadata.ItemType.Rom));
             Assert.Equal(12345, dict.DatStatistics.TotalSize);
             Assert.Equal(1, dict.DatStatistics.GetHashCount(HashType.CRC32));
             Assert.Equal(1, dict.DatStatistics.GetHashCount(HashType.MD5));

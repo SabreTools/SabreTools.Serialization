@@ -28,6 +28,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Input() => Type = ItemType.Input;
+        public Input() => ItemType = ItemType.Input;
     }
 }

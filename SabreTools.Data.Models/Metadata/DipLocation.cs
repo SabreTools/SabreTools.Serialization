@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public DipLocation() => Type = ItemType.DipLocation;
+        public DipLocation() => ItemType = ItemType.DipLocation;
     }
 }

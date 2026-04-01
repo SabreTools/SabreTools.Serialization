@@ -298,6 +298,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public Rom() => Type = ItemType.Rom;
+        public Rom() => ItemType = ItemType.Rom;
     }
 }

@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Fields
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.DipSwitch;
+        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.DipSwitch;
 
         [JsonIgnore]
         public bool ConditionsSpecified

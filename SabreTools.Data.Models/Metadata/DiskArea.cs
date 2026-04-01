@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        public DiskArea() => Type = ItemType.DiskArea;
+        public DiskArea() => ItemType = ItemType.DiskArea;
     }
 }
