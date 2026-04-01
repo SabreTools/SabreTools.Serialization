@@ -304,6 +304,11 @@ namespace SabreTools.Wrappers
         XZP,
 
         /// <summary>
+        /// ZArchive archive
+        /// </summary>
+        ZArchive,
+
+        /// <summary>
         /// ZStandard compressed file
         /// </summary>
         ZSTD,

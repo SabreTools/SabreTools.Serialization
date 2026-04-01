@@ -74,6 +74,7 @@ Options:
 | XBox Package File (XZP) | |
 | Xbox DVD Filesystem (XISO) | |
 | xz archive (XZ) | .NET Framework 4.6.2 and greater |
+| ZArchive | |
 
 ## Namespaces
 

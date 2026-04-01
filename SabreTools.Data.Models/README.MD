@@ -89,6 +89,7 @@ Below is a list of all existing namespaces with the `SabreTools.Data.Models` pre
 | `XDVDFS` | Xbox DVD Filesystem (XISO) |
 | `XZ` | xz archive |
 | `XZP` | XBox Package File |
+| `ZArchive` | ZArchive (ZAR) |
 | `ZSTD` | ZSTD archive |
 
 ## Notable Information Sources
