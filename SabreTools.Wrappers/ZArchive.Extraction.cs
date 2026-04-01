@@ -64,7 +64,7 @@ namespace SabreTools.Wrappers
                     }
 
                     string outputPath = Path.Combine(outputDirectory, name);
-                    if (child.IsDirectory())
+                    if ((child.NameOffsetAndTypeFlag & Constants.FileFlag) == 0)
                         success |= ExtractDirectory(outputPath, includeDebug, childIndex);
                     else
                         success |= ExtractFile(outputPath, includeDebug, childIndex);
