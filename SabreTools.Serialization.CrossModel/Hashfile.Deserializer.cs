@@ -146,7 +146,7 @@ namespace SabreTools.Serialization.CrossModel
             var md2 = new MD2
             {
                 Hash = item.ReadString(Data.Models.Metadata.Rom.MD2Key),
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
             };
             return md2;
         }
@@ -159,7 +159,7 @@ namespace SabreTools.Serialization.CrossModel
             var md4 = new MD4
             {
                 Hash = item.ReadString(Data.Models.Metadata.Rom.MD4Key),
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
             };
             return md4;
         }
@@ -172,7 +172,7 @@ namespace SabreTools.Serialization.CrossModel
             var md5 = new MD5
             {
                 Hash = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
             };
             return md5;
         }
@@ -185,7 +185,7 @@ namespace SabreTools.Serialization.CrossModel
             var ripemd128 = new RIPEMD128
             {
                 Hash = item.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key),
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
             };
             return ripemd128;
         }
@@ -198,7 +198,7 @@ namespace SabreTools.Serialization.CrossModel
             var ripemd160 = new RIPEMD160
             {
                 Hash = item.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key),
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
             };
             return ripemd160;
         }
@@ -210,7 +210,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sfv = new SFV
             {
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
                 Hash = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
             };
             return sfv;
@@ -224,7 +224,7 @@ namespace SabreTools.Serialization.CrossModel
             var sha1 = new SHA1
             {
                 Hash = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
             };
             return sha1;
         }
@@ -237,7 +237,7 @@ namespace SabreTools.Serialization.CrossModel
             var sha256 = new SHA256
             {
                 Hash = item.ReadString(Data.Models.Metadata.Rom.SHA256Key),
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
             };
             return sha256;
         }
@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.CrossModel
             var sha384 = new SHA384
             {
                 Hash = item.ReadString(Data.Models.Metadata.Rom.SHA384Key),
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
             };
             return sha384;
         }
@@ -263,7 +263,7 @@ namespace SabreTools.Serialization.CrossModel
             var sha512 = new SHA512
             {
                 Hash = item.ReadString(Data.Models.Metadata.Rom.SHA512Key),
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
             };
             return sha512;
         }
@@ -276,7 +276,7 @@ namespace SabreTools.Serialization.CrossModel
             var spamsum = new SpamSum
             {
                 Hash = item.ReadString(Data.Models.Metadata.Rom.SpamSumKey),
-                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                File = item.Name,
             };
             return spamsum;
         }

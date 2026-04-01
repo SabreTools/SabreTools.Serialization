@@ -6,6 +6,12 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("rom"), XmlRoot("rom")]
     public class Rom : DatItem
     {
+        #region Properties
+
+        public string? Name { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>string; ArchiveDotOrg.File</remarks>

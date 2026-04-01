@@ -121,7 +121,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void DatItem_Null_False()
         {
-            DatItem datItem = new Sample { [Sample.NameKey] = null };
+            DatItem datItem = new Sample { Name = null };
             bool actual = _filterRunner.Run(datItem);
             Assert.False(actual);
         }
@@ -129,7 +129,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void DatItem_Empty_False()
         {
-            DatItem datItem = new Sample { [Sample.NameKey] = "" };
+            DatItem datItem = new Sample { Name = "" };
             bool actual = _filterRunner.Run(datItem);
             Assert.False(actual);
         }
@@ -137,7 +137,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void DatItem_Incorrect_False()
         {
-            DatItem datItem = new Sample { [Sample.NameKey] = "NO_MATCH" };
+            DatItem datItem = new Sample { Name = "NO_MATCH" };
             bool actual = _filterRunner.Run(datItem);
             Assert.False(actual);
         }
@@ -145,7 +145,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void DatItem_Correct_True()
         {
-            DatItem datItem = new Sample { [Sample.NameKey] = "name" };
+            DatItem datItem = new Sample { Name = "name" };
             bool actual = _filterRunner.Run(datItem);
             Assert.True(actual);
         }
@@ -167,7 +167,7 @@ namespace SabreTools.Metadata.Filter.Test
         {
             DatItem datItem = new Rom
             {
-                [Rom.NameKey] = "name",
+                Name = "name",
                 [Rom.CRCKey] = null,
             };
 
@@ -180,7 +180,7 @@ namespace SabreTools.Metadata.Filter.Test
         {
             DatItem datItem = new Rom
             {
-                [Rom.NameKey] = "name",
+                Name = "name",
                 [Rom.CRCKey] = "",
             };
 
@@ -193,7 +193,7 @@ namespace SabreTools.Metadata.Filter.Test
         {
             DatItem datItem = new Rom
             {
-                [Rom.NameKey] = "name",
+                Name = "name",
                 [Rom.CRCKey] = "NO_MATCH",
             };
 
@@ -206,7 +206,7 @@ namespace SabreTools.Metadata.Filter.Test
         {
             DatItem datItem = new Rom
             {
-                [Rom.NameKey] = "name",
+                Name = "name",
                 [Rom.CRCKey] = "crc",
             };
 

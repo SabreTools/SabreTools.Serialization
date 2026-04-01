@@ -6,6 +6,12 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("slotoption"), XmlRoot("slotoption")]
     public class SlotOption : DatItem
     {
+        #region Properties
+
+        public string? Name { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>(yes|no) "no"</remarks>

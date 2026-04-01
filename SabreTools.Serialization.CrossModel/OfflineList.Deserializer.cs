@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.CrossModel
                 NoNamespaceSchemaLocation = item.ReadString(Data.Models.Metadata.Header.SchemaLocationKey),
             };
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.NameKey)
+            if (item.Name is not null
                 || item.ContainsKey(Data.Models.Metadata.Header.ImFolderKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.DatVersionKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.SystemKey)
@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 dat.Configuration = new Configuration
                 {
-                    DatName = item.ReadString(Data.Models.Metadata.Header.NameKey),
+                    DatName = item.Name,
                     ImFolder = item.ReadString(Data.Models.Metadata.Header.ImFolderKey),
                     DatVersion = item.ReadString(Data.Models.Metadata.Header.DatVersionKey),
                     System = item.ReadString(Data.Models.Metadata.Header.SystemKey),
@@ -84,7 +84,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 ImageNumber = item.ReadString(Data.Models.Metadata.Machine.ImageNumberKey),
                 ReleaseNumber = item.ReadString(Data.Models.Metadata.Machine.ReleaseNumberKey),
-                Title = item.ReadString(Data.Models.Metadata.Machine.NameKey),
+                Title = item.Name,
                 SaveType = item.ReadString(Data.Models.Metadata.Machine.SaveTypeKey),
                 Publisher = item.ReadString(Data.Models.Metadata.Machine.PublisherKey),
                 Location = item.ReadString(Data.Models.Metadata.Machine.LocationKey),

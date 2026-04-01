@@ -6,6 +6,12 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("feature"), XmlRoot("feature")]
     public class Feature : DatItem
     {
+        #region Properties
+
+        public string? Name { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>string</remarks>

@@ -6,6 +6,12 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("media"), XmlRoot("media")]
     public class Media : DatItem
     {
+        #region Properties
+
+        public string? Name { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>string</remarks>

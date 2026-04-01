@@ -509,10 +509,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine origMachine = new Machine();
-            origMachine.Write(Data.Models.Metadata.Machine.NameKey, "original");
+            origMachine.SetName("original");
 
             Machine newMachine = new Machine();
-            newMachine.Write(Data.Models.Metadata.Machine.NameKey, "new");
+            newMachine.SetName("new");
 
             DatItem datItem = new Rom();
 

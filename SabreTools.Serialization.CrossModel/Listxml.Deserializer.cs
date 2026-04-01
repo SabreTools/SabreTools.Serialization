@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Machine
             {
-                Name = item.ReadString(Data.Models.Metadata.Machine.NameKey),
+                Name = item.Name,
                 SourceFile = item.ReadString(Data.Models.Metadata.Machine.SourceFileKey),
                 IsBios = item.ReadString(Data.Models.Metadata.Machine.IsBiosKey),
                 IsDevice = item.ReadString(Data.Models.Metadata.Machine.IsDeviceKey),
@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var adjuster = new Adjuster
             {
-                Name = item.ReadString(Data.Models.Metadata.Adjuster.NameKey),
+                Name = item.Name,
                 Default = item.ReadString(Data.Models.Metadata.Adjuster.DefaultKey),
             };
 
@@ -178,7 +178,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var biosset = new BiosSet
             {
-                Name = item.ReadString(Data.Models.Metadata.BiosSet.NameKey),
+                Name = item.Name,
                 Description = item.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey),
                 Default = item.ReadString(Data.Models.Metadata.BiosSet.DefaultKey),
             };
@@ -192,7 +192,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var chip = new Chip
             {
-                Name = item.ReadString(Data.Models.Metadata.Chip.NameKey),
+                Name = item.Name,
                 Tag = item.ReadString(Data.Models.Metadata.Chip.TagKey),
                 Type = item.ReadString(Data.Models.Metadata.Chip.ChipTypeKey),
                 SoundOnly = item.ReadString(Data.Models.Metadata.Chip.SoundOnlyKey),
@@ -223,7 +223,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var configuration = new Configuration
             {
-                Name = item.ReadString(Data.Models.Metadata.Configuration.NameKey),
+                Name = item.Name,
                 Tag = item.ReadString(Data.Models.Metadata.Configuration.TagKey),
                 Mask = item.ReadString(Data.Models.Metadata.Configuration.MaskKey),
             };
@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var confLocation = new ConfLocation
             {
-                Name = item.ReadString(Data.Models.Metadata.ConfLocation.NameKey),
+                Name = item.Name,
                 Number = item.ReadString(Data.Models.Metadata.ConfLocation.NumberKey),
                 Inverted = item.ReadString(Data.Models.Metadata.ConfLocation.InvertedKey),
             };
@@ -264,7 +264,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var confSetting = new ConfSetting
             {
-                Name = item.ReadString(Data.Models.Metadata.ConfSetting.NameKey),
+                Name = item.Name,
                 Value = item.ReadString(Data.Models.Metadata.ConfSetting.ValueKey),
                 Default = item.ReadString(Data.Models.Metadata.ConfSetting.DefaultKey),
             };
@@ -331,7 +331,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var deviceRef = new DeviceRef
             {
-                Name = item.ReadString(Data.Models.Metadata.DeviceRef.NameKey),
+                Name = item.Name,
             };
             return deviceRef;
         }
@@ -343,7 +343,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipLocation = new DipLocation
             {
-                Name = item.ReadString(Data.Models.Metadata.DipLocation.NameKey),
+                Name = item.Name,
                 Number = item.ReadString(Data.Models.Metadata.DipLocation.NumberKey),
                 Inverted = item.ReadString(Data.Models.Metadata.DipLocation.InvertedKey),
             };
@@ -357,7 +357,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipSwitch = new DipSwitch
             {
-                Name = item.ReadString(Data.Models.Metadata.DipSwitch.NameKey),
+                Name = item.Name,
                 Tag = item.ReadString(Data.Models.Metadata.DipSwitch.TagKey),
                 Mask = item.ReadString(Data.Models.Metadata.DipSwitch.MaskKey),
             };
@@ -384,7 +384,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipValue = new DipValue
             {
-                Name = item.ReadString(Data.Models.Metadata.DipValue.NameKey),
+                Name = item.Name,
                 Value = item.ReadString(Data.Models.Metadata.DipValue.ValueKey),
                 Default = item.ReadString(Data.Models.Metadata.DipValue.DefaultKey),
             };
@@ -403,7 +403,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var disk = new Disk
             {
-                Name = item.ReadString(Data.Models.Metadata.Disk.NameKey),
+                Name = item.Name,
                 MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
                 SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
                 Merge = item.ReadString(Data.Models.Metadata.Disk.MergeKey),
@@ -470,7 +470,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var extension = new Extension
             {
-                Name = item.ReadString(Data.Models.Metadata.Extension.NameKey),
+                Name = item.Name,
             };
             return extension;
         }
@@ -521,7 +521,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var instance = new Instance
             {
-                Name = item.ReadString(Data.Models.Metadata.Instance.NameKey),
+                Name = item.Name,
                 BriefName = item.ReadString(Data.Models.Metadata.Instance.BriefNameKey),
             };
             return instance;
@@ -551,7 +551,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var ramOption = new RamOption
             {
-                Name = item.ReadString(Data.Models.Metadata.RamOption.NameKey),
+                Name = item.Name,
                 Default = item.ReadString(Data.Models.Metadata.RamOption.DefaultKey),
                 Content = item.ReadString(Data.Models.Metadata.RamOption.ContentKey),
             };
@@ -565,7 +565,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Rom
             {
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                Name = item.Name,
                 Bios = item.ReadString(Data.Models.Metadata.Rom.BiosKey),
                 Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
@@ -588,7 +588,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sample = new Sample
             {
-                Name = item.ReadString(Data.Models.Metadata.Sample.NameKey),
+                Name = item.Name,
             };
             return sample;
         }
@@ -600,7 +600,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var slot = new Slot
             {
-                Name = item.ReadString(Data.Models.Metadata.Slot.NameKey),
+                Name = item.Name,
             };
 
             var slotOptions = item.Read<Data.Models.Metadata.SlotOption[]>(Data.Models.Metadata.Slot.SlotOptionKey);
@@ -617,7 +617,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var slotOption = new SlotOption
             {
-                Name = item.ReadString(Data.Models.Metadata.SlotOption.NameKey),
+                Name = item.Name,
                 DevName = item.ReadString(Data.Models.Metadata.SlotOption.DevNameKey),
                 Default = item.ReadString(Data.Models.Metadata.SlotOption.DefaultKey),
             };
@@ -632,7 +632,7 @@ namespace SabreTools.Serialization.CrossModel
             var softwareList = new Data.Models.Listxml.SoftwareList
             {
                 Tag = item.ReadString(Data.Models.Metadata.SoftwareList.TagKey),
-                Name = item.ReadString(Data.Models.Metadata.SoftwareList.NameKey),
+                Name = item.Name,
                 Status = item.ReadString(Data.Models.Metadata.SoftwareList.StatusKey),
                 Filter = item.ReadString(Data.Models.Metadata.SoftwareList.FilterKey),
             };

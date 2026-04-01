@@ -57,8 +57,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                Name = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
-                Title = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                Name = parent.Name,
+                Title = item.Name,
                 Emulator = parent.ReadString(Data.Models.Metadata.Machine.EmulatorKey),
                 CloneOf = parent.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
                 Year = parent.ReadString(Data.Models.Metadata.Machine.YearKey),

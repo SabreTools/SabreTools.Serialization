@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.CrossModel
             var row = new Row
             {
                 SHA256 = item.ReadString(Data.Models.Metadata.Rom.SHA256Key),
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                Name = item.Name,
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
                 MD5 = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
                 CRC32 = item.ReadString(Data.Models.Metadata.Rom.CRCKey),

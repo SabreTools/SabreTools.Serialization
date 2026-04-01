@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.NameKey] = item.Name,
+                Name =  item.Name,
                 [Data.Models.Metadata.Header.DescriptionKey] = item.Description,
                 [Data.Models.Metadata.Header.VersionKey] = item.Version,
                 [Data.Models.Metadata.Header.DateKey] = item.Date,
@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.NameKey] = item.Name,
+                Name = item.Name,
             };
 
             if (item.File is not null && item.File.Length > 0)
@@ -69,7 +69,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Rom.SizeKey] = item.Size,
                 [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
                 [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,

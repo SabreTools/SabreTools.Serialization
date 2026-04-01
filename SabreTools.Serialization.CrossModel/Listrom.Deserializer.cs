@@ -28,9 +28,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var set = new Set();
             if (item.ReadString(Data.Models.Metadata.Machine.IsDeviceKey) == "yes")
-                set.Device = item.ReadString(Data.Models.Metadata.Machine.NameKey);
+                set.Device = item.Name;
             else
-                set.Driver = item.ReadString(Data.Models.Metadata.Machine.NameKey);
+                set.Driver = item.Name;
 
             var rowItems = new List<Row>();
 
@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                Name = item.ReadString(Data.Models.Metadata.Disk.NameKey),
+                Name = item.Name,
                 MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
                 SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
             };
@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                Name = item.Name,
                 Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),

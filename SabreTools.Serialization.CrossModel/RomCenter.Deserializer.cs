@@ -100,9 +100,9 @@ namespace SabreTools.Serialization.CrossModel
             {
                 ParentName = parent.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
                 //ParentDescription = parent.ReadString(Data.Models.Metadata.Machine.ParentDescriptionKey), // This is unmappable
-                GameName = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
+                GameName = parent.Name,
                 GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
-                RomName = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                RomName = item.Name,
                 RomCRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 RomSize = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
                 RomOf = parent.ReadString(Data.Models.Metadata.Machine.RomOfKey),

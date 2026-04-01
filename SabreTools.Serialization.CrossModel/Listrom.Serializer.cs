@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.NameKey] = "MAME Listrom",
+                Name =  "MAME Listrom",
             };
             return header;
         }
@@ -46,12 +46,12 @@ namespace SabreTools.Serialization.CrossModel
             var machine = new Data.Models.Metadata.Machine();
             if (!string.IsNullOrEmpty(item.Device))
             {
-                machine[Data.Models.Metadata.Machine.NameKey] = item.Device;
+                machine.Name = item.Device;
                 machine[Data.Models.Metadata.Machine.IsDeviceKey] = "yes";
             }
             else
             {
-                machine[Data.Models.Metadata.Machine.NameKey] = item.Driver;
+                machine.Name = item.Driver;
             }
 
             if (item.Row is not null && item.Row.Length > 0)
@@ -83,7 +83,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 var disk = new Data.Models.Metadata.Disk
                 {
-                    [Data.Models.Metadata.Disk.NameKey] = item.Name,
+                    Name = item.Name,
                     [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
                     [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
                 };
@@ -99,7 +99,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 var rom = new Data.Models.Metadata.Rom
                 {
-                    [Data.Models.Metadata.Rom.NameKey] = item.Name,
+                    Name = item.Name,
                     [Data.Models.Metadata.Rom.SizeKey] = item.Size,
                     [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
                     [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,

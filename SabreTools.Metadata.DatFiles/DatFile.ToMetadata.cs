@@ -315,7 +315,7 @@ namespace SabreTools.Metadata.DatFiles
                         var datItem = partMapping.Value;
 
                         // Get the part name and skip if there's none
-                        string? partName = partItem.ReadString(Data.Models.Metadata.Part.NameKey);
+                        string? partName = partItem.Name;
                         if (partName is null)
                             continue;
 
@@ -324,7 +324,7 @@ namespace SabreTools.Metadata.DatFiles
                             partItems[partName] = [];
 
                         // Copy over string values
-                        partItems[partName][Data.Models.Metadata.Part.NameKey] = partName;
+                        partItems[partName].Name = partName;
                         if (!partItems[partName].ContainsKey(Data.Models.Metadata.Part.InterfaceKey))
                             partItems[partName][Data.Models.Metadata.Part.InterfaceKey] = partItem.ReadString(Data.Models.Metadata.Part.InterfaceKey);
 
@@ -341,7 +341,7 @@ namespace SabreTools.Metadata.DatFiles
                             ClearEmptyKeys(romItem);
 
                             // Get the data area name and skip if there's none
-                            string? dataAreaName = dataArea.ReadString(Data.Models.Metadata.DataArea.NameKey);
+                            string? dataAreaName = dataArea.Name;
                             if (dataAreaName is not null)
                             {
                                 // Get existing data areas as a list
@@ -349,7 +349,7 @@ namespace SabreTools.Metadata.DatFiles
                                 List<Data.Models.Metadata.DataArea> dataAreas = [.. dataAreasArr];
 
                                 // Find the existing disk area to append to, otherwise create a new disk area
-                                int dataAreaIndex = dataAreas.FindIndex(da => da.ReadString(Data.Models.Metadata.DataArea.NameKey) == dataAreaName);
+                                int dataAreaIndex = dataAreas.FindIndex(da => da.Name == dataAreaName);
                                 Data.Models.Metadata.DataArea aggregateDataArea;
                                 if (dataAreaIndex > -1)
                                 {
@@ -359,7 +359,7 @@ namespace SabreTools.Metadata.DatFiles
                                 {
                                     aggregateDataArea = [];
                                     aggregateDataArea[Data.Models.Metadata.DataArea.EndiannessKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.EndiannessKey);
-                                    aggregateDataArea[Data.Models.Metadata.DataArea.NameKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.NameKey);
+                                    aggregateDataArea.Name = dataArea.Name;
                                     aggregateDataArea[Data.Models.Metadata.DataArea.SizeKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.SizeKey);
                                     aggregateDataArea[Data.Models.Metadata.DataArea.WidthKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.WidthKey);
                                 }
@@ -398,7 +398,7 @@ namespace SabreTools.Metadata.DatFiles
                             ClearEmptyKeys(diskItem);
 
                             // Get the disk area name and skip if there's none
-                            string? diskAreaName = diskArea.ReadString(Data.Models.Metadata.DiskArea.NameKey);
+                            string? diskAreaName = diskArea.Name;
                             if (diskAreaName is not null)
                             {
                                 // Get existing disk areas as a list
@@ -406,7 +406,7 @@ namespace SabreTools.Metadata.DatFiles
                                 List<Data.Models.Metadata.DiskArea> diskAreas = [.. diskAreasArr];
 
                                 // Find the existing disk area to append to, otherwise create a new disk area
-                                int diskAreaIndex = diskAreas.FindIndex(da => da.ReadString(Data.Models.Metadata.DiskArea.NameKey) == diskAreaName);
+                                int diskAreaIndex = diskAreas.FindIndex(da => da.Name == diskAreaName);
                                 Data.Models.Metadata.DiskArea aggregateDiskArea;
                                 if (diskAreaIndex > -1)
                                 {
@@ -415,7 +415,7 @@ namespace SabreTools.Metadata.DatFiles
                                 else
                                 {
                                     aggregateDiskArea = [];
-                                    aggregateDiskArea[Data.Models.Metadata.DiskArea.NameKey] = diskArea.ReadString(Data.Models.Metadata.DiskArea.NameKey);
+                                    aggregateDiskArea.Name = diskArea.Name;
                                 }
 
                                 // Clear any empty fields
@@ -741,7 +741,7 @@ namespace SabreTools.Metadata.DatFiles
                         var datItem = partMapping.Value;
 
                         // Get the part name and skip if there's none
-                        string? partName = partItem.ReadString(Data.Models.Metadata.Part.NameKey);
+                        string? partName = partItem.Name;
                         if (partName is null)
                             continue;
 
@@ -750,7 +750,7 @@ namespace SabreTools.Metadata.DatFiles
                             partItems[partName] = [];
 
                         // Copy over string values
-                        partItems[partName][Data.Models.Metadata.Part.NameKey] = partName;
+                        partItems[partName].Name = partName;
                         if (!partItems[partName].ContainsKey(Data.Models.Metadata.Part.InterfaceKey))
                             partItems[partName][Data.Models.Metadata.Part.InterfaceKey] = partItem.ReadString(Data.Models.Metadata.Part.InterfaceKey);
 
@@ -767,7 +767,7 @@ namespace SabreTools.Metadata.DatFiles
                             ClearEmptyKeys(romItem);
 
                             // Get the data area name and skip if there's none
-                            string? dataAreaName = dataArea.ReadString(Data.Models.Metadata.DataArea.NameKey);
+                            string? dataAreaName = dataArea.Name;
                             if (dataAreaName is not null)
                             {
                                 // Get existing data areas as a list
@@ -775,7 +775,7 @@ namespace SabreTools.Metadata.DatFiles
                                 List<Data.Models.Metadata.DataArea> dataAreas = [.. dataAreasArr];
 
                                 // Find the existing disk area to append to, otherwise create a new disk area
-                                int dataAreaIndex = dataAreas.FindIndex(da => da.ReadString(Data.Models.Metadata.DataArea.NameKey) == dataAreaName);
+                                int dataAreaIndex = dataAreas.FindIndex(da => da.Name == dataAreaName);
                                 Data.Models.Metadata.DataArea aggregateDataArea;
                                 if (dataAreaIndex > -1)
                                 {
@@ -785,7 +785,7 @@ namespace SabreTools.Metadata.DatFiles
                                 {
                                     aggregateDataArea = [];
                                     aggregateDataArea[Data.Models.Metadata.DataArea.EndiannessKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.EndiannessKey);
-                                    aggregateDataArea[Data.Models.Metadata.DataArea.NameKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.NameKey);
+                                    aggregateDataArea.Name = dataArea.Name;
                                     aggregateDataArea[Data.Models.Metadata.DataArea.SizeKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.SizeKey);
                                     aggregateDataArea[Data.Models.Metadata.DataArea.WidthKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.WidthKey);
                                 }
@@ -824,7 +824,7 @@ namespace SabreTools.Metadata.DatFiles
                             ClearEmptyKeys(diskItem);
 
                             // Get the disk area name and skip if there's none
-                            string? diskAreaName = diskArea.ReadString(Data.Models.Metadata.DiskArea.NameKey);
+                            string? diskAreaName = diskArea.Name;
                             if (diskAreaName is not null)
                             {
                                 // Get existing disk areas as a list
@@ -832,7 +832,7 @@ namespace SabreTools.Metadata.DatFiles
                                 List<Data.Models.Metadata.DiskArea> diskAreas = [.. diskAreasArr];
 
                                 // Find the existing disk area to append to, otherwise create a new disk area
-                                int diskAreaIndex = diskAreas.FindIndex(da => da.ReadString(Data.Models.Metadata.DiskArea.NameKey) == diskAreaName);
+                                int diskAreaIndex = diskAreas.FindIndex(da => da.Name == diskAreaName);
                                 Data.Models.Metadata.DiskArea aggregateDiskArea;
                                 if (diskAreaIndex > -1)
                                 {
@@ -841,7 +841,7 @@ namespace SabreTools.Metadata.DatFiles
                                 else
                                 {
                                     aggregateDiskArea = [];
-                                    aggregateDiskArea[Data.Models.Metadata.DiskArea.NameKey] = diskArea.ReadString(Data.Models.Metadata.DiskArea.NameKey);
+                                    aggregateDiskArea.Name = diskArea.Name;
                                 }
 
                                 // Clear any empty fields
@@ -983,7 +983,7 @@ namespace SabreTools.Metadata.DatFiles
                     var dumpRom = new Data.Models.Metadata.Dump();
                     var rom = new Data.Models.Metadata.Rom();
 
-                    rom[Data.Models.Metadata.Rom.NameKey] = romItem.ReadString(Data.Models.Metadata.Rom.NameKey);
+                    rom.Name = romItem.Name;
                     rom[Data.Models.Metadata.Rom.OffsetKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
                     rom[Data.Models.Metadata.Rom.OpenMSXType] = romItem.ReadString(Data.Models.Metadata.Rom.OpenMSXType);
                     rom[Data.Models.Metadata.Rom.RemarkKey] = romItem.ReadString(Data.Models.Metadata.Rom.RemarkKey);
@@ -1011,7 +1011,7 @@ namespace SabreTools.Metadata.DatFiles
                     var dumpMegaRom = new Data.Models.Metadata.Dump();
                     var megaRom = new Data.Models.Metadata.Rom();
 
-                    megaRom[Data.Models.Metadata.Rom.NameKey] = romItem.ReadString(Data.Models.Metadata.Rom.NameKey);
+                    megaRom.Name = romItem.Name;
                     megaRom[Data.Models.Metadata.Rom.OffsetKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
                     megaRom[Data.Models.Metadata.Rom.OpenMSXType] = romItem.ReadString(Data.Models.Metadata.Rom.OpenMSXType);
                     megaRom[Data.Models.Metadata.Rom.RemarkKey] = romItem.ReadString(Data.Models.Metadata.Rom.RemarkKey);
@@ -1039,7 +1039,7 @@ namespace SabreTools.Metadata.DatFiles
                     var dumpSccPlusCart = new Data.Models.Metadata.Dump();
                     var sccPlusCart = new Data.Models.Metadata.Rom();
 
-                    sccPlusCart[Data.Models.Metadata.Rom.NameKey] = romItem.ReadString(Data.Models.Metadata.Rom.NameKey);
+                    sccPlusCart.Name = romItem.Name;
                     sccPlusCart[Data.Models.Metadata.Rom.OffsetKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
                     sccPlusCart[Data.Models.Metadata.Rom.OpenMSXType] = romItem.ReadString(Data.Models.Metadata.Rom.OpenMSXType);
                     sccPlusCart[Data.Models.Metadata.Rom.RemarkKey] = romItem.ReadString(Data.Models.Metadata.Rom.RemarkKey);

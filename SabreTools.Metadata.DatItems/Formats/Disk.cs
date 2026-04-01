@@ -114,8 +114,8 @@ namespace SabreTools.Metadata.DatItems.Formats
             {
                 var dataArea = new DataArea();
 
-                string? diskAreaName = diskArea.ReadString(Data.Models.Metadata.DiskArea.NameKey);
-                dataArea.Write(Data.Models.Metadata.DataArea.NameKey, diskAreaName);
+                string? diskAreaName = diskArea.GetName();
+                dataArea.SetName(diskAreaName);
 
                 rom.Write<DataArea?>(Rom.DataAreaKey, dataArea);
             }

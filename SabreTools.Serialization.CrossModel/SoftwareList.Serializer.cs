@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.NameKey] = item.Name,
+                Name =  item.Name,
                 [Data.Models.Metadata.Header.DescriptionKey] = item.Description,
                 [Data.Models.Metadata.Header.NotesKey] = item.Notes,
             };
@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Machine.CloneOfKey] = item.CloneOf,
                 [Data.Models.Metadata.Machine.SupportedKey] = item.Supported,
                 [Data.Models.Metadata.Machine.DescriptionKey] = item.Description,
@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dataArea = new Data.Models.Metadata.DataArea
             {
-                [Data.Models.Metadata.DataArea.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.DataArea.SizeKey] = item.Size,
                 [Data.Models.Metadata.DataArea.WidthKey] = item.Width,
                 [Data.Models.Metadata.DataArea.EndiannessKey] = item.Endianness,
@@ -93,7 +93,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipSwitch = new Data.Models.Metadata.DipSwitch
             {
-                [Data.Models.Metadata.DipSwitch.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.DipSwitch.TagKey] = item.Tag,
                 [Data.Models.Metadata.DipSwitch.MaskKey] = item.Mask,
             };
@@ -111,7 +111,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipValue = new Data.Models.Metadata.DipValue
             {
-                [Data.Models.Metadata.DipValue.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.DipValue.ValueKey] = item.Value,
                 [Data.Models.Metadata.DipValue.DefaultKey] = item.Default,
             };
@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var disk = new Data.Models.Metadata.Disk
             {
-                [Data.Models.Metadata.Disk.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
                 [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
                 [Data.Models.Metadata.Disk.StatusKey] = item.Status,
@@ -141,7 +141,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var diskArea = new Data.Models.Metadata.DiskArea
             {
-                [Data.Models.Metadata.DiskArea.NameKey] = item.Name,
+                Name = item.Name,
             };
 
             if (item.Disk is not null && item.Disk.Length > 0)
@@ -157,7 +157,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var feature = new Data.Models.Metadata.Feature
             {
-                [Data.Models.Metadata.Feature.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Feature.ValueKey] = item.Value,
             };
             return feature;
@@ -170,7 +170,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var info = new Data.Models.Metadata.Info
             {
-                [Data.Models.Metadata.Info.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Info.ValueKey] = item.Value,
             };
             return info;
@@ -183,7 +183,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var part = new Data.Models.Metadata.Part
             {
-                [Data.Models.Metadata.Part.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Part.InterfaceKey] = item.Interface,
             };
 
@@ -209,7 +209,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Rom.SizeKey] = item.Size,
                 [Data.Models.Metadata.Rom.LengthKey] = item.Length,
                 [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
@@ -229,7 +229,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sharedFeat = new Data.Models.Metadata.SharedFeat
             {
-                [Data.Models.Metadata.SharedFeat.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.SharedFeat.ValueKey] = item.Value,
             };
             return sharedFeat;

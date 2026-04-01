@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.NameKey] = "Everdrive SMDB",
+                Name =  "Everdrive SMDB",
             };
             return header;
         }
@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.SHA256Key] = item.SHA256,
-                [Data.Models.Metadata.Rom.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
                 [Data.Models.Metadata.Rom.MD5Key] = item.MD5,
                 [Data.Models.Metadata.Rom.CRCKey] = item.CRC32,

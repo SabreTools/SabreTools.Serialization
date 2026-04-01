@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.NameKey] = "archive.org",
+                Name =  "archive.org",
             };
             return header;
         }
@@ -61,7 +61,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Rom.SourceKey] = item.Source,
                 [Data.Models.Metadata.Rom.BitTorrentMagnetHashKey] = item.BitTorrentMagnetHash,
                 [Data.Models.Metadata.Rom.LastModifiedTimeKey] = item.LastModifiedTime,

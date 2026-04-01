@@ -1,3 +1,4 @@
+using SabreTools.Data.Extensions;
 using Xunit;
 
 namespace SabreTools.Metadata.DatItems.Test
@@ -10,7 +11,7 @@ namespace SabreTools.Metadata.DatItems.Test
         public void CloneTest()
         {
             Machine item = new Machine();
-            item.Write(Data.Models.Metadata.Machine.NameKey, "name");
+            item.SetName("name");
 
             object clone = item.Clone();
             Machine? actual = clone as Machine;
@@ -26,10 +27,10 @@ namespace SabreTools.Metadata.DatItems.Test
         public void GetInternalCloneTest()
         {
             Machine item = new Machine();
-            item.Write(Data.Models.Metadata.Machine.NameKey, "name");
+            item.SetName("name");
 
             Data.Models.Metadata.Machine actual = item.GetInternalClone();
-            Assert.Equal("name", actual[Data.Models.Metadata.Machine.NameKey]);
+            Assert.Equal("name", actual.GetName());
         }
 
         #endregion
@@ -60,10 +61,10 @@ namespace SabreTools.Metadata.DatItems.Test
         public void Equals_MismatchedInternal_False()
         {
             Machine self = new Machine();
-            self.Write(Data.Models.Metadata.Machine.NameKey, "self");
+            self.SetName("self");
 
             Machine? other = new Machine();
-            other.Write(Data.Models.Metadata.Machine.NameKey, "other");
+            other.SetName("other");
 
             bool actual = self.Equals(other);
             Assert.False(actual);
@@ -73,10 +74,10 @@ namespace SabreTools.Metadata.DatItems.Test
         public void Equals_EqualInternal_True()
         {
             Machine self = new Machine();
-            self.Write(Data.Models.Metadata.Machine.NameKey, "name");
+            self.SetName("name");
 
             Machine? other = new Machine();
-            other.Write(Data.Models.Metadata.Machine.NameKey, "name");
+            other.SetName("name");
 
             bool actual = self.Equals(other);
             Assert.True(actual);

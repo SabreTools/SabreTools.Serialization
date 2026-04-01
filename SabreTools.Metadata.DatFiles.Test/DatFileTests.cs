@@ -40,7 +40,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             rom.Write(DatItem.MachineKey, machine);
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "name");
+            datFile.Header.Name = "name";
             datFile.AddItem(rom, statsOnly: false);
 
             long sourceIndex = datFile.AddSourceDB(source);
@@ -51,7 +51,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             created.BucketBy(ItemKey.Machine);
 
             Assert.NotNull(created.Header);
-            Assert.Equal("name", created.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("name", created.Header.Name);
 
             Assert.NotNull(created.Items);
             DatItem datItem = Assert.Single(created.GetItemsForBucket("key"));
@@ -113,14 +113,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void FillHeaderFromPath_NoNameNoDesc_NotBare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, string.Empty);
+            datFile.Header.Name = string.Empty;
             datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
-            Assert.Equal("Filename (1980-01-01)", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Filename (1980-01-01)", datFile.Header.Name);
             Assert.Equal("Filename (1980-01-01)", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
@@ -128,14 +128,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void FillHeaderFromPath_NoNameNoDesc_Bare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, string.Empty);
+            datFile.Header.Name = string.Empty;
             datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
-            Assert.Equal("Filename", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Filename", datFile.Header.Name);
             Assert.Equal("Filename", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
@@ -143,14 +143,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void FillHeaderFromPath_NoNameDesc_NotBare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, string.Empty);
+            datFile.Header.Name = string.Empty;
             datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description");
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
-            Assert.Equal("Description (1980-01-01)", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Description (1980-01-01)", datFile.Header.Name);
             Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
@@ -158,14 +158,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void FillHeaderFromPath_NoNameDesc_Bare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, string.Empty);
+            datFile.Header.Name = string.Empty;
             datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description");
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
-            Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Description", datFile.Header.Name);
             Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
@@ -173,14 +173,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void FillHeaderFromPath_NameNoDesc_NotBare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "Name");
+            datFile.Header.Name = "Name";
             datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
-            Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Name", datFile.Header.Name);
             Assert.Equal("Name (1980-01-01)", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
@@ -188,14 +188,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void FillHeaderFromPath_NameNoDesc_Bare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "Name");
+            datFile.Header.Name = "Name";
             datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
-            Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Name", datFile.Header.Name);
             Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
@@ -203,14 +203,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void FillHeaderFromPath_NameDesc_NotBare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "Name");
+            datFile.Header.Name = "Name";
             datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description");
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
-            Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Name", datFile.Header.Name);
             Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
@@ -218,14 +218,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void FillHeaderFromPath_NameDesc_Bare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "Name ");
+            datFile.Header.Name = "Name ";
             datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description ");
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
-            Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Name", datFile.Header.Name);
             Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
@@ -237,14 +237,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void SetHeaderTest()
         {
             DatHeader datHeader = new DatHeader();
-            datHeader.Write(Data.Models.Metadata.Header.NameKey, "name");
+            datHeader.Name = "name";
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "notname");
+            datFile.Header.Name = "notname";
 
             datFile.SetHeader(datHeader);
             Assert.NotNull(datFile.Header);
-            Assert.Equal("name", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("name", datFile.Header.Name);
         }
 
         #endregion
@@ -273,7 +273,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResetDictionaryTest()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "name");
+            datFile.Header.Name = "name";
             datFile.AddItem(new Rom(), statsOnly: false);
             datFile.AddItemDB(new Rom(), 0, 0, false);
 
@@ -1329,10 +1329,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected)
         {
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
 
             DatItem item = new Rom();
-            item.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            item.SetName("name");
             item.Write(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
@@ -1363,13 +1363,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = string.Empty;
 
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
             machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Rom();
-            item.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            item.SetName("name");
             item.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             item.Write(Data.Models.Metadata.Rom.CRC16Key, "crc16");
             item.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
@@ -1396,13 +1396,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name_manufacturer_publisher_category______md5___sha1_____";
 
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
             machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Disk();
-            item.Write(Data.Models.Metadata.Disk.NameKey, "name");
+            item.SetName("name");
             item.Write(Data.Models.Metadata.Disk.MD5Key, "md5");
             item.Write(Data.Models.Metadata.Disk.SHA1Key, "sha1");
 
@@ -1417,7 +1417,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name.bin_manufacturer_publisher_category__00000000____d41d8cd98f00b204e9800998ecf8427e___da39a3ee5e6b4b0d3255bfef95601890afd80709_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855___12345_";
 
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
             machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
@@ -1444,13 +1444,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name_manufacturer_publisher_category______md5___sha1_sha256____spamsum";
 
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
             machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Media();
-            item.Write(Data.Models.Metadata.Media.NameKey, "name");
+            item.SetName("name");
             item.Write(Data.Models.Metadata.Media.MD5Key, "md5");
             item.Write(Data.Models.Metadata.Media.SHA1Key, "sha1");
             item.Write(Data.Models.Metadata.Media.SHA256Key, "sha256");
@@ -1467,13 +1467,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name_manufacturer_publisher_category_crc16_crc_crc64_md2_md4_md5_ripemd128_ripemd160_sha1_sha256_sha384_sha512_12345_spamsum";
 
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
             machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Rom();
-            item.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            item.SetName("name");
             item.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             item.Write(Data.Models.Metadata.Rom.CRC16Key, "crc16");
             item.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
@@ -1952,7 +1952,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNames_SingleItem_Single()
         {
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
 
             Source source = new Source(0);
 
@@ -1980,7 +1980,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNames_NonDuplicate_AllUntouched()
         {
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
 
             Source source = new Source(0);
 
@@ -2022,7 +2022,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNames_AllDuplicate_Single()
         {
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
 
             Source source = new Source(0);
 
@@ -2057,7 +2057,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNames_NameMatch_SingleRenamed()
         {
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
 
             Source source = new Source(0);
 
@@ -2114,7 +2114,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNamesDB_SingleItem_Single()
         {
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
 
             Source source = new Source(0);
 
@@ -2144,7 +2144,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNamesDB_NonDuplicate_AllUntouched()
         {
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
 
             Source source = new Source(0);
 
@@ -2191,7 +2191,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(null, useGame: false);
 
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
             long machineIndex = datFile.AddMachineDB(machine);
 
             Source source = new Source(0);
@@ -2228,7 +2228,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNamesDB_NameMatch_SingleRenamed()
         {
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.SetName("machine");
 
             Source source = new Source(0);
 
@@ -2318,7 +2318,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ShouldIgnore_NoIgnoreBlanksZeroRom_False()
         {
             DatItem? datItem = new Rom();
-            datItem.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            datItem.SetName("name");
             datItem.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             datItem.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             DatFile datFile = new Logiqx(null, useGame: false);
@@ -2341,7 +2341,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ShouldIgnore_MissingRequired_True()
         {
             DatItem? datItem = new Rom();
-            datItem.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            datItem.SetName("name");
             datItem.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             DatFile datFile = new Logiqx(null, useGame: false);
 
@@ -2353,7 +2353,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ShouldIgnore_AllVerified_False()
         {
             DatItem? datItem = new Rom();
-            datItem.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            datItem.SetName("name");
             datItem.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             datItem.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             datItem.Write(Data.Models.Metadata.Rom.MD2Key, "crc");

@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var game = new Software
             {
-                Title = item.ReadString(Data.Models.Metadata.Machine.NameKey),
+                Title = item.Name,
                 GenMSXID = item.ReadString(Data.Models.Metadata.Machine.GenMSXIDKey),
                 System = item.ReadString(Data.Models.Metadata.Machine.SystemKey),
                 Company = item.ReadString(Data.Models.Metadata.Machine.CompanyKey),

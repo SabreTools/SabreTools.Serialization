@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var file = new File
             {
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                Name = item.Name,
                 Source = item.ReadString(Data.Models.Metadata.Rom.SourceKey),
                 BitTorrentMagnetHash = item.ReadString(Data.Models.Metadata.Rom.BitTorrentMagnetHashKey),
                 LastModifiedTime = item.ReadString(Data.Models.Metadata.Rom.LastModifiedTimeKey),

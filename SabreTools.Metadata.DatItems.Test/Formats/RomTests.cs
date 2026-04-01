@@ -800,7 +800,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Source source = new Source(0);
 
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "Machine");
+            machine.SetName("Machine");
 
             DatItem datItem = new Rom();
             datItem.Write(Data.Models.Metadata.Rom.CRC16Key, "DEADBEEF");

@@ -77,13 +77,13 @@ namespace SabreTools.Serialization.CrossModel
             var row = new Row
             {
                 FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
-                InternalName = header?.ReadString(Data.Models.Metadata.Header.NameKey),
+                InternalName = header?.Name,
                 Description = header?.ReadString(Data.Models.Metadata.Header.DescriptionKey),
-                GameName = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
+                GameName = parent.Name,
                 GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
                 Type = "disk",
                 RomName = null,
-                DiskName = item.ReadString(Data.Models.Metadata.Disk.NameKey),
+                DiskName = item.Name,
                 Size = null,
                 CRC = null,
                 MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
@@ -105,13 +105,13 @@ namespace SabreTools.Serialization.CrossModel
             var row = new Row
             {
                 FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve on an item -- OriginalFilename
-                InternalName = header?.ReadString(Data.Models.Metadata.Header.NameKey),
+                InternalName = header?.Name,
                 Description = header?.ReadString(Data.Models.Metadata.Header.DescriptionKey),
-                GameName = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
+                GameName = parent.Name,
                 GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
                 Type = "media",
                 RomName = null,
-                DiskName = item.ReadString(Data.Models.Metadata.Media.NameKey),
+                DiskName = item.Name,
                 Size = null,
                 CRC = null,
                 MD5 = item.ReadString(Data.Models.Metadata.Media.MD5Key),
@@ -132,12 +132,12 @@ namespace SabreTools.Serialization.CrossModel
             var row = new Row
             {
                 FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
-                InternalName = header?.ReadString(Data.Models.Metadata.Header.NameKey),
+                InternalName = header?.Name,
                 Description = header?.ReadString(Data.Models.Metadata.Header.DescriptionKey),
-                GameName = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
+                GameName = parent.Name,
                 GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
                 Type = "rom",
-                RomName = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                RomName = item.Name,
                 DiskName = null,
                 Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),

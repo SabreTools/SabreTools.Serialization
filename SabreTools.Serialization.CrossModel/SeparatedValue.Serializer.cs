@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 var first = item.Row[0];
                 header["FILENAME"] = first.FileName; // TODO: Make this an actual key to retrieve on an item -- OriginalFilename
-                header[Data.Models.Metadata.Header.NameKey] = first.FileName;
+                header.Name =  first.FileName;
                 header[Data.Models.Metadata.Header.DescriptionKey] = first.Description;
             }
 
@@ -53,7 +53,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.NameKey] = item.GameName,
+                Name = item.GameName,
                 [Data.Models.Metadata.Machine.DescriptionKey] = item.GameDescription,
             };
 
@@ -89,14 +89,14 @@ namespace SabreTools.Serialization.CrossModel
             {
                 "disk" => new Data.Models.Metadata.Disk
                 {
-                    [Data.Models.Metadata.Disk.NameKey] = item.DiskName,
+                    Name = item.DiskName,
                     [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
                     [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
                     [Data.Models.Metadata.Disk.StatusKey] = item.Status,
                 },
                 "media" => new Data.Models.Metadata.Media
                 {
-                    [Data.Models.Metadata.Media.NameKey] = item.DiskName,
+                    Name = item.DiskName,
                     [Data.Models.Metadata.Media.MD5Key] = item.MD5,
                     [Data.Models.Metadata.Media.SHA1Key] = item.SHA1,
                     [Data.Models.Metadata.Media.SHA256Key] = item.SHA256,
@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.CrossModel
                 },
                 "rom" => new Data.Models.Metadata.Rom
                 {
-                    [Data.Models.Metadata.Rom.NameKey] = item.RomName,
+                    Name = item.RomName,
                     [Data.Models.Metadata.Rom.SizeKey] = item.Size,
                     [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
                     [Data.Models.Metadata.Rom.MD5Key] = item.MD5,

@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var clrMamePro = new Data.Models.ClrMamePro.ClrMamePro
             {
-                Name = item.ReadString(Data.Models.Metadata.Header.NameKey),
+                Name = item.Name,
                 Description = item.ReadString(Data.Models.Metadata.Header.DescriptionKey),
                 RootDir = item.ReadString(Data.Models.Metadata.Header.RootDirKey),
                 Category = item.ReadString(Data.Models.Metadata.Header.CategoryKey),
@@ -69,7 +69,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             GameBase gameBase = game ? new Game() : new Machine();
 
-            gameBase.Name = item.ReadString(Data.Models.Metadata.Machine.NameKey);
+            gameBase.Name = item.Name;
             gameBase.Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey);
             // gameBase.DriverStatus = item.ReadString(Data.Models.Metadata.Machine.DriverKey); // TODO: Needs metadata mapping
             gameBase.Year = item.ReadString(Data.Models.Metadata.Machine.YearKey);
@@ -141,7 +141,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var archive = new Archive
             {
-                Name = item.ReadString(Data.Models.Metadata.Archive.NameKey),
+                Name = item.Name,
             };
             return archive;
         }
@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var biosset = new BiosSet
             {
-                Name = item.ReadString(Data.Models.Metadata.BiosSet.NameKey),
+                Name = item.Name,
                 Description = item.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey),
                 Default = item.ReadString(Data.Models.Metadata.BiosSet.DefaultKey),
             };
@@ -168,7 +168,7 @@ namespace SabreTools.Serialization.CrossModel
             var chip = new Chip
             {
                 Type = item.ReadString(Data.Models.Metadata.Chip.ChipTypeKey),
-                Name = item.ReadString(Data.Models.Metadata.Chip.NameKey),
+                Name = item.Name,
                 Flags = item.ReadString(Data.Models.Metadata.Chip.FlagsKey),
                 Clock = item.ReadString(Data.Models.Metadata.Chip.ClockKey),
             };
@@ -182,7 +182,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipswitch = new DipSwitch
             {
-                Name = item.ReadString(Data.Models.Metadata.DipSwitch.NameKey),
+                Name = item.Name,
                 Entry = item[Data.Models.Metadata.DipSwitch.EntryKey] as string[],
                 Default = item.ReadString(Data.Models.Metadata.DipSwitch.DefaultKey),
             };
@@ -196,7 +196,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var disk = new Disk
             {
-                Name = item.ReadString(Data.Models.Metadata.Disk.NameKey),
+                Name = item.Name,
                 MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
                 SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
                 Merge = item.ReadString(Data.Models.Metadata.Disk.MergeKey),
@@ -246,7 +246,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var media = new Media
             {
-                Name = item.ReadString(Data.Models.Metadata.Media.NameKey),
+                Name = item.Name,
                 MD5 = item.ReadString(Data.Models.Metadata.Media.MD5Key),
                 SHA1 = item.ReadString(Data.Models.Metadata.Media.SHA1Key),
                 SHA256 = item.ReadString(Data.Models.Metadata.Media.SHA256Key),
@@ -262,7 +262,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var release = new Release
             {
-                Name = item.ReadString(Data.Models.Metadata.Release.NameKey),
+                Name = item.Name,
                 Region = item.ReadString(Data.Models.Metadata.Release.RegionKey),
                 Language = item.ReadString(Data.Models.Metadata.Release.LanguageKey),
                 Date = item.ReadString(Data.Models.Metadata.Release.DateKey),
@@ -278,7 +278,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Rom
             {
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                Name = item.Name,
                 Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
                 CRC16 = item.ReadString(Data.Models.Metadata.Rom.CRC16Key),
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
@@ -316,7 +316,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sample = new Sample
             {
-                Name = item.ReadString(Data.Models.Metadata.Sample.NameKey),
+                Name = item.Name,
             };
             return sample;
         }

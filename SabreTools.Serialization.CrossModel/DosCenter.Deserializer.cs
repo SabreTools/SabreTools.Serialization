@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dosCenter = new Data.Models.DosCenter.DosCenter
             {
-                Name = item.ReadString(Data.Models.Metadata.Header.NameKey),
+                Name = item.Name,
                 Description = item.ReadString(Data.Models.Metadata.Header.DescriptionKey),
                 Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
                 Date = item.ReadString(Data.Models.Metadata.Header.DateKey),
@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var game = new Game
             {
-                Name = item.ReadString(Data.Models.Metadata.Machine.NameKey),
+                Name = item.Name,
             };
 
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var file = new File
             {
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                Name = item.Name,
                 Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),

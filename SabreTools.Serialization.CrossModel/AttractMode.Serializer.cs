@@ -47,7 +47,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.NameKey] = item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Machine.EmulatorKey] = item.Emulator,
                 [Data.Models.Metadata.Machine.CloneOfKey] = item.CloneOf,
                 [Data.Models.Metadata.Machine.YearKey] = item.Year,
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.NameKey] = item.Title,
+                Name = item.Title,
                 [Data.Models.Metadata.Rom.AltRomnameKey] = item.AltRomname,
                 [Data.Models.Metadata.Rom.AltTitleKey] = item.AltTitle,
                 [Data.Models.Metadata.Rom.FileIsAvailableKey] = item.FileIsAvailable,

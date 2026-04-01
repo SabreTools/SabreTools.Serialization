@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.NameKey] = "Hashfile",
+                Name =  "Hashfile",
             };
             return header;
         }
@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.MD2Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
             };
             return rom;
         }
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.MD4Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
             };
             return rom;
         }
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.MD5Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
             };
             return rom;
         }
@@ -114,7 +114,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.RIPEMD128Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
             };
             return rom;
         }
@@ -127,7 +127,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.RIPEMD160Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
             };
             return rom;
         }
@@ -139,7 +139,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
                 [Data.Models.Metadata.Rom.CRCKey] = item.Hash,
             };
             return rom;
@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.SHA1Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
             };
             return rom;
         }
@@ -166,7 +166,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.SHA256Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
             };
             return rom;
         }
@@ -179,7 +179,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.SHA384Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
             };
             return rom;
         }
@@ -192,7 +192,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.SHA512Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
             };
             return rom;
         }
@@ -205,7 +205,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 [Data.Models.Metadata.Rom.SpamSumKey] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                Name = item.File,
             };
             return rom;
         }

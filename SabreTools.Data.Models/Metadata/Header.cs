@@ -6,6 +6,12 @@ namespace SabreTools.Data.Models.Metadata
     /// </summary>
     public class Header : DictionaryBase
     {
+        #region Properties
+
+        public string? Name { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>string</remarks>

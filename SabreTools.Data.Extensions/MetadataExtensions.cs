@@ -20,46 +20,48 @@ namespace SabreTools.Data.Extensions
 
             return self switch
             {
-                Machine => self.ReadString(Machine.NameKey),
+                Header header => header.Name,
 
-                Adjuster => self.ReadString(Adjuster.NameKey),
+                Machine machine => machine.Name,
+
+                Adjuster adjuster => adjuster.Name,
                 Analog => null,
-                Archive => self.ReadString(Archive.NameKey),
-                BiosSet => self.ReadString(BiosSet.NameKey),
-                Chip => self.ReadString(Chip.NameKey),
+                Archive archive => archive.Name,
+                BiosSet biosSet => biosSet.Name,
+                Chip chip => chip.Name,
                 Condition => null,
-                ConfLocation => self.ReadString(ConfLocation.NameKey),
-                ConfSetting => self.ReadString(ConfSetting.NameKey),
-                Configuration => self.ReadString(Configuration.NameKey),
+                ConfLocation confLocation => confLocation.Name,
+                ConfSetting confSetting => confSetting.Name,
+                Configuration configuration => configuration.Name,
                 Control => null,
-                DataArea => self.ReadString(DataArea.NameKey),
+                DataArea dataArea => dataArea.Name,
                 Device => null,
-                DeviceRef => self.ReadString(DeviceRef.NameKey),
-                DipLocation => self.ReadString(DipLocation.NameKey),
-                DipSwitch => self.ReadString(DipSwitch.NameKey),
-                DipValue => self.ReadString(DipValue.NameKey),
-                Disk => self.ReadString(Disk.NameKey),
-                DiskArea => self.ReadString(DiskArea.NameKey),
+                DeviceRef deviceRef => deviceRef.Name,
+                DipLocation dipLocation => dipLocation.Name,
+                DipSwitch dipSwitch => dipSwitch.Name,
+                DipValue dipValue => dipValue.Name,
+                Disk disk => disk.Name,
+                DiskArea diskArea => diskArea.Name,
                 Display => null,
                 Driver => null,
-                Extension => self.ReadString(Extension.NameKey),
-                Feature => self.ReadString(Feature.NameKey),
-                Info => self.ReadString(Info.NameKey),
+                Extension extension => extension.Name,
+                Feature feature => feature.Name,
+                Info info => info.Name,
                 Input => null,
-                Instance => self.ReadString(Instance.NameKey),
-                Media => self.ReadString(Media.NameKey),
-                Part => self.ReadString(Part.NameKey),
+                Instance instance => instance.Name,
+                Media media => media.Name,
+                Part part => part.Name,
                 Port => null,
-                RamOption => self.ReadString(RamOption.NameKey),
-                Release => self.ReadString(Release.NameKey),
+                RamOption ramOption => ramOption.Name,
+                Release release => release.Name,
                 ReleaseDetails => null,
-                Rom => self.ReadString(Rom.NameKey),
-                Sample => self.ReadString(Sample.NameKey),
+                Rom rom => rom.Name,
+                Sample sample => sample.Name,
                 Serials => null,
-                SharedFeat => self.ReadString(SharedFeat.NameKey),
-                Slot => self.ReadString(Slot.NameKey),
-                SlotOption => self.ReadString(SlotOption.NameKey),
-                SoftwareList => self.ReadString(SoftwareList.NameKey),
+                SharedFeat sharedFeat => sharedFeat.Name,
+                Slot slot => slot.Name,
+                SlotOption slotOption => slotOption.Name,
+                SoftwareList softwareList => softwareList.Name,
                 Sound => null,
                 SourceDetails => null,
                 Video => null,
@@ -78,46 +80,48 @@ namespace SabreTools.Data.Extensions
 
             switch (self)
             {
-                case Machine: self[Machine.NameKey] = name; break;
+                case Header header: header.Name = name; break;
 
-                case Adjuster: self[Adjuster.NameKey] = name; break;
+                case Machine machine: machine.Name = name; break;
+
+                case Adjuster adjuster: adjuster.Name = name; break;
                 case Analog: break;
-                case Archive: self[Archive.NameKey] = name; break;
-                case BiosSet: self[BiosSet.NameKey] = name; break;
-                case Chip: self[Chip.NameKey] = name; break;
+                case Archive archive: archive.Name = name; break;
+                case BiosSet biosSet: biosSet.Name = name; break;
+                case Chip chip: chip.Name = name; break;
                 case Condition: break;
-                case ConfLocation: self[ConfLocation.NameKey] = name; break;
-                case ConfSetting: self[ConfSetting.NameKey] = name; break;
-                case Configuration: self[Configuration.NameKey] = name; break;
+                case ConfLocation confLocation: confLocation.Name = name; break;
+                case ConfSetting confSetting: confSetting.Name = name; break;
+                case Configuration configuration: configuration.Name = name; break;
                 case Control: break;
-                case DataArea: self[DataArea.NameKey] = name; break;
+                case DataArea dataArea: dataArea.Name = name; break;
                 case Device: break;
-                case DeviceRef: self[DeviceRef.NameKey] = name; break;
-                case DipLocation: self[DipLocation.NameKey] = name; break;
-                case DipSwitch: self[DipSwitch.NameKey] = name; break;
-                case DipValue: self[DipValue.NameKey] = name; break;
-                case Disk: self[Disk.NameKey] = name; break;
-                case DiskArea: self[DiskArea.NameKey] = name; break;
+                case DeviceRef deviceRef: deviceRef.Name = name; break;
+                case DipLocation dipLocation: dipLocation.Name = name; break;
+                case DipSwitch dipSwitch: dipSwitch.Name = name; break;
+                case DipValue dipValue: dipValue.Name = name; break;
+                case Disk disk: disk.Name = name; break;
+                case DiskArea diskArea: diskArea.Name = name; break;
                 case Display: break;
                 case Driver: break;
-                case Extension: self[Extension.NameKey] = name; break;
-                case Feature: self[Feature.NameKey] = name; break;
-                case Info: self[Info.NameKey] = name; break;
+                case Extension extension: extension.Name = name; break;
+                case Feature feature: feature.Name = name; break;
+                case Info info: info.Name = name; break;
                 case Input: break;
-                case Instance: self[Instance.NameKey] = name; break;
-                case Media: self[Media.NameKey] = name; break;
-                case Part: self[Part.NameKey] = name; break;
+                case Instance instance: instance.Name = name; break;
+                case Media media: media.Name = name; break;
+                case Part part: part.Name = name; break;
                 case Port: break;
-                case RamOption: self[RamOption.NameKey] = name; break;
-                case Release: self[Release.NameKey] = name; break;
+                case RamOption ramOption: ramOption.Name = name; break;
+                case Release release: release.Name = name; break;
                 case ReleaseDetails: break;
-                case Rom: self[Rom.NameKey] = name; break;
-                case Sample: self[Sample.NameKey] = name; break;
+                case Rom rom: rom.Name = name; break;
+                case Sample sample: sample.Name = name; break;
                 case Serials: break;
-                case SharedFeat: self[SharedFeat.NameKey] = name; break;
-                case Slot: self[Slot.NameKey] = name; break;
-                case SlotOption: self[SlotOption.NameKey] = name; break;
-                case SoftwareList: self[SoftwareList.NameKey] = name; break;
+                case SharedFeat sharedFeat: sharedFeat.Name = name; break;
+                case Slot slot: slot.Name = name; break;
+                case SlotOption slotOption: slotOption.Name = name; break;
+                case SoftwareList softwareList: softwareList.Name = name; break;
                 case Sound: break;
                 case SourceDetails: break;
                 case Video: break;
@@ -138,6 +142,9 @@ namespace SabreTools.Data.Extensions
             // If construction failed, we can't do anything
             if (Activator.CreateInstance(self.GetType()) is not DictionaryBase clone)
                 return null;
+
+            // Handle known properties
+            clone.SetName(self.GetName());
 
             // Loop through and clone per type
             foreach (string key in self.Keys)
@@ -196,13 +203,13 @@ namespace SabreTools.Data.Extensions
                 return null;
 
             // Append a suffix to the name
-            string? name = disk.ReadString(Disk.NameKey);
+            string? name = disk.Name;
             if (name is not null)
                 name += ".chd";
 
             return new Rom
             {
-                [Rom.NameKey] = name,
+                Name = name,
                 [Rom.MergeKey] = disk.ReadString(Disk.MergeKey),
                 [Rom.RegionKey] = disk.ReadString(Disk.RegionKey),
                 [Rom.StatusKey] = disk.ReadString(Disk.StatusKey),
@@ -222,13 +229,13 @@ namespace SabreTools.Data.Extensions
                 return null;
 
             // Append a suffix to the name
-            string? name = media.ReadString(Media.NameKey);
+            string? name = media.Name;
             if (name is not null)
                 name += ".aaruf";
 
             return new Rom
             {
-                [Rom.NameKey] = name,
+                Name = name,
                 [Rom.MD5Key] = media.ReadString(Media.MD5Key),
                 [Rom.SHA1Key] = media.ReadString(Media.SHA1Key),
                 [Rom.SHA256Key] = media.ReadString(Media.SHA256Key),

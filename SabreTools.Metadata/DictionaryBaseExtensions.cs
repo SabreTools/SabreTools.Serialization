@@ -55,6 +55,10 @@ namespace SabreTools.Metadata
             if (!selfKeys.SetEquals(otherKeys))
                 return false;
 
+            // Check names
+            if (self.GetName() != other.GetName())
+                return false;
+
             // Check all pairs to see if they're equal
             foreach (var kvp in self)
             {
@@ -175,8 +179,8 @@ namespace SabreTools.Metadata
             string? selfStatus = self.ReadString(Disk.StatusKey);
             string? otherStatus = other.ReadString(Disk.StatusKey);
 
-            string? selfName = self.ReadString(Disk.NameKey);
-            string? otherName = other.ReadString(Disk.NameKey);
+            string? selfName = self.Name;
+            string? otherName = other.Name;
 
             // If all hashes are empty but they're both nodump and the names match, then they're dupes
             if (string.Equals(selfStatus, "nodump", StringComparison.OrdinalIgnoreCase)
@@ -217,8 +221,8 @@ namespace SabreTools.Metadata
             string? selfStatus = self.ReadString(Rom.StatusKey);
             string? otherStatus = other.ReadString(Rom.StatusKey);
 
-            string? selfName = self.ReadString(Rom.NameKey);
-            string? otherName = other.ReadString(Rom.NameKey);
+            string? selfName = self.Name;
+            string? otherName = other.Name;
 
             long? selfSize = self.ReadLong(Rom.SizeKey);
             long? otherSize = other.ReadLong(Rom.SizeKey);

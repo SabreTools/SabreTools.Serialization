@@ -118,12 +118,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void CloneTest()
         {
             DatHeader header = new DatHeader();
-            header.Write(Data.Models.Metadata.Header.NameKey, "name");
+            header.Name = "name";
 
             object clone = header.Clone();
             DatHeader? actual = clone as DatHeader;
             Assert.NotNull(actual);
-            Assert.Equal("name", actual.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion
@@ -150,10 +150,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void GetInternalCloneTest()
         {
             DatHeader header = new DatHeader();
-            header.Write(Data.Models.Metadata.Header.NameKey, "name");
+            header.Name = "name";
 
             Data.Models.Metadata.Header actual = header.GetInternalClone();
-            Assert.Equal("name", actual[Data.Models.Metadata.Header.NameKey]);
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion
@@ -184,10 +184,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void Equals_MismatchedInternal_False()
         {
             DatHeader self = new DatHeader();
-            self.Write(Data.Models.Metadata.Header.NameKey, "self");
+            self.Name = "self";
 
             DatHeader? other = new DatHeader();
-            other.Write(Data.Models.Metadata.Header.NameKey, "other");
+            other.Name = "other";
 
             bool actual = self.Equals(other);
             Assert.False(actual);
@@ -197,10 +197,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void Equals_EqualInternal_True()
         {
             DatHeader self = new DatHeader();
-            self.Write(Data.Models.Metadata.Header.NameKey, "name");
+            self.Name = "name";
 
             DatHeader? other = new DatHeader();
-            other.Write(Data.Models.Metadata.Header.NameKey, "name");
+            other.Name = "name";
 
             bool actual = self.Equals(other);
             Assert.True(actual);

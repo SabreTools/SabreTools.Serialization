@@ -77,12 +77,24 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesEqual(DictionaryBase dictionaryBase)
         {
-            // If the key doesn't exist, we count it as null
-            if (!dictionaryBase.ContainsKey(Key.FieldName))
-                return string.IsNullOrEmpty(Value);
+            // Some fields need unique handling
+            string? checkValue;
+            if (Key.FieldName == "name")
+            {
+                // TODO: Make this less awkward and hacky
+                checkValue = dictionaryBase.GetName();
+            }
+            else
+            {
+                // If the key doesn't exist, we count it as null
+                if (!dictionaryBase.ContainsKey(Key.FieldName))
+                    return string.IsNullOrEmpty(Value);
 
-            // If the value in the dictionary is null
-            string? checkValue = dictionaryBase.ReadString(Key.FieldName);
+                // If the value in the dictionary is null
+                checkValue = dictionaryBase.ReadString(Key.FieldName);
+            }
+
+            // If a null value is expected
             if (checkValue is null)
                 return string.IsNullOrEmpty(Value);
 
@@ -120,12 +132,24 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesNotEqual(DictionaryBase dictionaryBase)
         {
-            // If the key doesn't exist, we count it as null
-            if (!dictionaryBase.ContainsKey(Key.FieldName))
-                return !string.IsNullOrEmpty(Value);
+            // Some fields need unique handling
+            string? checkValue;
+            if (Key.FieldName == "name")
+            {
+                // TODO: Make this less awkward and hacky
+                checkValue = dictionaryBase.GetName();
+            }
+            else
+            {
+                // If the key doesn't exist, we count it as null
+                if (!dictionaryBase.ContainsKey(Key.FieldName))
+                    return string.IsNullOrEmpty(Value);
 
-            // If the value in the dictionary is null
-            string? checkValue = dictionaryBase.ReadString(Key.FieldName);
+                // If the value in the dictionary is null
+                checkValue = dictionaryBase.ReadString(Key.FieldName);
+            }
+
+            // If a null value is expected
             if (checkValue is null)
                 return !string.IsNullOrEmpty(Value);
 
@@ -163,12 +187,24 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesGreaterThan(DictionaryBase dictionaryBase)
         {
-            // If the key doesn't exist, we count it as null
-            if (!dictionaryBase.ContainsKey(Key.FieldName))
-                return false;
+            // Some fields need unique handling
+            string? checkValue;
+            if (Key.FieldName == "name")
+            {
+                // TODO: Make this less awkward and hacky
+                checkValue = dictionaryBase.GetName();
+            }
+            else
+            {
+                // If the key doesn't exist, we count it as null
+                if (!dictionaryBase.ContainsKey(Key.FieldName))
+                    return string.IsNullOrEmpty(Value);
 
-            // If the value in the dictionary is null
-            string? checkValue = dictionaryBase.ReadString(Key.FieldName);
+                // If the value in the dictionary is null
+                checkValue = dictionaryBase.ReadString(Key.FieldName);
+            }
+
+            // Null is always failure
             if (checkValue is null)
                 return false;
 
@@ -196,12 +232,24 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesGreaterThanOrEqual(DictionaryBase dictionaryBase)
         {
-            // If the key doesn't exist, we count it as null
-            if (!dictionaryBase.ContainsKey(Key.FieldName))
-                return false;
+            // Some fields need unique handling
+            string? checkValue;
+            if (Key.FieldName == "name")
+            {
+                // TODO: Make this less awkward and hacky
+                checkValue = dictionaryBase.GetName();
+            }
+            else
+            {
+                // If the key doesn't exist, we count it as null
+                if (!dictionaryBase.ContainsKey(Key.FieldName))
+                    return string.IsNullOrEmpty(Value);
 
-            // If the value in the dictionary is null
-            string? checkValue = dictionaryBase.ReadString(Key.FieldName);
+                // If the value in the dictionary is null
+                checkValue = dictionaryBase.ReadString(Key.FieldName);
+            }
+
+            // Null is always failure
             if (checkValue is null)
                 return false;
 
@@ -229,12 +277,24 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesLessThan(DictionaryBase dictionaryBase)
         {
-            // If the key doesn't exist, we count it as null
-            if (!dictionaryBase.ContainsKey(Key.FieldName))
-                return false;
+            // Some fields need unique handling
+            string? checkValue;
+            if (Key.FieldName == "name")
+            {
+                // TODO: Make this less awkward and hacky
+                checkValue = dictionaryBase.GetName();
+            }
+            else
+            {
+                // If the key doesn't exist, we count it as null
+                if (!dictionaryBase.ContainsKey(Key.FieldName))
+                    return string.IsNullOrEmpty(Value);
 
-            // If the value in the dictionary is null
-            string? checkValue = dictionaryBase.ReadString(Key.FieldName);
+                // If the value in the dictionary is null
+                checkValue = dictionaryBase.ReadString(Key.FieldName);
+            }
+
+            // Null is always failure
             if (checkValue is null)
                 return false;
 
@@ -262,12 +322,24 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesLessThanOrEqual(DictionaryBase dictionaryBase)
         {
-            // If the key doesn't exist, we count it as null
-            if (!dictionaryBase.ContainsKey(Key.FieldName))
-                return false;
+            // Some fields need unique handling
+            string? checkValue;
+            if (Key.FieldName == "name")
+            {
+                // TODO: Make this less awkward and hacky
+                checkValue = dictionaryBase.GetName();
+            }
+            else
+            {
+                // If the key doesn't exist, we count it as null
+                if (!dictionaryBase.ContainsKey(Key.FieldName))
+                    return string.IsNullOrEmpty(Value);
 
-            // If the value in the dictionary is null
-            string? checkValue = dictionaryBase.ReadString(Key.FieldName);
+                // If the value in the dictionary is null
+                checkValue = dictionaryBase.ReadString(Key.FieldName);
+            }
+
+            // Null is always failure
             if (checkValue is null)
                 return false;
 

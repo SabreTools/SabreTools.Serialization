@@ -67,6 +67,7 @@ namespace SabreTools.Metadata.DatFiles
 
             // Create an internal header
             var header = new DatHeader(item);
+            Header.Name = header.Name;
 
             // Convert subheader values
             var canOpen = item.Read<Data.Models.OfflineList.CanOpen>(Data.Models.Metadata.Header.CanOpenKey);
@@ -136,8 +137,8 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Write(Data.Models.Metadata.Header.LockSampleModeKey, header.ReadBool(Data.Models.Metadata.Header.LockSampleModeKey));
             if (Header.ReadString(Data.Models.Metadata.Header.MameConfigKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.MameConfigKey, header.ReadString(Data.Models.Metadata.Header.MameConfigKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.NameKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.NameKey, header.ReadString(Data.Models.Metadata.Header.NameKey));
+            if (Header.Name is null)
+                Header.Name = header.Name;
             if (Header.ReadString(Data.Models.Metadata.Header.NotesKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.NotesKey, header.ReadString(Data.Models.Metadata.Header.NotesKey));
             if (Header.ReadString(Data.Models.Metadata.Header.PluginKey) is null)
@@ -170,7 +171,7 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Write<string?>(Data.Models.Metadata.Header.VersionKey, header.ReadString(Data.Models.Metadata.Header.VersionKey));
 
             // Handle implied SuperDAT
-            if (Header.ReadString(Data.Models.Metadata.Header.NameKey)?.Contains(" - SuperDAT") == true && keep)
+            if (Header.Name?.Contains(" - SuperDAT") == true && keep)
             {
                 if (Header.ReadString(Data.Models.Metadata.Header.TypeKey) is null)
                     Header.Write<string?>(Data.Models.Metadata.Header.TypeKey, "SuperDAT");

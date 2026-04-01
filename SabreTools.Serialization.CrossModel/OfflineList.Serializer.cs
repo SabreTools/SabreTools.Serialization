@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.Configuration is not null)
             {
-                header[Data.Models.Metadata.Header.NameKey] = item.Configuration.DatName;
+                header.Name =  item.Configuration.DatName;
                 header[Data.Models.Metadata.Header.ImFolderKey] = item.Configuration.ImFolder;
                 header[Data.Models.Metadata.Header.DatVersionKey] = item.Configuration.DatVersion;
                 header[Data.Models.Metadata.Header.SystemKey] = item.Configuration.System;
@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 [Data.Models.Metadata.Machine.ImageNumberKey] = item.ImageNumber,
                 [Data.Models.Metadata.Machine.ReleaseNumberKey] = item.ReleaseNumber,
-                [Data.Models.Metadata.Machine.NameKey] = item.Title,
+                Name = item.Title,
                 [Data.Models.Metadata.Machine.SaveTypeKey] = item.SaveType,
                 [Data.Models.Metadata.Machine.PublisherKey] = item.Publisher,
                 [Data.Models.Metadata.Machine.LocationKey] = item.Location,

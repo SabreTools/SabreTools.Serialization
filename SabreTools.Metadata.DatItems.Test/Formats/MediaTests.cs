@@ -11,7 +11,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void ConvertToRomTest()
         {
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "XXXXXX");
+            machine.SetName("XXXXXX");
 
             Source source = new Source(0, "XXXXXX");
 
@@ -306,7 +306,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Source source = new Source(0);
 
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "Machine");
+            machine.SetName("Machine");
 
             DatItem datItem = new Media();
             datItem.Write(Data.Models.Metadata.Media.MD5Key, "DEADBEEF");

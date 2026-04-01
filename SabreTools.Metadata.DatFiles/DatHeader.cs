@@ -31,6 +31,12 @@ namespace SabreTools.Metadata.DatFiles
 
         #region Fields
 
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
         [JsonIgnore]
         public bool CanOpenSpecified
         {

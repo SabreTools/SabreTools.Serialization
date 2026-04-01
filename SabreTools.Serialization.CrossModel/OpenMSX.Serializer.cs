@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.NameKey] = item.Title,
+                Name = item.Title,
                 [Data.Models.Metadata.Machine.GenMSXIDKey] = item.GenMSXID,
                 [Data.Models.Metadata.Machine.SystemKey] = item.System,
                 [Data.Models.Metadata.Machine.CompanyKey] = item.Company,

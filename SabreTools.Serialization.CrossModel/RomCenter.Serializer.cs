@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Machine.RomOfKey] = item.RomOf,
                 [Data.Models.Metadata.Machine.CloneOfKey] = item.ParentName,
                 //[Data.Models.Metadata.Machine.ParentDescriptionKey] = item.ParentDescription, // This is unmappable
-                [Data.Models.Metadata.Machine.NameKey] = item.GameName,
+                Name = item.GameName,
                 [Data.Models.Metadata.Machine.DescriptionKey] = item.GameDescription,
                 [Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { ConvertToInternalModel(item) },
             };
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.NameKey] = item.RomName,
+                Name = item.RomName,
                 [Data.Models.Metadata.Rom.CRCKey] = item.RomCRC,
                 [Data.Models.Metadata.Rom.SizeKey] = item.RomSize,
                 [Data.Models.Metadata.Rom.MergeKey] = item.MergeName,

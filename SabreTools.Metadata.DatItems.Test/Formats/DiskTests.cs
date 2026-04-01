@@ -14,7 +14,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             diskArea.SetName("XXXXXX");
 
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "XXXXXX");
+            machine.SetName("XXXXXX");
 
             Part part = new Part();
             part.SetName("XXXXXX");
@@ -49,7 +49,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             DataArea? actualDataArea = actual.Read<DataArea?>(Rom.DataAreaKey);
             Assert.NotNull(actualDataArea);
-            Assert.Equal("XXXXXX", actualDataArea.ReadString(Data.Models.Metadata.DataArea.NameKey));
+            Assert.Equal("XXXXXX", actualDataArea.GetName());
 
             Machine? actualMachine = actual.GetMachine();
             Assert.NotNull(actualMachine);
@@ -59,7 +59,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Part? actualPart = actual.Read<Part?>(Rom.PartKey);
             Assert.NotNull(actualPart);
-            Assert.Equal("XXXXXX", actualPart.ReadString(Data.Models.Metadata.Part.NameKey));
+            Assert.Equal("XXXXXX", actualPart.GetName());
 
             Source? actualSource = actual.Read<Source?>(DatItem.SourceKey);
             Assert.NotNull(actualSource);
@@ -254,7 +254,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Source source = new Source(0);
 
             Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "Machine");
+            machine.SetName("Machine");
 
             DatItem datItem = new Disk();
             datItem.Write(Data.Models.Metadata.Disk.MD5Key, "DEADBEEF");

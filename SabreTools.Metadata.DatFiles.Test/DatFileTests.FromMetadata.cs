@@ -227,7 +227,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Header.LockRomModeKey] = "yes",
                 [Data.Models.Metadata.Header.LockSampleModeKey] = "yes",
                 [Data.Models.Metadata.Header.MameConfigKey] = "mameconfig",
-                [Data.Models.Metadata.Header.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Header.NewDatKey] = newDat,
                 [Data.Models.Metadata.Header.NotesKey] = "notes",
                 [Data.Models.Metadata.Header.PluginKey] = "plugin",
@@ -297,7 +297,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Machine.LocationKey] = "location",
                 [Data.Models.Metadata.Machine.ManufacturerKey] = "manufacturer",
                 [Data.Models.Metadata.Machine.MediaKey] = new Data.Models.Metadata.Media[] { CreateMetadataMedia() },
-                [Data.Models.Metadata.Machine.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Machine.NotesKey] = "notes",
                 [Data.Models.Metadata.Machine.PartKey] = new Data.Models.Metadata.Part[] { CreateMetadataPart() },
                 [Data.Models.Metadata.Machine.PlayedCountKey] = "playedcount",
@@ -338,7 +338,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 [Data.Models.Metadata.Adjuster.ConditionKey] = CreateMetadataCondition(),
                 [Data.Models.Metadata.Adjuster.DefaultKey] = true,
-                [Data.Models.Metadata.Adjuster.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -359,7 +359,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Archive.RegParentKey] = "regparent",
                 [Data.Models.Metadata.Archive.MergeOfKey] = "mergeof",
                 [Data.Models.Metadata.Archive.MergeNameKey] = "mergename",
-                [Data.Models.Metadata.Archive.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Archive.NameAltKey] = "name_alt",
                 [Data.Models.Metadata.Archive.RegionKey] = "region",
                 [Data.Models.Metadata.Archive.LanguagesKey] = "languages",
@@ -396,7 +396,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 [Data.Models.Metadata.BiosSet.DefaultKey] = true,
                 [Data.Models.Metadata.BiosSet.DescriptionKey] = "description",
-                [Data.Models.Metadata.BiosSet.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -406,7 +406,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 [Data.Models.Metadata.Chip.ClockKey] = 12345L,
                 [Data.Models.Metadata.Chip.FlagsKey] = "flags",
-                [Data.Models.Metadata.Chip.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Chip.SoundOnlyKey] = "yes",
                 [Data.Models.Metadata.Chip.TagKey] = "tag",
                 [Data.Models.Metadata.Chip.ChipTypeKey] = "cpu",
@@ -421,7 +421,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Configuration.ConfLocationKey] = new Data.Models.Metadata.ConfLocation[] { CreateMetadataConfLocation() },
                 [Data.Models.Metadata.Configuration.ConfSettingKey] = new Data.Models.Metadata.ConfSetting[] { CreateMetadataConfSetting() },
                 [Data.Models.Metadata.Configuration.MaskKey] = "mask",
-                [Data.Models.Metadata.Configuration.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Configuration.TagKey] = "tag",
             };
         }
@@ -442,7 +442,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.ConfLocation
             {
                 [Data.Models.Metadata.ConfLocation.InvertedKey] = "yes",
-                [Data.Models.Metadata.ConfLocation.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.ConfLocation.NumberKey] = "number",
             };
         }
@@ -453,7 +453,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 [Data.Models.Metadata.ConfSetting.ConditionKey] = CreateMetadataCondition(),
                 [Data.Models.Metadata.ConfSetting.DefaultKey] = "yes",
-                [Data.Models.Metadata.ConfSetting.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.ConfSetting.ValueKey] = "value",
             };
         }
@@ -495,7 +495,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.DeviceRef
             {
-                [Data.Models.Metadata.DeviceRef.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -504,7 +504,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.DipLocation
             {
                 [Data.Models.Metadata.DipLocation.InvertedKey] = "yes",
-                [Data.Models.Metadata.DipLocation.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.DipLocation.NumberKey] = "number",
             };
         }
@@ -519,7 +519,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.DipSwitch.DipValueKey] = new Data.Models.Metadata.DipValue[] { CreateMetadataDipValue() },
                 [Data.Models.Metadata.DipSwitch.EntryKey] = new string[] { "entry" },
                 [Data.Models.Metadata.DipSwitch.MaskKey] = "mask",
-                [Data.Models.Metadata.DipSwitch.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.DipSwitch.TagKey] = "tag",
             };
         }
@@ -530,7 +530,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 [Data.Models.Metadata.DipValue.ConditionKey] = CreateMetadataCondition(),
                 [Data.Models.Metadata.DipValue.DefaultKey] = "yes",
-                [Data.Models.Metadata.DipValue.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.DipValue.ValueKey] = "value",
             };
         }
@@ -540,7 +540,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.DataArea
             {
                 [Data.Models.Metadata.DataArea.EndiannessKey] = "big",
-                [Data.Models.Metadata.DataArea.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.DataArea.RomKey] = new Data.Models.Metadata.Rom[] { [] },
                 [Data.Models.Metadata.DataArea.SizeKey] = 12345L,
                 [Data.Models.Metadata.DataArea.WidthKey] = 64,
@@ -555,7 +555,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Disk.IndexKey] = "index",
                 [Data.Models.Metadata.Disk.MD5Key] = HashType.MD5.ZeroString,
                 [Data.Models.Metadata.Disk.MergeKey] = "merge",
-                [Data.Models.Metadata.Disk.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Disk.OptionalKey] = "yes",
                 [Data.Models.Metadata.Disk.RegionKey] = "region",
                 [Data.Models.Metadata.Disk.SHA1Key] = HashType.SHA1.ZeroString,
@@ -568,7 +568,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.DiskArea
             {
                 [Data.Models.Metadata.DiskArea.DiskKey] = new Data.Models.Metadata.Disk[] { [] },
-                [Data.Models.Metadata.DiskArea.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -631,7 +631,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Extension
             {
-                [Data.Models.Metadata.Extension.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -639,7 +639,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Feature
             {
-                [Data.Models.Metadata.Feature.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Feature.OverallKey] = "imperfect",
                 [Data.Models.Metadata.Feature.StatusKey] = "imperfect",
                 [Data.Models.Metadata.Feature.FeatureTypeKey] = "protection",
@@ -651,7 +651,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Info
             {
-                [Data.Models.Metadata.Info.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Info.ValueKey] = "value",
             };
         }
@@ -674,7 +674,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Instance
             {
                 [Data.Models.Metadata.Instance.BriefNameKey] = "briefname",
-                [Data.Models.Metadata.Instance.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -683,7 +683,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Media
             {
                 [Data.Models.Metadata.Media.MD5Key] = HashType.MD5.ZeroString,
-                [Data.Models.Metadata.Media.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Media.SHA1Key] = HashType.SHA1.ZeroString,
                 [Data.Models.Metadata.Media.SHA256Key] = HashType.SHA256.ZeroString,
                 [Data.Models.Metadata.Media.SpamSumKey] = HashType.SpamSum.ZeroString,
@@ -708,7 +708,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Part.DipSwitchKey] = new Data.Models.Metadata.DipSwitch[] { [] },
                 [Data.Models.Metadata.Part.FeatureKey] = new Data.Models.Metadata.Feature[] { CreateMetadataFeature() },
                 [Data.Models.Metadata.Part.InterfaceKey] = "interface",
-                [Data.Models.Metadata.Part.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -727,7 +727,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 [Data.Models.Metadata.RamOption.ContentKey] = "content",
                 [Data.Models.Metadata.RamOption.DefaultKey] = "yes",
-                [Data.Models.Metadata.RamOption.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -738,7 +738,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Release.DateKey] = "date",
                 [Data.Models.Metadata.Release.DefaultKey] = "yes",
                 [Data.Models.Metadata.Release.LanguageKey] = "language",
-                [Data.Models.Metadata.Release.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Release.RegionKey] = "region",
             };
         }
@@ -813,7 +813,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 // [Data.Models.Metadata.Rom.OpenMSXMediaType] = null, // Omit due to other test
                 [Data.Models.Metadata.Rom.MergeKey] = "merge",
                 [Data.Models.Metadata.Rom.MIAKey] = "yes",
-                [Data.Models.Metadata.Rom.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Rom.TesseractOCRKey] = "ocr",
                 [Data.Models.Metadata.Rom.TesseractOCRConvertedKey] = "ocr_converted",
                 [Data.Models.Metadata.Rom.TesseractOCRDetectedLangKey] = "ocr_detected_lang",
@@ -873,7 +873,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Sample
             {
-                [Data.Models.Metadata.Sample.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -902,7 +902,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.SharedFeat
             {
-                [Data.Models.Metadata.SharedFeat.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.SharedFeat.ValueKey] = "value",
             };
         }
@@ -911,7 +911,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Slot
             {
-                [Data.Models.Metadata.Slot.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Slot.SlotOptionKey] = new Data.Models.Metadata.SlotOption[] { CreateMetadataSlotOption() },
             };
         }
@@ -922,7 +922,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 [Data.Models.Metadata.SlotOption.DefaultKey] = "yes",
                 [Data.Models.Metadata.SlotOption.DevNameKey] = "devname",
-                [Data.Models.Metadata.SlotOption.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -933,7 +933,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Software.CloneOfKey] = "cloneof",
                 [Data.Models.Metadata.Software.DescriptionKey] = "description",
                 [Data.Models.Metadata.Software.InfoKey] = new Data.Models.Metadata.Info[] { CreateMetadataInfo() },
-                [Data.Models.Metadata.Software.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.Software.NotesKey] = "notes",
                 [Data.Models.Metadata.Software.PartKey] = new Data.Models.Metadata.Part[] { CreateMetadataPart() },
                 [Data.Models.Metadata.Software.PublisherKey] = "publisher",
@@ -949,7 +949,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 [Data.Models.Metadata.SoftwareList.DescriptionKey] = "description",
                 [Data.Models.Metadata.SoftwareList.FilterKey] = "filter",
-                [Data.Models.Metadata.SoftwareList.NameKey] = "name",
+                Name = "name",
                 [Data.Models.Metadata.SoftwareList.NotesKey] = "notes",
                 [Data.Models.Metadata.SoftwareList.SoftwareKey] = new Data.Models.Metadata.Software[] { CreateMetadataSoftware() },
                 [Data.Models.Metadata.SoftwareList.StatusKey] = "original",
@@ -1063,7 +1063,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.LockRomModeKey));
             Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.LockSampleModeKey));
             Assert.Equal("mameconfig", datHeader.ReadString(Data.Models.Metadata.Header.MameConfigKey));
-            Assert.Equal("name", datHeader.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("name", datHeader.Name);
             Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.NewDatKey));
             Assert.Equal("notes", datHeader.ReadString(Data.Models.Metadata.Header.NotesKey));
             Assert.Equal("plugin", datHeader.ReadString(Data.Models.Metadata.Header.PluginKey));
@@ -1145,7 +1145,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(adjuster);
             Assert.True(adjuster.ReadBool(Data.Models.Metadata.Adjuster.DefaultKey));
-            Assert.Equal("name", adjuster.ReadString(Data.Models.Metadata.Adjuster.NameKey));
+            Assert.Equal("name", adjuster.GetName());
 
             Condition? condition = adjuster.Read<Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
             ValidateCondition(condition);
@@ -1160,7 +1160,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateArchive(Archive? archive)
         {
             Assert.NotNull(archive);
-            Assert.Equal("name", archive.ReadString(Data.Models.Metadata.Archive.NameKey));
+            Assert.Equal("name", archive.GetName());
         }
 
         private static void ValidateBiosSet(BiosSet? biosSet)
@@ -1168,7 +1168,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(biosSet);
             Assert.True(biosSet.ReadBool(Data.Models.Metadata.BiosSet.DefaultKey));
             Assert.Equal("description", biosSet.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey));
-            Assert.Equal("name", biosSet.ReadString(Data.Models.Metadata.BiosSet.NameKey));
+            Assert.Equal("name", biosSet.GetName());
         }
 
         private static void ValidateChip(Chip? chip)
@@ -1176,7 +1176,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(chip);
             Assert.Equal(12345L, chip.ReadLong(Data.Models.Metadata.Chip.ClockKey));
             Assert.Equal("flags", chip.ReadString(Data.Models.Metadata.Chip.FlagsKey));
-            Assert.Equal("name", chip.ReadString(Data.Models.Metadata.Chip.NameKey));
+            Assert.Equal("name", chip.GetName());
             Assert.True(chip.ReadBool(Data.Models.Metadata.Chip.SoundOnlyKey));
             Assert.Equal("tag", chip.ReadString(Data.Models.Metadata.Chip.TagKey));
             Assert.Equal("cpu", chip.ReadString(Data.Models.Metadata.Chip.ChipTypeKey));
@@ -1195,7 +1195,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(configuration);
             Assert.Equal("mask", configuration.ReadString(Data.Models.Metadata.Configuration.MaskKey));
-            Assert.Equal("name", configuration.ReadString(Data.Models.Metadata.Configuration.NameKey));
+            Assert.Equal("name", configuration.GetName());
             Assert.Equal("tag", configuration.ReadString(Data.Models.Metadata.Configuration.TagKey));
 
             Condition? condition = configuration.Read<Condition>(Data.Models.Metadata.Configuration.ConditionKey);
@@ -1216,7 +1216,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(confLocation);
             Assert.True(confLocation.ReadBool(Data.Models.Metadata.ConfLocation.InvertedKey));
-            Assert.Equal("name", confLocation.ReadString(Data.Models.Metadata.ConfLocation.NameKey));
+            Assert.Equal("name", confLocation.GetName());
             Assert.Equal("number", confLocation.ReadString(Data.Models.Metadata.ConfLocation.NumberKey));
         }
 
@@ -1224,7 +1224,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(confSetting);
             Assert.True(confSetting.ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey));
-            Assert.Equal("name", confSetting.ReadString(Data.Models.Metadata.ConfSetting.NameKey));
+            Assert.Equal("name", confSetting.GetName());
             Assert.Equal("value", confSetting.ReadString(Data.Models.Metadata.ConfSetting.ValueKey));
 
             Condition? condition = confSetting.Read<Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
@@ -1252,7 +1252,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(dataArea);
             Assert.Equal("big", dataArea.ReadString(Data.Models.Metadata.DataArea.EndiannessKey));
-            Assert.Equal("name", dataArea.ReadString(Data.Models.Metadata.DataArea.NameKey));
+            Assert.Equal("name", dataArea.GetName());
             Assert.Equal(12345L, dataArea.ReadLong(Data.Models.Metadata.DataArea.SizeKey));
             Assert.Equal(64, dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey));
         }
@@ -1278,14 +1278,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateDeviceRef(DeviceRef? deviceRef)
         {
             Assert.NotNull(deviceRef);
-            Assert.Equal("name", deviceRef.ReadString(Data.Models.Metadata.DeviceRef.NameKey));
+            Assert.Equal("name", deviceRef.GetName());
         }
 
         private static void ValidateDipLocation(DipLocation? dipLocation)
         {
             Assert.NotNull(dipLocation);
             Assert.True(dipLocation.ReadBool(Data.Models.Metadata.DipLocation.InvertedKey));
-            Assert.Equal("name", dipLocation.ReadString(Data.Models.Metadata.DipLocation.NameKey));
+            Assert.Equal("name", dipLocation.GetName());
             Assert.Equal("number", dipLocation.ReadString(Data.Models.Metadata.DipLocation.NumberKey));
         }
 
@@ -1294,7 +1294,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(dipSwitch);
             Assert.True(dipSwitch.ReadBool(Data.Models.Metadata.DipSwitch.DefaultKey));
             Assert.Equal("mask", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.MaskKey));
-            Assert.Equal("name", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.NameKey));
+            Assert.Equal("name", dipSwitch.GetName());
             Assert.Equal("tag", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.TagKey));
 
             Condition? condition = dipSwitch.Read<Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
@@ -1320,7 +1320,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(dipValue);
             Assert.True(dipValue.ReadBool(Data.Models.Metadata.DipValue.DefaultKey));
-            Assert.Equal("name", dipValue.ReadString(Data.Models.Metadata.DipValue.NameKey));
+            Assert.Equal("name", dipValue.GetName());
             Assert.Equal("value", dipValue.ReadString(Data.Models.Metadata.DipValue.ValueKey));
 
             Condition? condition = dipValue.Read<Condition>(Data.Models.Metadata.DipValue.ConditionKey);
@@ -1334,7 +1334,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("index", disk.ReadString(Data.Models.Metadata.Disk.IndexKey));
             Assert.Equal(HashType.MD5.ZeroString, disk.ReadString(Data.Models.Metadata.Disk.MD5Key));
             Assert.Equal("merge", disk.ReadString(Data.Models.Metadata.Disk.MergeKey));
-            Assert.Equal("name", disk.ReadString(Data.Models.Metadata.Disk.NameKey));
+            Assert.Equal("name", disk.GetName());
             Assert.True(disk.ReadBool(Data.Models.Metadata.Disk.OptionalKey));
             Assert.Equal("region", disk.ReadString(Data.Models.Metadata.Disk.RegionKey));
             Assert.Equal(HashType.SHA1.ZeroString, disk.ReadString(Data.Models.Metadata.Disk.SHA1Key));
@@ -1344,7 +1344,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateDiskArea(DiskArea? diskArea)
         {
             Assert.NotNull(diskArea);
-            Assert.Equal("name", diskArea.ReadString(Data.Models.Metadata.DiskArea.NameKey));
+            Assert.Equal("name", diskArea.GetName());
         }
 
         private static void ValidateDisplay(Display? display)
@@ -1386,13 +1386,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateExtension(Extension? extension)
         {
             Assert.NotNull(extension);
-            Assert.Equal("name", extension.ReadString(Data.Models.Metadata.Extension.NameKey));
+            Assert.Equal("name", extension.GetName());
         }
 
         private static void ValidateFeature(Feature? feature)
         {
             Assert.NotNull(feature);
-            Assert.Equal("name", feature.ReadString(Data.Models.Metadata.Feature.NameKey));
+            Assert.Equal("name", feature.GetName());
             Assert.Equal("imperfect", feature.ReadString(Data.Models.Metadata.Feature.OverallKey));
             Assert.Equal("imperfect", feature.ReadString(Data.Models.Metadata.Feature.StatusKey));
             Assert.Equal("protection", feature.ReadString(Data.Models.Metadata.Feature.FeatureTypeKey));
@@ -1402,7 +1402,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateInfo(Info? info)
         {
             Assert.NotNull(info);
-            Assert.Equal("name", info.ReadString(Data.Models.Metadata.Info.NameKey));
+            Assert.Equal("name", info.GetName());
             Assert.Equal("value", info.ReadString(Data.Models.Metadata.Info.ValueKey));
         }
 
@@ -1425,14 +1425,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(instance);
             Assert.Equal("briefname", instance.ReadString(Data.Models.Metadata.Instance.BriefNameKey));
-            Assert.Equal("name", instance.ReadString(Data.Models.Metadata.Instance.NameKey));
+            Assert.Equal("name", instance.GetName());
         }
 
         private static void ValidateMedia(Media? media)
         {
             Assert.NotNull(media);
             Assert.Equal(HashType.MD5.ZeroString, media.ReadString(Data.Models.Metadata.Media.MD5Key));
-            Assert.Equal("name", media.ReadString(Data.Models.Metadata.Media.NameKey));
+            Assert.Equal("name", media.GetName());
             Assert.Equal(HashType.SHA1.ZeroString, media.ReadString(Data.Models.Metadata.Media.SHA1Key));
             Assert.Equal(HashType.SHA256.ZeroString, media.ReadString(Data.Models.Metadata.Media.SHA256Key));
             Assert.Equal(HashType.SpamSum.ZeroString, media.ReadString(Data.Models.Metadata.Media.SpamSumKey));
@@ -1442,13 +1442,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(part);
             Assert.Equal("interface", part.ReadString(Data.Models.Metadata.Part.InterfaceKey));
-            Assert.Equal("name", part.ReadString(Data.Models.Metadata.Part.NameKey));
+            Assert.Equal("name", part.GetName());
         }
 
         private static void ValidatePartFeature(PartFeature? partFeature)
         {
             Assert.NotNull(partFeature);
-            Assert.Equal("name", partFeature.ReadString(Data.Models.Metadata.Feature.NameKey));
+            Assert.Equal("name", partFeature.GetName());
             Assert.Equal("imperfect", partFeature.ReadString(Data.Models.Metadata.Feature.OverallKey));
             Assert.Equal("imperfect", partFeature.ReadString(Data.Models.Metadata.Feature.StatusKey));
             Assert.Equal("protection", partFeature.ReadString(Data.Models.Metadata.Feature.FeatureTypeKey));
@@ -1474,7 +1474,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(ramOption);
             Assert.Equal("content", ramOption.ReadString(Data.Models.Metadata.RamOption.ContentKey));
             Assert.True(ramOption.ReadBool(Data.Models.Metadata.RamOption.DefaultKey));
-            Assert.Equal("name", ramOption.ReadString(Data.Models.Metadata.RamOption.NameKey));
+            Assert.Equal("name", ramOption.GetName());
         }
 
         private static void ValidateRelease(Release? release)
@@ -1483,7 +1483,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("date", release.ReadString(Data.Models.Metadata.Release.DateKey));
             Assert.True(release.ReadBool(Data.Models.Metadata.Release.DefaultKey));
             Assert.Equal("language", release.ReadString(Data.Models.Metadata.Release.LanguageKey));
-            Assert.Equal("name", release.ReadString(Data.Models.Metadata.Release.NameKey));
+            Assert.Equal("name", release.GetName());
             Assert.Equal("region", release.ReadString(Data.Models.Metadata.Release.RegionKey));
         }
 
@@ -1533,7 +1533,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType)); // Omit due to other test
             Assert.Equal("merge", rom.ReadString(Data.Models.Metadata.Rom.MergeKey));
             Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.MIAKey));
-            Assert.Equal("name", rom.ReadString(Data.Models.Metadata.Rom.NameKey));
+            Assert.Equal("name", rom.GetName());
             Assert.Equal("ocr", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRKey));
             Assert.Equal("ocr_converted", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRConvertedKey));
             Assert.Equal("ocr_detected_lang", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRDetectedLangKey));
@@ -1591,20 +1591,20 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateSample(Sample? sample)
         {
             Assert.NotNull(sample);
-            Assert.Equal("name", sample.ReadString(Data.Models.Metadata.Sample.NameKey));
+            Assert.Equal("name", sample.GetName());
         }
 
         private static void ValidateSharedFeat(SharedFeat? sharedFeat)
         {
             Assert.NotNull(sharedFeat);
-            Assert.Equal("name", sharedFeat.ReadString(Data.Models.Metadata.SharedFeat.NameKey));
+            Assert.Equal("name", sharedFeat.GetName());
             Assert.Equal("value", sharedFeat.ReadString(Data.Models.Metadata.SharedFeat.ValueKey));
         }
 
         private static void ValidateSlot(Slot? slot)
         {
             Assert.NotNull(slot);
-            Assert.Equal("name", slot.ReadString(Data.Models.Metadata.Slot.NameKey));
+            Assert.Equal("name", slot.GetName());
 
             SlotOption[]? slotOptions = slot.Read<SlotOption[]>(Data.Models.Metadata.Slot.SlotOptionKey);
             Assert.NotNull(slotOptions);
@@ -1617,7 +1617,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(slotOption);
             Assert.True(slotOption.ReadBool(Data.Models.Metadata.SlotOption.DefaultKey));
             Assert.Equal("devname", slotOption.ReadString(Data.Models.Metadata.SlotOption.DevNameKey));
-            Assert.Equal("name", slotOption.ReadString(Data.Models.Metadata.SlotOption.NameKey));
+            Assert.Equal("name", slotOption.GetName());
         }
 
         private static void ValidateSoftwareList(SoftwareList? softwareList)
@@ -1625,7 +1625,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(softwareList);
             Assert.Equal("description", softwareList.ReadString(Data.Models.Metadata.SoftwareList.DescriptionKey));
             Assert.Equal("filter", softwareList.ReadString(Data.Models.Metadata.SoftwareList.FilterKey));
-            Assert.Equal("name", softwareList.ReadString(Data.Models.Metadata.SoftwareList.NameKey));
+            Assert.Equal("name", softwareList.GetName());
             Assert.Equal("notes", softwareList.ReadString(Data.Models.Metadata.SoftwareList.NotesKey));
             // TODO: Figure out why Data.Models.Metadata.SoftwareList.SoftwareKey doesn't get processed
             Assert.Equal("original", softwareList.ReadString(Data.Models.Metadata.SoftwareList.StatusKey));

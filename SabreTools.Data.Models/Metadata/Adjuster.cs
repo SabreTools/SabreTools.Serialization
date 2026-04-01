@@ -6,6 +6,12 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("adjuster"), XmlRoot("adjuster")]
     public class Adjuster : DatItem
     {
+        #region Properties
+
+        public string? Name { get; set; }
+
+        #endregion
+
         #region Keys
 
         // <remarks>Condition</remarks>

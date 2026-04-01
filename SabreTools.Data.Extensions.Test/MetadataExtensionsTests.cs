@@ -23,9 +23,9 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(7, actual.Count);
+            Assert.Equal(6, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
-            Assert.Null(actual[Rom.NameKey]);
+            Assert.Null(actual.Name);
             Assert.Null(actual[Rom.MergeKey]);
             Assert.Null(actual[Rom.RegionKey]);
             Assert.Null(actual[Rom.StatusKey]);
@@ -39,7 +39,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase? self = new Disk
             {
-                [Disk.NameKey] = "XXXXXX",
+                Name = "XXXXXX",
                 [Disk.MergeKey] = "XXXXXX",
                 [Disk.RegionKey] = "XXXXXX",
                 [Disk.StatusKey] = "XXXXXX",
@@ -51,9 +51,9 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(7, actual.Count);
+            Assert.Equal(6, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
-            Assert.Equal("XXXXXX.chd", actual[Rom.NameKey]);
+            Assert.Equal("XXXXXX.chd", actual.Name);
             Assert.Equal("XXXXXX", actual[Rom.MergeKey]);
             Assert.Equal("XXXXXX", actual[Rom.RegionKey]);
             Assert.Equal("XXXXXX", actual[Rom.StatusKey]);
@@ -69,9 +69,9 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(5, actual.Count);
+            Assert.Equal(4, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
-            Assert.Null(actual[Rom.NameKey]);
+            Assert.Null(actual.Name);
             Assert.Null(actual[Rom.MD5Key]);
             Assert.Null(actual[Rom.SHA1Key]);
             Assert.Null(actual[Rom.SHA256Key]);
@@ -83,7 +83,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase? self = new Media
             {
-                [Media.NameKey] = "XXXXXX",
+                Name = "XXXXXX",
                 [Media.MD5Key] = "XXXXXX",
                 [Media.SHA1Key] = "XXXXXX",
                 [Media.SHA256Key] = "XXXXXX",
@@ -93,9 +93,9 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(5, actual.Count);
+            Assert.Equal(4, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
-            Assert.Equal("XXXXXX.aaruf", actual[Rom.NameKey]);
+            Assert.Equal("XXXXXX.aaruf", actual.Name);
             Assert.Equal("XXXXXX", actual[Rom.MD5Key]);
             Assert.Equal("XXXXXX", actual[Rom.SHA1Key]);
             Assert.Equal("XXXXXX", actual[Rom.SHA256Key]);
@@ -1501,7 +1501,7 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase other = new Disk();
 
             self.FillMissingHashes(other);
-            Assert.Single(self);
+            Assert.Empty(self);
         }
 
         [Fact]
@@ -1523,7 +1523,7 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase self = new Media();
             DictionaryBase other = new Media();
             self.FillMissingHashes(other);
-            Assert.Single(self);
+            Assert.Empty(self);
         }
 
         [Fact]
@@ -1547,7 +1547,7 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase self = new Rom();
             DictionaryBase other = new Rom();
             self.FillMissingHashes(other);
-            Assert.Single(self);
+            Assert.Empty(self);
         }
 
         [Fact]

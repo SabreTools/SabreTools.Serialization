@@ -95,7 +95,7 @@ namespace SabreTools.Metadata.DatFiles
         public void FillHeaderFromPath(string path, bool bare)
         {
             // Get the header strings
-            string? name = Header.ReadString(Data.Models.Metadata.Header.NameKey);
+            string? name = Header.Name;
             string? description = Header.ReadString(Data.Models.Metadata.Header.DescriptionKey);
             string? date = Header.ReadString(Data.Models.Metadata.Header.DateKey);
 
@@ -129,7 +129,7 @@ namespace SabreTools.Metadata.DatFiles
             description = description?.Trim();
 
             // Set the fields back
-            Header.Write<string?>(Data.Models.Metadata.Header.NameKey, name);
+            Header.Name = name;
             Header.Write<string?>(Data.Models.Metadata.Header.DescriptionKey, description);
         }
 
