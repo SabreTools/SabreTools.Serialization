@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("control"), XmlRoot("control")]
     public sealed class Control : DatItem<Data.Models.Metadata.Control>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Control;
-
-        #endregion
-
         #region Constructors
 
         public Control() : base() { }

@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("diplocation"), XmlRoot("diplocation")]
     public sealed class DipLocation : DatItem<Data.Models.Metadata.DipLocation>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.DipLocation;
-
-        #endregion
-
         #region Constructors
 
         public DipLocation() : base() { }

@@ -8,6 +8,13 @@ namespace SabreTools.Metadata.DatItems
     /// </summary>
     public abstract class DatItem<T> : DatItem, IEquatable<DatItem<T>>, IComparable<DatItem<T>>, ICloneable where T : Data.Models.Metadata.DatItem, new()
     {
+        #region Fields
+
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType => _internal.ItemType;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>

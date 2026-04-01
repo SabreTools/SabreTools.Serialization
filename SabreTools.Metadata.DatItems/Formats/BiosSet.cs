@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("biosset"), XmlRoot("biosset")]
     public sealed class BiosSet : DatItem<Data.Models.Metadata.BiosSet>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.BiosSet;
-
-        #endregion
-
         #region Constructors
 
         public BiosSet() : base() { }

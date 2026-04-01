@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("extension"), XmlRoot("extension")]
     public sealed class Extension : DatItem<Data.Models.Metadata.Extension>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Extension;
-
-        #endregion
-
         #region Constructors
 
         public Extension() : base() { }

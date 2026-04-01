@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("chip"), XmlRoot("chip")]
     public sealed class Chip : DatItem<Data.Models.Metadata.Chip>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Chip;
-
-        #endregion
-
         #region Constructors
 
         public Chip() : base() { }

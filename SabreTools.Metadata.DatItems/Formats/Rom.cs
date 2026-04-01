@@ -28,9 +28,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         #region Fields
 
-        /// <inheritdoc>/>
-        internal override ItemType ItemType => ItemType.Rom;
-
         [JsonIgnore]
         public bool ItemStatusSpecified
         {

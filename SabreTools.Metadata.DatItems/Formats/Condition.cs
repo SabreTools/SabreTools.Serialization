@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("condition"), XmlRoot("condition")]
     public sealed class Condition : DatItem<Data.Models.Metadata.Condition>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Condition;
-
-        #endregion
-
         #region Constructors
 
         public Condition() : base() { }

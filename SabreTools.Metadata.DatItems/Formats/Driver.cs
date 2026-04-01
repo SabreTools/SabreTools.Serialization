@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("driver"), XmlRoot("driver")]
     public sealed class Driver : DatItem<Data.Models.Metadata.Driver>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Driver;
-
-        #endregion
-
         #region Constructors
 
         public Driver() : base() { }

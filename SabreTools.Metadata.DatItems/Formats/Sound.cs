@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("sound"), XmlRoot("sound")]
     public sealed class Sound : DatItem<Data.Models.Metadata.Sound>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Sound;
-
-        #endregion
-
         #region Constructors
 
         public Sound() : base() { }

@@ -27,7 +27,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Fields
 
         /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.File;
+        public override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.File;
 
         /// <summary>
         /// ID value

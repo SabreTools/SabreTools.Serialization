@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
@@ -85,7 +85,7 @@ namespace SabreTools.Metadata.DatItems
         /// <summary>
         /// Item type for the object
         /// </summary>
-        internal abstract Data.Models.Metadata.ItemType ItemType { get; }
+        public abstract Data.Models.Metadata.ItemType ItemType { get; }
 
         #endregion
 

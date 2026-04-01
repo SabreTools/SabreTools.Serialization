@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("ramoption"), XmlRoot("ramoption")]
     public sealed class RamOption : DatItem<Data.Models.Metadata.RamOption>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.RamOption;
-
-        #endregion
-
         #region Constructors
 
         public RamOption() : base() { }

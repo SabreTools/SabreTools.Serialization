@@ -11,13 +11,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("diskarea"), XmlRoot("diskarea")]
     public sealed class DiskArea : DatItem<Data.Models.Metadata.DiskArea>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.DiskArea;
-
-        #endregion
-
         #region Constructors
 
         public DiskArea() : base() { }

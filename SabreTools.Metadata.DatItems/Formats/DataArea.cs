@@ -11,13 +11,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("dataarea"), XmlRoot("dataarea")]
     public sealed class DataArea : DatItem<Data.Models.Metadata.DataArea>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.DataArea;
-
-        #endregion
-
         #region Constructors
 
         public DataArea() : base() { }

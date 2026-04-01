@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("feature"), XmlRoot("feature")]
     public sealed class Feature : DatItem<Data.Models.Metadata.Feature>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Feature;
-
-        #endregion
-
         #region Constructors
 
         public Feature() : base() { }

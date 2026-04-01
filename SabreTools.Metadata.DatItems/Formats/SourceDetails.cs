@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("source_details"), XmlRoot("source_details")]
     public sealed class SourceDetails : DatItem<Data.Models.Metadata.SourceDetails>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.SourceDetails;
-
-        #endregion
-
         #region Constructors
 
         public SourceDetails() : base() { }

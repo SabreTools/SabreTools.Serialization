@@ -23,7 +23,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(8, actual.Count);
+            Assert.Equal(7, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
             Assert.Null(actual[Rom.NameKey]);
             Assert.Null(actual[Rom.MergeKey]);
@@ -51,7 +51,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(8, actual.Count);
+            Assert.Equal(7, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
             Assert.Equal("XXXXXX.chd", actual[Rom.NameKey]);
             Assert.Equal("XXXXXX", actual[Rom.MergeKey]);
@@ -69,7 +69,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(6, actual.Count);
+            Assert.Equal(5, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
             Assert.Null(actual[Rom.NameKey]);
             Assert.Null(actual[Rom.MD5Key]);
@@ -93,7 +93,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(6, actual.Count);
+            Assert.Equal(5, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
             Assert.Equal("XXXXXX.aaruf", actual[Rom.NameKey]);
             Assert.Equal("XXXXXX", actual[Rom.MD5Key]);

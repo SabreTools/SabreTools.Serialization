@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("softwarelist"), XmlRoot("softwarelist")]
     public sealed class SoftwareList : DatItem<Data.Models.Metadata.SoftwareList>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.SoftwareList;
-
-        #endregion
-
         #region Constructors
 
         public SoftwareList() : base() { }

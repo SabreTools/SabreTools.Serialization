@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("analog"), XmlRoot("analog")]
     public sealed class Analog : DatItem<Data.Models.Metadata.Analog>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Analog;
-
-        #endregion
-
         #region Constructors
 
         public Analog() : base() { }

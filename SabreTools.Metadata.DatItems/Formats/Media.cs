@@ -11,13 +11,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("media"), XmlRoot("media")]
     public sealed class Media : DatItem<Data.Models.Metadata.Media>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Media;
-
-        #endregion
-
         #region Constructors
 
         public Media() : base()

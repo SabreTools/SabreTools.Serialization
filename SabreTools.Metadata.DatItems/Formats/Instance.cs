@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("instance"), XmlRoot("instance")]
     public sealed class Instance : DatItem<Data.Models.Metadata.Instance>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Instance;
-
-        #endregion
-
         #region Constructors
 
         public Instance() : base() { }

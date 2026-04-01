@@ -10,13 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("conflocation"), XmlRoot("conflocation")]
     public sealed class ConfLocation : DatItem<Data.Models.Metadata.ConfLocation>
     {
-        #region Fields
-
-        /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.ConfLocation;
-
-        #endregion
-
         #region Constructors
 
         public ConfLocation() : base() { }

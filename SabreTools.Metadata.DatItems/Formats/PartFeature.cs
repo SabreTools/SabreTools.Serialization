@@ -22,7 +22,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Fields
 
         /// <inheritdoc>/>
-        internal override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.PartFeature;
+        /// <remarks>This needs to be set to PartFeature because internally it uses Feature</remarks>
+        public override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.PartFeature;
 
         #endregion
 
