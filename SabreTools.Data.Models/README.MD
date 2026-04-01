@@ -55,6 +55,7 @@ Below is a list of all existing namespaces with the `SabreTools.Data.Models` pre
 | `NES` | Nintendo Entertainment System (NES) and Famicom (FC) carts |
 | `NewExecutable` | New Executable (NE) |
 | `Nitro` | Nintendo DS carts |
+| `NoIntroDatabase` | No-Intro Database Exports |
 | `OfflineList` | OfflineList XML-based metadata files |
 | `OLE` | Object Linking and Embedding (OLE) |
 | `OpenMSX` | OpenMSX XML-based metadata files |
@@ -105,6 +106,7 @@ Not all of this information was able to be gathered directly from the files in q
 | [cabextract/libmspack](https://www.cabextract.org.uk/) | LZ |
 | [cxbx](https://www.caustik.com/cxbx/) | XboxExecutable |
 | [Cxbx-Reloaded](https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/) | XboxExecutable |
+| [Dat-o-Matic Upload XSD](https://datomatic.no-intro.org/stuff/example_upload_custom.xsd) | NoIntroDatabase |
 | [DBox](https://dbox.tools/) | Xbox |
 | [DebugInfo.com](https://www.debuginfo.com/index.html) | PortableExecutable |
 | [Devilsclaw](https://devilsclaws.net/) | PFF |
