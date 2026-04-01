@@ -45,6 +45,7 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(Port))]
     [XmlInclude(typeof(RamOption))]
     [XmlInclude(typeof(Release))]
+    [XmlInclude(typeof(ReleaseDetails))]
     [XmlInclude(typeof(Rom))]
     [XmlInclude(typeof(Sample))]
     [XmlInclude(typeof(SharedFeat))]
@@ -52,6 +53,7 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(SlotOption))]
     [XmlInclude(typeof(SoftwareList))]
     [XmlInclude(typeof(Sound))]
+    [XmlInclude(typeof(SourceDetails))]
     public abstract class DatItem : ModelBackedItem<Data.Models.Metadata.DatItem>, IEquatable<DatItem>, IComparable<DatItem>, ICloneable
     {
         #region Constants

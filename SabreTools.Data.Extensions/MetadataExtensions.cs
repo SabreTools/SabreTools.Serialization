@@ -52,13 +52,17 @@ namespace SabreTools.Data.Extensions
                 Port => null,
                 RamOption => self.ReadString(RamOption.NameKey),
                 Release => self.ReadString(Release.NameKey),
+                ReleaseDetails => null,
                 Rom => self.ReadString(Rom.NameKey),
                 Sample => self.ReadString(Sample.NameKey),
+                Serials => null,
                 SharedFeat => self.ReadString(SharedFeat.NameKey),
                 Slot => self.ReadString(Slot.NameKey),
                 SlotOption => self.ReadString(SlotOption.NameKey),
                 SoftwareList => self.ReadString(SoftwareList.NameKey),
                 Sound => null,
+                SourceDetails => null,
+                Video => null,
 
                 _ => null,
             };
@@ -106,13 +110,17 @@ namespace SabreTools.Data.Extensions
                 case Port: break;
                 case RamOption: self[RamOption.NameKey] = name; break;
                 case Release: self[Release.NameKey] = name; break;
+                case ReleaseDetails: break;
                 case Rom: self[Rom.NameKey] = name; break;
                 case Sample: self[Sample.NameKey] = name; break;
+                case Serials: break;
                 case SharedFeat: self[SharedFeat.NameKey] = name; break;
                 case Slot: self[Slot.NameKey] = name; break;
                 case SlotOption: self[SlotOption.NameKey] = name; break;
                 case SoftwareList: self[SoftwareList.NameKey] = name; break;
                 case Sound: break;
+                case SourceDetails: break;
+                case Video: break;
 
                 default: break;
             }

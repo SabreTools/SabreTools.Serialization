@@ -635,7 +635,39 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataArchive(Data.Models.Metadata.Archive? archive)
         {
             Assert.NotNull(archive);
+            Assert.Equal("number", archive.ReadString(Data.Models.Metadata.Archive.NumberKey));
+            Assert.Equal("clone", archive.ReadString(Data.Models.Metadata.Archive.CloneKey));
+            Assert.Equal("regparent", archive.ReadString(Data.Models.Metadata.Archive.RegParentKey));
+            Assert.Equal("mergeof", archive.ReadString(Data.Models.Metadata.Archive.MergeOfKey));
+            Assert.Equal("mergename", archive.ReadString(Data.Models.Metadata.Archive.MergeNameKey));
             Assert.Equal("name", archive.ReadString(Data.Models.Metadata.Archive.NameKey));
+            Assert.Equal("name_alt", archive.ReadString(Data.Models.Metadata.Archive.NameAltKey));
+            Assert.Equal("region", archive.ReadString(Data.Models.Metadata.Archive.RegionKey));
+            Assert.Equal("languages", archive.ReadString(Data.Models.Metadata.Archive.LanguagesKey));
+            Assert.Equal("showlang", archive.ReadString(Data.Models.Metadata.Archive.ShowLangKey));
+            Assert.Equal("langchecked", archive.ReadString(Data.Models.Metadata.Archive.LangCheckedKey));
+            Assert.Equal("version1", archive.ReadString(Data.Models.Metadata.Archive.Version1Key));
+            Assert.Equal("version2", archive.ReadString(Data.Models.Metadata.Archive.Version2Key));
+            Assert.Equal("devstatus", archive.ReadString(Data.Models.Metadata.Archive.DevStatusKey));
+            Assert.Equal("additional", archive.ReadString(Data.Models.Metadata.Archive.AdditionalKey));
+            Assert.Equal("special1", archive.ReadString(Data.Models.Metadata.Archive.Special1Key));
+            Assert.Equal("special2", archive.ReadString(Data.Models.Metadata.Archive.Special2Key));
+            Assert.Equal("alt", archive.ReadString(Data.Models.Metadata.Archive.AltKey));
+            Assert.Equal("gameid1", archive.ReadString(Data.Models.Metadata.Archive.GameId1Key));
+            Assert.Equal("gameid2", archive.ReadString(Data.Models.Metadata.Archive.GameId2Key));
+            Assert.Equal("description", archive.ReadString(Data.Models.Metadata.Archive.DescriptionKey));
+            Assert.Equal("bios", archive.ReadString(Data.Models.Metadata.Archive.BiosKey));
+            Assert.Equal("licensed", archive.ReadString(Data.Models.Metadata.Archive.LicensedKey));
+            Assert.Equal("pirate", archive.ReadString(Data.Models.Metadata.Archive.PirateKey));
+            Assert.Equal("physical", archive.ReadString(Data.Models.Metadata.Archive.PhysicalKey));
+            Assert.Equal("complete", archive.ReadString(Data.Models.Metadata.Archive.CompleteKey));
+            Assert.Equal("adult", archive.ReadString(Data.Models.Metadata.Archive.AdultKey));
+            Assert.Equal("dat", archive.ReadString(Data.Models.Metadata.Archive.DatKey));
+            Assert.Equal("listed", archive.ReadString(Data.Models.Metadata.Archive.ListedKey));
+            Assert.Equal("private", archive.ReadString(Data.Models.Metadata.Archive.PrivateKey));
+            Assert.Equal("stickynote", archive.ReadString(Data.Models.Metadata.Archive.StickyNoteKey));
+            Assert.Equal("datternote", archive.ReadString(Data.Models.Metadata.Archive.DatterNoteKey));
+            Assert.Equal("categories", archive.ReadString(Data.Models.Metadata.Archive.CategoriesKey));
         }
 
         private static void ValidateMetadataBiosSet(Data.Models.Metadata.BiosSet? biosSet)
@@ -979,6 +1011,27 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("region", release.ReadString(Data.Models.Metadata.Release.RegionKey));
         }
 
+        private static void ValidateMetadataReleaseDetails(Data.Models.Metadata.ReleaseDetails? releaseDetails)
+        {
+            Assert.NotNull(releaseDetails);
+            Assert.Equal("id", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.IdKey));
+            Assert.Equal("appendtonumber", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.AppendToNumberKey));
+            Assert.Equal("date", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.DateKey));
+            Assert.Equal("originalformat", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.OriginalFormatKey));
+            Assert.Equal("group", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.GroupKey));
+            Assert.Equal("dirname", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.DirNameKey));
+            Assert.Equal("nfoname", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.NfoNameKey));
+            Assert.Equal("nfosize", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.NfoSizeKey));
+            Assert.Equal("nfocrc", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.NfoCRCKey));
+            Assert.Equal("archivename", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.ArchiveNameKey));
+            Assert.Equal("rominfo", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.RomInfoKey));
+            Assert.Equal("category", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.CategoryKey));
+            Assert.Equal("comment", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.CommentKey));
+            Assert.Equal("tool", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.ToolKey));
+            Assert.Equal("region", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.RegionKey));
+            Assert.Equal("origin", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.OriginKey));
+        }
+
         private static void ValidateMetadataRom(Data.Models.Metadata.Rom? rom)
         {
             Assert.NotNull(rom);
@@ -1086,6 +1139,25 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("name", sample.ReadString(Data.Models.Metadata.Sample.NameKey));
         }
 
+        private static void ValidateMetadataSerials(Data.Models.Metadata.Serials? serials)
+        {
+            Assert.NotNull(serials);
+            Assert.Equal("mediaserial1", serials.ReadString(Data.Models.Metadata.Serials.MediaSerial1Key));
+            Assert.Equal("mediaserial2", serials.ReadString(Data.Models.Metadata.Serials.MediaSerial2Key));
+            Assert.Equal("mediaserial3", serials.ReadString(Data.Models.Metadata.Serials.MediaSerial3Key));
+            Assert.Equal("pcbserial", serials.ReadString(Data.Models.Metadata.Serials.PCBSerialKey));
+            Assert.Equal("romchipserial1", serials.ReadString(Data.Models.Metadata.Serials.RomChipSerial1Key));
+            Assert.Equal("romchipserial2", serials.ReadString(Data.Models.Metadata.Serials.RomChipSerial2Key));
+            Assert.Equal("lockoutserial", serials.ReadString(Data.Models.Metadata.Serials.LockoutSerialKey));
+            Assert.Equal("savechipserial", serials.ReadString(Data.Models.Metadata.Serials.SaveChipSerialKey));
+            Assert.Equal("chipserial", serials.ReadString(Data.Models.Metadata.Serials.ChipSerialKey));
+            Assert.Equal("boxserial", serials.ReadString(Data.Models.Metadata.Serials.BoxSerialKey));
+            Assert.Equal("mediastamp", serials.ReadString(Data.Models.Metadata.Serials.MediaStampKey));
+            Assert.Equal("boxbarcode", serials.ReadString(Data.Models.Metadata.Serials.BoxBarcodeKey));
+            Assert.Equal("digitalserial1", serials.ReadString(Data.Models.Metadata.Serials.DigitalSerial1Key));
+            Assert.Equal("digitalserial2", serials.ReadString(Data.Models.Metadata.Serials.DigitalSerial2Key));
+        }
+
         private static void ValidateMetadataSharedFeat(Data.Models.Metadata.SharedFeat? sharedFeat)
         {
             Assert.NotNull(sharedFeat);
@@ -1129,6 +1201,35 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(sound);
             Assert.Equal(12345, sound.ReadLong(Data.Models.Metadata.Sound.ChannelsKey));
+        }
+
+        private static void ValidateMetadataSourceDetails(Data.Models.Metadata.SourceDetails? sourceDetails)
+        {
+            Assert.NotNull(sourceDetails);
+            Assert.Equal("id", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.IdKey));
+            Assert.Equal("appendtonumber", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.AppendToNumberKey));
+            Assert.Equal("section", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.SectionKey));
+            Assert.Equal("rominfo", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.RomInfoKey));
+            Assert.Equal("dumpdate", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.DumpDateKey));
+            Assert.Equal("dumpdateinfo", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.DumpDateInfoKey));
+            Assert.Equal("releasedate", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.ReleaseDateKey));
+            Assert.Equal("releasedateinfo", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.ReleaseDateInfoKey));
+            Assert.Equal("dumper", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.DumperKey));
+            Assert.Equal("project", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.ProjectKey));
+            Assert.Equal("originalformat", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.OriginalFormatKey));
+            Assert.Equal("nodump", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.NodumpKey));
+            Assert.Equal("tool", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.ToolKey));
+            Assert.Equal("origin", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.OriginKey));
+            Assert.Equal("comment1", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Comment1Key));
+            Assert.Equal("comment2", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Comment2Key));
+            Assert.Equal("link1", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link1Key));
+            Assert.Equal("link1public", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link1PublicKey));
+            Assert.Equal("link2", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link2Key));
+            Assert.Equal("link2public", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link2PublicKey));
+            Assert.Equal("link3", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link3Key));
+            Assert.Equal("link3public", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link3PublicKey));
+            Assert.Equal("region", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.RegionKey));
+            Assert.Equal("mediatitle", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.MediaTitleKey));
         }
 
         private static void ValidateMetadataTrurip(Data.Models.Logiqx.Trurip? trurip)

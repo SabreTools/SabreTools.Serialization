@@ -354,7 +354,39 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Archive
             {
+                [Data.Models.Metadata.Archive.NumberKey] = "number",
+                [Data.Models.Metadata.Archive.CloneKey] = "clone",
+                [Data.Models.Metadata.Archive.RegParentKey] = "regparent",
+                [Data.Models.Metadata.Archive.MergeOfKey] = "mergeof",
+                [Data.Models.Metadata.Archive.MergeNameKey] = "mergename",
                 [Data.Models.Metadata.Archive.NameKey] = "name",
+                [Data.Models.Metadata.Archive.NameAltKey] = "name_alt",
+                [Data.Models.Metadata.Archive.RegionKey] = "region",
+                [Data.Models.Metadata.Archive.LanguagesKey] = "languages",
+                [Data.Models.Metadata.Archive.ShowLangKey] = "showlang",
+                [Data.Models.Metadata.Archive.LangCheckedKey] = "langchecked",
+                [Data.Models.Metadata.Archive.Version1Key] = "version1",
+                [Data.Models.Metadata.Archive.Version2Key] = "version2",
+                [Data.Models.Metadata.Archive.DevStatusKey] = "devstatus",
+                [Data.Models.Metadata.Archive.AdditionalKey] = "additional",
+                [Data.Models.Metadata.Archive.Special1Key] = "special1",
+                [Data.Models.Metadata.Archive.Special2Key] = "special2",
+                [Data.Models.Metadata.Archive.AltKey] = "alt",
+                [Data.Models.Metadata.Archive.GameId1Key] = "gameid1",
+                [Data.Models.Metadata.Archive.GameId2Key] = "gameid2",
+                [Data.Models.Metadata.Archive.DescriptionKey] = "description",
+                [Data.Models.Metadata.Archive.BiosKey] = "bios",
+                [Data.Models.Metadata.Archive.LicensedKey] = "licensed",
+                [Data.Models.Metadata.Archive.PirateKey] = "pirate",
+                [Data.Models.Metadata.Archive.PhysicalKey] = "physical",
+                [Data.Models.Metadata.Archive.CompleteKey] = "complete",
+                [Data.Models.Metadata.Archive.AdultKey] = "adult",
+                [Data.Models.Metadata.Archive.DatKey] = "dat",
+                [Data.Models.Metadata.Archive.ListedKey] = "listed",
+                [Data.Models.Metadata.Archive.PrivateKey] = "private",
+                [Data.Models.Metadata.Archive.StickyNoteKey] = "stickynote",
+                [Data.Models.Metadata.Archive.DatterNoteKey] = "datternote",
+                [Data.Models.Metadata.Archive.CategoriesKey] = "categories",
             };
         }
 
@@ -711,6 +743,29 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
         }
 
+        private static Data.Models.Metadata.ReleaseDetails CreateMetadataReleaseDetails()
+        {
+            return new Data.Models.Metadata.ReleaseDetails
+            {
+                [Data.Models.Metadata.ReleaseDetails.IdKey] = "id",
+                [Data.Models.Metadata.ReleaseDetails.AppendToNumberKey] = "appendtonumber",
+                [Data.Models.Metadata.ReleaseDetails.DateKey] = "date",
+                [Data.Models.Metadata.ReleaseDetails.OriginalFormatKey] = "originalformat",
+                [Data.Models.Metadata.ReleaseDetails.GroupKey] = "group",
+                [Data.Models.Metadata.ReleaseDetails.DirNameKey] = "dirname",
+                [Data.Models.Metadata.ReleaseDetails.NfoNameKey] = "nfoname",
+                [Data.Models.Metadata.ReleaseDetails.NfoSizeKey] = "nfosize",
+                [Data.Models.Metadata.ReleaseDetails.NfoCRCKey] = "nfocrc",
+                [Data.Models.Metadata.ReleaseDetails.ArchiveNameKey] = "archivename",
+                [Data.Models.Metadata.ReleaseDetails.RomInfoKey] = "rominfo",
+                [Data.Models.Metadata.ReleaseDetails.CategoryKey] = "category",
+                [Data.Models.Metadata.ReleaseDetails.CommentKey] = "comment",
+                [Data.Models.Metadata.ReleaseDetails.ToolKey] = "tool",
+                [Data.Models.Metadata.ReleaseDetails.RegionKey] = "region",
+                [Data.Models.Metadata.ReleaseDetails.OriginKey] = "origin",
+            };
+        }
+
         private static Data.Models.Metadata.Rom CreateMetadataRom()
         {
             return new Data.Models.Metadata.Rom
@@ -822,6 +877,27 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
         }
 
+        private static Data.Models.Metadata.Serials CreateMetadataSerials()
+        {
+            return new Data.Models.Metadata.Serials
+            {
+                [Data.Models.Metadata.Serials.MediaSerial1Key] = "mediaserial1",
+                [Data.Models.Metadata.Serials.MediaSerial2Key] = "mediaserial2",
+                [Data.Models.Metadata.Serials.MediaSerial3Key] = "mediaserial3",
+                [Data.Models.Metadata.Serials.PCBSerialKey] = "pcbserial",
+                [Data.Models.Metadata.Serials.RomChipSerial1Key] = "romchipserial1",
+                [Data.Models.Metadata.Serials.RomChipSerial2Key] = "romchipserial2",
+                [Data.Models.Metadata.Serials.LockoutSerialKey] = "lockoutserial",
+                [Data.Models.Metadata.Serials.SaveChipSerialKey] = "savechipserial",
+                [Data.Models.Metadata.Serials.ChipSerialKey] = "chipserial",
+                [Data.Models.Metadata.Serials.BoxSerialKey] = "boxserial",
+                [Data.Models.Metadata.Serials.MediaStampKey] = "mediastamp",
+                [Data.Models.Metadata.Serials.BoxBarcodeKey] = "boxbarcode",
+                [Data.Models.Metadata.Serials.DigitalSerial1Key] = "digitalserial1",
+                [Data.Models.Metadata.Serials.DigitalSerial2Key] = "digitalserial2",
+            };
+        }
+
         private static Data.Models.Metadata.SharedFeat CreateMetadataSharedFeat()
         {
             return new Data.Models.Metadata.SharedFeat
@@ -886,6 +962,37 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Sound
             {
                 [Data.Models.Metadata.Sound.ChannelsKey] = 12345L,
+            };
+        }
+
+        private static Data.Models.Metadata.SourceDetails CreateMetadataSourceDetails()
+        {
+            return new Data.Models.Metadata.SourceDetails
+            {
+                [Data.Models.Metadata.SourceDetails.IdKey] = "id",
+                [Data.Models.Metadata.SourceDetails.AppendToNumberKey] = "appendtonumber",
+                [Data.Models.Metadata.SourceDetails.SectionKey] = "section",
+                [Data.Models.Metadata.SourceDetails.RomInfoKey] = "rominfo",
+                [Data.Models.Metadata.SourceDetails.DumpDateKey] = "dumpdate",
+                [Data.Models.Metadata.SourceDetails.DumpDateInfoKey] = "dumpdateinfo",
+                [Data.Models.Metadata.SourceDetails.ReleaseDateKey] = "releasedate",
+                [Data.Models.Metadata.SourceDetails.ReleaseDateInfoKey] = "releasedateinfo",
+                [Data.Models.Metadata.SourceDetails.DumperKey] = "dumper",
+                [Data.Models.Metadata.SourceDetails.ProjectKey] = "project",
+                [Data.Models.Metadata.SourceDetails.OriginalFormatKey] = "originalformat",
+                [Data.Models.Metadata.SourceDetails.NodumpKey] = "nodump",
+                [Data.Models.Metadata.SourceDetails.ToolKey] = "tool",
+                [Data.Models.Metadata.SourceDetails.OriginKey] = "origin",
+                [Data.Models.Metadata.SourceDetails.Comment1Key] = "comment1",
+                [Data.Models.Metadata.SourceDetails.Comment2Key] = "comment2",
+                [Data.Models.Metadata.SourceDetails.Link1Key] = "link1",
+                [Data.Models.Metadata.SourceDetails.Link1PublicKey] = "link1public",
+                [Data.Models.Metadata.SourceDetails.Link2Key] = "link2",
+                [Data.Models.Metadata.SourceDetails.Link2PublicKey] = "link2public",
+                [Data.Models.Metadata.SourceDetails.Link3Key] = "link3",
+                [Data.Models.Metadata.SourceDetails.Link3PublicKey] = "link3public",
+                [Data.Models.Metadata.SourceDetails.RegionKey] = "region",
+                [Data.Models.Metadata.SourceDetails.MediaTitleKey] = "mediatitle",
             };
         }
 

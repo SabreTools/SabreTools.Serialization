@@ -288,14 +288,17 @@ namespace SabreTools.Data.Models.Metadata
         Port,
         RamOption,
         Release,
+        ReleaseDetails,
         Rom,
         Sample,
+        Serials,
         SharedFeat,
         Slot,
         SlotOption,
         Software,
         SoftwareList,
         Sound,
+        SourceDetails,
         Video,
 
         /// <summary>
