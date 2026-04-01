@@ -39,8 +39,8 @@ namespace SabreTools.Serialization.Readers
                 archive.Footer = footer;
 
                 // Check offset records offset validity
-                long offsetRecordsOffset = initalOffset + (long)archive.Footer.SectionOffsetRecords.Offset;
-                if (offsetRecordsOffset < 0 || offsetRecordsOffset + archive.Footer.SectionOffsetRecords.Size >= data.Length)
+                long offsetRecordsOffset = initialOffset + (long)archive.Footer.SectionOffsetRecords.Offset;
+                if (offsetRecordsOffset < 0 || offsetRecordsOffset + (long)archive.Footer.SectionOffsetRecords.Size >= data.Length)
                     return null;
 
                 // Seek to and then read the compression offset records
@@ -52,8 +52,8 @@ namespace SabreTools.Serialization.Readers
                 archive.OffsetRecords = offsetRecords;
 
                 // Check name table section validity
-                long nameTableOffset = initalOffset + (long)archive.Footer.SectionNameTable.Offset;
-                if (nameTableOffset < 0 || nameTableOffset + archive.Footer.SectionNameTable.Size >= data.Length)
+                long nameTableOffset = initialOffset + (long)archive.Footer.SectionNameTable.Offset;
+                if (nameTableOffset < 0 || nameTableOffset + (long)archive.Footer.SectionNameTable.Size >= data.Length)
                     return null;
 
                 // Seek to and then read the name table entries
@@ -65,8 +65,8 @@ namespace SabreTools.Serialization.Readers
                 archive.NameTable = nameTable;
 
                 // Check name table section validity
-                long fileTreeOffset = initalOffset + (long)archive.Footer.SectionFileTree.Offset;
-                if (fileTreeOffset < 0 || fileTreeOffset + archive.Footer.SectionFileTree.Size >= data.Length)
+                long fileTreeOffset = initialOffset + (long)archive.Footer.SectionFileTree.Offset;
+                if (fileTreeOffset < 0 || fileTreeOffset + (long)archive.Footer.SectionFileTree.Size >= data.Length)
                     return null;
 
                 // Seek to and then read the file tree entries
