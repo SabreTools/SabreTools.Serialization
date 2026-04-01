@@ -25,9 +25,6 @@ namespace SabreTools.Data.Models.Metadata
         public const string InfoKey = "info";
 
         /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
-        /// <remarks>string</remarks>
         public const string NotesKey = "notes";
 
         /// <remarks>Part[]</remarks>

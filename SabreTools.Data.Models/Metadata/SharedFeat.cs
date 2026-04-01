@@ -15,9 +15,6 @@ namespace SabreTools.Data.Models.Metadata
         #region Keys
 
         /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
-        /// <remarks>string</remarks>
         public const string ValueKey = "value";
 
         #endregion

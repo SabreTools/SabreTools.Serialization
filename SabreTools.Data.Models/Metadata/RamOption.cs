@@ -20,9 +20,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public const string DefaultKey = "default";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         #endregion
 
         public RamOption() => ItemType = ItemType.RamOption;

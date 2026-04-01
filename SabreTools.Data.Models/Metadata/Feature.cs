@@ -14,9 +14,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #region Keys
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         /// <remarks>(unemulated|imperfect)</remarks>
         public const string OverallKey = "overall";
 

@@ -22,9 +22,6 @@ namespace SabreTools.Data.Models.Metadata
         public const string DefaultKey = "default";
 
         /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
-        /// <remarks>string</remarks>
         public const string ValueKey = "value";
 
         #endregion

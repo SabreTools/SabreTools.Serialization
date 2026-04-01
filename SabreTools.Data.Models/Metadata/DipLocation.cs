@@ -17,9 +17,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public const string InvertedKey = "inverted";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         /// <remarks>string, possibly long</remarks>
         public const string NumberKey = "number";
 

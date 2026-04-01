@@ -12,13 +12,6 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        #region Keys
-
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
-        #endregion
-
         public Sample() => ItemType = ItemType.Sample;
     }
 }

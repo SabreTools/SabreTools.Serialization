@@ -29,9 +29,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string, No-Intro DB extension</remarks>
         public const string MergeNameKey = "mergename";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         /// <remarks>string, No-Intro DB extension</remarks>
         public const string NameAltKey = "name_alt";
 

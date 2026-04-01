@@ -24,9 +24,6 @@ namespace SabreTools.Data.Models.Metadata
         public const string LanguageKey = "language";
 
         /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
-        /// <remarks>string</remarks>
         public const string RegionKey = "region";
 
         #endregion

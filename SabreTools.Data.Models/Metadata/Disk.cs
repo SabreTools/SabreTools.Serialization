@@ -26,9 +26,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string</remarks>
         public const string MergeKey = "merge";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         /// <remarks>(yes|no) "no"</remarks>
         public const string OptionalKey = "optional";
 

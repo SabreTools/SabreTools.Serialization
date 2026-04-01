@@ -76,21 +76,21 @@ namespace SabreTools.Metadata.DatFiles.Formats
             {
                 case Release release:
                     if (string.IsNullOrEmpty(release.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Release.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Release.Name));
                     if (string.IsNullOrEmpty(release.ReadString(Data.Models.Metadata.Release.RegionKey)))
                         missingFields.Add(Data.Models.Metadata.Release.RegionKey);
                     break;
 
                 case BiosSet biosset:
                     if (string.IsNullOrEmpty(biosset.GetName()))
-                        missingFields.Add(Data.Models.Metadata.BiosSet.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Name));
                     if (string.IsNullOrEmpty(biosset.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey)))
                         missingFields.Add(Data.Models.Metadata.BiosSet.DescriptionKey);
                     break;
 
                 case Rom rom:
                     if (string.IsNullOrEmpty(rom.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Rom.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
                         missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
                     if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key))
@@ -114,7 +114,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case Disk disk:
                     if (string.IsNullOrEmpty(disk.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Disk.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
                     if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
                         && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
                     {
@@ -125,19 +125,19 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case Sample sample:
                     if (string.IsNullOrEmpty(sample.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Sample.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Sample.Name));
                     break;
 
                 case Archive archive:
                     if (string.IsNullOrEmpty(archive.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Archive.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Archive.Name));
                     break;
 
                 case Chip chip:
                     if (chip.ReadString(Data.Models.Metadata.Chip.ChipTypeKey).AsChipType() is null)
                         missingFields.Add(Data.Models.Metadata.Chip.ChipTypeKey);
                     if (string.IsNullOrEmpty(chip.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Chip.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Chip.Name));
                     break;
 
                 case Display display:
@@ -161,7 +161,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case DipSwitch dipswitch:
                     if (string.IsNullOrEmpty(dipswitch.GetName()))
-                        missingFields.Add(Data.Models.Metadata.DipSwitch.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Name));
                     break;
 
                 case Driver driver:

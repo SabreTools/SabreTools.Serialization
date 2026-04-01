@@ -18,9 +18,6 @@ namespace SabreTools.Data.Models.Metadata
         public const string MD5Key = "md5";
 
         /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
-        /// <remarks>string</remarks>
         public const string SHA1Key = "sha1";
 
         /// <remarks>string</remarks>

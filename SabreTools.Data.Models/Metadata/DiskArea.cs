@@ -18,9 +18,6 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string DiskKey = "disk";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         #endregion
 
         public DiskArea() => ItemType = ItemType.DiskArea;

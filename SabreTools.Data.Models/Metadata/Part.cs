@@ -33,9 +33,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string</remarks>
         public const string InterfaceKey = "interface";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         #endregion
 
         public Part() => ItemType = ItemType.Part;

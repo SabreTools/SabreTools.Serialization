@@ -106,6 +106,14 @@ namespace SabreTools.Metadata.Filter
             if (constants is null)
                 return false;
 
+            // Special cases
+            if (fieldName.Equals("name", StringComparison.OrdinalIgnoreCase))
+            {
+                itemName = MetadataFile.HeaderKey;
+                fieldName = "name";
+                return true;
+            }
+
             // Get if there's a match to the constant
             string localFieldName = fieldName;
             string? constantMatch = Array.Find(constants, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
@@ -128,6 +136,14 @@ namespace SabreTools.Metadata.Filter
             if (constants is null)
                 return false;
 
+            // Special cases
+            if (fieldName.Equals("name", StringComparison.OrdinalIgnoreCase))
+            {
+                itemName = MetadataFile.MachineKey;
+                fieldName = "name";
+                return true;
+            }
+
             // Get if there's a match to the constant
             string localFieldName = fieldName;
             string? constantMatch = Array.Find(constants, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
@@ -149,6 +165,14 @@ namespace SabreTools.Metadata.Filter
             if (string.Equals(itemName, "datitem", StringComparison.OrdinalIgnoreCase)
                 || string.Equals(itemName, "item", StringComparison.OrdinalIgnoreCase))
             {
+                // Special cases
+                if (fieldName.Equals("name", StringComparison.OrdinalIgnoreCase))
+                {
+                    itemName = "item";
+                    fieldName = "name";
+                    return true;
+                }
+
                 // Get all item types
                 var itemTypes = TypeHelper.GetDatItemTypeNames();
 
@@ -203,6 +227,10 @@ namespace SabreTools.Metadata.Filter
             var constants = TypeHelper.GetConstants(itemType);
             if (constants is null)
                 return null;
+
+            // Special cases
+            if (fieldName.Equals("name", StringComparison.OrdinalIgnoreCase))
+                return "name";
 
             // Get if there's a match to the constant
             string localFieldName = fieldName;

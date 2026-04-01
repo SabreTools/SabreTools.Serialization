@@ -36,9 +36,6 @@ namespace SabreTools.Data.Models.Metadata
         public const string MaskKey = "mask";
 
         /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
-        /// <remarks>string</remarks>
         public const string TagKey = "tag";
 
         #endregion

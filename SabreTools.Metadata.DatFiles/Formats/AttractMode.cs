@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using SabreTools.Metadata.DatItems;
 
 namespace SabreTools.Metadata.DatFiles.Formats
@@ -30,7 +30,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
             // Check item name
             if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
+                missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
 
             return missingFields;
         }

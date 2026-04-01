@@ -33,7 +33,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
             // Check item name
             if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
+                missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
 
             switch (datItem)
             {

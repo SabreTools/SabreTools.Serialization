@@ -262,14 +262,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
             {
                 case BiosSet biosset:
                     if (string.IsNullOrEmpty(biosset.GetName()))
-                        missingFields.Add(Data.Models.Metadata.BiosSet.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Name));
                     if (string.IsNullOrEmpty(biosset.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey)))
                         missingFields.Add(Data.Models.Metadata.BiosSet.DescriptionKey);
                     break;
 
                 case Rom rom:
                     if (string.IsNullOrEmpty(rom.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Rom.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
                         missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
                     if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey))
@@ -282,7 +282,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case Disk disk:
                     if (string.IsNullOrEmpty(disk.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Disk.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
                     if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
                         && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
                     {
@@ -293,17 +293,17 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case DeviceRef deviceref:
                     if (string.IsNullOrEmpty(deviceref.GetName()))
-                        missingFields.Add(Data.Models.Metadata.DeviceRef.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.DeviceRef.Name));
                     break;
 
                 case Sample sample:
                     if (string.IsNullOrEmpty(sample.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Sample.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Sample.Name));
                     break;
 
                 case Chip chip:
                     if (string.IsNullOrEmpty(chip.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Chip.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Chip.Name));
                     if (chip.ReadString(Data.Models.Metadata.Chip.ChipTypeKey).AsChipType() is null)
                         missingFields.Add(Data.Models.Metadata.Chip.ChipTypeKey);
                     break;
@@ -327,14 +327,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case DipSwitch dipswitch:
                     if (string.IsNullOrEmpty(dipswitch.GetName()))
-                        missingFields.Add(Data.Models.Metadata.DipSwitch.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Name));
                     if (string.IsNullOrEmpty(dipswitch.ReadString(Data.Models.Metadata.DipSwitch.TagKey)))
                         missingFields.Add(Data.Models.Metadata.DipSwitch.TagKey);
                     break;
 
                 case Configuration configuration:
                     if (string.IsNullOrEmpty(configuration.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Configuration.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Configuration.Name));
                     if (string.IsNullOrEmpty(configuration.ReadString(Data.Models.Metadata.Configuration.TagKey)))
                         missingFields.Add(Data.Models.Metadata.Configuration.TagKey);
                     break;
@@ -346,7 +346,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case Adjuster adjuster:
                     if (string.IsNullOrEmpty(adjuster.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Adjuster.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Adjuster.Name));
                     break;
 
                 case Driver driver:
@@ -372,21 +372,21 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case Slot slot:
                     if (string.IsNullOrEmpty(slot.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Slot.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Slot.Name));
                     break;
 
                 case DatItems.Formats.SoftwareList softwarelist:
                     if (string.IsNullOrEmpty(softwarelist.ReadString(Data.Models.Metadata.SoftwareList.TagKey)))
                         missingFields.Add(Data.Models.Metadata.SoftwareList.TagKey);
                     if (string.IsNullOrEmpty(softwarelist.GetName()))
-                        missingFields.Add(Data.Models.Metadata.SoftwareList.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.SoftwareList.Name));
                     if (softwarelist.ReadString(Data.Models.Metadata.SoftwareList.StatusKey).AsSoftwareListStatus() == null)
                         missingFields.Add(Data.Models.Metadata.SoftwareList.StatusKey);
                     break;
 
                 case RamOption ramoption:
                     if (string.IsNullOrEmpty(ramoption.GetName()))
-                        missingFields.Add(Data.Models.Metadata.RamOption.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.RamOption.Name));
                     break;
 
                 default:

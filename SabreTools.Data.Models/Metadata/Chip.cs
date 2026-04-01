@@ -20,9 +20,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string</remarks>
         public const string FlagsKey = "flags";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         /// <remarks>(yes|no) "no"</remarks>
         public const string SoundOnlyKey = "soundonly";
 

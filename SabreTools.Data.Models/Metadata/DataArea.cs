@@ -17,9 +17,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(big|little) "little"</remarks>
         public const string EndiannessKey = "endianness";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         /// <remarks>Rom[]</remarks>
         [NoFilter]
         public const string RomKey = "rom";

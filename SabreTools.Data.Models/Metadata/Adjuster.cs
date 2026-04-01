@@ -21,9 +21,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>bool</remarks>
         public const string DefaultKey = "default";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         #endregion
 
         public Adjuster() => ItemType = ItemType.Adjuster;

@@ -268,21 +268,21 @@ namespace SabreTools.Metadata.DatFiles.Formats
             {
                 case Release release:
                     if (string.IsNullOrEmpty(release.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Release.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Release.Name));
                     if (string.IsNullOrEmpty(release.ReadString(Data.Models.Metadata.Release.RegionKey)))
                         missingFields.Add(Data.Models.Metadata.Release.RegionKey);
                     break;
 
                 case BiosSet biosset:
                     if (string.IsNullOrEmpty(biosset.GetName()))
-                        missingFields.Add(Data.Models.Metadata.BiosSet.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Name));
                     if (string.IsNullOrEmpty(biosset.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey)))
                         missingFields.Add(Data.Models.Metadata.BiosSet.DescriptionKey);
                     break;
 
                 case Rom rom:
                     if (string.IsNullOrEmpty(rom.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Rom.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
                         missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
                     if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key))
@@ -306,7 +306,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case Disk disk:
                     if (string.IsNullOrEmpty(disk.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Disk.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
                     if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
                         && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
                     {
@@ -317,7 +317,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case Media media:
                     if (string.IsNullOrEmpty(media.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Media.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.Name));
                     if (string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.MD5Key))
                         && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA1Key))
                         && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA256Key))
@@ -330,17 +330,17 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                 case DeviceRef deviceref:
                     if (string.IsNullOrEmpty(deviceref.GetName()))
-                        missingFields.Add(Data.Models.Metadata.DeviceRef.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.DeviceRef.Name));
                     break;
 
                 case Sample sample:
                     if (string.IsNullOrEmpty(sample.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Sample.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Sample.Name));
                     break;
 
                 case Archive archive:
                     if (string.IsNullOrEmpty(archive.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Archive.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Archive.Name));
                     break;
 
                 case Driver driver:
@@ -358,7 +358,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (string.IsNullOrEmpty(softwarelist.ReadString(Data.Models.Metadata.SoftwareList.TagKey)))
                         missingFields.Add(Data.Models.Metadata.SoftwareList.TagKey);
                     if (string.IsNullOrEmpty(softwarelist.GetName()))
-                        missingFields.Add(Data.Models.Metadata.SoftwareList.NameKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.SoftwareList.Name));
                     if (softwarelist.ReadString(Data.Models.Metadata.SoftwareList.StatusKey).AsSoftwareListStatus() == null)
                         missingFields.Add(Data.Models.Metadata.SoftwareList.StatusKey);
                     break;

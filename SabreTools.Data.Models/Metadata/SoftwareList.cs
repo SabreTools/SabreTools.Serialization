@@ -21,9 +21,6 @@ namespace SabreTools.Data.Models.Metadata
         public const string FilterKey = "filter";
 
         /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
-        /// <remarks>string</remarks>
         public const string NotesKey = "notes";
 
         /// <remarks>Software[]</remarks>

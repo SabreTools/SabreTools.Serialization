@@ -17,9 +17,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string</remarks>
         public const string BriefNameKey = "briefname";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         #endregion
 
         public Instance() => ItemType = ItemType.Instance;

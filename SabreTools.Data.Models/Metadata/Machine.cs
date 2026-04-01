@@ -169,9 +169,6 @@ namespace SabreTools.Data.Models.Metadata
         public const string MediaKey = "media";
 
         /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
-        /// <remarks>string</remarks>
         public const string NotesKey = "notes";
 
         /// <remarks>Part[]</remarks>

@@ -98,9 +98,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string</remarks>
         public const string MameConfigKey = "mameconfig";
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
-
         /// TODO: This needs an internal model OR mapping to fields
         /// <remarks>NewDat</remarks>
         [NoFilter]
