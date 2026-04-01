@@ -33,34 +33,49 @@ namespace SabreTools.Serialization.Readers
                 // Parse the footer first
                 data.SeekIfPossible(-Constants.FooterSize, SeekOrigin.End);
                 var footer = ParseFooter(data, initialOffset);
-                if (footer is not null)
-                    archive.Footer = footer;
-                else
+                if (footer is null)
+                    return null;
+
+                archive.Footer = footer;
+
+                // Check offset records offset validity
+                long offsetRecordsOffset = initalOffset + (long)archive.Footer.SectionOffsetRecords.Offset;
+                if (offsetRecordsOffset < 0 || offsetRecordsOffset + archive.Footer.SectionOffsetRecords.Size >= data.Length)
                     return null;
 
                 // Seek to and then read the compression offset records
-                data.SeekIfPossible((long)archive.Footer.SectionOffsetRecords.Offset, SeekOrigin.Begin);
+                data.SeekIfPossible(offsetRecordsOffset, SeekOrigin.Begin);
                 var offsetRecords = ParseOffsetRecords(data, archive.Footer.SectionOffsetRecords.Size);
-                if (offsetRecords is not null)
-                    archive.OffsetRecords = offsetRecords;
-                else
+                if (offsetRecords is null)
+                    return null;
+
+                archive.OffsetRecords = offsetRecords;
+
+                // Check name table section validity
+                long nameTableOffset = initalOffset + (long)archive.Footer.SectionNameTable.Offset;
+                if (nameTableOffset < 0 || nameTableOffset + archive.Footer.SectionNameTable.Size >= data.Length)
                     return null;
 
                 // Seek to and then read the name table entries
-                data.SeekIfPossible((long)archive.Footer.SectionNameTable.Offset, SeekOrigin.Begin);
+                data.SeekIfPossible((long)nameTableOffset, SeekOrigin.Begin);
                 var nameTable = ParseNameTable(data, archive.Footer.SectionNameTable.Size);
-                if (nameTable is not null)
-                    archive.NameTable = nameTable;
-                else
+                if (nameTable is null)
+                    return null;
+
+                archive.NameTable = nameTable;
+
+                // Check name table section validity
+                long fileTreeOffset = initalOffset + (long)archive.Footer.SectionFileTree.Offset;
+                if (fileTreeOffset < 0 || fileTreeOffset + archive.Footer.SectionFileTree.Size >= data.Length)
                     return null;
 
                 // Seek to and then read the file tree entries
-                data.SeekIfPossible((long)archive.Footer.SectionFileTree.Offset, SeekOrigin.Begin);
+                data.SeekIfPossible((long)fileTreeOffset, SeekOrigin.Begin);
                 var fileTree = ParseFileTree(data, archive.Footer.SectionFileTree.Size, archive.Footer.SectionNameTable.Size);
-                if (fileTree is not null)
-                    archive.FileTree = fileTree;
-                else
+                if (fileTree is null)
                     return null;
+
+                archive.FileTree = fileTree;
 
                 // Do not attempt to read compressed data into memory
 
