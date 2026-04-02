@@ -69,6 +69,8 @@ namespace SabreTools.Serialization.Readers
                 optionalHeaders[i].HeaderData = data.ReadUInt32BigEndian();
             }
 
+            obj.OptionalHeaders = optionalHeaders;
+
             return obj;
         }
     }
