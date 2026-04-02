@@ -78,7 +78,7 @@ namespace SabreTools.Metadata.Filter
         private bool MatchesEqual(DictionaryBase dictionaryBase)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // If a null value is expected
@@ -120,7 +120,7 @@ namespace SabreTools.Metadata.Filter
         private bool MatchesNotEqual(DictionaryBase dictionaryBase)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // If a null value is expected
@@ -162,7 +162,7 @@ namespace SabreTools.Metadata.Filter
         private bool MatchesGreaterThan(DictionaryBase dictionaryBase)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // Null is always failure
@@ -194,7 +194,7 @@ namespace SabreTools.Metadata.Filter
         private bool MatchesGreaterThanOrEqual(DictionaryBase dictionaryBase)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // Null is always failure
@@ -226,7 +226,7 @@ namespace SabreTools.Metadata.Filter
         private bool MatchesLessThan(DictionaryBase dictionaryBase)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // Null is always failure
@@ -258,7 +258,7 @@ namespace SabreTools.Metadata.Filter
         private bool MatchesLessThanOrEqual(DictionaryBase dictionaryBase)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // Null is always failure
@@ -336,10 +336,10 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Get the check value for a field from a DictionaryBase
         /// </summary>
-        private bool GetCheckValue(DictionaryBase dictionaryBase, out string? checkValue)
+        private static bool GetCheckValue(DictionaryBase dictionaryBase, string fieldName, out string? checkValue)
         {
             // Handle the common name field
-            if (Key.FieldName == "name")
+            if (fieldName == "name")
             {
                 checkValue = dictionaryBase.GetName();
                 return true;
@@ -348,231 +348,231 @@ namespace SabreTools.Metadata.Filter
             // Handle type-specific properties
             switch (dictionaryBase)
             {
-                case Adjuster item when Key.FieldName == "default":
+                case Adjuster item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
 
-                case BiosSet item when Key.FieldName == "default":
+                case BiosSet item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
 
-                case Chip item when Key.FieldName == "type":
+                case Chip item when fieldName == "type":
                     checkValue = item.ChipType?.AsStringValue();
                     return true;
-                case Chip item when Key.FieldName == "soundonly":
+                case Chip item when fieldName == "soundonly":
                     checkValue = item.SoundOnly.FromYesNo();
                     return true;
 
-                case Condition item when Key.FieldName == "relation":
+                case Condition item when fieldName == "relation":
                     checkValue = item.Relation?.AsStringValue();
                     return true;
 
-                case ConfLocation item when Key.FieldName == "inverted":
+                case ConfLocation item when fieldName == "inverted":
                     checkValue = item.Inverted.FromYesNo();
                     return true;
 
-                case ConfSetting item when Key.FieldName == "default":
+                case ConfSetting item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
 
-                case Control item when Key.FieldName == "type":
+                case Control item when fieldName == "type":
                     checkValue = item.ControlType?.AsStringValue();
                     return true;
-                case Control item when Key.FieldName == "reverse":
+                case Control item when fieldName == "reverse":
                     checkValue = item.Reverse.FromYesNo();
                     return true;
 
-                case DataArea item when Key.FieldName == "endianness":
+                case DataArea item when fieldName == "endianness":
                     checkValue = item.Endianness?.AsStringValue();
                     return true;
 
-                case Device item when Key.FieldName == "type":
+                case Device item when fieldName == "type":
                     checkValue = item.DeviceType?.AsStringValue();
                     return true;
 
-                case DipLocation item when Key.FieldName == "inverted":
+                case DipLocation item when fieldName == "inverted":
                     checkValue = item.Inverted.FromYesNo();
                     return true;
 
-                case DipLocation item when Key.FieldName == "inverted":
+                case DipLocation item when fieldName == "inverted":
                     checkValue = item.Inverted.FromYesNo();
                     return true;
 
-                case DipSwitch item when Key.FieldName == "default":
+                case DipSwitch item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
 
-                case DipValue item when Key.FieldName == "default":
+                case DipValue item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
 
-                case Disk item when Key.FieldName == "optional":
+                case Disk item when fieldName == "optional":
                     checkValue = item.Optional.FromYesNo();
                     return true;
-                case Disk item when Key.FieldName == "status":
+                case Disk item when fieldName == "status":
                     checkValue = item.Status?.AsStringValue();
                     return true;
-                case Disk item when Key.FieldName == "writable":
+                case Disk item when fieldName == "writable":
                     checkValue = item.Writable.FromYesNo();
                     return true;
 
-                case Display item when Key.FieldName == "flipx":
+                case Display item when fieldName == "flipx":
                     checkValue = item.FlipX.FromYesNo();
                     return true;
-                case Display item when Key.FieldName == "type":
+                case Display item when fieldName == "type":
                     checkValue = item.DisplayType?.AsStringValue();
                     return true;
 
-                case Driver item when Key.FieldName == "blit":
+                case Driver item when fieldName == "blit":
                     checkValue = item.Blit?.AsStringValue();
                     return true;
-                case Driver item when Key.FieldName == "cocktail":
+                case Driver item when fieldName == "cocktail":
                     checkValue = item.Cocktail?.AsStringValue();
                     return true;
-                case Driver item when Key.FieldName == "color":
+                case Driver item when fieldName == "color":
                     checkValue = item.Color?.AsStringValue();
                     return true;
-                case Driver item when Key.FieldName == "emulation":
+                case Driver item when fieldName == "emulation":
                     checkValue = item.Emulation?.AsStringValue();
                     return true;
-                case Driver item when Key.FieldName == "incomplete":
+                case Driver item when fieldName == "incomplete":
                     checkValue = item.Incomplete.FromYesNo();
                     return true;
-                case Driver item when Key.FieldName == "nosoundhardware":
+                case Driver item when fieldName == "nosoundhardware":
                     checkValue = item.NoSoundHardware.FromYesNo();
                     return true;
-                case Driver item when Key.FieldName == "requiresartwork":
+                case Driver item when fieldName == "requiresartwork":
                     checkValue = item.RequiresArtwork.FromYesNo();
                     return true;
-                case Driver item when Key.FieldName == "savestate":
+                case Driver item when fieldName == "savestate":
                     checkValue = item.SaveState?.AsStringValue();
                     return true;
-                case Driver item when Key.FieldName == "sound":
+                case Driver item when fieldName == "sound":
                     checkValue = item.Sound?.AsStringValue();
                     return true;
-                case Driver item when Key.FieldName == "status":
+                case Driver item when fieldName == "status":
                     checkValue = item.Status?.AsStringValue();
                     return true;
-                case Driver item when Key.FieldName == "unofficial":
+                case Driver item when fieldName == "unofficial":
                     checkValue = item.Unofficial.FromYesNo();
                     return true;
 
-                case Feature item when Key.FieldName == "overall":
+                case Feature item when fieldName == "overall":
                     checkValue = item.Overall?.AsStringValue();
                     return true;
-                case Feature item when Key.FieldName == "status":
+                case Feature item when fieldName == "status":
                     checkValue = item.Status?.AsStringValue();
                     return true;
-                case Feature item when Key.FieldName == "type":
+                case Feature item when fieldName == "type":
                     checkValue = item.FeatureType?.AsStringValue();
                     return true;
 
-                case Header item when Key.FieldName == "biosmode":
+                case Header item when fieldName == "biosmode":
                     checkValue = item.BiosMode.AsStringValue();
                     return true;
-                case Header item when Key.FieldName == "debug":
+                case Header item when fieldName == "debug":
                     checkValue = item.Debug.FromYesNo();
                     return true;
-                case Header item when Key.FieldName == "forcemerging":
+                case Header item when fieldName == "forcemerging":
                     checkValue = item.ForceMerging.AsStringValue();
                     return true;
-                case Header item when Key.FieldName == "forcenodump":
+                case Header item when fieldName == "forcenodump":
                     checkValue = item.ForceNodump.AsStringValue();
                     return true;
-                case Header item when Key.FieldName == "forcepacking":
+                case Header item when fieldName == "forcepacking":
                     checkValue = item.ForcePacking.AsStringValue();
                     return true;
-                case Header item when Key.FieldName == "forcezipping":
+                case Header item when fieldName == "forcezipping":
                     checkValue = item.ForceZipping.FromYesNo();
                     return true;
-                case Header item when Key.FieldName == "lockbiosmode":
+                case Header item when fieldName == "lockbiosmode":
                     checkValue = item.LockBiosMode.FromYesNo();
                     return true;
-                case Header item when Key.FieldName == "lockrommode":
+                case Header item when fieldName == "lockrommode":
                     checkValue = item.LockRomMode.FromYesNo();
                     return true;
-                case Header item when Key.FieldName == "locksamplemode":
+                case Header item when fieldName == "locksamplemode":
                     checkValue = item.LockSampleMode.FromYesNo();
                     return true;
-                case Header item when Key.FieldName == "rommode":
+                case Header item when fieldName == "rommode":
                     checkValue = item.RomMode.AsStringValue();
                     return true;
-                case Header item when Key.FieldName == "samplemode":
+                case Header item when fieldName == "samplemode":
                     checkValue = item.SampleMode.AsStringValue();
                     return true;
 
-                case Input item when Key.FieldName == "service":
+                case Input item when fieldName == "service":
                     checkValue = item.Service.FromYesNo();
                     return true;
-                case Input item when Key.FieldName == "tilt":
+                case Input item when fieldName == "tilt":
                     checkValue = item.Tilt.FromYesNo();
                     return true;
 
-                case Machine item when Key.FieldName == "isbios":
+                case Machine item when fieldName == "isbios":
                     checkValue = item.IsBios.FromYesNo();
                     return true;
-                case Machine item when Key.FieldName == "isdevice":
+                case Machine item when fieldName == "isdevice":
                     checkValue = item.IsDevice.FromYesNo();
                     return true;
-                case Machine item when Key.FieldName == "ismechanical":
+                case Machine item when fieldName == "ismechanical":
                     checkValue = item.IsMechanical.FromYesNo();
                     return true;
-                case Machine item when Key.FieldName == "runnable":
+                case Machine item when fieldName == "runnable":
                     checkValue = item.Runnable?.AsStringValue();
                     return true;
-                case Machine item when Key.FieldName == "supported":
+                case Machine item when fieldName == "supported":
                     checkValue = item.Supported?.AsStringValue();
                     return true;
 
-                case RamOption item when Key.FieldName == "default":
+                case RamOption item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
 
-                case Release item when Key.FieldName == "default":
+                case Release item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
 
-                case Rom item when Key.FieldName == "dispose":
+                case Rom item when fieldName == "dispose":
                     checkValue = item.Dispose.FromYesNo();
                     return true;
-                case Rom item when Key.FieldName == "fileisavailable":
+                case Rom item when fieldName == "fileisavailable":
                     checkValue = item.FileIsAvailable.FromYesNo();
                     return true;
-                case Rom item when Key.FieldName == "inverted":
+                case Rom item when fieldName == "inverted":
                     checkValue = item.Inverted.FromYesNo();
                     return true;
-                case Rom item when Key.FieldName == "loadflag":
+                case Rom item when fieldName == "loadflag":
                     checkValue = item.LoadFlag?.AsStringValue();
                     return true;
-                case Rom item when Key.FieldName == "mediatype":
+                case Rom item when fieldName == "mediatype":
                     checkValue = item.OpenMSXMediaType?.AsStringValue();
                     return true;
-                case Rom item when Key.FieldName == "mia":
+                case Rom item when fieldName == "mia":
                     checkValue = item.MIA.FromYesNo();
                     return true;
-                case Rom item when Key.FieldName == "optional":
+                case Rom item when fieldName == "optional":
                     checkValue = item.Optional.FromYesNo();
                     return true;
-                case Rom item when Key.FieldName == "soundonly":
+                case Rom item when fieldName == "soundonly":
                     checkValue = item.SoundOnly.FromYesNo();
                     return true;
-                case Rom item when Key.FieldName == "status":
+                case Rom item when fieldName == "status":
                     checkValue = item.Status?.AsStringValue();
                     return true;
 
-                case SlotOption item when Key.FieldName == "default":
+                case SlotOption item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
 
-                case Software item when Key.FieldName == "supported":
+                case Software item when fieldName == "supported":
                     checkValue = item.Supported?.AsStringValue();
                     return true;
 
-                case SoftwareList item when Key.FieldName == "status":
+                case SoftwareList item when fieldName == "status":
                     checkValue = item.Status?.AsStringValue();
                     return true;
 
-                case Video item when Key.FieldName == "screen":
+                case Video item when fieldName == "screen":
                     checkValue = item.Screen?.AsStringValue();
                     return true;
 
@@ -581,14 +581,14 @@ namespace SabreTools.Metadata.Filter
             }
 
             // If the key doesn't exist, we count it as null
-            if (!dictionaryBase.ContainsKey(Key.FieldName))
+            if (!dictionaryBase.ContainsKey(fieldName))
             {
                 checkValue = null;
                 return false;
             }
 
             // If the value in the dictionary is null
-            checkValue = dictionaryBase.ReadString(Key.FieldName);
+            checkValue = dictionaryBase.ReadString(fieldName);
             return true;
         }
 
