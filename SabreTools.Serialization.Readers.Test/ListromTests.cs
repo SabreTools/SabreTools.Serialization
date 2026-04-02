@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             var romGood = new Data.Models.Listrom.Row
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Size = "12345",
                 Bad = false,
                 CRC = Hashing.HashType.CRC32.ZeroString,
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var romBad = new Data.Models.Listrom.Row
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Size = "12345",
                 Bad = true,
                 CRC = Hashing.HashType.CRC32.ZeroString,
@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var diskGoodMd5 = new Data.Models.Listrom.Row
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Bad = false,
                 MD5 = Hashing.HashType.MD5.ZeroString,
                 SHA1 = null,
@@ -131,7 +131,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var diskGoodSha1 = new Data.Models.Listrom.Row
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Bad = false,
                 MD5 = null,
                 SHA1 = Hashing.HashType.SHA1.ZeroString,
@@ -140,7 +140,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var diskBad = new Data.Models.Listrom.Row
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Bad = false,
                 MD5 = Hashing.HashType.MD5.ZeroString,
                 SHA1 = Hashing.HashType.SHA1.ZeroString,
@@ -202,7 +202,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void ValidateGoodRom(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
-            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("name", row.Name);
             Assert.Equal("12345", row.Size);
             Assert.False(row.Bad);
             Assert.Equal(Hashing.HashType.CRC32.ZeroString, row.CRC);
@@ -216,7 +216,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void ValidateBadRom(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
-            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("name", row.Name);
             Assert.Equal("12345", row.Size);
             Assert.True(row.Bad);
             Assert.Equal(Hashing.HashType.CRC32.ZeroString, row.CRC);
@@ -230,7 +230,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void ValidateGoodMd5Disk(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
-            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("name", row.Name);
             Assert.False(row.Bad);
             Assert.Equal(Hashing.HashType.MD5.ZeroString, row.MD5);
             Assert.Null(row.SHA1);
@@ -243,7 +243,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void ValidateGoodSha1Disk(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
-            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("name", row.Name);
             Assert.False(row.Bad);
             Assert.Null(row.MD5);
             Assert.Equal(Hashing.HashType.SHA1.ZeroString, row.SHA1);
@@ -256,7 +256,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void ValidateBadDisk(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
-            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("name", row.Name);
             Assert.False(row.Bad);
             Assert.Null(row.MD5);
             Assert.Null(row.SHA1);

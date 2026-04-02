@@ -106,7 +106,7 @@ namespace SabreTools.Serialization.Readers.Test
                 RegParent = "XXXXXX",
                 MergeOf = "XXXXXX",
                 MergeName = "XXXXXX",
-                Name = "XXXXXX",
+                Name = "name",
                 NameAlt = "XXXXXX",
                 Region = "XXXXXX",
                 Languages = "XXXXXX",
@@ -249,7 +249,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var game = new Data.Models.NoIntroDatabase.Game
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Archive = archive,
                 Media = [media],
                 Source = [source],
@@ -268,7 +268,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.NoIntroDatabase.Game? game)
         {
             Assert.NotNull(game);
-            Assert.Equal("XXXXXX", game.Name);
+            Assert.Equal("name", game.Name);
 
             Validate(game.Archive);
 
@@ -296,7 +296,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", archive.RegParent);
             Assert.Equal("XXXXXX", archive.MergeOf);
             Assert.Equal("XXXXXX", archive.MergeName);
-            Assert.Equal("XXXXXX", archive.Name);
+            Assert.Equal("name", archive.Name);
             Assert.Equal("XXXXXX", archive.NameAlt);
             Assert.Equal("XXXXXX", archive.Region);
             Assert.Equal("XXXXXX", archive.Languages);

@@ -620,7 +620,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem actual = Assert.Single(datFile.GetItemsForBucket("child"));
             Machine? actualMachine = actual.GetMachine();
             Assert.NotNull(actualMachine);
-            Assert.Equal("child", actualMachine.GetName());
+            Assert.Equal("child", actualMachine.Name);
             Assert.Equal("romof", actualMachine.ReadString(Data.Models.Metadata.Machine.RomOfKey));
         }
 
@@ -673,7 +673,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             long actual = Assert.Single(datFile.GetItemsForBucketDB("child")).Key;
             Machine? actualMachine = datFile.GetMachineForItemDB(actual).Value;
             Assert.NotNull(actualMachine);
-            Assert.Equal("child", actualMachine.GetName());
+            Assert.Equal("child", actualMachine.Name);
             Assert.Equal("romof", actualMachine.ReadString(Data.Models.Metadata.Machine.RomOfKey));
         }
 
@@ -727,7 +727,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem actual = Assert.Single(datFile.GetItemsForBucket("child"));
             Machine? actualMachine = actual.GetMachine();
             Assert.NotNull(actualMachine);
-            Assert.Equal("child", actualMachine.GetName());
+            Assert.Equal("child", actualMachine.Name);
         }
 
         [Fact]
@@ -779,7 +779,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             long actual = Assert.Single(datFile.GetItemsForBucketDB("child")).Key;
             Machine? actualMachine = datFile.GetMachineForItemDB(actual).Value;
             Assert.NotNull(actualMachine);
-            Assert.Equal("child", actualMachine.GetName());
+            Assert.Equal("child", actualMachine.Name);
         }
 
         #endregion

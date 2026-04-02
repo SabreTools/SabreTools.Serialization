@@ -11,12 +11,12 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void ConvertToRomTest()
         {
             Machine machine = new Machine();
-            machine.SetName("XXXXXX");
+            machine.SetName("name");
 
             Source source = new Source(0, "XXXXXX");
 
             Media media = new Media();
-            media.SetName("XXXXXX");
+            media.SetName("name");
             media.Write(Data.Models.Metadata.Media.MD5Key, HashType.MD5.ZeroString);
             media.Write(Data.Models.Metadata.Media.SHA1Key, HashType.SHA1.ZeroString);
             media.Write(Data.Models.Metadata.Media.SHA256Key, HashType.SHA256.ZeroString);
@@ -28,7 +28,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Rom actual = media.ConvertToRom();
 
-            Assert.Equal("XXXXXX.aaruf", actual.GetName());
+            Assert.Equal("name.aaruf", actual.Name);
             Assert.Equal(HashType.MD5.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
             Assert.Equal(HashType.SHA1.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
             Assert.Equal(HashType.SHA256.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SHA256Key));
@@ -37,7 +37,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Machine? actualMachine = actual.GetMachine();
             Assert.NotNull(actualMachine);
-            Assert.Equal("XXXXXX", actualMachine.GetName());
+            Assert.Equal("name", actualMachine.Name);
 
             Assert.Equal(false, actual.ReadBool(DatItem.RemoveKey));
 

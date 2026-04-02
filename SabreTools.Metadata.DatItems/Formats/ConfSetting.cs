@@ -28,6 +28,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.ConfSetting)?.Default = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.ConfSetting)?.Name;
+            set => (_internal as Data.Models.Metadata.ConfSetting)?.Name = value;
+        }
+
         public string? Value
         {
             get => (_internal as Data.Models.Metadata.ConfSetting)?.Value;

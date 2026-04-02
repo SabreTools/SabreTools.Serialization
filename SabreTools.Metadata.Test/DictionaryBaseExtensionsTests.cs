@@ -23,14 +23,14 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Disk
             {
                 Status = ItemStatus.Nodump,
-                Name = "XXXXXX",
+                Name = "name",
                 [Disk.MD5Key] = string.Empty,
                 [Disk.SHA1Key] = string.Empty,
             };
             DictionaryBase other = new Disk
             {
                 Status = ItemStatus.Nodump,
-                Name = "XXXXXX",
+                Name = "name",
                 [Disk.MD5Key] = string.Empty,
                 [Disk.SHA1Key] = string.Empty,
             };
@@ -44,13 +44,13 @@ namespace SabreTools.Metadata.Test
         {
             DictionaryBase self = new Disk
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Disk.MD5Key] = "XXXXXX",
                 [Disk.SHA1Key] = string.Empty,
             };
             DictionaryBase other = new Disk
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Disk.MD5Key] = string.Empty,
                 [Disk.SHA1Key] = "XXXXXX",
             };
@@ -124,7 +124,7 @@ namespace SabreTools.Metadata.Test
         {
             DictionaryBase self = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = "XXXXXX",
                 [Media.SHA1Key] = string.Empty,
                 [Media.SHA256Key] = "XXXXXX",
@@ -132,7 +132,7 @@ namespace SabreTools.Metadata.Test
             };
             DictionaryBase other = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = string.Empty,
                 [Media.SHA1Key] = "XXXXXX",
                 [Media.SHA256Key] = string.Empty,
@@ -148,7 +148,7 @@ namespace SabreTools.Metadata.Test
         {
             DictionaryBase self = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = "XXXXXX",
                 [Media.SHA1Key] = string.Empty,
                 [Media.SHA256Key] = string.Empty,
@@ -156,7 +156,7 @@ namespace SabreTools.Metadata.Test
             };
             DictionaryBase other = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = "XXXXXX",
                 [Media.SHA1Key] = "XXXXXX",
                 [Media.SHA256Key] = "XXXXXX",
@@ -172,7 +172,7 @@ namespace SabreTools.Metadata.Test
         {
             DictionaryBase self = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = string.Empty,
                 [Media.SHA1Key] = "XXXXXX",
                 [Media.SHA256Key] = string.Empty,
@@ -180,7 +180,7 @@ namespace SabreTools.Metadata.Test
             };
             DictionaryBase other = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = "XXXXXX",
                 [Media.SHA1Key] = "XXXXXX",
                 [Media.SHA256Key] = "XXXXXX",
@@ -196,7 +196,7 @@ namespace SabreTools.Metadata.Test
         {
             DictionaryBase self = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = string.Empty,
                 [Media.SHA1Key] = string.Empty,
                 [Media.SHA256Key] = "XXXXXX",
@@ -204,7 +204,7 @@ namespace SabreTools.Metadata.Test
             };
             DictionaryBase other = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = "XXXXXX",
                 [Media.SHA1Key] = "XXXXXX",
                 [Media.SHA256Key] = "XXXXXX",
@@ -220,7 +220,7 @@ namespace SabreTools.Metadata.Test
         {
             DictionaryBase self = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = string.Empty,
                 [Media.SHA1Key] = string.Empty,
                 [Media.SHA256Key] = string.Empty,
@@ -228,7 +228,7 @@ namespace SabreTools.Metadata.Test
             };
             DictionaryBase other = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = "XXXXXX",
                 [Media.SHA1Key] = "XXXXXX",
                 [Media.SHA256Key] = "XXXXXX",
@@ -244,7 +244,7 @@ namespace SabreTools.Metadata.Test
         {
             DictionaryBase self = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = "XXXXXX",
                 [Media.SHA1Key] = "XXXXXX",
                 [Media.SHA256Key] = "XXXXXX",
@@ -252,7 +252,7 @@ namespace SabreTools.Metadata.Test
             };
             DictionaryBase other = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = "XXXXXX",
                 [Media.SHA1Key] = "XXXXXX",
                 [Media.SHA256Key] = "XXXXXX",
@@ -269,7 +269,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Status = ItemStatus.Nodump,
-                Name = "XXXXXX",
+                Name = "name",
                 [Rom.SizeKey] = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -288,7 +288,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Status = ItemStatus.Nodump,
-                Name = "XXXXXX",
+                Name = "name",
                 [Rom.SizeKey] = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -314,7 +314,7 @@ namespace SabreTools.Metadata.Test
         {
             DictionaryBase self = new Rom
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Rom.SizeKey] = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = string.Empty,
@@ -332,7 +332,7 @@ namespace SabreTools.Metadata.Test
             };
             DictionaryBase other = new Rom
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Rom.SizeKey] = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = "XXXXXX",

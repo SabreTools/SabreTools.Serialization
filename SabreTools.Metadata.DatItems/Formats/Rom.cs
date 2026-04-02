@@ -35,7 +35,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             {
                 var dataArea = Read<DataArea?>(DataAreaKey);
                 return dataArea is not null
-                    && (!string.IsNullOrEmpty(dataArea.GetName())
+                    && (!string.IsNullOrEmpty(dataArea.Name)
                         || dataArea.ReadLong(Data.Models.Metadata.DataArea.SizeKey) is not null
                         || dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey) is not null
                         || dataArea.Endianness is not null);
@@ -72,6 +72,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Rom)?.MIA = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.Name;
+            set => (_internal as Data.Models.Metadata.Rom)?.Name = value;
+        }
+
         public OpenMSXSubType? OpenMSXMediaType
         {
             get => (_internal as Data.Models.Metadata.Rom)?.OpenMSXMediaType;
@@ -101,7 +107,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             {
                 var part = Read<Part?>(PartKey);
                 return part is not null
-                    && (!string.IsNullOrEmpty(part.GetName())
+                    && (!string.IsNullOrEmpty(part.Name)
                         || !string.IsNullOrEmpty(part.ReadString(Data.Models.Metadata.Part.InterfaceKey)));
             }
         }
@@ -160,7 +166,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (rom is null)
                 return;
 
-            string name = $"{machine.GetName()}_{index++}{(!string.IsNullOrEmpty(rom!.ReadString(Data.Models.Metadata.Rom.RemarkKey)) ? $" {rom.ReadString(Data.Models.Metadata.Rom.RemarkKey)}" : string.Empty)}";
+            string name = $"{machine.Name}_{index++}{(!string.IsNullOrEmpty(rom!.ReadString(Data.Models.Metadata.Rom.RemarkKey)) ? $" {rom.ReadString(Data.Models.Metadata.Rom.RemarkKey)}" : string.Empty)}";
 
             SetName(name);
             Write<string?>(Data.Models.Metadata.Rom.OffsetKey, rom.ReadString(Data.Models.Metadata.Rom.StartKey));

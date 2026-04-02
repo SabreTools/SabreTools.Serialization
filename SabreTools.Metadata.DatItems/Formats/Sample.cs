@@ -10,6 +10,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("sample"), XmlRoot("sample")]
     public class Sample : DatItem<Data.Models.Metadata.Sample>
     {
+        #region Fields
+
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Sample)?.Name;
+            set => (_internal as Data.Models.Metadata.Sample)?.Name = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Sample() : base() { }

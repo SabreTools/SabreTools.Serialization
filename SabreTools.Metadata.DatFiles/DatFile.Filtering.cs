@@ -124,7 +124,7 @@ namespace SabreTools.Metadata.DatFiles
                         continue;
 
                     // Get the values to check against
-                    string? machineName = machine.GetName();
+                    string? machineName = machine.Name;
                     string? machineDesc = machine.Description;
                     if (machineName is null || machineDesc is null)
                         continue;
@@ -165,7 +165,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the values to check against
-                string? machineName = machine.Value.GetName();
+                string? machineName = machine.Value.Name;
                 string? machineDesc = machine.Value.Description;
                 if (machineName is null || machineDesc is null)
                     continue;
@@ -327,7 +327,7 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Get machine information
                 Machine? machine = item.GetMachine();
-                string? machineName = machine?.GetName()?.ToLowerInvariant();
+                string? machineName = machine?.Name?.ToLowerInvariant();
                 if (machine is null || machineName is null)
                     continue;
 
@@ -406,7 +406,7 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Get machine information
                 Machine? machineObj = machine.Value;
-                string? machineName = machineObj?.GetName()?.ToLowerInvariant();
+                string? machineName = machineObj?.Name?.ToLowerInvariant();
                 if (machineObj is null || machineName is null)
                     continue;
 
@@ -528,12 +528,12 @@ namespace SabreTools.Metadata.DatFiles
             if (datItem is DatItems.Formats.File || datItem is Rom)
             {
                 string[] splitname = itemName.Split('.');
-                itemName = machine.GetName()
+                itemName = machine.Name
                     + $"/{string.Join(".", splitname, 0, splitname.Length > 1 ? splitname.Length - 1 : 1)}";
             }
             else
             {
-                itemName = machine.GetName() + $"/{itemName}";
+                itemName = machine.Name + $"/{itemName}";
             }
 
             // Strip off "Default" prefix only for ORPG
@@ -606,12 +606,12 @@ namespace SabreTools.Metadata.DatFiles
             if (datItem.Value is DatItems.Formats.File || datItem.Value is Rom)
             {
                 string[] splitname = itemName.Split('.');
-                itemName = machine.Value.GetName()
+                itemName = machine.Value.Name
                     + $"/{string.Join(".", splitname, 0, splitname.Length > 1 ? splitname.Length - 1 : 1)}";
             }
             else
             {
-                itemName = machine.Value.GetName() + $"/{itemName}";
+                itemName = machine.Value.Name + $"/{itemName}";
             }
 
             // Strip off "Default" prefix only for ORPG
@@ -651,7 +651,7 @@ namespace SabreTools.Metadata.DatFiles
                         continue;
 
                     // Get the values to check against
-                    string? machineName = machine.GetName();
+                    string? machineName = machine.Name;
                     string? machineDesc = machine.Description;
 
                     if (machineName is not null && Regex.IsMatch(machineName, SceneNamePattern))
@@ -689,7 +689,7 @@ namespace SabreTools.Metadata.DatFiles
 #endif
 
                 // Get the values to check against
-                string? machineName = machine.Value.GetName();
+                string? machineName = machine.Value.Name;
                 string? machineDesc = machine.Value.Description;
 
                 if (machineName is not null && Regex.IsMatch(machineName, SceneNamePattern))
@@ -732,7 +732,7 @@ namespace SabreTools.Metadata.DatFiles
                         continue;
 
                     // Get the values to check against
-                    string? machineName = machine.GetName();
+                    string? machineName = machine.Name;
                     string? cloneOf = machine.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
                     string? romOf = machine.ReadString(Data.Models.Metadata.Machine.RomOfKey);
                     string? sampleOf = machine.ReadString(Data.Models.Metadata.Machine.SampleOfKey);
@@ -773,7 +773,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the values to check against
-                string? machineName = machine.Value.GetName();
+                string? machineName = machine.Value.Name;
                 string? cloneOf = machine.Value.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
                 string? romOf = machine.Value.ReadString(Data.Models.Metadata.Machine.RomOfKey);
                 string? sampleOf = machine.Value.ReadString(Data.Models.Metadata.Machine.SampleOfKey);

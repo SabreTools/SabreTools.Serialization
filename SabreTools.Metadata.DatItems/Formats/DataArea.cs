@@ -19,6 +19,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.DataArea)?.Endianness = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.DataArea)?.Name;
+            set => (_internal as Data.Models.Metadata.DataArea)?.Name = value;
+        }
+
         #endregion
 
         #region Constructors

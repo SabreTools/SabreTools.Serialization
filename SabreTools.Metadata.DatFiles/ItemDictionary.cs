@@ -102,7 +102,7 @@ namespace SabreTools.Metadata.DatFiles
                     && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
                     && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
                 {
-                    _logger.Verbose($"Incomplete entry for '{disk.GetName()}' will be output as nodump");
+                    _logger.Verbose($"Incomplete entry for '{disk.Name}' will be output as nodump");
                     disk.Status = ItemStatus.Nodump;
                 }
 
@@ -129,7 +129,7 @@ namespace SabreTools.Metadata.DatFiles
                     && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA256Key))
                     && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SpamSumKey)))
                 {
-                    _logger.Verbose($"Incomplete entry for '{media.GetName()}' will be output as nodump");
+                    _logger.Verbose($"Incomplete entry for '{media.Name}' will be output as nodump");
                 }
 
                 item = media;
@@ -142,7 +142,7 @@ namespace SabreTools.Metadata.DatFiles
                 if (size is null && !string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
                 {
                     // No-op, just catch it so it doesn't go further
-                    //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Entry with only SHA-1 found - '{rom.GetName()}'");
+                    //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Entry with only SHA-1 found - '{rom.Name}'");
                 }
 
                 // If we have a rom and it's missing size AND the hashes match a 0-byte file, fill in the rest of the info
@@ -168,7 +168,7 @@ namespace SabreTools.Metadata.DatFiles
                 // If the file has no size and it's not the above case, skip and log
                 else if (rom.Status != ItemStatus.Nodump && (size == 0 || size is null))
                 {
-                    //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Incomplete entry for '{rom.GetName()}' will be output as nodump");
+                    //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Incomplete entry for '{rom.Name}' will be output as nodump");
                     rom.Status = ItemStatus.Nodump;
                 }
 
@@ -177,7 +177,7 @@ namespace SabreTools.Metadata.DatFiles
                     && size is not null && size > 0
                     && !rom.HasHashes())
                 {
-                    //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Incomplete entry for '{rom.GetName()}' will be output as nodump");
+                    //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Incomplete entry for '{rom.Name}' will be output as nodump");
                     rom.Status = ItemStatus.Nodump;
                 }
 
@@ -438,9 +438,9 @@ namespace SabreTools.Metadata.DatFiles
 
             // Get the machines for comparison
             var selfMachine = self.GetMachine();
-            string? selfMachineName = selfMachine?.GetName();
+            string? selfMachineName = selfMachine?.Name;
             var lastMachine = last.GetMachine();
-            string? lastMachineName = lastMachine?.GetName();
+            string? lastMachineName = lastMachine?.Name;
 
             // If the duplicate is external already
 #if NET20 || NET35
@@ -558,8 +558,8 @@ namespace SabreTools.Metadata.DatFiles
                 }
 
                 // If the saved machine is a child of the current machine, use the current machine instead
-                if (savedMachine?.ReadString(Data.Models.Metadata.Machine.CloneOfKey) == itemMachine?.GetName()
-                    || savedMachine?.ReadString(Data.Models.Metadata.Machine.RomOfKey) == itemMachine?.GetName())
+                if (savedMachine?.ReadString(Data.Models.Metadata.Machine.CloneOfKey) == itemMachine?.Name
+                    || savedMachine?.ReadString(Data.Models.Metadata.Machine.RomOfKey) == itemMachine?.Name)
                 {
                     savedItem.CopyMachineInformation(datItem);
                     savedItem.SetName(datItem.GetName());
@@ -856,8 +856,8 @@ namespace SabreTools.Metadata.DatFiles
                     Machine? yMachine = y.GetMachine();
 
                     // If machine names don't match
-                    string? xMachineName = xMachine?.GetName();
-                    string? yMachineName = yMachine?.GetName();
+                    string? xMachineName = xMachine?.Name;
+                    string? yMachineName = yMachine?.Name;
                     if (xMachineName != yMachineName)
                         return nc.Compare(xMachineName, yMachineName);
 

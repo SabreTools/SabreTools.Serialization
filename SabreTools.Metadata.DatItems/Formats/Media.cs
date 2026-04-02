@@ -11,6 +11,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("media"), XmlRoot("media")]
     public sealed class Media : DatItem<Data.Models.Metadata.Media>
     {
+        #region Fields
+
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Media)?.Name;
+            set => (_internal as Data.Models.Metadata.Media)?.Name = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Media() : base()

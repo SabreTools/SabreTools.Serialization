@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             // Validate the data
             Assert.NotNull(newSl);
-            Assert.Equal("XXXXXX", newSl.Name);
+            Assert.Equal("name", newSl.Name);
             Assert.Equal("description", newSl.Description);
             Assert.Equal("XXXXXX", newSl.Notes);
 
@@ -111,25 +111,25 @@ namespace SabreTools.Serialization.Readers.Test
         {
             var info = new Data.Models.SoftwareList.Info
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Value = "value",
             };
 
             var sharedfeat = new Data.Models.SoftwareList.SharedFeat
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Value = "value",
             };
 
             var feature = new Data.Models.SoftwareList.Feature
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Value = "value",
             };
 
             var rom = new Data.Models.SoftwareList.Rom
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Size = "XXXXXX",
                 Length = "XXXXXX",
                 CRC = "XXXXXX",
@@ -142,7 +142,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var dataarea = new Data.Models.SoftwareList.DataArea
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Size = "XXXXXX",
                 Width = "XXXXXX",
                 Endianness = Data.Models.Metadata.Endianness.Big,
@@ -151,7 +151,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var disk = new Data.Models.SoftwareList.Disk
             {
-                Name = "XXXXXX",
+                Name = "name",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Status = Data.Models.Metadata.ItemStatus.Good,
@@ -160,20 +160,20 @@ namespace SabreTools.Serialization.Readers.Test
 
             var diskarea = new Data.Models.SoftwareList.DiskArea
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Disk = [disk],
             };
 
             var dipvalue = new Data.Models.SoftwareList.DipValue
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Value = "value",
                 Default = true,
             };
 
             var dipswitch = new Data.Models.SoftwareList.DipSwitch
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Tag = "tag",
                 Mask = "mask",
                 DipValue = [dipvalue],
@@ -181,7 +181,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var part = new Data.Models.SoftwareList.Part
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Interface = "XXXXXX",
                 Feature = [feature],
                 DataArea = [dataarea],
@@ -191,7 +191,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var software = new Data.Models.SoftwareList.Software
             {
-                Name = "XXXXXX",
+                Name = "name",
                 CloneOf = "XXXXXX",
                 Supported = Data.Models.Metadata.Supported.Yes,
                 Description = "description",
@@ -205,7 +205,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             return new Data.Models.SoftwareList.SoftwareList
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Description = "description",
                 Notes = "XXXXXX",
                 Software = [software],
@@ -218,7 +218,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.Software? software)
         {
             Assert.NotNull(software);
-            Assert.Equal("XXXXXX", software.Name);
+            Assert.Equal("name", software.Name);
             Assert.Equal("XXXXXX", software.CloneOf);
             Assert.Equal(Data.Models.Metadata.Supported.Yes, software.Supported);
             Assert.Equal("description", software.Description);
@@ -245,7 +245,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.Info? info)
         {
             Assert.NotNull(info);
-            Assert.Equal("XXXXXX", info.Name);
+            Assert.Equal("name", info.Name);
             Assert.Equal("value", info.Value);
         }
 
@@ -255,7 +255,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.SharedFeat? sharedfeat)
         {
             Assert.NotNull(sharedfeat);
-            Assert.Equal("XXXXXX", sharedfeat.Name);
+            Assert.Equal("name", sharedfeat.Name);
             Assert.Equal("value", sharedfeat.Value);
         }
 
@@ -265,7 +265,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.Part? part)
         {
             Assert.NotNull(part);
-            Assert.Equal("XXXXXX", part.Name);
+            Assert.Equal("name", part.Name);
             Assert.Equal("XXXXXX", part.Interface);
 
             Assert.NotNull(part.Feature);
@@ -291,7 +291,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.Feature? feature)
         {
             Assert.NotNull(feature);
-            Assert.Equal("XXXXXX", feature.Name);
+            Assert.Equal("name", feature.Name);
             Assert.Equal("value", feature.Value);
         }
 
@@ -301,7 +301,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.DataArea? dataarea)
         {
             Assert.NotNull(dataarea);
-            Assert.Equal("XXXXXX", dataarea.Name);
+            Assert.Equal("name", dataarea.Name);
             Assert.Equal("XXXXXX", dataarea.Size);
             Assert.Equal("XXXXXX", dataarea.Width);
             Assert.Equal(Data.Models.Metadata.Endianness.Big, dataarea.Endianness);
@@ -317,7 +317,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.Rom? rom)
         {
             Assert.NotNull(rom);
-            Assert.Equal("XXXXXX", rom.Name);
+            Assert.Equal("name", rom.Name);
             Assert.Equal("XXXXXX", rom.Size);
             Assert.Equal("XXXXXX", rom.Length);
             Assert.Equal("XXXXXX", rom.CRC);
@@ -334,7 +334,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.DiskArea? diskarea)
         {
             Assert.NotNull(diskarea);
-            Assert.Equal("XXXXXX", diskarea.Name);
+            Assert.Equal("name", diskarea.Name);
 
             Assert.NotNull(diskarea.Disk);
             var disk = Assert.Single(diskarea.Disk);
@@ -347,7 +347,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.Disk? disk)
         {
             Assert.NotNull(disk);
-            Assert.Equal("XXXXXX", disk.Name);
+            Assert.Equal("name", disk.Name);
             Assert.Equal("XXXXXX", disk.MD5);
             Assert.Equal("XXXXXX", disk.SHA1);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, disk.Status);
@@ -360,7 +360,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.DipSwitch? dipswitch)
         {
             Assert.NotNull(dipswitch);
-            Assert.Equal("XXXXXX", dipswitch.Name);
+            Assert.Equal("name", dipswitch.Name);
             Assert.Equal("tag", dipswitch.Tag);
             Assert.Equal("mask", dipswitch.Mask);
 
@@ -375,7 +375,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.SoftwareList.DipValue? dipvalue)
         {
             Assert.NotNull(dipvalue);
-            Assert.Equal("XXXXXX", dipvalue.Name);
+            Assert.Equal("name", dipvalue.Name);
             Assert.Equal("value", dipvalue.Value);
             Assert.Equal(true, dipvalue.Default);
         }

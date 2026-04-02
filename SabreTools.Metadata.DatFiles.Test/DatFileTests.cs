@@ -1971,7 +1971,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem actualItemA = Assert.Single(actual);
             Rom? actualRomA = actualItemA as Rom;
             Assert.NotNull(actualRomA);
-            Assert.Equal("name", actualRomA.GetName());
+            Assert.Equal("name", actualRomA.Name);
             Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
@@ -2007,13 +2007,13 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom? actualRomA = actual[0] as Rom;
             Assert.NotNull(actualRomA);
-            Assert.Equal("romA", actualRomA.GetName());
+            Assert.Equal("romA", actualRomA.Name);
             Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1] as Rom;
             Assert.NotNull(actualRomB);
-            Assert.Equal("romB", actualRomB.GetName());
+            Assert.Equal("romB", actualRomB.Name);
             Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
@@ -2048,7 +2048,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem actualItemA = Assert.Single(actual);
             Rom? actualRomA = actualItemA as Rom;
             Assert.NotNull(actualRomA);
-            Assert.Equal("rom", actualRomA.GetName());
+            Assert.Equal("rom", actualRomA.Name);
             Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
@@ -2084,13 +2084,13 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom? actualRomA = actual[0] as Rom;
             Assert.NotNull(actualRomA);
-            Assert.Equal("rom", actualRomA.GetName());
+            Assert.Equal("rom", actualRomA.Name);
             Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1] as Rom;
             Assert.NotNull(actualRomB);
-            Assert.Equal("rom_crc2", actualRomB.GetName());
+            Assert.Equal("rom_crc2", actualRomB.Name);
             Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
@@ -2135,7 +2135,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             KeyValuePair<long, DatItem> actualItemA = Assert.Single(actual);
             Rom? actualRomA = actualItemA.Value as Rom;
             Assert.NotNull(actualRomA);
-            Assert.Equal("name", actualRomA.GetName());
+            Assert.Equal("name", actualRomA.Name);
             Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
@@ -2174,13 +2174,13 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom? actualRomA = actual[0].Value as Rom;
             Assert.NotNull(actualRomA);
-            Assert.Equal("romA", actualRomA.GetName());
+            Assert.Equal("romA", actualRomA.Name);
             Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1].Value as Rom;
             Assert.NotNull(actualRomB);
-            Assert.Equal("romB", actualRomB.GetName());
+            Assert.Equal("romB", actualRomB.Name);
             Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
@@ -2219,7 +2219,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             KeyValuePair<long, DatItem> actualItemA = Assert.Single(actual);
             Rom? actualRomA = actualItemA.Value as Rom;
             Assert.NotNull(actualRomA);
-            Assert.Equal("rom", actualRomA.GetName());
+            Assert.Equal("rom", actualRomA.Name);
             Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
@@ -2258,13 +2258,13 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom? actualRomA = actual[0].Value as Rom;
             Assert.NotNull(actualRomA);
-            Assert.Equal("rom", actualRomA.GetName());
+            Assert.Equal("rom", actualRomA.Name);
             Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1].Value as Rom;
             Assert.NotNull(actualRomB);
-            Assert.Equal("rom_crc2", actualRomB.GetName());
+            Assert.Equal("rom_crc2", actualRomB.Name);
             Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }

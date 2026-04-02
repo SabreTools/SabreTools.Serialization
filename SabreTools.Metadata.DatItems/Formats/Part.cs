@@ -23,6 +23,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Part)?.Name;
+            set => (_internal as Data.Models.Metadata.Part)?.Name = value;
+        }
+
         #endregion
 
         #region Constructors

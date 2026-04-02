@@ -533,7 +533,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var actual = dict.GetMachineForItem(itemIndex);
             Assert.Equal(1, actual.Key);
             Assert.NotNull(actual.Value);
-            Assert.Equal("new", actual.Value.GetName());
+            Assert.Equal("new", actual.Value.Name);
         }
 
         #endregion

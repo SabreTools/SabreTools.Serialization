@@ -178,7 +178,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             var cmp = new Data.Models.ClrMamePro.ClrMamePro
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Description = "description",
                 RootDir = "XXXXXX",
                 Category = "XXXXXX",
@@ -197,7 +197,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var release = new Data.Models.ClrMamePro.Release
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Region = "XXXXXX",
                 Language = "XXXXXX",
                 Date = "XXXXXX",
@@ -206,14 +206,14 @@ namespace SabreTools.Serialization.Readers.Test
 
             var biosset = new Data.Models.ClrMamePro.BiosSet
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Description = "description",
                 Default = true,
             };
 
             var rom = new Data.Models.ClrMamePro.Rom
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Size = "XXXXXX",
                 CRC16 = "XXXXXX",
                 CRC = "XXXXXX",
@@ -244,7 +244,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var disk = new Data.Models.ClrMamePro.Disk
             {
-                Name = "XXXXXX",
+                Name = "name",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Merge = "XXXXXX",
@@ -254,17 +254,17 @@ namespace SabreTools.Serialization.Readers.Test
 
             var sample = new Data.Models.ClrMamePro.Sample
             {
-                Name = "XXXXXX",
+                Name = "name",
             };
 
             var archive = new Data.Models.ClrMamePro.Archive
             {
-                Name = "XXXXXX",
+                Name = "name",
             };
 
             var media = new Data.Models.ClrMamePro.Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 SHA256 = "XXXXXX",
@@ -274,7 +274,7 @@ namespace SabreTools.Serialization.Readers.Test
             var chip = new Data.Models.ClrMamePro.Chip
             {
                 Type = Data.Models.Metadata.ChipType.CPU,
-                Name = "XXXXXX",
+                Name = "name",
                 Flags = "XXXXXX",
                 Clock = "XXXXXX",
             };
@@ -307,7 +307,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var dipswitch = new Data.Models.ClrMamePro.DipSwitch
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Entry = ["XXXXXX"],
                 Default = true,
             };
@@ -325,7 +325,7 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.ClrMamePro.GameBase gameBase = game
                 ? new Data.Models.ClrMamePro.Game()
                 : new Data.Models.ClrMamePro.Machine();
-            gameBase.Name = "XXXXXX";
+            gameBase.Name = "name";
             gameBase.Description = "description";
             gameBase.DriverStatus = "XXXXXX";
             gameBase.Year = "XXXXXX";
@@ -367,7 +367,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.ClrMamePro? cmp)
         {
             Assert.NotNull(cmp);
-            Assert.Equal("XXXXXX", cmp.Name);
+            Assert.Equal("name", cmp.Name);
             Assert.Equal("description", cmp.Description);
             Assert.Equal("XXXXXX", cmp.RootDir);
             Assert.Equal("XXXXXX", cmp.Category);
@@ -390,7 +390,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.GameBase? gb)
         {
             Assert.NotNull(gb);
-            Assert.Equal("XXXXXX", gb.Name);
+            Assert.Equal("name", gb.Name);
             Assert.Equal("description", gb.Description);
             // Assert.Equal("XXXXXX", gb.DriverStatus); // TODO: Needs metadata mapping
             Assert.Equal("XXXXXX", gb.Year);
@@ -452,7 +452,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Release? release)
         {
             Assert.NotNull(release);
-            Assert.Equal("XXXXXX", release.Name);
+            Assert.Equal("name", release.Name);
             Assert.Equal("XXXXXX", release.Region);
             Assert.Equal("XXXXXX", release.Language);
             Assert.Equal("XXXXXX", release.Date);
@@ -465,7 +465,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.BiosSet? biosset)
         {
             Assert.NotNull(biosset);
-            Assert.Equal("XXXXXX", biosset.Name);
+            Assert.Equal("name", biosset.Name);
             Assert.Equal("description", biosset.Description);
             Assert.Equal(true, biosset.Default);
         }
@@ -476,7 +476,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Rom? rom)
         {
             Assert.NotNull(rom);
-            Assert.Equal("XXXXXX", rom.Name);
+            Assert.Equal("name", rom.Name);
             Assert.Equal("XXXXXX", rom.Size);
             Assert.Equal("XXXXXX", rom.CRC16);
             Assert.Equal("XXXXXX", rom.CRC);
@@ -511,7 +511,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Disk? disk)
         {
             Assert.NotNull(disk);
-            Assert.Equal("XXXXXX", disk.Name);
+            Assert.Equal("name", disk.Name);
             Assert.Equal("XXXXXX", disk.MD5);
             Assert.Equal("XXXXXX", disk.SHA1);
             Assert.Equal("XXXXXX", disk.Merge);
@@ -525,7 +525,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Sample? sample)
         {
             Assert.NotNull(sample);
-            Assert.Equal("XXXXXX", sample.Name);
+            Assert.Equal("name", sample.Name);
         }
 
         /// <summary>
@@ -534,7 +534,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Archive? archive)
         {
             Assert.NotNull(archive);
-            Assert.Equal("XXXXXX", archive.Name);
+            Assert.Equal("name", archive.Name);
         }
 
         /// <summary>
@@ -543,7 +543,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Media? media)
         {
             Assert.NotNull(media);
-            Assert.Equal("XXXXXX", media.Name);
+            Assert.Equal("name", media.Name);
             Assert.Equal("XXXXXX", media.MD5);
             Assert.Equal("XXXXXX", media.SHA1);
             Assert.Equal("XXXXXX", media.SHA256);
@@ -557,7 +557,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(chip);
             Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.Type);
-            Assert.Equal("XXXXXX", chip.Name);
+            Assert.Equal("name", chip.Name);
             Assert.Equal("XXXXXX", chip.Flags);
             Assert.Equal("XXXXXX", chip.Clock);
         }
@@ -606,7 +606,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.DipSwitch? dipswitch)
         {
             Assert.NotNull(dipswitch);
-            Assert.Equal("XXXXXX", dipswitch.Name);
+            Assert.Equal("name", dipswitch.Name);
 
             Assert.NotNull(dipswitch.Entry);
             string entry = Assert.Single(dipswitch.Entry);

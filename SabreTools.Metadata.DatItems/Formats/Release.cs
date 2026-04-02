@@ -12,11 +12,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Properties
 
-        [JsonIgnore]
         public bool? Default
         {
             get => (_internal as Data.Models.Metadata.Release)?.Default;
             set => (_internal as Data.Models.Metadata.Release)?.Default = value;
+        }
+
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Release)?.Name;
+            set => (_internal as Data.Models.Metadata.Release)?.Name = value;
         }
 
         #endregion

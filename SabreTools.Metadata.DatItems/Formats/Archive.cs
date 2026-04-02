@@ -10,6 +10,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("archive"), XmlRoot("archive")]
     public sealed class Archive : DatItem<Data.Models.Metadata.Archive>
     {
+        #region Fields
+
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Archive)?.Name;
+            set => (_internal as Data.Models.Metadata.Archive)?.Name = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Archive() : base() { }

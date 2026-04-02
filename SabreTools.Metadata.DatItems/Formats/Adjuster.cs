@@ -22,11 +22,16 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
-        [JsonIgnore]
         public bool? Default
         {
             get => (_internal as Data.Models.Metadata.Adjuster)?.Default;
             set => (_internal as Data.Models.Metadata.Adjuster)?.Default = value;
+        }
+
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Adjuster)?.Name;
+            set => (_internal as Data.Models.Metadata.Adjuster)?.Name = value;
         }
 
         #endregion

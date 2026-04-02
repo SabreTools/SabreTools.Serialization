@@ -13,6 +13,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Slot)?.Name;
+            set => (_internal as Data.Models.Metadata.Slot)?.Name = value;
+        }
+
         [JsonIgnore]
         public bool SlotOptionsSpecified
         {

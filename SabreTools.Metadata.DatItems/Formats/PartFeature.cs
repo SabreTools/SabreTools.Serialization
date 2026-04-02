@@ -27,6 +27,16 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Feature)?.FeatureType = value;
         }
 
+        /// <inheritdoc>/>
+        /// <remarks>This needs to be set to PartFeature because internally it uses Feature</remarks>
+        public override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.PartFeature;
+
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Feature)?.Name;
+            set => (_internal as Data.Models.Metadata.Feature)?.Name = value;
+        }
+
         public Data.Models.Metadata.FeatureStatus? Overall
         {
             get => (_internal as Data.Models.Metadata.Feature)?.Overall;
@@ -38,10 +48,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             get => (_internal as Data.Models.Metadata.Feature)?.Status;
             set => (_internal as Data.Models.Metadata.Feature)?.Status = value;
         }
-
-        /// <inheritdoc>/>
-        /// <remarks>This needs to be set to PartFeature because internally it uses Feature</remarks>
-        public override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.PartFeature;
 
         public string? Value
         {

@@ -18,6 +18,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Chip)?.ChipType = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Chip)?.Name;
+            set => (_internal as Data.Models.Metadata.Chip)?.Name = value;
+        }
+
         public bool? SoundOnly
         {
             get => (_internal as Data.Models.Metadata.Chip)?.SoundOnly;

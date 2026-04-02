@@ -495,7 +495,7 @@ namespace SabreTools.Metadata.DatFiles
             // Get the name to update
             string? name = (useRomName
                 ? item.GetName()
-                : machine?.GetName()) ?? string.Empty;
+                : machine?.Name) ?? string.Empty;
 
             // If we're in Depot mode, take care of that instead
             if (Modifiers.OutputDepot?.IsActive == true)
@@ -561,7 +561,7 @@ namespace SabreTools.Metadata.DatFiles
                 name += Modifiers.AddExtension;
 
             if (useRomName && Modifiers.GameName)
-                name = Path.Combine(machine?.GetName() ?? string.Empty, name);
+                name = Path.Combine(machine?.Name ?? string.Empty, name);
 
             // Now assign back the formatted name
             name = $"{pre}{name}{post}";
@@ -583,7 +583,7 @@ namespace SabreTools.Metadata.DatFiles
             // Initialize strings
             Data.Models.Metadata.ItemType type = item.ItemType;
             string
-                game = machine?.GetName() ?? string.Empty,
+                game = machine?.Name ?? string.Empty,
                 manufacturer = machine?.ReadString(Data.Models.Metadata.Machine.ManufacturerKey) ?? string.Empty,
                 publisher = machine?.ReadString(Data.Models.Metadata.Machine.PublisherKey) ?? string.Empty,
                 category = machine?.ReadString(Data.Models.Metadata.Machine.CategoryKey) ?? string.Empty,
@@ -689,7 +689,7 @@ namespace SabreTools.Metadata.DatFiles
                 return rom;
 
             // If the Rom has "null" characteristics, ensure all fields
-            rom.SetName(rom.GetName() == "null" ? "-" : rom.GetName());
+            rom.SetName(rom.Name == "null" ? "-" : rom.Name);
             rom.Write<string?>(Data.Models.Metadata.Rom.SizeKey, "0");
             rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key,
                 rom.ReadString(Data.Models.Metadata.Rom.CRC16Key) == "null" ? HashType.CRC16.ZeroString : null);
@@ -1176,8 +1176,8 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // If machine names don't match
-                    string? xMachineName = x.GetMachine()?.GetName();
-                    string? yMachineName = y.GetMachine()?.GetName();
+                    string? xMachineName = x.GetMachine()?.Name;
+                    string? yMachineName = y.GetMachine()?.Name;
                     if (xMachineName != yMachineName)
                         return nc.Compare(xMachineName, yMachineName);
 
@@ -1233,8 +1233,8 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // If machine names don't match
-                    string? xMachineName = ItemsDB.GetMachineForItem(x.Key).Value?.GetName();
-                    string? yMachineName = ItemsDB.GetMachineForItem(y.Key).Value?.GetName();
+                    string? xMachineName = ItemsDB.GetMachineForItem(x.Key).Value?.Name;
+                    string? yMachineName = ItemsDB.GetMachineForItem(y.Key).Value?.Name;
                     if (xMachineName != yMachineName)
                         return nc.Compare(xMachineName, yMachineName);
 

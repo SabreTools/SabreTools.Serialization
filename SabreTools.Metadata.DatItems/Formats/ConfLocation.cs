@@ -12,6 +12,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.ConfLocation)?.Name;
+            set => (_internal as Data.Models.Metadata.ConfLocation)?.Name = value;
+        }
+
         public bool? Inverted
         {
             get => (_internal as Data.Models.Metadata.ConfLocation)?.Inverted;

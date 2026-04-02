@@ -11,7 +11,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void ConvertToRomTest()
         {
             Machine machine = new Machine();
-            machine.SetName("XXXXXX");
+            machine.SetName("name");
 
             Source source = new Source(0, "XXXXXX");
 
@@ -45,7 +45,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Machine? actualMachine = actual.GetMachine();
             Assert.NotNull(actualMachine);
-            Assert.Equal("XXXXXX", actualMachine.GetName());
+            Assert.Equal("name", actualMachine.GetName());
 
             Assert.Equal(false, actual.ReadBool(DatItem.RemoveKey));
 

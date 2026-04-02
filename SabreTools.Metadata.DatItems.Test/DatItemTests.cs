@@ -64,7 +64,7 @@ namespace SabreTools.Metadata.DatItems.Test
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.GetMachine();
             Assert.NotNull(actualMachineA);
-            Assert.Null(actualMachineA.GetName());
+            Assert.Null(actualMachineA.Name);
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace SabreTools.Metadata.DatItems.Test
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.GetMachine();
             Assert.NotNull(actualMachineA);
-            Assert.Equal("machineA", actualMachineA.GetName());
+            Assert.Equal("machineA", actualMachineA.Name);
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace SabreTools.Metadata.DatItems.Test
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.GetMachine();
             Assert.NotNull(actualMachineA);
-            Assert.Equal("machineA", actualMachineA.GetName());
+            Assert.Equal("machineA", actualMachineA.Name);
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace SabreTools.Metadata.DatItems.Test
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.GetMachine();
             Assert.NotNull(actualMachineA);
-            Assert.Null(actualMachineA.GetName());
+            Assert.Null(actualMachineA.Name);
         }
 
         [Fact]
@@ -143,7 +143,7 @@ namespace SabreTools.Metadata.DatItems.Test
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.GetMachine();
             Assert.NotNull(actualMachineA);
-            Assert.Equal("machineB", actualMachineA.GetName());
+            Assert.Equal("machineB", actualMachineA.Name);
         }
 
         [Fact]
@@ -164,7 +164,7 @@ namespace SabreTools.Metadata.DatItems.Test
             romA.CopyMachineInformation(diskB);
             var actualMachineA = romA.GetMachine();
             Assert.NotNull(actualMachineA);
-            Assert.Equal("machineB", actualMachineA.GetName());
+            Assert.Equal("machineB", actualMachineA.Name);
         }
 
         #endregion

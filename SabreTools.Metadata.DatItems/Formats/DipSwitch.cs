@@ -55,6 +55,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.DipSwitch)?.Mask = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.DipSwitch)?.Name;
+            set => (_internal as Data.Models.Metadata.DipSwitch)?.Name = value;
+        }
+
         [JsonIgnore]
         public bool ValuesSpecified
         {
@@ -72,7 +78,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             {
                 var part = Read<Part?>(PartKey);
                 return part is not null
-                    && (!string.IsNullOrEmpty(part.GetName())
+                    && (!string.IsNullOrEmpty(part.Name)
                         || !string.IsNullOrEmpty(part.ReadString(Data.Models.Metadata.Part.InterfaceKey)));
             }
         }

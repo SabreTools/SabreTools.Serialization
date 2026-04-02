@@ -129,7 +129,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var row = new Data.Models.AttractMode.Row
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Title = "XXXXXX",
                 Emulator = "XXXXXX",
                 CloneOf = "XXXXXX",
@@ -178,7 +178,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.AttractMode.Row? row, bool longHeader)
         {
             Assert.NotNull(row);
-            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("name", row.Name);
             Assert.Equal("XXXXXX", row.Title);
             Assert.Equal("XXXXXX", row.Emulator);
             Assert.Equal("XXXXXX", row.CloneOf);

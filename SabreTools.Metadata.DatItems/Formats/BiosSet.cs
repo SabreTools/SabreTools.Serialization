@@ -24,6 +24,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.BiosSet)?.Description = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.BiosSet)?.Name;
+            set => (_internal as Data.Models.Metadata.BiosSet)?.Name = value;
+        }
+
         #endregion
 
         #region Constructors

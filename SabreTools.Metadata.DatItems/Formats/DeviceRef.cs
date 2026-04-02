@@ -10,6 +10,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("device_ref"), XmlRoot("device_ref")]
     public sealed class DeviceRef : DatItem<Data.Models.Metadata.DeviceRef>
     {
+        #region Fields
+
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.DeviceRef)?.Name;
+            set => (_internal as Data.Models.Metadata.DeviceRef)?.Name = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public DeviceRef() : base() { }

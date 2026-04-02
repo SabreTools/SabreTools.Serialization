@@ -39,6 +39,12 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.IsMechanical = value;
         }
 
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
         public Data.Models.Metadata.Runnable? Runnable
         {
             get => _internal.Runnable;
@@ -117,13 +123,13 @@ namespace SabreTools.Metadata.DatItems
         /// Gets the name to use for a Machine
         /// </summary>
         /// <returns>Name if available, null otherwise</returns>
-        public string? GetName() => _internal.GetName();
+        public string? GetName() => Name;
 
         /// <summary>
         /// Sets the name to use for a Machine
         /// </summary>
         /// <param name="name">Name to set for the item</param>
-        public void SetName(string? name) => _internal.SetName(name);
+        public void SetName(string? name) => Name = name;
 
         #endregion
 

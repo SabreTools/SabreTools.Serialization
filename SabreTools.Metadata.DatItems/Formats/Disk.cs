@@ -34,8 +34,14 @@ namespace SabreTools.Metadata.DatItems.Formats
             get
             {
                 var diskArea = Read<DiskArea?>(DiskAreaKey);
-                return diskArea is not null && !string.IsNullOrEmpty(diskArea.GetName());
+                return diskArea is not null && !string.IsNullOrEmpty(diskArea.Name);
             }
+        }
+
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Disk)?.Name;
+            set => (_internal as Data.Models.Metadata.Disk)?.Name = value;
         }
 
         public bool? Optional
@@ -51,7 +57,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             {
                 var part = Read<Part?>(PartKey);
                 return part is not null
-                    && (!string.IsNullOrEmpty(part.GetName())
+                    && (!string.IsNullOrEmpty(part.Name)
                         || !string.IsNullOrEmpty(part.ReadString(Data.Models.Metadata.Part.InterfaceKey)));
             }
         }
@@ -119,7 +125,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             {
                 var dataArea = new DataArea();
 
-                string? diskAreaName = diskArea.GetName();
+                string? diskAreaName = diskArea.Name;
                 dataArea.SetName(diskAreaName);
 
                 rom.Write<DataArea?>(Rom.DataAreaKey, dataArea);

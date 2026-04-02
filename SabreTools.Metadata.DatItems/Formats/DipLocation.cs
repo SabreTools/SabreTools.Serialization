@@ -18,6 +18,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.DipLocation)?.Inverted = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.DipLocation)?.Name;
+            set => (_internal as Data.Models.Metadata.DipLocation)?.Name = value;
+        }
+
         #endregion
 
         #region Constructors

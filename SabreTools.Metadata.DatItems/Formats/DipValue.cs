@@ -28,6 +28,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.DipValue)?.Default = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.DipValue)?.Name;
+            set => (_internal as Data.Models.Metadata.DipValue)?.Name = value;
+        }
+
         public string? Value
         {
             get => (_internal as Data.Models.Metadata.DipValue)?.Value;

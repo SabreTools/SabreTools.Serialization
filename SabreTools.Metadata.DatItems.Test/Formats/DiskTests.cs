@@ -11,18 +11,18 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void ConvertToRomTest()
         {
             DiskArea diskArea = new DiskArea();
-            diskArea.SetName("XXXXXX");
+            diskArea.SetName("name");
 
             Machine machine = new Machine();
-            machine.SetName("XXXXXX");
+            machine.SetName("name");
 
             Part part = new Part();
-            part.SetName("XXXXXX");
+            part.SetName("name");
 
             Source source = new Source(0, "XXXXXX");
 
             Disk disk = new Disk();
-            disk.SetName("XXXXXX");
+            disk.SetName("name");
             disk.Write(Disk.DiskAreaKey, diskArea);
             disk.Write(Data.Models.Metadata.Disk.MergeKey, "XXXXXX");
             disk.Write(Data.Models.Metadata.Disk.RegionKey, "XXXXXX");
@@ -38,7 +38,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Rom actual = disk.ConvertToRom();
 
-            Assert.Equal("XXXXXX.chd", actual.GetName());
+            Assert.Equal("name.chd", actual.Name);
             Assert.Equal("XXXXXX", actual.ReadString(Data.Models.Metadata.Rom.MergeKey));
             Assert.Equal("XXXXXX", actual.ReadString(Data.Models.Metadata.Rom.RegionKey));
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, actual.Status);
@@ -49,17 +49,17 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             DataArea? actualDataArea = actual.Read<DataArea?>(Rom.DataAreaKey);
             Assert.NotNull(actualDataArea);
-            Assert.Equal("XXXXXX", actualDataArea.GetName());
+            Assert.Equal("name", actualDataArea.Name);
 
             Machine? actualMachine = actual.GetMachine();
             Assert.NotNull(actualMachine);
-            Assert.Equal("XXXXXX", actualMachine.GetName());
+            Assert.Equal("name", actualMachine.Name);
 
             Assert.Equal(false, actual.ReadBool(DatItem.RemoveKey));
 
             Part? actualPart = actual.Read<Part?>(Rom.PartKey);
             Assert.NotNull(actualPart);
-            Assert.Equal("XXXXXX", actualPart.GetName());
+            Assert.Equal("name", actualPart.Name);
 
             Source? actualSource = actual.Read<Source?>(DatItem.SourceKey);
             Assert.NotNull(actualSource);

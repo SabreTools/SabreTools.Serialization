@@ -18,6 +18,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Feature)?.FeatureType = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Feature)?.Name;
+            set => (_internal as Data.Models.Metadata.Feature)?.Name = value;
+        }
+
         public Data.Models.Metadata.FeatureStatus? Overall
         {
             get => (_internal as Data.Models.Metadata.Feature)?.Overall;

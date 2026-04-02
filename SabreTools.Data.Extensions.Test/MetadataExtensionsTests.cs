@@ -39,7 +39,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase? self = new Disk
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Disk.MergeKey] = "XXXXXX",
                 [Disk.RegionKey] = "XXXXXX",
                 Status = ItemStatus.Good,
@@ -53,7 +53,7 @@ namespace SabreTools.Data.Extensions.Test
             Assert.NotNull(actual);
             Assert.Equal(4, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
-            Assert.Equal("XXXXXX.chd", actual.Name);
+            Assert.Equal("name.chd", actual.Name);
             Assert.Equal("XXXXXX", actual[Rom.MergeKey]);
             Assert.Equal("XXXXXX", actual[Rom.RegionKey]);
             Assert.Equal(ItemStatus.Good, actual.Status);
@@ -83,7 +83,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase? self = new Media
             {
-                Name = "XXXXXX",
+                Name = "name",
                 [Media.MD5Key] = "XXXXXX",
                 [Media.SHA1Key] = "XXXXXX",
                 [Media.SHA256Key] = "XXXXXX",
@@ -95,7 +95,7 @@ namespace SabreTools.Data.Extensions.Test
             Assert.NotNull(actual);
             Assert.Equal(4, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
-            Assert.Equal("XXXXXX.aaruf", actual.Name);
+            Assert.Equal("name.aaruf", actual.Name);
             Assert.Equal("XXXXXX", actual[Rom.MD5Key]);
             Assert.Equal("XXXXXX", actual[Rom.SHA1Key]);
             Assert.Equal("XXXXXX", actual[Rom.SHA256Key]);

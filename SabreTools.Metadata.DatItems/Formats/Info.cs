@@ -12,6 +12,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Info)?.Name;
+            set => (_internal as Data.Models.Metadata.Info)?.Name = value;
+        }
+
         public string? Value
         {
             get => (_internal as Data.Models.Metadata.Info)?.Value;

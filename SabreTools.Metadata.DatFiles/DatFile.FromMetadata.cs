@@ -375,7 +375,7 @@ namespace SabreTools.Metadata.DatFiles
                 for (int i = 0; i < items.Length; i++)
                 {
                     var datItem = new Rom(items[i], machine, source, i);
-                    if (datItem.GetName() is not null)
+                    if (datItem.Name is not null)
                     {
                         AddItem(datItem, statsOnly);
                         // AddItemDB(datItem, machineIndex, sourceIndex, statsOnly);

@@ -121,8 +121,8 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesEqual_RegexValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "^XXXXXX$", Operation.Equals);
+            var sample = new Sample { Name = "name" };
+            FilterObject filterObject = new FilterObject("Sample.Name", "^name$", Operation.Equals);
             bool actual = filterObject.Matches(sample);
             Assert.True(actual);
         }
@@ -130,8 +130,8 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesEqual_StringValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "XXXXXX", Operation.Equals);
+            var sample = new Sample { Name = "name" };
+            FilterObject filterObject = new FilterObject("Sample.Name", "name", Operation.Equals);
             bool actual = filterObject.Matches(sample);
             Assert.True(actual);
         }
@@ -188,8 +188,8 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesNotEqual_RegexValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "^XXXXXX$", Operation.NotEquals);
+            var sample = new Sample { Name = "name" };
+            FilterObject filterObject = new FilterObject("Sample.Name", "^name$", Operation.NotEquals);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
         }
@@ -197,8 +197,8 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesNotEqual_StringValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "XXXXXX", Operation.NotEquals);
+            var sample = new Sample { Name = "name" };
+            FilterObject filterObject = new FilterObject("Sample.Name", "name", Operation.NotEquals);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
         }
@@ -255,7 +255,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesGreaterThan_RegexValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
+            var sample = new Sample { Name = "name" };
             FilterObject filterObject = new FilterObject("Sample.Name", "^XXXXXX$", Operation.GreaterThan);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
@@ -264,7 +264,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesGreaterThan_StringValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
+            var sample = new Sample { Name = "name" };
             FilterObject filterObject = new FilterObject("Sample.Name", "XXXXXX", Operation.GreaterThan);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
@@ -322,7 +322,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesGreaterThanOrEqual_RegexValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
+            var sample = new Sample { Name = "name" };
             FilterObject filterObject = new FilterObject("Sample.Name", "^XXXXXX$", Operation.GreaterThanOrEqual);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
@@ -331,7 +331,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesGreaterThanOrEqual_StringValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
+            var sample = new Sample { Name = "name" };
             FilterObject filterObject = new FilterObject("Sample.Name", "XXXXXX", Operation.GreaterThanOrEqual);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
@@ -389,7 +389,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesLessThan_RegexValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
+            var sample = new Sample { Name = "name" };
             FilterObject filterObject = new FilterObject("Sample.Name", "^XXXXXX$", Operation.LessThan);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
@@ -398,7 +398,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesLessThan_StringValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
+            var sample = new Sample { Name = "name" };
             FilterObject filterObject = new FilterObject("Sample.Name", "XXXXXX", Operation.LessThan);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
@@ -456,7 +456,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesLessThanOrEqual_RegexValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
+            var sample = new Sample { Name = "name" };
             FilterObject filterObject = new FilterObject("Sample.Name", "^XXXXXX$", Operation.LessThanOrEqual);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
@@ -465,7 +465,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void MatchesLessThanOrEqual_StringValue()
         {
-            var sample = new Sample { Name = "XXXXXX" };
+            var sample = new Sample { Name = "name" };
             FilterObject filterObject = new FilterObject("Sample.Name", "XXXXXX", Operation.LessThanOrEqual);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);

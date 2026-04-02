@@ -65,14 +65,14 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             var biosset = new Data.Models.Listxml.BiosSet
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Description = "description",
                 Default = true,
             };
 
             var rom = new Data.Models.Listxml.Rom
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Bios = "XXXXXX",
                 Size = "XXXXXX",
                 CRC = "XXXXXX",
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var disk = new Data.Models.Listxml.Disk
             {
-                Name = "XXXXXX",
+                Name = "name",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Merge = "XXXXXX",
@@ -101,17 +101,17 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var deviceref = new Data.Models.Listxml.DeviceRef
             {
-                Name = "XXXXXX",
+                Name = "name",
             };
 
             var sample = new Data.Models.Listxml.Sample
             {
-                Name = "XXXXXX",
+                Name = "name",
             };
 
             var chip = new Data.Models.Listxml.Chip
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Tag = "tag",
                 Type = Data.Models.Metadata.ChipType.CPU,
                 SoundOnly = true,
@@ -189,14 +189,14 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var diplocation = new Data.Models.Listxml.DipLocation
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Number = "XXXXXX",
                 Inverted = true,
             };
 
             var dipvalue = new Data.Models.Listxml.DipValue
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Value = "value",
                 Default = true,
                 Condition = condition,
@@ -204,7 +204,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var dipswitch = new Data.Models.Listxml.DipSwitch
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Tag = "tag",
                 Mask = "mask",
                 Condition = condition,
@@ -214,14 +214,14 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var conflocation = new Data.Models.Listxml.ConfLocation
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Number = "XXXXXX",
                 Inverted = true,
             };
 
             var confsetting = new Data.Models.Listxml.ConfSetting
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Value = "value",
                 Default = true,
                 Condition = condition,
@@ -229,7 +229,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var configuration = new Data.Models.Listxml.Configuration
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Tag = "tag",
                 Mask = "mask",
                 Condition = condition,
@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var adjuster = new Data.Models.Listxml.Adjuster
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Default = true,
                 Condition = condition,
             };
@@ -279,13 +279,13 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var instance = new Data.Models.Listxml.Instance
             {
-                Name = "XXXXXX",
+                Name = "name",
                 BriefName = "XXXXXX",
             };
 
             var extension = new Data.Models.Listxml.Extension
             {
-                Name = "XXXXXX",
+                Name = "name",
             };
 
             var device = new Data.Models.Listxml.Device
@@ -301,28 +301,28 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var slotOption = new Data.Models.Listxml.SlotOption
             {
-                Name = "XXXXXX",
+                Name = "name",
                 DevName = "XXXXXX",
                 Default = true,
             };
 
             var slot = new Data.Models.Listxml.Slot
             {
-                Name = "XXXXXX",
+                Name = "name",
                 SlotOption = [slotOption],
             };
 
             var softwarelist = new Data.Models.Listxml.SoftwareList
             {
                 Tag = "tag",
-                Name = "XXXXXX",
+                Name = "name",
                 Status = Data.Models.Metadata.SoftwareListStatus.Original,
                 Filter = "XXXXXX",
             };
 
             var ramoption = new Data.Models.Listxml.RamOption
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Default = true,
                 Content = "XXXXXX",
             };
@@ -330,7 +330,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Data.Models.Listxml.GameBase gameBase = game
                 ? new Data.Models.Listxml.Game()
                 : new Data.Models.Listxml.Machine();
-            gameBase.Name = "XXXXXX";
+            gameBase.Name = "name";
             gameBase.SourceFile = "XXXXXX";
             gameBase.IsBios = true;
             gameBase.IsDevice = true;
@@ -379,7 +379,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.GameBase? gb)
         {
             Assert.NotNull(gb);
-            Assert.Equal("XXXXXX", gb.Name);
+            Assert.Equal("name", gb.Name);
             Assert.Equal("XXXXXX", gb.SourceFile);
             Assert.Equal(true, gb.IsBios);
             Assert.Equal(true, gb.IsDevice);
@@ -473,7 +473,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.BiosSet? biosset)
         {
             Assert.NotNull(biosset);
-            Assert.Equal("XXXXXX", biosset.Name);
+            Assert.Equal("name", biosset.Name);
             Assert.Equal("description", biosset.Description);
             Assert.Equal(true, biosset.Default);
         }
@@ -484,7 +484,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Rom? rom)
         {
             Assert.NotNull(rom);
-            Assert.Equal("XXXXXX", rom.Name);
+            Assert.Equal("name", rom.Name);
             Assert.Equal("XXXXXX", rom.Bios);
             Assert.Equal("XXXXXX", rom.Size);
             Assert.Equal("XXXXXX", rom.CRC);
@@ -504,7 +504,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Disk? disk)
         {
             Assert.NotNull(disk);
-            Assert.Equal("XXXXXX", disk.Name);
+            Assert.Equal("name", disk.Name);
             Assert.Equal("XXXXXX", disk.MD5);
             Assert.Equal("XXXXXX", disk.SHA1);
             Assert.Equal("XXXXXX", disk.Merge);
@@ -521,7 +521,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.DeviceRef? deviceref)
         {
             Assert.NotNull(deviceref);
-            Assert.Equal("XXXXXX", deviceref.Name);
+            Assert.Equal("name", deviceref.Name);
         }
 
         /// <summary>
@@ -530,7 +530,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Sample? sample)
         {
             Assert.NotNull(sample);
-            Assert.Equal("XXXXXX", sample.Name);
+            Assert.Equal("name", sample.Name);
         }
 
         /// <summary>
@@ -539,7 +539,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Chip? chip)
         {
             Assert.NotNull(chip);
-            Assert.Equal("XXXXXX", chip.Name);
+            Assert.Equal("name", chip.Name);
             Assert.Equal("tag", chip.Tag);
             Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.Type);
             Assert.Equal(true, chip.SoundOnly);
@@ -636,7 +636,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.DipSwitch? dipswitch)
         {
             Assert.NotNull(dipswitch);
-            Assert.Equal("XXXXXX", dipswitch.Name);
+            Assert.Equal("name", dipswitch.Name);
             Assert.Equal("tag", dipswitch.Tag);
             Assert.Equal("mask", dipswitch.Mask);
             Validate(dipswitch.Condition);
@@ -668,7 +668,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.DipLocation? diplocation)
         {
             Assert.NotNull(diplocation);
-            Assert.Equal("XXXXXX", diplocation.Name);
+            Assert.Equal("name", diplocation.Name);
             Assert.Equal("XXXXXX", diplocation.Number);
             Assert.Equal(true, diplocation.Inverted);
         }
@@ -679,7 +679,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.DipValue? dipvalue)
         {
             Assert.NotNull(dipvalue);
-            Assert.Equal("XXXXXX", dipvalue.Name);
+            Assert.Equal("name", dipvalue.Name);
             Assert.Equal("value", dipvalue.Value);
             Assert.Equal(true, dipvalue.Default);
             Validate(dipvalue.Condition);
@@ -691,7 +691,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Configuration? configuration)
         {
             Assert.NotNull(configuration);
-            Assert.Equal("XXXXXX", configuration.Name);
+            Assert.Equal("name", configuration.Name);
             Assert.Equal("tag", configuration.Tag);
             Assert.Equal("mask", configuration.Mask);
             Validate(configuration.Condition);
@@ -711,7 +711,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.ConfLocation? conflocation)
         {
             Assert.NotNull(conflocation);
-            Assert.Equal("XXXXXX", conflocation.Name);
+            Assert.Equal("name", conflocation.Name);
             Assert.Equal("XXXXXX", conflocation.Number);
             Assert.Equal(true, conflocation.Inverted);
         }
@@ -722,7 +722,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.ConfSetting? confsetting)
         {
             Assert.NotNull(confsetting);
-            Assert.Equal("XXXXXX", confsetting.Name);
+            Assert.Equal("name", confsetting.Name);
             Assert.Equal("value", confsetting.Value);
             Assert.Equal(true, confsetting.Default);
             Validate(confsetting.Condition);
@@ -756,7 +756,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Adjuster? adjuster)
         {
             Assert.NotNull(adjuster);
-            Assert.Equal("XXXXXX", adjuster.Name);
+            Assert.Equal("name", adjuster.Name);
             Assert.Equal(true, adjuster.Default);
             Validate(adjuster.Condition);
         }
@@ -815,7 +815,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Instance? instance)
         {
             Assert.NotNull(instance);
-            Assert.Equal("XXXXXX", instance.Name);
+            Assert.Equal("name", instance.Name);
             Assert.Equal("XXXXXX", instance.BriefName);
         }
 
@@ -825,7 +825,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Extension? extension)
         {
             Assert.NotNull(extension);
-            Assert.Equal("XXXXXX", extension.Name);
+            Assert.Equal("name", extension.Name);
         }
 
         /// <summary>
@@ -834,7 +834,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Slot? slot)
         {
             Assert.NotNull(slot);
-            Assert.Equal("XXXXXX", slot.Name);
+            Assert.Equal("name", slot.Name);
 
             Assert.NotNull(slot.SlotOption);
             var slotoption = Assert.Single(slot.SlotOption);
@@ -847,7 +847,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.SlotOption? slotoption)
         {
             Assert.NotNull(slotoption);
-            Assert.Equal("XXXXXX", slotoption.Name);
+            Assert.Equal("name", slotoption.Name);
             Assert.Equal("XXXXXX", slotoption.DevName);
             Assert.Equal(true, slotoption.Default);
         }
@@ -859,7 +859,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(softwarelist);
             Assert.Equal("tag", softwarelist.Tag);
-            Assert.Equal("XXXXXX", softwarelist.Name);
+            Assert.Equal("name", softwarelist.Name);
             Assert.Equal(Data.Models.Metadata.SoftwareListStatus.Original, softwarelist.Status);
             Assert.Equal("XXXXXX", softwarelist.Filter);
         }
@@ -870,7 +870,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.RamOption? ramoption)
         {
             Assert.NotNull(ramoption);
-            Assert.Equal("XXXXXX", ramoption.Name);
+            Assert.Equal("name", ramoption.Name);
             Assert.Equal(true, ramoption.Default);
             Assert.Equal("XXXXXX", ramoption.Content);
         }

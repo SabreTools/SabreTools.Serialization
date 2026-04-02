@@ -18,6 +18,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.SoftwareList)?.Description = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.SoftwareList)?.Name;
+            set => (_internal as Data.Models.Metadata.SoftwareList)?.Name = value;
+        }
+
         public Data.Models.Metadata.SoftwareListStatus? Status
         {
             get => (_internal as Data.Models.Metadata.SoftwareList)?.Status;

@@ -1,4 +1,3 @@
-using SabreTools.Data.Extensions;
 using Xunit;
 
 namespace SabreTools.Metadata.DatItems.Test
@@ -16,7 +15,7 @@ namespace SabreTools.Metadata.DatItems.Test
             object clone = item.Clone();
             Machine? actual = clone as Machine;
             Assert.NotNull(actual);
-            Assert.Equal("name", actual.GetName());
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion
@@ -30,7 +29,7 @@ namespace SabreTools.Metadata.DatItems.Test
             item.SetName("name");
 
             Data.Models.Metadata.Machine actual = item.GetInternalClone();
-            Assert.Equal("name", actual.GetName());
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion

@@ -74,21 +74,21 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Release release:
-                    if (string.IsNullOrEmpty(release.GetName()))
+                    if (string.IsNullOrEmpty(release.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Release.Name));
                     if (string.IsNullOrEmpty(release.ReadString(Data.Models.Metadata.Release.RegionKey)))
                         missingFields.Add(Data.Models.Metadata.Release.RegionKey);
                     break;
 
                 case BiosSet biosset:
-                    if (string.IsNullOrEmpty(biosset.GetName()))
+                    if (string.IsNullOrEmpty(biosset.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Name));
                     if (string.IsNullOrEmpty(biosset.Description))
                         missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Description));
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetName()))
+                    if (string.IsNullOrEmpty(rom.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
                         missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
@@ -112,7 +112,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Disk disk:
-                    if (string.IsNullOrEmpty(disk.GetName()))
+                    if (string.IsNullOrEmpty(disk.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
                     if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
                         && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
@@ -123,19 +123,19 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Sample sample:
-                    if (string.IsNullOrEmpty(sample.GetName()))
+                    if (string.IsNullOrEmpty(sample.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Sample.Name));
                     break;
 
                 case Archive archive:
-                    if (string.IsNullOrEmpty(archive.GetName()))
+                    if (string.IsNullOrEmpty(archive.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Archive.Name));
                     break;
 
                 case Chip chip:
                     if (chip.ChipType is null)
                         missingFields.Add(nameof(Data.Models.Metadata.Chip.ChipType));
-                    if (string.IsNullOrEmpty(chip.GetName()))
+                    if (string.IsNullOrEmpty(chip.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Chip.Name));
                     break;
 
@@ -159,7 +159,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case DipSwitch dipswitch:
-                    if (string.IsNullOrEmpty(dipswitch.GetName()))
+                    if (string.IsNullOrEmpty(dipswitch.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Name));
                     break;
 

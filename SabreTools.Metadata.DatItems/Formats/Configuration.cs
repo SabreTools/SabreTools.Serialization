@@ -39,6 +39,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Configuration)?.Mask = value;
         }
 
+        public string? Name
+        {
+            get => (_internal as Data.Models.Metadata.Configuration)?.Name;
+            set => (_internal as Data.Models.Metadata.Configuration)?.Name = value;
+        }
+
         [JsonIgnore]
         public bool SettingsSpecified
         {

@@ -302,7 +302,7 @@ namespace SabreTools.Metadata.DatFiles
                         // If the merge tag exists and the parent already contains it, skip
                         if (mergeTag is not null && GetItemsForBucket(cloneOf)
                             .FindAll(i => i is Disk)
-                            .ConvertAll(i => (i as Disk)!.GetName())
+                            .ConvertAll(i => (i as Disk)!.Name)
                             .Contains(mergeTag))
                         {
                             continue;
@@ -311,7 +311,7 @@ namespace SabreTools.Metadata.DatFiles
                         // If the merge tag exists but the parent doesn't contain it, add to parent
                         else if (mergeTag is not null && !GetItemsForBucket(cloneOf)
                             .FindAll(i => i is Disk)
-                            .ConvertAll(i => (i as Disk)!.GetName())
+                            .ConvertAll(i => (i as Disk)!.Name)
                             .Contains(mergeTag))
                         {
                             disk.CopyMachineInformation(copyFrom);
@@ -321,8 +321,8 @@ namespace SabreTools.Metadata.DatFiles
                         // If there is no merge tag, add to parent
                         else if (mergeTag is null && !GetItemsForBucket(cloneOf)
                             .FindAll(i => i is Disk)
-                            .ConvertAll(i => (i as Disk)!.GetName())
-                            .Contains(disk.GetName()))
+                            .ConvertAll(i => (i as Disk)!.Name)
+                            .Contains(disk.Name))
                         {
                             disk.CopyMachineInformation(copyFrom);
                             AddItem(disk, statsOnly: false);
@@ -337,7 +337,7 @@ namespace SabreTools.Metadata.DatFiles
                         // If the merge tag exists and the parent already contains it, skip
                         if (mergeTag is not null && GetItemsForBucket(cloneOf)
                             .FindAll(i => i is Rom)
-                            .ConvertAll(i => (i as Rom)!.GetName())
+                            .ConvertAll(i => (i as Rom)!.Name)
                             .Contains(mergeTag))
                         {
                             continue;
@@ -346,11 +346,11 @@ namespace SabreTools.Metadata.DatFiles
                         // If the merge tag exists but the parent doesn't contain it, add to subfolder of parent
                         else if (mergeTag is not null && !GetItemsForBucket(cloneOf)
                             .FindAll(i => i is Rom)
-                            .ConvertAll(i => (i as Rom)!.GetName())
+                            .ConvertAll(i => (i as Rom)!.Name)
                             .Contains(mergeTag))
                         {
                             if (subfolder)
-                                rom.SetName($"{rom.GetMachine()!.GetName()}\\{rom.GetName()}");
+                                rom.SetName($"{rom.GetMachine()!.Name}\\{rom.Name}");
 
                             rom.CopyMachineInformation(copyFrom);
                             AddItem(rom, statsOnly: false);
@@ -360,7 +360,7 @@ namespace SabreTools.Metadata.DatFiles
                         else if (!GetItemsForBucket(cloneOf).Exists(i => i.Equals(item)) || skipDedup)
                         {
                             if (subfolder)
-                                rom.SetName($"{item.GetMachine()!.GetName()}\\{rom.GetName()}");
+                                rom.SetName($"{item.GetMachine()!.Name}\\{rom.Name}");
 
                             rom.CopyMachineInformation(copyFrom);
                             AddItem(rom, statsOnly: false);
@@ -371,7 +371,7 @@ namespace SabreTools.Metadata.DatFiles
                     else if (!GetItemsForBucket(cloneOf).Exists(i => i.Equals(item)))
                     {
                         if (subfolder)
-                            item.SetName($"{item.GetMachine()!.GetName()}\\{item.GetName()}");
+                            item.SetName($"{item.GetMachine()!.Name}\\{item.GetName()}");
 
                         item.CopyMachineInformation(copyFrom);
                         AddItem(item, statsOnly: false);
@@ -428,8 +428,7 @@ namespace SabreTools.Metadata.DatFiles
                     if (parentItems.Count == 0)
                         continue;
 
-                    string? machineName = GetMachineForItemDB(item.Key).Value?
-                        .GetName();
+                    string? machineName = GetMachineForItemDB(item.Key).Value?.Name;
 
                     // Special disk handling
                     if (item.Value is Disk disk)
@@ -439,7 +438,7 @@ namespace SabreTools.Metadata.DatFiles
                         // If the merge tag exists and the parent already contains it, skip
                         if (mergeTag is not null && GetItemsForBucketDB(cloneOf).Values
                             .Where(i => i is Disk)
-                            .Select(i => (i as Disk)!.GetName())
+                            .Select(i => (i as Disk)!.Name)
                             .Contains(mergeTag))
                         {
                             continue;
@@ -448,7 +447,7 @@ namespace SabreTools.Metadata.DatFiles
                         // If the merge tag exists but the parent doesn't contain it, add to parent
                         else if (mergeTag is not null && !GetItemsForBucketDB(cloneOf).Values
                             .Where(i => i is Disk)
-                            .Select(i => (i as Disk)!.GetName())
+                            .Select(i => (i as Disk)!.Name)
                             .Contains(mergeTag))
                         {
                             ItemsDB.RemapDatItemToMachine(item.Key, cloneOfMachine.Key);
@@ -458,8 +457,8 @@ namespace SabreTools.Metadata.DatFiles
                         // If there is no merge tag, add to parent
                         else if (mergeTag is null && !GetItemsForBucketDB(cloneOf).Values
                             .Where(i => i is Disk)
-                            .Select(i => (i as Disk)!.GetName())
-                            .Contains(disk.GetName()))
+                            .Select(i => (i as Disk)!.Name)
+                            .Contains(disk.Name))
                         {
                             ItemsDB.RemapDatItemToMachine(item.Key, cloneOfMachine.Key);
                             ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
@@ -474,7 +473,7 @@ namespace SabreTools.Metadata.DatFiles
                         // If the merge tag exists and the parent already contains it, skip
                         if (mergeTag is not null && GetItemsForBucketDB(cloneOf).Values
                             .Where(i => i is Rom)
-                            .Select(i => (i as Rom)!.GetName())
+                            .Select(i => (i as Rom)!.Name)
                             .Contains(mergeTag))
                         {
                             continue;
@@ -483,11 +482,11 @@ namespace SabreTools.Metadata.DatFiles
                         // If the merge tag exists but the parent doesn't contain it, add to subfolder of parent
                         else if (mergeTag is not null && !GetItemsForBucketDB(cloneOf).Values
                             .Where(i => i is Rom)
-                            .Select(i => (i as Rom)!.GetName())
+                            .Select(i => (i as Rom)!.Name)
                             .Contains(mergeTag))
                         {
                             if (subfolder)
-                                rom.SetName($"{machineName}\\{rom.GetName()}");
+                                rom.SetName($"{machineName}\\{rom.Name}");
 
                             ItemsDB.RemapDatItemToMachine(item.Key, machineIndex: cloneOfMachine.Key);
                             ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
@@ -497,7 +496,7 @@ namespace SabreTools.Metadata.DatFiles
                         else if (!GetItemsForBucketDB(cloneOf).ContainsValue(item.Value) || skipDedup)
                         {
                             if (subfolder)
-                                rom.SetName($"{machineName}\\{rom.GetName()}");
+                                rom.SetName($"{machineName}\\{rom.Name}");
 
                             ItemsDB.RemapDatItemToMachine(item.Key, cloneOfMachine.Key);
                             ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
@@ -671,7 +670,7 @@ namespace SabreTools.Metadata.DatFiles
                 deviceReferences.UnionWith(datItems
                     .FindAll(i => i is DeviceRef)
                     .ConvertAll(i => i as DeviceRef)
-                    .ConvertAll(dr => dr!.GetName()));
+                    .ConvertAll(dr => dr!.Name));
 
                 // Get all slot option names from the current machine
                 HashSet<string?> slotOptions = [];
@@ -696,7 +695,7 @@ namespace SabreTools.Metadata.DatFiles
 
                         newDeviceReferences.UnionWith(devItems
                             .FindAll(i => i is DeviceRef)
-                            .ConvertAll(i => (i as DeviceRef)!.GetName()!));
+                            .ConvertAll(i => (i as DeviceRef)!.Name!));
 
                         // Set new machine information and add to the current machine
                         foreach (DatItem item in devItems)
@@ -827,7 +826,7 @@ namespace SabreTools.Metadata.DatFiles
                 List<string?> deviceReferences = items.Values
                     .Where(i => i is DeviceRef)
                     .Select(i => i as DeviceRef)
-                    .Select(dr => dr!.GetName())
+                    .Select(dr => dr!.Name)
                     .Distinct()
                     .ToList();
 
@@ -860,7 +859,7 @@ namespace SabreTools.Metadata.DatFiles
                         // Add to the list of new device reference names
                         newDeviceReferences.UnionWith(devItems.Values
                             .Where(i => i is DeviceRef)
-                            .Select(i => (i as DeviceRef)!.GetName()!));
+                            .Select(i => (i as DeviceRef)!.Name!));
 
                         // Set new machine information and add to the current machine
                         var copyFrom = GetMachineForItemDB(items.First().Key);
