@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             var original = new Data.Models.OpenMSX.Original
             {
-                Value = "XXXXXX",
+                Value = "value",
                 Content = "XXXXXX",
             };
 
@@ -137,7 +137,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.OpenMSX.Original? original)
         {
             Assert.NotNull(original);
-            Assert.Equal("XXXXXX", original.Value);
+            Assert.Equal("value", original.Value);
             Assert.Equal("XXXXXX", original.Content);
         }
 

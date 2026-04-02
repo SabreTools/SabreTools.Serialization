@@ -125,7 +125,7 @@ namespace SabreTools.Metadata.DatFiles
 
                     // Get the values to check against
                     string? machineName = machine.GetName();
-                    string? machineDesc = machine.ReadString(Data.Models.Metadata.Machine.DescriptionKey);
+                    string? machineDesc = machine.Description;
                     if (machineName is null || machineDesc is null)
                         continue;
 
@@ -166,7 +166,7 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Get the values to check against
                 string? machineName = machine.Value.GetName();
-                string? machineDesc = machine.Value.ReadString(Data.Models.Metadata.Machine.DescriptionKey);
+                string? machineDesc = machine.Value.Description;
                 if (machineName is null || machineDesc is null)
                     continue;
 
@@ -652,13 +652,13 @@ namespace SabreTools.Metadata.DatFiles
 
                     // Get the values to check against
                     string? machineName = machine.GetName();
-                    string? machineDesc = machine.ReadString(Data.Models.Metadata.Machine.DescriptionKey);
+                    string? machineDesc = machine.Description;
 
                     if (machineName is not null && Regex.IsMatch(machineName, SceneNamePattern))
                         item.GetMachine()!.SetName(Regex.Replace(machineName, SceneNamePattern, "$2"));
 
                     if (machineDesc is not null && Regex.IsMatch(machineDesc, SceneNamePattern))
-                        item.GetMachine()!.Write<string?>(Data.Models.Metadata.Machine.DescriptionKey, Regex.Replace(machineDesc, SceneNamePattern, "$2"));
+                        item.GetMachine()!.Description = Regex.Replace(machineDesc, SceneNamePattern, "$2");
                 }
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
@@ -690,13 +690,13 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Get the values to check against
                 string? machineName = machine.Value.GetName();
-                string? machineDesc = machine.Value.ReadString(Data.Models.Metadata.Machine.DescriptionKey);
+                string? machineDesc = machine.Value.Description;
 
                 if (machineName is not null && Regex.IsMatch(machineName, SceneNamePattern))
                     machine.Value.SetName(Regex.Replace(machineName, SceneNamePattern, "$2"));
 
                 if (machineDesc is not null && Regex.IsMatch(machineDesc, SceneNamePattern))
-                    machine.Value.Write<string?>(Data.Models.Metadata.Machine.DescriptionKey, Regex.Replace(machineDesc, SceneNamePattern, "$2"));
+                    machine.Value.Description = Regex.Replace(machineDesc, SceneNamePattern, "$2");
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
 #else

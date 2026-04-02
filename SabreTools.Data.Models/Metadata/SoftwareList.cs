@@ -8,17 +8,18 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? Description { get; set; }
+
         public string? Name { get; set; }
 
         /// <remarks>(original|compatible)</remarks>
         public SoftwareListStatus? Status { get; set; }
 
+        public string? Tag { get; set; }
+
         #endregion
 
         #region Keys
-
-        /// <remarks>string</remarks>
-        public const string DescriptionKey = "description";
 
         /// <remarks>string</remarks>
         public const string FilterKey = "filter";
@@ -29,9 +30,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>Software[]</remarks>
         [NoFilter]
         public const string SoftwareKey = "software";
-
-        /// <remarks>string</remarks>
-        public const string TagKey = "tag";
 
         #endregion
 

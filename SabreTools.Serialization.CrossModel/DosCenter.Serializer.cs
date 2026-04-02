@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.CrossModel
             var header = new Data.Models.Metadata.Header
             {
                 Name =  item.Name,
-                [Data.Models.Metadata.Header.DescriptionKey] = item.Description,
+                Description = item.Description,
                 [Data.Models.Metadata.Header.VersionKey] = item.Version,
                 [Data.Models.Metadata.Header.DateKey] = item.Date,
                 [Data.Models.Metadata.Header.AuthorKey] = item.Author,

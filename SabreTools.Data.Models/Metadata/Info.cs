@@ -10,12 +10,7 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Name { get; set; }
 
-        #endregion
-
-        #region Keys
-
-        /// <remarks>string</remarks>
-        public const string ValueKey = "value";
+        public string? Value { get; set; }
 
         #endregion
 

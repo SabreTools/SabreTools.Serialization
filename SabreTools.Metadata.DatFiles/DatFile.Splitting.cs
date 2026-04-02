@@ -284,7 +284,7 @@ namespace SabreTools.Metadata.DatFiles
                 {
                     copyFrom = new Rom();
                     copyFrom.GetMachine()!.SetName(cloneOf);
-                    copyFrom.GetMachine()!.Write<string?>(Data.Models.Metadata.Machine.DescriptionKey, cloneOf);
+                    copyFrom.GetMachine()!.Description = cloneOf;
                 }
                 else
                 {

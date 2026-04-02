@@ -30,6 +30,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Feature)?.Status = value;
         }
 
+        public string? Value
+        {
+            get => (_internal as Data.Models.Metadata.Feature)?.Value;
+            set => (_internal as Data.Models.Metadata.Feature)?.Value = value;
+        }
+
         #endregion
 
         #region Constructors

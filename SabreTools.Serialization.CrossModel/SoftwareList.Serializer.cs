@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.CrossModel
             var header = new Data.Models.Metadata.Header
             {
                 Name =  item.Name,
-                [Data.Models.Metadata.Header.DescriptionKey] = item.Description,
+                Description = item.Description,
                 [Data.Models.Metadata.Header.NotesKey] = item.Notes,
             };
             return header;
@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 [Data.Models.Metadata.Machine.CloneOfKey] = item.CloneOf,
                 Supported = item.Supported,
-                [Data.Models.Metadata.Machine.DescriptionKey] = item.Description,
+                Description = item.Description,
                 [Data.Models.Metadata.Machine.YearKey] = item.Year,
                 [Data.Models.Metadata.Machine.PublisherKey] = item.Publisher,
                 [Data.Models.Metadata.Machine.NotesKey] = item.Notes,
@@ -94,8 +94,8 @@ namespace SabreTools.Serialization.CrossModel
             var dipSwitch = new Data.Models.Metadata.DipSwitch
             {
                 Name = item.Name,
-                [Data.Models.Metadata.DipSwitch.TagKey] = item.Tag,
-                [Data.Models.Metadata.DipSwitch.MaskKey] = item.Mask,
+                Tag = item.Tag,
+                Mask = item.Mask,
             };
 
             if (item.DipValue is not null && item.DipValue.Length > 0)
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.CrossModel
             var dipValue = new Data.Models.Metadata.DipValue
             {
                 Name = item.Name,
-                [Data.Models.Metadata.DipValue.ValueKey] = item.Value,
+                Value = item.Value,
                 Default = item.Default,
             };
             return dipValue;
@@ -158,7 +158,7 @@ namespace SabreTools.Serialization.CrossModel
             var feature = new Data.Models.Metadata.Feature
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Feature.ValueKey] = item.Value,
+                Value = item.Value,
             };
             return feature;
         }
@@ -171,7 +171,7 @@ namespace SabreTools.Serialization.CrossModel
             var info = new Data.Models.Metadata.Info
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Info.ValueKey] = item.Value,
+                Value = item.Value,
             };
             return info;
         }
@@ -215,7 +215,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
                 [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
                 [Data.Models.Metadata.Rom.OffsetKey] = item.Offset,
-                [Data.Models.Metadata.Rom.ValueKey] = item.Value,
+                Value = item.Value,
                 Status = item.Status,
                 LoadFlag = item.LoadFlag,
             };
@@ -230,7 +230,7 @@ namespace SabreTools.Serialization.CrossModel
             var sharedFeat = new Data.Models.Metadata.SharedFeat
             {
                 Name = item.Name,
-                [Data.Models.Metadata.SharedFeat.ValueKey] = item.Value,
+                Value = item.Value,
             };
             return sharedFeat;
         }

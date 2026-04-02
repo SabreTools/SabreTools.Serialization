@@ -33,6 +33,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public string? Mask
+        {
+            get => (_internal as Data.Models.Metadata.Configuration)?.Mask;
+            set => (_internal as Data.Models.Metadata.Configuration)?.Mask = value;
+        }
+
         [JsonIgnore]
         public bool SettingsSpecified
         {
@@ -41,6 +47,12 @@ namespace SabreTools.Metadata.DatItems.Formats
                 var settings = Read<ConfSetting[]?>(Data.Models.Metadata.Configuration.ConfSettingKey);
                 return settings is not null && settings.Length > 0;
             }
+        }
+
+        public string? Tag
+        {
+            get => (_internal as Data.Models.Metadata.Configuration)?.Tag;
+            set => (_internal as Data.Models.Metadata.Configuration)?.Tag = value;
         }
 
         #endregion

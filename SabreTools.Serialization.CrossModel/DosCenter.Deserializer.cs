@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.CrossModel
             var dosCenter = new Data.Models.DosCenter.DosCenter
             {
                 Name = item.Name,
-                Description = item.ReadString(Data.Models.Metadata.Header.DescriptionKey),
+                Description = item.Description,
                 Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
                 Date = item.ReadString(Data.Models.Metadata.Header.DateKey),
                 Author = item.ReadString(Data.Models.Metadata.Header.AuthorKey),

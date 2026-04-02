@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.CrossModel
             var softwareList = new Data.Models.SoftwareList.SoftwareList
             {
                 Name = item.Name,
-                Description = item.ReadString(Data.Models.Metadata.Header.DescriptionKey),
+                Description = item.Description,
                 Notes = item.ReadString(Data.Models.Metadata.Header.NotesKey),
             };
             return softwareList;
@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
                 Supported = item.Supported,
-                Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
+                Description = item.Description,
                 Year = item.ReadString(Data.Models.Metadata.Machine.YearKey),
                 Publisher = item.ReadString(Data.Models.Metadata.Machine.PublisherKey),
                 Notes = item.ReadString(Data.Models.Metadata.Machine.NotesKey),
@@ -94,8 +94,8 @@ namespace SabreTools.Serialization.CrossModel
             var dipSwitch = new DipSwitch
             {
                 Name = item.Name,
-                Tag = item.ReadString(Data.Models.Metadata.DipSwitch.TagKey),
-                Mask = item.ReadString(Data.Models.Metadata.DipSwitch.MaskKey),
+                Tag = item.Tag,
+                Mask = item.Mask,
             };
 
             var dipValues = item.Read<Data.Models.Metadata.DipValue[]>(Data.Models.Metadata.DipSwitch.DipValueKey);
@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.CrossModel
             var dipValue = new DipValue
             {
                 Name = item.Name,
-                Value = item.ReadString(Data.Models.Metadata.DipValue.ValueKey),
+                Value = item.Value,
                 Default = item.Default,
             };
             return dipValue;
@@ -160,7 +160,7 @@ namespace SabreTools.Serialization.CrossModel
             var feature = new Feature
             {
                 Name = item.Name,
-                Value = item.ReadString(Data.Models.Metadata.Feature.ValueKey),
+                Value = item.Value,
             };
             return feature;
         }
@@ -173,7 +173,7 @@ namespace SabreTools.Serialization.CrossModel
             var info = new Info
             {
                 Name = item.Name,
-                Value = item.ReadString(Data.Models.Metadata.Info.ValueKey),
+                Value = item.Value,
             };
             return info;
         }
@@ -221,7 +221,7 @@ namespace SabreTools.Serialization.CrossModel
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
                 Offset = item.ReadString(Data.Models.Metadata.Rom.OffsetKey),
-                Value = item.ReadString(Data.Models.Metadata.Rom.ValueKey),
+                Value = item.Value,
                 Status = item.Status,
                 LoadFlag = item.LoadFlag,
             };
@@ -236,7 +236,7 @@ namespace SabreTools.Serialization.CrossModel
             var sharedFeat = new SharedFeat
             {
                 Name = item.Name,
-                Value = item.ReadString(Data.Models.Metadata.SharedFeat.ValueKey),
+                Value = item.Value,
             };
             return sharedFeat;
         }

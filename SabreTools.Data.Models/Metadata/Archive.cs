@@ -8,6 +8,9 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>No-Intro DB extension</remarks>
+        public string? Description { get; set; }
+
         public string? Name { get; set; }
 
         #endregion
@@ -70,9 +73,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string, No-Intro DB extension</remarks>
         public const string GameId2Key = "gameid2";
-
-        /// <remarks>string, No-Intro DB extension</remarks>
-        public const string DescriptionKey = "description";
 
         /// <remarks>byte, No-Intro DB extension</remarks>
         public const string BiosKey = "bios";

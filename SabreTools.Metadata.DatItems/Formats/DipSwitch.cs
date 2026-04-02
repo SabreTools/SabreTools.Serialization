@@ -49,6 +49,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public string? Mask
+        {
+            get => (_internal as Data.Models.Metadata.DipSwitch)?.Mask;
+            set => (_internal as Data.Models.Metadata.DipSwitch)?.Mask = value;
+        }
+
         [JsonIgnore]
         public bool ValuesSpecified
         {
@@ -69,6 +75,12 @@ namespace SabreTools.Metadata.DatItems.Formats
                     && (!string.IsNullOrEmpty(part.GetName())
                         || !string.IsNullOrEmpty(part.ReadString(Data.Models.Metadata.Part.InterfaceKey)));
             }
+        }
+
+        public string? Tag
+        {
+            get => (_internal as Data.Models.Metadata.DipSwitch)?.Tag;
+            set => (_internal as Data.Models.Metadata.DipSwitch)?.Tag = value;
         }
 
         #endregion

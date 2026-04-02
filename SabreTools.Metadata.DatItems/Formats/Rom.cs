@@ -118,6 +118,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Rom)?.Status = value;
         }
 
+        public string? Value
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.Value;
+            set => (_internal as Data.Models.Metadata.Rom)?.Value = value;
+        }
+
         #endregion
 
         #region Constructors

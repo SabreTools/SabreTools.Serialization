@@ -78,9 +78,9 @@ namespace SabreTools.Serialization.CrossModel
             {
                 FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
                 InternalName = header?.Name,
-                Description = header?.ReadString(Data.Models.Metadata.Header.DescriptionKey),
+                Description = header?.Description,
                 GameName = parent.Name,
-                GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
+                GameDescription = parent.Description,
                 Type = "disk",
                 RomName = null,
                 DiskName = item.Name,
@@ -106,9 +106,9 @@ namespace SabreTools.Serialization.CrossModel
             {
                 FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve on an item -- OriginalFilename
                 InternalName = header?.Name,
-                Description = header?.ReadString(Data.Models.Metadata.Header.DescriptionKey),
+                Description = header?.Description,
                 GameName = parent.Name,
-                GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
+                GameDescription = parent.Description,
                 Type = "media",
                 RomName = null,
                 DiskName = item.Name,
@@ -133,9 +133,9 @@ namespace SabreTools.Serialization.CrossModel
             {
                 FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
                 InternalName = header?.Name,
-                Description = header?.ReadString(Data.Models.Metadata.Header.DescriptionKey),
+                Description = header?.Description,
                 GameName = parent.Name,
-                GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
+                GameDescription = parent.Description,
                 Type = "rom",
                 RomName = item.Name,
                 DiskName = null,

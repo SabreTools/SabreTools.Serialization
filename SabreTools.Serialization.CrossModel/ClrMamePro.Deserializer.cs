@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.CrossModel
             var clrMamePro = new Data.Models.ClrMamePro.ClrMamePro
             {
                 Name = item.Name,
-                Description = item.ReadString(Data.Models.Metadata.Header.DescriptionKey),
+                Description = item.Description,
                 RootDir = item.ReadString(Data.Models.Metadata.Header.RootDirKey),
                 Category = item.ReadString(Data.Models.Metadata.Header.CategoryKey),
                 Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.CrossModel
             GameBase gameBase = game ? new Game() : new Machine();
 
             gameBase.Name = item.Name;
-            gameBase.Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey);
+            gameBase.Description = item.Description;
             // gameBase.DriverStatus = item.ReadString(Data.Models.Metadata.Machine.DriverKey); // TODO: Needs metadata mapping
             gameBase.Year = item.ReadString(Data.Models.Metadata.Machine.YearKey);
             gameBase.Manufacturer = item.ReadString(Data.Models.Metadata.Machine.ManufacturerKey);
@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.CrossModel
             var biosset = new BiosSet
             {
                 Name = item.Name,
-                Description = item.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey),
+                Description = item.Description,
                 Default = item.Default,
             };
             return biosset;

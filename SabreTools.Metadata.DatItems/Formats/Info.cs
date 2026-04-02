@@ -10,6 +10,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("info"), XmlRoot("info")]
     public sealed class Info : DatItem<Data.Models.Metadata.Info>
     {
+        #region Fields
+
+        public string? Value
+        {
+            get => (_internal as Data.Models.Metadata.Info)?.Value;
+            set => (_internal as Data.Models.Metadata.Info)?.Value = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Info() : base() { }

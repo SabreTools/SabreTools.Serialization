@@ -80,7 +80,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine machine = new Machine();
             machine.SetName("machine");
-            machine.Write(Data.Models.Metadata.Machine.DescriptionKey, "description");
+            machine.Description = "description";
 
             DatItem datItem = new Rom();
             datItem.Write(DatItem.MachineKey, machine);
@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine? actualMachine = actual.GetMachine();
             Assert.NotNull(actualMachine);
             Assert.Equal("description", actualMachine.GetName());
-            Assert.Equal("description", actualMachine.ReadString(Data.Models.Metadata.Machine.DescriptionKey));
+            Assert.Equal("description", actualMachine.Description);
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Machine machine = new Machine();
             machine.SetName("machine");
-            machine.Write(Data.Models.Metadata.Machine.DescriptionKey, "description");
+            machine.Description = "description";
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             _ = datFile.AddMachineDB(machine);
@@ -113,7 +113,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine actualMachine = Assert.Single(datFile.GetMachinesDB()).Value;
             Assert.Equal("description", actualMachine.GetName());
-            Assert.Equal("description", actualMachine.ReadString(Data.Models.Metadata.Machine.DescriptionKey));
+            Assert.Equal("description", actualMachine.Description);
         }
 
         #endregion

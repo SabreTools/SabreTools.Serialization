@@ -106,8 +106,8 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Write<string?>(Data.Models.Metadata.Header.DatVersionKey, header.ReadString(Data.Models.Metadata.Header.DatVersionKey));
             if (Header.Debug is null)
                 Header.Debug = header.Debug;
-            if (Header.ReadString(Data.Models.Metadata.Header.DescriptionKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.DescriptionKey, header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
+            if (Header.Description is null)
+                Header.Description = header.Description;
             if (Header.ReadString(Data.Models.Metadata.Header.EmailKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.EmailKey, header.ReadString(Data.Models.Metadata.Header.EmailKey));
             if (Header.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey) is null)

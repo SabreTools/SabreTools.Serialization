@@ -262,8 +262,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case BiosSet biosset:
                     if (string.IsNullOrEmpty(biosset.GetName()))
                         missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Name));
-                    if (string.IsNullOrEmpty(biosset.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey)))
-                        missingFields.Add(Data.Models.Metadata.BiosSet.DescriptionKey);
+                    if (string.IsNullOrEmpty(biosset.Description))
+                        missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Description));
                     break;
 
                 case Rom rom:
@@ -327,20 +327,20 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case DipSwitch dipswitch:
                     if (string.IsNullOrEmpty(dipswitch.GetName()))
                         missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Name));
-                    if (string.IsNullOrEmpty(dipswitch.ReadString(Data.Models.Metadata.DipSwitch.TagKey)))
-                        missingFields.Add(Data.Models.Metadata.DipSwitch.TagKey);
+                    if (string.IsNullOrEmpty(dipswitch.Tag))
+                        missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Tag));
                     break;
 
                 case Configuration configuration:
                     if (string.IsNullOrEmpty(configuration.GetName()))
                         missingFields.Add(nameof(Data.Models.Metadata.Configuration.Name));
-                    if (string.IsNullOrEmpty(configuration.ReadString(Data.Models.Metadata.Configuration.TagKey)))
-                        missingFields.Add(Data.Models.Metadata.Configuration.TagKey);
+                    if (string.IsNullOrEmpty(configuration.Tag))
+                        missingFields.Add(nameof(Data.Models.Metadata.Configuration.Tag));
                     break;
 
                 case Port port:
-                    if (string.IsNullOrEmpty(port.ReadString(Data.Models.Metadata.Port.TagKey)))
-                        missingFields.Add(Data.Models.Metadata.Port.TagKey);
+                    if (string.IsNullOrEmpty(port.Tag))
+                        missingFields.Add(nameof(Data.Models.Metadata.Port.Tag));
                     break;
 
                 case Adjuster adjuster:
@@ -375,8 +375,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case DatItems.Formats.SoftwareList softwarelist:
-                    if (string.IsNullOrEmpty(softwarelist.ReadString(Data.Models.Metadata.SoftwareList.TagKey)))
-                        missingFields.Add(Data.Models.Metadata.SoftwareList.TagKey);
+                    if (string.IsNullOrEmpty(softwarelist.Tag))
+                        missingFields.Add(nameof(Data.Models.Metadata.SoftwareList.Tag));
                     if (string.IsNullOrEmpty(softwarelist.GetName()))
                         missingFields.Add(nameof(Data.Models.Metadata.SoftwareList.Name));
                     if (softwarelist.Status == null)

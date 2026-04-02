@@ -10,6 +10,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("analog"), XmlRoot("analog")]
     public sealed class Analog : DatItem<Data.Models.Metadata.Analog>
     {
+        #region Fields
+
+        public string? Mask
+        {
+            get => (_internal as Data.Models.Metadata.Analog)?.Mask;
+            set => (_internal as Data.Models.Metadata.Analog)?.Mask = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Analog() : base() { }

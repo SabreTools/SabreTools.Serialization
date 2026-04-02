@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var dc = new Data.Models.DosCenter.DosCenter
             {
                 Name = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 Version = "XXXXXX",
                 Date = "XXXXXX",
                 Author = "XXXXXX",
@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(cmp);
             Assert.Equal("XXXXXX", cmp.Name);
-            Assert.Equal("XXXXXX", cmp.Description);
+            Assert.Equal("description", cmp.Description);
             Assert.Equal("XXXXXX", cmp.Version);
             Assert.Equal("XXXXXX", cmp.Date);
             Assert.Equal("XXXXXX", cmp.Author);

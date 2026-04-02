@@ -45,6 +45,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Device)?.Mandatory = value;
         }
 
+        public string? Tag
+        {
+            get => (_internal as Data.Models.Metadata.Device)?.Tag;
+            set => (_internal as Data.Models.Metadata.Device)?.Tag = value;
+        }
+
         #endregion
 
         #region Constructors

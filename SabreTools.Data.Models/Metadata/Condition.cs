@@ -8,21 +8,14 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? Mask { get; set; }
+
         /// <remarks>(eq|ne|gt|le|lt|ge)</remarks>
         public Relation? Relation { get; set; }
 
-        #endregion
+        public string? Tag { get; set; }
 
-        #region Keys
-
-        /// <remarks>string</remarks>
-        public const string ValueKey = "clock";
-
-        /// <remarks>string</remarks>
-        public const string MaskKey = "mask";
-
-        /// <remarks>string</remarks>
-        public const string TagKey = "tag";
+        public string? Value { get; set; }
 
         #endregion
 

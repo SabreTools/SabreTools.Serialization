@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatFiles
         {
             // Get the header strings
             string? name = Header.Name;
-            string? description = Header.ReadString(Data.Models.Metadata.Header.DescriptionKey);
+            string? description = Header.Description;
             string? date = Header.ReadString(Data.Models.Metadata.Header.DateKey);
 
             // If the description is defined but not the name, set the name from the description
@@ -130,7 +130,7 @@ namespace SabreTools.Metadata.DatFiles
 
             // Set the fields back
             Header.Name = name;
-            Header.Write<string?>(Data.Models.Metadata.Header.DescriptionKey, description);
+            Header.Description = description;
         }
 
         #endregion

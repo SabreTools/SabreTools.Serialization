@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 [Data.Models.Metadata.Header.IdKey] = item.Id,
                 Name = item.Name,
-                [Data.Models.Metadata.Header.DescriptionKey] = item.Description,
+                Description = item.Description,
                 [Data.Models.Metadata.Header.RootDirKey] = item.RootDir,
                 [Data.Models.Metadata.Header.CategoryKey] = item.Category,
                 [Data.Models.Metadata.Header.VersionKey] = item.Version,
@@ -140,7 +140,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Machine.CloneOfIdKey] = item.CloneOfId,
                 Runnable = item.Runnable,
                 [Data.Models.Metadata.Machine.CommentKey] = item.Comment,
-                [Data.Models.Metadata.Machine.DescriptionKey] = item.Description,
+                Description = item.Description,
                 [Data.Models.Metadata.Machine.YearKey] = item.Year,
                 [Data.Models.Metadata.Machine.ManufacturerKey] = item.Manufacturer,
                 [Data.Models.Metadata.Machine.PublisherKey] = item.Publisher,
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.CrossModel
             var biosset = new Data.Models.Metadata.BiosSet
             {
                 Name = item.Name,
-                [Data.Models.Metadata.BiosSet.DescriptionKey] = item.Description,
+                Description = item.Description,
                 Default = item.Default,
             };
             return biosset;
@@ -341,7 +341,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var softwareList = new Data.Models.Metadata.SoftwareList
             {
-                [Data.Models.Metadata.SoftwareList.TagKey] = item.Tag,
+                Tag = item.Tag,
                 Name = item.Name,
                 Status = item.Status,
                 [Data.Models.Metadata.SoftwareList.FilterKey] = item.Filter,

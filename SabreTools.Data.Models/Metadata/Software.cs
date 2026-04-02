@@ -8,6 +8,8 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? Description { get; set; }
+
         public string? Name { get; set; }
 
         /// <remarks>(yes|partial|no) "yes"</remarks>
@@ -19,9 +21,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string CloneOfKey = "cloneof";
-
-        /// <remarks>string</remarks>
-        public const string DescriptionKey = "description";
 
         /// <remarks>Info[]</remarks>
         [NoFilter]

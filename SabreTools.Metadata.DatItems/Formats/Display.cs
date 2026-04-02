@@ -25,6 +25,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Display)?.FlipX = value;
         }
 
+        public string? Tag
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.Tag;
+            set => (_internal as Data.Models.Metadata.Display)?.Tag = value;
+        }
+
         #endregion
 
         #region Constructors

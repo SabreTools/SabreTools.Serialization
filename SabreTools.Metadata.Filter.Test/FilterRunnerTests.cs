@@ -77,7 +77,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Machine_Null_False()
         {
-            var machine = new Machine { [Machine.DescriptionKey] = null };
+            var machine = new Machine { Description = null };
             bool actual = _filterRunner.Run(machine);
             Assert.False(actual);
         }
@@ -85,7 +85,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Machine_Empty_False()
         {
-            var machine = new Machine { [Machine.DescriptionKey] = "" };
+            var machine = new Machine { Description = "" };
             bool actual = _filterRunner.Run(machine);
             Assert.False(actual);
         }
@@ -93,7 +93,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Machine_Incorrect_False()
         {
-            var machine = new Machine { [Machine.DescriptionKey] = "NO_MATCH" };
+            var machine = new Machine { Description = "NO_MATCH" };
             bool actual = _filterRunner.Run(machine);
             Assert.False(actual);
         }
@@ -101,7 +101,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Machine_Correct_True()
         {
-            var machine = new Machine { [Machine.DescriptionKey] = "desc" };
+            var machine = new Machine { Description = "desc" };
             bool actual = _filterRunner.Run(machine);
             Assert.True(actual);
         }

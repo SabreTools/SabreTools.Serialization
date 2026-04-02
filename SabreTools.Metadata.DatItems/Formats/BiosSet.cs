@@ -12,11 +12,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Properties
 
-        [JsonIgnore]
         public bool? Default
         {
             get => (_internal as Data.Models.Metadata.BiosSet)?.Default;
             set => (_internal as Data.Models.Metadata.BiosSet)?.Default = value;
+        }
+
+        public string? Description
+        {
+            get => (_internal as Data.Models.Metadata.BiosSet)?.Description;
+            set => (_internal as Data.Models.Metadata.BiosSet)?.Description = value;
         }
 
         #endregion

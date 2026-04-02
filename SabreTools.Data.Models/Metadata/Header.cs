@@ -14,6 +14,8 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Debug { get; set; }
 
+        public string? Description { get; set; }
+
         /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
         public MergingFlag ForceMerging { get; set; }
 
@@ -69,9 +71,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string DatVersionKey = "datversion";
-
-        /// <remarks>string</remarks>
-        public const string DescriptionKey = "description";
 
         /// <remarks>string</remarks>
         public const string EmailKey = "email";

@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.CrossModel
                 var first = item.Row[0];
                 header["FILENAME"] = first.FileName; // TODO: Make this an actual key to retrieve on an item -- OriginalFilename
                 header.Name =  first.FileName;
-                header[Data.Models.Metadata.Header.DescriptionKey] = first.Description;
+                header.Description = first.Description;
             }
 
             return header;
@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.CrossModel
             var machine = new Data.Models.Metadata.Machine
             {
                 Name = item.GameName,
-                [Data.Models.Metadata.Machine.DescriptionKey] = item.GameDescription,
+                Description = item.GameDescription,
             };
 
             var datItem = ConvertToInternalModel(item);

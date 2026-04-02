@@ -161,7 +161,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Id = "XXXXXX",
                 Name = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 RootDir = "XXXXXX",
                 Category = "XXXXXX",
                 Version = "XXXXXX",
@@ -206,7 +206,7 @@ namespace SabreTools.Serialization.Readers.Test
             var biosset = new Data.Models.Logiqx.BiosSet
             {
                 Name = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 Default = true,
             };
 
@@ -286,7 +286,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var softwarelist = new Data.Models.Logiqx.SoftwareList
             {
-                Tag = "XXXXXX",
+                Tag = "tag",
                 Name = "XXXXXX",
                 Status = Data.Models.Metadata.SoftwareListStatus.Original,
                 Filter = "XXXXXX",
@@ -309,7 +309,7 @@ namespace SabreTools.Serialization.Readers.Test
             gameBase.CloneOfId = "XXXXXX";
             gameBase.Runnable = Data.Models.Metadata.Runnable.Yes;
             gameBase.Comment = ["XXXXXX"];
-            gameBase.Description = "XXXXXX";
+            gameBase.Description = "description";
             gameBase.Year = "XXXXXX";
             gameBase.Manufacturer = "XXXXXX";
             gameBase.Publisher = "XXXXXX";
@@ -345,7 +345,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(header);
             Assert.Equal("XXXXXX", header.Id);
             Assert.Equal("XXXXXX", header.Name);
-            Assert.Equal("XXXXXX", header.Description);
+            Assert.Equal("description", header.Description);
             Assert.Equal("XXXXXX", header.RootDir);
             Assert.Equal("XXXXXX", header.Category);
             Assert.Equal("XXXXXX", header.Version);
@@ -411,7 +411,7 @@ namespace SabreTools.Serialization.Readers.Test
             string comment = Assert.Single(gb.Comment);
             Assert.Equal("XXXXXX", comment);
 
-            Assert.Equal("XXXXXX", gb.Description);
+            Assert.Equal("description", gb.Description);
             Assert.Equal("XXXXXX", gb.Year);
             Assert.Equal("XXXXXX", gb.Manufacturer);
             Assert.Equal("XXXXXX", gb.Publisher);
@@ -503,7 +503,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(biosset);
             Assert.Equal("XXXXXX", biosset.Name);
-            Assert.Equal("XXXXXX", biosset.Description);
+            Assert.Equal("description", biosset.Description);
             Assert.Equal(true, biosset.Default);
         }
 
@@ -613,7 +613,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Logiqx.SoftwareList? softwarelist)
         {
             Assert.NotNull(softwarelist);
-            Assert.Equal("XXXXXX", softwarelist.Tag);
+            Assert.Equal("tag", softwarelist.Tag);
             Assert.Equal("XXXXXX", softwarelist.Name);
             Assert.Equal(Data.Models.Metadata.SoftwareListStatus.Original, softwarelist.Status);
             Assert.Equal("XXXXXX", softwarelist.Filter);

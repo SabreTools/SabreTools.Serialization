@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 ParentName = "XXXXXX",
                 ParentDescription = "XXXXXX",
                 GameName = "XXXXXX",
-                GameDescription = "XXXXXX",
+                GameDescription = "description",
                 RomName = "XXXXXX",
                 RomCRC = "XXXXXX",
                 RomSize = "XXXXXX",
@@ -142,7 +142,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", rom.ParentName);
             Assert.Null(rom.ParentDescription); // This is unmappable
             Assert.Equal("XXXXXX", rom.GameName);
-            Assert.Equal("XXXXXX", rom.GameDescription);
+            Assert.Equal("description", rom.GameDescription);
             Assert.Equal("XXXXXX", rom.RomName);
             Assert.Equal("XXXXXX", rom.RomCRC);
             Assert.Equal("XXXXXX", rom.RomSize);

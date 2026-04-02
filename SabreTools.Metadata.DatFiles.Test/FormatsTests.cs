@@ -112,7 +112,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.BiosSet.Name),
-                Data.Models.Metadata.BiosSet.DescriptionKey,
+                nameof(Data.Models.Metadata.BiosSet.Description),
             ]));
         }
 
@@ -791,7 +791,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.BiosSet.Name),
-                Data.Models.Metadata.BiosSet.DescriptionKey,
+                nameof(Data.Models.Metadata.BiosSet.Description),
             ]));
         }
 
@@ -923,7 +923,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.DipSwitch.Name),
-                Data.Models.Metadata.DipSwitch.TagKey,
+                nameof(Data.Models.Metadata.DipSwitch.Tag),
             ]));
         }
 
@@ -938,7 +938,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Configuration.Name),
-                Data.Models.Metadata.Configuration.TagKey,
+                nameof(Data.Models.Metadata.Configuration.Tag),
             ]));
         }
 
@@ -952,7 +952,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Port.TagKey,
+                nameof(Data.Models.Metadata.Port.Tag),
             ]));
         }
 
@@ -1039,7 +1039,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.SoftwareList.TagKey,
+                nameof(Data.Models.Metadata.SoftwareList.Tag),
                 nameof(Data.Models.Metadata.SoftwareList.Name),
                 nameof(Data.Models.Metadata.SoftwareList.Status),
             ]));
@@ -1108,7 +1108,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.BiosSet.Name),
-                Data.Models.Metadata.BiosSet.DescriptionKey,
+                nameof(Data.Models.Metadata.BiosSet.Description),
             ]));
         }
 
@@ -1227,7 +1227,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.SoftwareList.TagKey,
+                nameof(Data.Models.Metadata.SoftwareList.Tag),
                 nameof(Data.Models.Metadata.SoftwareList.Name),
                 nameof(Data.Models.Metadata.SoftwareList.Status),
             ]));
@@ -1574,8 +1574,8 @@ namespace SabreTools.Metadata.DatFiles.Test
                 nameof(Data.Models.Metadata.Part.Name),
                 Data.Models.Metadata.Part.InterfaceKey,
                 nameof(Data.Models.Metadata.DipSwitch.Name),
-                Data.Models.Metadata.DipSwitch.TagKey,
-                Data.Models.Metadata.DipSwitch.MaskKey,
+                nameof(Data.Models.Metadata.DipSwitch.Tag),
+                nameof(Data.Models.Metadata.DipSwitch.Mask),
             ]));
         }
 

@@ -14,6 +14,8 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? FlipX { get; set; }
 
+        public string? Tag { get; set; }
+
         #endregion
 
         #region Keys
@@ -39,9 +41,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(0|90|180|270)</remarks>
         /// TODO: Convert to enum
         public const string RotateKey = "rotate";
-
-        /// <remarks>string</remarks>
-        public const string TagKey = "tag";
 
         /// <remarks>long</remarks>
         public const string VBEndKey = "vbend";

@@ -129,7 +129,7 @@ namespace SabreTools.Serialization.Readers.Test
             var biosset = new Data.Models.Listxml.BiosSet
             {
                 Name = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 Default = true,
             };
 
@@ -175,7 +175,7 @@ namespace SabreTools.Serialization.Readers.Test
             var chip = new Data.Models.Listxml.Chip
             {
                 Name = "XXXXXX",
-                Tag = "XXXXXX",
+                Tag = "tag",
                 Type = Data.Models.Metadata.ChipType.CPU,
                 SoundOnly = true,
                 Clock = "XXXXXX",
@@ -183,7 +183,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var display = new Data.Models.Listxml.Display
             {
-                Tag = "XXXXXX",
+                Tag = "tag",
                 Type = Data.Models.Metadata.DisplayType.Vector,
                 Rotate = "XXXXXX",
                 FlipX = true,
@@ -244,10 +244,10 @@ namespace SabreTools.Serialization.Readers.Test
 
             var condition = new Data.Models.Listxml.Condition
             {
-                Tag = "XXXXXX",
-                Mask = "XXXXXX",
+                Tag = "tag",
+                Mask = "mask",
                 Relation = Data.Models.Metadata.Relation.Equal,
-                Value = "XXXXXX",
+                Value = "value",
             };
 
             var diplocation = new Data.Models.Listxml.DipLocation
@@ -260,7 +260,7 @@ namespace SabreTools.Serialization.Readers.Test
             var dipvalue = new Data.Models.Listxml.DipValue
             {
                 Name = "XXXXXX",
-                Value = "XXXXXX",
+                Value = "value",
                 Default = true,
                 Condition = condition,
             };
@@ -268,8 +268,8 @@ namespace SabreTools.Serialization.Readers.Test
             var dipswitch = new Data.Models.Listxml.DipSwitch
             {
                 Name = "XXXXXX",
-                Tag = "XXXXXX",
-                Mask = "XXXXXX",
+                Tag = "tag",
+                Mask = "mask",
                 Condition = condition,
                 DipLocation = [diplocation],
                 DipValue = [dipvalue],
@@ -285,7 +285,7 @@ namespace SabreTools.Serialization.Readers.Test
             var confsetting = new Data.Models.Listxml.ConfSetting
             {
                 Name = "XXXXXX",
-                Value = "XXXXXX",
+                Value = "value",
                 Default = true,
                 Condition = condition,
             };
@@ -293,8 +293,8 @@ namespace SabreTools.Serialization.Readers.Test
             var configuration = new Data.Models.Listxml.Configuration
             {
                 Name = "XXXXXX",
-                Tag = "XXXXXX",
-                Mask = "XXXXXX",
+                Tag = "tag",
+                Mask = "mask",
                 Condition = condition,
                 ConfLocation = [conflocation],
                 ConfSetting = [confsetting],
@@ -302,12 +302,12 @@ namespace SabreTools.Serialization.Readers.Test
 
             var analog = new Data.Models.Listxml.Analog
             {
-                Mask = "XXXXXX",
+                Mask = "mask",
             };
 
             var port = new Data.Models.Listxml.Port
             {
-                Tag = "XXXXXX",
+                Tag = "tag",
                 Analog = [analog],
             };
 
@@ -354,7 +354,7 @@ namespace SabreTools.Serialization.Readers.Test
             var device = new Data.Models.Listxml.Device
             {
                 Type = Data.Models.Metadata.DeviceType.PunchTape,
-                Tag = "XXXXXX",
+                Tag = "tag",
                 FixedImage = "XXXXXX",
                 Mandatory = true,
                 Interface = "XXXXXX",
@@ -377,7 +377,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var softwarelist = new Data.Models.Listxml.SoftwareList
             {
-                Tag = "XXXXXX",
+                Tag = "tag",
                 Name = "XXXXXX",
                 Status = Data.Models.Metadata.SoftwareListStatus.Original,
                 Filter = "XXXXXX",
@@ -402,7 +402,7 @@ namespace SabreTools.Serialization.Readers.Test
             gameBase.CloneOf = "XXXXXX";
             gameBase.RomOf = "XXXXXX";
             gameBase.SampleOf = "XXXXXX";
-            gameBase.Description = "XXXXXX";
+            gameBase.Description = "description";
             gameBase.Year = "XXXXXX";
             gameBase.Manufacturer = "XXXXXX";
             gameBase.History = "XXXXXX";
@@ -449,7 +449,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", gb.CloneOf);
             Assert.Equal("XXXXXX", gb.RomOf);
             Assert.Equal("XXXXXX", gb.SampleOf);
-            Assert.Equal("XXXXXX", gb.Description);
+            Assert.Equal("description", gb.Description);
             Assert.Equal("XXXXXX", gb.Year);
             Assert.Equal("XXXXXX", gb.Manufacturer);
             Assert.Equal("XXXXXX", gb.History);
@@ -535,7 +535,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(biosset);
             Assert.Equal("XXXXXX", biosset.Name);
-            Assert.Equal("XXXXXX", biosset.Description);
+            Assert.Equal("description", biosset.Description);
             Assert.Equal(true, biosset.Default);
         }
 
@@ -601,7 +601,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(chip);
             Assert.Equal("XXXXXX", chip.Name);
-            Assert.Equal("XXXXXX", chip.Tag);
+            Assert.Equal("tag", chip.Tag);
             Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.Type);
             Assert.Equal(true, chip.SoundOnly);
             Assert.Equal("XXXXXX", chip.Clock);
@@ -613,7 +613,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Listxml.Display? display)
         {
             Assert.NotNull(display);
-            Assert.Equal("XXXXXX", display.Tag);
+            Assert.Equal("tag", display.Tag);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.Type);
             Assert.Equal("XXXXXX", display.Rotate);
             Assert.Equal(true, display.FlipX);
@@ -698,8 +698,8 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(dipswitch);
             Assert.Equal("XXXXXX", dipswitch.Name);
-            Assert.Equal("XXXXXX", dipswitch.Tag);
-            Assert.Equal("XXXXXX", dipswitch.Mask);
+            Assert.Equal("tag", dipswitch.Tag);
+            Assert.Equal("mask", dipswitch.Mask);
             Validate(dipswitch.Condition);
 
             Assert.NotNull(dipswitch.DipLocation);
@@ -717,10 +717,10 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Listxml.Condition? condition)
         {
             Assert.NotNull(condition);
-            Assert.Equal("XXXXXX", condition.Tag);
-            Assert.Equal("XXXXXX", condition.Mask);
+            Assert.Equal("tag", condition.Tag);
+            Assert.Equal("mask", condition.Mask);
             Assert.Equal(Data.Models.Metadata.Relation.Equal, condition.Relation);
-            Assert.Equal("XXXXXX", condition.Value);
+            Assert.Equal("value", condition.Value);
         }
 
         /// <summary>
@@ -741,7 +741,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(dipvalue);
             Assert.Equal("XXXXXX", dipvalue.Name);
-            Assert.Equal("XXXXXX", dipvalue.Value);
+            Assert.Equal("value", dipvalue.Value);
             Assert.Equal(true, dipvalue.Default);
             Validate(dipvalue.Condition);
         }
@@ -753,8 +753,8 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(configuration);
             Assert.Equal("XXXXXX", configuration.Name);
-            Assert.Equal("XXXXXX", configuration.Tag);
-            Assert.Equal("XXXXXX", configuration.Mask);
+            Assert.Equal("tag", configuration.Tag);
+            Assert.Equal("mask", configuration.Mask);
             Validate(configuration.Condition);
 
             Assert.NotNull(configuration.ConfLocation);
@@ -784,7 +784,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(confsetting);
             Assert.Equal("XXXXXX", confsetting.Name);
-            Assert.Equal("XXXXXX", confsetting.Value);
+            Assert.Equal("value", confsetting.Value);
             Assert.Equal(true, confsetting.Default);
             Validate(confsetting.Condition);
         }
@@ -795,7 +795,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Listxml.Port? port)
         {
             Assert.NotNull(port);
-            Assert.Equal("XXXXXX", port.Tag);
+            Assert.Equal("tag", port.Tag);
 
             Assert.NotNull(port.Analog);
             var analog = Assert.Single(port.Analog);
@@ -808,7 +808,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Listxml.Analog? analog)
         {
             Assert.NotNull(analog);
-            Assert.Equal("XXXXXX", analog.Mask);
+            Assert.Equal("mask", analog.Mask);
         }
 
         /// <summary>
@@ -859,7 +859,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(device);
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.Type);
-            Assert.Equal("XXXXXX", device.Tag);
+            Assert.Equal("tag", device.Tag);
             Assert.Equal("XXXXXX", device.FixedImage);
             Assert.Equal(true, device.Mandatory);
             Assert.Equal("XXXXXX", device.Interface);
@@ -919,7 +919,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Listxml.SoftwareList? softwarelist)
         {
             Assert.NotNull(softwarelist);
-            Assert.Equal("XXXXXX", softwarelist.Tag);
+            Assert.Equal("tag", softwarelist.Tag);
             Assert.Equal("XXXXXX", softwarelist.Name);
             Assert.Equal(Data.Models.Metadata.SoftwareListStatus.Original, softwarelist.Status);
             Assert.Equal("XXXXXX", softwarelist.Filter);

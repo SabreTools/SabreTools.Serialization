@@ -12,10 +12,28 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public string? Mask
+        {
+            get => (_internal as Data.Models.Metadata.Condition)?.Mask;
+            set => (_internal as Data.Models.Metadata.Condition)?.Mask = value;
+        }
+
         public Data.Models.Metadata.Relation? Relation
         {
             get => (_internal as Data.Models.Metadata.Condition)?.Relation;
             set => (_internal as Data.Models.Metadata.Condition)?.Relation = value;
+        }
+
+        public string? Tag
+        {
+            get => (_internal as Data.Models.Metadata.Condition)?.Tag;
+            set => (_internal as Data.Models.Metadata.Condition)?.Tag = value;
+        }
+
+        public string? Value
+        {
+            get => (_internal as Data.Models.Metadata.Condition)?.Value;
+            set => (_internal as Data.Models.Metadata.Condition)?.Value = value;
         }
 
         #endregion

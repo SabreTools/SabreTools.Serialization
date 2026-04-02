@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.CrossModel
             var header = new Data.Models.Metadata.Header
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Header.DescriptionKey] = item.Description,
+                Description = item.Description,
                 [Data.Models.Metadata.Header.RootDirKey] = item.RootDir,
                 [Data.Models.Metadata.Header.CategoryKey] = item.Category,
                 [Data.Models.Metadata.Header.VersionKey] = item.Version,
@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.CrossModel
             var machine = new Data.Models.Metadata.Machine
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Machine.DescriptionKey] = item.Description,
+                Description = item.Description,
                 // [Data.Models.Metadata.Machine.DriverKey] = item.DriverStatus, // TODO: Needs metadata mapping
                 [Data.Models.Metadata.Machine.YearKey] = item.Year,
                 [Data.Models.Metadata.Machine.ManufacturerKey] = item.Manufacturer,
@@ -167,7 +167,7 @@ namespace SabreTools.Serialization.CrossModel
             var biosset = new Data.Models.Metadata.BiosSet
             {
                 Name = item.Name,
-                [Data.Models.Metadata.BiosSet.DescriptionKey] = item.Description,
+                Description = item.Description,
                 Default = item.Default,
             };
             return biosset;

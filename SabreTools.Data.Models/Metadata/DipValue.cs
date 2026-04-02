@@ -13,6 +13,8 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Name { get; set; }
 
+        public string? Value { get; set; }
+
         #endregion
 
         #region Keys
@@ -20,9 +22,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>Condition</remarks>
         [NoFilter]
         public const string ConditionKey = "condition";
-
-        /// <remarks>string</remarks>
-        public const string ValueKey = "value";
 
         #endregion
 

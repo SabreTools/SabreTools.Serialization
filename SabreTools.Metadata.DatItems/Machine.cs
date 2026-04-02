@@ -15,6 +15,12 @@ namespace SabreTools.Metadata.DatItems
     {
         #region Fields
 
+        public string? Description
+        {
+            get => _internal.Description;
+            set => _internal.Description = value;
+        }
+
         public bool? IsBios
         {
             get => _internal.IsBios;

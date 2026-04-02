@@ -31,12 +31,6 @@ namespace SabreTools.Metadata.DatFiles
 
         #region Fields
 
-        public string? Name
-        {
-            get => _internal.Name;
-            set => _internal.Name = value;
-        }
-
         public MergingFlag BiosMode
         {
             get => _internal.BiosMode;
@@ -57,6 +51,12 @@ namespace SabreTools.Metadata.DatFiles
         {
             get => _internal.Debug;
             set => _internal.Debug = value;
+        }
+
+        public string? Description
+        {
+            get => _internal.Description;
+            set => _internal.Description = value;
         }
 
         public MergingFlag ForceMerging
@@ -117,6 +117,12 @@ namespace SabreTools.Metadata.DatFiles
         {
             get => _internal.LockSampleMode;
             set => _internal.LockSampleMode = value;
+        }
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         [JsonIgnore]

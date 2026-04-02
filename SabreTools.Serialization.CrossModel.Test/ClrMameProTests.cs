@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var cmp = new Data.Models.ClrMamePro.ClrMamePro
             {
                 Name = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 RootDir = "XXXXXX",
                 Category = "XXXXXX",
                 Version = "XXXXXX",
@@ -90,7 +90,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var biosset = new Data.Models.ClrMamePro.BiosSet
             {
                 Name = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 Default = true,
             };
 
@@ -209,7 +209,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 ? new Data.Models.ClrMamePro.Game()
                 : new Data.Models.ClrMamePro.Machine();
             gameBase.Name = "XXXXXX";
-            gameBase.Description = "XXXXXX";
+            gameBase.Description = "description";
             gameBase.DriverStatus = "XXXXXX";
             gameBase.Year = "XXXXXX";
             gameBase.Manufacturer = "XXXXXX";
@@ -251,7 +251,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(cmp);
             Assert.Equal("XXXXXX", cmp.Name);
-            Assert.Equal("XXXXXX", cmp.Description);
+            Assert.Equal("description", cmp.Description);
             Assert.Equal("XXXXXX", cmp.RootDir);
             Assert.Equal("XXXXXX", cmp.Category);
             Assert.Equal("XXXXXX", cmp.Version);
@@ -274,7 +274,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(gb);
             Assert.Equal("XXXXXX", gb.Name);
-            Assert.Equal("XXXXXX", gb.Description);
+            Assert.Equal("description", gb.Description);
             // Assert.Equal("XXXXXX", gb.DriverStatus); // TODO: Needs metadata mapping
             Assert.Equal("XXXXXX", gb.Year);
             Assert.Equal("XXXXXX", gb.Manufacturer);
@@ -349,7 +349,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(biosset);
             Assert.Equal("XXXXXX", biosset.Name);
-            Assert.Equal("XXXXXX", biosset.Description);
+            Assert.Equal("description", biosset.Description);
             Assert.Equal(true, biosset.Default);
         }
 

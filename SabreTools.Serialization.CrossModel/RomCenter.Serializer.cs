@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Machine.CloneOfKey] = item.ParentName,
                 //[Data.Models.Metadata.Machine.ParentDescriptionKey] = item.ParentDescription, // This is unmappable
                 Name = item.GameName,
-                [Data.Models.Metadata.Machine.DescriptionKey] = item.GameDescription,
+                Description = item.GameDescription,
                 [Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { ConvertToInternalModel(item) },
             };
 

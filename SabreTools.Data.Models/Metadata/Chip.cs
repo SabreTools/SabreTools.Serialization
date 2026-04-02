@@ -16,6 +16,8 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? SoundOnly { get; set; }
 
+        public string? Tag { get; set; }
+
         #endregion
 
         #region Keys
@@ -25,9 +27,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string FlagsKey = "flags";
-
-        /// <remarks>string</remarks>
-        public const string TagKey = "tag";
 
         #endregion
 

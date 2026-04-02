@@ -12,10 +12,22 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public string? Description
+        {
+            get => (_internal as Data.Models.Metadata.SoftwareList)?.Description;
+            set => (_internal as Data.Models.Metadata.SoftwareList)?.Description = value;
+        }
+
         public Data.Models.Metadata.SoftwareListStatus? Status
         {
             get => (_internal as Data.Models.Metadata.SoftwareList)?.Status;
             set => (_internal as Data.Models.Metadata.SoftwareList)?.Status = value;
+        }
+
+        public string? Tag
+        {
+            get => (_internal as Data.Models.Metadata.SoftwareList)?.Tag;
+            set => (_internal as Data.Models.Metadata.SoftwareList)?.Tag = value;
         }
 
         #endregion

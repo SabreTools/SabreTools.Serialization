@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Id = item.ReadString(Data.Models.Metadata.Header.IdKey),
                 Name = item.Name,
-                Description = item.ReadString(Data.Models.Metadata.Header.DescriptionKey),
+                Description = item.Description,
                 RootDir = item.ReadString(Data.Models.Metadata.Header.RootDirKey),
                 Category = item.ReadString(Data.Models.Metadata.Header.CategoryKey),
                 Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
@@ -134,7 +134,7 @@ namespace SabreTools.Serialization.CrossModel
             gameBase.CloneOfId = item.ReadString(Data.Models.Metadata.Machine.CloneOfIdKey);
             gameBase.Runnable = item.Runnable;
             gameBase.Comment = item.ReadStringArray(Data.Models.Metadata.Machine.CommentKey);
-            gameBase.Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey);
+            gameBase.Description = item.Description;
             gameBase.Year = item.ReadString(Data.Models.Metadata.Machine.YearKey);
             gameBase.Manufacturer = item.ReadString(Data.Models.Metadata.Machine.ManufacturerKey);
             gameBase.Publisher = item.ReadString(Data.Models.Metadata.Machine.PublisherKey);
@@ -207,7 +207,7 @@ namespace SabreTools.Serialization.CrossModel
             var biosset = new BiosSet
             {
                 Name = item.Name,
-                Description = item.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey),
+                Description = item.Description,
                 Default = item.Default,
             };
             return biosset;
@@ -347,7 +347,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var softwareList = new Data.Models.Logiqx.SoftwareList
             {
-                Tag = item.ReadString(Data.Models.Metadata.SoftwareList.TagKey),
+                Tag = item.Tag,
                 Name = item.Name,
                 Status = item.Status,
                 Filter = item.ReadString(Data.Models.Metadata.SoftwareList.FilterKey),

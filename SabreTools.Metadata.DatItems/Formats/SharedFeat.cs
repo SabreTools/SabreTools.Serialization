@@ -10,6 +10,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("sharedfeat"), XmlRoot("sharedfeat")]
     public sealed class SharedFeat : DatItem<Data.Models.Metadata.SharedFeat>
     {
+        #region Fields
+
+        public string? Value
+        {
+            get => (_internal as Data.Models.Metadata.SharedFeat)?.Value;
+            set => (_internal as Data.Models.Metadata.SharedFeat)?.Value = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public SharedFeat() : base() { }

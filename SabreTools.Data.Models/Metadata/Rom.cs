@@ -37,6 +37,8 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
         public ItemStatus? Status { get; set; }
 
+        public string? Value { get; set; }
+
         #endregion
 
         #region Keys
@@ -244,9 +246,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string; OpenMSX.RomBase</remarks>
         public const string OpenMSXType = "type";
-
-        /// <remarks>string</remarks>
-        public const string ValueKey = "value";
 
         /// <remarks>string; ArchiveDotOrg.File</remarks>
         public const string WhisperASRModuleVersionKey = "whisper_asr_module_version";

@@ -8,7 +8,11 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? Mask { get; set; }
+
         public string? Name { get; set; }
+
+        public string? Tag { get; set; }
 
         #endregion
 
@@ -25,12 +29,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>ConfSetting[]</remarks>
         [NoFilter]
         public const string ConfSettingKey = "confsetting";
-
-        /// <remarks>string</remarks>
-        public const string MaskKey = "mask";
-
-        /// <remarks>string</remarks>
-        public const string TagKey = "tag";
 
         #endregion
 

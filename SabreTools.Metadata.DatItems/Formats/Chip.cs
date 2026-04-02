@@ -24,6 +24,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Chip)?.SoundOnly = value;
         }
 
+        public string? Tag
+        {
+            get => (_internal as Data.Models.Metadata.Chip)?.Tag;
+            set => (_internal as Data.Models.Metadata.Chip)?.Tag = value;
+        }
+
         #endregion
 
         #region Constructors

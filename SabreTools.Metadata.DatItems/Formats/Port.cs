@@ -23,6 +23,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public string? Tag
+        {
+            get => (_internal as Data.Models.Metadata.Port)?.Tag;
+            set => (_internal as Data.Models.Metadata.Port)?.Tag = value;
+        }
+
         #endregion
 
         #region Constructors

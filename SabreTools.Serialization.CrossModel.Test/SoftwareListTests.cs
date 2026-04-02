@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             // Validate the data
             Assert.NotNull(newSl);
             Assert.Equal("XXXXXX", newSl.Name);
-            Assert.Equal("XXXXXX", newSl.Description);
+            Assert.Equal("description", newSl.Description);
             Assert.Equal("XXXXXX", newSl.Notes);
 
             Assert.NotNull(newSl.Software);
@@ -39,19 +39,19 @@ namespace SabreTools.Serialization.CrossModel.Test
             var info = new Data.Models.SoftwareList.Info
             {
                 Name = "XXXXXX",
-                Value = "XXXXXX",
+                Value = "value",
             };
 
             var sharedfeat = new Data.Models.SoftwareList.SharedFeat
             {
                 Name = "XXXXXX",
-                Value = "XXXXXX",
+                Value = "value",
             };
 
             var feature = new Data.Models.SoftwareList.Feature
             {
                 Name = "XXXXXX",
-                Value = "XXXXXX",
+                Value = "value",
             };
 
             var rom = new Data.Models.SoftwareList.Rom
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 CRC = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Offset = "XXXXXX",
-                Value = "XXXXXX",
+                Value = "value",
                 Status = Data.Models.Metadata.ItemStatus.Good,
                 LoadFlag = Data.Models.Metadata.LoadFlag.Load16Byte,
             };
@@ -94,15 +94,15 @@ namespace SabreTools.Serialization.CrossModel.Test
             var dipvalue = new Data.Models.SoftwareList.DipValue
             {
                 Name = "XXXXXX",
-                Value = "XXXXXX",
+                Value = "value",
                 Default = true,
             };
 
             var dipswitch = new Data.Models.SoftwareList.DipSwitch
             {
                 Name = "XXXXXX",
-                Tag = "XXXXXX",
-                Mask = "XXXXXX",
+                Tag = "tag",
+                Mask = "mask",
                 DipValue = [dipvalue],
             };
 
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Name = "XXXXXX",
                 CloneOf = "XXXXXX",
                 Supported = Data.Models.Metadata.Supported.Yes,
-                Description = "XXXXXX",
+                Description = "description",
                 Year = "XXXXXX",
                 Publisher = "XXXXXX",
                 Notes = "XXXXXX",
@@ -133,7 +133,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             return new Data.Models.SoftwareList.SoftwareList
             {
                 Name = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 Notes = "XXXXXX",
                 Software = [software],
             };
@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", software.Name);
             Assert.Equal("XXXXXX", software.CloneOf);
             Assert.Equal(Data.Models.Metadata.Supported.Yes, software.Supported);
-            Assert.Equal("XXXXXX", software.Description);
+            Assert.Equal("description", software.Description);
             Assert.Equal("XXXXXX", software.Year);
             Assert.Equal("XXXXXX", software.Publisher);
             Assert.Equal("XXXXXX", software.Notes);
@@ -173,7 +173,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(info);
             Assert.Equal("XXXXXX", info.Name);
-            Assert.Equal("XXXXXX", info.Value);
+            Assert.Equal("value", info.Value);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(sharedfeat);
             Assert.Equal("XXXXXX", sharedfeat.Name);
-            Assert.Equal("XXXXXX", sharedfeat.Value);
+            Assert.Equal("value", sharedfeat.Value);
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(feature);
             Assert.Equal("XXXXXX", feature.Name);
-            Assert.Equal("XXXXXX", feature.Value);
+            Assert.Equal("value", feature.Value);
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", rom.CRC);
             Assert.Equal("XXXXXX", rom.SHA1);
             Assert.Equal("XXXXXX", rom.Offset);
-            Assert.Equal("XXXXXX", rom.Value);
+            Assert.Equal("value", rom.Value);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
             Assert.Equal(Data.Models.Metadata.LoadFlag.Load16Byte, rom.LoadFlag);
         }
@@ -288,8 +288,8 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(dipswitch);
             Assert.Equal("XXXXXX", dipswitch.Name);
-            Assert.Equal("XXXXXX", dipswitch.Tag);
-            Assert.Equal("XXXXXX", dipswitch.Mask);
+            Assert.Equal("tag", dipswitch.Tag);
+            Assert.Equal("mask", dipswitch.Mask);
 
             Assert.NotNull(dipswitch.DipValue);
             var dipvalue = Assert.Single(dipswitch.DipValue);
@@ -303,7 +303,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(dipvalue);
             Assert.Equal("XXXXXX", dipvalue.Name);
-            Assert.Equal("XXXXXX", dipvalue.Value);
+            Assert.Equal("value", dipvalue.Value);
             Assert.Equal(true, dipvalue.Default);
         }
     }

@@ -83,8 +83,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case BiosSet biosset:
                     if (string.IsNullOrEmpty(biosset.GetName()))
                         missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Name));
-                    if (string.IsNullOrEmpty(biosset.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey)))
-                        missingFields.Add(Data.Models.Metadata.BiosSet.DescriptionKey);
+                    if (string.IsNullOrEmpty(biosset.Description))
+                        missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Description));
                     break;
 
                 case Rom rom:

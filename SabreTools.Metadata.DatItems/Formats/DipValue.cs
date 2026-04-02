@@ -22,11 +22,16 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
-        [JsonIgnore]
         public bool? Default
         {
             get => (_internal as Data.Models.Metadata.DipValue)?.Default;
             set => (_internal as Data.Models.Metadata.DipValue)?.Default = value;
+        }
+
+        public string? Value
+        {
+            get => (_internal as Data.Models.Metadata.DipValue)?.Value;
+            set => (_internal as Data.Models.Metadata.DipValue)?.Value = value;
         }
 
         #endregion

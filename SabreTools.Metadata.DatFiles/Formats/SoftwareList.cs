@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
@@ -122,17 +122,17 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                     if (string.IsNullOrEmpty(dipSwitch.GetName()))
                         missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Name));
-                    if (string.IsNullOrEmpty(dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.TagKey)))
-                        missingFields.Add(Data.Models.Metadata.DipSwitch.TagKey);
-                    if (string.IsNullOrEmpty(dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.MaskKey)))
-                        missingFields.Add(Data.Models.Metadata.DipSwitch.MaskKey);
+                    if (string.IsNullOrEmpty(dipSwitch.Tag))
+                        missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Tag));
+                    if (string.IsNullOrEmpty(dipSwitch.Mask))
+                        missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Mask));
                     if (dipSwitch.ValuesSpecified)
                     {
                         var dipValues = dipSwitch.Read<DipValue[]?>(Data.Models.Metadata.DipSwitch.DipValueKey);
                         if (Array.Find(dipValues!, dv => string.IsNullOrEmpty(dv.GetName())) is not null)
                             missingFields.Add(nameof(Data.Models.Metadata.DipValue.Name));
-                        if (Array.Find(dipValues!, dv => string.IsNullOrEmpty(dv.ReadString(Data.Models.Metadata.DipValue.ValueKey))) is not null)
-                            missingFields.Add(Data.Models.Metadata.DipValue.ValueKey);
+                        if (Array.Find(dipValues!, dv => string.IsNullOrEmpty(dv.Value)) is not null)
+                            missingFields.Add(nameof(Data.Models.Metadata.DipValue.Value));
                     }
 
                     break;

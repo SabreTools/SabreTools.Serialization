@@ -114,14 +114,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = string.Empty;
-            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
+            datFile.Header.Description = string.Empty;
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
             Assert.Equal("Filename (1980-01-01)", datFile.Header.Name);
-            Assert.Equal("Filename (1980-01-01)", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Filename (1980-01-01)", datFile.Header.Description);
         }
 
         [Fact]
@@ -129,14 +129,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = string.Empty;
-            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
+            datFile.Header.Description = string.Empty;
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
             Assert.Equal("Filename", datFile.Header.Name);
-            Assert.Equal("Filename", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Filename", datFile.Header.Description);
         }
 
         [Fact]
@@ -144,14 +144,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = string.Empty;
-            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description");
+            datFile.Header.Description = "Description";
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
             Assert.Equal("Description (1980-01-01)", datFile.Header.Name);
-            Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Description", datFile.Header.Description);
         }
 
         [Fact]
@@ -159,14 +159,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = string.Empty;
-            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description");
+            datFile.Header.Description = "Description";
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
             Assert.Equal("Description", datFile.Header.Name);
-            Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Description", datFile.Header.Description);
         }
 
         [Fact]
@@ -174,14 +174,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "Name";
-            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
+            datFile.Header.Description = string.Empty;
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
             Assert.Equal("Name", datFile.Header.Name);
-            Assert.Equal("Name (1980-01-01)", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Name (1980-01-01)", datFile.Header.Description);
         }
 
         [Fact]
@@ -189,14 +189,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "Name";
-            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
+            datFile.Header.Description = string.Empty;
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
             Assert.Equal("Name", datFile.Header.Name);
-            Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Name", datFile.Header.Description);
         }
 
         [Fact]
@@ -204,14 +204,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "Name";
-            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description");
+            datFile.Header.Description = "Description";
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
             Assert.Equal("Name", datFile.Header.Name);
-            Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Description", datFile.Header.Description);
         }
 
         [Fact]
@@ -219,14 +219,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "Name ";
-            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description ");
+            datFile.Header.Description = "Description ";
             datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
             Assert.Equal("Name", datFile.Header.Name);
-            Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Description", datFile.Header.Description);
         }
 
         #endregion

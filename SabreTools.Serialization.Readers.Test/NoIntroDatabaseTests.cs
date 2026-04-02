@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Alt = "XXXXXX",
                 GameId1 = "XXXXXX",
                 GameId2 = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 Bios = "XXXXXX",
                 Licensed = "XXXXXX",
                 Pirate = "XXXXXX",
@@ -311,7 +311,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", archive.Alt);
             Assert.Equal("XXXXXX", archive.GameId1);
             Assert.Equal("XXXXXX", archive.GameId2);
-            Assert.Equal("XXXXXX", archive.Description);
+            Assert.Equal("description", archive.Description);
             Assert.Equal("XXXXXX", archive.Bios);
             Assert.Equal("XXXXXX", archive.Licensed);
             Assert.Equal("XXXXXX", archive.Pirate);

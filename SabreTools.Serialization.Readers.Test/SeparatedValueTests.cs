@@ -137,9 +137,9 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 GameName = "XXXXXX",
-                GameDescription = "XXXXXX",
+                GameDescription = "description",
                 Type = "disk",
                 DiskName = "XXXXXX",
                 MD5 = "XXXXXX",
@@ -151,9 +151,9 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 GameName = "XXXXXX",
-                GameDescription = "XXXXXX",
+                GameDescription = "description",
                 Type = "media",
                 DiskName = "XXXXXX",
                 MD5 = "XXXXXX",
@@ -166,9 +166,9 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 GameName = "XXXXXX",
-                GameDescription = "XXXXXX",
+                GameDescription = "description",
                 Type = "rom",
                 RomName = "XXXXXX",
                 Size = "XXXXXX",
@@ -209,9 +209,9 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);
             Assert.Equal("XXXXXX", row.InternalName);
-            Assert.Equal("XXXXXX", row.Description);
+            Assert.Equal("description", row.Description);
             Assert.Equal("XXXXXX", row.GameName);
-            Assert.Equal("XXXXXX", row.GameDescription);
+            Assert.Equal("description", row.GameDescription);
             Assert.Equal("disk", row.Type);
             Assert.NotNull(row.RomName); Assert.Empty(row.RomName);
             Assert.Equal("XXXXXX", row.DiskName);
@@ -244,9 +244,9 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);
             Assert.Equal("XXXXXX", row.InternalName);
-            Assert.Equal("XXXXXX", row.Description);
+            Assert.Equal("description", row.Description);
             Assert.Equal("XXXXXX", row.GameName);
-            Assert.Equal("XXXXXX", row.GameDescription);
+            Assert.Equal("description", row.GameDescription);
             Assert.Equal("media", row.Type);
             Assert.NotNull(row.RomName); Assert.Empty(row.RomName);
             Assert.Equal("XXXXXX", row.DiskName);
@@ -279,9 +279,9 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);
             Assert.Equal("XXXXXX", row.InternalName);
-            Assert.Equal("XXXXXX", row.Description);
+            Assert.Equal("description", row.Description);
             Assert.Equal("XXXXXX", row.GameName);
-            Assert.Equal("XXXXXX", row.GameDescription);
+            Assert.Equal("description", row.GameDescription);
             Assert.Equal("rom", row.Type);
             Assert.Equal("XXXXXX", row.RomName);
             Assert.NotNull(row.DiskName);

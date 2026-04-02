@@ -8,6 +8,8 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? Description { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? IsBios { get; set; }
 
@@ -75,9 +77,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string CountryKey = "country";
-
-        /// <remarks>string</remarks>
-        public const string DescriptionKey = "description";
 
         /// <remarks>Device[]</remarks>
         [NoFilter]

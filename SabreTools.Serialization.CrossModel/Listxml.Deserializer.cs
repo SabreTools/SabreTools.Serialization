@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.CrossModel
                 CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
                 RomOf = item.ReadString(Data.Models.Metadata.Machine.RomOfKey),
                 SampleOf = item.ReadString(Data.Models.Metadata.Machine.SampleOfKey),
-                Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
+                Description = item.Description,
                 Year = item.ReadString(Data.Models.Metadata.Machine.YearKey),
                 Manufacturer = item.ReadString(Data.Models.Metadata.Machine.ManufacturerKey),
                 History = item.ReadString(Data.Models.Metadata.Machine.HistoryKey),
@@ -166,7 +166,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var analog = new Analog
             {
-                Mask = item.ReadString(Data.Models.Metadata.Analog.MaskKey),
+                Mask = item.Mask,
             };
             return analog;
         }
@@ -179,7 +179,7 @@ namespace SabreTools.Serialization.CrossModel
             var biosset = new BiosSet
             {
                 Name = item.Name,
-                Description = item.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey),
+                Description = item.Description,
                 Default = item.Default,
             };
             return biosset;
@@ -193,7 +193,7 @@ namespace SabreTools.Serialization.CrossModel
             var chip = new Chip
             {
                 Name = item.Name,
-                Tag = item.ReadString(Data.Models.Metadata.Chip.TagKey),
+                Tag = item.Tag,
                 Type = item.ChipType,
                 SoundOnly = item.SoundOnly,
                 Clock = item.ReadString(Data.Models.Metadata.Chip.ClockKey),
@@ -208,10 +208,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var condition = new Condition
             {
-                Tag = item.ReadString(Data.Models.Metadata.Condition.TagKey),
-                Mask = item.ReadString(Data.Models.Metadata.Condition.MaskKey),
+                Tag = item.Tag,
+                Mask = item.Mask,
                 Relation = item.Relation,
-                Value = item.ReadString(Data.Models.Metadata.Condition.ValueKey),
+                Value = item.Value,
             };
             return condition;
         }
@@ -224,8 +224,8 @@ namespace SabreTools.Serialization.CrossModel
             var configuration = new Configuration
             {
                 Name = item.Name,
-                Tag = item.ReadString(Data.Models.Metadata.Configuration.TagKey),
-                Mask = item.ReadString(Data.Models.Metadata.Configuration.MaskKey),
+                Tag = item.Tag,
+                Mask = item.Mask,
             };
 
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Configuration.ConditionKey);
@@ -265,7 +265,7 @@ namespace SabreTools.Serialization.CrossModel
             var confSetting = new ConfSetting
             {
                 Name = item.Name,
-                Value = item.ReadString(Data.Models.Metadata.ConfSetting.ValueKey),
+                Value = item.Value,
                 Default = item.Default,
             };
 
@@ -307,7 +307,7 @@ namespace SabreTools.Serialization.CrossModel
             var device = new Device
             {
                 Type = item.DeviceType,
-                Tag = item.ReadString(Data.Models.Metadata.Device.TagKey),
+                Tag = item.Tag,
                 FixedImage = item.ReadString(Data.Models.Metadata.Device.FixedImageKey),
                 Mandatory = item.Mandatory,
                 Interface = item.ReadString(Data.Models.Metadata.Device.InterfaceKey),
@@ -358,8 +358,8 @@ namespace SabreTools.Serialization.CrossModel
             var dipSwitch = new DipSwitch
             {
                 Name = item.Name,
-                Tag = item.ReadString(Data.Models.Metadata.DipSwitch.TagKey),
-                Mask = item.ReadString(Data.Models.Metadata.DipSwitch.MaskKey),
+                Tag = item.Tag,
+                Mask = item.Mask,
             };
 
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
@@ -385,7 +385,7 @@ namespace SabreTools.Serialization.CrossModel
             var dipValue = new DipValue
             {
                 Name = item.Name,
-                Value = item.ReadString(Data.Models.Metadata.DipValue.ValueKey),
+                Value = item.Value,
                 Default = item.Default,
             };
 
@@ -423,7 +423,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var display = new Display
             {
-                Tag = item.ReadString(Data.Models.Metadata.Display.TagKey),
+                Tag = item.Tag,
                 Type = item.DisplayType,
                 Rotate = item.ReadString(Data.Models.Metadata.Display.RotateKey),
                 FlipX = item.FlipX,
@@ -534,7 +534,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var port = new Port
             {
-                Tag = item.ReadString(Data.Models.Metadata.Port.TagKey),
+                Tag = item.Tag,
             };
 
             var analogs = item.Read<Data.Models.Metadata.Analog[]>(Data.Models.Metadata.Port.AnalogKey);
@@ -631,7 +631,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var softwareList = new Data.Models.Listxml.SoftwareList
             {
-                Tag = item.ReadString(Data.Models.Metadata.SoftwareList.TagKey),
+                Tag = item.Tag,
                 Name = item.Name,
                 Status = item.Status,
                 Filter = item.ReadString(Data.Models.Metadata.SoftwareList.FilterKey),

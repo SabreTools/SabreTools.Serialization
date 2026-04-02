@@ -11,7 +11,11 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Default { get; set; }
 
+        public string? Mask { get; set; }
+
         public string? Name { get; set; }
+
+        public string? Tag { get; set; }
 
         #endregion
 
@@ -31,12 +35,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string[]</remarks>
         public const string EntryKey = "entry";
-
-        /// <remarks>string</remarks>
-        public const string MaskKey = "mask";
-
-        /// <remarks>string</remarks>
-        public const string TagKey = "tag";
 
         #endregion
 

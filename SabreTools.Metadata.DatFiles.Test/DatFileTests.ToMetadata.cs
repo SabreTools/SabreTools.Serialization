@@ -382,7 +382,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("date", header.ReadString(Data.Models.Metadata.Header.DateKey));
             Assert.Equal("datversion", header.ReadString(Data.Models.Metadata.Header.DatVersionKey));
             Assert.True(header.Debug);
-            Assert.Equal("description", header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("description", header.Description);
             Assert.Equal("email", header.ReadString(Data.Models.Metadata.Header.EmailKey));
             Assert.Equal("emulatorversion", header.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey));
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, header.ForceMerging);
@@ -430,7 +430,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("company", machine.ReadString(Data.Models.Metadata.Machine.CompanyKey));
             Assert.Equal("control", machine.ReadString(Data.Models.Metadata.Machine.ControlKey));
             Assert.Equal("country", machine.ReadString(Data.Models.Metadata.Machine.CountryKey));
-            Assert.Equal("description", machine.ReadString(Data.Models.Metadata.Machine.DescriptionKey));
+            Assert.Equal("description", machine.Description);
             Assert.Equal("dirname", machine.ReadString(Data.Models.Metadata.Machine.DirNameKey));
             Assert.Equal("displaycount", machine.ReadString(Data.Models.Metadata.Machine.DisplayCountKey));
             Assert.Equal("displaytype", machine.ReadString(Data.Models.Metadata.Machine.DisplayTypeKey));
@@ -629,7 +629,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataAnalog(Data.Models.Metadata.Analog? analog)
         {
             Assert.NotNull(analog);
-            Assert.Equal("mask", analog.ReadString(Data.Models.Metadata.Analog.MaskKey));
+            Assert.Equal("mask", analog.Mask);
         }
 
         private static void ValidateMetadataArchive(Data.Models.Metadata.Archive? archive)
@@ -655,7 +655,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("alt", archive.ReadString(Data.Models.Metadata.Archive.AltKey));
             Assert.Equal("gameid1", archive.ReadString(Data.Models.Metadata.Archive.GameId1Key));
             Assert.Equal("gameid2", archive.ReadString(Data.Models.Metadata.Archive.GameId2Key));
-            Assert.Equal("description", archive.ReadString(Data.Models.Metadata.Archive.DescriptionKey));
+            Assert.Equal("description", archive.Description);
             Assert.Equal("bios", archive.ReadString(Data.Models.Metadata.Archive.BiosKey));
             Assert.Equal("licensed", archive.ReadString(Data.Models.Metadata.Archive.LicensedKey));
             Assert.Equal("pirate", archive.ReadString(Data.Models.Metadata.Archive.PirateKey));
@@ -674,7 +674,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(biosSet);
             Assert.True(biosSet.Default);
-            Assert.Equal("description", biosSet.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey));
+            Assert.Equal("description", biosSet.Description);
             Assert.Equal("name", biosSet.Name);
         }
 
@@ -685,25 +685,25 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("flags", chip.ReadString(Data.Models.Metadata.Chip.FlagsKey));
             Assert.Equal("name", chip.Name);
             Assert.True(chip.SoundOnly);
-            Assert.Equal("tag", chip.ReadString(Data.Models.Metadata.Chip.TagKey));
+            Assert.Equal("tag", chip.Tag);
             Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.ChipType);
         }
 
         private static void ValidateMetadataCondition(Data.Models.Metadata.Condition? condition)
         {
             Assert.NotNull(condition);
-            Assert.Equal("value", condition.ReadString(Data.Models.Metadata.Condition.ValueKey));
-            Assert.Equal("mask", condition.ReadString(Data.Models.Metadata.Condition.MaskKey));
+            Assert.Equal("value", condition.Value);
+            Assert.Equal("mask", condition.Mask);
             Assert.Equal(Data.Models.Metadata.Relation.Equal, condition.Relation);
-            Assert.Equal("tag", condition.ReadString(Data.Models.Metadata.Condition.TagKey));
+            Assert.Equal("tag", condition.Tag);
         }
 
         private static void ValidateMetadataConfiguration(Data.Models.Metadata.Configuration? configuration)
         {
             Assert.NotNull(configuration);
-            Assert.Equal("mask", configuration.ReadString(Data.Models.Metadata.Configuration.MaskKey));
+            Assert.Equal("mask", configuration.Mask);
             Assert.Equal("name", configuration.Name);
-            Assert.Equal("tag", configuration.ReadString(Data.Models.Metadata.Configuration.TagKey));
+            Assert.Equal("tag", configuration.Tag);
 
             Data.Models.Metadata.Condition? condition = configuration.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Configuration.ConditionKey);
             ValidateMetadataCondition(condition);
@@ -732,7 +732,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(confSetting);
             Assert.True(confSetting.Default);
             Assert.Equal("name", confSetting.Name);
-            Assert.Equal("value", confSetting.ReadString(Data.Models.Metadata.ConfSetting.ValueKey));
+            Assert.Equal("value", confSetting.Value);
 
             Data.Models.Metadata.Condition? condition = confSetting.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
             ValidateMetadataCondition(condition);
@@ -775,7 +775,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("fixedimage", device.ReadString(Data.Models.Metadata.Device.FixedImageKey));
             Assert.Equal("interface", device.ReadString(Data.Models.Metadata.Device.InterfaceKey));
             Assert.Equal(true, device.Mandatory);
-            Assert.Equal("tag", device.ReadString(Data.Models.Metadata.Device.TagKey));
+            Assert.Equal("tag", device.Tag);
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.DeviceType);
 
             Data.Models.Metadata.Extension[]? extensions = device.ReadArray<Data.Models.Metadata.Extension>(Data.Models.Metadata.Device.ExtensionKey);
@@ -805,9 +805,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(dipSwitch);
             Assert.True(dipSwitch.Default);
-            Assert.Equal("mask", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.MaskKey));
+            Assert.Equal("mask", dipSwitch.Mask);
             Assert.Equal("name", dipSwitch.Name);
-            Assert.Equal("tag", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.TagKey));
+            Assert.Equal("tag", dipSwitch.Tag);
 
             Data.Models.Metadata.Condition? condition = dipSwitch.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
             ValidateMetadataCondition(condition);
@@ -833,7 +833,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(dipValue);
             Assert.True(dipValue.Default);
             Assert.Equal("name", dipValue.Name);
-            Assert.Equal("value", dipValue.ReadString(Data.Models.Metadata.DipValue.ValueKey));
+            Assert.Equal("value", dipValue.Value);
 
             Data.Models.Metadata.Condition? condition = dipValue.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
             ValidateMetadataCondition(condition);
@@ -875,7 +875,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345, display.ReadLong(Data.Models.Metadata.Display.PixClockKey));
             Assert.Equal(12345, display.ReadLong(Data.Models.Metadata.Display.RefreshKey));
             Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
-            Assert.Equal("tag", display.ReadString(Data.Models.Metadata.Display.TagKey));
+            Assert.Equal("tag", display.Tag);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
             Assert.Equal(12345, display.ReadLong(Data.Models.Metadata.Display.VBEndKey));
             Assert.Equal(12345, display.ReadLong(Data.Models.Metadata.Display.VBStartKey));
@@ -913,14 +913,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.FeatureStatus.Imperfect, feature.Overall);
             Assert.Equal(Data.Models.Metadata.FeatureStatus.Imperfect, feature.Status);
             Assert.Equal(Data.Models.Metadata.FeatureType.Protection, feature.FeatureType);
-            Assert.Equal("value", feature.ReadString(Data.Models.Metadata.Feature.ValueKey));
+            Assert.Equal("value", feature.Value);
         }
 
         private static void ValidateMetadataInfo(Data.Models.Metadata.Info? info)
         {
             Assert.NotNull(info);
             Assert.Equal("name", info.Name);
-            Assert.Equal("value", info.ReadString(Data.Models.Metadata.Info.ValueKey));
+            Assert.Equal("value", info.Value);
         }
 
         private static void ValidateMetadataInput(Data.Models.Metadata.Input? input)
@@ -985,7 +985,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataPort(Data.Models.Metadata.Port? port)
         {
             Assert.NotNull(port);
-            Assert.Equal("tag", port.ReadString(Data.Models.Metadata.Port.TagKey));
+            Assert.Equal("tag", port.Tag);
 
             Data.Models.Metadata.Analog[]? dipValues = port.ReadArray<Data.Models.Metadata.Analog>(Data.Models.Metadata.Port.AnalogKey);
             Assert.NotNull(dipValues);
@@ -1113,7 +1113,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("title", rom.ReadString(Data.Models.Metadata.Rom.TitleKey));
             Assert.Equal("track", rom.ReadString(Data.Models.Metadata.Rom.TrackKey));
             Assert.Equal("type", rom.ReadString(Data.Models.Metadata.Rom.OpenMSXType));
-            Assert.Equal("value", rom.ReadString(Data.Models.Metadata.Rom.ValueKey));
+            Assert.Equal("value", rom.Value);
             Assert.Equal("whisper_asr_module_version", rom.ReadString(Data.Models.Metadata.Rom.WhisperASRModuleVersionKey));
             Assert.Equal("whisper_model_hash", rom.ReadString(Data.Models.Metadata.Rom.WhisperModelHashKey));
             Assert.Equal("whisper_model_name", rom.ReadString(Data.Models.Metadata.Rom.WhisperModelNameKey));
@@ -1162,7 +1162,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(sharedFeat);
             Assert.Equal("name", sharedFeat.Name);
-            Assert.Equal("value", sharedFeat.ReadString(Data.Models.Metadata.SharedFeat.ValueKey));
+            Assert.Equal("value", sharedFeat.Value);
         }
 
         private static void ValidateMetadataSlot(Data.Models.Metadata.Slot? slot)
@@ -1187,12 +1187,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataSoftwareList(Data.Models.Metadata.SoftwareList? softwareList)
         {
             Assert.NotNull(softwareList);
-            Assert.Equal("description", softwareList.ReadString(Data.Models.Metadata.SoftwareList.DescriptionKey));
+            Assert.Equal("description", softwareList.Description);
             Assert.Equal("filter", softwareList.ReadString(Data.Models.Metadata.SoftwareList.FilterKey));
             Assert.Equal("name", softwareList.Name);
             Assert.Equal("notes", softwareList.ReadString(Data.Models.Metadata.SoftwareList.NotesKey));
             Assert.Equal(Data.Models.Metadata.SoftwareListStatus.Original, softwareList.Status);
-            Assert.Equal("tag", softwareList.ReadString(Data.Models.Metadata.SoftwareList.TagKey));
+            Assert.Equal("tag", softwareList.Tag);
 
             // TODO: Figure out why Data.Models.Metadata.SoftwareList.SoftwareKey doesn't get processed
         }

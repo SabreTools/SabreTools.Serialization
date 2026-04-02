@@ -352,8 +352,19 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Default.FromYesNo();
                     return true;
 
+                case Analog item when fieldName == "mask":
+                    checkValue = item.Mask;
+                    return true;
+
+                case Archive item when fieldName == "description":
+                    checkValue = item.Description;
+                    return true;
+
                 case BiosSet item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
+                    return true;
+                case BiosSet item when fieldName == "description":
+                    checkValue = item.Description;
                     return true;
 
                 case Chip item when fieldName == "type":
@@ -362,9 +373,28 @@ namespace SabreTools.Metadata.Filter
                 case Chip item when fieldName == "soundonly":
                     checkValue = item.SoundOnly.FromYesNo();
                     return true;
+                case Chip item when fieldName == "tag":
+                    checkValue = item.Tag;
+                    return true;
 
+                case Condition item when fieldName == "mask":
+                    checkValue = item.Mask;
+                    return true;
                 case Condition item when fieldName == "relation":
                     checkValue = item.Relation?.AsStringValue();
+                    return true;
+                case Condition item when fieldName == "tag":
+                    checkValue = item.Tag;
+                    return true;
+                case Condition item when fieldName == "value":
+                    checkValue = item.Value;
+                    return true;
+
+                case Configuration item when fieldName == "mask":
+                    checkValue = item.Mask;
+                    return true;
+                case Configuration item when fieldName == "tag":
+                    checkValue = item.Tag;
                     return true;
 
                 case ConfLocation item when fieldName == "inverted":
@@ -373,6 +403,9 @@ namespace SabreTools.Metadata.Filter
 
                 case ConfSetting item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
+                    return true;
+                case ConfSetting item when fieldName == "value":
+                    checkValue = item.Value;
                     return true;
 
                 case Control item when fieldName == "type":
@@ -392,21 +425,33 @@ namespace SabreTools.Metadata.Filter
                 case Device item when fieldName == "mandatory":
                     checkValue = item.Mandatory.FromYesNo();
                     return true;
+                case Device item when fieldName == "tag":
+                    checkValue = item.Tag;
+                    return true;
 
                 case DipLocation item when fieldName == "inverted":
                     checkValue = item.Inverted.FromYesNo();
                     return true;
 
-                case DipLocation item when fieldName == "inverted":
+                case DipLocation item when fieldName == "invertwed":
                     checkValue = item.Inverted.FromYesNo();
                     return true;
 
                 case DipSwitch item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
+                case DipSwitch item when fieldName == "mask":
+                    checkValue = item.Mask;
+                    return true;
+                case DipSwitch item when fieldName == "tag":
+                    checkValue = item.Tag;
+                    return true;
 
                 case DipValue item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
+                    return true;
+                case DipValue item when fieldName == "value":
+                    checkValue = item.Value;
                     return true;
 
                 case Disk item when fieldName == "optional":
@@ -424,6 +469,9 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case Display item when fieldName == "type":
                     checkValue = item.DisplayType?.AsStringValue();
+                    return true;
+                case Display item when fieldName == "tag":
+                    checkValue = item.Tag;
                     return true;
 
                 case Driver item when fieldName == "blit":
@@ -469,12 +517,18 @@ namespace SabreTools.Metadata.Filter
                 case Feature item when fieldName == "type":
                     checkValue = item.FeatureType?.AsStringValue();
                     return true;
+                case Feature item when fieldName == "value":
+                    checkValue = item.Value;
+                    return true;
 
                 case Header item when fieldName == "biosmode":
                     checkValue = item.BiosMode.AsStringValue();
                     return true;
                 case Header item when fieldName == "debug":
                     checkValue = item.Debug.FromYesNo();
+                    return true;
+                case Header item when fieldName == "description":
+                    checkValue = item.Description;
                     return true;
                 case Header item when fieldName == "forcemerging":
                     checkValue = item.ForceMerging.AsStringValue();
@@ -504,6 +558,10 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.SampleMode.AsStringValue();
                     return true;
 
+                case Info item when fieldName == "value":
+                    checkValue = item.Value;
+                    return true;
+
                 case Input item when fieldName == "service":
                     checkValue = item.Service.FromYesNo();
                     return true;
@@ -511,6 +569,9 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Tilt.FromYesNo();
                     return true;
 
+                case Machine item when fieldName == "description":
+                    checkValue = item.Description;
+                    return true;
                 case Machine item when fieldName == "isbios":
                     checkValue = item.IsBios.FromYesNo();
                     return true;
@@ -525,6 +586,10 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case Machine item when fieldName == "supported":
                     checkValue = item.Supported?.AsStringValue();
+                    return true;
+
+                case Port item when fieldName == "tag":
+                    checkValue = item.Tag;
                     return true;
 
                 case RamOption item when fieldName == "default":
@@ -562,17 +627,33 @@ namespace SabreTools.Metadata.Filter
                 case Rom item when fieldName == "status":
                     checkValue = item.Status?.AsStringValue();
                     return true;
+                case Rom item when fieldName == "value":
+                    checkValue = item.Value;
+                    return true;
+
+                case SharedFeat item when fieldName == "value":
+                    checkValue = item.Value;
+                    return true;
 
                 case SlotOption item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
 
+                case Software item when fieldName == "description":
+                    checkValue = item.Description;
+                    return true;
                 case Software item when fieldName == "supported":
                     checkValue = item.Supported?.AsStringValue();
                     return true;
 
+                case SoftwareList item when fieldName == "description":
+                    checkValue = item.Description;
+                    return true;
                 case SoftwareList item when fieldName == "status":
                     checkValue = item.Status?.AsStringValue();
+                    return true;
+                case SoftwareList item when fieldName == "tag":
+                    checkValue = item.Tag;
                     return true;
 
                 case Video item when fieldName == "screen":

@@ -208,13 +208,13 @@ namespace SabreTools.Serialization.Readers.Test
             var find = new Data.Models.OfflineList.Find
             {
                 Operation = "XXXXXX",
-                Value = "XXXXXX",
+                Value = "value",
                 Content = "XXXXXX",
             };
 
             var to = new Data.Models.OfflineList.To
             {
-                Value = "XXXXXX",
+                Value = "value",
                 Default = true,
                 Auto = "XXXXXX",
                 Find = [find],
@@ -404,7 +404,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.OfflineList.To? to)
         {
             Assert.NotNull(to);
-            Assert.Equal("XXXXXX", to.Value);
+            Assert.Equal("value", to.Value);
             Assert.Equal(true, to.Default);
             Assert.Equal("XXXXXX", to.Auto);
 
@@ -420,7 +420,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(find);
             Assert.Equal("XXXXXX", find.Operation);
-            Assert.Equal("XXXXXX", find.Value);
+            Assert.Equal("value", find.Value);
             Assert.Equal("XXXXXX", find.Content);
         }
 

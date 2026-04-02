@@ -14,6 +14,8 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(0|1) "0"</remarks>
         public bool? Mandatory { get; set; }
 
+        public string? Tag { get; set; }
+
         #endregion
 
         #region Keys
@@ -31,9 +33,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string InterfaceKey = "interface";
-
-        /// <remarks>string</remarks>
-        public const string TagKey = "tag";
 
         #endregion
 
