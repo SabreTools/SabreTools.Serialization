@@ -88,6 +88,7 @@ Below is a list of all existing namespaces with the `SabreTools.Data.Models` pre
 | `Xbox` | Xbox and Xbox 360 file formats |
 | `XboxExecutable` | Xbox Executable (XBE) |
 | `XDVDFS` | Xbox DVD Filesystem (XISO) |
+| `XenonExecutable` | Xenon (Xbox 360) Executable (XEX) |
 | `XZ` | xz archive |
 | `XZP` | XBox Package File |
 | `ZSTD` | ZSTD archive |

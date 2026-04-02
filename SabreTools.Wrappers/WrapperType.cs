@@ -294,6 +294,11 @@ namespace SabreTools.Wrappers
         XDVDFS,
 
         /// <summary>
+        /// Xenon (Xbox 360) Executable
+        /// </summary>
+        XenonExecutable,
+
+        /// <summary>
         /// xz archive
         /// </summary>
         XZ,
