@@ -8,17 +8,12 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? Content { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Default { get; set; }
 
         public string? Name { get; set; }
-
-        #endregion
-
-        #region Keys
-
-        /// <remarks>string</remarks>
-        public const string ContentKey = "content";
 
         #endregion
 

@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.CrossModel
             var part = new Part
             {
                 Name = item.Name,
-                Interface = item.ReadString(Data.Models.Metadata.Part.InterfaceKey),
+                Interface = item.Interface,
             };
 
             var features = item.Read<Data.Models.Metadata.Feature[]>(Data.Models.Metadata.Part.FeatureKey);

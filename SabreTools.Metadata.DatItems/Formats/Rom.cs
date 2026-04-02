@@ -108,7 +108,7 @@ namespace SabreTools.Metadata.DatItems.Formats
                 var part = Read<Part?>(PartKey);
                 return part is not null
                     && (!string.IsNullOrEmpty(part.Name)
-                        || !string.IsNullOrEmpty(part.ReadString(Data.Models.Metadata.Part.InterfaceKey)));
+                        || !string.IsNullOrEmpty(part.Interface));
             }
         }
 
@@ -183,7 +183,7 @@ namespace SabreTools.Metadata.DatItems.Formats
                 Write<Original?>("ORIGINAL", new Original
                 {
                     Value = original.ReadBool(Data.Models.Metadata.Original.ValueKey),
-                    Content = original.ReadString(Data.Models.Metadata.Original.ContentKey),
+                    Content = original.Content,
                 });
             }
 

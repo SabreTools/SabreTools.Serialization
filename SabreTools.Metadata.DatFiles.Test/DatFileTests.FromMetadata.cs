@@ -482,9 +482,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Device
             {
                 [Data.Models.Metadata.Device.ExtensionKey] = new Data.Models.Metadata.Extension[] { CreateMetadataExtension() },
-                [Data.Models.Metadata.Device.FixedImageKey] = "fixedimage",
+                FixedImage = "fixedimage",
                 [Data.Models.Metadata.Device.InstanceKey] = CreateMetadataInstance(),
-                [Data.Models.Metadata.Device.InterfaceKey] = "interface",
+                Interface = "interface",
                 Mandatory = true,
                 Tag = "tag",
                 DeviceType = Data.Models.Metadata.DeviceType.PunchTape,
@@ -673,7 +673,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Instance
             {
-                [Data.Models.Metadata.Instance.BriefNameKey] = "briefname",
+                BriefName = "briefname",
                 Name = "name",
             };
         }
@@ -694,7 +694,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Original
             {
-                [Data.Models.Metadata.Original.ContentKey] = "content",
+                Content = "content",
                 [Data.Models.Metadata.Original.ValueKey] = true,
             };
         }
@@ -707,7 +707,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Part.DiskAreaKey] = new Data.Models.Metadata.DiskArea[] { CreateMetadataDiskArea() },
                 [Data.Models.Metadata.Part.DipSwitchKey] = new Data.Models.Metadata.DipSwitch[] { [] },
                 [Data.Models.Metadata.Part.FeatureKey] = new Data.Models.Metadata.Feature[] { CreateMetadataFeature() },
-                [Data.Models.Metadata.Part.InterfaceKey] = "interface",
+                Interface = "interface",
                 Name = "name",
             };
         }
@@ -725,7 +725,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.RamOption
             {
-                [Data.Models.Metadata.RamOption.ContentKey] = "content",
+                Content = "content",
                 Default = true,
                 Name = "name",
             };
@@ -921,7 +921,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.SlotOption
             {
                 Default = true,
-                [Data.Models.Metadata.SlotOption.DevNameKey] = "devname",
+                DevName = "devname",
                 Name = "name",
             };
         }
@@ -1260,8 +1260,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateDevice(Device? device)
         {
             Assert.NotNull(device);
-            Assert.Equal("fixedimage", device.ReadString(Data.Models.Metadata.Device.FixedImageKey));
-            Assert.Equal("interface", device.ReadString(Data.Models.Metadata.Device.InterfaceKey));
+            Assert.Equal("fixedimage", device.FixedImage);
+            Assert.Equal("interface", device.Interface);
             Assert.Equal(true, device.Mandatory);
             Assert.Equal("tag", device.Tag);
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.DeviceType);
@@ -1424,7 +1424,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateInstance(Instance? instance)
         {
             Assert.NotNull(instance);
-            Assert.Equal("briefname", instance.ReadString(Data.Models.Metadata.Instance.BriefNameKey));
+            Assert.Equal("briefname", instance.BriefName);
             Assert.Equal("name", instance.Name);
         }
 
@@ -1441,7 +1441,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidatePart(Part? part)
         {
             Assert.NotNull(part);
-            Assert.Equal("interface", part.ReadString(Data.Models.Metadata.Part.InterfaceKey));
+            Assert.Equal("interface", part.Interface);
             Assert.Equal("name", part.Name);
         }
 
@@ -1472,7 +1472,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateRamOption(RamOption? ramOption)
         {
             Assert.NotNull(ramOption);
-            Assert.Equal("content", ramOption.ReadString(Data.Models.Metadata.RamOption.ContentKey));
+            Assert.Equal("content", ramOption.Content);
             Assert.True(ramOption.Default);
             Assert.Equal("name", ramOption.Name);
         }
@@ -1616,7 +1616,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(slotOption);
             Assert.True(slotOption.Default);
-            Assert.Equal("devname", slotOption.ReadString(Data.Models.Metadata.SlotOption.DevNameKey));
+            Assert.Equal("devname", slotOption.DevName);
             Assert.Equal("name", slotOption.Name);
         }
 

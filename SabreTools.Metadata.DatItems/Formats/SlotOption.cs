@@ -18,6 +18,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.SlotOption)?.Default = value;
         }
 
+        public string? DevName
+        {
+            get => (_internal as Data.Models.Metadata.SlotOption)?.DevName;
+            set => (_internal as Data.Models.Metadata.SlotOption)?.DevName = value;
+        }
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.SlotOption)?.Name;

@@ -79,7 +79,7 @@ namespace SabreTools.Metadata.DatItems.Formats
                 var part = Read<Part?>(PartKey);
                 return part is not null
                     && (!string.IsNullOrEmpty(part.Name)
-                        || !string.IsNullOrEmpty(part.ReadString(Data.Models.Metadata.Part.InterfaceKey)));
+                        || !string.IsNullOrEmpty(part.Interface));
             }
         }
 

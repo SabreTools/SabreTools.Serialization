@@ -12,6 +12,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public string? BriefName
+        {
+            get => (_internal as Data.Models.Metadata.Instance)?.BriefName;
+            set => (_internal as Data.Models.Metadata.Instance)?.BriefName = value;
+        }
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.Instance)?.Name;

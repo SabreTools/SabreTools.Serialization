@@ -203,6 +203,8 @@ namespace SabreTools.Data.Extensions
             else if (self is Device selfDevice && clone is Device cloneDevice)
             {
                 cloneDevice.DeviceType = selfDevice.DeviceType;
+                cloneDevice.FixedImage = selfDevice.FixedImage;
+                cloneDevice.Interface = selfDevice.Interface;
                 cloneDevice.Mandatory = selfDevice.Mandatory;
                 cloneDevice.Tag = selfDevice.Tag;
             }
@@ -278,6 +280,10 @@ namespace SabreTools.Data.Extensions
                 cloneInput.Service = selfInput.Service;
                 cloneInput.Tilt = selfInput.Tilt;
             }
+            else if (self is Instance selfInstance && clone is Instance cloneInstance)
+            {
+                cloneInstance.BriefName = selfInstance.BriefName;
+            }
             else if (self is Machine selfMachine && clone is Machine cloneMachine)
             {
                 cloneMachine.Description = selfMachine.Description;
@@ -287,12 +293,21 @@ namespace SabreTools.Data.Extensions
                 cloneMachine.Runnable = selfMachine.Runnable;
                 cloneMachine.Supported = selfMachine.Supported;
             }
+            else if (self is Original selfOriginal && clone is Original cloneOriginal)
+            {
+                cloneOriginal.Content = selfOriginal.Content;
+            }
+            else if (self is Part selfPart && clone is Part clonePart)
+            {
+                clonePart.Interface = selfPart.Interface;
+            }
             else if (self is Port selfPort && clone is Port clonePort)
             {
                 clonePort.Tag = selfPort.Tag;
             }
             else if (self is RamOption selfRamOption && clone is RamOption cloneRamOption)
             {
+                cloneRamOption.Content = selfRamOption.Content;
                 cloneRamOption.Default = selfRamOption.Default;
             }
             else if (self is Release selfRelease && clone is Release cloneRelease)
@@ -319,6 +334,7 @@ namespace SabreTools.Data.Extensions
             else if (self is SlotOption selfSlotOption && clone is SlotOption cloneSlotOption)
             {
                 cloneSlotOption.Default = selfSlotOption.Default;
+                cloneSlotOption.DevName = selfSlotOption.DevName;
             }
             else if (self is Software selfSoftware && clone is Software cloneSoftware)
             {

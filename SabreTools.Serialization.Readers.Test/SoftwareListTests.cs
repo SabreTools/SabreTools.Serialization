@@ -182,7 +182,7 @@ namespace SabreTools.Serialization.Readers.Test
             var part = new Data.Models.SoftwareList.Part
             {
                 Name = "name",
-                Interface = "XXXXXX",
+                Interface = "interface",
                 Feature = [feature],
                 DataArea = [dataarea],
                 DiskArea = [diskarea],
@@ -266,7 +266,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(part);
             Assert.Equal("name", part.Name);
-            Assert.Equal("XXXXXX", part.Interface);
+            Assert.Equal("interface", part.Interface);
 
             Assert.NotNull(part.Feature);
             var feature = Assert.Single(part.Feature);

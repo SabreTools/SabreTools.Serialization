@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.CrossModel
             var original = new Original
             {
                 Value = item.ReadString(Data.Models.Metadata.Original.ValueKey),
-                Content = item.ReadString(Data.Models.Metadata.Original.ContentKey),
+                Content = item.Content,
             };
             return original;
         }

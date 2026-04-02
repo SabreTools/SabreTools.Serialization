@@ -8,14 +8,9 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? BriefName { get; set; }
+
         public string? Name { get; set; }
-
-        #endregion
-
-        #region Keys
-
-        /// <remarks>string</remarks>
-        public const string BriefNameKey = "briefname";
 
         #endregion
 

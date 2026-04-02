@@ -343,9 +343,9 @@ namespace SabreTools.Serialization.CrossModel
             {
                 DeviceType = item.Type,
                 Tag = item.Tag,
-                [Data.Models.Metadata.Device.FixedImageKey] = item.FixedImage,
+                FixedImage = item.FixedImage,
                 Mandatory = item.Mandatory,
-                [Data.Models.Metadata.Device.InterfaceKey] = item.Interface,
+                Interface = item.Interface,
             };
 
             if (item.Instance is not null)
@@ -559,7 +559,7 @@ namespace SabreTools.Serialization.CrossModel
             var instance = new Data.Models.Metadata.Instance
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Instance.BriefNameKey] = item.BriefName,
+                BriefName = item.BriefName,
             };
             return instance;
         }
@@ -592,7 +592,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Default = item.Default,
-                [Data.Models.Metadata.RamOption.ContentKey] = item.Content,
+                Content = item.Content,
             };
             return ramOption;
         }
@@ -659,7 +659,7 @@ namespace SabreTools.Serialization.CrossModel
             var slotOption = new Data.Models.Metadata.SlotOption
             {
                 Name = item.Name,
-                [Data.Models.Metadata.SlotOption.DevNameKey] = item.DevName,
+                DevName = item.DevName,
                 Default = item.Default,
             };
             return slotOption;

@@ -23,6 +23,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public string? Interface
+        {
+            get => (_internal as Data.Models.Metadata.Part)?.Interface;
+            set => (_internal as Data.Models.Metadata.Part)?.Interface = value;
+        }
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.Part)?.Name;

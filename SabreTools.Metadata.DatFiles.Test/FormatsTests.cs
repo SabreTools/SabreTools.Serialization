@@ -1572,7 +1572,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Part.Name),
-                Data.Models.Metadata.Part.InterfaceKey,
+                nameof(Data.Models.Metadata.Part.Interface),
                 nameof(Data.Models.Metadata.DipSwitch.Name),
                 nameof(Data.Models.Metadata.DipSwitch.Tag),
                 nameof(Data.Models.Metadata.DipSwitch.Mask),
@@ -1590,7 +1590,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Part.Name),
-                Data.Models.Metadata.Part.InterfaceKey,
+                nameof(Data.Models.Metadata.Part.Interface),
                 nameof(Data.Models.Metadata.DiskArea.Name),
                 nameof(Data.Models.Metadata.Disk.Name),
             ]));
@@ -1621,7 +1621,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Part.Name),
-                Data.Models.Metadata.Part.InterfaceKey,
+                nameof(Data.Models.Metadata.Part.Interface),
                 nameof(Data.Models.Metadata.DataArea.Name),
                 Data.Models.Metadata.DataArea.SizeKey,
             ]));

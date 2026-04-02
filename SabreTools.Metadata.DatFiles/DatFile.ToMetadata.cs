@@ -325,8 +325,8 @@ namespace SabreTools.Metadata.DatFiles
 
                         // Copy over string values
                         partItems[partName].Name = partName;
-                        if (!partItems[partName].ContainsKey(Data.Models.Metadata.Part.InterfaceKey))
-                            partItems[partName][Data.Models.Metadata.Part.InterfaceKey] = partItem.ReadString(Data.Models.Metadata.Part.InterfaceKey);
+                        if (partItems[partName].Interface == null)
+                            partItems[partName].Interface = partItem.Interface;
 
                         // Clear any empty fields
                         ClearEmptyKeys(partItems[partName]);
@@ -751,8 +751,8 @@ namespace SabreTools.Metadata.DatFiles
 
                         // Copy over string values
                         partItems[partName].Name = partName;
-                        if (!partItems[partName].ContainsKey(Data.Models.Metadata.Part.InterfaceKey))
-                            partItems[partName][Data.Models.Metadata.Part.InterfaceKey] = partItem.ReadString(Data.Models.Metadata.Part.InterfaceKey);
+                        if (partItems[partName].Interface == null)
+                            partItems[partName].Interface = partItem.Interface;
 
                         // Clear any empty fields
                         ClearEmptyKeys(partItems[partName]);
@@ -998,7 +998,7 @@ namespace SabreTools.Metadata.DatFiles
                         var newOriginal = new Data.Models.Metadata.Original
                         {
                             [Data.Models.Metadata.Original.ValueKey] = romOriginal.Value.FromYesNo(),
-                            [Data.Models.Metadata.Original.ContentKey] = romOriginal.Content,
+                            Content = romOriginal.Content,
                         };
                         dumpRom[Data.Models.Metadata.Dump.OriginalKey] = newOriginal;
                     }
@@ -1026,7 +1026,7 @@ namespace SabreTools.Metadata.DatFiles
                         var newOriginal = new Data.Models.Metadata.Original
                         {
                             [Data.Models.Metadata.Original.ValueKey] = megaRomOriginal.Value.FromYesNo(),
-                            [Data.Models.Metadata.Original.ContentKey] = megaRomOriginal.Content,
+                            Content = megaRomOriginal.Content,
                         };
                         dumpMegaRom[Data.Models.Metadata.Dump.OriginalKey] = newOriginal;
                     }
@@ -1054,7 +1054,7 @@ namespace SabreTools.Metadata.DatFiles
                         var newOriginal = new Data.Models.Metadata.Original
                         {
                             [Data.Models.Metadata.Original.ValueKey] = sccPlusCartOriginal.Value.FromYesNo(),
-                            [Data.Models.Metadata.Original.ContentKey] = sccPlusCartOriginal.Content,
+                            Content = sccPlusCartOriginal.Content,
                         };
                         dumpSccPlusCart[Data.Models.Metadata.Dump.OriginalKey] = newOriginal;
                     }

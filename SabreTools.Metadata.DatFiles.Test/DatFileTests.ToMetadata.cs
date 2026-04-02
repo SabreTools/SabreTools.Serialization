@@ -772,8 +772,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataDevice(Data.Models.Metadata.Device? device)
         {
             Assert.NotNull(device);
-            Assert.Equal("fixedimage", device.ReadString(Data.Models.Metadata.Device.FixedImageKey));
-            Assert.Equal("interface", device.ReadString(Data.Models.Metadata.Device.InterfaceKey));
+            Assert.Equal("fixedimage", device.FixedImage);
+            Assert.Equal("interface", device.Interface);
             Assert.Equal(true, device.Mandatory);
             Assert.Equal("tag", device.Tag);
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.DeviceType);
@@ -941,7 +941,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataInstance(Data.Models.Metadata.Instance? instance)
         {
             Assert.NotNull(instance);
-            Assert.Equal("briefname", instance.ReadString(Data.Models.Metadata.Instance.BriefNameKey));
+            Assert.Equal("briefname", instance.BriefName);
             Assert.Equal("name", instance.Name);
         }
 
@@ -958,7 +958,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataPart(Data.Models.Metadata.Part? part)
         {
             Assert.NotNull(part);
-            Assert.Equal("interface", part.ReadString(Data.Models.Metadata.Part.InterfaceKey));
+            Assert.Equal("interface", part.Interface);
             Assert.Equal("name", part.Name);
 
             Data.Models.Metadata.DataArea[]? dataAreas = part.ReadArray<Data.Models.Metadata.DataArea>(Data.Models.Metadata.Part.DataAreaKey);
@@ -996,7 +996,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataRamOption(Data.Models.Metadata.RamOption? ramOption)
         {
             Assert.NotNull(ramOption);
-            Assert.Equal("content", ramOption.ReadString(Data.Models.Metadata.RamOption.ContentKey));
+            Assert.Equal("content", ramOption.Content);
             Assert.True(ramOption.Default);
             Assert.Equal("name", ramOption.Name);
         }
@@ -1180,7 +1180,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(slotOption);
             Assert.True(slotOption.Default);
-            Assert.Equal("devname", slotOption.ReadString(Data.Models.Metadata.SlotOption.DevNameKey));
+            Assert.Equal("devname", slotOption.DevName);
             Assert.Equal("name", slotOption.Name);
         }
 

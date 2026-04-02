@@ -11,6 +11,10 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(unknown|cartridge|floppydisk|harddisk|cylinder|cassette|punchcard|punchtape|printout|serial|parallel|snapshot|quickload|memcard|cdrom|magtape|romimage|midiin|midiout|picture|vidfile)</remarks>
         public DeviceType? DeviceType { get; set; }
 
+        public string? FixedImage { get; set; }
+
+        public string? Interface { get; set; }
+
         /// <remarks>(0|1) "0"</remarks>
         public bool? Mandatory { get; set; }
 
@@ -24,15 +28,9 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string ExtensionKey = "extension";
 
-        /// <remarks>string</remarks>
-        public const string FixedImageKey = "fixed_image";
-
         /// <remarks>Instance</remarks>
         [NoFilter]
         public const string InstanceKey = "instance";
-
-        /// <remarks>string</remarks>
-        public const string InterfaceKey = "interface";
 
         #endregion
 

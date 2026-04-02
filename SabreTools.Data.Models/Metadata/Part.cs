@@ -8,6 +8,8 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? Interface { get; set; }
+
         public string? Name { get; set; }
 
         #endregion
@@ -29,9 +31,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>Feature[]</remarks>
         [NoFilter]
         public const string FeatureKey = "feature";
-
-        /// <remarks>string</remarks>
-        public const string InterfaceKey = "interface";
 
         #endregion
 

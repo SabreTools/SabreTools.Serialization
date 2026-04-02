@@ -19,8 +19,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         [JsonProperty("content"), XmlElement("content")]
         public string? Content
         {
-            get => _internal.ReadString(Data.Models.Metadata.Original.ContentKey);
-            set => _internal[Data.Models.Metadata.Original.ContentKey] = value;
+            get => _internal.Content;
+            set => _internal.Content = value;
         }
 
         /// <summary>

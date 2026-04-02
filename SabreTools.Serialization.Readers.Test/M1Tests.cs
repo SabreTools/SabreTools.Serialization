@@ -343,7 +343,7 @@ namespace SabreTools.Serialization.Readers.Test
             var instance = new Data.Models.Listxml.Instance
             {
                 Name = "name",
-                BriefName = "XXXXXX",
+                BriefName = "briefname",
             };
 
             var extension = new Data.Models.Listxml.Extension
@@ -355,9 +355,9 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Type = Data.Models.Metadata.DeviceType.PunchTape,
                 Tag = "tag",
-                FixedImage = "XXXXXX",
+                FixedImage = "fixedimage",
                 Mandatory = true,
-                Interface = "XXXXXX",
+                Interface = "interface",
                 Instance = instance,
                 Extension = [extension],
             };
@@ -365,7 +365,7 @@ namespace SabreTools.Serialization.Readers.Test
             var slotOption = new Data.Models.Listxml.SlotOption
             {
                 Name = "name",
-                DevName = "XXXXXX",
+                DevName = "devname",
                 Default = true,
             };
 
@@ -387,7 +387,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Name = "name",
                 Default = true,
-                Content = "XXXXXX",
+                Content = "content",
             };
 
             Data.Models.Listxml.GameBase gameBase = game
@@ -860,9 +860,9 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(device);
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.Type);
             Assert.Equal("tag", device.Tag);
-            Assert.Equal("XXXXXX", device.FixedImage);
+            Assert.Equal("fixedimage", device.FixedImage);
             Assert.Equal(true, device.Mandatory);
-            Assert.Equal("XXXXXX", device.Interface);
+            Assert.Equal("interface", device.Interface);
             Validate(device.Instance);
 
             Assert.NotNull(device.Extension);
@@ -877,7 +877,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(instance);
             Assert.Equal("name", instance.Name);
-            Assert.Equal("XXXXXX", instance.BriefName);
+            Assert.Equal("briefname", instance.BriefName);
         }
 
         /// <summary>
@@ -909,7 +909,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(slotoption);
             Assert.Equal("name", slotoption.Name);
-            Assert.Equal("XXXXXX", slotoption.DevName);
+            Assert.Equal("devname", slotoption.DevName);
             Assert.Equal(true, slotoption.Default);
         }
 
@@ -933,7 +933,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(ramoption);
             Assert.Equal("name", ramoption.Name);
             Assert.Equal(true, ramoption.Default);
-            Assert.Equal("XXXXXX", ramoption.Content);
+            Assert.Equal("content", ramoption.Content);
         }
     }
 }

@@ -20,6 +20,22 @@ namespace SabreTools.Metadata.DatItems.Formats
         }
 
         [JsonIgnore]
+        public bool ExtensionsSpecified
+        {
+            get
+            {
+                var extensions = Read<Extension[]?>(Data.Models.Metadata.Device.ExtensionKey);
+                return extensions is not null && extensions.Length > 0;
+            }
+        }
+
+        public string? FixedImage
+        {
+            get => (_internal as Data.Models.Metadata.Device)?.FixedImage;
+            set => (_internal as Data.Models.Metadata.Device)?.FixedImage = value;
+        }
+
+        [JsonIgnore]
         public bool InstancesSpecified
         {
             get
@@ -29,14 +45,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
-        [JsonIgnore]
-        public bool ExtensionsSpecified
+        public string? Interface
         {
-            get
-            {
-                var extensions = Read<Extension[]?>(Data.Models.Metadata.Device.ExtensionKey);
-                return extensions is not null && extensions.Length > 0;
-            }
+            get => (_internal as Data.Models.Metadata.Device)?.Interface;
+            set => (_internal as Data.Models.Metadata.Device)?.Interface = value;
         }
 
         public bool? Mandatory
@@ -89,6 +101,12 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override Data.Models.Metadata.Device GetInternalClone()
         {
             var deviceItem = base.GetInternalClone();
+
+            deviceItem.DeviceType = DeviceType;
+            deviceItem.FixedImage = FixedImage;
+            deviceItem.Interface = Interface;
+            deviceItem.Mandatory = Mandatory;
+            deviceItem.Tag = Tag;
 
             var instance = Read<Instance?>(Data.Models.Metadata.Device.InstanceKey);
             if (instance is not null)

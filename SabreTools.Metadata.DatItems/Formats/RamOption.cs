@@ -12,6 +12,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Properties
 
+        public string? Content
+        {
+            get => (_internal as Data.Models.Metadata.RamOption)?.Content;
+            set => (_internal as Data.Models.Metadata.RamOption)?.Content = value;
+        }
+
         public bool? Default
         {
             get => (_internal as Data.Models.Metadata.RamOption)?.Default;

@@ -103,7 +103,7 @@ namespace SabreTools.Serialization.Readers.Test
             var original = new Data.Models.OpenMSX.Original
             {
                 Value = "value",
-                Content = "XXXXXX",
+                Content = "content",
             };
 
             var rom = new Data.Models.OpenMSX.Rom
@@ -204,7 +204,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(original);
             Assert.Equal("value", original.Value);
-            Assert.Equal("XXXXXX", original.Content);
+            Assert.Equal("content", original.Content);
         }
 
         /// <summary>

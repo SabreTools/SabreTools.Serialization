@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.CrossModel
             var part = new Data.Models.Metadata.Part
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Part.InterfaceKey] = item.Interface,
+                Interface = item.Interface,
             };
 
             if (item.Feature is not null && item.Feature.Length > 0)

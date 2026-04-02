@@ -679,7 +679,7 @@ namespace SabreTools.Metadata.DatFiles
                    .ConvertAll(i => i as Slot)
                    .FindAll(s => s!.SlotOptionsSpecified)
                    .SelectMany(s => s!.Read<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey)!)
-                   .Select(so => so.ReadString(Data.Models.Metadata.SlotOption.DevNameKey)));
+                   .Select(so => so.DevName));
 
                 // If we're checking device references
                 if (deviceReferences.Count > 0)
@@ -745,7 +745,7 @@ namespace SabreTools.Metadata.DatFiles
                             .FindAll(i => i is Slot)
                             .FindAll(s => (s as Slot)!.SlotOptionsSpecified)
                             .SelectMany(s => (s as Slot)!.Read<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey)!)
-                            .Select(o => o.ReadString(Data.Models.Metadata.SlotOption.DevNameKey)!));
+                            .Select(o => o.DevName!));
 
                         // Set new machine information and add to the current machine
                         foreach (DatItem item in slotItems)
@@ -773,7 +773,7 @@ namespace SabreTools.Metadata.DatFiles
 
                         slotOptions.Add(slotOption);
                         var slotOptionItem = new SlotOption();
-                        slotOptionItem.Write<string?>(Data.Models.Metadata.SlotOption.DevNameKey, slotOption);
+                        slotOptionItem.DevName = slotOption;
                         slotOptionItem.CopyMachineInformation(copyFrom);
 
                         var slotItem = new Slot();
@@ -836,7 +836,7 @@ namespace SabreTools.Metadata.DatFiles
                     .Select(i => i as Slot)
                     .Where(s => s!.SlotOptionsSpecified)
                     .SelectMany(s => s!.Read<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey)!)
-                    .Select(so => so.ReadString(Data.Models.Metadata.SlotOption.DevNameKey))
+                    .Select(so => so.DevName)
                     .Distinct()
                     .ToList();
 
@@ -915,7 +915,7 @@ namespace SabreTools.Metadata.DatFiles
                             .Where(i => i is Slot)
                             .Where(s => (s as Slot)!.SlotOptionsSpecified)
                             .SelectMany(s => (s as Slot)!.Read<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey)!)
-                            .Select(o => o.ReadString(Data.Models.Metadata.SlotOption.DevNameKey)!));
+                            .Select(o => o.DevName!));
 
                         // Set new machine information and add to the current machine
                         var copyFrom = GetMachineForItemDB(GetItemsForBucketDB(bucket).First().Key);
@@ -944,7 +944,7 @@ namespace SabreTools.Metadata.DatFiles
                         if (!slotOptions.Contains(slotOption))
                         {
                             var slotOptionItem = new SlotOption();
-                            slotOptionItem.Write<string?>(Data.Models.Metadata.SlotOption.DevNameKey, slotOption);
+                            slotOptionItem.DevName = slotOption;
 
                             var slotItem = new Slot();
                             slotItem.Write<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey, [slotOptionItem]);

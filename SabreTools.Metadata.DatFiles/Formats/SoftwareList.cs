@@ -110,14 +110,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (!dipSwitch.PartSpecified)
                     {
                         missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        missingFields.Add(Data.Models.Metadata.Part.InterfaceKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
                     }
                     else
                     {
                         if (string.IsNullOrEmpty(dipSwitch.Read<Part?>(DipSwitch.PartKey)!.Name))
                             missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        if (string.IsNullOrEmpty(dipSwitch.Read<Part?>(DipSwitch.PartKey)!.ReadString(Data.Models.Metadata.Part.InterfaceKey)))
-                            missingFields.Add(Data.Models.Metadata.Part.InterfaceKey);
+                        if (string.IsNullOrEmpty(dipSwitch.Read<Part?>(DipSwitch.PartKey)!.Interface))
+                            missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
                     }
 
                     if (string.IsNullOrEmpty(dipSwitch.Name))
@@ -141,14 +141,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (!disk.PartSpecified)
                     {
                         missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        missingFields.Add(Data.Models.Metadata.Part.InterfaceKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
                     }
                     else
                     {
                         if (string.IsNullOrEmpty(disk.Read<Part?>(Disk.PartKey)!.Name))
                             missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        if (string.IsNullOrEmpty(disk.Read<Part?>(Disk.PartKey)!.ReadString(Data.Models.Metadata.Part.InterfaceKey)))
-                            missingFields.Add(Data.Models.Metadata.Part.InterfaceKey);
+                        if (string.IsNullOrEmpty(disk.Read<Part?>(Disk.PartKey)!.Interface))
+                            missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
                     }
 
                     if (!disk.DiskAreaSpecified)
@@ -174,14 +174,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (!rom.PartSpecified)
                     {
                         missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        missingFields.Add(Data.Models.Metadata.Part.InterfaceKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
                     }
                     else
                     {
                         if (string.IsNullOrEmpty(rom.Read<Part?>(Rom.PartKey)!.Name))
                             missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        if (string.IsNullOrEmpty(rom.Read<Part?>(Rom.PartKey)!.ReadString(Data.Models.Metadata.Part.InterfaceKey)))
-                            missingFields.Add(Data.Models.Metadata.Part.InterfaceKey);
+                        if (string.IsNullOrEmpty(rom.Read<Part?>(Rom.PartKey)!.Interface))
+                            missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
                     }
 
                     if (!rom.DataAreaSpecified)

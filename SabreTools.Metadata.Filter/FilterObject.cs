@@ -422,6 +422,12 @@ namespace SabreTools.Metadata.Filter
                 case Device item when fieldName == "type":
                     checkValue = item.DeviceType?.AsStringValue();
                     return true;
+                case Device item when fieldName == "fixedimage":
+                    checkValue = item.FixedImage;
+                    return true;
+                case Device item when fieldName == "interface":
+                    checkValue = item.Interface;
+                    return true;
                 case Device item when fieldName == "mandatory":
                     checkValue = item.Mandatory.FromYesNo();
                     return true;
@@ -588,10 +594,21 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Supported?.AsStringValue();
                     return true;
 
+                case Original item when fieldName == "content":
+                    checkValue = item.Content;
+                    return true;
+
+                case Part item when fieldName == "interface":
+                    checkValue = item.Interface;
+                    return true;
+
                 case Port item when fieldName == "tag":
                     checkValue = item.Tag;
                     return true;
 
+                case RamOption item when fieldName == "content":
+                    checkValue = item.Content;
+                    return true;
                 case RamOption item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
@@ -637,6 +654,9 @@ namespace SabreTools.Metadata.Filter
 
                 case SlotOption item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
+                    return true;
+                case SlotOption item when fieldName == "devname":
+                    checkValue = item.DevName;
                     return true;
 
                 case Software item when fieldName == "description":
