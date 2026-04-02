@@ -75,6 +75,19 @@ namespace SabreTools.Serialization.Readers
 
                 // Get the TLS address
                 long tlsOffset = initialOffset + (header.TLSAddress - header.BaseAddress);
+
+                // TLS address is relative to .rdata section
+                for (int i = 0; i < header.NumberOfSections; i++)
+                {
+                    var sectionStart = xbe.SectionHeaders[i].VirtualAddress;
+                    var sectionEnd = xbe.SectionHeaders[i].VirtualAddress + xbe.SectionHeaders[i].VirtualSize;
+                    if (tlsOffset >= sectionStart && tlsOffset < sectionEnd)
+                    {
+                        // TLS offset is relative to section start
+                        tlsOffset = xbe.SectionHeaders[i].RawAddress + (tlsOffset - sectionStart);
+                    }
+                }
+
                 if (tlsOffset >= initialOffset && tlsOffset < data.Length)
                 {
                     // Seek to the TLS
