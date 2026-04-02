@@ -1864,8 +1864,10 @@ namespace SabreTools.Data.Extensions.Test
         [Theory]
         [InlineData(null, null)]
         [InlineData("INVALID", null)]
+        [InlineData("1", true)]
         [InlineData("yes", true)]
         [InlineData("True", true)]
+        [InlineData("0", false)]
         [InlineData("no", false)]
         [InlineData("False", false)]
         public void AsYesNoTest(string? field, bool? expected)

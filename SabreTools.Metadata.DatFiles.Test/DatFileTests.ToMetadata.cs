@@ -774,7 +774,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(device);
             Assert.Equal("fixedimage", device.ReadString(Data.Models.Metadata.Device.FixedImageKey));
             Assert.Equal("interface", device.ReadString(Data.Models.Metadata.Device.InterfaceKey));
-            Assert.Equal(1, device.ReadLong(Data.Models.Metadata.Device.MandatoryKey));
+            Assert.Equal(true, device.Mandatory);
             Assert.Equal("tag", device.ReadString(Data.Models.Metadata.Device.TagKey));
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.DeviceType);
 

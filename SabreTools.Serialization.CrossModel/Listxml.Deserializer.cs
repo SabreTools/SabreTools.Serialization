@@ -309,7 +309,7 @@ namespace SabreTools.Serialization.CrossModel
                 Type = item.DeviceType,
                 Tag = item.ReadString(Data.Models.Metadata.Device.TagKey),
                 FixedImage = item.ReadString(Data.Models.Metadata.Device.FixedImageKey),
-                Mandatory = item.ReadString(Data.Models.Metadata.Device.MandatoryKey),
+                Mandatory = item.Mandatory,
                 Interface = item.ReadString(Data.Models.Metadata.Device.InterfaceKey),
             };
 

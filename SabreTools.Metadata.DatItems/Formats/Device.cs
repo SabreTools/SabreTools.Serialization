@@ -39,6 +39,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public bool? Mandatory
+        {
+            get => (_internal as Data.Models.Metadata.Device)?.Mandatory;
+            set => (_internal as Data.Models.Metadata.Device)?.Mandatory = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -47,11 +53,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Device(Data.Models.Metadata.Device item) : base(item)
         {
-            // Process flag values
-            bool? mandatory = ReadBool(Data.Models.Metadata.Device.MandatoryKey);
-            if (mandatory is not null)
-                Write<string?>(Data.Models.Metadata.Device.MandatoryKey, mandatory.FromYesNo());
-
             // Handle subitems
             var instance = item.Read<Data.Models.Metadata.Instance>(Data.Models.Metadata.Device.InstanceKey);
             if (instance is not null)

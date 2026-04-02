@@ -389,6 +389,9 @@ namespace SabreTools.Metadata.Filter
                 case Device item when fieldName == "type":
                     checkValue = item.DeviceType?.AsStringValue();
                     return true;
+                case Device item when fieldName == "mandatory":
+                    checkValue = item.Mandatory.FromYesNo();
+                    return true;
 
                 case DipLocation item when fieldName == "inverted":
                     checkValue = item.Inverted.FromYesNo();

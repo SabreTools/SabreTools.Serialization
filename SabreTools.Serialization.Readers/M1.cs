@@ -366,7 +366,7 @@ namespace SabreTools.Serialization.Readers
             obj.Type = reader.GetAttribute("type").AsDeviceType();
             obj.Tag = reader.GetAttribute("tag");
             obj.FixedImage = reader.GetAttribute("fixed_image");
-            obj.Mandatory = reader.GetAttribute("mandatory");
+            obj.Mandatory = reader.GetAttribute("mandatory").AsYesNo();
             obj.Interface = reader.GetAttribute("interface");
 
             List<Extension> extensions = [];

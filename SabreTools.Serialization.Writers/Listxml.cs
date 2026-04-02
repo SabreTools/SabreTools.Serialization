@@ -256,7 +256,8 @@ namespace SabreTools.Serialization.Writers
             writer.WriteRequiredAttributeString("type", obj.Type?.AsStringValue());
             writer.WriteOptionalAttributeString("tag", obj.Tag);
             writer.WriteOptionalAttributeString("fixed_image", obj.FixedImage);
-            writer.WriteOptionalAttributeString("mandatory", obj.Mandatory);
+            if (obj.Mandatory is not null)
+                writer.WriteOptionalAttributeString("mandatory", obj.Mandatory.Value ? "1" : "0");
             writer.WriteOptionalAttributeString("interface", obj.Interface);
 
             if (obj.Instance is not null)

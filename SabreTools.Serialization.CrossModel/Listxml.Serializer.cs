@@ -344,7 +344,7 @@ namespace SabreTools.Serialization.CrossModel
                 DeviceType = item.Type,
                 [Data.Models.Metadata.Device.TagKey] = item.Tag,
                 [Data.Models.Metadata.Device.FixedImageKey] = item.FixedImage,
-                [Data.Models.Metadata.Device.MandatoryKey] = item.Mandatory,
+                Mandatory = item.Mandatory,
                 [Data.Models.Metadata.Device.InterfaceKey] = item.Interface,
             };
 

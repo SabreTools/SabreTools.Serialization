@@ -11,6 +11,9 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(unknown|cartridge|floppydisk|harddisk|cylinder|cassette|punchcard|punchtape|printout|serial|parallel|snapshot|quickload|memcard|cdrom|magtape|romimage|midiin|midiout|picture|vidfile)</remarks>
         public DeviceType? DeviceType { get; set; }
 
+        /// <remarks>(0|1) "0"</remarks>
+        public bool? Mandatory { get; set; }
+
         #endregion
 
         #region Keys
@@ -28,10 +31,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string InterfaceKey = "interface";
-
-        /// <remarks>(0|1) "0"</remarks>
-        /// TODO: Convert to bool?
-        public const string MandatoryKey = "mandatory";
 
         /// <remarks>string</remarks>
         public const string TagKey = "tag";

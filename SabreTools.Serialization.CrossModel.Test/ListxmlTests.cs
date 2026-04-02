@@ -293,7 +293,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Type = Data.Models.Metadata.DeviceType.PunchTape,
                 Tag = "XXXXXX",
                 FixedImage = "XXXXXX",
-                Mandatory = "XXXXXX",
+                Mandatory = true,
                 Interface = "XXXXXX",
                 Instance = instance,
                 Extension = [extension],
@@ -800,7 +800,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.Type);
             Assert.Equal("XXXXXX", device.Tag);
             Assert.Equal("XXXXXX", device.FixedImage);
-            Assert.Equal("XXXXXX", device.Mandatory);
+            Assert.Equal(true, device.Mandatory);
             Assert.Equal("XXXXXX", device.Interface);
             Validate(device.Instance);
 

@@ -18,9 +18,9 @@ namespace SabreTools.Data.Models.Listxml
         [XmlAttribute("fixed_image")]
         public string? FixedImage { get; set; }
 
-        /// <remarks>Numeric boolean</remarks>
+        /// <remarks>(0|1) "0"</remarks>
         [XmlAttribute("mandatory")]
-        public string? Mandatory { get; set; }
+        public bool? Mandatory { get; set; }
 
         [XmlAttribute("interface")]
         public string? Interface { get; set; }

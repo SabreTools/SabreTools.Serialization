@@ -184,6 +184,7 @@ namespace SabreTools.Data.Extensions
             else if (self is Device selfDevice && clone is Device cloneDevice)
             {
                 cloneDevice.DeviceType = selfDevice.DeviceType;
+                cloneDevice.Mandatory = selfDevice.Mandatory;
             }
             else if (self is DipLocation selfDipLocation && clone is DipLocation cloneDipLocation)
             {
@@ -1402,8 +1403,8 @@ namespace SabreTools.Data.Extensions
         {
             return yesno?.ToLowerInvariant() switch
             {
-                "yes" or "true" => true,
-                "no" or "false" => false,
+                "1" or "yes" or "true" => true,
+                "0" or "no" or "false" => false,
                 _ => null,
             };
         }
