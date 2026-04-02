@@ -296,7 +296,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("game-1");
+            machine.Name = "game-1";
 
             DatItem rom1 = new Rom();
             rom1.SetName("rom-1");
@@ -335,7 +335,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             DatItem item = new Rom();
 
@@ -355,7 +355,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             DatItem item = new Rom();
 
@@ -375,7 +375,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             DatItem item = new Rom();
             item.Write<bool?>(DatItem.RemoveKey, true);
@@ -396,7 +396,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             DatItem item = new Rom();
             item.Write<bool?>(DatItem.RemoveKey, true);
@@ -417,7 +417,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             DatItem item = new Rom();
 
@@ -515,10 +515,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine origMachine = new Machine();
-            origMachine.SetName("original");
+            origMachine.Name = "original";
 
             Machine newMachine = new Machine();
-            newMachine.SetName("new");
+            newMachine.Name = "new";
 
             DatItem datItem = new Rom();
 
@@ -546,7 +546,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("game-1");
+            machine.Name = "game-1";
 
             DatItem datItem = new Rom();
             datItem.SetName("rom-1");
@@ -574,7 +574,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("game-1");
+            machine.Name = "game-1";
 
             DatItem datItem = new Rom();
             datItem.SetName("rom-1");
@@ -623,10 +623,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine1 = new Machine();
-            machine1.SetName("game-1");
+            machine1.Name = "game-1";
 
             Machine machine2 = new Machine();
-            machine2.SetName("game-2");
+            machine2.Name = "game-2";
 
             DatItem rom1 = new Rom();
             rom1.SetName("rom-1");
@@ -677,7 +677,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("game-1");
+            machine.Name = "game-1";
 
             DatItem rom1 = new Rom();
             rom1.SetName("rom-1");
@@ -744,21 +744,21 @@ namespace SabreTools.Metadata.DatFiles.Test
             long sourceBIndex = dict.AddSource(sourceB);
 
             Machine? machineA = new Machine();
-            machineA.SetName("name-same");
+            machineA.Name = "name-same";
             long machineAIndex = dict.AddMachine(machineA);
 
             Machine? machineB = new Machine();
-            machineB.SetName("name-same");
+            machineB.Name = "name-same";
             long machineBIndex = dict.AddMachine(machineB);
 
             var romA = new Rom();
-            romA.SetName("same-name");
+            romA.Name = "same-name";
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "BEEFDEAD");
             long romAIndex = dict.AddItem(romA, machineAIndex, sourceAIndex);
             KeyValuePair<long, DatItem>? romAPair = new KeyValuePair<long, DatItem>(romAIndex, romA);
 
             var romB = new Rom();
-            romB.SetName("same-name");
+            romB.Name = "same-name";
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
             long romBIndex = dict.AddItem(romB, machineBIndex, sourceBIndex);
             KeyValuePair<long, DatItem>? romBPair = new KeyValuePair<long, DatItem>(romBIndex, romB);
@@ -778,21 +778,21 @@ namespace SabreTools.Metadata.DatFiles.Test
             long sourceBIndex = dict.AddSource(sourceB);
 
             Machine? machineA = new Machine();
-            machineA.SetName("name-same");
+            machineA.Name = "name-same";
             long machineAIndex = dict.AddMachine(machineA);
 
             Machine? machineB = new Machine();
-            machineB.SetName("name-same");
+            machineB.Name = "name-same";
             long machineBIndex = dict.AddMachine(machineB);
 
             var romA = new Rom();
-            romA.SetName("same-name");
+            romA.Name = "same-name";
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
             long romAIndex = dict.AddItem(romA, machineAIndex, sourceAIndex);
             KeyValuePair<long, DatItem>? romAPair = new KeyValuePair<long, DatItem>(romAIndex, romA);
 
             var romB = new Rom();
-            romB.SetName("same-name");
+            romB.Name = "same-name";
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
             long romBIndex = dict.AddItem(romB, machineBIndex, sourceBIndex);
             KeyValuePair<long, DatItem>? romBPair = new KeyValuePair<long, DatItem>(romBIndex, romB);
@@ -812,21 +812,21 @@ namespace SabreTools.Metadata.DatFiles.Test
             long sourceBIndex = dict.AddSource(sourceB);
 
             Machine? machineA = new Machine();
-            machineA.SetName("name-same");
+            machineA.Name = "name-same";
             long machineAIndex = dict.AddMachine(machineA);
 
             Machine? machineB = new Machine();
-            machineB.SetName("not-name-same");
+            machineB.Name = "not-name-same";
             long machineBIndex = dict.AddMachine(machineB);
 
             var romA = new Rom();
-            romA.SetName("same-name");
+            romA.Name = "same-name";
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
             long romAIndex = dict.AddItem(romA, machineAIndex, sourceAIndex);
             KeyValuePair<long, DatItem>? romAPair = new KeyValuePair<long, DatItem>(romAIndex, romA);
 
             var romB = new Rom();
-            romB.SetName("same-name");
+            romB.Name = "same-name";
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
             long romBIndex = dict.AddItem(romB, machineBIndex, sourceBIndex);
             KeyValuePair<long, DatItem>? romBPair = new KeyValuePair<long, DatItem>(romBIndex, romB);
@@ -846,21 +846,21 @@ namespace SabreTools.Metadata.DatFiles.Test
             long sourceBIndex = dict.AddSource(sourceB);
 
             Machine? machineA = new Machine();
-            machineA.SetName("name-same");
+            machineA.Name = "name-same";
             long machineAIndex = dict.AddMachine(machineA);
 
             Machine? machineB = new Machine();
-            machineB.SetName("name-same");
+            machineB.Name = "name-same";
             long machineBIndex = dict.AddMachine(machineB);
 
             var romA = new Rom();
-            romA.SetName("same-name");
+            romA.Name = "same-name";
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
             long romAIndex = dict.AddItem(romA, machineAIndex, sourceAIndex);
             KeyValuePair<long, DatItem>? romAPair = new KeyValuePair<long, DatItem>(romAIndex, romA);
 
             var romB = new Rom();
-            romB.SetName("same-name");
+            romB.Name = "same-name";
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
             long romBIndex = dict.AddItem(romB, machineBIndex, sourceBIndex);
             KeyValuePair<long, DatItem>? romBPair = new KeyValuePair<long, DatItem>(romBIndex, romB);
@@ -880,21 +880,21 @@ namespace SabreTools.Metadata.DatFiles.Test
             long sourceBIndex = dict.AddSource(sourceB);
 
             Machine? machineA = new Machine();
-            machineA.SetName("name-same");
+            machineA.Name = "name-same";
             long machineAIndex = dict.AddMachine(machineA);
 
             Machine? machineB = new Machine();
-            machineB.SetName("not-name-same");
+            machineB.Name = "not-name-same";
             long machineBIndex = dict.AddMachine(machineB);
 
             var romA = new Rom();
-            romA.SetName("same-name");
+            romA.Name = "same-name";
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
             long romAIndex = dict.AddItem(romA, machineAIndex, sourceAIndex);
             KeyValuePair<long, DatItem>? romAPair = new KeyValuePair<long, DatItem>(romAIndex, romA);
 
             var romB = new Rom();
-            romB.SetName("same-name");
+            romB.Name = "same-name";
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
             long romBIndex = dict.AddItem(romB, machineBIndex, sourceBIndex);
             KeyValuePair<long, DatItem>? romBPair = new KeyValuePair<long, DatItem>(romBIndex, romB);
@@ -916,7 +916,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("game-1");
+            machine.Name = "game-1";
 
             DatItem rom1 = new Rom();
             rom1.SetName("rom-1");
@@ -958,7 +958,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("game-1");
+            machine.Name = "game-1";
 
             DatItem rom1 = new Rom();
             rom1.SetName("rom-1");
@@ -997,7 +997,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             DatItem item = new Rom();
             item.SetName("rom");

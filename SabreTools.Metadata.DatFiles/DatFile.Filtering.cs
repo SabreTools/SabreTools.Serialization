@@ -540,7 +540,7 @@ namespace SabreTools.Metadata.DatFiles
             if (itemName.StartsWith("Default"))
                 itemName = itemName.Substring("Default".Length + 1);
 
-            machine.SetName(itemName);
+            machine.Name = itemName;
             datItem.SetName(Path.GetFileName(datItem.GetName()));
         }
 
@@ -618,7 +618,7 @@ namespace SabreTools.Metadata.DatFiles
             if (itemName.StartsWith("Default"))
                 itemName = itemName.Substring("Default".Length + 1);
 
-            machine.Value.SetName(itemName);
+            machine.Value.Name = itemName;
             datItem.Value.SetName(Path.GetFileName(datItem.Value.GetName()));
         }
 
@@ -655,7 +655,7 @@ namespace SabreTools.Metadata.DatFiles
                     string? machineDesc = machine.Description;
 
                     if (machineName is not null && Regex.IsMatch(machineName, SceneNamePattern))
-                        item.GetMachine()!.SetName(Regex.Replace(machineName, SceneNamePattern, "$2"));
+                        item.GetMachine()!.Name = Regex.Replace(machineName, SceneNamePattern, "$2");
 
                     if (machineDesc is not null && Regex.IsMatch(machineDesc, SceneNamePattern))
                         item.GetMachine()!.Description = Regex.Replace(machineDesc, SceneNamePattern, "$2");
@@ -693,7 +693,7 @@ namespace SabreTools.Metadata.DatFiles
                 string? machineDesc = machine.Value.Description;
 
                 if (machineName is not null && Regex.IsMatch(machineName, SceneNamePattern))
-                    machine.Value.SetName(Regex.Replace(machineName, SceneNamePattern, "$2"));
+                    machine.Value.Name = Regex.Replace(machineName, SceneNamePattern, "$2");
 
                 if (machineDesc is not null && Regex.IsMatch(machineDesc, SceneNamePattern))
                     machine.Value.Description = Regex.Replace(machineDesc, SceneNamePattern, "$2");
@@ -739,7 +739,7 @@ namespace SabreTools.Metadata.DatFiles
 
                     // Update machine name
                     if (machineName is not null && mapping.TryGetValue(machineName, out string? mappedMachineName))
-                        machine.SetName(mappedMachineName);
+                        machine.Name = mappedMachineName;
 
                     // Update cloneof
                     if (cloneOf is not null && mapping.TryGetValue(cloneOf, out string? mappedCloneOf))
@@ -780,7 +780,7 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Update machine name
                 if (machineName is not null && mapping.TryGetValue(machineName, out string? mappedMachineName))
-                    machine.Value.SetName(mappedMachineName);
+                    machine.Value.Name = mappedMachineName;
 
                 // Update cloneof
                 if (cloneOf is not null && mapping.TryGetValue(cloneOf, out string? mappedCloneOf))

@@ -11,7 +11,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void ConvertToRomTest()
         {
             Machine machine = new Machine();
-            machine.SetName("name");
+            machine.Name = "name";
 
             Source source = new Source(0, "XXXXXX");
 
@@ -341,7 +341,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Source source = new Source(0);
 
             Machine machine = new Machine();
-            machine.SetName("Machine");
+            machine.Name = "Machine";
 
             DatItem datItem = new File
             {

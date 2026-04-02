@@ -11,18 +11,18 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void ConvertToRomTest()
         {
             DiskArea diskArea = new DiskArea();
-            diskArea.SetName("name");
+            diskArea.Name = "name";
 
             Machine machine = new Machine();
-            machine.SetName("name");
+            machine.Name = "name";
 
             Part part = new Part();
-            part.SetName("name");
+            part.Name = "name";
 
             Source source = new Source(0, "XXXXXX");
 
             Disk disk = new Disk();
-            disk.SetName("name");
+            disk.Name = "name";
             disk.Write(Disk.DiskAreaKey, diskArea);
             disk.Write(Data.Models.Metadata.Disk.MergeKey, "XXXXXX");
             disk.Write(Data.Models.Metadata.Disk.RegionKey, "XXXXXX");
@@ -254,7 +254,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Source source = new Source(0);
 
             Machine machine = new Machine();
-            machine.SetName("Machine");
+            machine.Name = "Machine";
 
             DatItem datItem = new Disk();
             datItem.Write(Data.Models.Metadata.Disk.MD5Key, "DEADBEEF");

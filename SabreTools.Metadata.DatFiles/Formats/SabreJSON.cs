@@ -602,7 +602,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             // No game should start with a path separator
             if (!string.IsNullOrEmpty(datItem.GetMachine()!.Name))
-                datItem.GetMachine()!.SetName(datItem.GetMachine()!.Name!.TrimStart(Path.DirectorySeparatorChar));
+                datItem.GetMachine()!.Name = datItem.GetMachine()!.Name!.TrimStart(Path.DirectorySeparatorChar);
 
             // Build the state
             jtw.WriteStartObject();

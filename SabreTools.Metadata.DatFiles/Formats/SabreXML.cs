@@ -429,7 +429,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         private static void WriteStartGame(XmlTextWriter xtw, DatItem datItem)
         {
             // No game should start with a path separator
-            datItem.GetMachine()!.SetName(datItem.GetMachine()!.Name?.TrimStart(Path.DirectorySeparatorChar) ?? string.Empty);
+            datItem.GetMachine()!.Name = datItem.GetMachine()!.Name?.TrimStart(Path.DirectorySeparatorChar) ?? string.Empty;
 
             // Write the machine
             xtw.WriteStartElement("directory");

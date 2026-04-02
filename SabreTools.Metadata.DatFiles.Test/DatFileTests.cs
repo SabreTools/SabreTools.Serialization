@@ -31,7 +31,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("key");
+            machine.Name = "key";
 
             DatItem rom = new Rom();
             rom.SetName("rom");
@@ -73,7 +73,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("game-1");
+            machine.Name = "game-1";
 
             DatItem datItem = new Rom();
             datItem.Write<Source?>(DatItem.SourceKey, source);
@@ -92,7 +92,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
 
             Machine machine = new Machine();
-            machine.SetName("game-1");
+            machine.Name = "game-1";
 
             DatItem datItem = new Rom();
 
@@ -1329,7 +1329,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected)
         {
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             DatItem item = new Rom();
             item.SetName("name");
@@ -1363,7 +1363,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = string.Empty;
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
             machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
@@ -1396,7 +1396,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name_manufacturer_publisher_category______md5___sha1_____";
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
             machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
@@ -1417,7 +1417,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name.bin_manufacturer_publisher_category__00000000____d41d8cd98f00b204e9800998ecf8427e___da39a3ee5e6b4b0d3255bfef95601890afd80709_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855___12345_";
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
             machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
@@ -1444,7 +1444,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name_manufacturer_publisher_category______md5___sha1_sha256____spamsum";
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
             machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
@@ -1467,7 +1467,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name_manufacturer_publisher_category_crc16_crc_crc64_md2_md4_md5_ripemd128_ripemd160_sha1_sha256_sha384_sha512_12345_spamsum";
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
             machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
@@ -1952,7 +1952,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNames_SingleItem_Single()
         {
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             Source source = new Source(0);
 
@@ -1980,7 +1980,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNames_NonDuplicate_AllUntouched()
         {
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             Source source = new Source(0);
 
@@ -2022,7 +2022,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNames_AllDuplicate_Single()
         {
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             Source source = new Source(0);
 
@@ -2057,7 +2057,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNames_NameMatch_SingleRenamed()
         {
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             Source source = new Source(0);
 
@@ -2114,7 +2114,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNamesDB_SingleItem_Single()
         {
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             Source source = new Source(0);
 
@@ -2144,7 +2144,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNamesDB_NonDuplicate_AllUntouched()
         {
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             Source source = new Source(0);
 
@@ -2191,7 +2191,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(null, useGame: false);
 
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
             long machineIndex = datFile.AddMachineDB(machine);
 
             Source source = new Source(0);
@@ -2228,7 +2228,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNamesDB_NameMatch_SingleRenamed()
         {
             Machine machine = new Machine();
-            machine.SetName("machine");
+            machine.Name = "machine";
 
             Source source = new Source(0);
 

@@ -124,9 +124,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (diskArea is not null)
             {
                 var dataArea = new DataArea();
-
-                string? diskAreaName = diskArea.Name;
-                dataArea.SetName(diskAreaName);
+                dataArea.Name = diskArea.Name;
 
                 rom.Write<DataArea?>(Rom.DataAreaKey, dataArea);
             }

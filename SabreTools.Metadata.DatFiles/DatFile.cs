@@ -568,7 +568,7 @@ namespace SabreTools.Metadata.DatFiles
             if (useRomName)
                 item.SetName(name);
             else
-                machine?.SetName(name);
+                machine?.Name = name;
         }
 
         /// <summary>
@@ -689,7 +689,7 @@ namespace SabreTools.Metadata.DatFiles
                 return rom;
 
             // If the Rom has "null" characteristics, ensure all fields
-            rom.SetName(rom.Name == "null" ? "-" : rom.Name);
+            rom.Name = rom.Name == "null" ? "-" : rom.Name;
             rom.Write<string?>(Data.Models.Metadata.Rom.SizeKey, "0");
             rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key,
                 rom.ReadString(Data.Models.Metadata.Rom.CRC16Key) == "null" ? HashType.CRC16.ZeroString : null);

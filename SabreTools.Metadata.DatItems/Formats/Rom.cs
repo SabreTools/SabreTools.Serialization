@@ -168,7 +168,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             string name = $"{machine.Name}_{index++}{(!string.IsNullOrEmpty(rom!.ReadString(Data.Models.Metadata.Rom.RemarkKey)) ? $" {rom.ReadString(Data.Models.Metadata.Rom.RemarkKey)}" : string.Empty)}";
 
-            SetName(name);
+            Name = name;
             Write<string?>(Data.Models.Metadata.Rom.OffsetKey, rom.ReadString(Data.Models.Metadata.Rom.StartKey));
             OpenMSXMediaType = subType;
             Write<string?>(Data.Models.Metadata.Rom.OpenMSXType, rom.ReadString(Data.Models.Metadata.Rom.OpenMSXType) ?? rom.ItemType.ToString());

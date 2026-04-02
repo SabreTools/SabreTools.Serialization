@@ -283,7 +283,7 @@ namespace SabreTools.Metadata.DatFiles
                 if (parentItems.Count == 0)
                 {
                     copyFrom = new Rom();
-                    copyFrom.GetMachine()!.SetName(cloneOf);
+                    copyFrom.GetMachine()!.Name = cloneOf;
                     copyFrom.GetMachine()!.Description = cloneOf;
                 }
                 else
@@ -350,7 +350,7 @@ namespace SabreTools.Metadata.DatFiles
                             .Contains(mergeTag))
                         {
                             if (subfolder)
-                                rom.SetName($"{rom.GetMachine()!.Name}\\{rom.Name}");
+                                rom.Name = $"{rom.GetMachine()!.Name}\\{rom.Name}";
 
                             rom.CopyMachineInformation(copyFrom);
                             AddItem(rom, statsOnly: false);
@@ -360,7 +360,7 @@ namespace SabreTools.Metadata.DatFiles
                         else if (!GetItemsForBucket(cloneOf).Exists(i => i.Equals(item)) || skipDedup)
                         {
                             if (subfolder)
-                                rom.SetName($"{item.GetMachine()!.Name}\\{rom.Name}");
+                                rom.Name = $"{item.GetMachine()!.Name}\\{rom.Name}";
 
                             rom.CopyMachineInformation(copyFrom);
                             AddItem(rom, statsOnly: false);
@@ -486,7 +486,7 @@ namespace SabreTools.Metadata.DatFiles
                             .Contains(mergeTag))
                         {
                             if (subfolder)
-                                rom.SetName($"{machineName}\\{rom.Name}");
+                                rom.Name = $"{machineName}\\{rom.Name}";
 
                             ItemsDB.RemapDatItemToMachine(item.Key, machineIndex: cloneOfMachine.Key);
                             ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
@@ -496,7 +496,7 @@ namespace SabreTools.Metadata.DatFiles
                         else if (!GetItemsForBucketDB(cloneOf).ContainsValue(item.Value) || skipDedup)
                         {
                             if (subfolder)
-                                rom.SetName($"{machineName}\\{rom.Name}");
+                                rom.Name = $"{machineName}\\{rom.Name}";
 
                             ItemsDB.RemapDatItemToMachine(item.Key, cloneOfMachine.Key);
                             ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
@@ -723,7 +723,7 @@ namespace SabreTools.Metadata.DatFiles
 
                         deviceReferences.Add(deviceReference);
                         var deviceRef = new DeviceRef();
-                        deviceRef.SetName(deviceReference);
+                        deviceRef.Name = deviceReference;
                         deviceRef.CopyMachineInformation(copyFrom);
                         Items.AddItem(deviceRef, statsOnly: false);
                     }
@@ -888,7 +888,7 @@ namespace SabreTools.Metadata.DatFiles
                         if (!deviceReferences.Contains(deviceReference))
                         {
                             var deviceRef = new DeviceRef();
-                            deviceRef.SetName(deviceReference);
+                            deviceRef.Name = deviceReference;
                             ItemsDB.AddItem(deviceRef, machine.Key, source.Key);
                         }
                     }

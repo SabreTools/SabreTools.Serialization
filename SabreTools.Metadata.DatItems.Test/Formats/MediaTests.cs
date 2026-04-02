@@ -11,12 +11,12 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void ConvertToRomTest()
         {
             Machine machine = new Machine();
-            machine.SetName("name");
+            machine.Name = "name";
 
             Source source = new Source(0, "XXXXXX");
 
             Media media = new Media();
-            media.SetName("name");
+            media.Name = "name";
             media.Write(Data.Models.Metadata.Media.MD5Key, HashType.MD5.ZeroString);
             media.Write(Data.Models.Metadata.Media.SHA1Key, HashType.SHA1.ZeroString);
             media.Write(Data.Models.Metadata.Media.SHA256Key, HashType.SHA256.ZeroString);
@@ -306,7 +306,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Source source = new Source(0);
 
             Machine machine = new Machine();
-            machine.SetName("Machine");
+            machine.Name = "Machine";
 
             DatItem datItem = new Media();
             datItem.Write(Data.Models.Metadata.Media.MD5Key, "DEADBEEF");
