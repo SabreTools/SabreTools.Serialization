@@ -176,15 +176,15 @@ namespace SabreTools.Metadata
         /// </summary>
         private static bool EqualsImpl(this Disk self, Disk other)
         {
-            string? selfStatus = self.ReadString(Disk.StatusKey);
-            string? otherStatus = other.ReadString(Disk.StatusKey);
+            ItemStatus? selfStatus = self.Status;
+            ItemStatus? otherStatus = other.Status;
 
             string? selfName = self.Name;
             string? otherName = other.Name;
 
             // If all hashes are empty but they're both nodump and the names match, then they're dupes
-            if (string.Equals(selfStatus, "nodump", StringComparison.OrdinalIgnoreCase)
-                && string.Equals(otherStatus, "nodump", StringComparison.OrdinalIgnoreCase)
+            if (selfStatus == ItemStatus.Nodump
+                && otherStatus == ItemStatus.Nodump
                 && string.Equals(selfName, otherName, StringComparison.OrdinalIgnoreCase)
                 && !self.HasHashes()
                 && !other.HasHashes())
@@ -218,8 +218,8 @@ namespace SabreTools.Metadata
         /// </summary>
         private static bool EqualsImpl(this Rom self, Rom other)
         {
-            string? selfStatus = self.ReadString(Rom.StatusKey);
-            string? otherStatus = other.ReadString(Rom.StatusKey);
+            ItemStatus? selfStatus = self.Status;
+            ItemStatus? otherStatus = other.Status;
 
             string? selfName = self.Name;
             string? otherName = other.Name;
@@ -228,8 +228,8 @@ namespace SabreTools.Metadata
             long? otherSize = other.ReadLong(Rom.SizeKey);
 
             // If all hashes are empty but they're both nodump and the names match, then they're dupes
-            if (string.Equals(selfStatus, "nodump", StringComparison.OrdinalIgnoreCase)
-                && string.Equals(otherStatus, "nodump", StringComparison.OrdinalIgnoreCase)
+            if (selfStatus == ItemStatus.Nodump
+                && otherStatus == ItemStatus.Nodump
                 && string.Equals(selfName, otherName, StringComparison.OrdinalIgnoreCase)
                 && !self.HasHashes()
                 && !other.HasHashes())

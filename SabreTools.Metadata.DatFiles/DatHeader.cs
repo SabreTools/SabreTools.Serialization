@@ -37,6 +37,12 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.Name = value;
         }
 
+        public MergingFlag BiosMode
+        {
+            get => _internal.BiosMode;
+            set => _internal.BiosMode = value;
+        }
+
         [JsonIgnore]
         public bool CanOpenSpecified
         {
@@ -51,6 +57,24 @@ namespace SabreTools.Metadata.DatFiles
         {
             get => _internal.Debug;
             set => _internal.Debug = value;
+        }
+
+        public MergingFlag ForceMerging
+        {
+            get => _internal.ForceMerging;
+            set => _internal.ForceMerging = value;
+        }
+
+        public NodumpFlag ForceNodump
+        {
+            get => _internal.ForceNodump;
+            set => _internal.ForceNodump = value;
+        }
+
+        public PackingFlag ForcePacking
+        {
+            get => _internal.ForcePacking;
+            set => _internal.ForcePacking = value;
         }
 
         public bool? ForceZipping
@@ -104,6 +128,18 @@ namespace SabreTools.Metadata.DatFiles
             }
         }
 
+        public MergingFlag RomMode
+        {
+            get => _internal.RomMode;
+            set => _internal.RomMode = value;
+        }
+
+        public MergingFlag SampleMode
+        {
+            get => _internal.SampleMode;
+            set => _internal.SampleMode = value;
+        }
+
         [JsonIgnore]
         public bool SearchSpecified
         {
@@ -151,20 +187,6 @@ namespace SabreTools.Metadata.DatFiles
         public Data.Models.Metadata.Header GetInternalClone()
         {
             var header = (_internal.Clone() as Data.Models.Metadata.Header)!;
-
-            // Remove fields with default values
-            if (header.ReadString(Data.Models.Metadata.Header.ForceMergingKey).AsMergingFlag() == MergingFlag.None)
-                header.Remove(Data.Models.Metadata.Header.ForceMergingKey);
-            if (header.ReadString(Data.Models.Metadata.Header.ForceNodumpKey).AsNodumpFlag() == NodumpFlag.None)
-                header.Remove(Data.Models.Metadata.Header.ForceNodumpKey);
-            if (header.ReadString(Data.Models.Metadata.Header.ForcePackingKey).AsPackingFlag() == PackingFlag.None)
-                header.Remove(Data.Models.Metadata.Header.ForcePackingKey);
-            if (header.ReadString(Data.Models.Metadata.Header.BiosModeKey).AsMergingFlag() == MergingFlag.None)
-                header.Remove(Data.Models.Metadata.Header.BiosModeKey);
-            if (header.ReadString(Data.Models.Metadata.Header.RomModeKey).AsMergingFlag() == MergingFlag.None)
-                header.Remove(Data.Models.Metadata.Header.RomModeKey);
-            if (header.ReadString(Data.Models.Metadata.Header.SampleModeKey).AsMergingFlag() == MergingFlag.None)
-                header.Remove(Data.Models.Metadata.Header.SampleModeKey);
 
             // Convert subheader values
             if (CanOpenSpecified)

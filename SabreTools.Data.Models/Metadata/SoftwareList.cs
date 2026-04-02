@@ -10,6 +10,9 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Name { get; set; }
 
+        /// <remarks>(original|compatible)</remarks>
+        public SoftwareListStatus? Status { get; set; }
+
         #endregion
 
         #region Keys
@@ -26,9 +29,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>Software[]</remarks>
         [NoFilter]
         public const string SoftwareKey = "software";
-
-        /// <remarks>(original|compatible)</remarks>
-        public const string StatusKey = "status";
 
         /// <remarks>string</remarks>
         public const string TagKey = "tag";

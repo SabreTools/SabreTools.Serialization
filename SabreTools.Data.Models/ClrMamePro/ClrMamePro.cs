@@ -1,3 +1,5 @@
+using SabreTools.Data.Models.Metadata;
+
 namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>clrmamepro</remarks>
@@ -40,12 +42,12 @@ namespace SabreTools.Data.Models.ClrMamePro
         public string? Type { get; set; }
 
         /// <remarks>forcemerging</remarks>
-        public string? ForceMerging { get; set; }
+        public MergingFlag ForceMerging { get; set; }
 
         /// <remarks>forcezipping, (yes|no) "no"</remarks>
         public bool? ForceZipping { get; set; }
 
         /// <remarks>forcepacking</remarks>
-        public string? ForcePacking { get; set; }
+        public PackingFlag ForcePacking { get; set; }
     }
 }

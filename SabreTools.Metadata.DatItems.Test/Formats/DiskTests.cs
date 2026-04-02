@@ -26,7 +26,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             disk.Write(Disk.DiskAreaKey, diskArea);
             disk.Write(Data.Models.Metadata.Disk.MergeKey, "XXXXXX");
             disk.Write(Data.Models.Metadata.Disk.RegionKey, "XXXXXX");
-            disk.Write(Data.Models.Metadata.Disk.StatusKey, "good");
+            disk.Status = Data.Models.Metadata.ItemStatus.Good;
             disk.Optional = true;
             disk.Write(Data.Models.Metadata.Disk.MD5Key, HashType.MD5.ZeroString);
             disk.Write(Data.Models.Metadata.Disk.SHA1Key, HashType.SHA1.ZeroString);
@@ -41,7 +41,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal("XXXXXX.chd", actual.GetName());
             Assert.Equal("XXXXXX", actual.ReadString(Data.Models.Metadata.Rom.MergeKey));
             Assert.Equal("XXXXXX", actual.ReadString(Data.Models.Metadata.Rom.RegionKey));
-            Assert.Equal("good", actual.ReadString(Data.Models.Metadata.Rom.StatusKey));
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, actual.Status);
             Assert.Equal(true, actual.Optional);
             Assert.Equal(HashType.MD5.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
             Assert.Equal(HashType.SHA1.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));

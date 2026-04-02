@@ -6,6 +6,13 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("condition"), XmlRoot("condition")]
     public class Condition : DatItem
     {
+        #region Properties
+
+        /// <remarks>(eq|ne|gt|le|lt|ge)</remarks>
+        public Relation? Relation { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>string</remarks>
@@ -13,9 +20,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string MaskKey = "mask";
-
-        /// <remarks>(eq|ne|gt|le|lt|ge)</remarks>
-        public const string RelationKey = "relation";
 
         /// <remarks>string</remarks>
         public const string TagKey = "tag";

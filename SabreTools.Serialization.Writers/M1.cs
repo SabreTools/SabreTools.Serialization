@@ -123,7 +123,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteOptionalAttributeString("tag", obj.Tag);
-            writer.WriteRequiredAttributeString("type", obj.Type);
+            writer.WriteRequiredAttributeString("type", obj.Type?.AsStringValue());
             writer.WriteOptionalAttributeString("soundonly", obj.SoundOnly.FromYesNo());
             writer.WriteOptionalAttributeString("clock", obj.Clock);
 
@@ -141,7 +141,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("tag", obj.Tag);
             writer.WriteRequiredAttributeString("mask", obj.Mask);
-            writer.WriteRequiredAttributeString("relation", obj.Relation);
+            writer.WriteRequiredAttributeString("relation", obj.Relation?.AsStringValue());
             writer.WriteRequiredAttributeString("value", obj.Value);
 
             writer.WriteEndElement();
@@ -226,7 +226,7 @@ namespace SabreTools.Serialization.Writers
         {
             writer.WriteStartElement("control");
 
-            writer.WriteRequiredAttributeString("type", obj.Type);
+            writer.WriteRequiredAttributeString("type", obj.Type?.AsStringValue());
             writer.WriteOptionalAttributeString("player", obj.Player);
             writer.WriteOptionalAttributeString("buttons", obj.Buttons);
             writer.WriteOptionalAttributeString("reqbuttons", obj.ReqButtons);
@@ -251,7 +251,7 @@ namespace SabreTools.Serialization.Writers
         {
             writer.WriteStartElement("device");
 
-            writer.WriteRequiredAttributeString("type", obj.Type);
+            writer.WriteRequiredAttributeString("type", obj.Type?.AsStringValue());
             writer.WriteOptionalAttributeString("tag", obj.Tag);
             writer.WriteOptionalAttributeString("fixed_image", obj.FixedImage);
             writer.WriteOptionalAttributeString("mandatory", obj.Mandatory);
@@ -371,7 +371,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("region", obj.Region);
             writer.WriteOptionalAttributeString("index", obj.Index);
             writer.WriteOptionalAttributeString("writable", obj.Writable.FromYesNo());
-            writer.WriteOptionalAttributeString("status", obj.Status);
+            writer.WriteOptionalAttributeString("status", obj.Status?.AsStringValue());
             writer.WriteOptionalAttributeString("optional", obj.Optional.FromYesNo());
 
             writer.WriteEndElement();
@@ -387,7 +387,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("display");
 
             writer.WriteOptionalAttributeString("tag", obj.Tag);
-            writer.WriteRequiredAttributeString("type", obj.Type);
+            writer.WriteRequiredAttributeString("type", obj.Type?.AsStringValue());
             writer.WriteOptionalAttributeString("rotate", obj.Rotate);
             writer.WriteOptionalAttributeString("flipx", obj.FlipX.FromYesNo());
             writer.WriteOptionalAttributeString("width", obj.Width);
@@ -413,13 +413,13 @@ namespace SabreTools.Serialization.Writers
         {
             writer.WriteStartElement("driver");
 
-            writer.WriteRequiredAttributeString("status", obj.Status);
-            writer.WriteOptionalAttributeString("color", obj.Color);
-            writer.WriteOptionalAttributeString("sound", obj.Sound);
+            writer.WriteRequiredAttributeString("status", obj.Status?.AsStringValue());
+            writer.WriteOptionalAttributeString("color", obj.Color?.AsStringValue());
+            writer.WriteOptionalAttributeString("sound", obj.Sound?.AsStringValue());
             writer.WriteOptionalAttributeString("palettesize", obj.PaletteSize);
-            writer.WriteRequiredAttributeString("emulation", obj.Emulation);
-            writer.WriteRequiredAttributeString("cocktail", obj.Cocktail);
-            writer.WriteRequiredAttributeString("savestate", obj.SaveState);
+            writer.WriteRequiredAttributeString("emulation", obj.Emulation?.AsStringValue());
+            writer.WriteRequiredAttributeString("cocktail", obj.Cocktail?.AsStringValue());
+            writer.WriteRequiredAttributeString("savestate", obj.SaveState?.AsStringValue());
             writer.WriteOptionalAttributeString("requiresartwork", obj.RequiresArtwork.FromYesNo());
             writer.WriteOptionalAttributeString("unofficial", obj.Unofficial.FromYesNo());
             writer.WriteOptionalAttributeString("nosoundhardware", obj.NoSoundHardware.FromYesNo());
@@ -451,9 +451,9 @@ namespace SabreTools.Serialization.Writers
         {
             writer.WriteStartElement("feature");
 
-            writer.WriteRequiredAttributeString("type", obj.Type);
-            writer.WriteOptionalAttributeString("status", obj.Status);
-            writer.WriteOptionalAttributeString("overall", obj.Overall);
+            writer.WriteRequiredAttributeString("type", obj.Type?.AsStringValue());
+            writer.WriteOptionalAttributeString("status", obj.Status?.AsStringValue());
+            writer.WriteOptionalAttributeString("overall", obj.Overall?.AsStringValue());
 
             writer.WriteEndElement();
         }
@@ -734,7 +734,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("merge", obj.Merge);
             writer.WriteOptionalAttributeString("region", obj.Region);
             writer.WriteOptionalAttributeString("offset", obj.Offset);
-            writer.WriteOptionalAttributeString("status", obj.Status);
+            writer.WriteOptionalAttributeString("status", obj.Status?.AsStringValue());
             writer.WriteOptionalAttributeString("optional", obj.Optional.FromYesNo());
             writer.WriteOptionalAttributeString("dispose", obj.Dispose.FromYesNo());
             writer.WriteOptionalAttributeString("soundonly", obj.SoundOnly.FromYesNo());
@@ -805,7 +805,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("tag", obj.Tag);
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteRequiredAttributeString("status", obj.Status);
+            writer.WriteRequiredAttributeString("status", obj.Status?.AsStringValue());
             writer.WriteOptionalAttributeString("filter", obj.Filter);
 
             writer.WriteEndElement();
@@ -834,7 +834,7 @@ namespace SabreTools.Serialization.Writers
         {
             writer.WriteStartElement("video");
 
-            writer.WriteRequiredAttributeString("screen", obj.Screen);
+            writer.WriteRequiredAttributeString("screen", obj.Screen?.AsStringValue());
             writer.WriteRequiredAttributeString("orientation", obj.Orientation);
             writer.WriteOptionalAttributeString("width", obj.Width);
             writer.WriteOptionalAttributeString("height", obj.Height);

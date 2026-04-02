@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SabreTools.Data.Extensions;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 using SabreTools.Metadata.Filter;
@@ -304,13 +303,13 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case Chip chip:
                     if (string.IsNullOrEmpty(chip.GetName()))
                         missingFields.Add(nameof(Data.Models.Metadata.Chip.Name));
-                    if (chip.ReadString(Data.Models.Metadata.Chip.ChipTypeKey).AsChipType() is null)
-                        missingFields.Add(Data.Models.Metadata.Chip.ChipTypeKey);
+                    if (chip.ChipType is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Chip.ChipType));
                     break;
 
                 case Display display:
-                    if (display.ReadString(Data.Models.Metadata.Display.DisplayTypeKey).AsDisplayType() is null)
-                        missingFields.Add(Data.Models.Metadata.Display.DisplayTypeKey);
+                    if (display.DisplayType is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Display.DisplayType));
                     if (display.ReadDouble(Data.Models.Metadata.Display.RefreshKey) is null)
                         missingFields.Add(Data.Models.Metadata.Display.RefreshKey);
                     break;
@@ -350,24 +349,24 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Driver driver:
-                    if (driver.ReadString(Data.Models.Metadata.Driver.StatusKey).AsSupportStatus() is null)
-                        missingFields.Add(Data.Models.Metadata.Driver.StatusKey);
-                    if (driver.ReadString(Data.Models.Metadata.Driver.EmulationKey).AsSupportStatus() is null)
-                        missingFields.Add(Data.Models.Metadata.Driver.EmulationKey);
-                    if (driver.ReadString(Data.Models.Metadata.Driver.CocktailKey).AsSupportStatus() is null)
-                        missingFields.Add(Data.Models.Metadata.Driver.CocktailKey);
-                    if (driver.ReadString(Data.Models.Metadata.Driver.SaveStateKey).AsSupportStatus() is null)
-                        missingFields.Add(Data.Models.Metadata.Driver.SaveStateKey);
+                    if (driver.Status is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Driver.Status));
+                    if (driver.Emulation is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Driver.Emulation));
+                    if (driver.Cocktail is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Driver.Cocktail));
+                    if (driver.SaveState is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Driver.SaveState));
                     break;
 
                 case Feature feature:
-                    if (feature.ReadString(Data.Models.Metadata.Feature.FeatureTypeKey).AsFeatureType() is null)
-                        missingFields.Add(Data.Models.Metadata.Feature.FeatureTypeKey);
+                    if (feature.FeatureType is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Feature.FeatureType));
                     break;
 
                 case Device device:
-                    if (device.ReadString(Data.Models.Metadata.Device.DeviceTypeKey).AsDeviceType() is null)
-                        missingFields.Add(Data.Models.Metadata.Device.DeviceTypeKey);
+                    if (device.DeviceType is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Device.DeviceType));
                     break;
 
                 case Slot slot:
@@ -380,8 +379,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         missingFields.Add(Data.Models.Metadata.SoftwareList.TagKey);
                     if (string.IsNullOrEmpty(softwarelist.GetName()))
                         missingFields.Add(nameof(Data.Models.Metadata.SoftwareList.Name));
-                    if (softwarelist.ReadString(Data.Models.Metadata.SoftwareList.StatusKey).AsSoftwareListStatus() == null)
-                        missingFields.Add(Data.Models.Metadata.SoftwareList.StatusKey);
+                    if (softwarelist.Status == null)
+                        missingFields.Add(nameof(Data.Models.Metadata.SoftwareList.Status));
                     break;
 
                 case RamOption ramoption:

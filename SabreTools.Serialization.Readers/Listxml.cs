@@ -189,7 +189,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Tag = reader.GetAttribute("tag");
-            obj.Type = reader.GetAttribute("type");
+            obj.Type = reader.GetAttribute("type").AsChipType();
             obj.SoundOnly = reader.GetAttribute("soundonly").AsYesNo();
             obj.Clock = reader.GetAttribute("clock");
 
@@ -207,7 +207,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Tag = reader.GetAttribute("tag");
             obj.Mask = reader.GetAttribute("mask");
-            obj.Relation = reader.GetAttribute("relation");
+            obj.Relation = reader.GetAttribute("relation").AsRelation();
             obj.Value = reader.GetAttribute("value");
 
             return obj;
@@ -340,7 +340,7 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Control();
 
-            obj.Type = reader.GetAttribute("type");
+            obj.Type = reader.GetAttribute("type").AsControlType();
             obj.Player = reader.GetAttribute("player");
             obj.Buttons = reader.GetAttribute("buttons");
             obj.ReqButtons = reader.GetAttribute("reqbuttons");
@@ -365,7 +365,7 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Device();
 
-            obj.Type = reader.GetAttribute("type");
+            obj.Type = reader.GetAttribute("type").AsDeviceType();
             obj.Tag = reader.GetAttribute("tag");
             obj.FixedImage = reader.GetAttribute("fixed_image");
             obj.Mandatory = reader.GetAttribute("mandatory");
@@ -558,7 +558,7 @@ namespace SabreTools.Serialization.Readers
             obj.Region = reader.GetAttribute("region");
             obj.Index = reader.GetAttribute("index");
             obj.Writable = reader.GetAttribute("writable").AsYesNo();
-            obj.Status = reader.GetAttribute("status");
+            obj.Status = reader.GetAttribute("status").AsItemStatus();
             obj.Optional = reader.GetAttribute("optional").AsYesNo();
 
             return obj;
@@ -574,7 +574,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new Display();
 
             obj.Tag = reader.GetAttribute("tag");
-            obj.Type = reader.GetAttribute("type");
+            obj.Type = reader.GetAttribute("type").AsDisplayType();
             obj.Rotate = reader.GetAttribute("rotate");
             obj.FlipX = reader.GetAttribute("flipx").AsYesNo();
             obj.Width = reader.GetAttribute("width");
@@ -600,13 +600,13 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Driver();
 
-            obj.Status = reader.GetAttribute("status");
-            obj.Color = reader.GetAttribute("color");
-            obj.Sound = reader.GetAttribute("sound");
+            obj.Status = reader.GetAttribute("status").AsSupportStatus();
+            obj.Color = reader.GetAttribute("color").AsSupportStatus();
+            obj.Sound = reader.GetAttribute("sound").AsSupportStatus();
             obj.PaletteSize = reader.GetAttribute("palettesize");
-            obj.Emulation = reader.GetAttribute("emulation");
-            obj.Cocktail = reader.GetAttribute("cocktail");
-            obj.SaveState = reader.GetAttribute("savestate");
+            obj.Emulation = reader.GetAttribute("emulation").AsSupportStatus();
+            obj.Cocktail = reader.GetAttribute("cocktail").AsSupportStatus();
+            obj.SaveState = reader.GetAttribute("savestate").AsSupported();
             obj.RequiresArtwork = reader.GetAttribute("requiresartwork").AsYesNo();
             obj.Unofficial = reader.GetAttribute("unofficial").AsYesNo();
             obj.NoSoundHardware = reader.GetAttribute("nosoundhardware").AsYesNo();
@@ -638,9 +638,9 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Feature();
 
-            obj.Type = reader.GetAttribute("type");
-            obj.Status = reader.GetAttribute("status");
-            obj.Overall = reader.GetAttribute("overall");
+            obj.Type = reader.GetAttribute("type").AsFeatureType();
+            obj.Status = reader.GetAttribute("status").AsFeatureStatus();
+            obj.Overall = reader.GetAttribute("overall").AsFeatureStatus();
 
             return obj;
         }
@@ -1052,7 +1052,7 @@ namespace SabreTools.Serialization.Readers
             obj.Merge = reader.GetAttribute("merge");
             obj.Region = reader.GetAttribute("region");
             obj.Offset = reader.GetAttribute("offset");
-            obj.Status = reader.GetAttribute("status");
+            obj.Status = reader.GetAttribute("status").AsItemStatus();
             obj.Optional = reader.GetAttribute("optional").AsYesNo();
             obj.Dispose = reader.GetAttribute("dispose").AsYesNo();
             obj.SoundOnly = reader.GetAttribute("soundonly").AsYesNo();
@@ -1145,7 +1145,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Tag = reader.GetAttribute("tag");
             obj.Name = reader.GetAttribute("name");
-            obj.Status = reader.GetAttribute("status");
+            obj.Status = reader.GetAttribute("status").AsSoftwareListStatus();
             obj.Filter = reader.GetAttribute("filter");
 
             return obj;
@@ -1174,7 +1174,7 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Video();
 
-            obj.Screen = reader.GetAttribute("screen");
+            obj.Screen = reader.GetAttribute("screen").AsDisplayType();
             obj.Orientation = reader.GetAttribute("orientation");
             obj.Width = reader.GetAttribute("width");
             obj.Height = reader.GetAttribute("height");

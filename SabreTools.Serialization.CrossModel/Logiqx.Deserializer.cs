@@ -57,38 +57,38 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             string? headerVal = item.ReadString(Data.Models.Metadata.Header.HeaderKey);
-            string? forceMerging = item.ReadString(Data.Models.Metadata.Header.ForceMergingKey);
-            string? forceNodump = item.ReadString(Data.Models.Metadata.Header.ForceNodumpKey);
-            string? forceUnpacking = item.ReadString(Data.Models.Metadata.Header.ForcePackingKey);
+            Data.Models.Metadata.MergingFlag forceMerging = item.ForceMerging;
+            Data.Models.Metadata.NodumpFlag forceNodump = item.ForceNodump;
+            Data.Models.Metadata.PackingFlag forcePacking = item.ForcePacking;
 
             if (headerVal is not null
-                || forceMerging is not null
-                || forceNodump is not null
-                || forceUnpacking is not null)
+                || forceMerging is not Data.Models.Metadata.MergingFlag.None
+                || forceNodump is not Data.Models.Metadata.NodumpFlag.None
+                || forcePacking is not Data.Models.Metadata.PackingFlag.None)
             {
                 header.ClrMamePro = new Data.Models.Logiqx.ClrMamePro();
                 if (headerVal is not null)
                     header.ClrMamePro.Header = headerVal;
-                if (forceMerging is not null)
+                if (forceMerging is not Data.Models.Metadata.MergingFlag.None)
                     header.ClrMamePro.ForceMerging = forceMerging;
-                if (forceNodump is not null)
+                if (forceNodump is not Data.Models.Metadata.NodumpFlag.None)
                     header.ClrMamePro.ForceNodump = forceNodump;
-                if (forceUnpacking is not null)
-                    header.ClrMamePro.ForcePacking = forceUnpacking;
+                if (forcePacking is not Data.Models.Metadata.PackingFlag.None)
+                    header.ClrMamePro.ForcePacking = forcePacking;
             }
 
             string? plugin = item.ReadString(Data.Models.Metadata.Header.PluginKey);
-            string? romMode = item.ReadString(Data.Models.Metadata.Header.RomModeKey);
-            string? biosMode = item.ReadString(Data.Models.Metadata.Header.BiosModeKey);
-            string? sampleMode = item.ReadString(Data.Models.Metadata.Header.SampleModeKey);
+            Data.Models.Metadata.MergingFlag romMode = item.RomMode;
+            Data.Models.Metadata.MergingFlag biosMode = item.BiosMode;
+            Data.Models.Metadata.MergingFlag sampleMode = item.SampleMode;
             bool? lockRomMode = item.LockRomMode;
             bool? lockBiosMode = item.LockBiosMode;
             bool? lockSampleMode = item.LockSampleMode;
 
             if (plugin is not null
-                || romMode is not null
-                || biosMode is not null
-                || sampleMode is not null
+                || romMode is not Data.Models.Metadata.MergingFlag.None
+                || biosMode is not Data.Models.Metadata.MergingFlag.None
+                || sampleMode is not Data.Models.Metadata.MergingFlag.None
                 || lockRomMode is not null
                 || lockBiosMode is not null
                 || lockSampleMode is not null)
@@ -96,11 +96,11 @@ namespace SabreTools.Serialization.CrossModel
                 header.RomCenter = new Data.Models.Logiqx.RomCenter();
                 if (plugin is not null)
                     header.RomCenter.Plugin = plugin;
-                if (romMode is not null)
+                if (romMode is not Data.Models.Metadata.MergingFlag.None)
                     header.RomCenter.RomMode = romMode;
-                if (biosMode is not null)
+                if (biosMode is not Data.Models.Metadata.MergingFlag.None)
                     header.RomCenter.BiosMode = biosMode;
-                if (sampleMode is not null)
+                if (sampleMode is not Data.Models.Metadata.MergingFlag.None)
                     header.RomCenter.SampleMode = sampleMode;
                 if (lockRomMode is not null)
                     header.RomCenter.LockRomMode = lockRomMode;
@@ -236,7 +236,7 @@ namespace SabreTools.Serialization.CrossModel
                 MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
                 SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
                 Merge = item.ReadString(Data.Models.Metadata.Disk.MergeKey),
-                Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
+                Status = item.Status,
                 Region = item.ReadString(Data.Models.Metadata.Disk.RegionKey),
             };
             return disk;
@@ -249,10 +249,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var driver = new Driver
             {
-                Status = item.ReadString(Data.Models.Metadata.Driver.StatusKey),
-                Emulation = item.ReadString(Data.Models.Metadata.Driver.EmulationKey),
-                Cocktail = item.ReadString(Data.Models.Metadata.Driver.CocktailKey),
-                SaveState = item.ReadString(Data.Models.Metadata.Driver.SaveStateKey),
+                Status = item.Status,
+                Emulation = item.Emulation,
+                Cocktail = item.Cocktail,
+                SaveState = item.SaveState,
                 RequiresArtwork = item.RequiresArtwork,
                 Unofficial = item.Unofficial,
                 NoSoundHardware = item.NoSoundHardware,
@@ -318,7 +318,7 @@ namespace SabreTools.Serialization.CrossModel
                 xxHash364 = item.ReadString(Data.Models.Metadata.Rom.xxHash364Key),
                 xxHash3128 = item.ReadString(Data.Models.Metadata.Rom.xxHash3128Key),
                 Merge = item.ReadString(Data.Models.Metadata.Rom.MergeKey),
-                Status = item.ReadString(Data.Models.Metadata.Rom.StatusKey),
+                Status = item.Status,
                 Serial = item.ReadString(Data.Models.Metadata.Rom.SerialKey),
                 Header = item.ReadString(Data.Models.Metadata.Rom.HeaderKey),
                 Date = item.ReadString(Data.Models.Metadata.Rom.DateKey),
@@ -349,7 +349,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Tag = item.ReadString(Data.Models.Metadata.SoftwareList.TagKey),
                 Name = item.Name,
-                Status = item.ReadString(Data.Models.Metadata.SoftwareList.StatusKey),
+                Status = item.Status,
                 Filter = item.ReadString(Data.Models.Metadata.SoftwareList.FilterKey),
             };
             return softwareList;

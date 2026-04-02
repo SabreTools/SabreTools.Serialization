@@ -38,7 +38,7 @@ namespace SabreTools.Metadata.DatItems.Formats
                     && (!string.IsNullOrEmpty(dataArea.GetName())
                         || dataArea.ReadLong(Data.Models.Metadata.DataArea.SizeKey) is not null
                         || dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey) is not null
-                        || dataArea.ReadString(Data.Models.Metadata.DataArea.EndiannessKey).AsEndianness() is not null);
+                        || dataArea.Endianness is not null);
             }
         }
 
@@ -60,20 +60,22 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Rom)?.Inverted = value;
         }
 
-        [JsonIgnore]
-        public bool ItemStatusSpecified
+        public LoadFlag? LoadFlag
         {
-            get
-            {
-                var status = ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus();
-                return status is not null && status != ItemStatus.None;
-            }
+            get => (_internal as Data.Models.Metadata.Rom)?.LoadFlag;
+            set => (_internal as Data.Models.Metadata.Rom)?.LoadFlag = value;
         }
 
         public bool? MIA
         {
             get => (_internal as Data.Models.Metadata.Rom)?.MIA;
             set => (_internal as Data.Models.Metadata.Rom)?.MIA = value;
+        }
+
+        public OpenMSXSubType? OpenMSXMediaType
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.OpenMSXMediaType;
+            set => (_internal as Data.Models.Metadata.Rom)?.OpenMSXMediaType = value;
         }
 
         public bool? Optional
@@ -110,6 +112,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Rom)?.SoundOnly = value;
         }
 
+        public ItemStatus? Status
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.Status;
+            set => (_internal as Data.Models.Metadata.Rom)?.Status = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -117,7 +125,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Rom() : base()
         {
             Write<DupeType>(DupeTypeKey, 0x00);
-            Write<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.None.AsStringValue());
+            Status = ItemStatus.None;
         }
 
         public Rom(Dump item, Machine machine, Source source, int index)
@@ -150,7 +158,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             SetName(name);
             Write<string?>(Data.Models.Metadata.Rom.OffsetKey, rom.ReadString(Data.Models.Metadata.Rom.StartKey));
-            Write<string?>(Data.Models.Metadata.Rom.OpenMSXMediaType, subType?.AsStringValue());
+            OpenMSXMediaType = subType;
             Write<string?>(Data.Models.Metadata.Rom.OpenMSXType, rom.ReadString(Data.Models.Metadata.Rom.OpenMSXType) ?? rom.ItemType.ToString());
             Write<string?>(Data.Models.Metadata.Rom.RemarkKey, rom.ReadString(Data.Models.Metadata.Rom.RemarkKey));
             Write<string?>(Data.Models.Metadata.Rom.SHA1Key, rom.ReadString(Data.Models.Metadata.Rom.SHA1Key));
@@ -228,19 +236,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Rom(Data.Models.Metadata.Rom item) : base(item)
         {
             Write<DupeType>(DupeTypeKey, 0x00);
-
-            // Process flag values
-            string? loadFlag = ReadString(Data.Models.Metadata.Rom.LoadFlagKey);
-            if (loadFlag is not null)
-                Write<string?>(Data.Models.Metadata.Rom.LoadFlagKey, loadFlag.AsLoadFlag()?.AsStringValue());
-
-            string? openMSXMediaType = ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType);
-            if (openMSXMediaType is not null)
-                Write<string?>(Data.Models.Metadata.Rom.OpenMSXMediaType, openMSXMediaType.AsOpenMSXSubType()?.AsStringValue());
-
-            string? status = ReadString(Data.Models.Metadata.Rom.StatusKey);
-            if (status is not null)
-                Write<string?>(Data.Models.Metadata.Rom.StatusKey, status.AsItemStatus()?.AsStringValue());
 
             // Process hash values
             long? size = ReadLong(Data.Models.Metadata.Rom.SizeKey);

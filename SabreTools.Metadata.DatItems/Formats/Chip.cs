@@ -12,7 +12,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
-        [JsonIgnore]
+        public Data.Models.Metadata.ChipType? ChipType
+        {
+            get => (_internal as Data.Models.Metadata.Chip)?.ChipType;
+            set => (_internal as Data.Models.Metadata.Chip)?.ChipType = value;
+        }
+
         public bool? SoundOnly
         {
             get => (_internal as Data.Models.Metadata.Chip)?.SoundOnly;
@@ -25,13 +30,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Chip() : base() { }
 
-        public Chip(Data.Models.Metadata.Chip item) : base(item)
-        {
-            // Process flag values
-            string? chipType = ReadString(Data.Models.Metadata.Chip.ChipTypeKey);
-            if (chipType is not null)
-                Write<string?>(Data.Models.Metadata.Chip.ChipTypeKey, chipType.AsChipType()?.AsStringValue());
-        }
+        public Chip(Data.Models.Metadata.Chip item) : base(item) { }
 
         public Chip(Data.Models.Metadata.Chip item, Machine machine, Source source) : this(item)
         {

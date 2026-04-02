@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -9,14 +10,14 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>(protection|timing|graphics|palette|sound|capture|camera|microphone|controls|keyboard|mouse|media|disk|printer|tape|punch|drum|rom|comms|lan|wan)</remarks>
         [Required]
         [XmlAttribute("type")]
-        public string? Type { get; set; }
+        public FeatureType? Type { get; set; }
 
         /// <remarks>(unemulated|imperfect)</remarks>
         [XmlAttribute("status")]
-        public string? Status { get; set; }
+        public FeatureStatus? Status { get; set; }
 
         /// <remarks>(unemulated|imperfect)</remarks>
         [XmlAttribute("overall")]
-        public string? Overall { get; set; }
+        public FeatureStatus? Overall { get; set; }
     }
 }

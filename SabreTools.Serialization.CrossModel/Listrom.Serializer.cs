@@ -89,9 +89,9 @@ namespace SabreTools.Serialization.CrossModel
                 };
 
                 if (item.NoGoodDumpKnown)
-                    disk[Data.Models.Metadata.Disk.StatusKey] = "nodump";
+                    disk.Status = Data.Models.Metadata.ItemStatus.Nodump;
                 else if (item.Bad)
-                    disk[Data.Models.Metadata.Disk.StatusKey] = "baddump";
+                    disk.Status = Data.Models.Metadata.ItemStatus.BadDump;
 
                 return disk;
             }
@@ -106,9 +106,9 @@ namespace SabreTools.Serialization.CrossModel
                 };
 
                 if (item.NoGoodDumpKnown)
-                    rom[Data.Models.Metadata.Rom.StatusKey] = "nodump";
+                    rom.Status = Data.Models.Metadata.ItemStatus.Nodump;
                 else if (item.Bad)
-                    rom[Data.Models.Metadata.Rom.StatusKey] = "baddump";
+                    rom.Status = Data.Models.Metadata.ItemStatus.BadDump;
 
                 return rom;
             }

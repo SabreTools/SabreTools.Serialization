@@ -23,12 +23,12 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(5, actual.Count);
+            Assert.Equal(4, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
             Assert.Null(actual.Name);
             Assert.Null(actual[Rom.MergeKey]);
             Assert.Null(actual[Rom.RegionKey]);
-            Assert.Null(actual[Rom.StatusKey]);
+            Assert.Null(actual.Status);
             Assert.Null(actual.Optional);
             Assert.Null(actual[Rom.MD5Key]);
             Assert.Null(actual[Rom.SHA1Key]);
@@ -42,7 +42,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX",
                 [Disk.MergeKey] = "XXXXXX",
                 [Disk.RegionKey] = "XXXXXX",
-                [Disk.StatusKey] = "XXXXXX",
+                Status = ItemStatus.Good,
                 Optional = true,
                 [Disk.MD5Key] = "XXXXXX",
                 [Disk.SHA1Key] = "XXXXXX",
@@ -51,12 +51,12 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(5, actual.Count);
+            Assert.Equal(4, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
             Assert.Equal("XXXXXX.chd", actual.Name);
             Assert.Equal("XXXXXX", actual[Rom.MergeKey]);
             Assert.Equal("XXXXXX", actual[Rom.RegionKey]);
-            Assert.Equal("XXXXXX", actual[Rom.StatusKey]);
+            Assert.Equal(ItemStatus.Good, actual.Status);
             Assert.Equal(true, actual.Optional);
             Assert.Equal("XXXXXX", actual[Rom.MD5Key]);
             Assert.Equal("XXXXXX", actual[Rom.SHA1Key]);
@@ -1580,6 +1580,16 @@ namespace SabreTools.Data.Extensions.Test
 
         [Theory]
         [InlineData(null, null)]
+        [InlineData("plain", Blit.Plain)]
+        [InlineData("dirty", Blit.Dirty)]
+        public void AsBlitTest(string? field, Blit? expected)
+        {
+            Blit? actual = field.AsBlit();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
         [InlineData("cpu", ChipType.CPU)]
         [InlineData("audio", ChipType.Audio)]
         public void AsChipTypeTest(string? field, ChipType? expected)
@@ -1867,6 +1877,16 @@ namespace SabreTools.Data.Extensions.Test
         #endregion
 
         #region Enum to String
+
+        [Theory]
+        [InlineData((Blit)int.MaxValue, null)]
+        [InlineData(Blit.Plain, "plain")]
+        [InlineData(Blit.Dirty, "dirty")]
+        public void FromBlitTest(Blit field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
 
         [Theory]
         [InlineData((ChipType)int.MaxValue, null)]

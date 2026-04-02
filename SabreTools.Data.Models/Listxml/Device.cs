@@ -1,14 +1,16 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
     [XmlRoot("device")]
     public class Device
     {
+        /// <remarks>(unknown|cartridge|floppydisk|harddisk|cylinder|cassette|punchcard|punchtape|printout|serial|parallel|snapshot|quickload|memcard|cdrom|magtape|romimage|midiin|midiout|picture|vidfile)</remarks>
         [Required]
         [XmlAttribute("type")]
-        public string? Type { get; set; }
+        public DeviceType? Type { get; set; }
 
         [XmlAttribute("tag")]
         public string? Tag { get; set; }

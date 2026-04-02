@@ -22,6 +22,9 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|partial|no) "no"</remarks>
         public Runnable? Runnable { get; set; }
 
+        /// <remarks>(yes|partial|no) "yes"</remarks>
+        public Supported? Supported { get; set; }
+
         #endregion
 
         #region Keys
@@ -252,9 +255,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string StatusKey = "status";
-
-        /// <remarks>(yes|partial|no) "yes"</remarks>
-        public const string SupportedKey = "supported";
 
         /// <remarks>string</remarks>
         public const string SystemKey = "system";

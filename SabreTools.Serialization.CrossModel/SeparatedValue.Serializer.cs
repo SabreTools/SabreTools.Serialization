@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.CrossModel
                     Name = item.DiskName,
                     [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
                     [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
-                    [Data.Models.Metadata.Disk.StatusKey] = item.Status,
+                    Status = item.Status,
                 },
                 "media" => new Data.Models.Metadata.Media
                 {
@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.CrossModel
                     [Data.Models.Metadata.Rom.SHA384Key] = item.SHA384,
                     [Data.Models.Metadata.Rom.SHA512Key] = item.SHA512,
                     [Data.Models.Metadata.Rom.SpamSumKey] = item.SpamSum,
-                    [Data.Models.Metadata.Rom.StatusKey] = item.Status,
+                    Status = item.Status,
                 },
                 _ => null,
             };

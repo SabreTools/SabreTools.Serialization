@@ -13,6 +13,9 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Optional { get; set; }
 
+        /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
+        public ItemStatus? Status { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Writable { get; set; }
 
@@ -37,9 +40,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string SHA1Key = "sha1";
-
-        /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
-        public const string StatusKey = "status";
 
         #endregion
 

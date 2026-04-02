@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -17,7 +18,7 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>(original|compatible)</remarks>
         [Required]
         [XmlAttribute("status")]
-        public string? Status { get; set; }
+        public SoftwareListStatus? Status { get; set; }
 
         [XmlAttribute("filter")]
         public string? Filter { get; set; }

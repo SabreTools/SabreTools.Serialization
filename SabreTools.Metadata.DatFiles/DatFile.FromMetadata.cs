@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using SabreTools.Metadata.Filter;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
-using SabreTools.Data.Extensions;
 using MergingFlag = SabreTools.Data.Models.Metadata.MergingFlag;
 using NodumpFlag = SabreTools.Data.Models.Metadata.NodumpFlag;
 using PackingFlag = SabreTools.Data.Models.Metadata.PackingFlag;
@@ -93,8 +92,8 @@ namespace SabreTools.Metadata.DatFiles
             // Selectively set all possible fields -- TODO: Figure out how to make this less manual
             if (Header.ReadString(Data.Models.Metadata.Header.AuthorKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.AuthorKey, header.ReadString(Data.Models.Metadata.Header.AuthorKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.BiosModeKey).AsMergingFlag() == MergingFlag.None)
-                Header.Write<string?>(Data.Models.Metadata.Header.BiosModeKey, header.ReadString(Data.Models.Metadata.Header.BiosModeKey).AsMergingFlag().AsStringValue());
+            if (Header.BiosMode == MergingFlag.None)
+                Header.BiosMode = header.BiosMode;
             if (Header.ReadString(Data.Models.Metadata.Header.BuildKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.BuildKey, header.ReadString(Data.Models.Metadata.Header.BuildKey));
             if (Header.ReadString(Data.Models.Metadata.Header.CategoryKey) is null)
@@ -113,12 +112,12 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Write<string?>(Data.Models.Metadata.Header.EmailKey, header.ReadString(Data.Models.Metadata.Header.EmailKey));
             if (Header.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.EmulatorVersionKey, header.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.ForceMergingKey).AsMergingFlag() == MergingFlag.None)
-                Header.Write<string?>(Data.Models.Metadata.Header.ForceMergingKey, header.ReadString(Data.Models.Metadata.Header.ForceMergingKey).AsMergingFlag().AsStringValue());
-            if (Header.ReadString(Data.Models.Metadata.Header.ForceNodumpKey).AsNodumpFlag() == NodumpFlag.None)
-                Header.Write<string?>(Data.Models.Metadata.Header.ForceNodumpKey, header.ReadString(Data.Models.Metadata.Header.ForceNodumpKey).AsNodumpFlag().AsStringValue());
-            if (Header.ReadString(Data.Models.Metadata.Header.ForcePackingKey).AsPackingFlag() == PackingFlag.None)
-                Header.Write<string?>(Data.Models.Metadata.Header.ForcePackingKey, header.ReadString(Data.Models.Metadata.Header.ForcePackingKey).AsPackingFlag().AsStringValue());
+            if (Header.ForceMerging == MergingFlag.None)
+                Header.ForceMerging = header.ForceMerging;
+            if (Header.ForceNodump == NodumpFlag.None)
+                Header.ForceNodump = header.ForceNodump;
+            if (Header.ForcePacking == PackingFlag.None)
+                Header.ForcePacking = header.ForcePacking;
             if (Header.ForceZipping is null)
                 Header.ForceZipping = header.ForceZipping;
             if (Header.ReadString(Data.Models.Metadata.Header.HeaderKey) is null)
@@ -145,14 +144,14 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Write<string?>(Data.Models.Metadata.Header.PluginKey, header.ReadString(Data.Models.Metadata.Header.PluginKey));
             if (Header.ReadString(Data.Models.Metadata.Header.RefNameKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.RefNameKey, header.ReadString(Data.Models.Metadata.Header.RefNameKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.RomModeKey).AsMergingFlag() == MergingFlag.None)
-                Header.Write<string?>(Data.Models.Metadata.Header.RomModeKey, header.ReadString(Data.Models.Metadata.Header.RomModeKey).AsMergingFlag().AsStringValue());
+            if (Header.RomMode == MergingFlag.None)
+                Header.RomMode = header.RomMode;
             if (Header.ReadString(Data.Models.Metadata.Header.RomTitleKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.RomTitleKey, header.ReadString(Data.Models.Metadata.Header.RomTitleKey));
             if (Header.ReadString(Data.Models.Metadata.Header.RootDirKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.RootDirKey, header.ReadString(Data.Models.Metadata.Header.RootDirKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.SampleModeKey).AsMergingFlag() == MergingFlag.None)
-                Header.Write<string?>(Data.Models.Metadata.Header.SampleModeKey, header.ReadString(Data.Models.Metadata.Header.SampleModeKey).AsMergingFlag().AsStringValue());
+            if (Header.SampleMode == MergingFlag.None)
+                Header.SampleMode = header.SampleMode;
             if (Header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.SchemaLocationKey, header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
             if (Header.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey) is null)
@@ -613,10 +612,10 @@ namespace SabreTools.Metadata.DatFiles
                             long? size = romItem.ReadLong(Data.Models.Metadata.Rom.SizeKey);
 
                             // If the rom is a continue or ignore
-                            string? loadFlag = rom.ReadString(Data.Models.Metadata.Rom.LoadFlagKey);
+                            Data.Models.Metadata.LoadFlag? loadFlag = rom.LoadFlag;
                             if (loadFlag is not null
-                                && (loadFlag.Equals("continue", StringComparison.OrdinalIgnoreCase)
-                                    || loadFlag.Equals("ignore", StringComparison.OrdinalIgnoreCase)))
+                                && (loadFlag == Data.Models.Metadata.LoadFlag.Continue
+                                    || loadFlag == Data.Models.Metadata.LoadFlag.Ignore))
                             {
                                 var lastRom = addRoms[addRoms.Count - 1];
                                 long? lastSize = lastRom.ReadLong(Data.Models.Metadata.Rom.SizeKey);

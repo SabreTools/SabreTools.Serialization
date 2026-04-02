@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.CrossModel
             var header = new Data.Models.Metadata.Header
             {
                 [Data.Models.Metadata.Header.IdKey] = item.Id,
-                Name =  item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Header.DescriptionKey] = item.Description,
                 [Data.Models.Metadata.Header.RootDirKey] = item.RootDir,
                 [Data.Models.Metadata.Header.CategoryKey] = item.Category,
@@ -71,17 +71,17 @@ namespace SabreTools.Serialization.CrossModel
             if (item.ClrMamePro is not null)
             {
                 header[Data.Models.Metadata.Header.HeaderKey] = item.ClrMamePro.Header;
-                header[Data.Models.Metadata.Header.ForceMergingKey] = item.ClrMamePro.ForceMerging;
-                header[Data.Models.Metadata.Header.ForceNodumpKey] = item.ClrMamePro.ForceNodump;
-                header[Data.Models.Metadata.Header.ForcePackingKey] = item.ClrMamePro.ForcePacking;
+                header.ForceMerging = item.ClrMamePro.ForceMerging;
+                header.ForceNodump = item.ClrMamePro.ForceNodump;
+                header.ForcePacking = item.ClrMamePro.ForcePacking;
             }
 
             if (item.RomCenter is not null)
             {
                 header[Data.Models.Metadata.Header.PluginKey] = item.RomCenter.Plugin;
-                header[Data.Models.Metadata.Header.RomModeKey] = item.RomCenter.RomMode;
-                header[Data.Models.Metadata.Header.BiosModeKey] = item.RomCenter.BiosMode;
-                header[Data.Models.Metadata.Header.SampleModeKey] = item.RomCenter.SampleMode;
+                header.RomMode = item.RomCenter.RomMode;
+                header.BiosMode = item.RomCenter.BiosMode;
+                header.SampleMode = item.RomCenter.SampleMode;
                 header.LockRomMode = item.RomCenter.LockRomMode;
                 header.LockBiosMode = item.RomCenter.LockBiosMode;
                 header.LockSampleMode = item.RomCenter.LockSampleMode;
@@ -230,7 +230,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
                 [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
                 [Data.Models.Metadata.Disk.MergeKey] = item.Merge,
-                [Data.Models.Metadata.Disk.StatusKey] = item.Status,
+                Status = item.Status,
                 [Data.Models.Metadata.Disk.RegionKey] = item.Region,
             };
             return disk;
@@ -243,10 +243,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var driver = new Data.Models.Metadata.Driver
             {
-                [Data.Models.Metadata.Driver.StatusKey] = item.Status,
-                [Data.Models.Metadata.Driver.EmulationKey] = item.Emulation,
-                [Data.Models.Metadata.Driver.CocktailKey] = item.Cocktail,
-                [Data.Models.Metadata.Driver.SaveStateKey] = item.SaveState,
+                Status = item.Status,
+                Emulation = item.Emulation,
+                Cocktail = item.Cocktail,
+                SaveState = item.SaveState,
                 RequiresArtwork = item.RequiresArtwork,
                 Unofficial = item.Unofficial,
                 NoSoundHardware = item.NoSoundHardware,
@@ -312,7 +312,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Rom.xxHash364Key] = item.xxHash364,
                 [Data.Models.Metadata.Rom.xxHash3128Key] = item.xxHash3128,
                 [Data.Models.Metadata.Rom.MergeKey] = item.Merge,
-                [Data.Models.Metadata.Rom.StatusKey] = item.Status,
+                Status = item.Status,
                 [Data.Models.Metadata.Rom.SerialKey] = item.Serial,
                 [Data.Models.Metadata.Rom.HeaderKey] = item.Header,
                 [Data.Models.Metadata.Rom.DateKey] = item.Date,
@@ -343,7 +343,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 [Data.Models.Metadata.SoftwareList.TagKey] = item.Tag,
                 Name = item.Name,
-                [Data.Models.Metadata.SoftwareList.StatusKey] = item.Status,
+                Status = item.Status,
                 [Data.Models.Metadata.SoftwareList.FilterKey] = item.Filter,
             };
             return softwareList;

@@ -136,9 +136,9 @@ namespace SabreTools.Serialization.Readers
             var obj = new Data.Models.Logiqx.ClrMamePro();
 
             obj.Header = reader.GetAttribute("header");
-            obj.ForceMerging = reader.GetAttribute("forcemerging");
-            obj.ForceNodump = reader.GetAttribute("forcenodump");
-            obj.ForcePacking = reader.GetAttribute("forcepacking");
+            obj.ForceMerging = reader.GetAttribute("forcemerging").AsMergingFlag();
+            obj.ForceNodump = reader.GetAttribute("forcenodump").AsNodumpFlag();
+            obj.ForcePacking = reader.GetAttribute("forcepacking").AsPackingFlag();
 
             return obj;
         }
@@ -278,9 +278,9 @@ namespace SabreTools.Serialization.Readers
             var obj = new Data.Models.Logiqx.RomCenter();
 
             obj.Plugin = reader.GetAttribute("plugin");
-            obj.RomMode = reader.GetAttribute("rommode");
-            obj.BiosMode = reader.GetAttribute("biosmode");
-            obj.SampleMode = reader.GetAttribute("samplemode");
+            obj.RomMode = reader.GetAttribute("rommode").AsMergingFlag();
+            obj.BiosMode = reader.GetAttribute("biosmode").AsMergingFlag();
+            obj.SampleMode = reader.GetAttribute("samplemode").AsMergingFlag();
             obj.LockRomMode = reader.GetAttribute("lockrommode").AsYesNo();
             obj.LockBiosMode = reader.GetAttribute("lockbiosmode").AsYesNo();
             obj.LockSampleMode = reader.GetAttribute("locksamplemode").AsYesNo();
@@ -403,7 +403,7 @@ namespace SabreTools.Serialization.Readers
             obj.MD5 = reader.GetAttribute("md5");
             obj.SHA1 = reader.GetAttribute("sha1");
             obj.Merge = reader.GetAttribute("merge");
-            obj.Status = reader.GetAttribute("status");
+            obj.Status = reader.GetAttribute("status").AsItemStatus();
             obj.Region = reader.GetAttribute("region");
 
             return obj;
@@ -418,10 +418,10 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Driver();
 
-            obj.Status = reader.GetAttribute("status");
-            obj.Emulation = reader.GetAttribute("emulation");
-            obj.Cocktail = reader.GetAttribute("cocktail");
-            obj.SaveState = reader.GetAttribute("savestate");
+            obj.Status = reader.GetAttribute("status").AsSupportStatus();
+            obj.Emulation = reader.GetAttribute("emulation").AsSupportStatus();
+            obj.Cocktail = reader.GetAttribute("cocktail").AsSupportStatus();
+            obj.SaveState = reader.GetAttribute("savestate").AsSupported();
             obj.RequiresArtwork = reader.GetAttribute("requiresartwork").AsYesNo();
             obj.Unofficial = reader.GetAttribute("unofficial").AsYesNo();
             obj.NoSoundHardware = reader.GetAttribute("nosoundhardware").AsYesNo();
@@ -706,7 +706,7 @@ namespace SabreTools.Serialization.Readers
             obj.xxHash364 = reader.GetAttribute("xxh3_64");
             obj.xxHash3128 = reader.GetAttribute("xxh3_128");
             obj.Merge = reader.GetAttribute("merge");
-            obj.Status = reader.GetAttribute("status");
+            obj.Status = reader.GetAttribute("status").AsItemStatus();
             obj.Serial = reader.GetAttribute("serial");
             obj.Header = reader.GetAttribute("header");
             obj.Date = reader.GetAttribute("date");
@@ -741,7 +741,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Tag = reader.GetAttribute("tag");
             obj.Name = reader.GetAttribute("name");
-            obj.Status = reader.GetAttribute("status");
+            obj.Status = reader.GetAttribute("status").AsSoftwareListStatus();
             obj.Filter = reader.GetAttribute("filter");
 
             return obj;

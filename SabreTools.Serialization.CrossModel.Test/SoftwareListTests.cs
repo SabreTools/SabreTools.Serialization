@@ -63,8 +63,8 @@ namespace SabreTools.Serialization.CrossModel.Test
                 SHA1 = "XXXXXX",
                 Offset = "XXXXXX",
                 Value = "XXXXXX",
-                Status = "XXXXXX",
-                LoadFlag = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
+                LoadFlag = Data.Models.Metadata.LoadFlag.Load16Byte,
             };
 
             var dataarea = new Data.Models.SoftwareList.DataArea
@@ -72,7 +72,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Name = "XXXXXX",
                 Size = "XXXXXX",
                 Width = "XXXXXX",
-                Endianness = "XXXXXX",
+                Endianness = Data.Models.Metadata.Endianness.Big,
                 Rom = [rom],
             };
 
@@ -81,7 +81,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Name = "XXXXXX",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
                 Writeable = true,
             };
 
@@ -120,7 +120,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "XXXXXX",
                 CloneOf = "XXXXXX",
-                Supported = "XXXXXX",
+                Supported = Data.Models.Metadata.Supported.Yes,
                 Description = "XXXXXX",
                 Year = "XXXXXX",
                 Publisher = "XXXXXX",
@@ -147,7 +147,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(software);
             Assert.Equal("XXXXXX", software.Name);
             Assert.Equal("XXXXXX", software.CloneOf);
-            Assert.Equal("XXXXXX", software.Supported);
+            Assert.Equal(Data.Models.Metadata.Supported.Yes, software.Supported);
             Assert.Equal("XXXXXX", software.Description);
             Assert.Equal("XXXXXX", software.Year);
             Assert.Equal("XXXXXX", software.Publisher);
@@ -231,7 +231,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", dataarea.Name);
             Assert.Equal("XXXXXX", dataarea.Size);
             Assert.Equal("XXXXXX", dataarea.Width);
-            Assert.Equal("XXXXXX", dataarea.Endianness);
+            Assert.Equal(Data.Models.Metadata.Endianness.Big, dataarea.Endianness);
 
             Assert.NotNull(dataarea.Rom);
             var rom = Assert.Single(dataarea.Rom);
@@ -251,8 +251,8 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", rom.SHA1);
             Assert.Equal("XXXXXX", rom.Offset);
             Assert.Equal("XXXXXX", rom.Value);
-            Assert.Equal("XXXXXX", rom.Status);
-            Assert.Equal("XXXXXX", rom.LoadFlag);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
+            Assert.Equal(Data.Models.Metadata.LoadFlag.Load16Byte, rom.LoadFlag);
         }
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", disk.Name);
             Assert.Equal("XXXXXX", disk.MD5);
             Assert.Equal("XXXXXX", disk.SHA1);
-            Assert.Equal("XXXXXX", disk.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, disk.Status);
             Assert.Equal(true, disk.Writeable);
         }
 

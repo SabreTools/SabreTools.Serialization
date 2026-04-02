@@ -55,9 +55,9 @@ namespace SabreTools.Serialization.CrossModel
                 Comment = item.ReadString(Data.Models.Metadata.Header.CommentKey),
                 Header = item.ReadString(Data.Models.Metadata.Header.HeaderKey),
                 Type = item.ReadString(Data.Models.Metadata.Header.TypeKey),
-                ForceMerging = item.ReadString(Data.Models.Metadata.Header.ForceMergingKey),
+                ForceMerging = item.ForceMerging,
                 ForceZipping = item.ForceZipping,
-                ForcePacking = item.ReadString(Data.Models.Metadata.Header.ForcePackingKey),
+                ForcePacking = item.ForcePacking,
             };
             return clrMamePro;
         }
@@ -167,7 +167,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var chip = new Chip
             {
-                Type = item.ReadString(Data.Models.Metadata.Chip.ChipTypeKey),
+                Type = item.ChipType,
                 Name = item.Name,
                 Flags = item.ReadString(Data.Models.Metadata.Chip.FlagsKey),
                 Clock = item.ReadString(Data.Models.Metadata.Chip.ClockKey),
@@ -200,7 +200,7 @@ namespace SabreTools.Serialization.CrossModel
                 MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
                 SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
                 Merge = item.ReadString(Data.Models.Metadata.Disk.MergeKey),
-                Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
+                Status = item.Status,
                 Flags = item.ReadString(Data.Models.Metadata.Disk.FlagsKey),
             };
             return disk;
@@ -213,11 +213,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var driver = new Driver
             {
-                Status = item.ReadString(Data.Models.Metadata.Driver.StatusKey),
-                Color = item.ReadString(Data.Models.Metadata.Driver.ColorKey),
-                Sound = item.ReadString(Data.Models.Metadata.Driver.SoundKey),
+                Status = item.Status,
+                Color = item.Color,
+                Sound = item.Sound,
                 PaletteSize = item.ReadString(Data.Models.Metadata.Driver.PaletteSizeKey),
-                Blit = item.ReadString(Data.Models.Metadata.Driver.BlitKey),
+                Blit = item.Blit,
             };
             return driver;
         }
@@ -296,7 +296,7 @@ namespace SabreTools.Serialization.CrossModel
                 xxHash364 = item.ReadString(Data.Models.Metadata.Rom.xxHash364Key),
                 xxHash3128 = item.ReadString(Data.Models.Metadata.Rom.xxHash3128Key),
                 Merge = item.ReadString(Data.Models.Metadata.Rom.MergeKey),
-                Status = item.ReadString(Data.Models.Metadata.Rom.StatusKey),
+                Status = item.Status,
                 Region = item.ReadString(Data.Models.Metadata.Rom.RegionKey),
                 Flags = item.ReadString(Data.Models.Metadata.Rom.FlagsKey),
                 Offs = item.ReadString(Data.Models.Metadata.Rom.OffsetKey),
@@ -340,7 +340,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var video = new Video
             {
-                Screen = item.ReadString(Data.Models.Metadata.Video.ScreenKey),
+                Screen = item.Screen,
                 Orientation = item.ReadString(Data.Models.Metadata.Video.OrientationKey),
                 X = item.ReadString(Data.Models.Metadata.Video.WidthKey),
                 Y = item.ReadString(Data.Models.Metadata.Video.HeightKey),

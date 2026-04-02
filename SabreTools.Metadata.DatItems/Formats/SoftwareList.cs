@@ -10,17 +10,22 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("softwarelist"), XmlRoot("softwarelist")]
     public sealed class SoftwareList : DatItem<Data.Models.Metadata.SoftwareList>
     {
+        #region Fields
+
+        public Data.Models.Metadata.SoftwareListStatus? Status
+        {
+            get => (_internal as Data.Models.Metadata.SoftwareList)?.Status;
+            set => (_internal as Data.Models.Metadata.SoftwareList)?.Status = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public SoftwareList() : base() { }
 
         public SoftwareList(Data.Models.Metadata.SoftwareList item) : base(item)
         {
-            // Process flag values
-            string? status = ReadString(Data.Models.Metadata.SoftwareList.StatusKey);
-            if (status is not null)
-                Write<string?>(Data.Models.Metadata.SoftwareList.StatusKey, status.AsSoftwareListStatus()?.AsStringValue());
-
             // Handle subitems
             // TODO: Handle the Software subitem
         }

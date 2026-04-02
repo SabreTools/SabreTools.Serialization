@@ -10,17 +10,21 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("condition"), XmlRoot("condition")]
     public sealed class Condition : DatItem<Data.Models.Metadata.Condition>
     {
+        #region Fields
+
+        public Data.Models.Metadata.Relation? Relation
+        {
+            get => (_internal as Data.Models.Metadata.Condition)?.Relation;
+            set => (_internal as Data.Models.Metadata.Condition)?.Relation = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Condition() : base() { }
 
-        public Condition(Data.Models.Metadata.Condition item) : base(item)
-        {
-            // Process flag values
-            string? condition = ReadString(Data.Models.Metadata.Condition.RelationKey);
-            if (condition is not null)
-                Write<string?>(Data.Models.Metadata.Condition.RelationKey, condition.AsRelation()?.AsStringValue());
-        }
+        public Condition(Data.Models.Metadata.Condition item) : base(item) { }
 
         public Condition(Data.Models.Metadata.Condition item, Machine machine, Source source) : this(item)
         {

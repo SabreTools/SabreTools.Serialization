@@ -356,8 +356,15 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Default.FromYesNo();
                     return true;
 
+                case Chip item when Key.FieldName == "type":
+                    checkValue = item.ChipType?.AsStringValue();
+                    return true;
                 case Chip item when Key.FieldName == "soundonly":
                     checkValue = item.SoundOnly.FromYesNo();
+                    return true;
+
+                case Condition item when Key.FieldName == "relation":
+                    checkValue = item.Relation?.AsStringValue();
                     return true;
 
                 case ConfLocation item when Key.FieldName == "inverted":
@@ -368,8 +375,19 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Default.FromYesNo();
                     return true;
 
+                case Control item when Key.FieldName == "type":
+                    checkValue = item.ControlType?.AsStringValue();
+                    return true;
                 case Control item when Key.FieldName == "reverse":
                     checkValue = item.Reverse.FromYesNo();
+                    return true;
+
+                case DataArea item when Key.FieldName == "endianness":
+                    checkValue = item.Endianness?.AsStringValue();
+                    return true;
+
+                case Device item when Key.FieldName == "type":
+                    checkValue = item.DeviceType?.AsStringValue();
                     return true;
 
                 case DipLocation item when Key.FieldName == "inverted":
@@ -391,6 +409,9 @@ namespace SabreTools.Metadata.Filter
                 case Disk item when Key.FieldName == "optional":
                     checkValue = item.Optional.FromYesNo();
                     return true;
+                case Disk item when Key.FieldName == "status":
+                    checkValue = item.Status?.AsStringValue();
+                    return true;
                 case Disk item when Key.FieldName == "writable":
                     checkValue = item.Writable.FromYesNo();
                     return true;
@@ -398,7 +419,22 @@ namespace SabreTools.Metadata.Filter
                 case Display item when Key.FieldName == "flipx":
                     checkValue = item.FlipX.FromYesNo();
                     return true;
+                case Display item when Key.FieldName == "type":
+                    checkValue = item.DisplayType?.AsStringValue();
+                    return true;
 
+                case Driver item when Key.FieldName == "blit":
+                    checkValue = item.Blit?.AsStringValue();
+                    return true;
+                case Driver item when Key.FieldName == "cocktail":
+                    checkValue = item.Cocktail?.AsStringValue();
+                    return true;
+                case Driver item when Key.FieldName == "color":
+                    checkValue = item.Color?.AsStringValue();
+                    return true;
+                case Driver item when Key.FieldName == "emulation":
+                    checkValue = item.Emulation?.AsStringValue();
+                    return true;
                 case Driver item when Key.FieldName == "incomplete":
                     checkValue = item.Incomplete.FromYesNo();
                     return true;
@@ -408,12 +444,43 @@ namespace SabreTools.Metadata.Filter
                 case Driver item when Key.FieldName == "requiresartwork":
                     checkValue = item.RequiresArtwork.FromYesNo();
                     return true;
+                case Driver item when Key.FieldName == "savestate":
+                    checkValue = item.SaveState?.AsStringValue();
+                    return true;
+                case Driver item when Key.FieldName == "sound":
+                    checkValue = item.Sound?.AsStringValue();
+                    return true;
+                case Driver item when Key.FieldName == "status":
+                    checkValue = item.Status?.AsStringValue();
+                    return true;
                 case Driver item when Key.FieldName == "unofficial":
                     checkValue = item.Unofficial.FromYesNo();
                     return true;
 
+                case Feature item when Key.FieldName == "overall":
+                    checkValue = item.Overall?.AsStringValue();
+                    return true;
+                case Feature item when Key.FieldName == "status":
+                    checkValue = item.Status?.AsStringValue();
+                    return true;
+                case Feature item when Key.FieldName == "type":
+                    checkValue = item.FeatureType?.AsStringValue();
+                    return true;
+
+                case Header item when Key.FieldName == "biosmode":
+                    checkValue = item.BiosMode.AsStringValue();
+                    return true;
                 case Header item when Key.FieldName == "debug":
                     checkValue = item.Debug.FromYesNo();
+                    return true;
+                case Header item when Key.FieldName == "forcemerging":
+                    checkValue = item.ForceMerging.AsStringValue();
+                    return true;
+                case Header item when Key.FieldName == "forcenodump":
+                    checkValue = item.ForceNodump.AsStringValue();
+                    return true;
+                case Header item when Key.FieldName == "forcepacking":
+                    checkValue = item.ForcePacking.AsStringValue();
                     return true;
                 case Header item when Key.FieldName == "forcezipping":
                     checkValue = item.ForceZipping.FromYesNo();
@@ -426,6 +493,12 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case Header item when Key.FieldName == "locksamplemode":
                     checkValue = item.LockSampleMode.FromYesNo();
+                    return true;
+                case Header item when Key.FieldName == "rommode":
+                    checkValue = item.RomMode.AsStringValue();
+                    return true;
+                case Header item when Key.FieldName == "samplemode":
+                    checkValue = item.SampleMode.AsStringValue();
                     return true;
 
                 case Input item when Key.FieldName == "service":
@@ -447,6 +520,9 @@ namespace SabreTools.Metadata.Filter
                 case Machine item when Key.FieldName == "runnable":
                     checkValue = item.Runnable?.AsStringValue();
                     return true;
+                case Machine item when Key.FieldName == "supported":
+                    checkValue = item.Supported?.AsStringValue();
+                    return true;
 
                 case RamOption item when Key.FieldName == "default":
                     checkValue = item.Default.FromYesNo();
@@ -465,6 +541,12 @@ namespace SabreTools.Metadata.Filter
                 case Rom item when Key.FieldName == "inverted":
                     checkValue = item.Inverted.FromYesNo();
                     return true;
+                case Rom item when Key.FieldName == "loadflag":
+                    checkValue = item.LoadFlag?.AsStringValue();
+                    return true;
+                case Rom item when Key.FieldName == "mediatype":
+                    checkValue = item.OpenMSXMediaType?.AsStringValue();
+                    return true;
                 case Rom item when Key.FieldName == "mia":
                     checkValue = item.MIA.FromYesNo();
                     return true;
@@ -474,9 +556,24 @@ namespace SabreTools.Metadata.Filter
                 case Rom item when Key.FieldName == "soundonly":
                     checkValue = item.SoundOnly.FromYesNo();
                     return true;
+                case Rom item when Key.FieldName == "status":
+                    checkValue = item.Status?.AsStringValue();
+                    return true;
 
                 case SlotOption item when Key.FieldName == "default":
                     checkValue = item.Default.FromYesNo();
+                    return true;
+
+                case Software item when Key.FieldName == "supported":
+                    checkValue = item.Supported?.AsStringValue();
+                    return true;
+
+                case SoftwareList item when Key.FieldName == "status":
+                    checkValue = item.Status?.AsStringValue();
+                    return true;
+
+                case Video item when Key.FieldName == "screen":
+                    checkValue = item.Screen?.AsStringValue();
                     return true;
 
                 // Fallthrough to Dictionary-based checking

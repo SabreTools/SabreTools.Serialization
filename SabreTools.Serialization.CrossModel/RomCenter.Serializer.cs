@@ -49,9 +49,9 @@ namespace SabreTools.Serialization.CrossModel
                 header[Data.Models.Metadata.Header.PluginKey] = item.Dat.Plugin;
 
                 if (item.Dat.Split == "yes" || item.Dat.Split == "1")
-                    header[Data.Models.Metadata.Header.ForceMergingKey] = "split";
+                    header.ForceMerging = Data.Models.Metadata.MergingFlag.Split;
                 else if (item.Dat.Merge == "yes" || item.Dat.Merge == "1")
-                    header[Data.Models.Metadata.Header.ForceMergingKey] = "merge";
+                    header.ForceMerging = Data.Models.Metadata.MergingFlag.Merged;
             }
 
             if (item.Emulator is not null)

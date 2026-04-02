@@ -11,6 +11,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("dataarea"), XmlRoot("dataarea")]
     public sealed class DataArea : DatItem<Data.Models.Metadata.DataArea>
     {
+        #region Fields
+
+        public Data.Models.Metadata.Endianness? Endianness
+        {
+            get => (_internal as Data.Models.Metadata.DataArea)?.Endianness;
+            set => (_internal as Data.Models.Metadata.DataArea)?.Endianness = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public DataArea() : base() { }
@@ -18,10 +28,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         public DataArea(Data.Models.Metadata.DataArea item) : base(item)
         {
             // Process flag values
-            string? endianness = ReadString(Data.Models.Metadata.DataArea.EndiannessKey);
-            if (endianness is not null)
-                Write<string?>(Data.Models.Metadata.DataArea.EndiannessKey, endianness.AsEndianness()?.AsStringValue());
-
             long? size = ReadLong(Data.Models.Metadata.DataArea.SizeKey);
             if (size is not null)
                 Write<string?>(Data.Models.Metadata.DataArea.SizeKey, size.ToString());

@@ -60,9 +60,9 @@ namespace SabreTools.Serialization.CrossModel
                 SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
             };
 
-            if ((item[Data.Models.Metadata.Disk.StatusKey] as string) == "nodump")
+            if (item.Status == Data.Models.Metadata.ItemStatus.Nodump)
                 row.NoGoodDumpKnown = true;
-            else if ((item[Data.Models.Metadata.Disk.StatusKey] as string) == "baddump")
+            else if (item.Status == Data.Models.Metadata.ItemStatus.BadDump)
                 row.Bad = true;
 
             return row;
@@ -81,9 +81,9 @@ namespace SabreTools.Serialization.CrossModel
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
             };
 
-            if ((item[Data.Models.Metadata.Rom.StatusKey] as string) == "nodump")
+            if (item.Status == Data.Models.Metadata.ItemStatus.Nodump)
                 row.NoGoodDumpKnown = true;
-            else if ((item[Data.Models.Metadata.Rom.StatusKey] as string) == "baddump")
+            else if (item.Status == Data.Models.Metadata.ItemStatus.BadDump)
                 row.Bad = true;
 
             return row;

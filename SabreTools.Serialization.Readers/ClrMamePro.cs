@@ -245,13 +245,15 @@ namespace SabreTools.Serialization.Readers
                                 dat.ClrMamePro.Type = reader.Standalone?.Value;
                                 break;
                             case "forcemerging":
-                                dat.ClrMamePro.ForceMerging = reader.Standalone?.Value;
+                                dat.ClrMamePro.ForceMerging = reader.Standalone?.Value?.AsMergingFlag()
+                                    ?? Data.Models.Metadata.MergingFlag.None;
                                 break;
                             case "forcezipping":
                                 dat.ClrMamePro.ForceZipping = reader.Standalone?.Value?.AsYesNo();
                                 break;
                             case "forcepacking":
-                                dat.ClrMamePro.ForcePacking = reader.Standalone?.Value;
+                                dat.ClrMamePro.ForcePacking = reader.Standalone?.Value?.AsPackingFlag()
+                                    ?? Data.Models.Metadata.PackingFlag.None;
                                 break;
                             default:
                                 // TODO: Log invalid values
@@ -578,7 +580,7 @@ namespace SabreTools.Serialization.Readers
                         rom.Merge = kvp.Value;
                         break;
                     case "status":
-                        rom.Status = kvp.Value;
+                        rom.Status = kvp.Value.AsItemStatus();
                         break;
                     case "region":
                         rom.Region = kvp.Value;
@@ -641,7 +643,7 @@ namespace SabreTools.Serialization.Readers
                         disk.Merge = kvp.Value;
                         break;
                     case "status":
-                        disk.Status = kvp.Value;
+                        disk.Status = kvp.Value.AsItemStatus();
                         break;
                     case "flags":
                         disk.Flags = kvp.Value;
@@ -764,7 +766,7 @@ namespace SabreTools.Serialization.Readers
                 switch (kvp.Key?.ToLowerInvariant())
                 {
                     case "type":
-                        chip.Type = kvp.Value;
+                        chip.Type = kvp.Value.AsChipType();
                         break;
                     case "name":
                         chip.Name = kvp.Value;
@@ -800,7 +802,7 @@ namespace SabreTools.Serialization.Readers
                 switch (kvp.Key?.ToLowerInvariant())
                 {
                     case "screen":
-                        video.Screen = kvp.Value;
+                        video.Screen = kvp.Value.AsDisplayType();
                         break;
                     case "orientation":
                         video.Orientation = kvp.Value;
@@ -949,19 +951,19 @@ namespace SabreTools.Serialization.Readers
                 switch (kvp.Key?.ToLowerInvariant())
                 {
                     case "status":
-                        driver.Status = kvp.Value;
+                        driver.Status = kvp.Value.AsSupportStatus();
                         break;
                     case "color":
-                        driver.Color = kvp.Value;
+                        driver.Color = kvp.Value.AsSupportStatus();
                         break;
                     case "sound":
-                        driver.Sound = kvp.Value;
+                        driver.Sound = kvp.Value.AsSupportStatus();
                         break;
                     case "palettesize":
                         driver.PaletteSize = kvp.Value;
                         break;
                     case "blit":
-                        driver.Blit = kvp.Value;
+                        driver.Blit = kvp.Value.AsBlit();
                         break;
                     default:
                         // TODO: Log invalid values

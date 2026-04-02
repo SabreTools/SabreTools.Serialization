@@ -22,14 +22,14 @@ namespace SabreTools.Metadata.Test
         {
             DictionaryBase self = new Disk
             {
-                [Disk.StatusKey] = "nodump",
+                Status = ItemStatus.Nodump,
                 Name = "XXXXXX",
                 [Disk.MD5Key] = string.Empty,
                 [Disk.SHA1Key] = string.Empty,
             };
             DictionaryBase other = new Disk
             {
-                [Disk.StatusKey] = "NODUMP",
+                Status = ItemStatus.Nodump,
                 Name = "XXXXXX",
                 [Disk.MD5Key] = string.Empty,
                 [Disk.SHA1Key] = string.Empty,
@@ -268,7 +268,7 @@ namespace SabreTools.Metadata.Test
         {
             DictionaryBase self = new Rom
             {
-                [Rom.StatusKey] = "nodump",
+                Status = ItemStatus.Nodump,
                 Name = "XXXXXX",
                 [Rom.SizeKey] = 12345,
                 [Rom.CRC16Key] = string.Empty,
@@ -287,7 +287,7 @@ namespace SabreTools.Metadata.Test
             };
             DictionaryBase other = new Rom
             {
-                [Rom.StatusKey] = "NODUMP",
+                Status = ItemStatus.Nodump,
                 Name = "XXXXXX",
                 [Rom.SizeKey] = 12345,
                 [Rom.CRC16Key] = string.Empty,

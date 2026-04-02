@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.Machine.CloneOfKey] = item.CloneOf,
-                [Data.Models.Metadata.Machine.SupportedKey] = item.Supported,
+                Supported = item.Supported,
                 [Data.Models.Metadata.Machine.DescriptionKey] = item.Description,
                 [Data.Models.Metadata.Machine.YearKey] = item.Year,
                 [Data.Models.Metadata.Machine.PublisherKey] = item.Publisher,
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 [Data.Models.Metadata.DataArea.SizeKey] = item.Size,
                 [Data.Models.Metadata.DataArea.WidthKey] = item.Width,
-                [Data.Models.Metadata.DataArea.EndiannessKey] = item.Endianness,
+                Endianness = item.Endianness,
             };
 
             if (item.Rom is not null && item.Rom.Length > 0)
@@ -128,7 +128,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
                 [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
-                [Data.Models.Metadata.Disk.StatusKey] = item.Status,
+                Status = item.Status,
                 Writable = item.Writeable,
             };
             return disk;
@@ -216,8 +216,8 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
                 [Data.Models.Metadata.Rom.OffsetKey] = item.Offset,
                 [Data.Models.Metadata.Rom.ValueKey] = item.Value,
-                [Data.Models.Metadata.Rom.StatusKey] = item.Status,
-                [Data.Models.Metadata.Rom.LoadFlagKey] = item.LoadFlag,
+                Status = item.Status,
+                LoadFlag = item.LoadFlag,
             };
             return rom;
         }

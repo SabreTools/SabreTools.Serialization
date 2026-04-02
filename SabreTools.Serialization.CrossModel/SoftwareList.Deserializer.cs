@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
-                Supported = item.ReadString(Data.Models.Metadata.Machine.SupportedKey),
+                Supported = item.Supported,
                 Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
                 Year = item.ReadString(Data.Models.Metadata.Machine.YearKey),
                 Publisher = item.ReadString(Data.Models.Metadata.Machine.PublisherKey),
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 Size = item.ReadString(Data.Models.Metadata.DataArea.SizeKey),
                 Width = item.ReadString(Data.Models.Metadata.DataArea.WidthKey),
-                Endianness = item.ReadString(Data.Models.Metadata.DataArea.EndiannessKey),
+                Endianness = item.Endianness,
             };
 
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.DataArea.RomKey);
@@ -129,7 +129,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
                 SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
-                Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
+                Status = item.Status,
                 Writeable = item.Writable,
             };
             return disk;
@@ -222,8 +222,8 @@ namespace SabreTools.Serialization.CrossModel
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
                 Offset = item.ReadString(Data.Models.Metadata.Rom.OffsetKey),
                 Value = item.ReadString(Data.Models.Metadata.Rom.ValueKey),
-                Status = item.ReadString(Data.Models.Metadata.Rom.StatusKey),
-                LoadFlag = item.ReadString(Data.Models.Metadata.Rom.LoadFlagKey),
+                Status = item.Status,
+                LoadFlag = item.LoadFlag,
             };
             return rom;
         }

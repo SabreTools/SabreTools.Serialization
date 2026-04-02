@@ -8,6 +8,9 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>(joy|stick|paddle|pedal|lightgun|positional|dial|trackball|mouse|only_buttons|keypad|keyboard|mahjong|hanafuda|gambling)</remarks>
+        public ControlType? ControlType { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Reverse { get; set; }
 
@@ -35,9 +38,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>long</remarks>
         public const string SensitivityKey = "sensitivity";
-
-        /// <remarks>(joy|stick|paddle|pedal|lightgun|positional|dial|trackball|mouse|only_buttons|keypad|keyboard|mahjong|hanafuda|gambling)</remarks>
-        public const string ControlTypeKey = "type";
 
         /// <remarks>string, possibly long</remarks>
         public const string WaysKey = "ways";

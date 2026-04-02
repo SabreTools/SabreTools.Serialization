@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using SabreTools.Data.Extensions;
 using SabreTools.Hashing;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
@@ -408,7 +407,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="disk">Item to add info from</param>
         private void AddItemStatistics(Disk disk)
         {
-            ItemStatus? status = disk.ReadString(Data.Models.Metadata.Disk.StatusKey).AsItemStatus();
+            ItemStatus? status = disk.Status;
             if (status != ItemStatus.Nodump)
             {
                 AddHashCount(HashType.MD5, string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key)) ? 0 : 1);
@@ -427,7 +426,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="disk">Item to add info from</param>
         private void AddItemStatistics(Data.Models.Metadata.Disk disk)
         {
-            ItemStatus? status = disk.ReadString(Data.Models.Metadata.Disk.StatusKey).AsItemStatus();
+            ItemStatus? status = disk.Status;
             if (status != ItemStatus.Nodump)
             {
                 AddHashCount(HashType.MD5, string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key)) ? 0 : 1);
@@ -483,7 +482,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="rom">Item to add info from</param>
         private void AddItemStatistics(Rom rom)
         {
-            ItemStatus? status = rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus();
+            ItemStatus? status = rom.Status;
             if (status != ItemStatus.Nodump)
             {
                 TotalSize += rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) ?? 0;
@@ -514,7 +513,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="rom">Item to add info from</param>
         private void AddItemStatistics(Data.Models.Metadata.Rom rom)
         {
-            ItemStatus? status = rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus();
+            ItemStatus? status = rom.Status;
             if (status != ItemStatus.Nodump)
             {
                 TotalSize += rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) ?? 0;
@@ -599,7 +598,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="disk">Item to remove info for</param>
         private void RemoveItemStatistics(Disk disk)
         {
-            ItemStatus? status = disk.ReadString(Data.Models.Metadata.Disk.StatusKey).AsItemStatus();
+            ItemStatus? status = disk.Status;
             if (status != ItemStatus.Nodump)
             {
                 RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key)) ? 0 : 1);
@@ -618,7 +617,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="disk">Item to remove info for</param>
         private void RemoveItemStatistics(Data.Models.Metadata.Disk disk)
         {
-            ItemStatus? status = disk.ReadString(Data.Models.Metadata.Disk.StatusKey).AsItemStatus();
+            ItemStatus? status = disk.Status;
             if (status != ItemStatus.Nodump)
             {
                 RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key)) ? 0 : 1);
@@ -674,7 +673,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="rom">Item to remove info for</param>
         private void RemoveItemStatistics(Rom rom)
         {
-            ItemStatus? status = rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus();
+            ItemStatus? status = rom.Status;
             if (status != ItemStatus.Nodump)
             {
                 TotalSize -= rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) ?? 0;
@@ -705,7 +704,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="rom">Item to remove info for</param>
         private void RemoveItemStatistics(Data.Models.Metadata.Rom rom)
         {
-            ItemStatus? status = rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus();
+            ItemStatus? status = rom.Status;
             if (status != ItemStatus.Nodump)
             {
                 TotalSize -= rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) ?? 0;

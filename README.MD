@@ -8,7 +8,7 @@ Find the link to the Nuget package [here](https://www.nuget.org/packages/SabreTo
 
 ## Releases
 
-For the most recent stable build, download the latest release where: [Releases Page](https://github.com/SabreTools/SabreTools.Serialization/releases)
+For the most recent stable build, download the latest release here: [Releases Page](https://github.com/SabreTools/SabreTools.Serialization/releases)
 
 For the latest WIP build here: [Rolling Release](https://github.com/SabreTools/SabreTools.Serialization/releases/tag/rolling)
 

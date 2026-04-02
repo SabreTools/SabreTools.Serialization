@@ -8,6 +8,9 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>(raster|vector|lcd|svg|unknown)</remarks>
+        public DisplayType? DisplayType { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? FlipX { get; set; }
 
@@ -34,13 +37,11 @@ namespace SabreTools.Data.Models.Metadata
         public const string RefreshKey = "refresh";
 
         /// <remarks>(0|90|180|270)</remarks>
+        /// TODO: Convert to enum
         public const string RotateKey = "rotate";
 
         /// <remarks>string</remarks>
         public const string TagKey = "tag";
-
-        /// <remarks>(raster|vector|lcd|svg|unknown)</remarks>
-        public const string DisplayTypeKey = "type";
 
         /// <remarks>long</remarks>
         public const string VBEndKey = "vbend";

@@ -17,16 +17,25 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Inverted { get; set; }
 
+        /// <remarks>(load16_byte|load16_word|load16_word_swap|load32_byte|load32_word|load32_word_swap|load32_dword|load64_word|load64_word_swap|reload|fill|continue|reload_plain|ignore)</remarks>
+        public LoadFlag? LoadFlag { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? MIA { get; set; }
 
         public string? Name { get; set; }
+
+        /// <remarks>string; OpenMSX.RomBase</remarks>
+        public OpenMSXSubType? OpenMSXMediaType { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Optional { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         public bool? SoundOnly { get; set; }
+
+        /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
+        public ItemStatus? Status { get; set; }
 
         #endregion
 
@@ -128,9 +137,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string, possibly long; Also in ArchiveDotOrg.File</remarks>
         public const string LengthKey = "length";
 
-        /// <remarks>(load16_byte|load16_word|load16_word_swap|load32_byte|load32_word|load32_word_swap|load32_dword|load64_word|load64_word_swap|reload|fill|continue|reload_plain|ignore)</remarks>
-        public const string LoadFlagKey = "loadflag";
-
         /// <remarks>string; ArchiveDotOrg.File</remarks>
         public const string MatrixNumberKey = "matrix_number";
 
@@ -142,9 +148,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string MD5Key = "md5";
-
-        /// <remarks>string; OpenMSX.RomBase</remarks>
-        public const string OpenMSXMediaType = "mediatype";
 
         /// <remarks>string</remarks>
         public const string MergeKey = "merge";
@@ -229,9 +232,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string, possibly long; OpenMSX.RomBase</remarks>
         public const string StartKey = "start";
-
-        /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
-        public const string StatusKey = "status";
 
         /// <remarks>string; ArchiveDotOrg.File</remarks>
         public const string SummationKey = "summation";

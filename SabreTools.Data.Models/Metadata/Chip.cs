@@ -8,6 +8,9 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>(cpu|audio)</remarks>
+        public ChipType? ChipType { get; set; }
+
         public string? Name { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
@@ -25,9 +28,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string TagKey = "tag";
-
-        /// <remarks>(cpu|audio)</remarks>
-        public const string ChipTypeKey = "type";
 
         #endregion
 

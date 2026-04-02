@@ -106,7 +106,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteRequiredAttributeString("size", obj.Size);
             writer.WriteOptionalAttributeString("width", obj.Width);
-            writer.WriteOptionalAttributeString("endianness", obj.Endianness);
+            writer.WriteOptionalAttributeString("endianness", obj.Endianness?.AsStringValue());
 
             if (obj.Rom is not null && obj.Rom.Length > 0)
             {
@@ -171,7 +171,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteOptionalAttributeString("md5", obj.MD5);
             writer.WriteOptionalAttributeString("sha1", obj.SHA1);
-            writer.WriteOptionalAttributeString("status", obj.Status);
+            writer.WriteOptionalAttributeString("status", obj.Status?.AsStringValue());
             writer.WriteOptionalAttributeString("writable", obj.Writeable.FromYesNo());
 
             writer.WriteEndElement();
@@ -292,8 +292,8 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("sha1", obj.SHA1);
             writer.WriteOptionalAttributeString("offset", obj.Offset);
             writer.WriteOptionalAttributeString("value", obj.Value);
-            writer.WriteOptionalAttributeString("status", obj.Status);
-            writer.WriteOptionalAttributeString("loadflag", obj.LoadFlag);
+            writer.WriteOptionalAttributeString("status", obj.Status?.AsStringValue());
+            writer.WriteOptionalAttributeString("loadflag", obj.LoadFlag?.AsStringValue());
 
             writer.WriteEndElement();
         }
@@ -324,7 +324,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteOptionalAttributeString("cloneof", obj.CloneOf);
-            writer.WriteOptionalAttributeString("supported", obj.Supported);
+            writer.WriteOptionalAttributeString("supported", obj.Supported?.AsStringValue());
 
             writer.WriteRequiredElementString("description", obj.Description);
             writer.WriteRequiredElementString("year", obj.Year);

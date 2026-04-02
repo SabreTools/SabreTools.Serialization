@@ -13,6 +13,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public Data.Models.Metadata.DeviceType? DeviceType
+        {
+            get => (_internal as Data.Models.Metadata.Device)?.DeviceType;
+            set => (_internal as Data.Models.Metadata.Device)?.DeviceType = value;
+        }
+
         [JsonIgnore]
         public bool InstancesSpecified
         {
@@ -45,10 +51,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             bool? mandatory = ReadBool(Data.Models.Metadata.Device.MandatoryKey);
             if (mandatory is not null)
                 Write<string?>(Data.Models.Metadata.Device.MandatoryKey, mandatory.FromYesNo());
-
-            string? deviceType = ReadString(Data.Models.Metadata.Device.DeviceTypeKey);
-            if (deviceType is not null)
-                Write<string?>(Data.Models.Metadata.Device.DeviceTypeKey, deviceType.AsDeviceType()?.AsStringValue());
 
             // Handle subitems
             var instance = item.Read<Data.Models.Metadata.Instance>(Data.Models.Metadata.Device.InstanceKey);

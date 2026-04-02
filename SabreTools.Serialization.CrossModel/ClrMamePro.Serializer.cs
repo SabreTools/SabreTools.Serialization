@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                Name =  item.Name,
+                Name = item.Name,
                 [Data.Models.Metadata.Header.DescriptionKey] = item.Description,
                 [Data.Models.Metadata.Header.RootDirKey] = item.RootDir,
                 [Data.Models.Metadata.Header.CategoryKey] = item.Category,
@@ -47,9 +47,9 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Header.CommentKey] = item.Comment,
                 [Data.Models.Metadata.Header.HeaderKey] = item.Header,
                 [Data.Models.Metadata.Header.TypeKey] = item.Type,
-                [Data.Models.Metadata.Header.ForceMergingKey] = item.ForceMerging,
+                ForceMerging = item.ForceMerging,
                 ForceZipping = item.ForceZipping,
-                [Data.Models.Metadata.Header.ForcePackingKey] = item.ForcePacking,
+                ForcePacking = item.ForcePacking,
             };
             return header;
         }
@@ -180,7 +180,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var chip = new Data.Models.Metadata.Chip
             {
-                [Data.Models.Metadata.Chip.ChipTypeKey] = item.Type,
+                ChipType = item.Type,
                 Name = item.Name,
                 [Data.Models.Metadata.Chip.FlagsKey] = item.Flags,
                 [Data.Models.Metadata.Chip.ClockKey] = item.Clock,
@@ -213,7 +213,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
                 [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
                 [Data.Models.Metadata.Disk.MergeKey] = item.Merge,
-                [Data.Models.Metadata.Disk.StatusKey] = item.Status,
+                Status = item.Status,
                 [Data.Models.Metadata.Disk.FlagsKey] = item.Flags,
             };
             return disk;
@@ -226,11 +226,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var driver = new Data.Models.Metadata.Driver
             {
-                [Data.Models.Metadata.Driver.StatusKey] = item.Status,
-                [Data.Models.Metadata.Driver.ColorKey] = item.Color,
-                [Data.Models.Metadata.Driver.SoundKey] = item.Sound,
+                Status = item.Status,
+                Color = item.Color,
+                Sound = item.Sound,
                 [Data.Models.Metadata.Driver.PaletteSizeKey] = item.PaletteSize,
-                [Data.Models.Metadata.Driver.BlitKey] = item.Blit,
+                Blit = item.Blit,
             };
             return driver;
         }
@@ -309,7 +309,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Rom.xxHash364Key] = item.xxHash364,
                 [Data.Models.Metadata.Rom.xxHash3128Key] = item.xxHash3128,
                 [Data.Models.Metadata.Rom.MergeKey] = item.Merge,
-                [Data.Models.Metadata.Rom.StatusKey] = item.Status,
+                Status = item.Status,
                 [Data.Models.Metadata.Rom.RegionKey] = item.Region,
                 [Data.Models.Metadata.Rom.FlagsKey] = item.Flags,
                 [Data.Models.Metadata.Rom.OffsetKey] = item.Offs,
@@ -353,7 +353,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var video = new Data.Models.Metadata.Video
             {
-                [Data.Models.Metadata.Video.ScreenKey] = item.Screen,
+                Screen = item.Screen,
                 [Data.Models.Metadata.Video.OrientationKey] = item.Orientation,
                 [Data.Models.Metadata.Video.WidthKey] = item.X,
                 [Data.Models.Metadata.Video.HeightKey] = item.Y,

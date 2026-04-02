@@ -6,6 +6,13 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("device"), XmlRoot("device")]
     public class Device : DatItem
     {
+        #region Properties
+
+        /// <remarks>(unknown|cartridge|floppydisk|harddisk|cylinder|cassette|punchcard|punchtape|printout|serial|parallel|snapshot|quickload|memcard|cdrom|magtape|romimage|midiin|midiout|picture|vidfile)</remarks>
+        public DeviceType? DeviceType { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>Extension[]</remarks>
@@ -23,13 +30,11 @@ namespace SabreTools.Data.Models.Metadata
         public const string InterfaceKey = "interface";
 
         /// <remarks>(0|1) "0"</remarks>
+        /// TODO: Convert to bool?
         public const string MandatoryKey = "mandatory";
 
         /// <remarks>string</remarks>
         public const string TagKey = "tag";
-
-        /// <remarks>(unknown|cartridge|floppydisk|harddisk|cylinder|cassette|punchcard|punchtape|printout|serial|parallel|snapshot|quickload|memcard|cdrom|magtape|romimage|midiin|midiout|picture|vidfile)</remarks>
-        public const string DeviceTypeKey = "type";
 
         #endregion
 

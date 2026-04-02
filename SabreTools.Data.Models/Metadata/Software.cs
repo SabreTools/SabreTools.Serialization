@@ -10,6 +10,9 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Name { get; set; }
 
+        /// <remarks>(yes|partial|no) "yes"</remarks>
+        public Supported? Supported { get; set; }
+
         #endregion
 
         #region Keys
@@ -37,9 +40,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>SharedFeat[]</remarks>
         [NoFilter]
         public const string SharedFeatKey = "sharedfeat";
-
-        /// <remarks>(yes|partial|no) "yes"</remarks>
-        public const string SupportedKey = "supported";
 
         /// <remarks>string</remarks>
         public const string YearKey = "year";

@@ -39,6 +39,12 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.Runnable = value;
         }
 
+        public Data.Models.Metadata.Supported? Supported
+        {
+            get => _internal.Supported;
+            set => _internal.Supported = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -90,10 +96,6 @@ namespace SabreTools.Metadata.DatItems
             string? im2Crc = ReadString(Data.Models.Metadata.Machine.Im2CRCKey);
             if (im2Crc is not null)
                 Write<string?>(Data.Models.Metadata.Machine.Im2CRCKey, TextHelper.NormalizeCRC32(im2Crc));
-
-            string? supported = ReadString(Data.Models.Metadata.Machine.SupportedKey);
-            if (supported is not null)
-                Write<string?>(Data.Models.Metadata.Machine.SupportedKey, supported.AsSupported()?.AsStringValue());
 
             // Handle Trurip object, if it exists
             var truripItem = machine.Read<Data.Models.Logiqx.Trurip>(Data.Models.Metadata.Machine.TruripKey);

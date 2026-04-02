@@ -358,7 +358,7 @@ namespace SabreTools.Metadata.DatFiles
                                 else
                                 {
                                     aggregateDataArea = [];
-                                    aggregateDataArea[Data.Models.Metadata.DataArea.EndiannessKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.EndiannessKey);
+                                    aggregateDataArea.Endianness = dataArea.Endianness;
                                     aggregateDataArea.Name = dataArea.Name;
                                     aggregateDataArea[Data.Models.Metadata.DataArea.SizeKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.SizeKey);
                                     aggregateDataArea[Data.Models.Metadata.DataArea.WidthKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.WidthKey);
@@ -784,7 +784,7 @@ namespace SabreTools.Metadata.DatFiles
                                 else
                                 {
                                     aggregateDataArea = [];
-                                    aggregateDataArea[Data.Models.Metadata.DataArea.EndiannessKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.EndiannessKey);
+                                    aggregateDataArea.Endianness = dataArea.Endianness;
                                     aggregateDataArea.Name = dataArea.Name;
                                     aggregateDataArea[Data.Models.Metadata.DataArea.SizeKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.SizeKey);
                                     aggregateDataArea[Data.Models.Metadata.DataArea.WidthKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.WidthKey);
@@ -937,7 +937,7 @@ namespace SabreTools.Metadata.DatFiles
                     [Data.Models.Metadata.Video.AspectYKey] = displayItem.ReadLong(Data.Models.Metadata.Video.AspectYKey).ToString(),
                     [Data.Models.Metadata.Video.HeightKey] = displayItem.ReadLong(Data.Models.Metadata.Display.HeightKey).ToString(),
                     [Data.Models.Metadata.Video.RefreshKey] = displayItem.ReadDouble(Data.Models.Metadata.Display.RefreshKey).ToString(),
-                    [Data.Models.Metadata.Video.ScreenKey] = displayItem.ReadString(Data.Models.Metadata.Display.DisplayTypeKey).AsDisplayType()?.AsStringValue(),
+                    Screen = displayItem.DisplayType,
                     [Data.Models.Metadata.Video.WidthKey] = displayItem.ReadLong(Data.Models.Metadata.Display.WidthKey).ToString()
                 };
 
@@ -977,7 +977,7 @@ namespace SabreTools.Metadata.DatFiles
             var romItem = item.GetInternalClone();
 
             // Create a Dump for every Rom that has a subtype
-            switch (romItem.ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType).AsOpenMSXSubType())
+            switch (romItem.OpenMSXMediaType)
             {
                 case OpenMSXSubType.Rom:
                     var dumpRom = new Data.Models.Metadata.Dump();

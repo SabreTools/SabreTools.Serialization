@@ -144,7 +144,7 @@ namespace SabreTools.Serialization.Readers.Test
                 DiskName = "XXXXXX",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
             };
 
             var media = new Data.Models.SeparatedValue.Row
@@ -179,7 +179,7 @@ namespace SabreTools.Serialization.Readers.Test
                 SHA384 = "XXXXXX",
                 SHA512 = "XXXXXX",
                 SpamSum = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
             };
 
             return new Data.Models.SeparatedValue.MetadataFile
@@ -233,7 +233,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Assert.Null(row.SpamSum);
             }
 
-            Assert.Equal("XXXXXX", row.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, row.Status);
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Assert.Null(row.SpamSum);
             }
 
-            Assert.NotNull(row.Status); Assert.Empty(row.Status);
+            Assert.Null(row.Status);
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Assert.Null(row.SpamSum);
             }
 
-            Assert.Equal("XXXXXX", row.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, row.Status);
         }
     }
 }

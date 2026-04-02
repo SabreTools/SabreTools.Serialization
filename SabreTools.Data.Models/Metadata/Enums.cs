@@ -1,6 +1,18 @@
 namespace SabreTools.Data.Models.Metadata
 {
     /// <summary>
+    /// Determine the blit type
+    /// </summary>
+    public enum Blit
+    {
+        /// <summary>"plain"</summary>
+        Plain,
+
+        /// <summary>"dirty"</summary>
+        Dirty,
+    }
+
+    /// <summary>
     /// Determine the chip type
     /// </summary>
     public enum ChipType
@@ -541,5 +553,8 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <summary>"preliminary"</summary>
         Preliminary,
+
+        /// <summary>"test"</summary>
+        Test,
     }
 }

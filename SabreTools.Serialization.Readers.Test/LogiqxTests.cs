@@ -141,17 +141,17 @@ namespace SabreTools.Serialization.Readers.Test
             var clrmamepro = new Data.Models.Logiqx.ClrMamePro
             {
                 Header = "XXXXXX",
-                ForceMerging = "XXXXXX",
-                ForceNodump = "XXXXXX",
-                ForcePacking = "XXXXXX",
+                ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
+                ForceNodump = Data.Models.Metadata.NodumpFlag.Required,
+                ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
             };
 
             var romcenter = new Data.Models.Logiqx.RomCenter
             {
                 Plugin = "XXXXXX",
-                RomMode = "XXXXXX",
-                BiosMode = "XXXXXX",
-                SampleMode = "XXXXXX",
+                RomMode = Data.Models.Metadata.MergingFlag.Merged,
+                BiosMode = Data.Models.Metadata.MergingFlag.Merged,
+                SampleMode = Data.Models.Metadata.MergingFlag.Merged,
                 LockRomMode = true,
                 LockBiosMode = true,
                 LockSampleMode = true,
@@ -230,7 +230,7 @@ namespace SabreTools.Serialization.Readers.Test
                 xxHash364 = "XXXXXX",
                 xxHash3128 = "XXXXXX",
                 Merge = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
                 Serial = "XXXXXX",
                 Header = "XXXXXX",
                 Date = "XXXXXX",
@@ -244,7 +244,7 @@ namespace SabreTools.Serialization.Readers.Test
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Merge = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
                 Region = "XXXXXX",
             };
 
@@ -274,10 +274,10 @@ namespace SabreTools.Serialization.Readers.Test
 
             var driver = new Data.Models.Logiqx.Driver
             {
-                Status = "XXXXXX",
-                Emulation = "XXXXXX",
-                Cocktail = "XXXXXX",
-                SaveState = "XXXXXX",
+                Status = Data.Models.Metadata.SupportStatus.Good,
+                Emulation = Data.Models.Metadata.SupportStatus.Good,
+                Cocktail = Data.Models.Metadata.SupportStatus.Good,
+                SaveState = Data.Models.Metadata.Supported.Yes,
                 RequiresArtwork = true,
                 Unofficial = true,
                 NoSoundHardware = true,
@@ -288,7 +288,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Tag = "XXXXXX",
                 Name = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.SoftwareListStatus.Original,
                 Filter = "XXXXXX",
             };
 
@@ -367,9 +367,9 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(cmp);
             Assert.Equal("XXXXXX", cmp.Header);
-            Assert.Equal("XXXXXX", cmp.ForceMerging);
-            Assert.Equal("XXXXXX", cmp.ForceNodump);
-            Assert.Equal("XXXXXX", cmp.ForcePacking);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, cmp.ForceMerging);
+            Assert.Equal(Data.Models.Metadata.NodumpFlag.Required, cmp.ForceNodump);
+            Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, cmp.ForcePacking);
         }
 
         /// <summary>
@@ -379,9 +379,9 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(rc);
             Assert.Equal("XXXXXX", rc.Plugin);
-            Assert.Equal("XXXXXX", rc.RomMode);
-            Assert.Equal("XXXXXX", rc.BiosMode);
-            Assert.Equal("XXXXXX", rc.SampleMode);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, rc.RomMode);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, rc.BiosMode);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, rc.SampleMode);
             Assert.Equal(true, rc.LockRomMode);
             Assert.Equal(true, rc.LockBiosMode);
             Assert.Equal(true, rc.LockSampleMode);
@@ -529,7 +529,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", rom.xxHash364);
             Assert.Equal("XXXXXX", rom.xxHash3128);
             Assert.Equal("XXXXXX", rom.Merge);
-            Assert.Equal("XXXXXX", rom.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
             Assert.Equal("XXXXXX", rom.Serial);
             Assert.Equal("XXXXXX", rom.Header);
             Assert.Equal("XXXXXX", rom.Date);
@@ -547,7 +547,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", disk.MD5);
             Assert.Equal("XXXXXX", disk.SHA1);
             Assert.Equal("XXXXXX", disk.Merge);
-            Assert.Equal("XXXXXX", disk.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, disk.Status);
             Assert.Equal("XXXXXX", disk.Region);
         }
 
@@ -597,10 +597,10 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Logiqx.Driver? driver)
         {
             Assert.NotNull(driver);
-            Assert.Equal("XXXXXX", driver.Status);
-            Assert.Equal("XXXXXX", driver.Emulation);
-            Assert.Equal("XXXXXX", driver.Cocktail);
-            Assert.Equal("XXXXXX", driver.SaveState);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Status);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Emulation);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Cocktail);
+            Assert.Equal(Data.Models.Metadata.Supported.Yes, driver.SaveState);
             Assert.Equal(true, driver.RequiresArtwork);
             Assert.Equal(true, driver.Unofficial);
             Assert.Equal(true, driver.NoSoundHardware);
@@ -615,7 +615,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(softwarelist);
             Assert.Equal("XXXXXX", softwarelist.Tag);
             Assert.Equal("XXXXXX", softwarelist.Name);
-            Assert.Equal("XXXXXX", softwarelist.Status);
+            Assert.Equal(Data.Models.Metadata.SoftwareListStatus.Original, softwarelist.Status);
             Assert.Equal("XXXXXX", softwarelist.Filter);
         }
     }

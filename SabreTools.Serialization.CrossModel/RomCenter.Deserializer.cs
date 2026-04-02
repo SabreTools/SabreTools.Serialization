@@ -55,14 +55,14 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.ContainsKey(Data.Models.Metadata.Header.DatVersionKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.PluginKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.ForceMergingKey))
+                || item.ForceMerging != Data.Models.Metadata.MergingFlag.None)
             {
                 metadataFile.Dat = new Dat
                 {
                     Version = item.ReadString(Data.Models.Metadata.Header.DatVersionKey),
                     Plugin = item.ReadString(Data.Models.Metadata.Header.PluginKey),
-                    Split = item.ReadString(Data.Models.Metadata.Header.ForceMergingKey) == "split" ? "yes" : "no",
-                    Merge = item.ReadString(Data.Models.Metadata.Header.ForceMergingKey) == "merge" ? "yes" : "no",
+                    Split = item.ForceMerging == Data.Models.Metadata.MergingFlag.Split ? "yes" : "no",
+                    Merge = item.ForceMerging == Data.Models.Metadata.MergingFlag.Merged ? "yes" : "no",
                 };
             }
 

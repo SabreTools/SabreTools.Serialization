@@ -6,6 +6,8 @@ using SabreTools.Matching;
 
 namespace SabreTools.Data.Extensions
 {
+    // TODO: Add proper enum for YesNo
+    // TODO: Combine yes/partial/no enums
     public static class MetadataExtensions
     {
         #region Accessors
@@ -155,7 +157,12 @@ namespace SabreTools.Data.Extensions
             }
             else if (self is Chip selfChip && clone is Chip cloneChip)
             {
+                cloneChip.ChipType = selfChip.ChipType;
                 cloneChip.SoundOnly = selfChip.SoundOnly;
+            }
+            else if (self is Condition selfCondition && clone is Condition cloneCondition)
+            {
+                cloneCondition.Relation = selfCondition.Relation;
             }
             else if (self is ConfLocation selfConfLocation && clone is ConfLocation cloneConfLocation)
             {
@@ -167,7 +174,16 @@ namespace SabreTools.Data.Extensions
             }
             else if (self is Control selfControl && clone is Control cloneControl)
             {
+                cloneControl.ControlType = selfControl.ControlType;
                 cloneControl.Reverse = selfControl.Reverse;
+            }
+            else if (self is DataArea selfDataArea && clone is DataArea cloneDataArea)
+            {
+                cloneDataArea.Endianness = selfDataArea.Endianness;
+            }
+            else if (self is Device selfDevice && clone is Device cloneDevice)
+            {
+                cloneDevice.DeviceType = selfDevice.DeviceType;
             }
             else if (self is DipLocation selfDipLocation && clone is DipLocation cloneDipLocation)
             {
@@ -184,26 +200,47 @@ namespace SabreTools.Data.Extensions
             else if (self is Disk selfDisk && clone is Disk cloneDisk)
             {
                 cloneDisk.Optional = selfDisk.Optional;
+                cloneDisk.Status = selfDisk.Status;
                 cloneDisk.Writable = selfDisk.Writable;
             }
             else if (self is Display selfDisplay && clone is Display cloneDisplay)
             {
+                cloneDisplay.DisplayType = selfDisplay.DisplayType;
                 cloneDisplay.FlipX = selfDisplay.FlipX;
             }
             else if (self is Driver selfDriver && clone is Driver cloneDriver)
             {
+                cloneDriver.Blit = selfDriver.Blit;
+                cloneDriver.Cocktail = selfDriver.Cocktail;
+                cloneDriver.Color = selfDriver.Color;
+                cloneDriver.Emulation = selfDriver.Emulation;
                 cloneDriver.Incomplete = selfDriver.Incomplete;
                 cloneDriver.NoSoundHardware = selfDriver.NoSoundHardware;
                 cloneDriver.RequiresArtwork = selfDriver.RequiresArtwork;
+                cloneDriver.SaveState = selfDriver.SaveState;
+                cloneDriver.Sound = selfDriver.Sound;
+                cloneDriver.Status = selfDriver.Status;
                 cloneDriver.Unofficial = selfDriver.Unofficial;
+            }
+            else if (self is Feature selfFeature && clone is Feature cloneFeature)
+            {
+                cloneFeature.FeatureType = selfFeature.FeatureType;
+                cloneFeature.Overall = selfFeature.Overall;
+                cloneFeature.Status = selfFeature.Status;
             }
             else if (self is Header selfHeader && clone is Header cloneHeader)
             {
+                cloneHeader.BiosMode = selfHeader.BiosMode;
                 cloneHeader.Debug = selfHeader.Debug;
+                cloneHeader.ForceMerging = selfHeader.ForceMerging;
+                cloneHeader.ForceNodump = selfHeader.ForceNodump;
+                cloneHeader.ForcePacking = selfHeader.ForcePacking;
                 cloneHeader.ForceZipping = selfHeader.ForceZipping;
                 cloneHeader.LockBiosMode = selfHeader.LockBiosMode;
                 cloneHeader.LockRomMode = selfHeader.LockRomMode;
                 cloneHeader.LockSampleMode = selfHeader.LockSampleMode;
+                cloneHeader.RomMode = selfHeader.RomMode;
+                cloneHeader.SampleMode = selfHeader.SampleMode;
             }
             else if (self is Input selfInput && clone is Input cloneInput)
             {
@@ -216,6 +253,7 @@ namespace SabreTools.Data.Extensions
                 cloneMachine.IsDevice = selfMachine.IsDevice;
                 cloneMachine.IsMechanical = selfMachine.IsMechanical;
                 cloneMachine.Runnable = selfMachine.Runnable;
+                cloneMachine.Supported = selfMachine.Supported;
             }
             else if (self is RamOption selfRamOption && clone is RamOption cloneRamOption)
             {
@@ -230,13 +268,28 @@ namespace SabreTools.Data.Extensions
                 cloneRom.Dispose = selfRom.Dispose;
                 cloneRom.FileIsAvailable = selfRom.FileIsAvailable;
                 cloneRom.Inverted = selfRom.Inverted;
+                cloneRom.LoadFlag = selfRom.LoadFlag;
                 cloneRom.MIA = selfRom.MIA;
+                cloneRom.OpenMSXMediaType = selfRom.OpenMSXMediaType;
                 cloneRom.Optional = selfRom.Optional;
                 cloneRom.SoundOnly = selfRom.SoundOnly;
+                cloneRom.Status = selfRom.Status;
             }
             else if (self is SlotOption selfSlotOption && clone is SlotOption cloneSlotOption)
             {
                 cloneSlotOption.Default = selfSlotOption.Default;
+            }
+            else if (self is Software selfSoftware && clone is Software cloneSoftware)
+            {
+                cloneSoftware.Supported = selfSoftware.Supported;
+            }
+            else if (self is SoftwareList selfSoftwareList && clone is SoftwareList cloneSoftwareList)
+            {
+                cloneSoftwareList.Status = selfSoftwareList.Status;
+            }
+            else if (self is Video selfVideo && clone is Video cloneVideo)
+            {
+                cloneVideo.Screen = selfVideo.Screen;
             }
 
             // Handle known properties
@@ -308,7 +361,7 @@ namespace SabreTools.Data.Extensions
                 Name = name,
                 [Rom.MergeKey] = disk.ReadString(Disk.MergeKey),
                 [Rom.RegionKey] = disk.ReadString(Disk.RegionKey),
-                [Rom.StatusKey] = disk.ReadString(Disk.StatusKey),
+                Status = disk.Status,
                 Optional = disk.Optional,
                 [Rom.MD5Key] = disk.ReadString(Disk.MD5Key),
                 [Rom.SHA1Key] = disk.ReadString(Disk.SHA1Key),
@@ -978,6 +1031,21 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         /// <param name="value">String value to parse/param>
         /// <returns>Enum value representing the input, null on error</returns>
+        public static Blit? AsBlit(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "plain" => Blit.Plain,
+                "dirty" => Blit.Dirty,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
         public static ChipType? AsChipType(this string? value)
         {
             return value?.ToLowerInvariant() switch
@@ -1349,6 +1417,21 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         /// <param name="value">Enum value to parse/param>
         /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this Blit value)
+        {
+            return value switch
+            {
+                Blit.Plain => "plain",
+                Blit.Dirty => "dirty",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
         public static string? AsStringValue(this ChipType value)
         {
             return value switch
@@ -1696,6 +1779,7 @@ namespace SabreTools.Data.Extensions
                 SupportStatus.Good => "good",
                 SupportStatus.Imperfect => "imperfect",
                 SupportStatus.Preliminary => "preliminary",
+                SupportStatus.Test => "test",
                 _ => null,
             };
         }

@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.SoftwareList
 {
@@ -18,7 +19,7 @@ namespace SabreTools.Data.Models.SoftwareList
 
         /// <remarks>(baddump|nodump|good) "good"</remarks>
         [XmlAttribute("status")]
-        public string? Status { get; set; }
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("writable")]

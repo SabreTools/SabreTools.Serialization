@@ -194,7 +194,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Tag = item.ReadString(Data.Models.Metadata.Chip.TagKey),
-                Type = item.ReadString(Data.Models.Metadata.Chip.ChipTypeKey),
+                Type = item.ChipType,
                 SoundOnly = item.SoundOnly,
                 Clock = item.ReadString(Data.Models.Metadata.Chip.ClockKey),
             };
@@ -210,7 +210,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Tag = item.ReadString(Data.Models.Metadata.Condition.TagKey),
                 Mask = item.ReadString(Data.Models.Metadata.Condition.MaskKey),
-                Relation = item.ReadString(Data.Models.Metadata.Condition.RelationKey),
+                Relation = item.Relation,
                 Value = item.ReadString(Data.Models.Metadata.Condition.ValueKey),
             };
             return condition;
@@ -283,7 +283,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var control = new Control
             {
-                Type = item.ReadString(Data.Models.Metadata.Control.ControlTypeKey),
+                Type = item.ControlType,
                 Player = item.ReadString(Data.Models.Metadata.Control.PlayerKey),
                 Buttons = item.ReadString(Data.Models.Metadata.Control.ButtonsKey),
                 ReqButtons = item.ReadString(Data.Models.Metadata.Control.ReqButtonsKey),
@@ -306,7 +306,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var device = new Device
             {
-                Type = item.ReadString(Data.Models.Metadata.Device.DeviceTypeKey),
+                Type = item.DeviceType,
                 Tag = item.ReadString(Data.Models.Metadata.Device.TagKey),
                 FixedImage = item.ReadString(Data.Models.Metadata.Device.FixedImageKey),
                 Mandatory = item.ReadString(Data.Models.Metadata.Device.MandatoryKey),
@@ -410,7 +410,7 @@ namespace SabreTools.Serialization.CrossModel
                 Region = item.ReadString(Data.Models.Metadata.Disk.RegionKey),
                 Index = item.ReadString(Data.Models.Metadata.Disk.IndexKey),
                 Writable = item.Writable,
-                Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
+                Status = item.Status,
                 Optional = item.Optional,
             };
             return disk;
@@ -424,7 +424,7 @@ namespace SabreTools.Serialization.CrossModel
             var display = new Display
             {
                 Tag = item.ReadString(Data.Models.Metadata.Display.TagKey),
-                Type = item.ReadString(Data.Models.Metadata.Display.DisplayTypeKey),
+                Type = item.DisplayType,
                 Rotate = item.ReadString(Data.Models.Metadata.Display.RotateKey),
                 FlipX = item.FlipX,
                 Width = item.ReadString(Data.Models.Metadata.Display.WidthKey),
@@ -448,13 +448,13 @@ namespace SabreTools.Serialization.CrossModel
         {
             var driver = new Driver
             {
-                Status = item.ReadString(Data.Models.Metadata.Driver.StatusKey),
-                Color = item.ReadString(Data.Models.Metadata.Driver.ColorKey),
-                Sound = item.ReadString(Data.Models.Metadata.Driver.SoundKey),
+                Status = item.Status,
+                Color = item.Color,
+                Sound = item.Sound,
                 PaletteSize = item.ReadString(Data.Models.Metadata.Driver.PaletteSizeKey),
-                Emulation = item.ReadString(Data.Models.Metadata.Driver.EmulationKey),
-                Cocktail = item.ReadString(Data.Models.Metadata.Driver.CocktailKey),
-                SaveState = item.ReadString(Data.Models.Metadata.Driver.SaveStateKey),
+                Emulation = item.Emulation,
+                Cocktail = item.Cocktail,
+                SaveState = item.SaveState,
                 RequiresArtwork = item.RequiresArtwork,
                 Unofficial = item.Unofficial,
                 NoSoundHardware = item.NoSoundHardware,
@@ -482,9 +482,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var feature = new Feature
             {
-                Type = item.ReadString(Data.Models.Metadata.Feature.FeatureTypeKey),
-                Status = item.ReadString(Data.Models.Metadata.Feature.StatusKey),
-                Overall = item.ReadString(Data.Models.Metadata.Feature.OverallKey),
+                Type = item.FeatureType,
+                Status = item.Status,
+                Overall = item.Overall,
             };
             return feature;
         }
@@ -573,7 +573,7 @@ namespace SabreTools.Serialization.CrossModel
                 Merge = item.ReadString(Data.Models.Metadata.Rom.MergeKey),
                 Region = item.ReadString(Data.Models.Metadata.Rom.RegionKey),
                 Offset = item.ReadString(Data.Models.Metadata.Rom.OffsetKey),
-                Status = item.ReadString(Data.Models.Metadata.Rom.StatusKey),
+                Status = item.Status,
                 Optional = item.Optional,
                 Dispose = item.Dispose,
                 SoundOnly = item.SoundOnly,
@@ -633,7 +633,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Tag = item.ReadString(Data.Models.Metadata.SoftwareList.TagKey),
                 Name = item.Name,
-                Status = item.ReadString(Data.Models.Metadata.SoftwareList.StatusKey),
+                Status = item.Status,
                 Filter = item.ReadString(Data.Models.Metadata.SoftwareList.FilterKey),
             };
             return softwareList;
@@ -658,7 +658,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var video = new Video
             {
-                Screen = item.ReadString(Data.Models.Metadata.Video.ScreenKey),
+                Screen = item.Screen,
                 Orientation = item.ReadString(Data.Models.Metadata.Video.OrientationKey),
                 Width = item.ReadString(Data.Models.Metadata.Video.WidthKey),
                 Height = item.ReadString(Data.Models.Metadata.Video.HeightKey),

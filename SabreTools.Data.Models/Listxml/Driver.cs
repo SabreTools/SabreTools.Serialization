@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -9,15 +10,15 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>(good|imperfect|preliminary), (good|preliminary|test) in older versions</remarks>
         [Required]
         [XmlAttribute("status")]
-        public string? Status { get; set; }
+        public SupportStatus? Status { get; set; }
 
         /// <remarks>(good|imperfect|preliminary), Only present in older versions</remarks>
         [XmlAttribute("color")]
-        public string? Color { get; set; }
+        public SupportStatus? Color { get; set; }
 
         /// <remarks>(good|imperfect|preliminary), Only present in older versions</remarks>
         [XmlAttribute("sound")]
-        public string? Sound { get; set; }
+        public SupportStatus? Sound { get; set; }
 
         /// <remarks>Only present in older versions</remarks>
         [XmlAttribute("palettesize")]
@@ -26,17 +27,17 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>(good|imperfect|preliminary)</remarks>
         [Required]
         [XmlAttribute("emulation")]
-        public string? Emulation { get; set; }
+        public SupportStatus? Emulation { get; set; }
 
         /// <remarks>(good|imperfect|preliminary)</remarks>
         [Required]
         [XmlAttribute("cocktail")]
-        public string? Cocktail { get; set; }
+        public SupportStatus? Cocktail { get; set; }
 
         /// <remarks>(supported|unsupported)</remarks>
         [Required]
         [XmlAttribute("savestate")]
-        public string? SaveState { get; set; }
+        public Supported? SaveState { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("requiresartwork")]

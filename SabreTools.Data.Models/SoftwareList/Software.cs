@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.SoftwareList
 {
@@ -15,7 +16,7 @@ namespace SabreTools.Data.Models.SoftwareList
 
         /// <remarks>(yes|partial|no) "yes"</remarks>
         [XmlAttribute("supported")]
-        public string? Supported { get; set; }
+        public Supported? Supported { get; set; }
 
         [Required]
         [XmlElement("description")]

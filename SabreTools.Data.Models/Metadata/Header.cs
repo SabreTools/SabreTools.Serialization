@@ -8,8 +8,20 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
+        public MergingFlag BiosMode { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Debug { get; set; }
+
+        /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
+        public MergingFlag ForceMerging { get; set; }
+
+        /// <remarks>(obsolete|required|ignore) "obsolete"</remarks>
+        public NodumpFlag ForceNodump { get; set; }
+
+        /// <remarks>(zip|unzip) "zip"</remarks>
+        public PackingFlag ForcePacking { get; set; }
 
         /// <remarks>(yes|no) "yes"</remarks>
         public bool? ForceZipping { get; set; }
@@ -25,15 +37,18 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Name { get; set; }
 
+        /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
+        public MergingFlag RomMode { get; set; }
+
+        /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
+        public MergingFlag SampleMode { get; set; }
+
         #endregion
 
         #region Keys
 
         /// <remarks>string</remarks>
         public const string AuthorKey = "author";
-
-        /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
-        public const string BiosModeKey = "biosmode";
 
         /// <remarks>string</remarks>
         public const string BuildKey = "build";
@@ -63,15 +78,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string EmulatorVersionKey = "emulatorversion";
-
-        /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
-        public const string ForceMergingKey = "forcemerging";
-
-        /// <remarks>(obsolete|required|ignore) "obsolete"</remarks>
-        public const string ForceNodumpKey = "forcenodump";
-
-        /// <remarks>(zip|unzip) "zip"</remarks>
-        public const string ForcePackingKey = "forcepacking";
 
         /// <remarks>string, string[]</remarks>
         public const string HeaderKey = "header";
@@ -112,17 +118,11 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string</remarks>
         public const string RefNameKey = "refname";
 
-        /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
-        public const string RomModeKey = "rommode";
-
         /// <remarks>string</remarks>
         public const string RomTitleKey = "romTitle";
 
         /// <remarks>string</remarks>
         public const string RootDirKey = "rootdir";
-
-        /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
-        public const string SampleModeKey = "samplemode";
 
         /// <remarks>string</remarks>
         public const string SchemaLocationKey = "schemaLocation";

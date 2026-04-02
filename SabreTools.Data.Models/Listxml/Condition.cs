@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -17,7 +18,7 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>(eq|ne|gt|le|lt|ge)</remarks>
         [Required]
         [XmlAttribute("relation")]
-        public string? Relation { get; set; }
+        public Relation? Relation { get; set; }
 
         [Required]
         [XmlAttribute("value")]

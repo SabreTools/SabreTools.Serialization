@@ -12,6 +12,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public Data.Models.Metadata.ControlType? ControlType
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.ControlType;
+            set => (_internal as Data.Models.Metadata.Control)?.ControlType = value;
+        }
+
         public bool? Reverse
         {
             get => (_internal as Data.Models.Metadata.Control)?.Reverse;
@@ -54,10 +60,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             long? sensitivity = ReadLong(Data.Models.Metadata.Control.SensitivityKey);
             if (sensitivity is not null)
                 Write<string?>(Data.Models.Metadata.Control.SensitivityKey, sensitivity.ToString());
-
-            string? controlType = ReadString(Data.Models.Metadata.Control.ControlTypeKey);
-            if (controlType is not null)
-                Write<string?>(Data.Models.Metadata.Control.ControlTypeKey, controlType.AsControlType()?.AsStringValue());
         }
 
         public Control(Data.Models.Metadata.Control item, Machine machine, Source source) : this(item)

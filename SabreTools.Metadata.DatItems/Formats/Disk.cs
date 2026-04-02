@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Metadata;
@@ -56,6 +56,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public ItemStatus? Status
+        {
+            get => (_internal as Data.Models.Metadata.Disk)?.Status;
+            set => (_internal as Data.Models.Metadata.Disk)?.Status = value;
+        }
+
         public bool? Writable
         {
             get => (_internal as Data.Models.Metadata.Disk)?.Writable;
@@ -69,17 +75,12 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Disk() : base()
         {
             Write<DupeType>(DupeTypeKey, 0x00);
-            Write<string?>(Data.Models.Metadata.Disk.StatusKey, ItemStatus.None.AsStringValue());
+            Status = ItemStatus.None;
         }
 
         public Disk(Data.Models.Metadata.Disk item) : base(item)
         {
             Write<DupeType>(DupeTypeKey, 0x00);
-
-            // Process flag values
-            string? status = ReadString(Data.Models.Metadata.Disk.StatusKey);
-            if (status is not null)
-                Write<string?>(Data.Models.Metadata.Disk.StatusKey, status.AsItemStatus()?.AsStringValue());
 
             // Process hash values
             string? md5 = ReadString(Data.Models.Metadata.Disk.MD5Key);

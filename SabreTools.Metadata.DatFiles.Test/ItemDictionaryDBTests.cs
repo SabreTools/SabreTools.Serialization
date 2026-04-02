@@ -26,8 +26,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             _ = dict.AddItem(disk, machineIndex, sourceIndex, statsOnly: false);
 
             DatItem actual = Assert.Single(dict.GetItemsForBucket("default")).Value;
-            Assert.True(actual is Disk);
-            Assert.Equal("none", actual.ReadString(Data.Models.Metadata.Disk.StatusKey));
+            Disk? actualDisk = actual as Disk;
+            Assert.NotNull(actualDisk);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.None, actualDisk.Status);
         }
 
         [Fact]
@@ -45,8 +46,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             _ = dict.AddItem(disk, machineIndex, sourceIndex, statsOnly: false);
 
             DatItem actual = Assert.Single(dict.GetItemsForBucket("default")).Value;
-            Assert.True(actual is Disk);
-            Assert.Equal("nodump", actual.ReadString(Data.Models.Metadata.Disk.StatusKey));
+            Disk? actualDisk = actual as Disk;
+            Assert.NotNull(actualDisk);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Nodump, actualDisk.Status);
         }
 
         [Fact]
@@ -144,10 +146,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             _ = dict.AddItem(rom, machineIndex, sourceIndex, statsOnly: false);
 
             DatItem actual = Assert.Single(dict.GetItemsForBucket("default")).Value;
-            Assert.True(actual is Rom);
+            Rom? actualRom = actual as Rom;
+            Assert.NotNull(actualRom);
             Assert.Equal(12345, actual.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal("none", actual.ReadString(Data.Models.Metadata.Rom.StatusKey));
+            Assert.Equal(Data.Models.Metadata.ItemStatus.None, actualRom.Status);
         }
 
         [Fact]
@@ -166,10 +169,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             _ = dict.AddItem(rom, machineIndex, sourceIndex, statsOnly: false);
 
             DatItem actual = Assert.Single(dict.GetItemsForBucket("default")).Value;
-            Assert.True(actual is Rom);
+            Rom? actualRom = actual as Rom;
+            Assert.NotNull(actualRom);
             Assert.Equal(12345, actual.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Null(actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal("nodump", actual.ReadString(Data.Models.Metadata.Rom.StatusKey));
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Nodump, actualRom.Status);
         }
 
         [Fact]
@@ -188,10 +192,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             _ = dict.AddItem(rom, machineIndex, sourceIndex, statsOnly: false);
 
             DatItem actual = Assert.Single(dict.GetItemsForBucket("default")).Value;
-            Assert.True(actual is Rom);
+            Rom? actualRom = actual as Rom;
+            Assert.NotNull(actualRom);
             Assert.Null(actual.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal("deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal("none", actual.ReadString(Data.Models.Metadata.Rom.StatusKey));
+            Assert.Equal(Data.Models.Metadata.ItemStatus.None, actualRom.Status);
         }
 
         [Fact]
@@ -209,10 +214,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             _ = dict.AddItem(rom, machineIndex, sourceIndex, statsOnly: false);
 
             DatItem actual = Assert.Single(dict.GetItemsForBucket("default")).Value;
-            Assert.True(actual is Rom);
+            Rom? actualRom = actual as Rom;
+            Assert.NotNull(actualRom);
             Assert.Equal(0, actual.ReadLong(Data.Models.Metadata.Rom.SizeKey));
             Assert.Equal(HashType.SHA1.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal("none", actual.ReadString(Data.Models.Metadata.Rom.StatusKey));
+            Assert.Equal(Data.Models.Metadata.ItemStatus.None, actualRom.Status);
         }
 
         [Fact]

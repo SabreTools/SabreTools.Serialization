@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Merge = "XXXXXX",
                 Region = "XXXXXX",
                 Offset = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
                 Optional = true,
                 Dispose = true,
                 SoundOnly = true,
@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Region = "XXXXXX",
                 Index = "XXXXXX",
                 Writable = true,
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
                 Optional = true,
             };
 
@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "XXXXXX",
                 Tag = "XXXXXX",
-                Type = "XXXXXX",
+                Type = Data.Models.Metadata.ChipType.CPU,
                 SoundOnly = true,
                 Clock = "XXXXXX",
             };
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var display = new Data.Models.Listxml.Display
             {
                 Tag = "XXXXXX",
-                Type = "XXXXXX",
+                Type = Data.Models.Metadata.DisplayType.Vector,
                 Rotate = "XXXXXX",
                 FlipX = true,
                 Width = "XXXXXX",
@@ -138,7 +138,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var video = new Data.Models.Listxml.Video
             {
-                Screen = "XXXXXX",
+                Screen = Data.Models.Metadata.DisplayType.Vector,
                 Orientation = "XXXXXX",
                 Width = "XXXXXX",
                 Height = "XXXXXX",
@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var control = new Data.Models.Listxml.Control
             {
-                Type = "XXXXXX",
+                Type = Data.Models.Metadata.ControlType.Lightgun,
                 Player = "XXXXXX",
                 Buttons = "XXXXXX",
                 ReqButtons = "XXXXXX",
@@ -183,7 +183,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Tag = "XXXXXX",
                 Mask = "XXXXXX",
-                Relation = "XXXXXX",
+                Relation = Data.Models.Metadata.Relation.Equal,
                 Value = "XXXXXX",
             };
 
@@ -257,13 +257,13 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var driver = new Data.Models.Listxml.Driver
             {
-                Status = "XXXXXX",
-                Color = "XXXXXX",
-                Sound = "XXXXXX",
+                Status = Data.Models.Metadata.SupportStatus.Good,
+                Color = Data.Models.Metadata.SupportStatus.Good,
+                Sound = Data.Models.Metadata.SupportStatus.Good,
                 PaletteSize = "XXXXXX",
-                Emulation = "XXXXXX",
-                Cocktail = "XXXXXX",
-                SaveState = "XXXXXX",
+                Emulation = Data.Models.Metadata.SupportStatus.Good,
+                Cocktail = Data.Models.Metadata.SupportStatus.Good,
+                SaveState = Data.Models.Metadata.Supported.Yes,
                 RequiresArtwork = true,
                 Unofficial = true,
                 NoSoundHardware = true,
@@ -272,9 +272,9 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var feature = new Data.Models.Listxml.Feature
             {
-                Type = "XXXXXX",
-                Status = "XXXXXX",
-                Overall = "XXXXXX",
+                Type = Data.Models.Metadata.FeatureType.Protection,
+                Status = Data.Models.Metadata.FeatureStatus.Imperfect,
+                Overall = Data.Models.Metadata.FeatureStatus.Imperfect,
             };
 
             var instance = new Data.Models.Listxml.Instance
@@ -290,7 +290,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var device = new Data.Models.Listxml.Device
             {
-                Type = "XXXXXX",
+                Type = Data.Models.Metadata.DeviceType.PunchTape,
                 Tag = "XXXXXX",
                 FixedImage = "XXXXXX",
                 Mandatory = "XXXXXX",
@@ -316,7 +316,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Tag = "XXXXXX",
                 Name = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.SoftwareListStatus.Original,
                 Filter = "XXXXXX",
             };
 
@@ -492,7 +492,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", rom.Merge);
             Assert.Equal("XXXXXX", rom.Region);
             Assert.Equal("XXXXXX", rom.Offset);
-            Assert.Equal("XXXXXX", rom.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
             Assert.Equal(true, rom.Optional);
             Assert.Equal(true, rom.Dispose);
             Assert.Equal(true, rom.SoundOnly);
@@ -511,7 +511,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", disk.Region);
             Assert.Equal("XXXXXX", disk.Index);
             Assert.Equal(true, disk.Writable);
-            Assert.Equal("XXXXXX", disk.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, disk.Status);
             Assert.Equal(true, disk.Optional);
         }
 
@@ -541,7 +541,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(chip);
             Assert.Equal("XXXXXX", chip.Name);
             Assert.Equal("XXXXXX", chip.Tag);
-            Assert.Equal("XXXXXX", chip.Type);
+            Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.Type);
             Assert.Equal(true, chip.SoundOnly);
             Assert.Equal("XXXXXX", chip.Clock);
         }
@@ -553,7 +553,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(display);
             Assert.Equal("XXXXXX", display.Tag);
-            Assert.Equal("XXXXXX", display.Type);
+            Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.Type);
             Assert.Equal("XXXXXX", display.Rotate);
             Assert.Equal(true, display.FlipX);
             Assert.Equal("XXXXXX", display.Width);
@@ -574,7 +574,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Video? video)
         {
             Assert.NotNull(video);
-            Assert.Equal("XXXXXX", video.Screen);
+            Assert.Equal(Data.Models.Metadata.DisplayType.Vector, video.Screen);
             Assert.Equal("XXXXXX", video.Orientation);
             Assert.Equal("XXXXXX", video.Width);
             Assert.Equal("XXXXXX", video.Height);
@@ -616,7 +616,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Control? control)
         {
             Assert.NotNull(control);
-            Assert.Equal("XXXXXX", control.Type);
+            Assert.Equal(Data.Models.Metadata.ControlType.Lightgun, control.Type);
             Assert.Equal("XXXXXX", control.Player);
             Assert.Equal("XXXXXX", control.Buttons);
             Assert.Equal("XXXXXX", control.ReqButtons);
@@ -658,7 +658,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(condition);
             Assert.Equal("XXXXXX", condition.Tag);
             Assert.Equal("XXXXXX", condition.Mask);
-            Assert.Equal("XXXXXX", condition.Relation);
+            Assert.Equal(Data.Models.Metadata.Relation.Equal, condition.Relation);
             Assert.Equal("XXXXXX", condition.Value);
         }
 
@@ -767,13 +767,13 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Driver? driver)
         {
             Assert.NotNull(driver);
-            Assert.Equal("XXXXXX", driver.Status);
-            Assert.Equal("XXXXXX", driver.Color);
-            Assert.Equal("XXXXXX", driver.Sound);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Status);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Color);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);
             Assert.Equal("XXXXXX", driver.PaletteSize);
-            Assert.Equal("XXXXXX", driver.Emulation);
-            Assert.Equal("XXXXXX", driver.Cocktail);
-            Assert.Equal("XXXXXX", driver.SaveState);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Emulation);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Cocktail);
+            Assert.Equal(Data.Models.Metadata.Supported.Yes, driver.SaveState);
             Assert.Equal(true, driver.RequiresArtwork);
             Assert.Equal(true, driver.Unofficial);
             Assert.Equal(true, driver.NoSoundHardware);
@@ -786,9 +786,9 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Feature? feature)
         {
             Assert.NotNull(feature);
-            Assert.Equal("XXXXXX", feature.Type);
-            Assert.Equal("XXXXXX", feature.Status);
-            Assert.Equal("XXXXXX", feature.Overall);
+            Assert.Equal(Data.Models.Metadata.FeatureType.Protection, feature.Type);
+            Assert.Equal(Data.Models.Metadata.FeatureStatus.Imperfect, feature.Status);
+            Assert.Equal(Data.Models.Metadata.FeatureStatus.Imperfect, feature.Overall);
         }
 
         /// <summary>
@@ -797,7 +797,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.Listxml.Device? device)
         {
             Assert.NotNull(device);
-            Assert.Equal("XXXXXX", device.Type);
+            Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.Type);
             Assert.Equal("XXXXXX", device.Tag);
             Assert.Equal("XXXXXX", device.FixedImage);
             Assert.Equal("XXXXXX", device.Mandatory);
@@ -860,7 +860,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(softwarelist);
             Assert.Equal("XXXXXX", softwarelist.Tag);
             Assert.Equal("XXXXXX", softwarelist.Name);
-            Assert.Equal("XXXXXX", softwarelist.Status);
+            Assert.Equal(Data.Models.Metadata.SoftwareListStatus.Original, softwarelist.Status);
             Assert.Equal("XXXXXX", softwarelist.Filter);
         }
 

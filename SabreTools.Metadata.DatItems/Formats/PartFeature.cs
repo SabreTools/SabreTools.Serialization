@@ -21,6 +21,24 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         #region Fields
 
+        public Data.Models.Metadata.FeatureType? FeatureType
+        {
+            get => (_internal as Data.Models.Metadata.Feature)?.FeatureType;
+            set => (_internal as Data.Models.Metadata.Feature)?.FeatureType = value;
+        }
+
+        public Data.Models.Metadata.FeatureStatus? Overall
+        {
+            get => (_internal as Data.Models.Metadata.Feature)?.Overall;
+            set => (_internal as Data.Models.Metadata.Feature)?.Overall = value;
+        }
+
+        public Data.Models.Metadata.FeatureStatus? Status
+        {
+            get => (_internal as Data.Models.Metadata.Feature)?.Status;
+            set => (_internal as Data.Models.Metadata.Feature)?.Status = value;
+        }
+
         /// <inheritdoc>/>
         /// <remarks>This needs to be set to PartFeature because internally it uses Feature</remarks>
         public override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.PartFeature;
@@ -31,21 +49,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public PartFeature() : base() { }
 
-        public PartFeature(Data.Models.Metadata.Feature item) : base(item)
-        {
-            // Process flag values
-            string? overall = ReadString(Data.Models.Metadata.Feature.OverallKey);
-            if (overall is not null)
-                Write<string?>(Data.Models.Metadata.Feature.OverallKey, overall.AsFeatureStatus()?.AsStringValue());
-
-            string? status = ReadString(Data.Models.Metadata.Feature.StatusKey);
-            if (status is not null)
-                Write<string?>(Data.Models.Metadata.Feature.StatusKey, status.AsFeatureStatus()?.AsStringValue());
-
-            string? featureType = ReadString(Data.Models.Metadata.Feature.FeatureTypeKey);
-            if (featureType is not null)
-                Write<string?>(Data.Models.Metadata.Feature.FeatureTypeKey, featureType.AsFeatureType()?.AsStringValue());
-        }
+        public PartFeature(Data.Models.Metadata.Feature item) : base(item) { }
 
         public PartFeature(Data.Models.Metadata.Feature item, Machine machine, Source source) : this(item)
         {

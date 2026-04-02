@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Logiqx
 {
@@ -11,15 +12,15 @@ namespace SabreTools.Data.Models.Logiqx
 
         /// <remarks>(none|split|merged|unmerged|fullmerged|device|full) "split"</remarks>
         [XmlAttribute("rommode")]
-        public string? RomMode { get; set; }
+        public MergingFlag RomMode { get; set; }
 
         /// <remarks>(none|split|merged|unmerged|fullmerged|device|full) "split"</remarks>
         [XmlAttribute("biosmode")]
-        public string? BiosMode { get; set; }
+        public MergingFlag BiosMode { get; set; }
 
         /// <remarks>(none|split|merged|unmerged|fullmerged|device|full) "merged"</remarks>
         [XmlAttribute("samplemode")]
-        public string? SampleMode { get; set; }
+        public MergingFlag SampleMode { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("lockrommode")]

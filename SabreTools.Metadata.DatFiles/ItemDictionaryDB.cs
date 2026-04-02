@@ -16,7 +16,6 @@ using SabreTools.Hashing;
 using SabreTools.Logging;
 using SabreTools.Text.Compare;
 using SabreTools.Text.Extensions;
-using SabreTools.Data.Extensions;
 using ItemStatus = SabreTools.Data.Models.Metadata.ItemStatus;
 
 /*
@@ -188,12 +187,12 @@ namespace SabreTools.Metadata.DatFiles
             if (item is Disk disk)
             {
                 // If the file has aboslutely no hashes, skip and log
-                if (disk.ReadString(Data.Models.Metadata.Disk.StatusKey).AsItemStatus() != ItemStatus.Nodump
+                if (disk.Status != ItemStatus.Nodump
                     && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
                     && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
                 {
                     _logger.Verbose($"Incomplete entry for '{disk.GetName()}' will be output as nodump");
-                    disk.Write<string?>(Data.Models.Metadata.Disk.StatusKey, ItemStatus.Nodump.AsStringValue());
+                    disk.Status = ItemStatus.Nodump;
                 }
 
                 item = disk;
@@ -256,19 +255,19 @@ namespace SabreTools.Metadata.DatFiles
                 }
 
                 // If the file has no size and it's not the above case, skip and log
-                else if (rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() != ItemStatus.Nodump && (size == 0 || size is null))
+                else if (rom.Status != ItemStatus.Nodump && (size == 0 || size is null))
                 {
                     //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Incomplete entry for '{rom.GetName()}' will be output as nodump");
-                    rom.Write<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.Nodump.AsStringValue());
+                    rom.Status = ItemStatus.Nodump;
                 }
 
                 // If the file has a size but aboslutely no hashes, skip and log
-                else if (rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() != ItemStatus.Nodump
+                else if (rom.Status != ItemStatus.Nodump
                     && size is not null && size > 0
                     && !rom.HasHashes())
                 {
                     //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Incomplete entry for '{rom.GetName()}' will be output as nodump");
-                    rom.Write<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.Nodump.AsStringValue());
+                    rom.Status = ItemStatus.Nodump;
                 }
 
                 item = rom;
@@ -873,13 +872,13 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // If it's a nodump, add and skip
-                if (datItem is Rom rom && rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() == ItemStatus.Nodump)
+                if (datItem is Rom rom && rom.Status == ItemStatus.Nodump)
                 {
                     output.Add(new KeyValuePair<long, DatItem>(itemIndex, datItem));
                     nodumpCount++;
                     continue;
                 }
-                else if (datItem is Disk disk && disk.ReadString(Data.Models.Metadata.Disk.StatusKey).AsItemStatus() == ItemStatus.Nodump)
+                else if (datItem is Disk disk && disk.Status == ItemStatus.Nodump)
                 {
                     output.Add(new KeyValuePair<long, DatItem>(itemIndex, datItem));
                     nodumpCount++;

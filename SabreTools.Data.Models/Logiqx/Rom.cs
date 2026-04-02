@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 #pragma warning disable IDE1006 // Naming Styles
 namespace SabreTools.Data.Models.Logiqx
@@ -77,7 +78,7 @@ namespace SabreTools.Data.Models.Logiqx
 
         /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
         [XmlAttribute("status")]
-        public string? Status { get; set; }
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>No-Intro extension</remarks>
         [XmlAttribute("serial")]

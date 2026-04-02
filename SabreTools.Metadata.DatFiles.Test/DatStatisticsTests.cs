@@ -1,6 +1,4 @@
-using SabreTools.Data.Extensions;
 using SabreTools.Hashing;
-using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 using Xunit;
 using ItemStatus = SabreTools.Data.Models.Metadata.ItemStatus;
@@ -255,7 +253,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             var disk = new Disk();
 
-            disk.Write<string?>(Data.Models.Metadata.Disk.StatusKey, ItemStatus.Good.AsStringValue());
+            disk.Status = ItemStatus.Good;
             disk.Write<string?>(Data.Models.Metadata.Disk.MD5Key, HashType.MD5.ZeroString);
             disk.Write<string?>(Data.Models.Metadata.Disk.SHA1Key, HashType.SHA1.ZeroString);
 
@@ -301,7 +299,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             var rom = new Rom();
 
-            rom.Write<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.Good.AsStringValue());
+            rom.Status = ItemStatus.Good;
             rom.Write<long>(Data.Models.Metadata.Rom.SizeKey, 1);
             rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key, HashType.CRC16.ZeroString);
             rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);

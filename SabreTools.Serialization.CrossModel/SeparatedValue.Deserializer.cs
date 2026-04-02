@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.CrossModel
                 SHA384 = null,
                 SHA512 = null,
                 SpamSum = null,
-                Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
+                Status = item.Status,
             };
             return row;
         }
@@ -147,7 +147,7 @@ namespace SabreTools.Serialization.CrossModel
                 SHA384 = item.ReadString(Data.Models.Metadata.Rom.SHA384Key),
                 SHA512 = item.ReadString(Data.Models.Metadata.Rom.SHA512Key),
                 SpamSum = item.ReadString(Data.Models.Metadata.Rom.SpamSumKey),
-                Status = item.ReadString(Data.Models.Metadata.Rom.StatusKey),
+                Status = item.Status,
             };
             return row;
         }

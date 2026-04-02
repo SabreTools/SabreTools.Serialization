@@ -6,6 +6,13 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("video"), XmlRoot("video")]
     public class Video : DatItem
     {
+        #region Properties
+
+        /// <remarks>(raster|vector)</remarks>
+        public DisplayType? Screen { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>long</remarks>
@@ -22,9 +29,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>double; Originally "freq"</remarks>
         public const string RefreshKey = "refresh";
-
-        /// <remarks>(raster|vector)</remarks>
-        public const string ScreenKey = "screen";
 
         /// <remarks>long; Originally "x"</remarks>
         public const string WidthKey = "width";

@@ -8,6 +8,18 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>(plain|dirty)</remarks>
+        public Blit? Blit { get; set; }
+
+        /// <remarks>(good|imperfect|preliminary)</remarks>
+        public SupportStatus? Cocktail { get; set; }
+
+        /// <remarks>(good|imperfect|preliminary)</remarks>
+        public SupportStatus? Color { get; set; }
+
+        /// <remarks>(good|imperfect|preliminary)</remarks>
+        public SupportStatus? Emulation { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Incomplete { get; set; }
 
@@ -17,6 +29,15 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? RequiresArtwork { get; set; }
 
+        /// <remarks>(supported|unsupported)</remarks>
+        public Supported? SaveState { get; set; }
+
+        /// <remarks>(good|imperfect|preliminary)</remarks>
+        public SupportStatus? Sound { get; set; }
+
+        /// <remarks>(good|imperfect|preliminary|test)</remarks>
+        public SupportStatus? Status { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Unofficial { get; set; }
 
@@ -24,29 +45,8 @@ namespace SabreTools.Data.Models.Metadata
 
         #region Keys
 
-        /// <remarks>(plain|dirty)</remarks>
-        public const string BlitKey = "blit";
-
-        /// <remarks>(good|imperfect|preliminary)</remarks>
-        public const string CocktailKey = "cocktail";
-
-        /// <remarks>(good|imperfect|preliminary)</remarks>
-        public const string ColorKey = "color";
-
-        /// <remarks>(good|imperfect|preliminary)</remarks>
-        public const string EmulationKey = "emulation";
-
         /// <remarks>string, possibly long</remarks>
         public const string PaletteSizeKey = "palettesize";
-
-        /// <remarks>(supported|unsupported)</remarks>
-        public const string SaveStateKey = "savestate";
-
-        /// <remarks>(good|imperfect|preliminary)</remarks>
-        public const string SoundKey = "sound";
-
-        /// <remarks>(good|imperfect|preliminary|test)</remarks>
-        public const string StatusKey = "status";
 
         #endregion
 

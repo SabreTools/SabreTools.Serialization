@@ -73,9 +73,9 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Comment = "XXXXXX",
                 Header = "XXXXXX",
                 Type = "XXXXXX",
-                ForceMerging = "XXXXXX",
+                ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
                 ForceZipping = true,
-                ForcePacking = "XXXXXX",
+                ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
             };
 
             var release = new Data.Models.ClrMamePro.Release
@@ -108,7 +108,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 RIPEMD160 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Merge = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
                 Flags = "XXXXXX",
                 Date = "XXXXXX",
                 SHA256 = "XXXXXX",
@@ -131,7 +131,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Merge = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
                 Flags = "XXXXXX",
             };
 
@@ -156,7 +156,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var chip = new Data.Models.ClrMamePro.Chip
             {
-                Type = "XXXXXX",
+                Type = Data.Models.Metadata.ChipType.CPU,
                 Name = "XXXXXX",
                 Flags = "XXXXXX",
                 Clock = "XXXXXX",
@@ -164,7 +164,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var video = new Data.Models.ClrMamePro.Video
             {
-                Screen = "XXXXXX",
+                Screen = Data.Models.Metadata.DisplayType.Vector,
                 Orientation = "XXXXXX",
                 X = "XXXXXX",
                 Y = "XXXXXX",
@@ -197,11 +197,11 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var driver = new Data.Models.ClrMamePro.Driver
             {
-                Status = "XXXXXX",
-                Color = "XXXXXX",
-                Sound = "XXXXXX",
+                Status = Data.Models.Metadata.SupportStatus.Good,
+                Color = Data.Models.Metadata.SupportStatus.Good,
+                Sound = Data.Models.Metadata.SupportStatus.Good,
                 PaletteSize = "XXXXXX",
-                Blit = "XXXXXX",
+                Blit = Data.Models.Metadata.Blit.Plain,
             };
 
             // TODO: This omits Set, should that have a separate case?
@@ -262,9 +262,9 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", cmp.Comment);
             Assert.Equal("XXXXXX", cmp.Header);
             Assert.Equal("XXXXXX", cmp.Type);
-            Assert.Equal("XXXXXX", cmp.ForceMerging);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, cmp.ForceMerging);
             Assert.Equal(true, cmp.ForceZipping);
-            Assert.Equal("XXXXXX", cmp.ForcePacking);
+            Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, cmp.ForcePacking);
         }
 
         /// <summary>
@@ -371,7 +371,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", rom.RIPEMD160);
             Assert.Equal("XXXXXX", rom.SHA1);
             Assert.Equal("XXXXXX", rom.Merge);
-            Assert.Equal("XXXXXX", rom.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
             Assert.Equal("XXXXXX", rom.Flags);
             Assert.Equal("XXXXXX", rom.Date);
             Assert.Equal("XXXXXX", rom.SHA256);
@@ -398,7 +398,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", disk.MD5);
             Assert.Equal("XXXXXX", disk.SHA1);
             Assert.Equal("XXXXXX", disk.Merge);
-            Assert.Equal("XXXXXX", disk.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, disk.Status);
             Assert.Equal("XXXXXX", disk.Flags);
         }
 
@@ -439,7 +439,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.ClrMamePro.Chip? chip)
         {
             Assert.NotNull(chip);
-            Assert.Equal("XXXXXX", chip.Type);
+            Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.Type);
             Assert.Equal("XXXXXX", chip.Name);
             Assert.Equal("XXXXXX", chip.Flags);
             Assert.Equal("XXXXXX", chip.Clock);
@@ -451,7 +451,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.ClrMamePro.Video? video)
         {
             Assert.NotNull(video);
-            Assert.Equal("XXXXXX", video.Screen);
+            Assert.Equal(Data.Models.Metadata.DisplayType.Vector, video.Screen);
             Assert.Equal("XXXXXX", video.Orientation);
             Assert.Equal("XXXXXX", video.X);
             Assert.Equal("XXXXXX", video.Y);
@@ -504,11 +504,11 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.ClrMamePro.Driver? driver)
         {
             Assert.NotNull(driver);
-            Assert.Equal("XXXXXX", driver.Status);
-            Assert.Equal("XXXXXX", driver.Color);
-            Assert.Equal("XXXXXX", driver.Sound);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Status);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Color);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);
             Assert.Equal("XXXXXX", driver.PaletteSize);
-            Assert.Equal("XXXXXX", driver.Blit);
+            Assert.Equal(Data.Models.Metadata.Blit.Plain, driver.Blit);
         }
 
         /// <summary>

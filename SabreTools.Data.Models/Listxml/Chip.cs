@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -16,7 +17,7 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>(cpu|audio)</remarks>
         [Required]
         [XmlAttribute("type")]
-        public string? Type { get; set; }
+        public ChipType? Type { get; set; }
 
         /// <remarks>Only present in older versions</remarks>
         [XmlAttribute("soundonly")]

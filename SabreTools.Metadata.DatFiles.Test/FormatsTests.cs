@@ -185,7 +185,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Chip.ChipTypeKey,
+                nameof(Data.Models.Metadata.Chip.ChipType),
                 nameof(Data.Models.Metadata.Chip.Name),
             ]));
         }
@@ -200,7 +200,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Display.DisplayTypeKey,
+                nameof(Data.Models.Metadata.Display.DisplayType),
                 Data.Models.Metadata.Display.RotateKey,
             ]));
         }
@@ -258,8 +258,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Driver.StatusKey,
-                Data.Models.Metadata.Driver.EmulationKey,
+                nameof(Data.Models.Metadata.Driver.Status),
+                nameof(Data.Models.Metadata.Driver.Emulation),
             ]));
         }
 
@@ -865,7 +865,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Chip.Name),
-                Data.Models.Metadata.Chip.ChipTypeKey,
+                nameof(Data.Models.Metadata.Chip.ChipType),
             ]));
         }
 
@@ -879,7 +879,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Display.DisplayTypeKey,
+                nameof(Data.Models.Metadata.Display.DisplayType),
                 Data.Models.Metadata.Display.RefreshKey,
             ]));
         }
@@ -980,10 +980,10 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Driver.StatusKey,
-                Data.Models.Metadata.Driver.EmulationKey,
-                Data.Models.Metadata.Driver.CocktailKey,
-                Data.Models.Metadata.Driver.SaveStateKey,
+                nameof(Data.Models.Metadata.Driver.Status),
+                nameof(Data.Models.Metadata.Driver.Emulation),
+                nameof(Data.Models.Metadata.Driver.Cocktail),
+                nameof(Data.Models.Metadata.Driver.SaveState),
             ]));
         }
 
@@ -997,7 +997,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Feature.FeatureTypeKey,
+                nameof(Data.Models.Metadata.Feature.FeatureType),
             ]));
         }
 
@@ -1011,7 +1011,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Device.DeviceTypeKey,
+                nameof(Data.Models.Metadata.Device.DeviceType),
             ]));
         }
 
@@ -1041,7 +1041,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.True(actual.SequenceEqual([
                 Data.Models.Metadata.SoftwareList.TagKey,
                 nameof(Data.Models.Metadata.SoftwareList.Name),
-                Data.Models.Metadata.SoftwareList.StatusKey,
+                nameof(Data.Models.Metadata.SoftwareList.Status),
             ]));
         }
 
@@ -1210,10 +1210,10 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Driver.StatusKey,
-                Data.Models.Metadata.Driver.EmulationKey,
-                Data.Models.Metadata.Driver.CocktailKey,
-                Data.Models.Metadata.Driver.SaveStateKey,
+                nameof(Data.Models.Metadata.Driver.Status),
+                nameof(Data.Models.Metadata.Driver.Emulation),
+                nameof(Data.Models.Metadata.Driver.Cocktail),
+                nameof(Data.Models.Metadata.Driver.SaveState),
             ]));
         }
 
@@ -1229,7 +1229,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.True(actual.SequenceEqual([
                 Data.Models.Metadata.SoftwareList.TagKey,
                 nameof(Data.Models.Metadata.SoftwareList.Name),
-                Data.Models.Metadata.SoftwareList.StatusKey,
+                nameof(Data.Models.Metadata.SoftwareList.Status),
             ]));
         }
 

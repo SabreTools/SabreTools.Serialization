@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -9,7 +10,7 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>(raster|vector)</remarks>
         [Required]
         [XmlAttribute("screen")]
-        public string? Screen { get; set; }
+        public DisplayType? Screen { get; set; }
 
         /// <remarks>(vertical|horizontal)</remarks>
         [Required]

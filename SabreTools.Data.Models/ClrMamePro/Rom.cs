@@ -1,5 +1,7 @@
 
 #pragma warning disable IDE1006 // Naming Styles
+using SabreTools.Data.Models.Metadata;
+
 namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>rom</remarks>
@@ -26,7 +28,7 @@ namespace SabreTools.Data.Models.ClrMamePro
         public string? Merge { get; set; }
 
         /// <remarks>status</remarks>
-        public string? Status { get; set; }
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>flags</remarks>
         public string? Flags { get; set; }

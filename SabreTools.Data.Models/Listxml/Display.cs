@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -12,7 +13,7 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>(raster|vector|lcd|svg|unknown)</remarks>
         [Required]
         [XmlAttribute("type")]
-        public string? Type { get; set; }
+        public DisplayType? Type { get; set; }
 
         /// <remarks>(0|90|180|270)</remarks>
         [XmlAttribute("rotate")]

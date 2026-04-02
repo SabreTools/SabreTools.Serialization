@@ -12,6 +12,30 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public Data.Models.Metadata.Blit? Blit
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.Blit;
+            set => (_internal as Data.Models.Metadata.Driver)?.Blit = value;
+        }
+
+        public Data.Models.Metadata.SupportStatus? Cocktail
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.Cocktail;
+            set => (_internal as Data.Models.Metadata.Driver)?.Cocktail = value;
+        }
+
+        public Data.Models.Metadata.SupportStatus? Color
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.Color;
+            set => (_internal as Data.Models.Metadata.Driver)?.Color = value;
+        }
+
+        public Data.Models.Metadata.SupportStatus? Emulation
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.Emulation;
+            set => (_internal as Data.Models.Metadata.Driver)?.Emulation = value;
+        }
+
         public bool? Incomplete
         {
             get => (_internal as Data.Models.Metadata.Driver)?.Incomplete;
@@ -30,6 +54,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Driver)?.RequiresArtwork = value;
         }
 
+        public Data.Models.Metadata.Supported? SaveState
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.SaveState;
+            set => (_internal as Data.Models.Metadata.Driver)?.SaveState = value;
+        }
+
+        public Data.Models.Metadata.SupportStatus? Sound
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.Sound;
+            set => (_internal as Data.Models.Metadata.Driver)?.Sound = value;
+        }
+
+        public Data.Models.Metadata.SupportStatus? Status
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.Status;
+            set => (_internal as Data.Models.Metadata.Driver)?.Status = value;
+        }
+
         public bool? Unofficial
         {
             get => (_internal as Data.Models.Metadata.Driver)?.Unofficial;
@@ -45,33 +87,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Driver(Data.Models.Metadata.Driver item) : base(item)
         {
             // Process flag values
-            string? cocktail = ReadString(Data.Models.Metadata.Driver.CocktailKey);
-            if (cocktail is not null)
-                Write<string?>(Data.Models.Metadata.Driver.CocktailKey, cocktail.AsSupportStatus()?.AsStringValue());
-
-            string? color = ReadString(Data.Models.Metadata.Driver.ColorKey);
-            if (color is not null)
-                Write<string?>(Data.Models.Metadata.Driver.ColorKey, color.AsSupportStatus()?.AsStringValue());
-
-            string? emulation = ReadString(Data.Models.Metadata.Driver.EmulationKey);
-            if (emulation is not null)
-                Write<string?>(Data.Models.Metadata.Driver.EmulationKey, emulation.AsSupportStatus()?.AsStringValue());
-
             long? paletteSize = ReadLong(Data.Models.Metadata.Driver.PaletteSizeKey);
             if (paletteSize is not null)
                 Write<string?>(Data.Models.Metadata.Driver.PaletteSizeKey, paletteSize.ToString());
-
-            string? saveState = ReadString(Data.Models.Metadata.Driver.SaveStateKey);
-            if (saveState is not null)
-                Write<string?>(Data.Models.Metadata.Driver.SaveStateKey, saveState.AsSupported()?.AsStringValue(useSecond: true));
-
-            string? sound = ReadString(Data.Models.Metadata.Driver.SoundKey);
-            if (sound is not null)
-                Write<string?>(Data.Models.Metadata.Driver.SoundKey, sound.AsSupportStatus()?.AsStringValue());
-
-            string? status = ReadString(Data.Models.Metadata.Driver.StatusKey);
-            if (status is not null)
-                Write<string?>(Data.Models.Metadata.Driver.StatusKey, status.AsSupportStatus()?.AsStringValue());
         }
 
         public Driver(Data.Models.Metadata.Driver item, Machine machine, Source source) : this(item)

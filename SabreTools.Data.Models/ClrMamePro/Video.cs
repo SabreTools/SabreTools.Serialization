@@ -1,4 +1,6 @@
 
+using SabreTools.Data.Models.Metadata;
+
 namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>video</remarks>
@@ -6,7 +8,7 @@ namespace SabreTools.Data.Models.ClrMamePro
     {
         /// <remarks>screen, (raster|vector)</remarks>
         [Required]
-        public string? Screen { get; set; }
+        public DisplayType? Screen { get; set; }
 
         /// <remarks>orientation, (vertical|horizontal)</remarks>
         [Required]

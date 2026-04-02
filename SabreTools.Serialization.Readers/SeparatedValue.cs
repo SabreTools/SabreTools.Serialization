@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.SeparatedValue;
 using SabreTools.Text.SeparatedValue;
 
@@ -126,7 +127,7 @@ namespace SabreTools.Serialization.Readers
                             MD5 = reader.Line[10],
                             SHA1 = reader.Line[11],
                             SHA256 = reader.Line[12],
-                            Status = reader.Line[13],
+                            Status = reader.Line[13].AsItemStatus(),
                         };
                     }
                     else
@@ -149,7 +150,7 @@ namespace SabreTools.Serialization.Readers
                             SHA384 = reader.Line[13],
                             SHA512 = reader.Line[14],
                             SpamSum = reader.Line[15],
-                            Status = reader.Line[16],
+                            Status = reader.Line[16].AsItemStatus(),
                         };
                     }
 
