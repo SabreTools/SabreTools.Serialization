@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Readers
                 #region TLS
 
                 // Get the relative TLS address
-                long tlsOffset = initialOffset + (header.TLSAddress - header.BaseAddress);
+                long tlsOffset = initialOffset + header.TLSAddress;
 
                 // Get the absolute TLS address
                 for (int i = 0; i < header.NumberOfSections; i++)
@@ -87,6 +87,10 @@ namespace SabreTools.Serialization.Readers
                         tlsOffset = xbe.SectionHeaders[i].RawAddress + (tlsOffset - sectionStart);
                         break;
                     }
+
+                    // Fallback if relative address not in any section
+                    if (i == (header.NumberOfSections - 1))
+                        tlsOffset -= header.BaseAddress;
                 }
 
                 if (tlsOffset >= initialOffset && tlsOffset < data.Length)
