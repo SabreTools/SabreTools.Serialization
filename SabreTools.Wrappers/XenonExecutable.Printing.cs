@@ -60,6 +60,8 @@ namespace SabreTools.Wrappers
                 builder.AppendLine(optionalHeader.HeaderID, "  Header ID");
                 if (Constants.OptionalHeaderTypes.TryGetValue(optionalHeader.HeaderID, out string? headerType))
                     builder.AppendLine(headerType, "  Header Type (Parsed)");
+                else
+                    builder.AppendLine("[Unknown]", "  Header Type (Parsed)");
 
                 builder.AppendLine(optionalHeader.HeaderData, "  Header Data");
                 builder.AppendLine();
