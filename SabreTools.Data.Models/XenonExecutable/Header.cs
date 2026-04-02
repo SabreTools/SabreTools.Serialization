@@ -35,7 +35,7 @@ namespace SabreTools.Data.Models.XenonExecutable
         /// Address at which the security info begins
         /// </summary>
         /// <remarks>Big-endian</remarks>
-        public uint SecurityInfoOffset { get; set; }
+        public uint CertificateOffset { get; set; }
 
         /// <summary>
         /// Number of optional headers
@@ -44,7 +44,7 @@ namespace SabreTools.Data.Models.XenonExecutable
         public uint OptionalHeaderCount { get; set; }
 
         /// <summary>
-        /// Pptional headers that follow the main header
+        /// Optional headers that follow the main header
         /// </summary>
         public OptionalHeader[]? OptionalHeaders { get; set; }
     }
