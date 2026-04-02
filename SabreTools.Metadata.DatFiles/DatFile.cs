@@ -1176,8 +1176,8 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // If machine names don't match
-                    string? xMachineName = x.GetMachine()?.Name;
-                    string? yMachineName = y.GetMachine()?.Name;
+                    string? xMachineName = x.Machine?.Name;
+                    string? yMachineName = y.Machine?.Name;
                     if (xMachineName != yMachineName)
                         return nc.Compare(xMachineName, yMachineName);
 

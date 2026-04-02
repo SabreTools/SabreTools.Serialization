@@ -437,9 +437,9 @@ namespace SabreTools.Metadata.DatFiles
             var lastSource = last.Read<Source?>(DatItem.SourceKey);
 
             // Get the machines for comparison
-            var selfMachine = self.GetMachine();
+            var selfMachine = self.Machine;
             string? selfMachineName = selfMachine?.Name;
-            var lastMachine = last.GetMachine();
+            var lastMachine = last.Machine;
             string? lastMachineName = lastMachine?.Name;
 
             // If the duplicate is external already
@@ -546,8 +546,8 @@ namespace SabreTools.Metadata.DatFiles
                 var itemSource = datItem.Read<Source?>(DatItem.SourceKey);
 
                 // Get the machines associated with the items
-                var savedMachine = savedItem.GetMachine();
-                var itemMachine = datItem.GetMachine();
+                var savedMachine = savedItem.Machine;
+                var itemMachine = datItem.Machine;
 
                 // If the current source has a lower ID than the saved, use the saved source
                 if (itemSource?.Index < savedSource?.Index)
@@ -732,7 +732,7 @@ namespace SabreTools.Metadata.DatFiles
                 bucketBy = ItemKey.Machine;
 
             // Get the machine and source
-            var machine = datItem.GetMachine();
+            var machine = datItem.Machine;
             var source = datItem.Read<Source?>(DatItem.SourceKey);
 
             // Get the bucket key
@@ -771,7 +771,7 @@ namespace SabreTools.Metadata.DatFiles
                         continue;
 
                     // Get the machine and source
-                    var machine = item.GetMachine();
+                    var machine = item.Machine;
                     var source = item.Read<Source?>(DatItem.SourceKey);
 
                     // We want to get the key most appropriate for the given sorting type
@@ -852,8 +852,8 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // Get the machines
-                    Machine? xMachine = x.GetMachine();
-                    Machine? yMachine = y.GetMachine();
+                    Machine? xMachine = x.Machine;
+                    Machine? yMachine = y.Machine;
 
                     // If machine names don't match
                     string? xMachineName = xMachine?.Name;

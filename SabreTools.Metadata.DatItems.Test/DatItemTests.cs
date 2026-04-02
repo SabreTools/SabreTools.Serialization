@@ -59,10 +59,10 @@ namespace SabreTools.Metadata.DatItems.Test
             var romA = new Rom();
 
             var romB = new Rom();
-            romB.Remove(DatItem.MachineKey);
+            romB.Machine = null;
 
             romA.CopyMachineInformation(romB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
             Assert.Null(actualMachineA.Name);
         }
@@ -74,13 +74,13 @@ namespace SabreTools.Metadata.DatItems.Test
             machineA.Name = "machineA";
 
             var romA = new Rom();
-            romA.Write(DatItem.MachineKey, machineA);
+            romA.Machine = machineA;
 
             var romB = new Rom();
-            romB.Remove(DatItem.MachineKey);
+            romB.Machine = null;
 
             romA.CopyMachineInformation(romB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
             Assert.Equal("machineA", actualMachineA.Name);
         }
@@ -94,13 +94,13 @@ namespace SabreTools.Metadata.DatItems.Test
             Machine? machineB = null;
 
             var romA = new Rom();
-            romA.Write(DatItem.MachineKey, machineA);
+            romA.Machine = machineA;
 
             var romB = new Rom();
-            romB.Write(DatItem.MachineKey, machineB);
+            romB.Machine = machineB;
 
             romA.CopyMachineInformation(romB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
             Assert.Equal("machineA", actualMachineA.Name);
         }
@@ -114,13 +114,13 @@ namespace SabreTools.Metadata.DatItems.Test
             Machine? machineB = new Machine();
 
             var romA = new Rom();
-            romA.Write(DatItem.MachineKey, machineA);
+            romA.Machine = machineA;
 
             var romB = new Rom();
-            romB.Write(DatItem.MachineKey, machineB);
+            romB.Machine = machineB;
 
             romA.CopyMachineInformation(romB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
             Assert.Null(actualMachineA.Name);
         }
@@ -135,13 +135,13 @@ namespace SabreTools.Metadata.DatItems.Test
             machineB.Name = "machineB";
 
             var romA = new Rom();
-            romA.Write(DatItem.MachineKey, machineA);
+            romA.Machine = machineA;
 
             var romB = new Rom();
-            romB.Write(DatItem.MachineKey, machineB);
+            romB.Machine = machineB;
 
             romA.CopyMachineInformation(romB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
             Assert.Equal("machineB", actualMachineA.Name);
         }
@@ -156,13 +156,13 @@ namespace SabreTools.Metadata.DatItems.Test
             machineB.Name = "machineB";
 
             var romA = new Rom();
-            romA.Write(DatItem.MachineKey, machineA);
+            romA.Machine = machineA;
 
             var diskB = new Disk();
-            diskB.Write(DatItem.MachineKey, machineB);
+            diskB.Machine = machineB;
 
             romA.CopyMachineInformation(diskB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
             Assert.Equal("machineB", actualMachineA.Name);
         }

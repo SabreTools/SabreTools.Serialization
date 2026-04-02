@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatItems
             _internal = new T();
 
             SetName(string.Empty);
-            Write(MachineKey, new Machine());
+            Machine = new Machine();
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace SabreTools.Metadata.DatItems
         {
             _internal = item;
 
-            Write(MachineKey, new Machine());
+            Machine = new Machine();
         }
 
         #endregion

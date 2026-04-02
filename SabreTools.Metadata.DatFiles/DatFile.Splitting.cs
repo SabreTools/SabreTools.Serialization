@@ -268,7 +268,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the machine
-                var machine = items[0].GetMachine();
+                var machine = items[0].Machine;
                 if (machine is null)
                     continue;
 
@@ -283,8 +283,8 @@ namespace SabreTools.Metadata.DatFiles
                 if (parentItems.Count == 0)
                 {
                     copyFrom = new Rom();
-                    copyFrom.GetMachine()!.Name = cloneOf;
-                    copyFrom.GetMachine()!.Description = cloneOf;
+                    copyFrom.Machine!.Name = cloneOf;
+                    copyFrom.Machine!.Description = cloneOf;
                 }
                 else
                 {
@@ -350,7 +350,7 @@ namespace SabreTools.Metadata.DatFiles
                             .Contains(mergeTag))
                         {
                             if (subfolder)
-                                rom.Name = $"{rom.GetMachine()!.Name}\\{rom.Name}";
+                                rom.Name = $"{rom.Machine!.Name}\\{rom.Name}";
 
                             rom.CopyMachineInformation(copyFrom);
                             AddItem(rom, statsOnly: false);
@@ -360,7 +360,7 @@ namespace SabreTools.Metadata.DatFiles
                         else if (!GetItemsForBucket(cloneOf).Exists(i => i.Equals(item)) || skipDedup)
                         {
                             if (subfolder)
-                                rom.Name = $"{item.GetMachine()!.Name}\\{rom.Name}";
+                                rom.Name = $"{item.Machine!.Name}\\{rom.Name}";
 
                             rom.CopyMachineInformation(copyFrom);
                             AddItem(rom, statsOnly: false);
@@ -371,7 +371,7 @@ namespace SabreTools.Metadata.DatFiles
                     else if (!GetItemsForBucket(cloneOf).Exists(i => i.Equals(item)))
                     {
                         if (subfolder)
-                            item.SetName($"{item.GetMachine()!.Name}\\{item.GetName()}");
+                            item.SetName($"{item.Machine!.Name}\\{item.GetName()}");
 
                         item.CopyMachineInformation(copyFrom);
                         AddItem(item, statsOnly: false);
@@ -537,7 +537,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the machine
-                var machine = items[0].GetMachine();
+                var machine = items[0].Machine;
                 if (machine is null)
                     continue;
 
@@ -562,10 +562,10 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Now we want to get the parent romof tag and put it in each of the items
                 items = GetItemsForBucket(bucket);
-                string? romof = GetItemsForBucket(cloneOf)[0].GetMachine()!.ReadString(Data.Models.Metadata.Machine.RomOfKey);
+                string? romof = GetItemsForBucket(cloneOf)[0].Machine!.ReadString(Data.Models.Metadata.Machine.RomOfKey);
                 foreach (DatItem item in items)
                 {
-                    item.GetMachine()!.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, romof);
+                    item.Machine!.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, romof);
                 }
             }
         }
@@ -659,7 +659,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // If the machine (is/is not) a device, we want to continue
-                if (deviceOnly ^ (datItems[0].GetMachine()!.IsDevice == true))
+                if (deviceOnly ^ (datItems[0].Machine!.IsDevice == true))
                     continue;
 
                 // Get the first item from the bucket
@@ -976,7 +976,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the machine
-                var machine = items[0].GetMachine();
+                var machine = items[0].Machine;
                 if (machine is null)
                     continue;
 
@@ -1069,7 +1069,7 @@ namespace SabreTools.Metadata.DatFiles
 #endif
 
                 // Get the machine
-                var machine = items[0].GetMachine();
+                var machine = items[0].Machine;
                 if (machine is null)
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                     return;
@@ -1158,7 +1158,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the machine
-                var machine = items[0].GetMachine();
+                var machine = items[0].Machine;
                 if (machine is null)
                     continue;
 
@@ -1186,10 +1186,10 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Now we want to get the parent romof tag and put it in each of the remaining items
                 items = GetItemsForBucket(bucket);
-                string? romof = GetItemsForBucket(cloneOf)[0].GetMachine()!.ReadString(Data.Models.Metadata.Machine.RomOfKey);
+                string? romof = GetItemsForBucket(cloneOf)[0].Machine!.ReadString(Data.Models.Metadata.Machine.RomOfKey);
                 foreach (DatItem item in items)
                 {
-                    item.GetMachine()!.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, romof);
+                    item.Machine!.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, romof);
                 }
             }
         }
@@ -1268,7 +1268,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the machine
-                var machine = items[0].GetMachine();
+                var machine = items[0].Machine;
                 if (machine is null)
                     continue;
 
@@ -1366,7 +1366,7 @@ namespace SabreTools.Metadata.DatFiles
                     item.Remove(Data.Models.Metadata.Rom.MergeKey);
 
                     // Get the machine
-                    var machine = item.GetMachine();
+                    var machine = item.Machine;
                     if (machine is null)
                         continue;
 

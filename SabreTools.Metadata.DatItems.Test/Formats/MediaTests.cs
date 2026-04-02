@@ -22,7 +22,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             media.Write(Data.Models.Metadata.Media.SHA256Key, HashType.SHA256.ZeroString);
             media.Write(Data.Models.Metadata.Media.SpamSumKey, HashType.SpamSum.ZeroString);
             media.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
-            media.Write(DatItem.MachineKey, machine);
+            media.Machine = machine;
             media.Write(DatItem.RemoveKey, (bool?)false);
             media.Write(DatItem.SourceKey, source);
 
@@ -35,7 +35,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal(HashType.SpamSum.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
             Assert.Equal(DupeType.All | DupeType.External, actual.Read<DupeType>(DatItem.DupeTypeKey));
 
-            Machine? actualMachine = actual.GetMachine();
+            Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);
             Assert.Equal("name", actualMachine.Name);
 

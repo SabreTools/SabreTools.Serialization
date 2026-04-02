@@ -68,7 +68,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             var rom = new Rom(_internal.ConvertToRom()!);
 
             rom.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
-            rom.Write(MachineKey, GetMachine());
+            rom.Machine = Machine?.Clone() as Machine;
             rom.Write(RemoveKey, ReadBool(RemoveKey));
             rom.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
 

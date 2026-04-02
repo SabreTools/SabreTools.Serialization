@@ -119,7 +119,7 @@ namespace SabreTools.Metadata.DatFiles
                 foreach (DatItem item in items)
                 {
                     // Get the current machine
-                    var machine = item.GetMachine();
+                    var machine = item.Machine;
                     if (machine is null)
                         continue;
 
@@ -326,7 +326,7 @@ namespace SabreTools.Metadata.DatFiles
                 DatItem item = GetItemsForBucket(key)[0];
 
                 // Get machine information
-                Machine? machine = item.GetMachine();
+                Machine? machine = item.Machine;
                 string? machineName = machine?.Name?.ToLowerInvariant();
                 if (machine is null || machineName is null)
                     continue;
@@ -514,7 +514,7 @@ namespace SabreTools.Metadata.DatFiles
                 return;
 
             // Get the current machine
-            var machine = datItem.GetMachine();
+            var machine = datItem.Machine;
             if (machine is null)
                 return;
 
@@ -522,7 +522,7 @@ namespace SabreTools.Metadata.DatFiles
             machine = (Machine)machine.Clone();
 
             // Reassign the item to the new machine
-            datItem.Write(DatItem.MachineKey, machine);
+            datItem.Machine = machine;
 
             // Remove extensions from File and Rom items
             if (datItem is DatItems.Formats.File || datItem is Rom)
@@ -646,7 +646,7 @@ namespace SabreTools.Metadata.DatFiles
                 foreach (DatItem item in items)
                 {
                     // Get the current machine
-                    var machine = item.GetMachine();
+                    var machine = item.Machine;
                     if (machine is null)
                         continue;
 
@@ -655,10 +655,10 @@ namespace SabreTools.Metadata.DatFiles
                     string? machineDesc = machine.Description;
 
                     if (machineName is not null && Regex.IsMatch(machineName, SceneNamePattern))
-                        item.GetMachine()!.Name = Regex.Replace(machineName, SceneNamePattern, "$2");
+                        item.Machine!.Name = Regex.Replace(machineName, SceneNamePattern, "$2");
 
                     if (machineDesc is not null && Regex.IsMatch(machineDesc, SceneNamePattern))
-                        item.GetMachine()!.Description = Regex.Replace(machineDesc, SceneNamePattern, "$2");
+                        item.Machine!.Description = Regex.Replace(machineDesc, SceneNamePattern, "$2");
                 }
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
@@ -727,7 +727,7 @@ namespace SabreTools.Metadata.DatFiles
                 foreach (DatItem item in items)
                 {
                     // Get the current machine
-                    var machine = item.GetMachine();
+                    var machine = item.Machine;
                     if (machine is null)
                         continue;
 

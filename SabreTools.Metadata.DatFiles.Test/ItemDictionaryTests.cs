@@ -20,7 +20,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             disk.SetName("item");
             disk.Write<string?>(Data.Models.Metadata.Disk.SHA1Key, "deadbeef");
             disk.Write<Source?>(DatItem.SourceKey, source);
-            disk.Write<Machine?>(DatItem.MachineKey, machine);
+            disk.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(disk, statsOnly: false);
@@ -40,7 +40,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem disk = new Disk();
             disk.SetName("item");
             disk.Write<Source?>(DatItem.SourceKey, source);
-            disk.Write<Machine?>(DatItem.MachineKey, machine);
+            disk.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(disk, statsOnly: false);
@@ -61,7 +61,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             file.SetName("item");
             file.SHA1 = "deadbeef";
             file.Write<Source?>(DatItem.SourceKey, source);
-            file.Write<Machine?>(DatItem.MachineKey, machine);
+            file.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(file, statsOnly: false);
@@ -80,7 +80,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem file = new File();
             file.SetName("item");
             file.Write<Source?>(DatItem.SourceKey, source);
-            file.Write<Machine?>(DatItem.MachineKey, machine);
+            file.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(file, statsOnly: false);
@@ -100,7 +100,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             media.SetName("item");
             media.Write<string?>(Data.Models.Metadata.Media.SHA1Key, "deadbeef");
             media.Write<Source?>(DatItem.SourceKey, source);
-            media.Write<Machine?>(DatItem.MachineKey, machine);
+            media.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(media, statsOnly: false);
@@ -119,7 +119,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem media = new Media();
             media.SetName("item");
             media.Write<Source?>(DatItem.SourceKey, source);
-            media.Write<Machine?>(DatItem.MachineKey, machine);
+            media.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(media, statsOnly: false);
@@ -140,7 +140,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             rom.Write<long?>(Data.Models.Metadata.Rom.SizeKey, 12345);
             rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, "deadbeef");
             rom.Write<Source?>(DatItem.SourceKey, source);
-            rom.Write<Machine?>(DatItem.MachineKey, machine);
+            rom.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(rom, statsOnly: false);
@@ -163,7 +163,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             rom.SetName("item");
             rom.Write<long?>(Data.Models.Metadata.Rom.SizeKey, 12345);
             rom.Write<Source?>(DatItem.SourceKey, source);
-            rom.Write<Machine?>(DatItem.MachineKey, machine);
+            rom.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(rom, statsOnly: false);
@@ -186,7 +186,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             rom.SetName("item");
             rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, "deadbeef");
             rom.Write<Source?>(DatItem.SourceKey, source);
-            rom.Write<Machine?>(DatItem.MachineKey, machine);
+            rom.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(rom, statsOnly: false);
@@ -208,7 +208,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem rom = new Rom();
             rom.SetName("item");
             rom.Write<Source?>(DatItem.SourceKey, source);
-            rom.Write<Machine?>(DatItem.MachineKey, machine);
+            rom.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(rom, statsOnly: false);
@@ -230,7 +230,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem item = new Rom();
             item.SetName("item");
             item.Write<Source?>(DatItem.SourceKey, source);
-            item.Write<Machine?>(DatItem.MachineKey, machine);
+            item.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(item, statsOnly: true);
@@ -247,7 +247,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem item = new Rom();
             item.SetName("item");
             item.Write<Source?>(DatItem.SourceKey, source);
-            item.Write<Machine?>(DatItem.MachineKey, machine);
+            item.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(item, statsOnly: false);
@@ -306,7 +306,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom();
             item.Write<Source?>(DatItem.SourceKey, source);
-            item.Write<Machine?>(DatItem.MachineKey, machine);
+            item.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(item, statsOnly: false);
@@ -326,7 +326,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom();
             item.Write<Source?>(DatItem.SourceKey, source);
-            item.Write<Machine?>(DatItem.MachineKey, machine);
+            item.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(item, statsOnly: false);
@@ -347,7 +347,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem item = new Rom();
             item.Write<bool?>(DatItem.RemoveKey, true);
             item.Write<Source?>(DatItem.SourceKey, source);
-            item.Write<Machine?>(DatItem.MachineKey, machine);
+            item.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(item, statsOnly: false);
@@ -368,7 +368,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem item = new Rom();
             item.Write<bool?>(DatItem.RemoveKey, true);
             item.Write<Source?>(DatItem.SourceKey, source);
-            item.Write<Machine?>(DatItem.MachineKey, machine);
+            item.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(item, statsOnly: false);
@@ -388,7 +388,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom();
             item.Write<Source?>(DatItem.SourceKey, source);
-            item.Write<Machine?>(DatItem.MachineKey, machine);
+            item.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(item, statsOnly: false);
@@ -797,7 +797,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             item.Write<long?>(Data.Models.Metadata.Rom.SizeKey, 12345);
             item.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
             item.Write<Source?>(DatItem.SourceKey, source);
-            item.Write<Machine?>(DatItem.MachineKey, machine);
+            item.Machine = machine;
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(item, statsOnly: false);

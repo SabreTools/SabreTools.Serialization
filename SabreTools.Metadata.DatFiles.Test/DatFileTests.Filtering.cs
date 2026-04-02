@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem datItem = new Rom();
             datItem.SetName("rom.bin");
             datItem.Write(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            datItem.Write(DatItem.MachineKey, machine);
+            datItem.Machine = machine;
             datItem.Write(DatItem.SourceKey, source);
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
@@ -53,7 +53,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem datItem = new Rom();
             datItem.SetName("rom.bin");
             datItem.Write(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            datItem.Write(DatItem.MachineKey, machine);
+            datItem.Machine = machine;
             datItem.Write(DatItem.SourceKey, source);
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
@@ -83,7 +83,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Description = "description";
 
             DatItem datItem = new Rom();
-            datItem.Write(DatItem.MachineKey, machine);
+            datItem.Machine = machine;
             datItem.Write(DatItem.SourceKey, source);
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
@@ -93,7 +93,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             // The name of the bucket is not expected to change
             DatItem actual = Assert.Single(datFile.GetItemsForBucket("machine"));
-            Machine? actualMachine = actual.GetMachine();
+            Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);
             Assert.Equal("description", actualMachine.Name);
             Assert.Equal("description", actualMachine.Description);
@@ -130,12 +130,12 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem rom = new Rom();
             rom.SetName("rom.bin");
-            rom.Write(DatItem.MachineKey, machine);
+            rom.Machine = machine;
             rom.Write(DatItem.SourceKey, source);
 
             DatItem disk = new Disk();
             disk.SetName("disk");
-            disk.Write(DatItem.MachineKey, machine);
+            disk.Machine = machine;
             disk.Write(DatItem.SourceKey, source);
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
@@ -149,12 +149,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(2, actualDatItems.Count);
 
             DatItem actualRom = Assert.Single(actualDatItems.FindAll(i => i is Rom));
-            Machine? actualRomMachine = actualRom.GetMachine();
+            Machine? actualRomMachine = actualRom.Machine;
             Assert.NotNull(actualRomMachine);
             Assert.Equal("machine/rom", actualRomMachine.Name);
 
             DatItem actualDisk = Assert.Single(actualDatItems.FindAll(i => i is Disk));
-            Machine? actualDiskMachine = actualDisk.GetMachine();
+            Machine? actualDiskMachine = actualDisk.Machine;
             Assert.NotNull(actualDiskMachine);
             Assert.Equal("machine/disk", actualDiskMachine.Name);
         }
@@ -212,11 +212,11 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem nowhereRom = new Rom();
             nowhereRom.SetName("rom.bin");
-            nowhereRom.Write(DatItem.MachineKey, nowhereMachine);
+            nowhereRom.Machine = nowhereMachine;
 
             DatItem worldRom = new Rom();
             worldRom.SetName("rom.nib");
-            worldRom.Write(DatItem.MachineKey, worldMachine);
+            worldRom.Machine = worldMachine;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(nowhereRom, statsOnly: false);
@@ -229,7 +229,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             var actualDatItems = datFile.GetItemsForBucket("machine (world)");
             DatItem actualWorldRom = Assert.Single(actualDatItems);
-            Machine? actualWorldMachine = actualWorldRom.GetMachine();
+            Machine? actualWorldMachine = actualWorldRom.Machine;
             Assert.NotNull(actualWorldMachine);
             Assert.Equal("machine (World)", actualWorldMachine.Name);
         }
@@ -269,7 +269,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Name = "10.10.10-machine-name";
 
             DatItem datItem = new Rom();
-            datItem.Write(DatItem.MachineKey, machine);
+            datItem.Machine = machine;
             datItem.Write(DatItem.SourceKey, source);
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
@@ -279,7 +279,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             // The name of the bucket is not expected to change
             DatItem actual = Assert.Single(datFile.GetItemsForBucket("10.10.10-machine-name"));
-            Machine? actualMachine = actual.GetMachine();
+            Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);
             Assert.Equal("machine-name", actualMachine.Name);
         }

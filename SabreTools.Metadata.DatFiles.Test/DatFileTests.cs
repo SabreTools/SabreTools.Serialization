@@ -37,7 +37,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             rom.SetName("rom");
             rom.Write(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
             rom.Write(DatItem.SourceKey, source);
-            rom.Write(DatItem.MachineKey, machine);
+            rom.Machine = machine;
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "name";
@@ -77,7 +77,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem datItem = new Rom();
             datItem.Write<Source?>(DatItem.SourceKey, source);
-            datItem.Write<Machine?>(DatItem.MachineKey, machine);
+            datItem.Machine = machine;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(datItem, statsOnly: false);
@@ -1960,7 +1960,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             romA.SetName("name");
             romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Machine = (Machine)machine.Clone();
             romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<DatItem> datItems = [romA];
@@ -1988,14 +1988,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             romA.SetName("romA");
             romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Machine = (Machine)machine.Clone();
             romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             Rom romB = new Rom();
             romB.SetName("romB");
             romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
-            romB.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romB.Machine = (Machine)machine.Clone();
             romB.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<DatItem> datItems = [romA, romB];
@@ -2030,14 +2030,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             romA.SetName("rom");
             romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Machine = (Machine)machine.Clone();
             romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             Rom romB = new Rom();
             romB.SetName("rom");
             romB.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romB.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romB.Machine = (Machine)machine.Clone();
             romB.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<DatItem> datItems = [romA, romB];
@@ -2065,14 +2065,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             romA.SetName("rom");
             romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Machine = (Machine)machine.Clone();
             romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             Rom romB = new Rom();
             romB.SetName("rom");
             romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
-            romB.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romB.Machine = (Machine)machine.Clone();
             romB.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<DatItem> datItems = [romA, romB];
@@ -2122,7 +2122,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             romA.SetName("name");
             romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Machine = (Machine)machine.Clone();
             romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<KeyValuePair<long, DatItem>> mappings =
@@ -2152,14 +2152,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             romA.SetName("romA");
             romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Machine = (Machine)machine.Clone();
             romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             Rom romB = new Rom();
             romB.SetName("romB");
             romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
-            romB.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romB.Machine = (Machine)machine.Clone();
             romB.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<KeyValuePair<long, DatItem>> mappings =
@@ -2236,14 +2236,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             romA.SetName("rom");
             romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Machine = (Machine)machine.Clone();
             romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             Rom romB = new Rom();
             romB.SetName("rom");
             romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
-            romB.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romB.Machine = (Machine)machine.Clone();
             romB.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<KeyValuePair<long, DatItem>> mappings =

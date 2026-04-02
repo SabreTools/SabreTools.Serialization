@@ -64,11 +64,6 @@ namespace SabreTools.Metadata.DatItems
         public const string DupeTypeKey = "DUPETYPE";
 
         /// <summary>
-        /// Machine associated with the item
-        /// </summary>
-        public const string MachineKey = "MACHINE";
-
-        /// <summary>
         /// Flag if item should be removed
         /// </summary>
         public const string RemoveKey = "REMOVE";
@@ -87,6 +82,11 @@ namespace SabreTools.Metadata.DatItems
         /// </summary>
         public abstract Data.Models.Metadata.ItemType ItemType { get; }
 
+        /// <summary>
+        /// Get the machine for a DatItem
+        /// </summary>
+        public Machine? Machine { get; set; }
+
         #endregion
 
         #region Logging
@@ -100,13 +100,6 @@ namespace SabreTools.Metadata.DatItems
         #endregion
 
         #region Accessors
-
-        /// <summary>
-        /// Get the machine for a DatItem
-        /// </summary>
-        /// <returns>Machine if available, null otherwise</returns>
-        /// <remarks>Relies on <see cref="MachineKey"/></remarks>
-        public Machine? GetMachine() => Read<Machine>(MachineKey);
 
         /// <summary>
         /// Gets the name to use for a DatItem
@@ -137,11 +130,10 @@ namespace SabreTools.Metadata.DatItems
         public void CopyMachineInformation(DatItem item)
         {
             // If there is no machine
-            if (!item._internal.ContainsKey(MachineKey))
+            if (item.Machine is null)
                 return;
 
-            var machine = item.GetMachine();
-            CopyMachineInformation(machine);
+            CopyMachineInformation(item.Machine);
         }
 
         /// <summary>
@@ -154,7 +146,7 @@ namespace SabreTools.Metadata.DatItems
                 return;
 
             if (machine.Clone() is Machine cloned)
-                Write(MachineKey, cloned);
+                Machine = cloned;
         }
 
         #endregion
@@ -245,7 +237,7 @@ namespace SabreTools.Metadata.DatItems
         /// <returns>True if the item and its machine passes the filter, false otherwise</returns>
         public bool PassesFilter(FilterRunner filterRunner)
         {
-            var machine = GetMachine();
+            var machine = Machine;
             if (machine is not null && !machine.PassesFilter(filterRunner))
                 return false;
 

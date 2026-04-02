@@ -458,11 +458,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         DatItem datItem = datItems[index];
 
                         // If we have a different game and we're not at the start of the list, output the end of last item
-                        if (lastgame is not null && !string.Equals(lastgame, datItem.GetMachine()!.Name, StringComparison.OrdinalIgnoreCase))
+                        if (lastgame is not null && !string.Equals(lastgame, datItem.Machine!.Name, StringComparison.OrdinalIgnoreCase))
                             WriteEndGame(jtw);
 
                         // If we have a new game, output the beginning of the new item
-                        if (lastgame is null || !string.Equals(lastgame, datItem.GetMachine()!.Name, StringComparison.OrdinalIgnoreCase))
+                        if (lastgame is null || !string.Equals(lastgame, datItem.Machine!.Name, StringComparison.OrdinalIgnoreCase))
                             WriteStartGame(jtw, datItem);
 
                         // Check for a "null" item
@@ -473,7 +473,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             WriteDatItem(jtw, datItem);
 
                         // Set the new data to compare against
-                        lastgame = datItem.GetMachine()!.Name;
+                        lastgame = datItem.Machine!.Name;
                     }
                 }
 
@@ -601,8 +601,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
         private static void WriteStartGame(JsonTextWriter jtw, DatItem datItem)
         {
             // No game should start with a path separator
-            if (!string.IsNullOrEmpty(datItem.GetMachine()!.Name))
-                datItem.GetMachine()!.Name = datItem.GetMachine()!.Name!.TrimStart(Path.DirectorySeparatorChar);
+            if (!string.IsNullOrEmpty(datItem.Machine!.Name))
+                datItem.Machine!.Name = datItem.Machine!.Name!.TrimStart(Path.DirectorySeparatorChar);
 
             // Build the state
             jtw.WriteStartObject();
@@ -610,7 +610,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
             // Write the Machine
             jtw.WritePropertyName("machine");
             JsonSerializer js = new() { Formatting = Formatting.Indented };
-            js.Serialize(jtw, datItem.GetMachine()!);
+            js.Serialize(jtw, datItem.Machine!);
 
             jtw.WritePropertyName("items");
             jtw.WriteStartArray();
@@ -641,7 +641,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         private void WriteDatItem(JsonTextWriter jtw, DatItem datItem)
         {
             // Get the machine for the item
-            var machine = datItem.GetMachine();
+            var machine = datItem.Machine;
 
             // Pre-process the item name
             ProcessItemName(datItem, machine, forceRemoveQuotes: true, forceRomName: false);

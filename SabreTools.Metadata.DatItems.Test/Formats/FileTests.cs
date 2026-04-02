@@ -27,10 +27,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 Format = "XXXXXX"
             };
             file.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
-            file.Write(DatItem.MachineKey, machine);
+            file.Machine = machine;
             file.Write(DatItem.RemoveKey, (bool?)false);
             file.Write(DatItem.SourceKey, source);
-            file.Write(DatItem.MachineKey, machine);
+            file.Machine = machine;
             file.Write(DatItem.SourceKey, source);
 
             Rom actual = file.ConvertToRom();
@@ -43,7 +43,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal("00000000000000000000000000000000000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA256Key));
             Assert.Equal(DupeType.All | DupeType.External, actual.Read<DupeType>(DatItem.DupeTypeKey));
 
-            Machine? actualMachine = actual.GetMachine();
+            Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);
             Assert.Equal("name", actualMachine.GetName());
 
