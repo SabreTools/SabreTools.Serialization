@@ -19,7 +19,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem disk = new Disk();
             disk.SetName("item");
             disk.Write<string?>(Data.Models.Metadata.Disk.SHA1Key, "deadbeef");
-            disk.Write<Source?>(DatItem.SourceKey, source);
+            disk.Source = source;
             disk.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -39,7 +39,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem disk = new Disk();
             disk.SetName("item");
-            disk.Write<Source?>(DatItem.SourceKey, source);
+            disk.Source = source;
             disk.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -60,7 +60,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var file = new File();
             file.SetName("item");
             file.SHA1 = "deadbeef";
-            file.Write<Source?>(DatItem.SourceKey, source);
+            file.Source = source;
             file.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -79,7 +79,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem file = new File();
             file.SetName("item");
-            file.Write<Source?>(DatItem.SourceKey, source);
+            file.Source = source;
             file.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -99,7 +99,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem media = new Media();
             media.SetName("item");
             media.Write<string?>(Data.Models.Metadata.Media.SHA1Key, "deadbeef");
-            media.Write<Source?>(DatItem.SourceKey, source);
+            media.Source = source;
             media.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -118,7 +118,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem media = new Media();
             media.SetName("item");
-            media.Write<Source?>(DatItem.SourceKey, source);
+            media.Source = source;
             media.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -139,7 +139,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             rom.SetName("item");
             rom.Write<long?>(Data.Models.Metadata.Rom.SizeKey, 12345);
             rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, "deadbeef");
-            rom.Write<Source?>(DatItem.SourceKey, source);
+            rom.Source = source;
             rom.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -162,7 +162,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem rom = new Rom();
             rom.SetName("item");
             rom.Write<long?>(Data.Models.Metadata.Rom.SizeKey, 12345);
-            rom.Write<Source?>(DatItem.SourceKey, source);
+            rom.Source = source;
             rom.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -185,7 +185,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem rom = new Rom();
             rom.SetName("item");
             rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, "deadbeef");
-            rom.Write<Source?>(DatItem.SourceKey, source);
+            rom.Source = source;
             rom.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -207,7 +207,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem rom = new Rom();
             rom.SetName("item");
-            rom.Write<Source?>(DatItem.SourceKey, source);
+            rom.Source = source;
             rom.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -229,7 +229,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom();
             item.SetName("item");
-            item.Write<Source?>(DatItem.SourceKey, source);
+            item.Source = source;
             item.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -246,7 +246,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom();
             item.SetName("item");
-            item.Write<Source?>(DatItem.SourceKey, source);
+            item.Source = source;
             item.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -305,7 +305,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Name = "machine";
 
             DatItem item = new Rom();
-            item.Write<Source?>(DatItem.SourceKey, source);
+            item.Source = source;
             item.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -325,7 +325,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Name = "machine";
 
             DatItem item = new Rom();
-            item.Write<Source?>(DatItem.SourceKey, source);
+            item.Source = source;
             item.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -346,7 +346,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom();
             item.Write<bool?>(DatItem.RemoveKey, true);
-            item.Write<Source?>(DatItem.SourceKey, source);
+            item.Source = source;
             item.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -367,7 +367,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom();
             item.Write<bool?>(DatItem.RemoveKey, true);
-            item.Write<Source?>(DatItem.SourceKey, source);
+            item.Source = source;
             item.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -387,7 +387,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Name = "machine";
 
             DatItem item = new Rom();
-            item.Write<Source?>(DatItem.SourceKey, source);
+            item.Source = source;
             item.Machine = machine;
 
             var dict = new ItemDictionary();
@@ -577,13 +577,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romA = new Rom();
             romA.Name = "same-name";
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "BEEFDEAD");
-            romA.Write<Source?>(DatItem.SourceKey, new Source(0));
+            romA.Source = new Source(0);
             romA.CopyMachineInformation(machineA);
 
             var romB = new Rom();
             romB.Name = "same-name";
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            romB.Write<Source?>(DatItem.SourceKey, new Source(1));
+            romB.Source = new Source(1);
             romB.CopyMachineInformation(machineB);
 
             var actual = dict.GetDuplicateStatus(romA, romB);
@@ -604,13 +604,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romA = new Rom();
             romA.Name = "same-name";
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            romA.Write<Source?>(DatItem.SourceKey, new Source(0));
+            romA.Source = new Source(0);
             romA.CopyMachineInformation(machineA);
 
             var romB = new Rom();
             romB.Name = "same-name";
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            romB.Write<Source?>(DatItem.SourceKey, new Source(1));
+            romB.Source = new Source(1);
             romB.CopyMachineInformation(machineB);
 
             var actual = dict.GetDuplicateStatus(romA, romB);
@@ -631,13 +631,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romA = new Rom();
             romA.Name = "same-name";
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            romA.Write<Source?>(DatItem.SourceKey, new Source(0));
+            romA.Source = new Source(0);
             romA.CopyMachineInformation(machineA);
 
             var romB = new Rom();
             romB.Name = "same-name";
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            romB.Write<Source?>(DatItem.SourceKey, new Source(1));
+            romB.Source = new Source(1);
             romB.CopyMachineInformation(machineB);
 
             var actual = dict.GetDuplicateStatus(romA, romB);
@@ -658,13 +658,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romA = new Rom();
             romA.Name = "same-name";
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            romA.Write<Source?>(DatItem.SourceKey, new Source(0));
+            romA.Source = new Source(0);
             romA.CopyMachineInformation(machineA);
 
             var romB = new Rom();
             romB.Name = "same-name";
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            romB.Write<Source?>(DatItem.SourceKey, new Source(0));
+            romB.Source = new Source(0);
             romB.CopyMachineInformation(machineB);
 
             var actual = dict.GetDuplicateStatus(romA, romB);
@@ -685,13 +685,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romA = new Rom();
             romA.Name = "same-name";
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            romA.Write<Source?>(DatItem.SourceKey, new Source(0));
+            romA.Source = new Source(0);
             romA.CopyMachineInformation(machineA);
 
             var romB = new Rom();
             romB.Name = "same-name";
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            romB.Write<Source?>(DatItem.SourceKey, new Source(0));
+            romB.Source = new Source(0);
             romB.CopyMachineInformation(machineB);
 
             var actual = dict.GetDuplicateStatus(romA, romB);
@@ -796,7 +796,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             item.SetName("rom");
             item.Write<long?>(Data.Models.Metadata.Rom.SizeKey, 12345);
             item.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            item.Write<Source?>(DatItem.SourceKey, source);
+            item.Source = source;
             item.Machine = machine;
 
             var dict = new ItemDictionary();

@@ -100,7 +100,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Disk(Data.Models.Metadata.Disk item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 
@@ -133,7 +133,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             rom.Machine = Machine?.Clone() as Machine;
             rom.Write(Rom.PartKey, Read<Part>(PartKey)?.Clone() as Part);
             rom.Write(RemoveKey, ReadBool(RemoveKey));
-            rom.Write<Source?>(SourceKey, Read<Source?>(SourceKey)?.Clone() as Source);
+            rom.Source = Source?.Clone() as Source;
 
             return rom;
         }

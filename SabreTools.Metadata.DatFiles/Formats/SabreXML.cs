@@ -223,7 +223,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             }
 
                             item.CopyMachineInformation(machine);
-                            item.Write<Source?>(DatItem.SourceKey, source);
+                            item.Source = source;
                             AddItem(item, statsOnly);
                             // AddItemDB(item, machineIndex, sourceIndex, statsOnly);
                         }

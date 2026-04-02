@@ -13,6 +13,7 @@ namespace SabreTools.Metadata
         /// <summary>
         /// Check equality of two DictionaryBase objects
         /// </summary>
+        /// TODO: Fix equality checking with case sensitivity of string properties
         public static bool EqualTo(this DictionaryBase self, DictionaryBase other)
         {
             // Check types first
@@ -58,6 +59,279 @@ namespace SabreTools.Metadata
             // Check names
             if (self.GetName() != other.GetName())
                 return false;
+
+            // Handle individual type properties
+            if (self is Adjuster selfAdjuster && other is Adjuster cloneAdjuster)
+            {
+                if (selfAdjuster.Default != cloneAdjuster.Default)
+                    return false;
+            }
+            else if (self is Analog selfAnalog && other is Analog cloneAnalog)
+            {
+                if (selfAnalog.Mask != cloneAnalog.Mask)
+                    return false;
+            }
+            else if (self is Archive selfArchive && other is Archive cloneArchive)
+            {
+                if (selfArchive.Description != cloneArchive.Description)
+                    return false;
+            }
+            else if (self is BiosSet selfBiosSet && other is BiosSet cloneBiosSet)
+            {
+                if (selfBiosSet.Default != cloneBiosSet.Default)
+                    return false;
+                if (selfBiosSet.Description != cloneBiosSet.Description)
+                    return false;
+            }
+            else if (self is Chip selfChip && other is Chip cloneChip)
+            {
+                if (selfChip.ChipType != cloneChip.ChipType)
+                    return false;
+                if (selfChip.SoundOnly != cloneChip.SoundOnly)
+                    return false;
+                if (selfChip.Tag != cloneChip.Tag)
+                    return false;
+            }
+            else if (self is Condition selfCondition && other is Condition cloneCondition)
+            {
+                if (selfCondition.Mask != cloneCondition.Mask)
+                    return false;
+                if (selfCondition.Relation != cloneCondition.Relation)
+                    return false;
+                if (selfCondition.Tag != cloneCondition.Tag)
+                    return false;
+                if (selfCondition.Value != cloneCondition.Value)
+                    return false;
+            }
+            else if (self is Configuration selfConfiguration && other is Configuration cloneConfiguration)
+            {
+                if (selfConfiguration.Mask != cloneConfiguration.Mask)
+                    return false;
+                if (selfConfiguration.Tag != cloneConfiguration.Tag)
+                    return false;
+            }
+            else if (self is ConfLocation selfConfLocation && other is ConfLocation cloneConfLocation)
+            {
+                if (selfConfLocation.Inverted != cloneConfLocation.Inverted)
+                    return false;
+            }
+            else if (self is ConfSetting selfConfSetting && other is ConfSetting cloneConfSetting)
+            {
+                if (selfConfSetting.Default != cloneConfSetting.Default)
+                    return false;
+                if (selfConfSetting.Value != cloneConfSetting.Value)
+                    return false;
+            }
+            else if (self is Control selfControl && other is Control cloneControl)
+            {
+                if (selfControl.ControlType != cloneControl.ControlType)
+                    return false;
+                if (selfControl.Reverse != cloneControl.Reverse)
+                    return false;
+            }
+            else if (self is DataArea selfDataArea && other is DataArea cloneDataArea)
+            {
+                if (selfDataArea.Endianness != cloneDataArea.Endianness)
+                    return false;
+            }
+            else if (self is Device selfDevice && other is Device cloneDevice)
+            {
+                if (selfDevice.DeviceType != cloneDevice.DeviceType)
+                    return false;
+                if (selfDevice.FixedImage != cloneDevice.FixedImage)
+                    return false;
+                if (selfDevice.Interface != cloneDevice.Interface)
+                    return false;
+                if (selfDevice.Mandatory != cloneDevice.Mandatory)
+                    return false;
+                if (selfDevice.Tag != cloneDevice.Tag)
+                    return false;
+            }
+            else if (self is DipLocation selfDipLocation && other is DipLocation cloneDipLocation)
+            {
+                if (selfDipLocation.Inverted != cloneDipLocation.Inverted)
+                    return false;
+            }
+            else if (self is DipSwitch selfDipSwitch && other is DipSwitch cloneDipSwitch)
+            {
+                if (selfDipSwitch.Default != cloneDipSwitch.Default)
+                    return false;
+                if (selfDipSwitch.Mask != cloneDipSwitch.Mask)
+                    return false;
+                if (selfDipSwitch.Tag != cloneDipSwitch.Tag)
+                    return false;
+            }
+            else if (self is DipValue selfDipValue && other is DipValue cloneDipValue)
+            {
+                if (selfDipValue.Default != cloneDipValue.Default)
+                    return false;
+                if (selfDipValue.Value != cloneDipValue.Value)
+                    return false;
+            }
+            else if (self is Display selfDisplay && other is Display cloneDisplay)
+            {
+                if (selfDisplay.DisplayType != cloneDisplay.DisplayType)
+                    return false;
+                if (selfDisplay.FlipX != cloneDisplay.FlipX)
+                    return false;
+                if (selfDisplay.Tag != cloneDisplay.Tag)
+                    return false;
+            }
+            else if (self is Driver selfDriver && other is Driver cloneDriver)
+            {
+                if (selfDriver.Blit != cloneDriver.Blit)
+                    return false;
+                if (selfDriver.Cocktail != cloneDriver.Cocktail)
+                    return false;
+                if (selfDriver.Color != cloneDriver.Color)
+                    return false;
+                if (selfDriver.Emulation != cloneDriver.Emulation)
+                    return false;
+                if (selfDriver.Incomplete != cloneDriver.Incomplete)
+                    return false;
+                if (selfDriver.NoSoundHardware != cloneDriver.NoSoundHardware)
+                    return false;
+                if (selfDriver.RequiresArtwork != cloneDriver.RequiresArtwork)
+                    return false;
+                if (selfDriver.SaveState != cloneDriver.SaveState)
+                    return false;
+                if (selfDriver.Sound != cloneDriver.Sound)
+                    return false;
+                if (selfDriver.Status != cloneDriver.Status)
+                    return false;
+                if (selfDriver.Unofficial != cloneDriver.Unofficial)
+                    return false;
+            }
+            else if (self is Feature selfFeature && other is Feature cloneFeature)
+            {
+                if (selfFeature.FeatureType != cloneFeature.FeatureType)
+                    return false;
+                if (selfFeature.Overall != cloneFeature.Overall)
+                    return false;
+                if (selfFeature.Status != cloneFeature.Status)
+                    return false;
+                if (selfFeature.Value != cloneFeature.Value)
+                    return false;
+            }
+            else if (self is Header selfHeader && other is Header cloneHeader)
+            {
+                if (selfHeader.BiosMode != cloneHeader.BiosMode)
+                    return false;
+                if (selfHeader.Debug != cloneHeader.Debug)
+                    return false;
+                if (selfHeader.Description != cloneHeader.Description)
+                    return false;
+                if (selfHeader.ForceMerging != cloneHeader.ForceMerging)
+                    return false;
+                if (selfHeader.ForceNodump != cloneHeader.ForceNodump)
+                    return false;
+                if (selfHeader.ForcePacking != cloneHeader.ForcePacking)
+                    return false;
+                if (selfHeader.ForceZipping != cloneHeader.ForceZipping)
+                    return false;
+                if (selfHeader.LockBiosMode != cloneHeader.LockBiosMode)
+                    return false;
+                if (selfHeader.LockRomMode != cloneHeader.LockRomMode)
+                    return false;
+                if (selfHeader.LockSampleMode != cloneHeader.LockSampleMode)
+                    return false;
+                if (selfHeader.RomMode != cloneHeader.RomMode)
+                    return false;
+                if (selfHeader.SampleMode != cloneHeader.SampleMode)
+                    return false;
+            }
+            else if (self is Info selfInfo && other is Info cloneInfo)
+            {
+                if (selfInfo.Value != cloneInfo.Value)
+                    return false;
+            }
+            else if (self is Input selfInput && other is Input cloneInput)
+            {
+                if (selfInput.Service != cloneInput.Service)
+                    return false;
+                if (selfInput.Tilt != cloneInput.Tilt)
+                    return false;
+            }
+            else if (self is Instance selfInstance && other is Instance cloneInstance)
+            {
+                if (selfInstance.BriefName != cloneInstance.BriefName)
+                    return false;
+            }
+            else if (self is Machine selfMachine && other is Machine cloneMachine)
+            {
+                if (selfMachine.Description != cloneMachine.Description)
+                    return false;
+                if (selfMachine.IsBios != cloneMachine.IsBios)
+                    return false;
+                if (selfMachine.IsDevice != cloneMachine.IsDevice)
+                    return false;
+                if (selfMachine.IsMechanical != cloneMachine.IsMechanical)
+                    return false;
+                if (selfMachine.Runnable != cloneMachine.Runnable)
+                    return false;
+                if (selfMachine.Supported != cloneMachine.Supported)
+                    return false;
+            }
+            else if (self is Original selfOriginal && other is Original cloneOriginal)
+            {
+                if (selfOriginal.Content != cloneOriginal.Content)
+                    return false;
+            }
+            else if (self is Part selfPart && other is Part clonePart)
+            {
+                if (selfPart.Interface != clonePart.Interface)
+                    return false;
+            }
+            else if (self is Port selfPort && other is Port clonePort)
+            {
+                if (selfPort.Tag != clonePort.Tag)
+                    return false;
+            }
+            else if (self is RamOption selfRamOption && other is RamOption cloneRamOption)
+            {
+                if (selfRamOption.Content != cloneRamOption.Content)
+                    return false;
+                if (selfRamOption.Default != cloneRamOption.Default)
+                    return false;
+            }
+            else if (self is Release selfRelease && other is Release cloneRelease)
+            {
+                if (selfRelease.Default != cloneRelease.Default)
+                    return false;
+            }
+            else if (self is SharedFeat selfSharedFeat && other is SharedFeat cloneSharedFeat)
+            {
+                if (selfSharedFeat.Value != cloneSharedFeat.Value)
+                    return false;
+            }
+            else if (self is SlotOption selfSlotOption && other is SlotOption cloneSlotOption)
+            {
+                if (selfSlotOption.Default != cloneSlotOption.Default)
+                    return false;
+                if (selfSlotOption.DevName != cloneSlotOption.DevName)
+                    return false;
+            }
+            else if (self is Software selfSoftware && other is Software cloneSoftware)
+            {
+                if (selfSoftware.Description != cloneSoftware.Description)
+                    return false;
+                if (selfSoftware.Supported != cloneSoftware.Supported)
+                    return false;
+            }
+            else if (self is SoftwareList selfSoftwareList && other is SoftwareList cloneSoftwareList)
+            {
+                if (selfSoftwareList.Description != cloneSoftwareList.Description)
+                    return false;
+                if (selfSoftwareList.Status != cloneSoftwareList.Status)
+                    return false;
+                if (selfSoftwareList.Tag != cloneSoftwareList.Tag)
+                    return false;
+            }
+            else if (self is Video selfVideo && other is Video cloneVideo)
+            {
+                if (selfVideo.Screen != cloneVideo.Screen)
+                    return false;
+            }
 
             // Check all pairs to see if they're equal
             foreach (var kvp in self)

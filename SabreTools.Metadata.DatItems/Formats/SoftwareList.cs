@@ -50,7 +50,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public SoftwareList(Data.Models.Metadata.SoftwareList item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

@@ -50,7 +50,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Adjuster(Data.Models.Metadata.Adjuster item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

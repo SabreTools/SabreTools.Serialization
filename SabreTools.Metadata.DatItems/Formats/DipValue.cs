@@ -56,7 +56,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DipValue(Data.Models.Metadata.DipValue item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

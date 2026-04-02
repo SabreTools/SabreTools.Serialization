@@ -64,7 +64,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Control(Data.Models.Metadata.Control item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

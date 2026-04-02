@@ -26,7 +26,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             datItem.SetName("rom.bin");
             datItem.Write(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
             datItem.Machine = machine;
-            datItem.Write(DatItem.SourceKey, source);
+            datItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(datItem, statsOnly: false);
@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             datItem.SetName("rom.bin");
             datItem.Write(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
             datItem.Machine = machine;
-            datItem.Write(DatItem.SourceKey, source);
+            datItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             long sourceIndex = datFile.AddSourceDB(source);
@@ -84,7 +84,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem datItem = new Rom();
             datItem.Machine = machine;
-            datItem.Write(DatItem.SourceKey, source);
+            datItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(datItem, statsOnly: false);
@@ -131,12 +131,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem rom = new Rom();
             rom.SetName("rom.bin");
             rom.Machine = machine;
-            rom.Write(DatItem.SourceKey, source);
+            rom.Source = source;
 
             DatItem disk = new Disk();
             disk.SetName("disk");
             disk.Machine = machine;
-            disk.Write(DatItem.SourceKey, source);
+            disk.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(rom, statsOnly: false);
@@ -270,7 +270,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem datItem = new Rom();
             datItem.Machine = machine;
-            datItem.Write(DatItem.SourceKey, source);
+            datItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(datItem, statsOnly: false);

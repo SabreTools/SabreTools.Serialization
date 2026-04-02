@@ -1169,8 +1169,8 @@ namespace SabreTools.Metadata.DatFiles
                     // Compare on source if renaming
                     if (!norename)
                     {
-                        int xSourceIndex = x.Read<Source?>(DatItem.SourceKey)?.Index ?? 0;
-                        int ySourceIndex = y.Read<Source?>(DatItem.SourceKey)?.Index ?? 0;
+                        int xSourceIndex = x.Source?.Index ?? 0;
+                        int ySourceIndex = y.Source?.Index ?? 0;
                         if (xSourceIndex != ySourceIndex)
                             return xSourceIndex - ySourceIndex;
                     }

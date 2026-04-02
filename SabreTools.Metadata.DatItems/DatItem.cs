@@ -68,11 +68,6 @@ namespace SabreTools.Metadata.DatItems
         /// </summary>
         public const string RemoveKey = "REMOVE";
 
-        /// <summary>
-        /// Source information
-        /// </summary>
-        public const string SourceKey = "SOURCE";
-
         #endregion
 
         #region Fields
@@ -86,6 +81,11 @@ namespace SabreTools.Metadata.DatItems
         /// Get the machine for a DatItem
         /// </summary>
         public Machine? Machine { get; set; }
+
+        /// <summary>
+        /// Source information
+        /// </summary>
+        public Source? Source { get; set; }
 
         #endregion
 
@@ -199,12 +199,6 @@ namespace SabreTools.Metadata.DatItems
             if (other is not DatItem otherItem)
                 return false;
 
-            // Compare machines
-            if ((Machine is null) ^ (otherItem.Machine is null))
-                return false;
-            if (Machine is not null && !Machine.Equals(otherItem.Machine))
-                return false;
-
             // Compare internal models
             return _internal.Equals(otherItem);
         }
@@ -220,18 +214,8 @@ namespace SabreTools.Metadata.DatItems
             if (other is null)
                 return false;
 
-            // Get the types for comparison
-            Data.Models.Metadata.ItemType selfType = ItemType;
-            Data.Models.Metadata.ItemType otherType = other.ItemType;
-
             // If we don't have a matched type, return false
-            if (selfType != otherType)
-                return false;
-
-            // Compare machines
-            if ((Machine is null) ^ (other.Machine is null))
-                return false;
-            if (Machine is not null && !Machine.Equals(other.Machine))
+            if (ItemType != other.ItemType)
                 return false;
 
             // Compare the internal models

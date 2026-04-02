@@ -175,7 +175,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             Write<string?>(Data.Models.Metadata.Rom.RemarkKey, rom.ReadString(Data.Models.Metadata.Rom.RemarkKey));
             Write<string?>(Data.Models.Metadata.Rom.SHA1Key, rom.ReadString(Data.Models.Metadata.Rom.SHA1Key));
             Write<string?>(Data.Models.Metadata.Rom.StartKey, rom.ReadString(Data.Models.Metadata.Rom.StartKey));
-            Write<Source?>(SourceKey, source);
+            Source = source;
 
             var original = item.Read<Data.Models.Metadata.Original>(Dump.OriginalKey);
             if (original is not null)
@@ -307,7 +307,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Rom(Data.Models.Metadata.Rom item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

@@ -433,8 +433,8 @@ namespace SabreTools.Metadata.DatFiles
                 return output;
 
             // Get the sources for comparison
-            var selfSource = self.Read<Source?>(DatItem.SourceKey);
-            var lastSource = last.Read<Source?>(DatItem.SourceKey);
+            var selfSource = self.Source;
+            var lastSource = last.Source;
 
             // Get the machines for comparison
             var selfMachine = self.Machine;
@@ -542,8 +542,8 @@ namespace SabreTools.Metadata.DatFiles
                 savedItem.Write(DatItem.DupeTypeKey, dupetype);
 
                 // Get the sources associated with the items
-                var savedSource = savedItem.Read<Source?>(DatItem.SourceKey);
-                var itemSource = datItem.Read<Source?>(DatItem.SourceKey);
+                var savedSource = savedItem.Source;
+                var itemSource = datItem.Source;
 
                 // Get the machines associated with the items
                 var savedMachine = savedItem.Machine;
@@ -552,7 +552,7 @@ namespace SabreTools.Metadata.DatFiles
                 // If the current source has a lower ID than the saved, use the saved source
                 if (itemSource?.Index < savedSource?.Index)
                 {
-                    datItem.Write<Source?>(DatItem.SourceKey, savedSource.Clone() as Source);
+                    datItem.Source = savedSource.Clone() as Source;
                     savedItem.CopyMachineInformation(datItem);
                     savedItem.SetName(datItem.GetName());
                 }
@@ -733,7 +733,7 @@ namespace SabreTools.Metadata.DatFiles
 
             // Get the machine and source
             var machine = datItem.Machine;
-            var source = datItem.Read<Source?>(DatItem.SourceKey);
+            var source = datItem.Source;
 
             // Get the bucket key
             return datItem.GetKey(bucketBy, machine, source, lower, norename);
@@ -772,7 +772,7 @@ namespace SabreTools.Metadata.DatFiles
 
                     // Get the machine and source
                     var machine = item.Machine;
-                    var source = item.Read<Source?>(DatItem.SourceKey);
+                    var source = item.Source;
 
                     // We want to get the key most appropriate for the given sorting type
                     string newkey = item.GetKey(bucketBy, machine, source, lower, norename);
@@ -845,8 +845,8 @@ namespace SabreTools.Metadata.DatFiles
                     // Compare on source if renaming
                     if (!norename)
                     {
-                        int xSourceIndex = x.Read<Source?>(DatItem.SourceKey)?.Index ?? 0;
-                        int ySourceIndex = y.Read<Source?>(DatItem.SourceKey)?.Index ?? 0;
+                        int xSourceIndex = x.Source?.Index ?? 0;
+                        int ySourceIndex = y.Source?.Index ?? 0;
                         if (xSourceIndex != ySourceIndex)
                             return xSourceIndex - ySourceIndex;
                     }

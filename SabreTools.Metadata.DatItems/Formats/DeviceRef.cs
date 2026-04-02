@@ -28,7 +28,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DeviceRef(Data.Models.Metadata.DeviceRef item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

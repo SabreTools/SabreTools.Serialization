@@ -45,7 +45,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DataArea(Data.Models.Metadata.DataArea item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

@@ -56,7 +56,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public ConfSetting(Data.Models.Metadata.ConfSetting item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

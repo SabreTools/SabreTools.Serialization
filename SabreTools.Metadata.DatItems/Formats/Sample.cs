@@ -28,7 +28,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Sample(Data.Models.Metadata.Sample item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

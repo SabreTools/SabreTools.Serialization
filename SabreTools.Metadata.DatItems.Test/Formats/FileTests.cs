@@ -29,9 +29,9 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             file.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
             file.Machine = machine;
             file.Write(DatItem.RemoveKey, (bool?)false);
-            file.Write(DatItem.SourceKey, source);
+            file.Source = source;
             file.Machine = machine;
-            file.Write(DatItem.SourceKey, source);
+            file.Source = source;
 
             Rom actual = file.ConvertToRom();
 
@@ -49,7 +49,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Assert.Equal(false, actual.ReadBool(DatItem.RemoveKey));
 
-            Source? actualSource = actual.Read<Source?>(DatItem.SourceKey);
+            Source? actualSource = actual.Source;
             Assert.NotNull(actualSource);
             Assert.Equal(0, actualSource.Index);
             Assert.Equal("XXXXXX", actualSource.Name);

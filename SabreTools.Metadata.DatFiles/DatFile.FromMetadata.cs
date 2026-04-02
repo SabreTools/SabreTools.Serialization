@@ -480,7 +480,7 @@ namespace SabreTools.Metadata.DatFiles
                 Array.ForEach(filtered, item =>
                 {
                     var datItem = new Rom(item, machine, source);
-                    datItem.Write<Source?>(DatItem.SourceKey, source);
+                    datItem.Source = source;
                     datItem.CopyMachineInformation(machine);
 
                     AddItem(datItem, statsOnly);
@@ -692,7 +692,7 @@ namespace SabreTools.Metadata.DatFiles
 
                         var partFeatureItem = new PartFeature(partFeature);
                         partFeatureItem.Write<Part?>(DipSwitch.PartKey, partItem);
-                        partFeatureItem.Write<Source?>(DatItem.SourceKey, source);
+                        partFeatureItem.Source = source;
                         partFeatureItem.CopyMachineInformation(machine);
 
                         AddItem(partFeatureItem, statsOnly);

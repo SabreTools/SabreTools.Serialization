@@ -87,7 +87,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Display(Data.Models.Metadata.Display item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 
@@ -138,7 +138,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Display(Data.Models.Metadata.Video item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

@@ -119,7 +119,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DipSwitch(Data.Models.Metadata.DipSwitch item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

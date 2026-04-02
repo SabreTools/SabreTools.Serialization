@@ -34,7 +34,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Instance(Data.Models.Metadata.Instance item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

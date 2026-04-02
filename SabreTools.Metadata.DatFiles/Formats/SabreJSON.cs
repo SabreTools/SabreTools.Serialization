@@ -406,7 +406,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     return;
 
                 datItem.CopyMachineInformation(machine);
-                datItem.Write<Source?>(DatItem.SourceKey, source);
+                datItem.Source = source;
                 AddItem(datItem, statsOnly);
                 AddItemDB(datItem, machineIndex, sourceIndex, statsOnly);
             }

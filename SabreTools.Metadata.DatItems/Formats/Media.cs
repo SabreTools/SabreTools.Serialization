@@ -48,7 +48,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Media(Data.Models.Metadata.Media item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 
@@ -70,7 +70,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             rom.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
             rom.Machine = Machine?.Clone() as Machine;
             rom.Write(RemoveKey, ReadBool(RemoveKey));
-            rom.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
+            rom.Source = Source?.Clone() as Source;
 
             return rom;
         }

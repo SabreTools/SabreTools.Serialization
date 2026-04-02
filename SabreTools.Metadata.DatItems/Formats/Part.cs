@@ -45,7 +45,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Part(Data.Models.Metadata.Part item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

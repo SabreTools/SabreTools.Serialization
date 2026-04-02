@@ -34,7 +34,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             disk.Machine = machine;
             disk.Write(Disk.PartKey, part);
             disk.Write(DatItem.RemoveKey, (bool?)false);
-            disk.Write(DatItem.SourceKey, source);
+            disk.Source = source;
 
             Rom actual = disk.ConvertToRom();
 
@@ -61,7 +61,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.NotNull(actualPart);
             Assert.Equal("name", actualPart.Name);
 
-            Source? actualSource = actual.Read<Source?>(DatItem.SourceKey);
+            Source? actualSource = actual.Source;
             Assert.NotNull(actualSource);
             Assert.Equal(0, actualSource.Index);
             Assert.Equal("XXXXXX", actualSource.Name);

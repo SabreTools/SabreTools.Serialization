@@ -48,7 +48,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Slot(Data.Models.Metadata.Slot item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

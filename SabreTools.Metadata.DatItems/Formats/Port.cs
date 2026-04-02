@@ -48,7 +48,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Port(Data.Models.Metadata.Port item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

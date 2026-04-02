@@ -40,7 +40,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public BiosSet(Data.Models.Metadata.BiosSet item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 

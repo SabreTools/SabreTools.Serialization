@@ -18,7 +18,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public ReleaseDetails(Data.Models.Metadata.ReleaseDetails item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
         #endregion
