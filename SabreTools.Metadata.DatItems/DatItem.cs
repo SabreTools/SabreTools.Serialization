@@ -199,6 +199,12 @@ namespace SabreTools.Metadata.DatItems
             if (other is not DatItem otherItem)
                 return false;
 
+            // Compare machines
+            if ((Machine is null) ^ (otherItem.Machine is null))
+                return false;
+            if (Machine is not null && !Machine.Equals(otherItem.Machine))
+                return false;
+
             // Compare internal models
             return _internal.Equals(otherItem);
         }
@@ -220,6 +226,12 @@ namespace SabreTools.Metadata.DatItems
 
             // If we don't have a matched type, return false
             if (selfType != otherType)
+                return false;
+
+            // Compare machines
+            if ((Machine is null) ^ (other.Machine is null))
+                return false;
+            if (Machine is not null && !Machine.Equals(other.Machine))
                 return false;
 
             // Compare the internal models
