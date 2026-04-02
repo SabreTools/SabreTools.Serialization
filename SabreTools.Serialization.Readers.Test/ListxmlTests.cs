@@ -402,7 +402,7 @@ namespace SabreTools.Serialization.Readers.Test
             gameBase.IsBios = true;
             gameBase.IsDevice = true;
             gameBase.IsMechanical = true;
-            gameBase.Runnable = true;
+            gameBase.Runnable = Data.Models.Metadata.Runnable.Yes;
             gameBase.CloneOf = "XXXXXX";
             gameBase.RomOf = "XXXXXX";
             gameBase.SampleOf = "XXXXXX";
@@ -451,7 +451,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal(true, gb.IsBios);
             Assert.Equal(true, gb.IsDevice);
             Assert.Equal(true, gb.IsMechanical);
-            Assert.Equal(true, gb.Runnable);
+            Assert.Equal(Data.Models.Metadata.Runnable.Yes, gb.Runnable);
             Assert.Equal("XXXXXX", gb.CloneOf);
             Assert.Equal("XXXXXX", gb.RomOf);
             Assert.Equal("XXXXXX", gb.SampleOf);

@@ -460,7 +460,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("releasenumber", machine.ReadString(Data.Models.Metadata.Machine.ReleaseNumberKey));
             Assert.Equal("romof", machine.ReadString(Data.Models.Metadata.Machine.RomOfKey));
             Assert.Equal("rotation", machine.ReadString(Data.Models.Metadata.Machine.RotationKey));
-            Assert.Equal(true, machine.Runnable);
+            Assert.Equal(Data.Models.Metadata.Runnable.Yes, machine.Runnable);
             Assert.Equal("sampleof", machine.ReadString(Data.Models.Metadata.Machine.SampleOfKey));
             Assert.Equal("savetype", machine.ReadString(Data.Models.Metadata.Machine.SaveTypeKey));
             Assert.Equal("sourcefile", machine.ReadString(Data.Models.Metadata.Machine.SourceFileKey));

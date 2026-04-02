@@ -445,7 +445,7 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.IsMechanical.FromYesNo();
                     return true;
                 case Machine item when Key.FieldName == "runnable":
-                    checkValue = item.Runnable.FromYesNo();
+                    checkValue = item.Runnable?.AsStringValue();
                     return true;
 
                 case RamOption item when Key.FieldName == "default":

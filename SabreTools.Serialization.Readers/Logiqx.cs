@@ -457,7 +457,7 @@ namespace SabreTools.Serialization.Readers
             obj.RebuildTo = reader.GetAttribute("rebuildto");
             obj.Id = reader.GetAttribute("id");
             obj.CloneOfId = reader.GetAttribute("cloneofid");
-            obj.Runnable = reader.GetAttribute("runnable").AsYesNo();
+            obj.Runnable = reader.GetAttribute("runnable").AsRunnable();
 
             List<string> comments = [];
             List<string> categories = [];

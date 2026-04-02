@@ -665,7 +665,7 @@ namespace SabreTools.Serialization.Readers
             obj.IsBios = reader.GetAttribute("isbios").AsYesNo();
             obj.IsDevice = reader.GetAttribute("isdevice").AsYesNo();
             obj.IsMechanical = reader.GetAttribute("ismechanical").AsYesNo();
-            obj.Runnable = reader.GetAttribute("runnable").AsYesNo();
+            obj.Runnable = reader.GetAttribute("runnable").AsRunnable();
             obj.CloneOf = reader.GetAttribute("cloneof");
             obj.RomOf = reader.GetAttribute("romof");
             obj.SampleOf = reader.GetAttribute("sampleof");

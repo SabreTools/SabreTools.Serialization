@@ -312,7 +312,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { CreateMetadataRom() },
                 [Data.Models.Metadata.Machine.RomOfKey] = "romof",
                 [Data.Models.Metadata.Machine.RotationKey] = "rotation",
-                Runnable = true,
+                Runnable = Data.Models.Metadata.Runnable.Yes,
                 [Data.Models.Metadata.Machine.SampleKey] = new Data.Models.Metadata.Sample[] { CreateMetadataSample() },
                 [Data.Models.Metadata.Machine.SampleOfKey] = "sampleof",
                 [Data.Models.Metadata.Machine.SaveTypeKey] = "savetype",
@@ -1125,7 +1125,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("releasenumber", machine.ReadString(Data.Models.Metadata.Machine.ReleaseNumberKey));
             Assert.Equal("romof", machine.ReadString(Data.Models.Metadata.Machine.RomOfKey));
             Assert.Equal("rotation", machine.ReadString(Data.Models.Metadata.Machine.RotationKey));
-            Assert.Equal(true, machine.Runnable);
+            Assert.Equal(Data.Models.Metadata.Runnable.Yes, machine.Runnable);
             Assert.Equal("sampleof", machine.ReadString(Data.Models.Metadata.Machine.SampleOfKey));
             Assert.Equal("savetype", machine.ReadString(Data.Models.Metadata.Machine.SaveTypeKey));
             Assert.Equal("sourcefile", machine.ReadString(Data.Models.Metadata.Machine.SourceFileKey));

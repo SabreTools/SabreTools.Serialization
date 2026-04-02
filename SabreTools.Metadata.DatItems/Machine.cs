@@ -33,7 +33,7 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.IsMechanical = value;
         }
 
-        public bool? Runnable
+        public Data.Models.Metadata.Runnable? Runnable
         {
             get => _internal.Runnable;
             set => _internal.Runnable = value;

@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -30,7 +31,7 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("runnable")]
-        public bool? Runnable { get; set; }
+        public Runnable? Runnable { get; set; }
 
         [XmlAttribute("cloneof")]
         public string? CloneOf { get; set; }

@@ -20,8 +20,7 @@ namespace SabreTools.Data.Models.Metadata
         public string? Name { get; set; }
 
         /// <remarks>(yes|partial|no) "no"</remarks>
-        /// TODO: Replace with Runnable type
-        public bool? Runnable { get; set; }
+        public Runnable? Runnable { get; set; }
 
         #endregion
 

@@ -307,7 +307,7 @@ namespace SabreTools.Serialization.Readers.Test
             gameBase.RebuildTo = "XXXXXX";
             gameBase.Id = "XXXXXX";
             gameBase.CloneOfId = "XXXXXX";
-            gameBase.Runnable = true;
+            gameBase.Runnable = Data.Models.Metadata.Runnable.Yes;
             gameBase.Comment = ["XXXXXX"];
             gameBase.Description = "XXXXXX";
             gameBase.Year = "XXXXXX";
@@ -405,7 +405,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", gb.RebuildTo);
             Assert.Equal("XXXXXX", gb.Id);
             Assert.Equal("XXXXXX", gb.CloneOfId);
-            Assert.Equal(true, gb.Runnable);
+            Assert.Equal(Data.Models.Metadata.Runnable.Yes, gb.Runnable);
 
             Assert.NotNull(gb.Comment);
             string comment = Assert.Single(gb.Comment);

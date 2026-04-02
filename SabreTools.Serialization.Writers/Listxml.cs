@@ -479,7 +479,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("isbios", obj.IsBios.FromYesNo());
             writer.WriteOptionalAttributeString("isdevice", obj.IsDevice.FromYesNo());
             writer.WriteOptionalAttributeString("ismechanical", obj.IsMechanical.FromYesNo());
-            writer.WriteOptionalAttributeString("runnable", obj.Runnable.FromYesNo());
+            writer.WriteOptionalAttributeString("runnable", obj.Runnable?.AsStringValue());
             writer.WriteOptionalAttributeString("cloneof", obj.CloneOf);
             writer.WriteOptionalAttributeString("romof", obj.RomOf);
             writer.WriteOptionalAttributeString("sampleof", obj.SampleOf);
