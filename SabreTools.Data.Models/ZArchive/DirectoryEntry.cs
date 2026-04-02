@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.ZArchive
         public uint NodeStartIndex { get; set; }
 
         /// <summary>
-        /// Number of 
+        /// Number of
         /// </summary>
         /// <remarks>Big-endian</remarks>
         public uint Count { get; set; }

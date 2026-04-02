@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ZArchive;
-using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
@@ -20,7 +18,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Simple check for a valid stream length
-            if (data.Length - data.Position <  Constants.FooterSize)
+            if (data.Length - data.Position < Constants.FooterSize)
                 return null;
 
             try
@@ -57,7 +55,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to and then read the name table entries
-                data.SeekIfPossible((long)nameTableOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(nameTableOffset, SeekOrigin.Begin);
                 var nameTable = ParseNameTable(data, archive.Footer.SectionNameTable.Size);
                 if (nameTable is null)
                     return null;
@@ -70,7 +68,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to and then read the file tree entries
-                data.SeekIfPossible((long)fileTreeOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(fileTreeOffset, SeekOrigin.Begin);
                 var fileTree = ParseFileTree(data, archive.Footer.SectionFileTree.Size, archive.Footer.SectionNameTable.Size);
                 if (fileTree is null)
                     return null;
@@ -212,10 +210,10 @@ namespace SabreTools.Serialization.Readers
                 var nameEntry = new NameEntry();
 
                 // Cache the offset into the NameEntry table
-                nameOffsets.Add(bytesRead);                
+                nameOffsets.Add(bytesRead);
 
                 // Read length of name
-                uint nameLength = (uint)data.ReadByteValue();
+                uint nameLength = data.ReadByteValue();
                 bytesRead += 1;
                 if ((nameLength & 0x80) == 0x80)
                 {
@@ -238,8 +236,8 @@ namespace SabreTools.Serialization.Readers
                 nameEntries.Add(nameEntry);
             }
 
-            obj.NameEntries = [..nameEntries];
-            obj.NameTableOffsets = [..nameOffsets];
+            obj.NameEntries = [.. nameEntries];
+            obj.NameTableOffsets = [.. nameOffsets];
 
             return obj;
         }
@@ -260,7 +258,7 @@ namespace SabreTools.Serialization.Readers
             {
                 var nameOffsetAndFlag = data.ReadUInt32BigEndian();
 
-                // Validate name table offset value                
+                // Validate name table offset value
                 if ((nameOffsetAndFlag & Constants.RootNode) > nameTableSize && nameOffsetAndFlag != Constants.RootNode)
                     return null;
 

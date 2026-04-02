@@ -961,7 +961,7 @@ namespace SabreTools.Wrappers
 
             #region ZSTD
 
-            // ZArchive magic is the final 4 bytes of the file: [0x16, 0x9F, 0x52, 0xD6] 
+            // ZArchive magic is the final 4 bytes of the file: [0x16, 0x9F, 0x52, 0xD6]
 
             if (extension.Equals("zar", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.ZArchive;

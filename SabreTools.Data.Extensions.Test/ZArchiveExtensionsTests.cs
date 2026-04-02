@@ -1,5 +1,4 @@
 using SabreTools.Data.Models.ZArchive;
-using SabreTools.Numerics;
 using Xunit;
 
 namespace SabreTools.Data.Extensions.Test

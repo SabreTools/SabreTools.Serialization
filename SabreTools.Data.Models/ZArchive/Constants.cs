@@ -4,19 +4,19 @@ namespace SabreTools.Data.Models.ZArchive
     public static class Constants
     {
         /// <summary>
-        /// Number of compressed blocks referred to by a record 
+        /// Number of compressed blocks referred to by a record
         /// </summary>
         public const int BlockSize = 64 * 1024;
 
         /// <summary>
-        /// Number of compressed blocks referred to by a record 
+        /// Number of compressed blocks referred to by a record
         /// </summary>
         public const int BlocksPerOffsetRecord = 16;
 
         /// <summary>
         /// Number of bytes stored in an offset record
         /// </summary>
-        public const int OffsetRecordSize = sizeof(ulong) + sizeof(ushort) * BlocksPerOffsetRecord;
+        public const int OffsetRecordSize = sizeof(ulong) + (sizeof(ushort) * BlocksPerOffsetRecord);
 
         /// <summary>
         /// Number of bytes stored in a file/directory entry
@@ -25,7 +25,7 @@ namespace SabreTools.Data.Models.ZArchive
 
         /// <summary>
         /// Number of bytes stored in the footer
-        /// 6 OffsetInfo fields, 
+        /// 6 OffsetInfo fields,
         /// </summary>
         public const int FooterSize = 144;
 

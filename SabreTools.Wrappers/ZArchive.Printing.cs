@@ -24,7 +24,7 @@ namespace SabreTools.Wrappers
             Print(builder, Footer);
         }
 
-        public void Print(StringBuilder builder, OffsetRecord[] records)
+        private static void Print(StringBuilder builder, OffsetRecord[] records)
         {
             builder.AppendLine("  Compression Offset Records:");
             builder.AppendLine("  -------------------------");
@@ -46,7 +46,7 @@ namespace SabreTools.Wrappers
             }
         }
 
-        public void Print(StringBuilder builder, NameTable nameTable)
+        private static void Print(StringBuilder builder, NameTable nameTable)
         {
             builder.AppendLine("  Name Table:");
             builder.AppendLine("  -------------------------");
@@ -72,7 +72,7 @@ namespace SabreTools.Wrappers
             }
         }
 
-        public void Print(StringBuilder builder, FileDirectoryEntry[] fileTree)
+        private static void Print(StringBuilder builder, FileDirectoryEntry[] fileTree)
         {
             builder.AppendLine("  File Tree:");
             builder.AppendLine("  -------------------------");
@@ -95,9 +95,9 @@ namespace SabreTools.Wrappers
 
                 if (node is FileEntry fe)
                 {
-                    var fileOffset = ((ulong)fe.FileOffsetHigh << 32) | (ulong)fe.FileOffsetLow;
+                    var fileOffset = ((ulong)fe.FileOffsetHigh << 32) | fe.FileOffsetLow;
                     builder.AppendLine(fileOffset, "    File Offset");
-                    var fileSize = ((ulong)fe.FileSizeHigh << 32) | (ulong)fe.FileSizeLow;
+                    var fileSize = ((ulong)fe.FileSizeHigh << 32) | fe.FileSizeLow;
                     builder.AppendLine(fileSize, "    File Size");
                 }
                 else if (node is DirectoryEntry de)
@@ -115,7 +115,7 @@ namespace SabreTools.Wrappers
             }
         }
 
-        public void Print(StringBuilder builder, Footer footer)
+        private static void Print(StringBuilder builder, Footer footer)
         {
             builder.AppendLine("  Footer:");
             builder.AppendLine("  -------------------------");

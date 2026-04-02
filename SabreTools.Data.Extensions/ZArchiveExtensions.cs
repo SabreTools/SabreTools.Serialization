@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using SabreTools.Data.Models.ZArchive;
-using SabreTools.Numerics;
 
 namespace SabreTools.Data.Extensions
 {

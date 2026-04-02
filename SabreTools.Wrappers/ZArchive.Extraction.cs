@@ -1,8 +1,6 @@
 using System;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ZArchive;
 using SabreTools.IO.Extensions;
@@ -19,7 +17,7 @@ namespace SabreTools.Wrappers
         {
             if (_dataSource is null || !_dataSource.CanRead)
                 return false;
-            
+
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             try
             {
@@ -88,8 +86,8 @@ namespace SabreTools.Wrappers
             var dataLength = Footer.SectionCompressedData.Size;
             if (node is FileEntry file)
             {
-                ulong fileOffset = ((ulong)file.FileOffsetHigh << 32) | (ulong)file.FileOffsetLow;
-                ulong fileSize = ((ulong)file.FileSizeHigh << 32) | (ulong)file.FileSizeLow;
+                ulong fileOffset = ((ulong)file.FileOffsetHigh << 32) | file.FileOffsetLow;
+                ulong fileSize = ((ulong)file.FileSizeHigh << 32) | file.FileSizeLow;
 
                 // Write the output file
                 if (includeDebug) Console.WriteLine($"Extracting: {outputPath}");
@@ -102,8 +100,8 @@ namespace SabreTools.Wrappers
                     {
                         // Determine offset and size of next read
                         ulong absoluteOffset = fileOffset + fileProgress;
-                        ulong blockIndex = absoluteOffset / (ulong)Constants.BlockSize;
-                        int recordIndex = (int)(blockIndex / (ulong)Constants.BlocksPerOffsetRecord);
+                        ulong blockIndex = absoluteOffset / Constants.BlockSize;
+                        int recordIndex = (int)(blockIndex / Constants.BlocksPerOffsetRecord);
                         if (recordIndex >= OffsetRecords.Length)
                         {
                             if (includeDebug) Console.WriteLine($"File offset out of range: {outputPath}");
@@ -111,16 +109,16 @@ namespace SabreTools.Wrappers
                         }
 
                         var offsetRecord = OffsetRecords[recordIndex];
-                        int withinRecordIndex = (int)(blockIndex % (ulong)Constants.BlocksPerOffsetRecord);
+                        int withinRecordIndex = (int)(blockIndex % Constants.BlocksPerOffsetRecord);
                         if (withinRecordIndex >= offsetRecord.Size.Length)
                         {
                             if (includeDebug) Console.WriteLine($"Blocks per record mismatch: {outputPath}");
                             return false;
                         }
 
-                        int intraBlockOffset = (int)(absoluteOffset % (ulong)Constants.BlockSize);
-                        int bytesToRead = (int)(offsetRecord.Size[withinRecordIndex]) + 1;
-                        int bytesToWrite = (int)Math.Min(fileSize - fileProgress, (ulong)Constants.BlockSize - (ulong)intraBlockOffset);
+                        int intraBlockOffset = (int)(absoluteOffset % Constants.BlockSize);
+                        int bytesToRead = offsetRecord.Size[withinRecordIndex] + 1;
+                        int bytesToWrite = (int)Math.Min(fileSize - fileProgress, Constants.BlockSize - (ulong)intraBlockOffset);
 
                         ulong readOffset = dataOffset + offsetRecord.Offset;
                         for (int i = 0; i < withinRecordIndex; i++)
