@@ -1,10 +1,11 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("feature"), XmlRoot("feature")]
-    public class Feature : DatItem
+    public class Feature : DatItem, ICloneable
     {
         #region Properties
 
@@ -24,5 +25,19 @@ namespace SabreTools.Data.Models.Metadata
         #endregion
 
         public Feature() => ItemType = ItemType.Feature;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Feature();
+
+            obj.FeatureType = FeatureType;
+            obj.Name = Name;
+            obj.Overall = Overall;
+            obj.Status = Status;
+            obj.Value = Value;
+
+            return obj;
+        }
     }
 }

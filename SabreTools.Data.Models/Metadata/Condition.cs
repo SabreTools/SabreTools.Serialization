@@ -1,10 +1,11 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("condition"), XmlRoot("condition")]
-    public class Condition : DatItem
+    public class Condition : DatItem, ICloneable
     {
         #region Properties
 
@@ -20,5 +21,18 @@ namespace SabreTools.Data.Models.Metadata
         #endregion
 
         public Condition() => ItemType = ItemType.Condition;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Condition();
+
+            obj.Mask = Mask;
+            obj.Relation = Relation;
+            obj.Tag = Tag;
+            obj.Value = Value;
+
+            return obj;
+        }
     }
 }

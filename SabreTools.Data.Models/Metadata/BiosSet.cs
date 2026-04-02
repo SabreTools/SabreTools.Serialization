@@ -1,10 +1,11 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("biosset"), XmlRoot("biosset")]
-    public class BiosSet : DatItem
+    public class BiosSet : DatItem, ICloneable
     {
         #region Properties
 
@@ -18,5 +19,17 @@ namespace SabreTools.Data.Models.Metadata
         #endregion
 
         public BiosSet() => ItemType = ItemType.BiosSet;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new BiosSet();
+
+            obj.Default = Default;
+            obj.Description = Description;
+            obj.Name = Name;
+
+            return obj;
+        }
     }
 }

@@ -1,10 +1,11 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("instance"), XmlRoot("instance")]
-    public class Instance : DatItem
+    public class Instance : DatItem, ICloneable
     {
         #region Properties
 
@@ -15,5 +16,16 @@ namespace SabreTools.Data.Models.Metadata
         #endregion
 
         public Instance() => ItemType = ItemType.Instance;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Instance();
+
+            obj.BriefName = BriefName;
+            obj.Name = Name;
+
+            return obj;
+        }
     }
 }

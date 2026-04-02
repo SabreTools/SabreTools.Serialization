@@ -1,10 +1,11 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("ramoption"), XmlRoot("ramoption")]
-    public class RamOption : DatItem
+    public class RamOption : DatItem, ICloneable
     {
         #region Properties
 
@@ -18,5 +19,17 @@ namespace SabreTools.Data.Models.Metadata
         #endregion
 
         public RamOption() => ItemType = ItemType.RamOption;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new RamOption();
+
+            obj.Content = Content;
+            obj.Default = Default;
+            obj.Name = Name;
+
+            return obj;
+        }
     }
 }

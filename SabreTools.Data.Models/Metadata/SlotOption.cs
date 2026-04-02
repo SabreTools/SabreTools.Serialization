@@ -1,10 +1,11 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("slotoption"), XmlRoot("slotoption")]
-    public class SlotOption : DatItem
+    public class SlotOption : DatItem, ICloneable
     {
         #region Properties
 
@@ -18,5 +19,17 @@ namespace SabreTools.Data.Models.Metadata
         #endregion
 
         public SlotOption() => ItemType = ItemType.SlotOption;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new SlotOption();
+
+            obj.Default = Default;
+            obj.DevName = DevName;
+            obj.Name = Name;
+
+            return obj;
+        }
     }
 }
