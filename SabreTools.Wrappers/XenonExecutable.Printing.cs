@@ -34,11 +34,11 @@ namespace SabreTools.Wrappers
                 return;
             }
 
-            builder.AppendLine(header.MagicNumber, "  Magic number");
+            builder.AppendLine(header.MagicNumber, "  Magic Number");
             builder.AppendLine(header.ModuleFlags, "  Module Flags");
             builder.AppendLine(header.PEDataOffset, "  PE Data Offset");
             builder.AppendLine(header.Reserved, "  Reserved");
-            builder.AppendLine(header.SecurityInfoOffset, "  Security Info Offset");
+            builder.AppendLine(header.CertificateOffset, "  Certificate Offset");
             builder.AppendLine(header.OptionalHeaderCount, "  Optional Header Count");
             builder.AppendLine();
 
