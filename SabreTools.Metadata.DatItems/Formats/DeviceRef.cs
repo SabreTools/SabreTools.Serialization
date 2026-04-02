@@ -37,7 +37,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new DeviceRef(_internal.Clone() as Data.Models.Metadata.DeviceRef ?? []);
+        public override object Clone() => new DeviceRef(_internal.DeepClone() as Data.Models.Metadata.DeviceRef ?? []);
 
         #endregion
     }

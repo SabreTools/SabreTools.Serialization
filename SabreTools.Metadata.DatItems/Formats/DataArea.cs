@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new DataArea(_internal.Clone() as Data.Models.Metadata.DataArea ?? []);
+        public override object Clone() => new DataArea(_internal.DeepClone() as Data.Models.Metadata.DataArea ?? []);
 
         #endregion
     }

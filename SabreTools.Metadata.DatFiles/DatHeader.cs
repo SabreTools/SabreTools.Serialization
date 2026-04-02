@@ -192,7 +192,7 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public Data.Models.Metadata.Header GetInternalClone()
         {
-            var header = (_internal.Clone() as Data.Models.Metadata.Header)!;
+            var header = (_internal.DeepClone() as Data.Models.Metadata.Header)!;
 
             // Convert subheader values
             if (CanOpenSpecified)

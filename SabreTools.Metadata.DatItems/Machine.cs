@@ -68,7 +68,7 @@ namespace SabreTools.Metadata.DatItems
 
         public Machine(Data.Models.Metadata.Machine machine)
         {
-            _internal = machine.Clone() as Data.Models.Metadata.Machine ?? [];
+            _internal = machine.DeepClone() as Data.Models.Metadata.Machine ?? [];
 
             // Remove all inverted fields
             Remove(Data.Models.Metadata.Machine.AdjusterKey);
@@ -143,14 +143,14 @@ namespace SabreTools.Metadata.DatItems
         {
             return new Machine()
             {
-                _internal = _internal.Clone() as Data.Models.Metadata.Machine ?? [],
+                _internal = _internal.DeepClone() as Data.Models.Metadata.Machine ?? [],
             };
         }
 
         /// <summary>
         /// Get a clone of the current internal model
         /// </summary>
-        public Data.Models.Metadata.Machine GetInternalClone() => (_internal.Clone() as Data.Models.Metadata.Machine)!;
+        public Data.Models.Metadata.Machine GetInternalClone() => (_internal.DeepClone() as Data.Models.Metadata.Machine)!;
 
         #endregion
 

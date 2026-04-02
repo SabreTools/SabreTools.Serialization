@@ -95,7 +95,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Device(_internal.Clone() as Data.Models.Metadata.Device ?? []);
+        public override object Clone() => new Device(_internal.DeepClone() as Data.Models.Metadata.Device ?? []);
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Device GetInternalClone()

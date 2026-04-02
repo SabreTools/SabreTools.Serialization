@@ -140,7 +140,7 @@ namespace SabreTools.Data.Extensions
         /// Deep clone a DictionaryBase object
         /// </summary>
         /// TODO: Move this to Clone methods in each file when keys go away entirely
-        public static DictionaryBase? Clone(this DictionaryBase self)
+        public static DictionaryBase? DeepClone(this DictionaryBase self)
         {
             // If construction failed, we can't do anything
             if (Activator.CreateInstance(self.GetType()) is not DictionaryBase clone)
@@ -365,12 +365,12 @@ namespace SabreTools.Data.Extensions
                     bool or long or double or string => value,
 
                     // DictionaryBase types
-                    DictionaryBase db => db.Clone(),
+                    DictionaryBase db => db.DeepClone(),
 
                     // Enumerable types
                     byte[] bytArr => bytArr.Clone(),
                     string[] strArr => strArr.Clone(),
-                    DictionaryBase[] dbArr => Array.ConvertAll(dbArr, Clone),
+                    DictionaryBase[] dbArr => Array.ConvertAll(dbArr, DeepClone),
                     ICloneable[] clArr => Array.ConvertAll(clArr, cl => cl.Clone()),
 
                     // Everything else just copies

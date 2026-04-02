@@ -45,7 +45,7 @@ namespace SabreTools.Metadata.DatItems
         /// <summary>
         /// Get a clone of the current internal model
         /// </summary>
-        public virtual T GetInternalClone() => (_internal.Clone() as T)!;
+        public virtual T GetInternalClone() => (_internal.DeepClone() as T)!;
 
         #endregion
 

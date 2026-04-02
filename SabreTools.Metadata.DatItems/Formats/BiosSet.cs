@@ -49,7 +49,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new BiosSet(_internal.Clone() as Data.Models.Metadata.BiosSet ?? []);
+        public override object Clone() => new BiosSet(_internal.DeepClone() as Data.Models.Metadata.BiosSet ?? []);
 
         #endregion
     }

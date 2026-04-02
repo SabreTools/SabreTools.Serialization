@@ -128,7 +128,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new DipSwitch(_internal.Clone() as Data.Models.Metadata.DipSwitch ?? []);
+        public override object Clone() => new DipSwitch(_internal.DeepClone() as Data.Models.Metadata.DipSwitch ?? []);
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.DipSwitch GetInternalClone()

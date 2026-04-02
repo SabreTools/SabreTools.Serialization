@@ -397,7 +397,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Rom(_internal.Clone() as Data.Models.Metadata.Rom ?? []);
+        public override object Clone() => new Rom(_internal.DeepClone() as Data.Models.Metadata.Rom ?? []);
 
         #endregion
 
