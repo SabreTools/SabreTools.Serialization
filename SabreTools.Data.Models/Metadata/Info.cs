@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("info"), XmlRoot("info")]
-    public class Info : DatItem, ICloneable
+    public class Info : DatItem, ICloneable, IEquatable<Info>
     {
         #region Properties
 
@@ -26,6 +26,27 @@ namespace SabreTools.Data.Models.Metadata
             obj.Value = Value;
 
             return obj;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Info? other)
+        {
+            // Null never matches
+            if (other is null)
+                return false;
+
+            // Properties
+            if ((Name is null) ^ (other.Name is null))
+                return false;
+            else if (Name is not null && !Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((Value is null) ^ (other.Value is null))
+                return false;
+            else if (Value is not null && !Value.Equals(other.Value, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            return true;
         }
     }
 }
