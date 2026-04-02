@@ -58,7 +58,7 @@ namespace SabreTools.Wrappers
             foreach (var optionalHeader in optionalHeaders)
             {
                 builder.AppendLine(optionalHeader.HeaderID, "  Header ID");
-                if (OptionalHeaderTypes.TryGetValue(optionalHeader.HeaderID, out string headerType))
+                if (Constants.OptionalHeaderTypes.TryGetValue(optionalHeader.HeaderID, out string? headerType))
                     builder.AppendLine(headerType, "  Header Type (Parsed)");
 
                 builder.AppendLine(optionalHeader.HeaderData, "  Header Data");

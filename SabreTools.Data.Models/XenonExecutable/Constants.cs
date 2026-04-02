@@ -1,6 +1,6 @@
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
-namespace SabreTools.Data.Models.XDVDFS
+namespace SabreTools.Data.Models.XenonExecutable
 {
     /// <see href="https://free60.org/System-Software/Formats/XEX/"/>
     public static class Constants
@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// <summary>
         /// Xenon (Xbox 360) Optional Header types
         /// </summary>
-        public static readonly ReadOnlyDictionary<int, string> OptionalHeaderTypes = new(new Dictionary<int, string>
+        public static readonly Dictionary<uint, string> OptionalHeaderTypes = new()
         {
             [0x0002FF] = "Resource Info",
             [0x0003FF] = "Base File Format",
@@ -51,6 +51,6 @@ namespace SabreTools.Data.Models.XDVDFS
             [0x0407FF] = "Alternate Title IDs",
             [0x040801] = "Additional Title Memory",
             [0xE10402] = "Exports by Name"
-        });
+        };
     }
 }

@@ -11,6 +11,6 @@ namespace SabreTools.Data.Models.XenonExecutable
         /// <summary>
         /// XEX header
         /// </summary>
-        public Header? Header { get; set; }
+        public Header Header { get; set; } = new();
     }
 }
