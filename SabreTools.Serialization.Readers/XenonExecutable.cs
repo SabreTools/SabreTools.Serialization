@@ -64,6 +64,7 @@ namespace SabreTools.Serialization.Readers
             var optionalHeaders = new OptionalHeader[obj.OptionalHeaderCount];
             for (int i = 0; i < obj.OptionalHeaderCount; i++)
             {
+                optionalHeaders[i] = new OptionalHeader();
                 optionalHeaders[i].HeaderID = data.ReadUInt32BigEndian();
                 optionalHeaders[i].HeaderData = data.ReadUInt32BigEndian();
             }
