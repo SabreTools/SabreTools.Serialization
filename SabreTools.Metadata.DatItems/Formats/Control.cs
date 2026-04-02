@@ -10,6 +10,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("control"), XmlRoot("control")]
     public sealed class Control : DatItem<Data.Models.Metadata.Control>
     {
+        #region Fields
+
+        public bool? Reverse
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.Reverse;
+            set => (_internal as Data.Models.Metadata.Control)?.Reverse = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Control() : base() { }
@@ -40,10 +50,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             long? reqButtons = ReadLong(Data.Models.Metadata.Control.ReqButtonsKey);
             if (reqButtons is not null)
                 Write<string?>(Data.Models.Metadata.Control.ReqButtonsKey, reqButtons.ToString());
-
-            bool? reverse = ReadBool(Data.Models.Metadata.Control.ReverseKey);
-            if (reverse is not null)
-                Write<string?>(Data.Models.Metadata.Control.ReverseKey, reverse.FromYesNo());
 
             long? sensitivity = ReadLong(Data.Models.Metadata.Control.SensitivityKey);
             if (sensitivity is not null)

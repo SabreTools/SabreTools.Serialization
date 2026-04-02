@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Readers.Test
             // Validate the data
             Assert.NotNull(newMame);
             Assert.Equal("XXXXXX", newMame.Build);
-            Assert.Equal("XXXXXX", newMame.Debug);
+            Assert.Equal(true, newMame.Debug);
             Assert.Equal("XXXXXX", newMame.MameConfig);
 
             Assert.NotNull(newMame.Game);
@@ -117,7 +117,7 @@ namespace SabreTools.Serialization.Readers.Test
             // Validate the data
             Assert.NotNull(newMame);
             Assert.Equal("XXXXXX", newMame.Build);
-            Assert.Equal("XXXXXX", newMame.Debug);
+            Assert.Equal(true, newMame.Debug);
             Assert.Equal("XXXXXX", newMame.MameConfig);
 
             Assert.NotNull(newMame.Game);
@@ -148,9 +148,9 @@ namespace SabreTools.Serialization.Readers.Test
                 Region = "XXXXXX",
                 Offset = "XXXXXX",
                 Status = "XXXXXX",
-                Optional = "XXXXXX",
-                Dispose = "XXXXXX",
-                SoundOnly = "XXXXXX",
+                Optional = true,
+                Dispose = true,
+                SoundOnly = true,
             };
 
             var disk = new Data.Models.Listxml.Disk
@@ -161,9 +161,9 @@ namespace SabreTools.Serialization.Readers.Test
                 Merge = "XXXXXX",
                 Region = "XXXXXX",
                 Index = "XXXXXX",
-                Writable = "XXXXXX",
+                Writable = true,
                 Status = "XXXXXX",
-                Optional = "XXXXXX",
+                Optional = true,
             };
 
             var deviceref = new Data.Models.Listxml.DeviceRef
@@ -181,7 +181,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Name = "XXXXXX",
                 Tag = "XXXXXX",
                 Type = "XXXXXX",
-                SoundOnly = "XXXXXX",
+                SoundOnly = true,
                 Clock = "XXXXXX",
             };
 
@@ -190,7 +190,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Tag = "XXXXXX",
                 Type = "XXXXXX",
                 Rotate = "XXXXXX",
-                FlipX = "XXXXXX",
+                FlipX = true,
                 Width = "XXXXXX",
                 Height = "XXXXXX",
                 Refresh = "XXXXXX",
@@ -229,7 +229,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Maximum = "XXXXXX",
                 Sensitivity = "XXXXXX",
                 KeyDelta = "XXXXXX",
-                Reverse = "XXXXXX",
+                Reverse = true,
                 Ways = "XXXXXX",
                 Ways2 = "XXXXXX",
                 Ways3 = "XXXXXX",
@@ -237,8 +237,8 @@ namespace SabreTools.Serialization.Readers.Test
 
             var input = new Data.Models.Listxml.Input
             {
-                Service = "XXXXXX",
-                Tilt = "XXXXXX",
+                Service = true,
+                Tilt = true,
                 Players = "XXXXXX",
                 ControlAttr = "XXXXXX",
                 Buttons = "XXXXXX",
@@ -258,7 +258,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Name = "XXXXXX",
                 Number = "XXXXXX",
-                Inverted = "XXXXXX",
+                Inverted = true,
             };
 
             var dipvalue = new Data.Models.Listxml.DipValue
@@ -283,7 +283,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Name = "XXXXXX",
                 Number = "XXXXXX",
-                Inverted = "XXXXXX",
+                Inverted = true,
             };
 
             var confsetting = new Data.Models.Listxml.ConfSetting
@@ -331,10 +331,10 @@ namespace SabreTools.Serialization.Readers.Test
                 Emulation = "XXXXXX",
                 Cocktail = "XXXXXX",
                 SaveState = "XXXXXX",
-                RequiresArtwork = "XXXXXX",
-                Unofficial = "XXXXXX",
-                NoSoundHardware = "XXXXXX",
-                Incomplete = "XXXXXX",
+                RequiresArtwork = true,
+                Unofficial = true,
+                NoSoundHardware = true,
+                Incomplete = true,
             };
 
             var feature = new Data.Models.Listxml.Feature
@@ -399,10 +399,10 @@ namespace SabreTools.Serialization.Readers.Test
                 : new Data.Models.Listxml.Machine();
             gameBase.Name = "XXXXXX";
             gameBase.SourceFile = "XXXXXX";
-            gameBase.IsBios = "XXXXXX";
-            gameBase.IsDevice = "XXXXXX";
-            gameBase.IsMechanical = "XXXXXX";
-            gameBase.Runnable = "XXXXXX";
+            gameBase.IsBios = true;
+            gameBase.IsDevice = true;
+            gameBase.IsMechanical = true;
+            gameBase.Runnable = true;
             gameBase.CloneOf = "XXXXXX";
             gameBase.RomOf = "XXXXXX";
             gameBase.SampleOf = "XXXXXX";
@@ -434,7 +434,7 @@ namespace SabreTools.Serialization.Readers.Test
             return new Data.Models.Listxml.Mame
             {
                 Build = "XXXXXX",
-                Debug = "XXXXXX",
+                Debug = true,
                 MameConfig = "XXXXXX",
                 Game = [gameBase],
             };
@@ -448,10 +448,10 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(gb);
             Assert.Equal("XXXXXX", gb.Name);
             Assert.Equal("XXXXXX", gb.SourceFile);
-            Assert.Equal("XXXXXX", gb.IsBios);
-            Assert.Equal("XXXXXX", gb.IsDevice);
-            Assert.Equal("XXXXXX", gb.IsMechanical);
-            Assert.Equal("XXXXXX", gb.Runnable);
+            Assert.Equal(true, gb.IsBios);
+            Assert.Equal(true, gb.IsDevice);
+            Assert.Equal(true, gb.IsMechanical);
+            Assert.Equal(true, gb.Runnable);
             Assert.Equal("XXXXXX", gb.CloneOf);
             Assert.Equal("XXXXXX", gb.RomOf);
             Assert.Equal("XXXXXX", gb.SampleOf);
@@ -560,9 +560,9 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", rom.Region);
             Assert.Equal("XXXXXX", rom.Offset);
             Assert.Equal("XXXXXX", rom.Status);
-            Assert.Equal("XXXXXX", rom.Optional);
-            Assert.Equal("XXXXXX", rom.Dispose);
-            Assert.Equal("XXXXXX", rom.SoundOnly);
+            Assert.Equal(true, rom.Optional);
+            Assert.Equal(true, rom.Dispose);
+            Assert.Equal(true, rom.SoundOnly);
         }
 
         /// <summary>
@@ -577,9 +577,9 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", disk.Merge);
             Assert.Equal("XXXXXX", disk.Region);
             Assert.Equal("XXXXXX", disk.Index);
-            Assert.Equal("XXXXXX", disk.Writable);
+            Assert.Equal(true, disk.Writable);
             Assert.Equal("XXXXXX", disk.Status);
-            Assert.Equal("XXXXXX", disk.Optional);
+            Assert.Equal(true, disk.Optional);
         }
 
         /// <summary>
@@ -609,7 +609,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", chip.Name);
             Assert.Equal("XXXXXX", chip.Tag);
             Assert.Equal("XXXXXX", chip.Type);
-            Assert.Equal("XXXXXX", chip.SoundOnly);
+            Assert.Equal(true, chip.SoundOnly);
             Assert.Equal("XXXXXX", chip.Clock);
         }
 
@@ -622,7 +622,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", display.Tag);
             Assert.Equal("XXXXXX", display.Type);
             Assert.Equal("XXXXXX", display.Rotate);
-            Assert.Equal("XXXXXX", display.FlipX);
+            Assert.Equal(true, display.FlipX);
             Assert.Equal("XXXXXX", display.Width);
             Assert.Equal("XXXXXX", display.Height);
             Assert.Equal("XXXXXX", display.Refresh);
@@ -665,8 +665,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Listxml.Input? input)
         {
             Assert.NotNull(input);
-            Assert.Equal("XXXXXX", input.Service);
-            Assert.Equal("XXXXXX", input.Tilt);
+            Assert.Equal(true, input.Service);
+            Assert.Equal(true, input.Tilt);
             Assert.Equal("XXXXXX", input.Players);
             Assert.Equal("XXXXXX", input.ControlAttr); // Mututally exclusive with input.Control
             Assert.Equal("XXXXXX", input.Buttons);
@@ -691,7 +691,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", control.Maximum);
             Assert.Equal("XXXXXX", control.Sensitivity);
             Assert.Equal("XXXXXX", control.KeyDelta);
-            Assert.Equal("XXXXXX", control.Reverse);
+            Assert.Equal(true, control.Reverse);
             Assert.Equal("XXXXXX", control.Ways);
             Assert.Equal("XXXXXX", control.Ways2);
             Assert.Equal("XXXXXX", control.Ways3);
@@ -737,7 +737,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(diplocation);
             Assert.Equal("XXXXXX", diplocation.Name);
             Assert.Equal("XXXXXX", diplocation.Number);
-            Assert.Equal("XXXXXX", diplocation.Inverted);
+            Assert.Equal(true, diplocation.Inverted);
         }
 
         /// <summary>
@@ -780,7 +780,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(conflocation);
             Assert.Equal("XXXXXX", conflocation.Name);
             Assert.Equal("XXXXXX", conflocation.Number);
-            Assert.Equal("XXXXXX", conflocation.Inverted);
+            Assert.Equal(true, conflocation.Inverted);
         }
 
         /// <summary>
@@ -841,10 +841,10 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", driver.Emulation);
             Assert.Equal("XXXXXX", driver.Cocktail);
             Assert.Equal("XXXXXX", driver.SaveState);
-            Assert.Equal("XXXXXX", driver.RequiresArtwork);
-            Assert.Equal("XXXXXX", driver.Unofficial);
-            Assert.Equal("XXXXXX", driver.NoSoundHardware);
-            Assert.Equal("XXXXXX", driver.Incomplete);
+            Assert.Equal(true, driver.RequiresArtwork);
+            Assert.Equal(true, driver.Unofficial);
+            Assert.Equal(true, driver.NoSoundHardware);
+            Assert.Equal(true, driver.Incomplete);
         }
 
         /// <summary>

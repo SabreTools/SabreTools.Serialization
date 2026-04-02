@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.CrossModel
                 Tags = parent.ReadString(Data.Models.Metadata.Machine.TagsKey),
                 PlayedCount = parent.ReadString(Data.Models.Metadata.Machine.PlayedCountKey),
                 PlayedTime = parent.ReadString(Data.Models.Metadata.Machine.PlayedTimeKey),
-                FileIsAvailable = item.ReadString(Data.Models.Metadata.Rom.FileIsAvailableKey),
+                FileIsAvailable = item.FileIsAvailable,
             };
             return row;
         }

@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("debug")]
-        public string? Debug { get; set; }
+        public bool? Debug { get; set; }
 
         [Required]
         [XmlAttribute("mameconfig")]

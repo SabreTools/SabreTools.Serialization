@@ -11,6 +11,16 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("display"), XmlRoot("display")]
     public sealed class Display : DatItem<Data.Models.Metadata.Display>
     {
+        #region Fields
+
+        public bool? FlipX
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.FlipX;
+            set => (_internal as Data.Models.Metadata.Display)?.FlipX = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Display() : base() { }
@@ -18,10 +28,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Display(Data.Models.Metadata.Display item) : base(item)
         {
             // Process flag values
-            bool? flipX = ReadBool(Data.Models.Metadata.Display.FlipXKey);
-            if (flipX is not null)
-                Write<string?>(Data.Models.Metadata.Display.FlipXKey, flipX.FromYesNo());
-
             long? hbEnd = ReadLong(Data.Models.Metadata.Display.HBEndKey);
             if (hbEnd is not null)
                 Write<string?>(Data.Models.Metadata.Display.HBEndKey, hbEnd.ToString());

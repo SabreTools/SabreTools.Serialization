@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Tags = "XXXXXX",
                 PlayedCount = "XXXXXX",
                 PlayedTime = "XXXXXX",
-                FileIsAvailable = "XXXXXX",
+                FileIsAvailable = true,
             };
 
             return new Data.Models.AttractMode.MetadataFile
@@ -105,7 +105,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", row.Tags);
             Assert.Equal("XXXXXX", row.PlayedCount);
             Assert.Equal("XXXXXX", row.PlayedTime);
-            Assert.Equal("XXXXXX", row.FileIsAvailable);
+            Assert.Equal(true, row.FileIsAvailable);
         }
     }
 }

@@ -10,6 +10,12 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Name { get; set; }
 
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Optional { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Writable { get; set; }
+
         #endregion
 
         #region Keys
@@ -26,9 +32,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string</remarks>
         public const string MergeKey = "merge";
 
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string OptionalKey = "optional";
-
         /// <remarks>string</remarks>
         public const string RegionKey = "region";
 
@@ -37,9 +40,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
         public const string StatusKey = "status";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string WritableKey = "writable";
 
         #endregion
 

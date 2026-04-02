@@ -47,6 +47,18 @@ namespace SabreTools.Metadata.DatFiles
             }
         }
 
+        public bool? Debug
+        {
+            get => _internal.Debug;
+            set => _internal.Debug = value;
+        }
+
+        public bool? ForceZipping
+        {
+            get => _internal.ForceZipping;
+            set => _internal.ForceZipping = value;
+        }
+
         [JsonIgnore]
         public bool ImagesSpecified
         {
@@ -63,6 +75,24 @@ namespace SabreTools.Metadata.DatFiles
             {
                 return Read<Data.Models.OfflineList.Infos?>(Data.Models.Metadata.Header.InfosKey) is not null;
             }
+        }
+
+        public bool? LockBiosMode
+        {
+            get => _internal.LockBiosMode;
+            set => _internal.LockBiosMode = value;
+        }
+
+        public bool? LockRomMode
+        {
+            get => _internal.LockRomMode;
+            set => _internal.LockRomMode = value;
+        }
+
+        public bool? LockSampleMode
+        {
+            get => _internal.LockSampleMode;
+            set => _internal.LockSampleMode = value;
         }
 
         [JsonIgnore]

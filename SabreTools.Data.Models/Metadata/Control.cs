@@ -6,6 +6,13 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("control"), XmlRoot("control")]
     public class Control : DatItem
     {
+        #region Properties
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Reverse { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>long</remarks>
@@ -25,9 +32,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>long</remarks>
         public const string ReqButtonsKey = "reqbuttons";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string ReverseKey = "reverse";
 
         /// <remarks>long</remarks>
         public const string SensitivityKey = "sensitivity";

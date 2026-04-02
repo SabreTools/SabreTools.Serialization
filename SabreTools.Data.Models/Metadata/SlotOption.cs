@@ -8,6 +8,7 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>(yes|no) "no"</remarks>
         public bool? Default { get; set; }
 
         public string? Name { get; set; }

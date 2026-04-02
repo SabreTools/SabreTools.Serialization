@@ -150,7 +150,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Tags = "XXXXXX",
                 PlayedCount = "XXXXXX",
                 PlayedTime = "XXXXXX",
-                FileIsAvailable = "XXXXXX",
+                FileIsAvailable = true,
             };
 
             return new Data.Models.AttractMode.MetadataFile
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Assert.Equal("XXXXXX", row.Tags);
                 Assert.Equal("XXXXXX", row.PlayedCount);
                 Assert.Equal("XXXXXX", row.PlayedTime);
-                Assert.Equal("XXXXXX", row.FileIsAvailable);
+                Assert.Equal(true, row.FileIsAvailable);
             }
             else
             {

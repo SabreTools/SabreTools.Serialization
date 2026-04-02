@@ -105,8 +105,8 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Write<string?>(Data.Models.Metadata.Header.DateKey, header.ReadString(Data.Models.Metadata.Header.DateKey));
             if (Header.ReadString(Data.Models.Metadata.Header.DatVersionKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.DatVersionKey, header.ReadString(Data.Models.Metadata.Header.DatVersionKey));
-            if (Header.ReadBool(Data.Models.Metadata.Header.DebugKey) is null)
-                Header.Write(Data.Models.Metadata.Header.DebugKey, header.ReadBool(Data.Models.Metadata.Header.DebugKey));
+            if (Header.Debug is null)
+                Header.Debug = header.Debug;
             if (Header.ReadString(Data.Models.Metadata.Header.DescriptionKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.DescriptionKey, header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
             if (Header.ReadString(Data.Models.Metadata.Header.EmailKey) is null)
@@ -119,8 +119,8 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Write<string?>(Data.Models.Metadata.Header.ForceNodumpKey, header.ReadString(Data.Models.Metadata.Header.ForceNodumpKey).AsNodumpFlag().AsStringValue());
             if (Header.ReadString(Data.Models.Metadata.Header.ForcePackingKey).AsPackingFlag() == PackingFlag.None)
                 Header.Write<string?>(Data.Models.Metadata.Header.ForcePackingKey, header.ReadString(Data.Models.Metadata.Header.ForcePackingKey).AsPackingFlag().AsStringValue());
-            if (Header.ReadBool(Data.Models.Metadata.Header.ForceZippingKey) is null)
-                Header.Write(Data.Models.Metadata.Header.ForceZippingKey, header.ReadBool(Data.Models.Metadata.Header.ForceZippingKey));
+            if (Header.ForceZipping is null)
+                Header.ForceZipping = header.ForceZipping;
             if (Header.ReadString(Data.Models.Metadata.Header.HeaderKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.HeaderKey, header.ReadString(Data.Models.Metadata.Header.HeaderKey));
             if (Header.ReadString(Data.Models.Metadata.Header.HomepageKey) is null)
@@ -129,12 +129,12 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Write<string?>(Data.Models.Metadata.Header.IdKey, header.ReadString(Data.Models.Metadata.Header.IdKey));
             if (Header.ReadString(Data.Models.Metadata.Header.ImFolderKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.ImFolderKey, header.ReadString(Data.Models.Metadata.Header.ImFolderKey));
-            if (Header.ReadBool(Data.Models.Metadata.Header.LockBiosModeKey) is null)
-                Header.Write(Data.Models.Metadata.Header.LockBiosModeKey, header.ReadBool(Data.Models.Metadata.Header.LockBiosModeKey));
-            if (Header.ReadBool(Data.Models.Metadata.Header.LockRomModeKey) is null)
-                Header.Write(Data.Models.Metadata.Header.LockRomModeKey, header.ReadBool(Data.Models.Metadata.Header.LockRomModeKey));
-            if (Header.ReadBool(Data.Models.Metadata.Header.LockSampleModeKey) is null)
-                Header.Write(Data.Models.Metadata.Header.LockSampleModeKey, header.ReadBool(Data.Models.Metadata.Header.LockSampleModeKey));
+            if (Header.LockBiosMode is null)
+                Header.LockBiosMode = header.LockBiosMode;
+            if (Header.LockRomMode is null)
+                Header.LockRomMode = header.LockRomMode;
+            if (Header.LockSampleMode is null)
+                Header.LockSampleMode = header.LockSampleMode;
             if (Header.ReadString(Data.Models.Metadata.Header.MameConfigKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.MameConfigKey, header.ReadString(Data.Models.Metadata.Header.MameConfigKey));
             if (Header.Name is null)

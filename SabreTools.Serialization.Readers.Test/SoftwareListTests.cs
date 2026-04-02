@@ -155,7 +155,7 @@ namespace SabreTools.Serialization.Readers.Test
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Status = "XXXXXX",
-                Writeable = "XXXXXX",
+                Writeable = true,
             };
 
             var diskarea = new Data.Models.SoftwareList.DiskArea
@@ -351,7 +351,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", disk.MD5);
             Assert.Equal("XXXXXX", disk.SHA1);
             Assert.Equal("XXXXXX", disk.Status);
-            Assert.Equal("XXXXXX", disk.Writeable);
+            Assert.Equal(true, disk.Writeable);
         }
 
         /// <summary>

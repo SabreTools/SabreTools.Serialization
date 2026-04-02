@@ -209,23 +209,23 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Header.CommentKey] = "comment",
                 [Data.Models.Metadata.Header.DateKey] = "date",
                 [Data.Models.Metadata.Header.DatVersionKey] = "datversion",
-                [Data.Models.Metadata.Header.DebugKey] = "yes",
+                Debug = true,
                 [Data.Models.Metadata.Header.DescriptionKey] = "description",
                 [Data.Models.Metadata.Header.EmailKey] = "email",
                 [Data.Models.Metadata.Header.EmulatorVersionKey] = "emulatorversion",
                 [Data.Models.Metadata.Header.ForceMergingKey] = "merged",
                 [Data.Models.Metadata.Header.ForceNodumpKey] = "required",
                 [Data.Models.Metadata.Header.ForcePackingKey] = "zip",
-                [Data.Models.Metadata.Header.ForceZippingKey] = "yes",
+                ForceZipping = true,
                 [Data.Models.Metadata.Header.HeaderKey] = "header",
                 [Data.Models.Metadata.Header.HomepageKey] = "homepage",
                 [Data.Models.Metadata.Header.IdKey] = "id",
                 [Data.Models.Metadata.Header.ImagesKey] = images,
                 [Data.Models.Metadata.Header.ImFolderKey] = "imfolder",
                 [Data.Models.Metadata.Header.InfosKey] = infos,
-                [Data.Models.Metadata.Header.LockBiosModeKey] = "yes",
-                [Data.Models.Metadata.Header.LockRomModeKey] = "yes",
-                [Data.Models.Metadata.Header.LockSampleModeKey] = "yes",
+                LockBiosMode = true,
+                LockRomMode = true,
+                LockSampleMode = true,
                 [Data.Models.Metadata.Header.MameConfigKey] = "mameconfig",
                 Name = "name",
                 [Data.Models.Metadata.Header.NewDatKey] = newDat,
@@ -290,9 +290,9 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Machine.ImageNumberKey] = "imagenumber",
                 [Data.Models.Metadata.Machine.InfoKey] = new Data.Models.Metadata.Info[] { CreateMetadataInfo() },
                 [Data.Models.Metadata.Machine.InputKey] = CreateMetadataInput(),
-                [Data.Models.Metadata.Machine.IsBiosKey] = "yes",
-                [Data.Models.Metadata.Machine.IsDeviceKey] = "yes",
-                [Data.Models.Metadata.Machine.IsMechanicalKey] = "yes",
+                IsBios = true,
+                IsDevice = true,
+                IsMechanical = true,
                 [Data.Models.Metadata.Machine.LanguageKey] = "language",
                 [Data.Models.Metadata.Machine.LocationKey] = "location",
                 [Data.Models.Metadata.Machine.ManufacturerKey] = "manufacturer",
@@ -312,7 +312,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { CreateMetadataRom() },
                 [Data.Models.Metadata.Machine.RomOfKey] = "romof",
                 [Data.Models.Metadata.Machine.RotationKey] = "rotation",
-                [Data.Models.Metadata.Machine.RunnableKey] = "yes",
+                Runnable = true,
                 [Data.Models.Metadata.Machine.SampleKey] = new Data.Models.Metadata.Sample[] { CreateMetadataSample() },
                 [Data.Models.Metadata.Machine.SampleOfKey] = "sampleof",
                 [Data.Models.Metadata.Machine.SaveTypeKey] = "savetype",
@@ -407,7 +407,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Chip.ClockKey] = 12345L,
                 [Data.Models.Metadata.Chip.FlagsKey] = "flags",
                 Name = "name",
-                [Data.Models.Metadata.Chip.SoundOnlyKey] = "yes",
+                SoundOnly = true,
                 [Data.Models.Metadata.Chip.TagKey] = "tag",
                 [Data.Models.Metadata.Chip.ChipTypeKey] = "cpu",
             };
@@ -441,7 +441,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.ConfLocation
             {
-                [Data.Models.Metadata.ConfLocation.InvertedKey] = "yes",
+                Inverted = true,
                 Name = "name",
                 [Data.Models.Metadata.ConfLocation.NumberKey] = "number",
             };
@@ -468,7 +468,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Control.MinimumKey] = 12345L,
                 [Data.Models.Metadata.Control.PlayerKey] = 12345L,
                 [Data.Models.Metadata.Control.ReqButtonsKey] = 12345L,
-                [Data.Models.Metadata.Control.ReverseKey] = "yes",
+                Reverse = true,
                 [Data.Models.Metadata.Control.SensitivityKey] = 12345L,
                 [Data.Models.Metadata.Control.ControlTypeKey] = "lightgun",
                 [Data.Models.Metadata.Control.WaysKey] = "ways",
@@ -503,7 +503,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.DipLocation
             {
-                [Data.Models.Metadata.DipLocation.InvertedKey] = "yes",
+                Inverted = true,
                 Name = "name",
                 [Data.Models.Metadata.DipLocation.NumberKey] = "number",
             };
@@ -556,10 +556,10 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Disk.MD5Key] = HashType.MD5.ZeroString,
                 [Data.Models.Metadata.Disk.MergeKey] = "merge",
                 Name = "name",
-                [Data.Models.Metadata.Disk.OptionalKey] = "yes",
+                Optional = true,
                 [Data.Models.Metadata.Disk.RegionKey] = "region",
                 [Data.Models.Metadata.Disk.SHA1Key] = HashType.SHA1.ZeroString,
-                [Data.Models.Metadata.Disk.WritableKey] = "yes",
+                Writable = true,
             };
         }
 
@@ -576,7 +576,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Display
             {
-                [Data.Models.Metadata.Display.FlipXKey] = "yes",
+                FlipX = true,
                 [Data.Models.Metadata.Display.HBEndKey] = 12345L,
                 [Data.Models.Metadata.Display.HBStartKey] = 12345L,
                 [Data.Models.Metadata.Display.HeightKey] = 12345L,
@@ -601,14 +601,14 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Driver.CocktailKey] = "good",
                 [Data.Models.Metadata.Driver.ColorKey] = "good",
                 [Data.Models.Metadata.Driver.EmulationKey] = "good",
-                [Data.Models.Metadata.Driver.IncompleteKey] = "yes",
-                [Data.Models.Metadata.Driver.NoSoundHardwareKey] = "yes",
+                Incomplete = true,
+                NoSoundHardware = true,
                 [Data.Models.Metadata.Driver.PaletteSizeKey] = "pallettesize",
-                [Data.Models.Metadata.Driver.RequiresArtworkKey] = "yes",
+                RequiresArtwork = true,
                 [Data.Models.Metadata.Driver.SaveStateKey] = "supported",
                 [Data.Models.Metadata.Driver.SoundKey] = "good",
                 [Data.Models.Metadata.Driver.StatusKey] = "good",
-                [Data.Models.Metadata.Driver.UnofficialKey] = "yes",
+                Unofficial = true,
             };
         }
 
@@ -664,8 +664,8 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Input.CoinsKey] = 12345L,
                 [Data.Models.Metadata.Input.ControlKey] = new Data.Models.Metadata.Control[] { CreateMetadataControl() },
                 [Data.Models.Metadata.Input.PlayersKey] = 12345L,
-                [Data.Models.Metadata.Input.ServiceKey] = "yes",
-                [Data.Models.Metadata.Input.TiltKey] = "yes",
+                Service = true,
+                Tilt = true,
             };
         }
 
@@ -788,10 +788,10 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Rom.CRC64Key] = HashType.CRC64.ZeroString,
                 [Data.Models.Metadata.Rom.CreatorKey] = "creator",
                 [Data.Models.Metadata.Rom.DateKey] = "date",
-                [Data.Models.Metadata.Rom.DisposeKey] = "yes",
+                Dispose = true,
                 [Data.Models.Metadata.Rom.ExtensionKey] = "extension",
                 [Data.Models.Metadata.Rom.FileCountKey] = 12345L,
-                [Data.Models.Metadata.Rom.FileIsAvailableKey] = true,
+                FileIsAvailable = true,
                 [Data.Models.Metadata.Rom.FlagsKey] = "flags",
                 [Data.Models.Metadata.Rom.FormatKey] = "format",
                 [Data.Models.Metadata.Rom.HeaderKey] = "header",
@@ -802,7 +802,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Rom.hOCRFtsTextModuleVersionKey] = "hocr_fts_text_module_version",
                 [Data.Models.Metadata.Rom.hOCRPageIndexhOCRVersionKey] = "hocr_pageindex_hocr_version",
                 [Data.Models.Metadata.Rom.hOCRPageIndexModuleVersionKey] = "hocr_pageindex_module_version",
-                [Data.Models.Metadata.Rom.InvertedKey] = "yes",
+                Inverted = true,
                 [Data.Models.Metadata.Rom.LastModifiedTimeKey] = "mtime",
                 [Data.Models.Metadata.Rom.LengthKey] = "length",
                 [Data.Models.Metadata.Rom.LoadFlagKey] = "load16_byte",
@@ -812,7 +812,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Rom.MD5Key] = HashType.MD5.ZeroString,
                 // [Data.Models.Metadata.Rom.OpenMSXMediaType] = null, // Omit due to other test
                 [Data.Models.Metadata.Rom.MergeKey] = "merge",
-                [Data.Models.Metadata.Rom.MIAKey] = "yes",
+                MIA = true,
                 Name = "name",
                 [Data.Models.Metadata.Rom.TesseractOCRKey] = "ocr",
                 [Data.Models.Metadata.Rom.TesseractOCRConvertedKey] = "ocr_converted",
@@ -823,7 +823,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Rom.TesseractOCRModuleVersionKey] = "ocr_module_version",
                 [Data.Models.Metadata.Rom.TesseractOCRParametersKey] = "ocr_parameters",
                 [Data.Models.Metadata.Rom.OffsetKey] = "offset",
-                [Data.Models.Metadata.Rom.OptionalKey] = "yes",
+                Optional = true,
                 [Data.Models.Metadata.Rom.OriginalKey] = "original",
                 [Data.Models.Metadata.Rom.PDFModuleVersionKey] = "pdf_module_version",
                 [Data.Models.Metadata.Rom.PreviewImageKey] = "preview-image",
@@ -839,7 +839,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Rom.SHA384Key] = HashType.SHA384.ZeroString,
                 [Data.Models.Metadata.Rom.SHA512Key] = HashType.SHA512.ZeroString,
                 [Data.Models.Metadata.Rom.SizeKey] = 12345L,
-                [Data.Models.Metadata.Rom.SoundOnlyKey] = "yes",
+                SoundOnly = true,
                 [Data.Models.Metadata.Rom.SourceKey] = "source",
                 [Data.Models.Metadata.Rom.SpamSumKey] = HashType.SpamSum.ZeroString,
                 [Data.Models.Metadata.Rom.StartKey] = "start",
@@ -938,7 +938,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Software.PartKey] = new Data.Models.Metadata.Part[] { CreateMetadataPart() },
                 [Data.Models.Metadata.Software.PublisherKey] = "publisher",
                 [Data.Models.Metadata.Software.SharedFeatKey] = new Data.Models.Metadata.SharedFeat[] { CreateMetadataSharedFeat() },
-                [Data.Models.Metadata.Software.SupportedKey] = "yes",
+                [Data.Models.Metadata.Software.SupportedKey] = true,
                 [Data.Models.Metadata.Software.YearKey] = "year",
             };
         }
@@ -1010,7 +1010,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Score = "score",
                 Players = "players",
                 Enabled = "enabled",
-                CRC = "true",
+                CRC = "yes",
                 Source = "source",
                 CloneOf = "cloneof",
                 RelatedTo = "relatedto",
@@ -1045,23 +1045,23 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("comment", datHeader.ReadString(Data.Models.Metadata.Header.CommentKey));
             Assert.Equal("date", datHeader.ReadString(Data.Models.Metadata.Header.DateKey));
             Assert.Equal("datversion", datHeader.ReadString(Data.Models.Metadata.Header.DatVersionKey));
-            Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.DebugKey));
+            Assert.True(datHeader.Debug);
             Assert.Equal("description", datHeader.ReadString(Data.Models.Metadata.Header.DescriptionKey));
             Assert.Equal("email", datHeader.ReadString(Data.Models.Metadata.Header.EmailKey));
             Assert.Equal("emulatorversion", datHeader.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey));
             Assert.Equal("merged", datHeader.ReadString(Data.Models.Metadata.Header.ForceMergingKey));
             Assert.Equal("required", datHeader.ReadString(Data.Models.Metadata.Header.ForceNodumpKey));
             Assert.Equal("zip", datHeader.ReadString(Data.Models.Metadata.Header.ForcePackingKey));
-            Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.ForceZippingKey));
+            Assert.True(datHeader.ForceZipping);
             Assert.Equal("header", datHeader.ReadString(Data.Models.Metadata.Header.HeaderKey));
             Assert.Equal("homepage", datHeader.ReadString(Data.Models.Metadata.Header.HomepageKey));
             Assert.Equal("id", datHeader.ReadString(Data.Models.Metadata.Header.IdKey));
             Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.ImagesKey));
             Assert.Equal("imfolder", datHeader.ReadString(Data.Models.Metadata.Header.ImFolderKey));
             Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.InfosKey));
-            Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.LockBiosModeKey));
-            Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.LockRomModeKey));
-            Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.LockSampleModeKey));
+            Assert.True(datHeader.LockBiosMode);
+            Assert.True(datHeader.LockRomMode);
+            Assert.True(datHeader.LockSampleMode);
             Assert.Equal("mameconfig", datHeader.ReadString(Data.Models.Metadata.Header.MameConfigKey));
             Assert.Equal("name", datHeader.Name);
             Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.NewDatKey));
@@ -1109,9 +1109,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.CRC32.ZeroString, machine.ReadString(Data.Models.Metadata.Machine.Im1CRCKey));
             Assert.Equal(HashType.CRC32.ZeroString, machine.ReadString(Data.Models.Metadata.Machine.Im2CRCKey));
             Assert.Equal("imagenumber", machine.ReadString(Data.Models.Metadata.Machine.ImageNumberKey));
-            Assert.Equal("yes", machine.ReadString(Data.Models.Metadata.Machine.IsBiosKey));
-            Assert.Equal("yes", machine.ReadString(Data.Models.Metadata.Machine.IsDeviceKey));
-            Assert.Equal("yes", machine.ReadString(Data.Models.Metadata.Machine.IsMechanicalKey));
+            Assert.Equal(true, machine.IsBios);
+            Assert.Equal(true, machine.IsDevice);
+            Assert.Equal(true, machine.IsMechanical);
             Assert.Equal("language", machine.ReadString(Data.Models.Metadata.Machine.LanguageKey));
             Assert.Equal("location", machine.ReadString(Data.Models.Metadata.Machine.LocationKey));
             Assert.Equal("manufacturer", machine.ReadString(Data.Models.Metadata.Machine.ManufacturerKey));
@@ -1125,7 +1125,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("releasenumber", machine.ReadString(Data.Models.Metadata.Machine.ReleaseNumberKey));
             Assert.Equal("romof", machine.ReadString(Data.Models.Metadata.Machine.RomOfKey));
             Assert.Equal("rotation", machine.ReadString(Data.Models.Metadata.Machine.RotationKey));
-            Assert.Equal("yes", machine.ReadString(Data.Models.Metadata.Machine.RunnableKey));
+            Assert.Equal(true, machine.Runnable);
             Assert.Equal("sampleof", machine.ReadString(Data.Models.Metadata.Machine.SampleOfKey));
             Assert.Equal("savetype", machine.ReadString(Data.Models.Metadata.Machine.SaveTypeKey));
             Assert.Equal("sourcefile", machine.ReadString(Data.Models.Metadata.Machine.SourceFileKey));
@@ -1177,7 +1177,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345L, chip.ReadLong(Data.Models.Metadata.Chip.ClockKey));
             Assert.Equal("flags", chip.ReadString(Data.Models.Metadata.Chip.FlagsKey));
             Assert.Equal("name", chip.GetName());
-            Assert.True(chip.ReadBool(Data.Models.Metadata.Chip.SoundOnlyKey));
+            Assert.True(chip.SoundOnly);
             Assert.Equal("tag", chip.ReadString(Data.Models.Metadata.Chip.TagKey));
             Assert.Equal("cpu", chip.ReadString(Data.Models.Metadata.Chip.ChipTypeKey));
         }
@@ -1215,7 +1215,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateConfLocation(ConfLocation? confLocation)
         {
             Assert.NotNull(confLocation);
-            Assert.True(confLocation.ReadBool(Data.Models.Metadata.ConfLocation.InvertedKey));
+            Assert.True(confLocation.Inverted);
             Assert.Equal("name", confLocation.GetName());
             Assert.Equal("number", confLocation.ReadString(Data.Models.Metadata.ConfLocation.NumberKey));
         }
@@ -1240,7 +1240,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.MinimumKey));
             Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.PlayerKey));
             Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.ReqButtonsKey));
-            Assert.True(control.ReadBool(Data.Models.Metadata.Control.ReverseKey));
+            Assert.True(control.Reverse);
             Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.SensitivityKey));
             Assert.Equal("lightgun", control.ReadString(Data.Models.Metadata.Control.ControlTypeKey));
             Assert.Equal("ways", control.ReadString(Data.Models.Metadata.Control.WaysKey));
@@ -1284,7 +1284,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateDipLocation(DipLocation? dipLocation)
         {
             Assert.NotNull(dipLocation);
-            Assert.True(dipLocation.ReadBool(Data.Models.Metadata.DipLocation.InvertedKey));
+            Assert.True(dipLocation.Inverted);
             Assert.Equal("name", dipLocation.GetName());
             Assert.Equal("number", dipLocation.ReadString(Data.Models.Metadata.DipLocation.NumberKey));
         }
@@ -1335,10 +1335,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.MD5.ZeroString, disk.ReadString(Data.Models.Metadata.Disk.MD5Key));
             Assert.Equal("merge", disk.ReadString(Data.Models.Metadata.Disk.MergeKey));
             Assert.Equal("name", disk.GetName());
-            Assert.True(disk.ReadBool(Data.Models.Metadata.Disk.OptionalKey));
+            Assert.True(disk.Optional);
             Assert.Equal("region", disk.ReadString(Data.Models.Metadata.Disk.RegionKey));
             Assert.Equal(HashType.SHA1.ZeroString, disk.ReadString(Data.Models.Metadata.Disk.SHA1Key));
-            Assert.True(disk.ReadBool(Data.Models.Metadata.Disk.WritableKey));
+            Assert.True(disk.Writable);
         }
 
         private static void ValidateDiskArea(DiskArea? diskArea)
@@ -1350,7 +1350,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateDisplay(Display? display)
         {
             Assert.NotNull(display);
-            Assert.True(display.ReadBool(Data.Models.Metadata.Display.FlipXKey));
+            Assert.True(display.FlipX);
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HBEndKey));
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HBStartKey));
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HeightKey));
@@ -1373,14 +1373,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("good", driver.ReadString(Data.Models.Metadata.Driver.CocktailKey));
             Assert.Equal("good", driver.ReadString(Data.Models.Metadata.Driver.ColorKey));
             Assert.Equal("good", driver.ReadString(Data.Models.Metadata.Driver.EmulationKey));
-            Assert.True(driver.ReadBool(Data.Models.Metadata.Driver.IncompleteKey));
-            Assert.True(driver.ReadBool(Data.Models.Metadata.Driver.NoSoundHardwareKey));
+            Assert.True(driver.Incomplete);
+            Assert.True(driver.NoSoundHardware);
             Assert.Equal("pallettesize", driver.ReadString(Data.Models.Metadata.Driver.PaletteSizeKey));
-            Assert.True(driver.ReadBool(Data.Models.Metadata.Driver.RequiresArtworkKey));
+            Assert.True(driver.RequiresArtwork);
             Assert.Equal("supported", driver.ReadString(Data.Models.Metadata.Driver.SaveStateKey));
             Assert.Equal("good", driver.ReadString(Data.Models.Metadata.Driver.SoundKey));
             Assert.Equal("good", driver.ReadString(Data.Models.Metadata.Driver.StatusKey));
-            Assert.True(driver.ReadBool(Data.Models.Metadata.Driver.UnofficialKey));
+            Assert.True(driver.Unofficial);
         }
 
         private static void ValidateExtension(Extension? extension)
@@ -1412,8 +1412,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345L, input.ReadLong(Data.Models.Metadata.Input.ButtonsKey));
             Assert.Equal(12345L, input.ReadLong(Data.Models.Metadata.Input.CoinsKey));
             Assert.Equal(12345L, input.ReadLong(Data.Models.Metadata.Input.PlayersKey));
-            Assert.True(input.ReadBool(Data.Models.Metadata.Input.ServiceKey));
-            Assert.True(input.ReadBool(Data.Models.Metadata.Input.TiltKey));
+            Assert.True(input.Service);
+            Assert.True(input.Tilt);
 
             Control[]? controls = input.Read<Control[]>(Data.Models.Metadata.Input.ControlKey);
             Assert.NotNull(controls);
@@ -1508,10 +1508,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.CRC64.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC64Key));
             Assert.Equal("creator", rom.ReadString(Data.Models.Metadata.Rom.CreatorKey));
             Assert.Equal("date", rom.ReadString(Data.Models.Metadata.Rom.DateKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.DisposeKey));
+            Assert.True(rom.Dispose);
             Assert.Equal("extension", rom.ReadString(Data.Models.Metadata.Rom.ExtensionKey));
             Assert.Equal(12345L, rom.ReadLong(Data.Models.Metadata.Rom.FileCountKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.FileIsAvailableKey));
+            Assert.True(rom.FileIsAvailable);
             Assert.Equal("flags", rom.ReadString(Data.Models.Metadata.Rom.FlagsKey));
             Assert.Equal("format", rom.ReadString(Data.Models.Metadata.Rom.FormatKey));
             Assert.Equal("header", rom.ReadString(Data.Models.Metadata.Rom.HeaderKey));
@@ -1522,7 +1522,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("hocr_fts_text_module_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRFtsTextModuleVersionKey));
             Assert.Equal("hocr_pageindex_hocr_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRPageIndexhOCRVersionKey));
             Assert.Equal("hocr_pageindex_module_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRPageIndexModuleVersionKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.InvertedKey));
+            Assert.True(rom.Inverted);
             Assert.Equal("mtime", rom.ReadString(Data.Models.Metadata.Rom.LastModifiedTimeKey));
             Assert.Equal("length", rom.ReadString(Data.Models.Metadata.Rom.LengthKey));
             Assert.Equal("load16_byte", rom.ReadString(Data.Models.Metadata.Rom.LoadFlagKey));
@@ -1532,7 +1532,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.MD5.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.MD5Key));
             Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType)); // Omit due to other test
             Assert.Equal("merge", rom.ReadString(Data.Models.Metadata.Rom.MergeKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.MIAKey));
+            Assert.True(rom.MIA);
             Assert.Equal("name", rom.GetName());
             Assert.Equal("ocr", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRKey));
             Assert.Equal("ocr_converted", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRConvertedKey));
@@ -1543,7 +1543,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("ocr_module_version", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRModuleVersionKey));
             Assert.Equal("ocr_parameters", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRParametersKey));
             Assert.Equal("offset", rom.ReadString(Data.Models.Metadata.Rom.OffsetKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.OptionalKey));
+            Assert.True(rom.Optional);
             Assert.Equal("original", rom.ReadString(Data.Models.Metadata.Rom.OriginalKey));
             Assert.Equal("pdf_module_version", rom.ReadString(Data.Models.Metadata.Rom.PDFModuleVersionKey));
             Assert.Equal("preview-image", rom.ReadString(Data.Models.Metadata.Rom.PreviewImageKey));
@@ -1559,7 +1559,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.SHA384.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA384Key));
             Assert.Equal(HashType.SHA512.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA512Key));
             Assert.Equal(12345L, rom.ReadLong(Data.Models.Metadata.Rom.SizeKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.SoundOnlyKey));
+            Assert.True(rom.SoundOnly);
             Assert.Equal("source", rom.ReadString(Data.Models.Metadata.Rom.SourceKey));
             Assert.Equal(HashType.SpamSum.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
             Assert.Equal("start", rom.ReadString(Data.Models.Metadata.Rom.StartKey));

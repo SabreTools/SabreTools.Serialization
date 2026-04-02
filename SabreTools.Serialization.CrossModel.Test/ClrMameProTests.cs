@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Header = "XXXXXX",
                 Type = "XXXXXX",
                 ForceMerging = "XXXXXX",
-                ForceZipping = "XXXXXX",
+                ForceZipping = true,
                 ForcePacking = "XXXXXX",
             };
 
@@ -121,8 +121,8 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Offs = "XXXXXX",
                 Serial = "XXXXXX",
                 Header = "XXXXXX",
-                Inverted = "XXXXXX",
-                MIA = "XXXXXX",
+                Inverted = true,
+                MIA = true,
             };
 
             var disk = new Data.Models.ClrMamePro.Disk
@@ -184,8 +184,8 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Control = "XXXXXX",
                 Buttons = "XXXXXX",
                 Coins = "XXXXXX",
-                Tilt = "XXXXXX",
-                Service = "XXXXXX",
+                Tilt = true,
+                Service = true,
             };
 
             var dipswitch = new Data.Models.ClrMamePro.DipSwitch
@@ -263,7 +263,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", cmp.Header);
             Assert.Equal("XXXXXX", cmp.Type);
             Assert.Equal("XXXXXX", cmp.ForceMerging);
-            Assert.Equal("XXXXXX", cmp.ForceZipping);
+            Assert.Equal(true, cmp.ForceZipping);
             Assert.Equal("XXXXXX", cmp.ForcePacking);
         }
 
@@ -384,8 +384,8 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", rom.Offs);
             Assert.Equal("XXXXXX", rom.Serial);
             Assert.Equal("XXXXXX", rom.Header);
-            Assert.Equal("XXXXXX", rom.Inverted);
-            Assert.Equal("XXXXXX", rom.MIA);
+            Assert.Equal(true, rom.Inverted);
+            Assert.Equal(true, rom.MIA);
         }
 
         /// <summary>
@@ -479,8 +479,8 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", input.Control);
             Assert.Equal("XXXXXX", input.Buttons);
             Assert.Equal("XXXXXX", input.Coins);
-            Assert.Equal("XXXXXX", input.Tilt);
-            Assert.Equal("XXXXXX", input.Service);
+            Assert.Equal(true, input.Tilt);
+            Assert.Equal(true, input.Service);
         }
 
         /// <summary>

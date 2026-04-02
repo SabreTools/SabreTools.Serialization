@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("inverted")]
-        public string? Inverted { get; set; }
+        public bool? Inverted { get; set; }
     }
 }

@@ -22,6 +22,6 @@ namespace SabreTools.Data.Models.SoftwareList
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("writable")]
-        public string? Writeable { get; set; }
+        public bool? Writeable { get; set; }
     }
 }

@@ -23,14 +23,14 @@ namespace SabreTools.Data.Models.Logiqx
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("lockrommode")]
-        public string? LockRomMode { get; set; }
+        public bool? LockRomMode { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("lockbiosmode")]
-        public string? LockBiosMode { get; set; }
+        public bool? LockBiosMode { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("locksamplemode")]
-        public string? LockSampleMode { get; set; }
+        public bool? LockSampleMode { get; set; }
     }
 }

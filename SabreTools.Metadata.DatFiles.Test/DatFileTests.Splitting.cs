@@ -20,7 +20,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine childMachine = new Machine();
             childMachine.SetName("child");
             childMachine.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, "parent");
-            childMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            childMachine.IsBios = true;
 
             DatItem parentItem = new Rom();
             parentItem.SetName("parent_rom");
@@ -65,7 +65,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine childMachine = new Machine();
             childMachine.SetName("child");
             childMachine.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, "parent");
-            childMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            childMachine.IsBios = true;
 
             DatItem parentItem = new Rom();
             parentItem.SetName("parent_rom");
@@ -110,7 +110,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine childMachine = new Machine();
             childMachine.SetName("child");
             childMachine.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, "parent");
-            childMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            childMachine.IsBios = true;
 
             DatItem parentItem = new Rom();
             parentItem.SetName("parent_rom");
@@ -158,7 +158,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine childMachine = new Machine();
             childMachine.SetName("child");
             childMachine.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, "parent");
-            childMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            childMachine.IsBios = true;
 
             DatItem parentItem = new Rom();
             parentItem.SetName("parent_rom");
@@ -210,7 +210,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine childMachine = new Machine();
             childMachine.SetName("child");
             childMachine.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, "parent");
-            childMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            childMachine.IsBios = true;
 
             DatItem parentItem = new Rom();
             parentItem.SetName("parent_rom");
@@ -255,7 +255,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine childMachine = new Machine();
             childMachine.SetName("child");
             childMachine.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, "parent");
-            childMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            childMachine.IsBios = true;
 
             DatItem parentItem = new Rom();
             parentItem.SetName("parent_rom");
@@ -307,7 +307,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine deviceMachine = new Machine();
             deviceMachine.SetName("device");
-            deviceMachine.Write(Data.Models.Metadata.Machine.IsDeviceKey, true);
+            deviceMachine.IsDevice = true;
 
             Machine slotOptionMachine = new Machine();
             slotOptionMachine.SetName("slotoption");
@@ -366,7 +366,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine deviceMachine = new Machine();
             deviceMachine.SetName("device");
-            deviceMachine.Write(Data.Models.Metadata.Machine.IsDeviceKey, true);
+            deviceMachine.IsDevice = true;
 
             Machine slotOptionMachine = new Machine();
             slotOptionMachine.SetName("slotoption");
@@ -423,7 +423,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine childMachine = new Machine();
             childMachine.SetName("child");
             childMachine.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, "parent");
-            childMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            childMachine.IsBios = true;
 
             DatItem parentItem = new Rom();
             parentItem.SetName("parent_rom");
@@ -468,7 +468,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine childMachine = new Machine();
             childMachine.SetName("child");
             childMachine.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, "parent");
-            childMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            childMachine.IsBios = true;
 
             DatItem parentItem = new Rom();
             parentItem.SetName("parent_rom");
@@ -516,11 +516,11 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine biosMachine = new Machine();
             biosMachine.SetName("bios");
-            biosMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            biosMachine.IsBios = true;
 
             Machine deviceMachine = new Machine();
             deviceMachine.SetName("device");
-            deviceMachine.Write(Data.Models.Metadata.Machine.IsDeviceKey, true);
+            deviceMachine.IsDevice = true;
 
             DatItem biosItem = new Rom();
             biosItem.Write(DatItem.MachineKey, biosMachine);
@@ -548,11 +548,11 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine biosMachine = new Machine();
             biosMachine.SetName("bios");
-            biosMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            biosMachine.IsBios = true;
 
             Machine deviceMachine = new Machine();
             deviceMachine.SetName("device");
-            deviceMachine.Write(Data.Models.Metadata.Machine.IsDeviceKey, true);
+            deviceMachine.IsDevice = true;
 
             DatItem biosItem = new Rom();
             DatItem deviceItem = new Rom();
@@ -692,7 +692,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine childMachine = new Machine();
             childMachine.SetName("child");
             childMachine.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, "parent");
-            childMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            childMachine.IsBios = true;
 
             DatItem parentItem = new Rom();
             parentItem.SetName("parent_rom");
@@ -741,7 +741,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine childMachine = new Machine();
             childMachine.SetName("child");
             childMachine.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, "parent");
-            childMachine.Write(Data.Models.Metadata.Machine.IsBiosKey, true);
+            childMachine.IsBios = true;
 
             DatItem parentItem = new Rom();
             parentItem.SetName("parent_rom");

@@ -8,7 +8,20 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? IsBios { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? IsDevice { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? IsMechanical { get; set; }
+
         public string? Name { get; set; }
+
+        /// <remarks>(yes|partial|no) "no"</remarks>
+        /// TODO: Replace with Runnable type
+        public bool? Runnable { get; set; }
 
         #endregion
 
@@ -146,15 +159,6 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string InputKey = "input";
 
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string IsBiosKey = "isbios";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string IsDeviceKey = "isdevice";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string IsMechanicalKey = "ismechanical";
-
         /// <remarks>string</remarks>
         public const string LanguageKey = "language";
 
@@ -214,9 +218,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string RotationKey = "rotation";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string RunnableKey = "runnable";
 
         /// <remarks>Sample[]</remarks>
         [NoFilter]

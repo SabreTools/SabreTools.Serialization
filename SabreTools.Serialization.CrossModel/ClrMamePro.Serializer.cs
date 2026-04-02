@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Header.HeaderKey] = item.Header,
                 [Data.Models.Metadata.Header.TypeKey] = item.Type,
                 [Data.Models.Metadata.Header.ForceMergingKey] = item.ForceMerging,
-                [Data.Models.Metadata.Header.ForceZippingKey] = item.ForceZipping,
+                ForceZipping = item.ForceZipping,
                 [Data.Models.Metadata.Header.ForcePackingKey] = item.ForcePacking,
             };
             return header;
@@ -246,8 +246,8 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Input.ControlKey] = item.Control,
                 [Data.Models.Metadata.Input.ButtonsKey] = item.Buttons,
                 [Data.Models.Metadata.Input.CoinsKey] = item.Coins,
-                [Data.Models.Metadata.Input.TiltKey] = item.Tilt,
-                [Data.Models.Metadata.Input.ServiceKey] = item.Service,
+                Tilt = item.Tilt,
+                Service = item.Service,
             };
             return input;
         }
@@ -316,8 +316,8 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Rom.SerialKey] = item.Serial,
                 [Data.Models.Metadata.Rom.HeaderKey] = item.Header,
                 [Data.Models.Metadata.Rom.DateKey] = item.Date,
-                [Data.Models.Metadata.Rom.InvertedKey] = item.Inverted,
-                [Data.Models.Metadata.Rom.MIAKey] = item.MIA,
+                Inverted = item.Inverted,
+                MIA = item.MIA,
             };
             return rom;
         }

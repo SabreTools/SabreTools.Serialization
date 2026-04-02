@@ -8,14 +8,14 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Inverted { get; set; }
+
         public string? Name { get; set; }
 
         #endregion
 
         #region Keys
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string InvertedKey = "inverted";
 
         /// <remarks>string, possibly long</remarks>
         public const string NumberKey = "number";

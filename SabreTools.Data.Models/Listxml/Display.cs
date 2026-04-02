@@ -20,7 +20,7 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("flipx")]
-        public string? FlipX { get; set; }
+        public bool? FlipX { get; set; }
 
         /// <remarks>Numeric</remarks>
         [XmlAttribute("width")]

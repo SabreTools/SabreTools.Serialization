@@ -137,11 +137,107 @@ namespace SabreTools.Data.Extensions
         /// <summary>
         /// Deep clone a DictionaryBase object
         /// </summary>
+        /// TODO: Move this to Clone methods in each file when keys go away entirely
         public static DictionaryBase? Clone(this DictionaryBase self)
         {
             // If construction failed, we can't do anything
             if (Activator.CreateInstance(self.GetType()) is not DictionaryBase clone)
                 return null;
+
+            // Handle individual type properties
+            if (self is Adjuster selfAdjuster && clone is Adjuster cloneAdjuster)
+            {
+                cloneAdjuster.Default = selfAdjuster.Default;
+            }
+            else if (self is BiosSet selfBiosSet && clone is BiosSet cloneBiosSet)
+            {
+                cloneBiosSet.Default = selfBiosSet.Default;
+            }
+            else if (self is Chip selfChip && clone is Chip cloneChip)
+            {
+                cloneChip.SoundOnly = selfChip.SoundOnly;
+            }
+            else if (self is ConfLocation selfConfLocation && clone is ConfLocation cloneConfLocation)
+            {
+                cloneConfLocation.Inverted = selfConfLocation.Inverted;
+            }
+            else if (self is ConfSetting selfConfSetting && clone is ConfSetting cloneConfSetting)
+            {
+                cloneConfSetting.Default = selfConfSetting.Default;
+            }
+            else if (self is Control selfControl && clone is Control cloneControl)
+            {
+                cloneControl.Reverse = selfControl.Reverse;
+            }
+            else if (self is DipLocation selfDipLocation && clone is DipLocation cloneDipLocation)
+            {
+                cloneDipLocation.Inverted = selfDipLocation.Inverted;
+            }
+            else if (self is DipSwitch selfDipSwitch && clone is DipSwitch cloneDipSwitch)
+            {
+                cloneDipSwitch.Default = selfDipSwitch.Default;
+            }
+            else if (self is DipValue selfDipValue && clone is DipValue cloneDipValue)
+            {
+                cloneDipValue.Default = selfDipValue.Default;
+            }
+            else if (self is Disk selfDisk && clone is Disk cloneDisk)
+            {
+                cloneDisk.Optional = selfDisk.Optional;
+                cloneDisk.Writable = selfDisk.Writable;
+            }
+            else if (self is Display selfDisplay && clone is Display cloneDisplay)
+            {
+                cloneDisplay.FlipX = selfDisplay.FlipX;
+            }
+            else if (self is Driver selfDriver && clone is Driver cloneDriver)
+            {
+                cloneDriver.Incomplete = selfDriver.Incomplete;
+                cloneDriver.NoSoundHardware = selfDriver.NoSoundHardware;
+                cloneDriver.RequiresArtwork = selfDriver.RequiresArtwork;
+                cloneDriver.Unofficial = selfDriver.Unofficial;
+            }
+            else if (self is Header selfHeader && clone is Header cloneHeader)
+            {
+                cloneHeader.Debug = selfHeader.Debug;
+                cloneHeader.ForceZipping = selfHeader.ForceZipping;
+                cloneHeader.LockBiosMode = selfHeader.LockBiosMode;
+                cloneHeader.LockRomMode = selfHeader.LockRomMode;
+                cloneHeader.LockSampleMode = selfHeader.LockSampleMode;
+            }
+            else if (self is Input selfInput && clone is Input cloneInput)
+            {
+                cloneInput.Service = selfInput.Service;
+                cloneInput.Tilt = selfInput.Tilt;
+            }
+            else if (self is Machine selfMachine && clone is Machine cloneMachine)
+            {
+                cloneMachine.IsBios = selfMachine.IsBios;
+                cloneMachine.IsDevice = selfMachine.IsDevice;
+                cloneMachine.IsMechanical = selfMachine.IsMechanical;
+                cloneMachine.Runnable = selfMachine.Runnable;
+            }
+            else if (self is RamOption selfRamOption && clone is RamOption cloneRamOption)
+            {
+                cloneRamOption.Default = selfRamOption.Default;
+            }
+            else if (self is Release selfRelease && clone is Release cloneRelease)
+            {
+                cloneRelease.Default = selfRelease.Default;
+            }
+            else if (self is Rom selfRom && clone is Rom cloneRom)
+            {
+                cloneRom.Dispose = selfRom.Dispose;
+                cloneRom.FileIsAvailable = selfRom.FileIsAvailable;
+                cloneRom.Inverted = selfRom.Inverted;
+                cloneRom.MIA = selfRom.MIA;
+                cloneRom.Optional = selfRom.Optional;
+                cloneRom.SoundOnly = selfRom.SoundOnly;
+            }
+            else if (self is SlotOption selfSlotOption && clone is SlotOption cloneSlotOption)
+            {
+                cloneSlotOption.Default = selfSlotOption.Default;
+            }
 
             // Handle known properties
             clone.SetName(self.GetName());
@@ -213,7 +309,7 @@ namespace SabreTools.Data.Extensions
                 [Rom.MergeKey] = disk.ReadString(Disk.MergeKey),
                 [Rom.RegionKey] = disk.ReadString(Disk.RegionKey),
                 [Rom.StatusKey] = disk.ReadString(Disk.StatusKey),
-                [Rom.OptionalKey] = disk.ReadString(Disk.OptionalKey),
+                Optional = disk.Optional,
                 [Rom.MD5Key] = disk.ReadString(Disk.MD5Key),
                 [Rom.SHA1Key] = disk.ReadString(Disk.SHA1Key),
             };

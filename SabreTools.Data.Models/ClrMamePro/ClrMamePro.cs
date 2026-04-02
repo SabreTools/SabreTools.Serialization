@@ -42,8 +42,8 @@ namespace SabreTools.Data.Models.ClrMamePro
         /// <remarks>forcemerging</remarks>
         public string? ForceMerging { get; set; }
 
-        /// <remarks>forcezipping</remarks>
-        public string? ForceZipping { get; set; }
+        /// <remarks>forcezipping, (yes|no) "no"</remarks>
+        public bool? ForceZipping { get; set; }
 
         /// <remarks>forcepacking</remarks>
         public string? ForcePacking { get; set; }

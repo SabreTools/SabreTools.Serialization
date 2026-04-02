@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Title,
                 [Data.Models.Metadata.Rom.AltRomnameKey] = item.AltRomname,
                 [Data.Models.Metadata.Rom.AltTitleKey] = item.AltTitle,
-                [Data.Models.Metadata.Rom.FileIsAvailableKey] = item.FileIsAvailable,
+                FileIsAvailable = item.FileIsAvailable,
             };
             return rom;
         }

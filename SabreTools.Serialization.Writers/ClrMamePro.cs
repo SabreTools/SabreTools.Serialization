@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalStandalone("header", header.Header);
             writer.WriteOptionalStandalone("type", header.Type);
             writer.WriteOptionalStandalone("forcemerging", header.ForceMerging);
-            writer.WriteOptionalStandalone("forcezipping", header.ForceZipping);
+            writer.WriteOptionalStandalone("forcezipping", header.ForceZipping.FromYesNo());
             writer.WriteOptionalStandalone("forcepacking", header.ForcePacking);
 
             writer.WriteEndElement(); // clrmamepro
@@ -283,8 +283,8 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteOptionalAttributeString("serial", rom.Serial);
                 writer.WriteOptionalAttributeString("header", rom.Header);
                 writer.WriteOptionalAttributeString("date", rom.Date);
-                writer.WriteOptionalAttributeString("inverted", rom.Inverted);
-                writer.WriteOptionalAttributeString("mia", rom.MIA);
+                writer.WriteOptionalAttributeString("inverted", rom.Inverted.FromYesNo());
+                writer.WriteOptionalAttributeString("mia", rom.MIA.FromYesNo());
                 writer.WriteEndElement(); // rom
             }
         }
@@ -453,8 +453,8 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("control", input.Control);
             writer.WriteRequiredAttributeString("buttons", input.Buttons, throwOnError: true);
             writer.WriteOptionalAttributeString("coins", input.Coins);
-            writer.WriteOptionalAttributeString("tilt", input.Tilt);
-            writer.WriteOptionalAttributeString("service", input.Service);
+            writer.WriteOptionalAttributeString("tilt", input.Tilt.FromYesNo());
+            writer.WriteOptionalAttributeString("service", input.Service.FromYesNo());
             writer.WriteEndElement(); // input
         }
 

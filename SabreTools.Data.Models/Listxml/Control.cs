@@ -41,7 +41,7 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("reverse")]
-        public string? Reverse { get; set; }
+        public bool? Reverse { get; set; }
 
         /// <remarks>Numeric?</remarks>
         [XmlAttribute("ways")]

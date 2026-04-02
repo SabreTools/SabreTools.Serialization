@@ -18,19 +18,19 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(yes|no) "no", Machine only</remarks>
         [XmlAttribute("isbios")]
-        public string? IsBios { get; set; }
+        public bool? IsBios { get; set; }
 
         /// <remarks>(yes|no) "no", Machine only</remarks>
         [XmlAttribute("isdevice")]
-        public string? IsDevice { get; set; }
+        public bool? IsDevice { get; set; }
 
         /// <remarks>(yes|no) "no", Machine only</remarks>
         [XmlAttribute("ismechanical")]
-        public string? IsMechanical { get; set; }
+        public bool? IsMechanical { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("runnable")]
-        public string? Runnable { get; set; }
+        public bool? Runnable { get; set; }
 
         [XmlAttribute("cloneof")]
         public string? CloneOf { get; set; }

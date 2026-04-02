@@ -40,18 +40,18 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("requiresartwork")]
-        public string? RequiresArtwork { get; set; }
+        public bool? RequiresArtwork { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("unofficial")]
-        public string? Unofficial { get; set; }
+        public bool? Unofficial { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("nosoundhardware")]
-        public string? NoSoundHardware { get; set; }
+        public bool? NoSoundHardware { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("incomplete")]
-        public string? Incomplete { get; set; }
+        public bool? Incomplete { get; set; }
     }
 }

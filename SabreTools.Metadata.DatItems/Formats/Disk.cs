@@ -38,6 +38,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public bool? Optional
+        {
+            get => (_internal as Data.Models.Metadata.Disk)?.Optional;
+            set => (_internal as Data.Models.Metadata.Disk)?.Optional = value;
+        }
+
         [JsonIgnore]
         public bool PartSpecified
         {
@@ -48,6 +54,12 @@ namespace SabreTools.Metadata.DatItems.Formats
                     && (!string.IsNullOrEmpty(part.GetName())
                         || !string.IsNullOrEmpty(part.ReadString(Data.Models.Metadata.Part.InterfaceKey)));
             }
+        }
+
+        public bool? Writable
+        {
+            get => (_internal as Data.Models.Metadata.Disk)?.Writable;
+            set => (_internal as Data.Models.Metadata.Disk)?.Writable = value;
         }
 
         #endregion
@@ -65,17 +77,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             Write<DupeType>(DupeTypeKey, 0x00);
 
             // Process flag values
-            bool? optional = ReadBool(Data.Models.Metadata.Disk.OptionalKey);
-            if (optional is not null)
-                Write<string?>(Data.Models.Metadata.Disk.OptionalKey, optional.FromYesNo());
-
             string? status = ReadString(Data.Models.Metadata.Disk.StatusKey);
             if (status is not null)
                 Write<string?>(Data.Models.Metadata.Disk.StatusKey, status.AsItemStatus()?.AsStringValue());
-
-            bool? writable = ReadBool(Data.Models.Metadata.Disk.WritableKey);
-            if (writable is not null)
-                Write<string?>(Data.Models.Metadata.Disk.WritableKey, writable.FromYesNo());
 
             // Process hash values
             string? md5 = ReadString(Data.Models.Metadata.Disk.MD5Key);

@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Readers.Test
             // Validate the data
             Assert.NotNull(newDf);
             Assert.Equal("XXXXXX", newDf.Build);
-            Assert.Equal("XXXXXX", newDf.Debug);
+            Assert.Equal(true, newDf.Debug);
             // Assert.Equal("XXXXXX", newDf.SchemaLocation); // TODO: Fix this based on No-Intro DATs
             Validate(newDf.Header);
 
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.Readers.Test
             // Validate the data
             Assert.NotNull(newDf);
             Assert.Equal("XXXXXX", newDf.Build);
-            Assert.Equal("XXXXXX", newDf.Debug);
+            Assert.Equal(true, newDf.Debug);
             // Assert.Equal("XXXXXX", newDf.SchemaLocation); // TODO: Fix this based on No-Intro DATs
             Validate(newDf.Header);
 
@@ -152,9 +152,9 @@ namespace SabreTools.Serialization.Readers.Test
                 RomMode = "XXXXXX",
                 BiosMode = "XXXXXX",
                 SampleMode = "XXXXXX",
-                LockRomMode = "XXXXXX",
-                LockBiosMode = "XXXXXX",
-                LockSampleMode = "XXXXXX",
+                LockRomMode = true,
+                LockBiosMode = true,
+                LockSampleMode = true,
             };
 
             var header = new Data.Models.Logiqx.Header
@@ -234,8 +234,8 @@ namespace SabreTools.Serialization.Readers.Test
                 Serial = "XXXXXX",
                 Header = "XXXXXX",
                 Date = "XXXXXX",
-                Inverted = "XXXXXX",
-                MIA = "XXXXXX",
+                Inverted = true,
+                MIA = true,
             };
 
             var disk = new Data.Models.Logiqx.Disk
@@ -278,10 +278,10 @@ namespace SabreTools.Serialization.Readers.Test
                 Emulation = "XXXXXX",
                 Cocktail = "XXXXXX",
                 SaveState = "XXXXXX",
-                RequiresArtwork = "XXXXXX",
-                Unofficial = "XXXXXX",
-                NoSoundHardware = "XXXXXX",
-                Incomplete = "XXXXXX",
+                RequiresArtwork = true,
+                Unofficial = true,
+                NoSoundHardware = true,
+                Incomplete = true,
             };
 
             var softwarelist = new Data.Models.Logiqx.SoftwareList
@@ -297,9 +297,9 @@ namespace SabreTools.Serialization.Readers.Test
                 : new Data.Models.Logiqx.Machine();
             gameBase.Name = "XXXXXX";
             gameBase.SourceFile = "XXXXXX";
-            gameBase.IsBios = "XXXXXX";
-            gameBase.IsDevice = "XXXXXX";
-            gameBase.IsMechanical = "XXXXXX";
+            gameBase.IsBios = true;
+            gameBase.IsDevice = true;
+            gameBase.IsMechanical = true;
             gameBase.CloneOf = "XXXXXX";
             gameBase.RomOf = "XXXXXX";
             gameBase.SampleOf = "XXXXXX";
@@ -307,7 +307,7 @@ namespace SabreTools.Serialization.Readers.Test
             gameBase.RebuildTo = "XXXXXX";
             gameBase.Id = "XXXXXX";
             gameBase.CloneOfId = "XXXXXX";
-            gameBase.Runnable = "XXXXXX";
+            gameBase.Runnable = true;
             gameBase.Comment = ["XXXXXX"];
             gameBase.Description = "XXXXXX";
             gameBase.Year = "XXXXXX";
@@ -329,7 +329,7 @@ namespace SabreTools.Serialization.Readers.Test
             return new Data.Models.Logiqx.Datafile
             {
                 Build = "XXXXXX",
-                Debug = "XXXXXX",
+                Debug = true,
                 SchemaLocation = "XXXXXX",
                 Header = header,
                 Game = [gameBase],
@@ -382,9 +382,9 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", rc.RomMode);
             Assert.Equal("XXXXXX", rc.BiosMode);
             Assert.Equal("XXXXXX", rc.SampleMode);
-            Assert.Equal("XXXXXX", rc.LockRomMode);
-            Assert.Equal("XXXXXX", rc.LockBiosMode);
-            Assert.Equal("XXXXXX", rc.LockSampleMode);
+            Assert.Equal(true, rc.LockRomMode);
+            Assert.Equal(true, rc.LockBiosMode);
+            Assert.Equal(true, rc.LockSampleMode);
         }
 
         /// <summary>
@@ -395,9 +395,9 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(gb);
             Assert.Equal("XXXXXX", gb.Name);
             Assert.Equal("XXXXXX", gb.SourceFile);
-            Assert.Equal("XXXXXX", gb.IsBios);
-            Assert.Equal("XXXXXX", gb.IsDevice);
-            Assert.Equal("XXXXXX", gb.IsMechanical);
+            Assert.Equal(true, gb.IsBios);
+            Assert.Equal(true, gb.IsDevice);
+            Assert.Equal(true, gb.IsMechanical);
             Assert.Equal("XXXXXX", gb.CloneOf);
             Assert.Equal("XXXXXX", gb.RomOf);
             Assert.Equal("XXXXXX", gb.SampleOf);
@@ -405,7 +405,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", gb.RebuildTo);
             Assert.Equal("XXXXXX", gb.Id);
             Assert.Equal("XXXXXX", gb.CloneOfId);
-            Assert.Equal("XXXXXX", gb.Runnable);
+            Assert.Equal(true, gb.Runnable);
 
             Assert.NotNull(gb.Comment);
             string comment = Assert.Single(gb.Comment);
@@ -533,8 +533,8 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", rom.Serial);
             Assert.Equal("XXXXXX", rom.Header);
             Assert.Equal("XXXXXX", rom.Date);
-            Assert.Equal("XXXXXX", rom.Inverted);
-            Assert.Equal("XXXXXX", rom.MIA);
+            Assert.Equal(true, rom.Inverted);
+            Assert.Equal(true, rom.MIA);
         }
 
         /// <summary>
@@ -601,10 +601,10 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", driver.Emulation);
             Assert.Equal("XXXXXX", driver.Cocktail);
             Assert.Equal("XXXXXX", driver.SaveState);
-            Assert.Equal("XXXXXX", driver.RequiresArtwork);
-            Assert.Equal("XXXXXX", driver.Unofficial);
-            Assert.Equal("XXXXXX", driver.NoSoundHardware);
-            Assert.Equal("XXXXXX", driver.Incomplete);
+            Assert.Equal(true, driver.RequiresArtwork);
+            Assert.Equal(true, driver.Unofficial);
+            Assert.Equal(true, driver.NoSoundHardware);
+            Assert.Equal(true, driver.Incomplete);
         }
 
         /// <summary>

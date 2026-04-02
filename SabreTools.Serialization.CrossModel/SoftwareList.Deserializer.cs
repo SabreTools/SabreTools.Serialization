@@ -130,7 +130,7 @@ namespace SabreTools.Serialization.CrossModel
                 MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
                 SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
                 Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
-                Writeable = item.ReadString(Data.Models.Metadata.Disk.WritableKey),
+                Writeable = item.Writable,
             };
             return disk;
         }

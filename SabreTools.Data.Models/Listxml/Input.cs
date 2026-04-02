@@ -8,11 +8,11 @@ namespace SabreTools.Data.Models.Listxml
     {
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("service")]
-        public string? Service { get; set; }
+        public bool? Service { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("tilt")]
-        public string? Tilt { get; set; }
+        public bool? Tilt { get; set; }
 
         /// <remarks>Numeric</remarks>
         [Required]

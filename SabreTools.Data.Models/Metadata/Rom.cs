@@ -8,7 +8,25 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Dispose { get; set; }
+
+        /// <remarks>bool; AttractMode.Row</remarks>
+        public bool? FileIsAvailable { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Inverted { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? MIA { get; set; }
+
         public string? Name { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Optional { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? SoundOnly { get; set; }
 
         #endregion
 
@@ -68,17 +86,11 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string</remarks>
         public const string DateKey = "date";
 
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string DisposeKey = "dispose";
-
         /// <remarks>string; OfflineList.FileRomCRC</remarks>
         public const string ExtensionKey = "extension";
 
         /// <remarks>long; ArchiveDotOrg.File</remarks>
         public const string FileCountKey = "filecount";
-
-        /// <remarks>bool; AttractMode.Row</remarks>
-        public const string FileIsAvailableKey = "file_is_available";
 
         /// <remarks>string</remarks>
         public const string FlagsKey = "flags";
@@ -110,9 +122,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string; ArchiveDotOrg.File</remarks>
         public const string hOCRPageIndexModuleVersionKey = "hocr_pageindex_module_version";
 
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string InvertedKey = "inverted";
-
         /// <remarks>long; ArchiveDotOrg.File</remarks>
         public const string LastModifiedTimeKey = "mtime";
 
@@ -140,9 +149,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string</remarks>
         public const string MergeKey = "merge";
 
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string MIAKey = "mia";
-
         /// <remarks>string; ArchiveDotOrg.File</remarks>
         public const string TesseractOCRKey = "ocr";
 
@@ -169,9 +175,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string, possibly long; Originally "offs"</remarks>
         public const string OffsetKey = "offset";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string OptionalKey = "optional";
 
         /// <remarks>string; ArchiveDotOrg.File</remarks>
         public const string OriginalKey = "original";
@@ -217,9 +220,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>long</remarks>
         public const string SizeKey = "size";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string SoundOnlyKey = "soundonly";
 
         /// <remarks>string; ArchiveDotOrg.File</remarks>
         public const string SourceKey = "source";

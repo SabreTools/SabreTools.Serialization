@@ -46,6 +46,6 @@ namespace SabreTools.Data.Models.AttractMode
 
         public string? PlayedTime { get; set; }
 
-        public string? FileIsAvailable { get; set; }
+        public bool? FileIsAvailable { get; set; }
     }
 }

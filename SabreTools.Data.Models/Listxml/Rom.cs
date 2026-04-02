@@ -40,14 +40,14 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("optional")]
-        public string? Optional { get; set; }
+        public bool? Optional { get; set; }
 
         /// <remarks>(yes|no) "no", Only present in older versions</remarks>
         [XmlAttribute("dispose")]
-        public string? Dispose { get; set; }
+        public bool? Dispose { get; set; }
 
         /// <remarks>(yes|no) "no", Only present in older versions</remarks>
         [XmlAttribute("soundonly")]
-        public string? SoundOnly { get; set; }
+        public bool? SoundOnly { get; set; }
     }
 }

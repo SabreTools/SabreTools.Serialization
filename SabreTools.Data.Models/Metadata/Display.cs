@@ -6,10 +6,14 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("display"), XmlRoot("display")]
     public class Display : DatItem
     {
-        #region Keys
+        #region Properties
 
         /// <remarks>(yes|no) "no"</remarks>
-        public const string FlipXKey = "flipx";
+        public bool? FlipX { get; set; }
+
+        #endregion
+
+        #region Keys
 
         /// <remarks>long</remarks>
         public const string HBEndKey = "hbend";

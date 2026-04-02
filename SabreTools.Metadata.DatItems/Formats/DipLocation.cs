@@ -10,17 +10,21 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("diplocation"), XmlRoot("diplocation")]
     public sealed class DipLocation : DatItem<Data.Models.Metadata.DipLocation>
     {
+        #region Fields
+
+        public bool? Inverted
+        {
+            get => (_internal as Data.Models.Metadata.DipLocation)?.Inverted;
+            set => (_internal as Data.Models.Metadata.DipLocation)?.Inverted = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public DipLocation() : base() { }
 
-        public DipLocation(Data.Models.Metadata.DipLocation item) : base(item)
-        {
-            // Process flag values
-            bool? inverted = ReadBool(Data.Models.Metadata.DipLocation.InvertedKey);
-            if (inverted is not null)
-                Write<string?>(Data.Models.Metadata.DipLocation.InvertedKey, inverted.FromYesNo());
-        }
+        public DipLocation(Data.Models.Metadata.DipLocation item) : base(item) { }
 
         public DipLocation(Data.Models.Metadata.DipLocation item, Machine machine, Source source) : this(item)
         {

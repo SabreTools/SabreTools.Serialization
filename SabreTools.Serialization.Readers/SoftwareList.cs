@@ -243,7 +243,7 @@ namespace SabreTools.Serialization.Readers
             obj.MD5 = reader.GetAttribute("md5");
             obj.SHA1 = reader.GetAttribute("sha1");
             obj.Status = reader.GetAttribute("status");
-            obj.Writeable = reader.GetAttribute("writable");
+            obj.Writeable = reader.GetAttribute("writable").AsYesNo();
 
             return obj;
         }

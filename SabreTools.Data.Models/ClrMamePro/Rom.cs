@@ -101,10 +101,10 @@ namespace SabreTools.Data.Models.ClrMamePro
         #region RomVault Extensions
 
         /// <remarks>inverted; Boolean; Appears after Date</remarks>
-        public string? Inverted { get; set; }
+        public bool? Inverted { get; set; }
 
         /// <remarks>mia; Boolean; Appears after Inverted</remarks>
-        public string? MIA { get; set; }
+        public bool? MIA { get; set; }
 
         #endregion
     }

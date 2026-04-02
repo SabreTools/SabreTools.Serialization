@@ -20,7 +20,7 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>Only present in older versions</remarks>
         [XmlAttribute("soundonly")]
-        public string? SoundOnly { get; set; }
+        public bool? SoundOnly { get; set; }
 
         [XmlAttribute("clock")]
         public string? Clock { get; set; }

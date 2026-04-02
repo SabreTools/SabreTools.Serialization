@@ -129,7 +129,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
                 [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
                 [Data.Models.Metadata.Disk.StatusKey] = item.Status,
-                [Data.Models.Metadata.Disk.WritableKey] = item.Writeable,
+                Writable = item.Writeable,
             };
             return disk;
         }

@@ -10,6 +10,34 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("driver"), XmlRoot("driver")]
     public sealed class Driver : DatItem<Data.Models.Metadata.Driver>
     {
+        #region Fields
+
+        public bool? Incomplete
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.Incomplete;
+            set => (_internal as Data.Models.Metadata.Driver)?.Incomplete = value;
+        }
+
+        public bool? NoSoundHardware
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.NoSoundHardware;
+            set => (_internal as Data.Models.Metadata.Driver)?.NoSoundHardware = value;
+        }
+
+        public bool? RequiresArtwork
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.RequiresArtwork;
+            set => (_internal as Data.Models.Metadata.Driver)?.RequiresArtwork = value;
+        }
+
+        public bool? Unofficial
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.Unofficial;
+            set => (_internal as Data.Models.Metadata.Driver)?.Unofficial = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Driver() : base() { }
@@ -29,21 +57,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (emulation is not null)
                 Write<string?>(Data.Models.Metadata.Driver.EmulationKey, emulation.AsSupportStatus()?.AsStringValue());
 
-            bool? incomplete = ReadBool(Data.Models.Metadata.Driver.IncompleteKey);
-            if (incomplete is not null)
-                Write<string?>(Data.Models.Metadata.Driver.IncompleteKey, incomplete.FromYesNo());
-
-            bool? noSoundHardware = ReadBool(Data.Models.Metadata.Driver.NoSoundHardwareKey);
-            if (noSoundHardware is not null)
-                Write<string?>(Data.Models.Metadata.Driver.NoSoundHardwareKey, noSoundHardware.FromYesNo());
-
             long? paletteSize = ReadLong(Data.Models.Metadata.Driver.PaletteSizeKey);
             if (paletteSize is not null)
                 Write<string?>(Data.Models.Metadata.Driver.PaletteSizeKey, paletteSize.ToString());
-
-            bool? requiresArtwork = ReadBool(Data.Models.Metadata.Driver.RequiresArtworkKey);
-            if (requiresArtwork is not null)
-                Write<string?>(Data.Models.Metadata.Driver.RequiresArtworkKey, requiresArtwork.FromYesNo());
 
             string? saveState = ReadString(Data.Models.Metadata.Driver.SaveStateKey);
             if (saveState is not null)
@@ -56,10 +72,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             string? status = ReadString(Data.Models.Metadata.Driver.StatusKey);
             if (status is not null)
                 Write<string?>(Data.Models.Metadata.Driver.StatusKey, status.AsSupportStatus()?.AsStringValue());
-
-            bool? unofficial = ReadBool(Data.Models.Metadata.Driver.UnofficialKey);
-            if (unofficial is not null)
-                Write<string?>(Data.Models.Metadata.Driver.UnofficialKey, unofficial.FromYesNo());
         }
 
         public Driver(Data.Models.Metadata.Driver item, Machine machine, Source source) : this(item)

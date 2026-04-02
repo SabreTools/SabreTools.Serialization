@@ -172,7 +172,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("md5", obj.MD5);
             writer.WriteOptionalAttributeString("sha1", obj.SHA1);
             writer.WriteOptionalAttributeString("status", obj.Status);
-            writer.WriteOptionalAttributeString("writable", obj.Writeable);
+            writer.WriteOptionalAttributeString("writable", obj.Writeable.FromYesNo());
 
             writer.WriteEndElement();
         }

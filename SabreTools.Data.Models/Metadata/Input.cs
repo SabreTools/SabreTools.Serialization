@@ -6,6 +6,16 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("input"), XmlRoot("input")]
     public class Input : DatItem
     {
+        #region Properties
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Service { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Tilt { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>long</remarks>
@@ -19,12 +29,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>long</remarks>
         public const string PlayersKey = "players";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string ServiceKey = "service";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string TiltKey = "tilt";
 
         #endregion
 

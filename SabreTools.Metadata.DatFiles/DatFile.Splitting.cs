@@ -660,7 +660,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // If the machine (is/is not) a device, we want to continue
-                if (deviceOnly ^ (datItems[0].GetMachine()!.ReadBool(Data.Models.Metadata.Machine.IsDeviceKey) == true))
+                if (deviceOnly ^ (datItems[0].GetMachine()!.IsDevice == true))
                     continue;
 
                 // Get the first item from the bucket
@@ -820,7 +820,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // If the machine (is/is not) a device, we want to continue
-                if (deviceOnly ^ (machine.Value.ReadBool(Data.Models.Metadata.Machine.IsDeviceKey) == true))
+                if (deviceOnly ^ (machine.Value.IsDevice == true))
                     continue;
 
                 // Get all device reference names from the current machine
@@ -1079,11 +1079,8 @@ namespace SabreTools.Metadata.DatFiles
 #endif
 
                 // Remove flagged items
-                if ((machine.ReadBool(Data.Models.Metadata.Machine.IsBiosKey) == true)
-                    || (machine.ReadBool(Data.Models.Metadata.Machine.IsDeviceKey) == true))
-                {
+                if ((machine.IsBios == true) || (machine.IsDevice == true))
                     RemoveBucket(bucket);
-                }
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
 #else
@@ -1127,8 +1124,7 @@ namespace SabreTools.Metadata.DatFiles
 #endif
 
                 // Remove flagged items
-                if ((machine.Value.ReadBool(Data.Models.Metadata.Machine.IsBiosKey) == true)
-                    || (machine.Value.ReadBool(Data.Models.Metadata.Machine.IsDeviceKey) == true))
+                if ((machine.Value.IsBios == true) || (machine.Value.IsDevice == true))
                 {
                     foreach (var key in items.Keys)
                     {

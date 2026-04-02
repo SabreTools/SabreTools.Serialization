@@ -29,26 +29,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Fields
 
         [JsonIgnore]
-        public bool ItemStatusSpecified
-        {
-            get
-            {
-                var status = ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus();
-                return status is not null && status != ItemStatus.None;
-            }
-        }
-
-        [JsonIgnore]
-        public bool OriginalSpecified
-        {
-            get
-            {
-                var original = Read<Original?>("ORIGINAL");
-                return original is not null && original != default;
-            }
-        }
-
-        [JsonIgnore]
         public bool DataAreaSpecified
         {
             get
@@ -62,6 +42,56 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public bool? Dispose
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.Dispose;
+            set => (_internal as Data.Models.Metadata.Rom)?.Dispose = value;
+        }
+
+        public bool? FileIsAvailable
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.FileIsAvailable;
+            set => (_internal as Data.Models.Metadata.Rom)?.FileIsAvailable = value;
+        }
+
+        public bool? Inverted
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.Inverted;
+            set => (_internal as Data.Models.Metadata.Rom)?.Inverted = value;
+        }
+
+        [JsonIgnore]
+        public bool ItemStatusSpecified
+        {
+            get
+            {
+                var status = ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus();
+                return status is not null && status != ItemStatus.None;
+            }
+        }
+
+        public bool? MIA
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.MIA;
+            set => (_internal as Data.Models.Metadata.Rom)?.MIA = value;
+        }
+
+        public bool? Optional
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.Optional;
+            set => (_internal as Data.Models.Metadata.Rom)?.Optional = value;
+        }
+
+        [JsonIgnore]
+        public bool OriginalSpecified
+        {
+            get
+            {
+                var original = Read<Original?>("ORIGINAL");
+                return original is not null && original != default;
+            }
+        }
+
         [JsonIgnore]
         public bool PartSpecified
         {
@@ -72,6 +102,12 @@ namespace SabreTools.Metadata.DatItems.Formats
                     && (!string.IsNullOrEmpty(part.GetName())
                         || !string.IsNullOrEmpty(part.ReadString(Data.Models.Metadata.Part.InterfaceKey)));
             }
+        }
+
+        public bool? SoundOnly
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.SoundOnly;
+            set => (_internal as Data.Models.Metadata.Rom)?.SoundOnly = value;
         }
 
         #endregion
@@ -194,14 +230,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             Write<DupeType>(DupeTypeKey, 0x00);
 
             // Process flag values
-            bool? dispose = ReadBool(Data.Models.Metadata.Rom.DisposeKey);
-            if (dispose is not null)
-                Write<string?>(Data.Models.Metadata.Rom.DisposeKey, dispose.FromYesNo());
-
-            bool? inverted = ReadBool(Data.Models.Metadata.Rom.InvertedKey);
-            if (inverted is not null)
-                Write<string?>(Data.Models.Metadata.Rom.InvertedKey, inverted.FromYesNo());
-
             string? loadFlag = ReadString(Data.Models.Metadata.Rom.LoadFlagKey);
             if (loadFlag is not null)
                 Write<string?>(Data.Models.Metadata.Rom.LoadFlagKey, loadFlag.AsLoadFlag()?.AsStringValue());
@@ -209,18 +237,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             string? openMSXMediaType = ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType);
             if (openMSXMediaType is not null)
                 Write<string?>(Data.Models.Metadata.Rom.OpenMSXMediaType, openMSXMediaType.AsOpenMSXSubType()?.AsStringValue());
-
-            bool? mia = ReadBool(Data.Models.Metadata.Rom.MIAKey);
-            if (mia is not null)
-                Write<string?>(Data.Models.Metadata.Rom.MIAKey, mia.FromYesNo());
-
-            bool? optional = ReadBool(Data.Models.Metadata.Rom.OptionalKey);
-            if (optional is not null)
-                Write<string?>(Data.Models.Metadata.Rom.OptionalKey, optional.FromYesNo());
-
-            bool? soundOnly = ReadBool(Data.Models.Metadata.Rom.SoundOnlyKey);
-            if (soundOnly is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SoundOnlyKey, soundOnly.FromYesNo());
 
             string? status = ReadString(Data.Models.Metadata.Rom.StatusKey);
             if (status is not null)

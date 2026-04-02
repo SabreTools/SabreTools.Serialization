@@ -92,10 +92,10 @@ namespace SabreTools.Data.Models.Logiqx
 
         /// <remarks>Boolean; RomVault extension</remarks>
         [XmlAttribute("inverted")]
-        public string? Inverted { get; set; }
+        public bool? Inverted { get; set; }
 
         /// <remarks>Boolean; RomVault extension</remarks>
         [XmlAttribute("mia")]
-        public string? MIA { get; set; }
+        public bool? MIA { get; set; }
     }
 }

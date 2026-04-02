@@ -87,7 +87,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("datafile");
 
             writer.WriteOptionalAttributeString("build", obj.Build);
-            writer.WriteOptionalAttributeString("debug", obj.Debug);
+            writer.WriteOptionalAttributeString("debug", obj.Debug.FromYesNo());
 
             // TODO: Fix schema location writing
             // writer.WriteOptionalAttributeString("schemaLocation", obj.SchemaLocation);
@@ -178,9 +178,9 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("rommode", obj.RomMode);
             writer.WriteOptionalAttributeString("biosmode", obj.BiosMode);
             writer.WriteOptionalAttributeString("samplemode", obj.SampleMode);
-            writer.WriteOptionalAttributeString("lockrommode", obj.LockRomMode);
-            writer.WriteOptionalAttributeString("lockbiosmode", obj.LockBiosMode);
-            writer.WriteOptionalAttributeString("locksamplemode", obj.LockSampleMode);
+            writer.WriteOptionalAttributeString("lockrommode", obj.LockRomMode.FromYesNo());
+            writer.WriteOptionalAttributeString("lockbiosmode", obj.LockBiosMode.FromYesNo());
+            writer.WriteOptionalAttributeString("locksamplemode", obj.LockSampleMode.FromYesNo());
 
             writer.WriteEndElement();
         }
@@ -295,10 +295,10 @@ namespace SabreTools.Serialization.Writers
             writer.WriteRequiredAttributeString("emulation", obj.Emulation);
             writer.WriteRequiredAttributeString("cocktail", obj.Cocktail);
             writer.WriteRequiredAttributeString("savestate", obj.SaveState);
-            writer.WriteOptionalAttributeString("requiresartwork", obj.RequiresArtwork);
-            writer.WriteOptionalAttributeString("unofficial", obj.Unofficial);
-            writer.WriteOptionalAttributeString("nosoundhardware", obj.NoSoundHardware);
-            writer.WriteOptionalAttributeString("incomplete", obj.Incomplete);
+            writer.WriteOptionalAttributeString("requiresartwork", obj.RequiresArtwork.FromYesNo());
+            writer.WriteOptionalAttributeString("unofficial", obj.Unofficial.FromYesNo());
+            writer.WriteOptionalAttributeString("nosoundhardware", obj.NoSoundHardware.FromYesNo());
+            writer.WriteOptionalAttributeString("incomplete", obj.Incomplete.FromYesNo());
 
             writer.WriteEndElement();
         }
@@ -319,9 +319,9 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteOptionalAttributeString("sourcefile", obj.SourceFile);
-            writer.WriteOptionalAttributeString("isbios", obj.IsBios);
-            writer.WriteOptionalAttributeString("isdevice", obj.IsDevice);
-            writer.WriteOptionalAttributeString("ismechanical", obj.IsMechanical);
+            writer.WriteOptionalAttributeString("isbios", obj.IsBios.FromYesNo());
+            writer.WriteOptionalAttributeString("isdevice", obj.IsDevice.FromYesNo());
+            writer.WriteOptionalAttributeString("ismechanical", obj.IsMechanical.FromYesNo());
             writer.WriteOptionalAttributeString("cloneof", obj.CloneOf);
             writer.WriteOptionalAttributeString("romof", obj.RomOf);
             writer.WriteOptionalAttributeString("sampleof", obj.SampleOf);
@@ -329,7 +329,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("rebuildto", obj.RebuildTo);
             writer.WriteOptionalAttributeString("id", obj.Id);
             writer.WriteOptionalAttributeString("cloneofid", obj.CloneOfId);
-            writer.WriteOptionalAttributeString("runnable", obj.Runnable);
+            writer.WriteOptionalAttributeString("runnable", obj.Runnable.FromYesNo());
 
             if (obj.Comment is not null && obj.Comment.Length > 0)
             {
@@ -503,8 +503,8 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("serial", obj.Serial);
             writer.WriteOptionalAttributeString("header", obj.Header);
             writer.WriteOptionalAttributeString("date", obj.Date);
-            writer.WriteOptionalAttributeString("inverted", obj.Inverted);
-            writer.WriteOptionalAttributeString("mia", obj.MIA);
+            writer.WriteOptionalAttributeString("inverted", obj.Inverted.FromYesNo());
+            writer.WriteOptionalAttributeString("mia", obj.MIA.FromYesNo());
 
             writer.WriteEndElement();
         }

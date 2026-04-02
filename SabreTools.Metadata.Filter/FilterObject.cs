@@ -356,8 +356,28 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Default.FromYesNo();
                     return true;
 
+                case Chip item when Key.FieldName == "soundonly":
+                    checkValue = item.SoundOnly.FromYesNo();
+                    return true;
+
+                case ConfLocation item when Key.FieldName == "inverted":
+                    checkValue = item.Inverted.FromYesNo();
+                    return true;
+
                 case ConfSetting item when Key.FieldName == "default":
                     checkValue = item.Default.FromYesNo();
+                    return true;
+
+                case Control item when Key.FieldName == "reverse":
+                    checkValue = item.Reverse.FromYesNo();
+                    return true;
+
+                case DipLocation item when Key.FieldName == "inverted":
+                    checkValue = item.Inverted.FromYesNo();
+                    return true;
+
+                case DipLocation item when Key.FieldName == "inverted":
+                    checkValue = item.Inverted.FromYesNo();
                     return true;
 
                 case DipSwitch item when Key.FieldName == "default":
@@ -368,12 +388,91 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Default.FromYesNo();
                     return true;
 
+                case Disk item when Key.FieldName == "optional":
+                    checkValue = item.Optional.FromYesNo();
+                    return true;
+                case Disk item when Key.FieldName == "writable":
+                    checkValue = item.Writable.FromYesNo();
+                    return true;
+
+                case Display item when Key.FieldName == "flipx":
+                    checkValue = item.FlipX.FromYesNo();
+                    return true;
+
+                case Driver item when Key.FieldName == "incomplete":
+                    checkValue = item.Incomplete.FromYesNo();
+                    return true;
+                case Driver item when Key.FieldName == "nosoundhardware":
+                    checkValue = item.NoSoundHardware.FromYesNo();
+                    return true;
+                case Driver item when Key.FieldName == "requiresartwork":
+                    checkValue = item.RequiresArtwork.FromYesNo();
+                    return true;
+                case Driver item when Key.FieldName == "unofficial":
+                    checkValue = item.Unofficial.FromYesNo();
+                    return true;
+
+                case Header item when Key.FieldName == "debug":
+                    checkValue = item.Debug.FromYesNo();
+                    return true;
+                case Header item when Key.FieldName == "forcezipping":
+                    checkValue = item.ForceZipping.FromYesNo();
+                    return true;
+                case Header item when Key.FieldName == "lockbiosmode":
+                    checkValue = item.LockBiosMode.FromYesNo();
+                    return true;
+                case Header item when Key.FieldName == "lockrommode":
+                    checkValue = item.LockRomMode.FromYesNo();
+                    return true;
+                case Header item when Key.FieldName == "locksamplemode":
+                    checkValue = item.LockSampleMode.FromYesNo();
+                    return true;
+
+                case Input item when Key.FieldName == "service":
+                    checkValue = item.Service.FromYesNo();
+                    return true;
+                case Input item when Key.FieldName == "tilt":
+                    checkValue = item.Tilt.FromYesNo();
+                    return true;
+
+                case Machine item when Key.FieldName == "isbios":
+                    checkValue = item.IsBios.FromYesNo();
+                    return true;
+                case Machine item when Key.FieldName == "isdevice":
+                    checkValue = item.IsDevice.FromYesNo();
+                    return true;
+                case Machine item when Key.FieldName == "ismechanical":
+                    checkValue = item.IsMechanical.FromYesNo();
+                    return true;
+                case Machine item when Key.FieldName == "runnable":
+                    checkValue = item.Runnable.FromYesNo();
+                    return true;
+
                 case RamOption item when Key.FieldName == "default":
                     checkValue = item.Default.FromYesNo();
                     return true;
 
                 case Release item when Key.FieldName == "default":
                     checkValue = item.Default.FromYesNo();
+                    return true;
+
+                case Rom item when Key.FieldName == "dispose":
+                    checkValue = item.Dispose.FromYesNo();
+                    return true;
+                case Rom item when Key.FieldName == "fileisavailable":
+                    checkValue = item.FileIsAvailable.FromYesNo();
+                    return true;
+                case Rom item when Key.FieldName == "inverted":
+                    checkValue = item.Inverted.FromYesNo();
+                    return true;
+                case Rom item when Key.FieldName == "mia":
+                    checkValue = item.MIA.FromYesNo();
+                    return true;
+                case Rom item when Key.FieldName == "optional":
+                    checkValue = item.Optional.FromYesNo();
+                    return true;
+                case Rom item when Key.FieldName == "soundonly":
+                    checkValue = item.SoundOnly.FromYesNo();
                     return true;
 
                 case SlotOption item when Key.FieldName == "default":

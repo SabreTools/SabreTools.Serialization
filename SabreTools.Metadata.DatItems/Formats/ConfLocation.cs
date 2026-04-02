@@ -10,17 +10,21 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("conflocation"), XmlRoot("conflocation")]
     public sealed class ConfLocation : DatItem<Data.Models.Metadata.ConfLocation>
     {
+        #region Fields
+
+        public bool? Inverted
+        {
+            get => (_internal as Data.Models.Metadata.ConfLocation)?.Inverted;
+            set => (_internal as Data.Models.Metadata.ConfLocation)?.Inverted = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public ConfLocation() : base() { }
 
-        public ConfLocation(Data.Models.Metadata.ConfLocation item) : base(item)
-        {
-            // Process flag values
-            bool? inverted = ReadBool(Data.Models.Metadata.ConfLocation.InvertedKey);
-            if (inverted is not null)
-                Write<string?>(Data.Models.Metadata.ConfLocation.InvertedKey, inverted.FromYesNo());
-        }
+        public ConfLocation(Data.Models.Metadata.ConfLocation item) : base(item) { }
 
         public ConfLocation(Data.Models.Metadata.ConfLocation item, Machine machine, Source source) : this(item)
         {

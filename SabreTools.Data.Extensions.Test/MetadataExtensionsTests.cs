@@ -23,13 +23,13 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(6, actual.Count);
+            Assert.Equal(5, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
             Assert.Null(actual.Name);
             Assert.Null(actual[Rom.MergeKey]);
             Assert.Null(actual[Rom.RegionKey]);
             Assert.Null(actual[Rom.StatusKey]);
-            Assert.Null(actual[Rom.OptionalKey]);
+            Assert.Null(actual.Optional);
             Assert.Null(actual[Rom.MD5Key]);
             Assert.Null(actual[Rom.SHA1Key]);
         }
@@ -43,7 +43,7 @@ namespace SabreTools.Data.Extensions.Test
                 [Disk.MergeKey] = "XXXXXX",
                 [Disk.RegionKey] = "XXXXXX",
                 [Disk.StatusKey] = "XXXXXX",
-                [Disk.OptionalKey] = "XXXXXX",
+                Optional = true,
                 [Disk.MD5Key] = "XXXXXX",
                 [Disk.SHA1Key] = "XXXXXX",
             };
@@ -51,13 +51,13 @@ namespace SabreTools.Data.Extensions.Test
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(6, actual.Count);
+            Assert.Equal(5, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
             Assert.Equal("XXXXXX.chd", actual.Name);
             Assert.Equal("XXXXXX", actual[Rom.MergeKey]);
             Assert.Equal("XXXXXX", actual[Rom.RegionKey]);
             Assert.Equal("XXXXXX", actual[Rom.StatusKey]);
-            Assert.Equal("XXXXXX", actual[Rom.OptionalKey]);
+            Assert.Equal(true, actual.Optional);
             Assert.Equal("XXXXXX", actual[Rom.MD5Key]);
             Assert.Equal("XXXXXX", actual[Rom.SHA1Key]);
         }

@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.CrossModel
             var header = new Data.Models.Metadata.Header
             {
                 [Data.Models.Metadata.Header.BuildKey] = item.Build,
-                [Data.Models.Metadata.Header.DebugKey] = item.Debug,
+                Debug = item.Debug,
                 [Data.Models.Metadata.Header.MameConfigKey] = item.MameConfig,
             };
             return header;
@@ -48,10 +48,10 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.Machine.SourceFileKey] = item.SourceFile,
-                [Data.Models.Metadata.Machine.IsBiosKey] = item.IsBios,
-                [Data.Models.Metadata.Machine.IsDeviceKey] = item.IsDevice,
-                [Data.Models.Metadata.Machine.IsMechanicalKey] = item.IsMechanical,
-                [Data.Models.Metadata.Machine.RunnableKey] = item.Runnable,
+                IsBios = item.IsBios,
+                IsDevice = item.IsDevice,
+                IsMechanical = item.IsMechanical,
+                Runnable = item.Runnable,
                 [Data.Models.Metadata.Machine.CloneOfKey] = item.CloneOf,
                 [Data.Models.Metadata.Machine.RomOfKey] = item.RomOf,
                 [Data.Models.Metadata.Machine.SampleOfKey] = item.SampleOf,
@@ -228,7 +228,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 [Data.Models.Metadata.Chip.TagKey] = item.Tag,
                 [Data.Models.Metadata.Chip.ChipTypeKey] = item.Type,
-                [Data.Models.Metadata.Chip.SoundOnlyKey] = item.SoundOnly,
+                SoundOnly = item.SoundOnly,
                 [Data.Models.Metadata.Chip.ClockKey] = item.Clock,
             };
             return chip;
@@ -288,7 +288,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.ConfLocation.NumberKey] = item.Number,
-                [Data.Models.Metadata.ConfLocation.InvertedKey] = item.Inverted,
+                Inverted = item.Inverted,
             };
             return confLocation;
         }
@@ -326,7 +326,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Control.MaximumKey] = item.Maximum,
                 [Data.Models.Metadata.Control.SensitivityKey] = item.Sensitivity,
                 [Data.Models.Metadata.Control.KeyDeltaKey] = item.KeyDelta,
-                [Data.Models.Metadata.Control.ReverseKey] = item.Reverse,
+                Reverse = item.Reverse,
                 [Data.Models.Metadata.Control.WaysKey] = item.Ways,
                 [Data.Models.Metadata.Control.Ways2Key] = item.Ways2,
                 [Data.Models.Metadata.Control.Ways3Key] = item.Ways3,
@@ -381,7 +381,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.DipLocation.NumberKey] = item.Number,
-                [Data.Models.Metadata.DipLocation.InvertedKey] = item.Inverted,
+                Inverted = item.Inverted,
             };
             return dipLocation;
         }
@@ -447,9 +447,9 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Disk.MergeKey] = item.Merge,
                 [Data.Models.Metadata.Disk.RegionKey] = item.Region,
                 [Data.Models.Metadata.Disk.IndexKey] = item.Index,
-                [Data.Models.Metadata.Disk.WritableKey] = item.Writable,
+                Writable = item.Writable,
                 [Data.Models.Metadata.Disk.StatusKey] = item.Status,
-                [Data.Models.Metadata.Disk.OptionalKey] = item.Optional,
+                Optional = item.Optional,
             };
             return disk;
         }
@@ -464,7 +464,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Display.TagKey] = item.Tag,
                 [Data.Models.Metadata.Display.DisplayTypeKey] = item.Type,
                 [Data.Models.Metadata.Display.RotateKey] = item.Rotate,
-                [Data.Models.Metadata.Display.FlipXKey] = item.FlipX,
+                FlipX = item.FlipX,
                 [Data.Models.Metadata.Display.WidthKey] = item.Width,
                 [Data.Models.Metadata.Display.HeightKey] = item.Height,
                 [Data.Models.Metadata.Display.RefreshKey] = item.Refresh,
@@ -493,10 +493,10 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Driver.EmulationKey] = item.Emulation,
                 [Data.Models.Metadata.Driver.CocktailKey] = item.Cocktail,
                 [Data.Models.Metadata.Driver.SaveStateKey] = item.SaveState,
-                [Data.Models.Metadata.Driver.RequiresArtworkKey] = item.RequiresArtwork,
-                [Data.Models.Metadata.Driver.UnofficialKey] = item.Unofficial,
-                [Data.Models.Metadata.Driver.NoSoundHardwareKey] = item.NoSoundHardware,
-                [Data.Models.Metadata.Driver.IncompleteKey] = item.Incomplete,
+                RequiresArtwork = item.RequiresArtwork,
+                Unofficial = item.Unofficial,
+                NoSoundHardware = item.NoSoundHardware,
+                Incomplete = item.Incomplete,
             };
             return driver;
         }
@@ -534,8 +534,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var input = new Data.Models.Metadata.Input
             {
-                [Data.Models.Metadata.Input.ServiceKey] = item.Service,
-                [Data.Models.Metadata.Input.TiltKey] = item.Tilt,
+                Service = item.Service,
+                Tilt = item.Tilt,
                 [Data.Models.Metadata.Input.PlayersKey] = item.Players,
                 [Data.Models.Metadata.Input.ControlKey] = item.ControlAttr,
                 [Data.Models.Metadata.Input.ButtonsKey] = item.Buttons,
@@ -613,9 +613,9 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Rom.RegionKey] = item.Region,
                 [Data.Models.Metadata.Rom.OffsetKey] = item.Offset,
                 [Data.Models.Metadata.Rom.StatusKey] = item.Status,
-                [Data.Models.Metadata.Rom.OptionalKey] = item.Optional,
-                [Data.Models.Metadata.Rom.DisposeKey] = item.Dispose,
-                [Data.Models.Metadata.Rom.SoundOnlyKey] = item.SoundOnly,
+                Optional = item.Optional,
+                Dispose = item.Dispose,
+                SoundOnly = item.SoundOnly,
             };
             return rom;
         }

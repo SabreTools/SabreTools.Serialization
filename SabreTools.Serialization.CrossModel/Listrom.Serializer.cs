@@ -47,7 +47,7 @@ namespace SabreTools.Serialization.CrossModel
             if (!string.IsNullOrEmpty(item.Device))
             {
                 machine.Name = item.Device;
-                machine[Data.Models.Metadata.Machine.IsDeviceKey] = "yes";
+                machine.IsDevice = true;
             }
             else
             {

@@ -10,6 +10,17 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("chip"), XmlRoot("chip")]
     public sealed class Chip : DatItem<Data.Models.Metadata.Chip>
     {
+        #region Fields
+
+        [JsonIgnore]
+        public bool? SoundOnly
+        {
+            get => (_internal as Data.Models.Metadata.Chip)?.SoundOnly;
+            set => (_internal as Data.Models.Metadata.Chip)?.SoundOnly = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Chip() : base() { }
@@ -17,10 +28,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Chip(Data.Models.Metadata.Chip item) : base(item)
         {
             // Process flag values
-            bool? soundOnly = ReadBool(Data.Models.Metadata.Chip.SoundOnlyKey);
-            if (soundOnly is not null)
-                Write<string?>(Data.Models.Metadata.Chip.SoundOnlyKey, soundOnly.FromYesNo());
-
             string? chipType = ReadString(Data.Models.Metadata.Chip.ChipTypeKey);
             if (chipType is not null)
                 Write<string?>(Data.Models.Metadata.Chip.ChipTypeKey, chipType.AsChipType()?.AsStringValue());

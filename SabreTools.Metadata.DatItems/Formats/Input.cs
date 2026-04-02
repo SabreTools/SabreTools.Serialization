@@ -23,6 +23,18 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public bool? Service
+        {
+            get => (_internal as Data.Models.Metadata.Input)?.Service;
+            set => (_internal as Data.Models.Metadata.Input)?.Service = value;
+        }
+
+        public bool? Tilt
+        {
+            get => (_internal as Data.Models.Metadata.Input)?.Tilt;
+            set => (_internal as Data.Models.Metadata.Input)?.Tilt = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -43,14 +55,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             long? players = ReadLong(Data.Models.Metadata.Input.PlayersKey);
             if (players is not null)
                 Write<string?>(Data.Models.Metadata.Input.PlayersKey, players.ToString());
-
-            bool? service = ReadBool(Data.Models.Metadata.Input.ServiceKey);
-            if (service is not null)
-                Write<string?>(Data.Models.Metadata.Input.ServiceKey, service.FromYesNo());
-
-            bool? tilt = ReadBool(Data.Models.Metadata.Input.TiltKey);
-            if (tilt is not null)
-                Write<string?>(Data.Models.Metadata.Input.TiltKey, tilt.FromYesNo());
 
             // Handle subitems
             var controls = item.ReadArray<Data.Models.Metadata.Control>(Data.Models.Metadata.Input.ControlKey);

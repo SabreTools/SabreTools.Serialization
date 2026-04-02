@@ -10,6 +10,7 @@ namespace SabreTools.Data.Models.Listxml
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
+        /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("default")]
         public bool? Default { get; set; }
 

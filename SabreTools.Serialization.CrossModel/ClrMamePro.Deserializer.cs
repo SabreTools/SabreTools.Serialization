@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.CrossModel
                 Header = item.ReadString(Data.Models.Metadata.Header.HeaderKey),
                 Type = item.ReadString(Data.Models.Metadata.Header.TypeKey),
                 ForceMerging = item.ReadString(Data.Models.Metadata.Header.ForceMergingKey),
-                ForceZipping = item.ReadString(Data.Models.Metadata.Header.ForceZippingKey),
+                ForceZipping = item.ForceZipping,
                 ForcePacking = item.ReadString(Data.Models.Metadata.Header.ForcePackingKey),
             };
             return clrMamePro;
@@ -233,8 +233,8 @@ namespace SabreTools.Serialization.CrossModel
                 Control = item.ReadString(Data.Models.Metadata.Input.ControlKey),
                 Buttons = item.ReadString(Data.Models.Metadata.Input.ButtonsKey),
                 Coins = item.ReadString(Data.Models.Metadata.Input.CoinsKey),
-                Tilt = item.ReadString(Data.Models.Metadata.Input.TiltKey),
-                Service = item.ReadString(Data.Models.Metadata.Input.ServiceKey),
+                Tilt = item.Tilt,
+                Service = item.Service,
             };
             return input;
         }
@@ -303,8 +303,8 @@ namespace SabreTools.Serialization.CrossModel
                 Serial = item.ReadString(Data.Models.Metadata.Rom.SerialKey),
                 Header = item.ReadString(Data.Models.Metadata.Rom.HeaderKey),
                 Date = item.ReadString(Data.Models.Metadata.Rom.DateKey),
-                Inverted = item.ReadString(Data.Models.Metadata.Rom.InvertedKey),
-                MIA = item.ReadString(Data.Models.Metadata.Rom.MIAKey),
+                Inverted = item.Inverted,
+                MIA = item.MIA,
             };
             return rom;
         }

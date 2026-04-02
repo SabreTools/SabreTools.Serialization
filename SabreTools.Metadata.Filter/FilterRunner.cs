@@ -73,11 +73,11 @@ namespace SabreTools.Metadata.Filter
             string key = filter.Key.ToString();
 
             // Special case for machine types
-            if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == Machine.IsBiosKey)
+            if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == "isbios")
                 key = $"{MetadataFile.MachineKey}.COMBINEDTYPE";
-            else if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == Machine.IsDeviceKey)
+            else if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == "isdevice")
                 key = $"{MetadataFile.MachineKey}.COMBINEDTYPE";
-            else if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == Machine.IsMechanicalKey)
+            else if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == "ismechanical")
                 key = $"{MetadataFile.MachineKey}.COMBINEDTYPE";
 
             // Set the expected group type

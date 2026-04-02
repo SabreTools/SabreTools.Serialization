@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.CrossModel
             var mame = new Mame
             {
                 Build = item.ReadString(Data.Models.Metadata.Header.BuildKey),
-                Debug = item.ReadString(Data.Models.Metadata.Header.DebugKey),
+                Debug = item.Debug,
                 MameConfig = item.ReadString(Data.Models.Metadata.Header.MameConfigKey),
             };
 
@@ -45,10 +45,10 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 SourceFile = item.ReadString(Data.Models.Metadata.Machine.SourceFileKey),
-                IsBios = item.ReadString(Data.Models.Metadata.Machine.IsBiosKey),
-                IsDevice = item.ReadString(Data.Models.Metadata.Machine.IsDeviceKey),
-                IsMechanical = item.ReadString(Data.Models.Metadata.Machine.IsMechanicalKey),
-                Runnable = item.ReadString(Data.Models.Metadata.Machine.RunnableKey),
+                IsBios = item.IsBios,
+                IsDevice = item.IsDevice,
+                IsMechanical = item.IsMechanical,
+                Runnable = item.Runnable,
                 CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
                 RomOf = item.ReadString(Data.Models.Metadata.Machine.RomOfKey),
                 SampleOf = item.ReadString(Data.Models.Metadata.Machine.SampleOfKey),
@@ -195,7 +195,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 Tag = item.ReadString(Data.Models.Metadata.Chip.TagKey),
                 Type = item.ReadString(Data.Models.Metadata.Chip.ChipTypeKey),
-                SoundOnly = item.ReadString(Data.Models.Metadata.Chip.SoundOnlyKey),
+                SoundOnly = item.SoundOnly,
                 Clock = item.ReadString(Data.Models.Metadata.Chip.ClockKey),
             };
             return chip;
@@ -252,7 +252,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Number = item.ReadString(Data.Models.Metadata.ConfLocation.NumberKey),
-                Inverted = item.ReadString(Data.Models.Metadata.ConfLocation.InvertedKey),
+                Inverted = item.Inverted,
             };
             return confLocation;
         }
@@ -291,7 +291,7 @@ namespace SabreTools.Serialization.CrossModel
                 Maximum = item.ReadString(Data.Models.Metadata.Control.MaximumKey),
                 Sensitivity = item.ReadString(Data.Models.Metadata.Control.SensitivityKey),
                 KeyDelta = item.ReadString(Data.Models.Metadata.Control.KeyDeltaKey),
-                Reverse = item.ReadString(Data.Models.Metadata.Control.ReverseKey),
+                Reverse = item.Reverse,
                 Ways = item.ReadString(Data.Models.Metadata.Control.WaysKey),
                 Ways2 = item.ReadString(Data.Models.Metadata.Control.Ways2Key),
                 Ways3 = item.ReadString(Data.Models.Metadata.Control.Ways3Key),
@@ -345,7 +345,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Number = item.ReadString(Data.Models.Metadata.DipLocation.NumberKey),
-                Inverted = item.ReadString(Data.Models.Metadata.DipLocation.InvertedKey),
+                Inverted = item.Inverted,
             };
             return dipLocation;
         }
@@ -409,9 +409,9 @@ namespace SabreTools.Serialization.CrossModel
                 Merge = item.ReadString(Data.Models.Metadata.Disk.MergeKey),
                 Region = item.ReadString(Data.Models.Metadata.Disk.RegionKey),
                 Index = item.ReadString(Data.Models.Metadata.Disk.IndexKey),
-                Writable = item.ReadString(Data.Models.Metadata.Disk.WritableKey),
+                Writable = item.Writable,
                 Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
-                Optional = item.ReadString(Data.Models.Metadata.Disk.OptionalKey),
+                Optional = item.Optional,
             };
             return disk;
         }
@@ -426,7 +426,7 @@ namespace SabreTools.Serialization.CrossModel
                 Tag = item.ReadString(Data.Models.Metadata.Display.TagKey),
                 Type = item.ReadString(Data.Models.Metadata.Display.DisplayTypeKey),
                 Rotate = item.ReadString(Data.Models.Metadata.Display.RotateKey),
-                FlipX = item.ReadString(Data.Models.Metadata.Display.FlipXKey),
+                FlipX = item.FlipX,
                 Width = item.ReadString(Data.Models.Metadata.Display.WidthKey),
                 Height = item.ReadString(Data.Models.Metadata.Display.HeightKey),
                 Refresh = item.ReadString(Data.Models.Metadata.Display.RefreshKey),
@@ -455,10 +455,10 @@ namespace SabreTools.Serialization.CrossModel
                 Emulation = item.ReadString(Data.Models.Metadata.Driver.EmulationKey),
                 Cocktail = item.ReadString(Data.Models.Metadata.Driver.CocktailKey),
                 SaveState = item.ReadString(Data.Models.Metadata.Driver.SaveStateKey),
-                RequiresArtwork = item.ReadString(Data.Models.Metadata.Driver.RequiresArtworkKey),
-                Unofficial = item.ReadString(Data.Models.Metadata.Driver.UnofficialKey),
-                NoSoundHardware = item.ReadString(Data.Models.Metadata.Driver.NoSoundHardwareKey),
-                Incomplete = item.ReadString(Data.Models.Metadata.Driver.IncompleteKey),
+                RequiresArtwork = item.RequiresArtwork,
+                Unofficial = item.Unofficial,
+                NoSoundHardware = item.NoSoundHardware,
+                Incomplete = item.Incomplete,
             };
             return driver;
         }
@@ -496,8 +496,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var input = new Input
             {
-                Service = item.ReadString(Data.Models.Metadata.Input.ServiceKey),
-                Tilt = item.ReadString(Data.Models.Metadata.Input.TiltKey),
+                Service = item.Service,
+                Tilt = item.Tilt,
                 Players = item.ReadString(Data.Models.Metadata.Input.PlayersKey),
                 Buttons = item.ReadString(Data.Models.Metadata.Input.ButtonsKey),
                 Coins = item.ReadString(Data.Models.Metadata.Input.CoinsKey),
@@ -574,9 +574,9 @@ namespace SabreTools.Serialization.CrossModel
                 Region = item.ReadString(Data.Models.Metadata.Rom.RegionKey),
                 Offset = item.ReadString(Data.Models.Metadata.Rom.OffsetKey),
                 Status = item.ReadString(Data.Models.Metadata.Rom.StatusKey),
-                Optional = item.ReadString(Data.Models.Metadata.Rom.OptionalKey),
-                Dispose = item.ReadString(Data.Models.Metadata.Rom.DisposeKey),
-                SoundOnly = item.ReadString(Data.Models.Metadata.Rom.SoundOnlyKey),
+                Optional = item.Optional,
+                Dispose = item.Dispose,
+                SoundOnly = item.SoundOnly,
             };
             return rom;
         }

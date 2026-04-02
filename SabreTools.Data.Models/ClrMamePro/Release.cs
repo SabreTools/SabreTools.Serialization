@@ -4,21 +4,21 @@ namespace SabreTools.Data.Models.ClrMamePro
     /// <remarks>release</remarks>
     public class Release
     {
-        /// <remarks>name</remarks>
+        /// <remarks>"name"</remarks>
         [Required]
         public string? Name { get; set; }
 
-        /// <remarks>region</remarks>
+        /// <remarks>"region"</remarks>
         [Required]
         public string? Region { get; set; }
 
-        /// <remarks>language</remarks>
+        /// <remarks>"language"</remarks>
         public string? Language { get; set; }
 
-        /// <remarks>date</remarks>
+        /// <remarks>"date"</remarks>
         public string? Date { get; set; }
 
-        /// <remarks>default</remarks>
+        /// <remarks>"default", (yes|no) "no"</remarks>
         public bool? Default { get; set; }
     }
 }

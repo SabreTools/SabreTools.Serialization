@@ -13,6 +13,34 @@ namespace SabreTools.Metadata.DatItems
     [JsonObject("machine"), XmlRoot("machine")]
     public sealed class Machine : ModelBackedItem<Data.Models.Metadata.Machine>, ICloneable, IEquatable<Machine>
     {
+        #region Fields
+
+        public bool? IsBios
+        {
+            get => _internal.IsBios;
+            set => _internal.IsBios = value;
+        }
+
+        public bool? IsDevice
+        {
+            get => _internal.IsDevice;
+            set => _internal.IsDevice = value;
+        }
+
+        public bool? IsMechanical
+        {
+            get => _internal.IsMechanical;
+            set => _internal.IsMechanical = value;
+        }
+
+        public bool? Runnable
+        {
+            get => _internal.Runnable;
+            set => _internal.Runnable = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Machine()
@@ -62,18 +90,6 @@ namespace SabreTools.Metadata.DatItems
             string? im2Crc = ReadString(Data.Models.Metadata.Machine.Im2CRCKey);
             if (im2Crc is not null)
                 Write<string?>(Data.Models.Metadata.Machine.Im2CRCKey, TextHelper.NormalizeCRC32(im2Crc));
-
-            bool? isBios = ReadBool(Data.Models.Metadata.Machine.IsBiosKey);
-            if (isBios is not null)
-                Write<string?>(Data.Models.Metadata.Machine.IsBiosKey, isBios.FromYesNo());
-
-            bool? isDevice = ReadBool(Data.Models.Metadata.Machine.IsDeviceKey);
-            if (isDevice is not null)
-                Write<string?>(Data.Models.Metadata.Machine.IsDeviceKey, isDevice.FromYesNo());
-
-            bool? isMechanical = ReadBool(Data.Models.Metadata.Machine.IsMechanicalKey);
-            if (isMechanical is not null)
-                Write<string?>(Data.Models.Metadata.Machine.IsMechanicalKey, isMechanical.FromYesNo());
 
             string? supported = ReadString(Data.Models.Metadata.Machine.SupportedKey);
             if (supported is not null)

@@ -248,7 +248,7 @@ namespace SabreTools.Serialization.Readers
                                 dat.ClrMamePro.ForceMerging = reader.Standalone?.Value;
                                 break;
                             case "forcezipping":
-                                dat.ClrMamePro.ForceZipping = reader.Standalone?.Value;
+                                dat.ClrMamePro.ForceZipping = reader.Standalone?.Value?.AsYesNo();
                                 break;
                             case "forcepacking":
                                 dat.ClrMamePro.ForcePacking = reader.Standalone?.Value;
@@ -599,10 +599,10 @@ namespace SabreTools.Serialization.Readers
                         rom.Date = kvp.Value;
                         break;
                     case "inverted":
-                        rom.Inverted = kvp.Value;
+                        rom.Inverted = kvp.Value.AsYesNo();
                         break;
                     case "mia":
-                        rom.MIA = kvp.Value;
+                        rom.MIA = kvp.Value.AsYesNo();
                         break;
                     default:
                         // TODO: Log invalid values
@@ -884,10 +884,10 @@ namespace SabreTools.Serialization.Readers
                         input.Coins = kvp.Value;
                         break;
                     case "tilt":
-                        input.Tilt = kvp.Value;
+                        input.Tilt = kvp.Value.AsYesNo();
                         break;
                     case "service":
-                        input.Service = kvp.Value;
+                        input.Service = kvp.Value.AsYesNo();
                         break;
                     default:
                         // TODO: Log invalid values

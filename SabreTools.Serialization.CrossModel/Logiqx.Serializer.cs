@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.CrossModel
             var header = item.Header is not null ? ConvertHeaderToInternalModel(item.Header) : [];
 
             header[Data.Models.Metadata.Header.BuildKey] = item.Build;
-            header[Data.Models.Metadata.Header.DebugKey] = item.Debug;
+            header.Debug = item.Debug;
             header[Data.Models.Metadata.Header.SchemaLocationKey] = item.SchemaLocation;
 
             return header;
@@ -82,9 +82,9 @@ namespace SabreTools.Serialization.CrossModel
                 header[Data.Models.Metadata.Header.RomModeKey] = item.RomCenter.RomMode;
                 header[Data.Models.Metadata.Header.BiosModeKey] = item.RomCenter.BiosMode;
                 header[Data.Models.Metadata.Header.SampleModeKey] = item.RomCenter.SampleMode;
-                header[Data.Models.Metadata.Header.LockRomModeKey] = item.RomCenter.LockRomMode;
-                header[Data.Models.Metadata.Header.LockBiosModeKey] = item.RomCenter.LockBiosMode;
-                header[Data.Models.Metadata.Header.LockSampleModeKey] = item.RomCenter.LockSampleMode;
+                header.LockRomMode = item.RomCenter.LockRomMode;
+                header.LockBiosMode = item.RomCenter.LockBiosMode;
+                header.LockSampleMode = item.RomCenter.LockSampleMode;
             }
 
             return header;
@@ -128,9 +128,9 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = machineName,
                 [Data.Models.Metadata.Machine.SourceFileKey] = item.SourceFile,
-                [Data.Models.Metadata.Machine.IsBiosKey] = item.IsBios,
-                [Data.Models.Metadata.Machine.IsDeviceKey] = item.IsDevice,
-                [Data.Models.Metadata.Machine.IsMechanicalKey] = item.IsMechanical,
+                IsBios = item.IsBios,
+                IsDevice = item.IsDevice,
+                IsMechanical = item.IsMechanical,
                 [Data.Models.Metadata.Machine.CloneOfKey] = item.CloneOf,
                 [Data.Models.Metadata.Machine.RomOfKey] = item.RomOf,
                 [Data.Models.Metadata.Machine.SampleOfKey] = item.SampleOf,
@@ -138,7 +138,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Machine.RebuildToKey] = item.RebuildTo,
                 [Data.Models.Metadata.Machine.IdKey] = item.Id,
                 [Data.Models.Metadata.Machine.CloneOfIdKey] = item.CloneOfId,
-                [Data.Models.Metadata.Machine.RunnableKey] = item.Runnable,
+                Runnable = item.Runnable,
                 [Data.Models.Metadata.Machine.CommentKey] = item.Comment,
                 [Data.Models.Metadata.Machine.DescriptionKey] = item.Description,
                 [Data.Models.Metadata.Machine.YearKey] = item.Year,
@@ -247,10 +247,10 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Driver.EmulationKey] = item.Emulation,
                 [Data.Models.Metadata.Driver.CocktailKey] = item.Cocktail,
                 [Data.Models.Metadata.Driver.SaveStateKey] = item.SaveState,
-                [Data.Models.Metadata.Driver.RequiresArtworkKey] = item.RequiresArtwork,
-                [Data.Models.Metadata.Driver.UnofficialKey] = item.Unofficial,
-                [Data.Models.Metadata.Driver.NoSoundHardwareKey] = item.NoSoundHardware,
-                [Data.Models.Metadata.Driver.IncompleteKey] = item.Incomplete,
+                RequiresArtwork = item.RequiresArtwork,
+                Unofficial = item.Unofficial,
+                NoSoundHardware = item.NoSoundHardware,
+                Incomplete = item.Incomplete,
             };
             return driver;
         }
@@ -316,8 +316,8 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Rom.SerialKey] = item.Serial,
                 [Data.Models.Metadata.Rom.HeaderKey] = item.Header,
                 [Data.Models.Metadata.Rom.DateKey] = item.Date,
-                [Data.Models.Metadata.Rom.InvertedKey] = item.Inverted,
-                [Data.Models.Metadata.Rom.MIAKey] = item.MIA,
+                Inverted = item.Inverted,
+                MIA = item.MIA,
             };
             return rom;
         }

@@ -8,6 +8,21 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Debug { get; set; }
+
+        /// <remarks>(yes|no) "yes"</remarks>
+        public bool? ForceZipping { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? LockBiosMode { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? LockRomMode { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? LockSampleMode { get; set; }
+
         public string? Name { get; set; }
 
         #endregion
@@ -40,9 +55,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string</remarks>
         public const string DatVersionKey = "datversion";
 
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string DebugKey = "debug";
-
         /// <remarks>string</remarks>
         public const string DescriptionKey = "description";
 
@@ -60,9 +72,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>(zip|unzip) "zip"</remarks>
         public const string ForcePackingKey = "forcepacking";
-
-        /// <remarks>(yes|no) "yes"</remarks>
-        public const string ForceZippingKey = "forcezipping";
 
         /// <remarks>string, string[]</remarks>
         public const string HeaderKey = "header";
@@ -85,15 +94,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>Infos</remarks>
         [NoFilter]
         public const string InfosKey = "infos";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string LockBiosModeKey = "lockbiosmode";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string LockRomModeKey = "lockrommode";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string LockSampleModeKey = "locksamplemode";
 
         /// <remarks>string</remarks>
         public const string MameConfigKey = "mameconfig";

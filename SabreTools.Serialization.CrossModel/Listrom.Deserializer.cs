@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
         private static Set ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item)
         {
             var set = new Set();
-            if (item.ReadString(Data.Models.Metadata.Machine.IsDeviceKey) == "yes")
+            if (item.IsDevice == true)
                 set.Device = item.Name;
             else
                 set.Driver = item.Name;

@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.CrossModel
             if (header is not null)
             {
                 datafile.Build = header.ReadString(Data.Models.Metadata.Header.BuildKey);
-                datafile.Debug = header.ReadString(Data.Models.Metadata.Header.DebugKey);
+                datafile.Debug = header.Debug;
                 datafile.SchemaLocation = header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey);
                 datafile.Header = ConvertHeaderFromInternalModel(header);
             }
@@ -81,9 +81,9 @@ namespace SabreTools.Serialization.CrossModel
             string? romMode = item.ReadString(Data.Models.Metadata.Header.RomModeKey);
             string? biosMode = item.ReadString(Data.Models.Metadata.Header.BiosModeKey);
             string? sampleMode = item.ReadString(Data.Models.Metadata.Header.SampleModeKey);
-            string? lockRomMode = item.ReadString(Data.Models.Metadata.Header.LockRomModeKey);
-            string? lockBiosMode = item.ReadString(Data.Models.Metadata.Header.LockBiosModeKey);
-            string? lockSampleMode = item.ReadString(Data.Models.Metadata.Header.LockSampleModeKey);
+            bool? lockRomMode = item.LockRomMode;
+            bool? lockBiosMode = item.LockBiosMode;
+            bool? lockSampleMode = item.LockSampleMode;
 
             if (plugin is not null
                 || romMode is not null
@@ -122,9 +122,9 @@ namespace SabreTools.Serialization.CrossModel
 
             gameBase.Name = item.Name;
             gameBase.SourceFile = item.ReadString(Data.Models.Metadata.Machine.SourceFileKey);
-            gameBase.IsBios = item.ReadString(Data.Models.Metadata.Machine.IsBiosKey);
-            gameBase.IsDevice = item.ReadString(Data.Models.Metadata.Machine.IsDeviceKey);
-            gameBase.IsMechanical = item.ReadString(Data.Models.Metadata.Machine.IsMechanicalKey);
+            gameBase.IsBios = item.IsBios;
+            gameBase.IsDevice = item.IsDevice;
+            gameBase.IsMechanical = item.IsMechanical;
             gameBase.CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
             gameBase.RomOf = item.ReadString(Data.Models.Metadata.Machine.RomOfKey);
             gameBase.SampleOf = item.ReadString(Data.Models.Metadata.Machine.SampleOfKey);
@@ -132,7 +132,7 @@ namespace SabreTools.Serialization.CrossModel
             gameBase.RebuildTo = item.ReadString(Data.Models.Metadata.Machine.RebuildToKey);
             gameBase.Id = item.ReadString(Data.Models.Metadata.Machine.IdKey);
             gameBase.CloneOfId = item.ReadString(Data.Models.Metadata.Machine.CloneOfIdKey);
-            gameBase.Runnable = item.ReadString(Data.Models.Metadata.Machine.RunnableKey);
+            gameBase.Runnable = item.Runnable;
             gameBase.Comment = item.ReadStringArray(Data.Models.Metadata.Machine.CommentKey);
             gameBase.Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey);
             gameBase.Year = item.ReadString(Data.Models.Metadata.Machine.YearKey);
@@ -253,10 +253,10 @@ namespace SabreTools.Serialization.CrossModel
                 Emulation = item.ReadString(Data.Models.Metadata.Driver.EmulationKey),
                 Cocktail = item.ReadString(Data.Models.Metadata.Driver.CocktailKey),
                 SaveState = item.ReadString(Data.Models.Metadata.Driver.SaveStateKey),
-                RequiresArtwork = item.ReadString(Data.Models.Metadata.Driver.RequiresArtworkKey),
-                Unofficial = item.ReadString(Data.Models.Metadata.Driver.UnofficialKey),
-                NoSoundHardware = item.ReadString(Data.Models.Metadata.Driver.NoSoundHardwareKey),
-                Incomplete = item.ReadString(Data.Models.Metadata.Driver.IncompleteKey),
+                RequiresArtwork = item.RequiresArtwork,
+                Unofficial = item.Unofficial,
+                NoSoundHardware = item.NoSoundHardware,
+                Incomplete = item.Incomplete,
             };
             return driver;
         }
@@ -322,8 +322,8 @@ namespace SabreTools.Serialization.CrossModel
                 Serial = item.ReadString(Data.Models.Metadata.Rom.SerialKey),
                 Header = item.ReadString(Data.Models.Metadata.Rom.HeaderKey),
                 Date = item.ReadString(Data.Models.Metadata.Rom.DateKey),
-                Inverted = item.ReadString(Data.Models.Metadata.Rom.InvertedKey),
-                MIA = item.ReadString(Data.Models.Metadata.Rom.MIAKey),
+                Inverted = item.Inverted,
+                MIA = item.MIA,
             };
             return rom;
         }

@@ -29,7 +29,7 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("writable")]
-        public string? Writable { get; set; }
+        public bool? Writable { get; set; }
 
         /// <remarks>(baddump|nodump|good) "good"</remarks>
         [XmlAttribute("status")]
@@ -37,6 +37,6 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("optional")]
-        public string? Optional { get; set; }
+        public bool? Optional { get; set; }
     }
 }
