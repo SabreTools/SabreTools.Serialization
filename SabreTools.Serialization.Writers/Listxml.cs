@@ -229,13 +229,13 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("control");
 
             writer.WriteRequiredAttributeString("type", obj.Type?.AsStringValue());
-            writer.WriteOptionalAttributeString("player", obj.Player);
-            writer.WriteOptionalAttributeString("buttons", obj.Buttons);
-            writer.WriteOptionalAttributeString("reqbuttons", obj.ReqButtons);
-            writer.WriteOptionalAttributeString("minimum", obj.Minimum);
-            writer.WriteOptionalAttributeString("maximum", obj.Maximum);
-            writer.WriteOptionalAttributeString("sensitivity", obj.Sensitivity);
-            writer.WriteOptionalAttributeString("keydelta", obj.KeyDelta);
+            writer.WriteOptionalAttributeString("player", obj.Player?.ToString());
+            writer.WriteOptionalAttributeString("buttons", obj.Buttons?.ToString());
+            writer.WriteOptionalAttributeString("reqbuttons", obj.ReqButtons?.ToString());
+            writer.WriteOptionalAttributeString("minimum", obj.Minimum?.ToString());
+            writer.WriteOptionalAttributeString("maximum", obj.Maximum?.ToString());
+            writer.WriteOptionalAttributeString("sensitivity", obj.Sensitivity?.ToString());
+            writer.WriteOptionalAttributeString("keydelta", obj.KeyDelta?.ToString());
             writer.WriteOptionalAttributeString("reverse", obj.Reverse.FromYesNo());
             writer.WriteOptionalAttributeString("ways", obj.Ways);
             writer.WriteOptionalAttributeString("ways2", obj.Ways2);

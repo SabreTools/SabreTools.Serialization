@@ -8,45 +8,31 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public long? Buttons { get; set; }
+
         /// <remarks>(joy|stick|paddle|pedal|lightgun|positional|dial|trackball|mouse|only_buttons|keypad|keyboard|mahjong|hanafuda|gambling)</remarks>
         public ControlType? ControlType { get; set; }
+
+        public long? KeyDelta { get; set; }
+
+        public long? Maximum { get; set; }
+
+        public long? Minimum { get; set; }
+
+        public long? Player { get; set; }
+
+        public long? ReqButtons { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Reverse { get; set; }
 
-        #endregion
+        public long? Sensitivity { get; set; }
 
-        #region Keys
+        public string? Ways { get; set; }
 
-        /// <remarks>long</remarks>
-        public const string ButtonsKey = "buttons";
+        public string? Ways2 { get; set; }
 
-        /// <remarks>long</remarks>
-        public const string KeyDeltaKey = "keydelta";
-
-        /// <remarks>long</remarks>
-        public const string MaximumKey = "maximum";
-
-        /// <remarks>long</remarks>
-        public const string MinimumKey = "minimum";
-
-        /// <remarks>long</remarks>
-        public const string PlayerKey = "player";
-
-        /// <remarks>long</remarks>
-        public const string ReqButtonsKey = "reqbuttons";
-
-        /// <remarks>long</remarks>
-        public const string SensitivityKey = "sensitivity";
-
-        /// <remarks>string, possibly long</remarks>
-        public const string WaysKey = "ways";
-
-        /// <remarks>string, possibly long</remarks>
-        public const string Ways2Key = "ways2";
-
-        /// <remarks>string, possibly long</remarks>
-        public const string Ways3Key = "ways3";
+        public string? Ways3 { get; set; }
 
         #endregion
 

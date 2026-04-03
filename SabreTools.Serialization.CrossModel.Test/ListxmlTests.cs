@@ -155,17 +155,17 @@ namespace SabreTools.Serialization.CrossModel.Test
             var control = new Data.Models.Listxml.Control
             {
                 Type = Data.Models.Metadata.ControlType.Lightgun,
-                Player = "XXXXXX",
-                Buttons = "XXXXXX",
-                ReqButtons = "XXXXXX",
-                Minimum = "XXXXXX",
-                Maximum = "XXXXXX",
-                Sensitivity = "XXXXXX",
-                KeyDelta = "XXXXXX",
+                Player = 12345,
+                Buttons = 12345,
+                ReqButtons = 12345,
+                Minimum = 12345,
+                Maximum = 12345,
+                Sensitivity = 12345,
+                KeyDelta = 12345,
                 Reverse = true,
-                Ways = "XXXXXX",
-                Ways2 = "XXXXXX",
-                Ways3 = "XXXXXX",
+                Ways = "ways",
+                Ways2 = "ways2",
+                Ways3 = "ways3",
             };
 
             var input = new Data.Models.Listxml.Input
@@ -617,17 +617,17 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(control);
             Assert.Equal(Data.Models.Metadata.ControlType.Lightgun, control.Type);
-            Assert.Equal("XXXXXX", control.Player);
-            Assert.Equal("XXXXXX", control.Buttons);
-            Assert.Equal("XXXXXX", control.ReqButtons);
-            Assert.Equal("XXXXXX", control.Minimum);
-            Assert.Equal("XXXXXX", control.Maximum);
-            Assert.Equal("XXXXXX", control.Sensitivity);
-            Assert.Equal("XXXXXX", control.KeyDelta);
+            Assert.Equal(12345, control.Player);
+            Assert.Equal(12345, control.Buttons);
+            Assert.Equal(12345, control.ReqButtons);
+            Assert.Equal(12345, control.Minimum);
+            Assert.Equal(12345, control.Maximum);
+            Assert.Equal(12345, control.Sensitivity);
+            Assert.Equal(12345, control.KeyDelta);
             Assert.Equal(true, control.Reverse);
-            Assert.Equal("XXXXXX", control.Ways);
-            Assert.Equal("XXXXXX", control.Ways2);
-            Assert.Equal("XXXXXX", control.Ways3);
+            Assert.Equal("ways", control.Ways);
+            Assert.Equal("ways2", control.Ways2);
+            Assert.Equal("ways3", control.Ways3);
         }
 
         /// <summary>

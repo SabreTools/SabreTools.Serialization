@@ -12,6 +12,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public long? Buttons
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.Buttons;
+            set => (_internal as Data.Models.Metadata.Control)?.Buttons = value;
+        }
+
         public Data.Models.Metadata.ControlType? ControlType
         {
             get => (_internal as Data.Models.Metadata.Control)?.ControlType;
@@ -22,10 +28,64 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.Control;
 
+        public long? KeyDelta
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.KeyDelta;
+            set => (_internal as Data.Models.Metadata.Control)?.KeyDelta = value;
+        }
+
+        public long? Maximum
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.Maximum;
+            set => (_internal as Data.Models.Metadata.Control)?.Maximum = value;
+        }
+
+        public long? Minimum
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.Minimum;
+            set => (_internal as Data.Models.Metadata.Control)?.Minimum = value;
+        }
+
+        public long? Player
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.Player;
+            set => (_internal as Data.Models.Metadata.Control)?.Player = value;
+        }
+
+        public long? ReqButtons
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.ReqButtons;
+            set => (_internal as Data.Models.Metadata.Control)?.ReqButtons = value;
+        }
+
         public bool? Reverse
         {
             get => (_internal as Data.Models.Metadata.Control)?.Reverse;
             set => (_internal as Data.Models.Metadata.Control)?.Reverse = value;
+        }
+
+        public long? Sensitivity
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.Sensitivity;
+            set => (_internal as Data.Models.Metadata.Control)?.Sensitivity = value;
+        }
+
+        public string? Ways
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.Ways;
+            set => (_internal as Data.Models.Metadata.Control)?.Ways = value;
+        }
+
+        public string? Ways2
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.Ways2;
+            set => (_internal as Data.Models.Metadata.Control)?.Ways2 = value;
+        }
+
+        public string? Ways3
+        {
+            get => (_internal as Data.Models.Metadata.Control)?.Ways3;
+            set => (_internal as Data.Models.Metadata.Control)?.Ways3 = value;
         }
 
         #endregion
@@ -34,37 +94,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Control() : base() { }
 
-        public Control(Data.Models.Metadata.Control item) : base(item)
-        {
-            // Process flag values
-            long? buttons = ReadLong(Data.Models.Metadata.Control.ButtonsKey);
-            if (buttons is not null)
-                Write<string?>(Data.Models.Metadata.Control.ButtonsKey, buttons.ToString());
-
-            long? keyDelta = ReadLong(Data.Models.Metadata.Control.KeyDeltaKey);
-            if (keyDelta is not null)
-                Write<string?>(Data.Models.Metadata.Control.KeyDeltaKey, keyDelta.ToString());
-
-            long? maximum = ReadLong(Data.Models.Metadata.Control.MaximumKey);
-            if (maximum is not null)
-                Write<string?>(Data.Models.Metadata.Control.MaximumKey, maximum.ToString());
-
-            long? minimum = ReadLong(Data.Models.Metadata.Control.MinimumKey);
-            if (minimum is not null)
-                Write<string?>(Data.Models.Metadata.Control.MinimumKey, minimum.ToString());
-
-            long? player = ReadLong(Data.Models.Metadata.Control.PlayerKey);
-            if (player is not null)
-                Write<string?>(Data.Models.Metadata.Control.PlayerKey, player.ToString());
-
-            long? reqButtons = ReadLong(Data.Models.Metadata.Control.ReqButtonsKey);
-            if (reqButtons is not null)
-                Write<string?>(Data.Models.Metadata.Control.ReqButtonsKey, reqButtons.ToString());
-
-            long? sensitivity = ReadLong(Data.Models.Metadata.Control.SensitivityKey);
-            if (sensitivity is not null)
-                Write<string?>(Data.Models.Metadata.Control.SensitivityKey, sensitivity.ToString());
-        }
+        public Control(Data.Models.Metadata.Control item) : base(item) { }
 
         public Control(Data.Models.Metadata.Control item, Machine machine, Source source) : this(item)
         {

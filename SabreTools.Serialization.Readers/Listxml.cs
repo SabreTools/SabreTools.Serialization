@@ -342,13 +342,13 @@ namespace SabreTools.Serialization.Readers
             var obj = new Control();
 
             obj.Type = reader.GetAttribute("type").AsControlType();
-            obj.Player = reader.GetAttribute("player");
-            obj.Buttons = reader.GetAttribute("buttons");
-            obj.ReqButtons = reader.GetAttribute("reqbuttons");
-            obj.Minimum = reader.GetAttribute("minimum");
-            obj.Maximum = reader.GetAttribute("maximum");
-            obj.Sensitivity = reader.GetAttribute("sensitivity");
-            obj.KeyDelta = reader.GetAttribute("keydelta");
+            obj.Player = NumberHelper.ConvertToInt64(reader.GetAttribute("player"));
+            obj.Buttons = NumberHelper.ConvertToInt64(reader.GetAttribute("buttons"));
+            obj.ReqButtons = NumberHelper.ConvertToInt64(reader.GetAttribute("reqbuttons"));
+            obj.Minimum = NumberHelper.ConvertToInt64(reader.GetAttribute("minimum"));
+            obj.Maximum = NumberHelper.ConvertToInt64(reader.GetAttribute("maximum"));
+            obj.Sensitivity = NumberHelper.ConvertToInt64(reader.GetAttribute("sensitivity"));
+            obj.KeyDelta = NumberHelper.ConvertToInt64(reader.GetAttribute("keydelta"));
             obj.Reverse = reader.GetAttribute("reverse").AsYesNo();
             obj.Ways = reader.GetAttribute("ways");
             obj.Ways2 = reader.GetAttribute("ways2");

@@ -12,47 +12,37 @@ namespace SabreTools.Data.Models.Listxml
         [XmlAttribute("type")]
         public ControlType? Type { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("player")]
-        public string? Player { get; set; }
+        public long? Player { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("buttons")]
-        public string? Buttons { get; set; }
+        public long? Buttons { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("reqbuttons")]
-        public string? ReqButtons { get; set; }
+        public long? ReqButtons { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("minimum")]
-        public string? Minimum { get; set; }
+        public long? Minimum { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("maximum")]
-        public string? Maximum { get; set; }
+        public long? Maximum { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("sensitivity")]
-        public string? Sensitivity { get; set; }
+        public long? Sensitivity { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("keydelta")]
-        public string? KeyDelta { get; set; }
+        public long? KeyDelta { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("reverse")]
         public bool? Reverse { get; set; }
 
-        /// <remarks>Numeric?</remarks>
         [XmlAttribute("ways")]
         public string? Ways { get; set; }
 
-        /// <remarks>Numeric?</remarks>
         [XmlAttribute("ways2")]
         public string? Ways2 { get; set; }
 
-        /// <remarks>Numeric?</remarks>
         [XmlAttribute("ways3")]
         public string? Ways3 { get; set; }
     }

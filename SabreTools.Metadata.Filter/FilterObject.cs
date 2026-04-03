@@ -408,11 +408,41 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Value;
                     return true;
 
+                case Control item when fieldName == "buttons":
+                    checkValue = item.Buttons?.ToString();
+                    return true;
                 case Control item when fieldName == "type":
                     checkValue = item.ControlType?.AsStringValue();
                     return true;
+                case Control item when fieldName == "keydelta":
+                    checkValue = item.KeyDelta?.ToString();
+                    return true;
+                case Control item when fieldName == "maximum":
+                    checkValue = item.Maximum?.ToString();
+                    return true;
+                case Control item when fieldName == "minimum":
+                    checkValue = item.Minimum?.ToString();
+                    return true;
+                case Control item when fieldName == "player":
+                    checkValue = item.Player?.ToString();
+                    return true;
+                case Control item when fieldName == "reqbuttons":
+                    checkValue = item.ReqButtons?.ToString();
+                    return true;
                 case Control item when fieldName == "reverse":
                     checkValue = item.Reverse.FromYesNo();
+                    return true;
+                case Control item when fieldName == "sensitivity":
+                    checkValue = item.Sensitivity?.ToString();
+                    return true;
+                case Control item when fieldName == "ways":
+                    checkValue = item.Ways;
+                    return true;
+                case Control item when fieldName == "ways2":
+                    checkValue = item.Ways2;
+                    return true;
+                case Control item when fieldName == "ways3":
+                    checkValue = item.Ways3;
                     return true;
 
                 case DataArea item when fieldName == "endianness":

@@ -741,18 +741,18 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataControl(Data.Models.Metadata.Control? control)
         {
             Assert.NotNull(control);
-            Assert.Equal(12345, control.ReadLong(Data.Models.Metadata.Control.ButtonsKey));
-            Assert.Equal(12345, control.ReadLong(Data.Models.Metadata.Control.KeyDeltaKey));
-            Assert.Equal(12345, control.ReadLong(Data.Models.Metadata.Control.MaximumKey));
-            Assert.Equal(12345, control.ReadLong(Data.Models.Metadata.Control.MinimumKey));
-            Assert.Equal(12345, control.ReadLong(Data.Models.Metadata.Control.PlayerKey));
-            Assert.Equal(12345, control.ReadLong(Data.Models.Metadata.Control.ReqButtonsKey));
+            Assert.Equal(12345, control.Buttons);
+            Assert.Equal(12345, control.KeyDelta);
+            Assert.Equal(12345, control.Maximum);
+            Assert.Equal(12345, control.Minimum);
+            Assert.Equal(12345, control.Player);
+            Assert.Equal(12345, control.ReqButtons);
             Assert.True(control.Reverse);
-            Assert.Equal(12345, control.ReadLong(Data.Models.Metadata.Control.SensitivityKey));
+            Assert.Equal(12345, control.Sensitivity);
             Assert.Equal(Data.Models.Metadata.ControlType.Lightgun, control.ControlType);
-            Assert.Equal("ways", control.ReadString(Data.Models.Metadata.Control.WaysKey));
-            Assert.Equal("ways2", control.ReadString(Data.Models.Metadata.Control.Ways2Key));
-            Assert.Equal("ways3", control.ReadString(Data.Models.Metadata.Control.Ways3Key));
+            Assert.Equal("ways", control.Ways);
+            Assert.Equal("ways2", control.Ways2);
+            Assert.Equal("ways3", control.Ways3);
         }
 
         private static void ValidateMetadataDataArea(Data.Models.Metadata.DataArea? dataArea)

@@ -193,8 +193,18 @@ namespace SabreTools.Data.Extensions
             }
             else if (self is Control selfControl && clone is Control cloneControl)
             {
+                cloneControl.Buttons = selfControl.Buttons;
                 cloneControl.ControlType = selfControl.ControlType;
+                cloneControl.KeyDelta = selfControl.KeyDelta;
+                cloneControl.Maximum = selfControl.Maximum;
+                cloneControl.Minimum = selfControl.Minimum;
+                cloneControl.Player = selfControl.Player;
+                cloneControl.ReqButtons = selfControl.ReqButtons;
                 cloneControl.Reverse = selfControl.Reverse;
+                cloneControl.Sensitivity = selfControl.Sensitivity;
+                cloneControl.Ways = selfControl.Ways;
+                cloneControl.Ways2 = selfControl.Ways2;
+                cloneControl.Ways3 = selfControl.Ways3;
             }
             else if (self is DataArea selfDataArea && clone is DataArea cloneDataArea)
             {

@@ -462,18 +462,18 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Control
             {
-                [Data.Models.Metadata.Control.ButtonsKey] = 12345L,
-                [Data.Models.Metadata.Control.KeyDeltaKey] = 12345L,
-                [Data.Models.Metadata.Control.MaximumKey] = 12345L,
-                [Data.Models.Metadata.Control.MinimumKey] = 12345L,
-                [Data.Models.Metadata.Control.PlayerKey] = 12345L,
-                [Data.Models.Metadata.Control.ReqButtonsKey] = 12345L,
+                Buttons = 12345L,
+                KeyDelta = 12345L,
+                Maximum = 12345L,
+                Minimum = 12345L,
+                Player = 12345L,
+                ReqButtons = 12345L,
                 Reverse = true,
-                [Data.Models.Metadata.Control.SensitivityKey] = 12345L,
+                Sensitivity = 12345L,
                 ControlType = Data.Models.Metadata.ControlType.Lightgun,
-                [Data.Models.Metadata.Control.WaysKey] = "ways",
-                [Data.Models.Metadata.Control.Ways2Key] = "ways2",
-                [Data.Models.Metadata.Control.Ways3Key] = "ways3",
+                Ways = "ways",
+                Ways2 = "ways2",
+                Ways3 = "ways3",
             };
         }
 
@@ -1234,18 +1234,18 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateControl(Control? control)
         {
             Assert.NotNull(control);
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.ButtonsKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.KeyDeltaKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.MaximumKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.MinimumKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.PlayerKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.ReqButtonsKey));
+            Assert.Equal(12345L, control.Buttons);
+            Assert.Equal(12345L, control.KeyDelta);
+            Assert.Equal(12345L, control.Maximum);
+            Assert.Equal(12345L, control.Minimum);
+            Assert.Equal(12345L, control.Player);
+            Assert.Equal(12345L, control.ReqButtons);
             Assert.True(control.Reverse);
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.SensitivityKey));
+            Assert.Equal(12345L, control.Sensitivity);
             Assert.Equal(Data.Models.Metadata.ControlType.Lightgun, control.ControlType);
-            Assert.Equal("ways", control.ReadString(Data.Models.Metadata.Control.WaysKey));
-            Assert.Equal("ways2", control.ReadString(Data.Models.Metadata.Control.Ways2Key));
-            Assert.Equal("ways3", control.ReadString(Data.Models.Metadata.Control.Ways3Key));
+            Assert.Equal("ways", control.Ways);
+            Assert.Equal("ways2", control.Ways2);
+            Assert.Equal("ways3", control.Ways3);
         }
 
         private static void ValidateDataArea(DataArea? dataArea)

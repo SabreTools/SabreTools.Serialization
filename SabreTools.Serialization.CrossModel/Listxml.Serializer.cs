@@ -319,17 +319,17 @@ namespace SabreTools.Serialization.CrossModel
             var control = new Data.Models.Metadata.Control
             {
                 ControlType = item.Type,
-                [Data.Models.Metadata.Control.PlayerKey] = item.Player,
-                [Data.Models.Metadata.Control.ButtonsKey] = item.Buttons,
-                [Data.Models.Metadata.Control.ReqButtonsKey] = item.ReqButtons,
-                [Data.Models.Metadata.Control.MinimumKey] = item.Minimum,
-                [Data.Models.Metadata.Control.MaximumKey] = item.Maximum,
-                [Data.Models.Metadata.Control.SensitivityKey] = item.Sensitivity,
-                [Data.Models.Metadata.Control.KeyDeltaKey] = item.KeyDelta,
+                Player = item.Player,
+                Buttons = item.Buttons,
+                ReqButtons = item.ReqButtons,
+                Minimum = item.Minimum,
+                Maximum = item.Maximum,
+                Sensitivity = item.Sensitivity,
+                KeyDelta = item.KeyDelta,
                 Reverse = item.Reverse,
-                [Data.Models.Metadata.Control.WaysKey] = item.Ways,
-                [Data.Models.Metadata.Control.Ways2Key] = item.Ways2,
-                [Data.Models.Metadata.Control.Ways3Key] = item.Ways3,
+                Ways = item.Ways,
+                Ways2 = item.Ways2,
+                Ways3 = item.Ways3,
             };
             return control;
         }
