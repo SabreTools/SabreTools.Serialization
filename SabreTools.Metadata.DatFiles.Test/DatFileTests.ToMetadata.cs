@@ -681,8 +681,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataChip(Data.Models.Metadata.Chip? chip)
         {
             Assert.NotNull(chip);
-            Assert.Equal(12345, chip.ReadLong(Data.Models.Metadata.Chip.ClockKey));
-            Assert.Equal("flags", chip.ReadString(Data.Models.Metadata.Chip.FlagsKey));
+            Assert.Equal(12345, chip.Clock);
+            Assert.Equal("flags", chip.Flags);
             Assert.Equal("name", chip.Name);
             Assert.True(chip.SoundOnly);
             Assert.Equal("tag", chip.Tag);

@@ -158,8 +158,8 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Type = Data.Models.Metadata.ChipType.CPU,
                 Name = "name",
-                Flags = "XXXXXX",
-                Clock = "XXXXXX",
+                Flags = "flags",
+                Clock = 12345,
             };
 
             var video = new Data.Models.ClrMamePro.Video
@@ -441,8 +441,8 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(chip);
             Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.Type);
             Assert.Equal("name", chip.Name);
-            Assert.Equal("XXXXXX", chip.Flags);
-            Assert.Equal("XXXXXX", chip.Clock);
+            Assert.Equal("flags", chip.Flags);
+            Assert.Equal(12345, chip.Clock);
         }
 
         /// <summary>

@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("tag", obj.Tag);
             writer.WriteRequiredAttributeString("type", obj.Type?.AsStringValue());
             writer.WriteOptionalAttributeString("soundonly", obj.SoundOnly.FromYesNo());
-            writer.WriteOptionalAttributeString("clock", obj.Clock);
+            writer.WriteOptionalAttributeString("clock", obj.Clock?.ToString());
 
             writer.WriteEndElement();
         }

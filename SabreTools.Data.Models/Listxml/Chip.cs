@@ -24,6 +24,6 @@ namespace SabreTools.Data.Models.Listxml
         public bool? SoundOnly { get; set; }
 
         [XmlAttribute("clock")]
-        public string? Clock { get; set; }
+        public long? Clock { get; set; }
     }
 }

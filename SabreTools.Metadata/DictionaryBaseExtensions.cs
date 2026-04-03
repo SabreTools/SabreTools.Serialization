@@ -84,11 +84,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Chip selfChip && other is Chip otherChip)
             {
-                if (selfChip.ChipType != otherChip.ChipType)
-                    return false;
-                if (selfChip.SoundOnly != otherChip.SoundOnly)
-                    return false;
-                if (selfChip.Tag != otherChip.Tag)
+                if (!selfChip.Equals(otherChip))
                     return false;
             }
             else if (self is Condition selfCondition && other is Condition otherCondition)

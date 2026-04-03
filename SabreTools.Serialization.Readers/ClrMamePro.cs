@@ -776,7 +776,7 @@ namespace SabreTools.Serialization.Readers
                         chip.Flags = kvp.Value;
                         break;
                     case "clock":
-                        chip.Clock = kvp.Value;
+                        chip.Clock = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     default:
                         // TODO: Log invalid values

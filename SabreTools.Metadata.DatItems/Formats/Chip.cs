@@ -22,6 +22,18 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.Chip;
 
+        public long? Clock
+        {
+            get => (_internal as Data.Models.Metadata.Chip)?.Clock;
+            set => (_internal as Data.Models.Metadata.Chip)?.Clock = value;
+        }
+
+        public string? Flags
+        {
+            get => (_internal as Data.Models.Metadata.Chip)?.Flags;
+            set => (_internal as Data.Models.Metadata.Chip)?.Flags = value;
+        }
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.Chip)?.Name;

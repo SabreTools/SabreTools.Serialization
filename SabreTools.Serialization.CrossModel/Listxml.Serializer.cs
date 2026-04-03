@@ -229,7 +229,7 @@ namespace SabreTools.Serialization.CrossModel
                 Tag = item.Tag,
                 ChipType = item.Type,
                 SoundOnly = item.SoundOnly,
-                [Data.Models.Metadata.Chip.ClockKey] = item.Clock,
+                Clock = item.Clock,
             };
             return chip;
         }

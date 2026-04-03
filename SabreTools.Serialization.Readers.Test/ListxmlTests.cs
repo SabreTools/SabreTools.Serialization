@@ -182,7 +182,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Tag = "tag",
                 Type = Data.Models.Metadata.ChipType.CPU,
                 SoundOnly = true,
-                Clock = "XXXXXX",
+                Clock = 12345,
             };
 
             var display = new Data.Models.Listxml.Display
@@ -610,7 +610,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("tag", chip.Tag);
             Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.Type);
             Assert.Equal(true, chip.SoundOnly);
-            Assert.Equal("XXXXXX", chip.Clock);
+            Assert.Equal(12345, chip.Clock);
         }
 
         /// <summary>

@@ -370,6 +370,12 @@ namespace SabreTools.Metadata.Filter
                 case Chip item when fieldName == "type":
                     checkValue = item.ChipType?.AsStringValue();
                     return true;
+                case Chip item when fieldName == "clock":
+                    checkValue = item.Clock?.ToString();
+                    return true;
+                case Chip item when fieldName == "flags":
+                    checkValue = item.Flags;
+                    return true;
                 case Chip item when fieldName == "soundonly":
                     checkValue = item.SoundOnly.FromYesNo();
                     return true;

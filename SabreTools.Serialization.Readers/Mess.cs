@@ -190,7 +190,7 @@ namespace SabreTools.Serialization.Readers
             obj.Tag = reader.GetAttribute("tag");
             obj.Type = reader.GetAttribute("type").AsChipType();
             obj.SoundOnly = reader.GetAttribute("soundonly").AsYesNo();
-            obj.Clock = reader.GetAttribute("clock");
+            obj.Clock = NumberHelper.ConvertToInt64(reader.GetAttribute("clock"));
 
             return obj;
         }

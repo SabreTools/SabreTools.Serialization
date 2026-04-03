@@ -182,8 +182,8 @@ namespace SabreTools.Serialization.CrossModel
             {
                 ChipType = item.Type,
                 Name = item.Name,
-                [Data.Models.Metadata.Chip.FlagsKey] = item.Flags,
-                [Data.Models.Metadata.Chip.ClockKey] = item.Clock,
+                Flags = item.Flags,
+                Clock = item.Clock,
             };
             return chip;
         }

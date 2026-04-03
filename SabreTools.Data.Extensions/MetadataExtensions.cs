@@ -167,6 +167,8 @@ namespace SabreTools.Data.Extensions
             else if (self is Chip selfChip && clone is Chip cloneChip)
             {
                 cloneChip.ChipType = selfChip.ChipType;
+                cloneChip.Clock = selfChip.Clock;
+                cloneChip.Flags = selfChip.Flags;
                 cloneChip.SoundOnly = selfChip.SoundOnly;
                 cloneChip.Tag = selfChip.Tag;
             }

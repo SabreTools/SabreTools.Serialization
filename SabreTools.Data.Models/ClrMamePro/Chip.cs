@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.ClrMamePro
         /// <remarks>flags</remarks>
         public string? Flags { get; set; }
 
-        /// <remarks>clock, Numeric?</remarks>
-        public string? Clock { get; set; }
+        /// <remarks>clock</remarks>
+        public long? Clock { get; set; }
     }
 }

@@ -393,7 +393,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteRequiredAttributeString("type", chip.Type?.AsStringValue(), throwOnError: true);
                 writer.WriteRequiredAttributeString("name", chip.Name, throwOnError: true);
                 writer.WriteOptionalAttributeString("flags", chip.Flags);
-                writer.WriteOptionalAttributeString("clock", chip.Clock);
+                writer.WriteOptionalAttributeString("clock", chip.Clock?.ToString());
                 writer.WriteEndElement(); // chip
             }
         }
