@@ -15,15 +15,6 @@ namespace SabreTools.Metadata.DatFiles
     [JsonObject("header"), XmlRoot("header")]
     public sealed class DatHeader : ModelBackedItem<Data.Models.Metadata.Header>, ICloneable
     {
-        #region Constants
-
-        /// <summary>
-        /// External name of the DAT
-        /// </summary>
-        public const string FileNameKey = "FILENAME";
-
-        #endregion
-
         #region Fields
 
         public string? Author
@@ -106,6 +97,11 @@ namespace SabreTools.Metadata.DatFiles
             get => _internal.EmulatorVersion;
             set => _internal.EmulatorVersion = value;
         }
+
+        /// <summary>
+        /// External name of the DAT
+        /// </summary>
+        public string? FileName { get; set; }
 
         public MergingFlag ForceMerging
         {
@@ -299,7 +295,11 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Clone the current header
         /// </summary>
-        public object Clone() => new DatHeader(GetInternalClone()) { DatFormat = DatFormat };
+        public object Clone() => new DatHeader(GetInternalClone())
+        {
+            DatFormat = DatFormat,
+            FileName = FileName,
+        };
 
         /// <summary>
         /// Clone just the format from the current header
