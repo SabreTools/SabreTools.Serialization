@@ -145,23 +145,23 @@ namespace SabreTools.Serialization.Readers.Test
                 Section = "XXXXXX",
                 RomInfo = "XXXXXX",
                 DumpDate = "XXXXXX",
-                DumpDateInfo = "XXXXXX",
+                DumpDateInfo = true,
                 ReleaseDate = "XXXXXX",
-                ReleaseDateInfo = "XXXXXX",
+                ReleaseDateInfo = true,
                 Dumper = "XXXXXX",
                 Project = "XXXXXX",
                 OriginalFormat = "XXXXXX",
-                Nodump = "XXXXXX",
+                Nodump = true,
                 Tool = "XXXXXX",
                 Origin = "XXXXXX",
                 Comment1 = "XXXXXX",
                 Comment2 = "XXXXXX",
                 Link1 = "XXXXXX",
-                Link1Public = "XXXXXX",
+                Link1Public = true,
                 Link2 = "XXXXXX",
-                Link2Public = "XXXXXX",
+                Link2Public = true,
                 Link3 = "XXXXXX",
-                Link3Public = "XXXXXX",
+                Link3Public = true,
                 Region = "XXXXXX",
                 MediaTitle = "XXXXXX",
             };
@@ -361,23 +361,23 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", sourceDetails.Section);
             Assert.Equal("XXXXXX", sourceDetails.RomInfo);
             Assert.Equal("XXXXXX", sourceDetails.DumpDate);
-            Assert.Equal("XXXXXX", sourceDetails.DumpDateInfo);
+            Assert.Equal(true, sourceDetails.DumpDateInfo);
             Assert.Equal("XXXXXX", sourceDetails.ReleaseDate);
-            Assert.Equal("XXXXXX", sourceDetails.ReleaseDateInfo);
+            Assert.Equal(true, sourceDetails.ReleaseDateInfo);
             Assert.Equal("XXXXXX", sourceDetails.Dumper);
             Assert.Equal("XXXXXX", sourceDetails.Project);
             Assert.Equal("XXXXXX", sourceDetails.OriginalFormat);
-            Assert.Equal("XXXXXX", sourceDetails.Nodump);
+            Assert.Equal(true, sourceDetails.Nodump);
             Assert.Equal("XXXXXX", sourceDetails.Tool);
             Assert.Equal("XXXXXX", sourceDetails.Origin);
             Assert.Equal("XXXXXX", sourceDetails.Comment1);
             Assert.Equal("XXXXXX", sourceDetails.Comment2);
             Assert.Equal("XXXXXX", sourceDetails.Link1);
-            Assert.Equal("XXXXXX", sourceDetails.Link1Public);
+            Assert.Equal(true, sourceDetails.Link1Public);
             Assert.Equal("XXXXXX", sourceDetails.Link2);
-            Assert.Equal("XXXXXX", sourceDetails.Link2Public);
+            Assert.Equal(true, sourceDetails.Link2Public);
             Assert.Equal("XXXXXX", sourceDetails.Link3);
-            Assert.Equal("XXXXXX", sourceDetails.Link3Public);
+            Assert.Equal(true, sourceDetails.Link3Public);
             Assert.Equal("XXXXXX", sourceDetails.Region);
             Assert.Equal("XXXXXX", sourceDetails.MediaTitle);
         }

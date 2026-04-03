@@ -340,6 +340,11 @@ namespace SabreTools.Metadata
                 if (!selfSound.Equals(otherSound))
                     return false;
             }
+            else if (self is SourceDetails selfSourceDetails && other is SourceDetails otherSourceDetails)
+            {
+                if (!selfSourceDetails.Equals(otherSourceDetails))
+                    return false;
+            }
             else if (self is Video selfVideo && other is Video otherVideo)
             {
                 if (!selfVideo.Equals(otherVideo))

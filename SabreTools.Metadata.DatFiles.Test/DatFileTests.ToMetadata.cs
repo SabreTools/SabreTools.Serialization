@@ -1204,30 +1204,30 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataSourceDetails(Data.Models.Metadata.SourceDetails? sourceDetails)
         {
             Assert.NotNull(sourceDetails);
-            Assert.Equal("id", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.IdKey));
-            Assert.Equal("appendtonumber", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.AppendToNumberKey));
-            Assert.Equal("section", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.SectionKey));
-            Assert.Equal("rominfo", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.RomInfoKey));
-            Assert.Equal("dumpdate", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.DumpDateKey));
-            Assert.Equal("dumpdateinfo", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.DumpDateInfoKey));
-            Assert.Equal("releasedate", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.ReleaseDateKey));
-            Assert.Equal("releasedateinfo", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.ReleaseDateInfoKey));
-            Assert.Equal("dumper", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.DumperKey));
-            Assert.Equal("project", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.ProjectKey));
-            Assert.Equal("originalformat", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.OriginalFormatKey));
-            Assert.Equal("nodump", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.NodumpKey));
-            Assert.Equal("tool", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.ToolKey));
-            Assert.Equal("origin", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.OriginKey));
-            Assert.Equal("comment1", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Comment1Key));
-            Assert.Equal("comment2", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Comment2Key));
-            Assert.Equal("link1", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link1Key));
-            Assert.Equal("link1public", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link1PublicKey));
-            Assert.Equal("link2", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link2Key));
-            Assert.Equal("link2public", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link2PublicKey));
-            Assert.Equal("link3", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link3Key));
-            Assert.Equal("link3public", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.Link3PublicKey));
-            Assert.Equal("region", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.RegionKey));
-            Assert.Equal("mediatitle", sourceDetails.ReadString(Data.Models.Metadata.SourceDetails.MediaTitleKey));
+            Assert.Equal("appendtonumber", sourceDetails.AppendToNumber);
+            Assert.Equal("comment1", sourceDetails.Comment1);
+            Assert.Equal("comment2", sourceDetails.Comment2);
+            Assert.Equal("dumpdate", sourceDetails.DumpDate);
+            Assert.Equal(true, sourceDetails.DumpDateInfo);
+            Assert.Equal("dumper", sourceDetails.Dumper);
+            Assert.Equal("id", sourceDetails.Id);
+            Assert.Equal("link1", sourceDetails.Link1);
+            Assert.Equal(true, sourceDetails.Link1Public);
+            Assert.Equal("link2", sourceDetails.Link2);
+            Assert.Equal(true, sourceDetails.Link2Public);
+            Assert.Equal("link3", sourceDetails.Link3);
+            Assert.Equal(true, sourceDetails.Link3Public);
+            Assert.Equal("mediatitle", sourceDetails.MediaTitle);
+            Assert.Equal(true, sourceDetails.Nodump);
+            Assert.Equal("origin", sourceDetails.Origin);
+            Assert.Equal("originalformat", sourceDetails.OriginalFormat);
+            Assert.Equal("project", sourceDetails.Project);
+            Assert.Equal("region", sourceDetails.Region);
+            Assert.Equal("releasedate", sourceDetails.ReleaseDate);
+            Assert.Equal(true, sourceDetails.ReleaseDateInfo);
+            Assert.Equal("rominfo", sourceDetails.RomInfo);
+            Assert.Equal("section", sourceDetails.Section);
+            Assert.Equal("tool", sourceDetails.Tool);
         }
 
         private static void ValidateMetadataTrurip(Data.Models.Logiqx.Trurip? trurip)

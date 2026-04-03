@@ -21,16 +21,16 @@ namespace SabreTools.Data.Models.NoIntroDatabase
         [XmlAttribute("d_date")]
         public string? DumpDate { get; set; }
 
-        /// <remarks>byte</remarks>
+        /// <remarks>(0|1) "0"</remarks>
         [XmlAttribute("d_date_info")]
-        public string? DumpDateInfo { get; set; }
+        public bool? DumpDateInfo { get; set; }
 
         [XmlAttribute("r_date")]
         public string? ReleaseDate { get; set; }
 
-        /// <remarks>byte</remarks>
+        /// <remarks>(0|1) "0"</remarks>
         [XmlAttribute("r_date_info")]
-        public string? ReleaseDateInfo { get; set; }
+        public bool? ReleaseDateInfo { get; set; }
 
         [XmlAttribute("dumper")]
         public string? Dumper { get; set; }
@@ -41,9 +41,9 @@ namespace SabreTools.Data.Models.NoIntroDatabase
         [XmlAttribute("originalformat")]
         public string? OriginalFormat { get; set; }
 
-        /// <remarks>byte</remarks>
+        /// <remarks>(0|1) "0"</remarks>
         [XmlAttribute("nodump")]
-        public string? Nodump { get; set; }
+        public bool? Nodump { get; set; }
 
         [XmlAttribute("tool")]
         public string? Tool { get; set; }
@@ -60,23 +60,23 @@ namespace SabreTools.Data.Models.NoIntroDatabase
         [XmlAttribute("link1")]
         public string? Link1 { get; set; }
 
-        /// <remarks>byte</remarks>
+        /// <remarks>(0|1) "0"</remarks>
         [XmlAttribute("link1_public")]
-        public string? Link1Public { get; set; }
+        public bool? Link1Public { get; set; }
 
         [XmlAttribute("link2")]
         public string? Link2 { get; set; }
 
-        /// <remarks>byte</remarks>
+        /// <remarks>(0|1) "0"</remarks>
         [XmlAttribute("link2_public")]
-        public string? Link2Public { get; set; }
+        public bool? Link2Public { get; set; }
 
         [XmlAttribute("link3")]
         public string? Link3 { get; set; }
 
-        /// <remarks>byte</remarks>
+        /// <remarks>(0|1) "0"</remarks>
         [XmlAttribute("link3_public")]
-        public string? Link3Public { get; set; }
+        public bool? Link3Public { get; set; }
 
         [XmlAttribute("region")]
         public string? Region { get; set; }

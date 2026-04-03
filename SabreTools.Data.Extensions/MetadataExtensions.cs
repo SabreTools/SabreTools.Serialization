@@ -188,6 +188,8 @@ namespace SabreTools.Data.Extensions
                 return softwareList.Clone() as SoftwareList;
             else if (self is Sound sound)
                 return sound.Clone() as Sound;
+            else if (self is SourceDetails sourceDetails)
+                return sourceDetails.Clone() as SourceDetails;
             else if (self is Video video)
                 return video.Clone() as Video;
 
@@ -1867,10 +1869,10 @@ namespace SabreTools.Data.Extensions
         {
             return value switch
             {
-                Width.Byte =>"8",
-                Width.Short =>"16",
-                Width.Int =>"32",
-                Width.Long =>"64",
+                Width.Byte => "8",
+                Width.Short => "16",
+                Width.Int => "32",
+                Width.Long => "64",
                 _ => null,
             };
         }

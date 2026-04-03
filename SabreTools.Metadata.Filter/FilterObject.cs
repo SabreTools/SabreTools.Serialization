@@ -849,6 +849,79 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Channels?.ToString();
                     return true;
 
+                case SourceDetails item when fieldName == "appendtonumber":
+                    checkValue = item.AppendToNumber;
+                    return true;
+                case SourceDetails item when fieldName == "comment1":
+                    checkValue = item.Comment1;
+                    return true;
+                case SourceDetails item when fieldName == "comment2":
+                    checkValue = item.Comment2;
+                    return true;
+                case SourceDetails item when fieldName == "dumpdate":
+                    checkValue = item.DumpDate;
+                    return true;
+                case SourceDetails item when fieldName == "dumpdateinfo":
+                    checkValue = item.DumpDateInfo is null ? null : (item.DumpDateInfo == true ? "1" : "0");
+                    return true;
+                case SourceDetails item when fieldName == "dumper":
+                    checkValue = item.Dumper;
+                    return true;
+                case SourceDetails item when fieldName == "id":
+                    checkValue = item.Id;
+                    return true;
+                case SourceDetails item when fieldName == "link1":
+                    checkValue = item.Link1;
+                    return true;
+                case SourceDetails item when fieldName == "link1public":
+                    checkValue = item.Link1Public is null ? null : (item.Link1Public == true ? "1" : "0");
+                    return true;
+                case SourceDetails item when fieldName == "link2":
+                    checkValue = item.Link2;
+                    return true;
+                case SourceDetails item when fieldName == "link2public":
+                    checkValue = item.Link2Public is null ? null : (item.Link2Public == true ? "1" : "0");
+                    return true;
+                case SourceDetails item when fieldName == "link3":
+                    checkValue = item.Link3;
+                    return true;
+                case SourceDetails item when fieldName == "link3public":
+                    checkValue = item.Link3Public is null ? null : (item.Link3Public == true ? "1" : "0");
+                    return true;
+                case SourceDetails item when fieldName == "mediatitle":
+                    checkValue = item.MediaTitle;
+                    return true;
+                case SourceDetails item when fieldName == "nodump":
+                    checkValue = item.Nodump is null ? null : (item.Nodump == true ? "1" : "0");
+                    return true;
+                case SourceDetails item when fieldName == "origin":
+                    checkValue = item.Origin;
+                    return true;
+                case SourceDetails item when fieldName == "originalformat":
+                    checkValue = item.OriginalFormat;
+                    return true;
+                case SourceDetails item when fieldName == "project":
+                    checkValue = item.Project;
+                    return true;
+                case SourceDetails item when fieldName == "region":
+                    checkValue = item.Region;
+                    return true;
+                case SourceDetails item when fieldName == "releasedate":
+                    checkValue = item.ReleaseDate;
+                    return true;
+                case SourceDetails item when fieldName == "releasedateinfo":
+                    checkValue = item.ReleaseDateInfo is null ? null : (item.ReleaseDateInfo == true ? "1" : "0");
+                    return true;
+                case SourceDetails item when fieldName == "rominfo":
+                    checkValue = item.RomInfo;
+                    return true;
+                case SourceDetails item when fieldName == "section":
+                    checkValue = item.Section;
+                    return true;
+                case SourceDetails item when fieldName == "tool":
+                    checkValue = item.Tool;
+                    return true;
+
                 case Video item when fieldName == "aspectx":
                     checkValue = item.AspectX?.ToString();
                     return true;

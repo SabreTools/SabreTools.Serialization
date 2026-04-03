@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.NoIntroDatabase;
 
 namespace SabreTools.Serialization.Readers
@@ -463,23 +464,23 @@ namespace SabreTools.Serialization.Readers
             obj.Section = reader.GetAttribute("section");
             obj.RomInfo = reader.GetAttribute("rominfo");
             obj.DumpDate = reader.GetAttribute("d_date");
-            obj.DumpDateInfo = reader.GetAttribute("d_date_info");
+            obj.DumpDateInfo = reader.GetAttribute("d_date_info").AsYesNo();
             obj.ReleaseDate = reader.GetAttribute("r_date");
-            obj.ReleaseDateInfo = reader.GetAttribute("r_date_info");
+            obj.ReleaseDateInfo = reader.GetAttribute("r_date_info").AsYesNo();
             obj.Dumper = reader.GetAttribute("dumper");
             obj.Project = reader.GetAttribute("project");
             obj.OriginalFormat = reader.GetAttribute("originalformat");
-            obj.Nodump = reader.GetAttribute("nodump");
+            obj.Nodump = reader.GetAttribute("nodump").AsYesNo();
             obj.Tool = reader.GetAttribute("tool");
             obj.Origin = reader.GetAttribute("origin");
             obj.Comment1 = reader.GetAttribute("comment1");
             obj.Comment2 = reader.GetAttribute("comment2");
             obj.Link1 = reader.GetAttribute("link1");
-            obj.Link1Public = reader.GetAttribute("link1_public");
+            obj.Link1Public = reader.GetAttribute("link1_public").AsYesNo();
             obj.Link2 = reader.GetAttribute("link2");
-            obj.Link2Public = reader.GetAttribute("link2_public");
+            obj.Link2Public = reader.GetAttribute("link2_public").AsYesNo();
             obj.Link3 = reader.GetAttribute("link3");
-            obj.Link3Public = reader.GetAttribute("link3_public");
+            obj.Link3Public = reader.GetAttribute("link3_public").AsYesNo();
             obj.Region = reader.GetAttribute("region");
             obj.MediaTitle = reader.GetAttribute("media_title");
 
