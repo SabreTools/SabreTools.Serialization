@@ -787,6 +787,55 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Region;
                     return true;
 
+                case ReleaseDetails item when fieldName == "appendtonumber":
+                    checkValue = item.AppendToNumber;
+                    return true;
+                case ReleaseDetails item when fieldName == "archivename":
+                    checkValue = item.ArchiveName;
+                    return true;
+                case ReleaseDetails item when fieldName == "category":
+                    checkValue = item.Category;
+                    return true;
+                case ReleaseDetails item when fieldName == "comment":
+                    checkValue = item.Comment;
+                    return true;
+                case ReleaseDetails item when fieldName == "date":
+                    checkValue = item.Date;
+                    return true;
+                case ReleaseDetails item when fieldName == "dirname":
+                    checkValue = item.DirName;
+                    return true;
+                case ReleaseDetails item when fieldName == "group":
+                    checkValue = item.Group;
+                    return true;
+                case ReleaseDetails item when fieldName == "id":
+                    checkValue = item.Id;
+                    return true;
+                case ReleaseDetails item when fieldName == "nfocrc":
+                    checkValue = item.NfoCRC;
+                    return true;
+                case ReleaseDetails item when fieldName == "nfoname":
+                    checkValue = item.NfoName;
+                    return true;
+                case ReleaseDetails item when fieldName == "nfosize":
+                    checkValue = item.NfoSize;
+                    return true;
+                case ReleaseDetails item when fieldName == "origin":
+                    checkValue = item.Origin;
+                    return true;
+                case ReleaseDetails item when fieldName == "originalformat":
+                    checkValue = item.OriginalFormat;
+                    return true;
+                case ReleaseDetails item when fieldName == "region":
+                    checkValue = item.Region;
+                    return true;
+                case ReleaseDetails item when fieldName == "rominfo":
+                    checkValue = item.RomInfo;
+                    return true;
+                case ReleaseDetails item when fieldName == "tool":
+                    checkValue = item.Tool;
+                    return true;
+
                 case Rom item when fieldName == "dispose":
                     checkValue = item.Dispose.FromYesNo();
                     return true;

@@ -12,9 +12,105 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public string? AppendToNumber
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.AppendToNumber;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.AppendToNumber = value;
+        }
+
+        public string? ArchiveName
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.ArchiveName;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.ArchiveName = value;
+        }
+
+        public string? Category
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Category;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Category = value;
+        }
+
+        public string? Comment
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Comment;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Comment = value;
+        }
+
+        public string? Date
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Date;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Date = value;
+        }
+
+        public string? DirName
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.DirName;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.DirName = value;
+        }
+
+        public string? Group
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Group;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Group = value;
+        }
+
+        public string? Id
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Id;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Id = value;
+        }
+
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.ReleaseDetails;
+
+        public string? NfoCRC
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoCRC;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoCRC = value;
+        }
+
+        public string? NfoName
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoName;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoName = value;
+        }
+
+        public string? NfoSize
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoSize;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoSize = value;
+        }
+
+        public string? Origin
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Origin;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Origin = value;
+        }
+
+        public string? OriginalFormat
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.OriginalFormat;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.OriginalFormat = value;
+        }
+
+        public string? Region
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Region;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Region = value;
+        }
+
+        public string? RomInfo
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.RomInfo;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.RomInfo = value;
+        }
+
+        public string? Tool
+        {
+            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Tool;
+            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Tool = value;
+        }
 
         #endregion
 

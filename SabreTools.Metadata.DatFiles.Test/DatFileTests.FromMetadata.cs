@@ -749,22 +749,22 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.ReleaseDetails
             {
-                [Data.Models.Metadata.ReleaseDetails.IdKey] = "id",
-                [Data.Models.Metadata.ReleaseDetails.AppendToNumberKey] = "appendtonumber",
-                [Data.Models.Metadata.ReleaseDetails.DateKey] = "date",
-                [Data.Models.Metadata.ReleaseDetails.OriginalFormatKey] = "originalformat",
-                [Data.Models.Metadata.ReleaseDetails.GroupKey] = "group",
-                [Data.Models.Metadata.ReleaseDetails.DirNameKey] = "dirname",
-                [Data.Models.Metadata.ReleaseDetails.NfoNameKey] = "nfoname",
-                [Data.Models.Metadata.ReleaseDetails.NfoSizeKey] = "nfosize",
-                [Data.Models.Metadata.ReleaseDetails.NfoCRCKey] = "nfocrc",
-                [Data.Models.Metadata.ReleaseDetails.ArchiveNameKey] = "archivename",
-                [Data.Models.Metadata.ReleaseDetails.RomInfoKey] = "rominfo",
-                [Data.Models.Metadata.ReleaseDetails.CategoryKey] = "category",
-                [Data.Models.Metadata.ReleaseDetails.CommentKey] = "comment",
-                [Data.Models.Metadata.ReleaseDetails.ToolKey] = "tool",
-                [Data.Models.Metadata.ReleaseDetails.RegionKey] = "region",
-                [Data.Models.Metadata.ReleaseDetails.OriginKey] = "origin",
+                AppendToNumber = "appendtonumber",
+                ArchiveName = "archivename",
+                Category = "category",
+                Comment = "comment",
+                Date = "date",
+                DirName = "dirname",
+                Group = "group",
+                Id = "id",
+                Origin = "origin",
+                OriginalFormat = "originalformat",
+                NfoCRC = "nfocrc",
+                NfoName = "nfoname",
+                NfoSize = "nfosize",
+                Region = "region",
+                RomInfo = "rominfo",
+                Tool = "tool",
             };
         }
 
@@ -1469,6 +1469,27 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("language", release.Language);
             Assert.Equal("name", release.Name);
             Assert.Equal("region", release.Region);
+        }
+
+        private static void ValidateReleaseDetails(ReleaseDetails? releaseDetails)
+        {
+            Assert.NotNull(releaseDetails);
+            Assert.Equal("appendtonumber", releaseDetails.AppendToNumber);
+            Assert.Equal("archivename", releaseDetails.ArchiveName);
+            Assert.Equal("category", releaseDetails.Category);
+            Assert.Equal("comment", releaseDetails.Comment);
+            Assert.Equal("date", releaseDetails.Date);
+            Assert.Equal("dirname", releaseDetails.DirName);
+            Assert.Equal("group", releaseDetails.Group);
+            Assert.Equal("id", releaseDetails.Id);
+            Assert.Equal("nfocrc", releaseDetails.NfoCRC);
+            Assert.Equal("nfoname", releaseDetails.NfoName);
+            Assert.Equal("nfosize", releaseDetails.NfoSize);
+            Assert.Equal("origin", releaseDetails.Origin);
+            Assert.Equal("originalformat", releaseDetails.OriginalFormat);
+            Assert.Equal("region", releaseDetails.Region);
+            Assert.Equal("rominfo", releaseDetails.RomInfo);
+            Assert.Equal("tool", releaseDetails.Tool);
         }
 
         private static void ValidateRom(Rom? rom)

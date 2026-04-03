@@ -180,6 +180,8 @@ namespace SabreTools.Data.Extensions
                 return ramOption.Clone() as RamOption;
             else if (self is Release release)
                 return release.Clone() as Release;
+            else if (self is ReleaseDetails releaseDetails)
+                return releaseDetails.Clone() as ReleaseDetails;
             else if (self is Serials serials)
                 return serials.Clone() as Serials;
             else if (self is SharedFeat sharedFeat)

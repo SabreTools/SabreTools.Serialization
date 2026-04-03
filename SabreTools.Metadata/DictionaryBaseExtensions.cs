@@ -316,6 +316,11 @@ namespace SabreTools.Metadata
                 if (!selfRelease.Equals(otherRelease))
                     return false;
             }
+            else if (self is ReleaseDetails selfReleaseDetails && other is ReleaseDetails otherReleaseDetails)
+            {
+                if (!selfReleaseDetails.Equals(otherReleaseDetails))
+                    return false;
+            }
             else if (self is Rom selfRom && other is Rom otherRom)
             {
                 // Intentionally skipped here

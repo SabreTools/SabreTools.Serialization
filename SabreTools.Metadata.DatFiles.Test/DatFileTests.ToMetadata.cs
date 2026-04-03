@@ -1016,22 +1016,22 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataReleaseDetails(Data.Models.Metadata.ReleaseDetails? releaseDetails)
         {
             Assert.NotNull(releaseDetails);
-            Assert.Equal("id", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.IdKey));
-            Assert.Equal("appendtonumber", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.AppendToNumberKey));
-            Assert.Equal("date", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.DateKey));
-            Assert.Equal("originalformat", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.OriginalFormatKey));
-            Assert.Equal("group", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.GroupKey));
-            Assert.Equal("dirname", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.DirNameKey));
-            Assert.Equal("nfoname", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.NfoNameKey));
-            Assert.Equal("nfosize", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.NfoSizeKey));
-            Assert.Equal("nfocrc", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.NfoCRCKey));
-            Assert.Equal("archivename", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.ArchiveNameKey));
-            Assert.Equal("rominfo", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.RomInfoKey));
-            Assert.Equal("category", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.CategoryKey));
-            Assert.Equal("comment", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.CommentKey));
-            Assert.Equal("tool", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.ToolKey));
-            Assert.Equal("region", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.RegionKey));
-            Assert.Equal("origin", releaseDetails.ReadString(Data.Models.Metadata.ReleaseDetails.OriginKey));
+            Assert.Equal("id", releaseDetails.Id);
+            Assert.Equal("appendtonumber", releaseDetails.AppendToNumber);
+            Assert.Equal("date", releaseDetails.Date);
+            Assert.Equal("originalformat", releaseDetails.OriginalFormat);
+            Assert.Equal("group", releaseDetails.Group);
+            Assert.Equal("dirname", releaseDetails.DirName);
+            Assert.Equal("nfoname", releaseDetails.NfoName);
+            Assert.Equal("nfosize", releaseDetails.NfoSize);
+            Assert.Equal("nfocrc", releaseDetails.NfoCRC);
+            Assert.Equal("archivename", releaseDetails.ArchiveName);
+            Assert.Equal("rominfo", releaseDetails.RomInfo);
+            Assert.Equal("category", releaseDetails.Category);
+            Assert.Equal("comment", releaseDetails.Comment);
+            Assert.Equal("tool", releaseDetails.Tool);
+            Assert.Equal("region", releaseDetails.Region);
+            Assert.Equal("origin", releaseDetails.Origin);
         }
 
         private static void ValidateMetadataRom(Data.Models.Metadata.Rom? rom)

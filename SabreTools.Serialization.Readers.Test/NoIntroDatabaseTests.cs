@@ -140,30 +140,30 @@ namespace SabreTools.Serialization.Readers.Test
 
             var sourceDetails = new Data.Models.NoIntroDatabase.SourceDetails
             {
-                Id = "XXXXXX",
-                AppendToNumber = "XXXXXX",
-                Section = "XXXXXX",
-                RomInfo = "XXXXXX",
-                DumpDate = "XXXXXX",
+                Id = "id",
+                AppendToNumber = "appendtonumber",
+                Section = "section",
+                RomInfo = "rominfo",
+                DumpDate = "dumpdate",
                 DumpDateInfo = true,
-                ReleaseDate = "XXXXXX",
+                ReleaseDate = "releasedate",
                 ReleaseDateInfo = true,
-                Dumper = "XXXXXX",
-                Project = "XXXXXX",
-                OriginalFormat = "XXXXXX",
+                Dumper = "dumper",
+                Project = "project",
+                OriginalFormat = "originalformat",
                 Nodump = true,
-                Tool = "XXXXXX",
-                Origin = "XXXXXX",
-                Comment1 = "XXXXXX",
-                Comment2 = "XXXXXX",
-                Link1 = "XXXXXX",
+                Tool = "tool",
+                Origin = "origin",
+                Comment1 = "comment1",
+                Comment2 = "comment2",
+                Link1 = "link1",
                 Link1Public = true,
-                Link2 = "XXXXXX",
+                Link2 = "link2",
                 Link2Public = true,
-                Link3 = "XXXXXX",
+                Link3 = "link3",
                 Link3Public = true,
-                Region = "XXXXXX",
-                MediaTitle = "XXXXXX",
+                Region = "region",
+                MediaTitle = "mediatitle",
             };
 
             var serials = new Data.Models.NoIntroDatabase.Serials
@@ -222,22 +222,22 @@ namespace SabreTools.Serialization.Readers.Test
 
             var releaseDetails = new Data.Models.NoIntroDatabase.ReleaseDetails
             {
-                Id = "XXXXXX",
-                AppendToNumber = "XXXXXX",
-                Date = "XXXXXX",
-                OriginalFormat = "XXXXXX",
-                Group = "XXXXXX",
-                DirName = "XXXXXX",
-                NfoName = "XXXXXX",
-                NfoSize = "XXXXXX",
-                NfoCRC = "XXXXXX",
-                ArchiveName = "XXXXXX",
-                RomInfo = "XXXXXX",
-                Category = "XXXXXX",
-                Comment = "XXXXXX",
-                Tool = "XXXXXX",
-                Region = "XXXXXX",
-                Origin = "XXXXXX",
+                Id = "id",
+                AppendToNumber = "appendtonumber",
+                Date = "date",
+                OriginalFormat = "originalformat",
+                Group = "group",
+                DirName = "dirname",
+                NfoName = "nfoname",
+                NfoSize = "nfosize",
+                NfoCRC = "nfocrc",
+                ArchiveName = "archivename",
+                RomInfo = "rominfo",
+                Category = "category",
+                Comment = "comment",
+                Tool = "tool",
+                Region = "region",
+                Origin = "origin",
             };
 
             var release = new Data.Models.NoIntroDatabase.Release
@@ -356,30 +356,30 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.NoIntroDatabase.SourceDetails? sourceDetails)
         {
             Assert.NotNull(sourceDetails);
-            Assert.Equal("XXXXXX", sourceDetails.Id);
-            Assert.Equal("XXXXXX", sourceDetails.AppendToNumber);
-            Assert.Equal("XXXXXX", sourceDetails.Section);
-            Assert.Equal("XXXXXX", sourceDetails.RomInfo);
-            Assert.Equal("XXXXXX", sourceDetails.DumpDate);
+            Assert.Equal("id", sourceDetails.Id);
+            Assert.Equal("appendtonumber", sourceDetails.AppendToNumber);
+            Assert.Equal("section", sourceDetails.Section);
+            Assert.Equal("rominfo", sourceDetails.RomInfo);
+            Assert.Equal("dumpdate", sourceDetails.DumpDate);
             Assert.Equal(true, sourceDetails.DumpDateInfo);
-            Assert.Equal("XXXXXX", sourceDetails.ReleaseDate);
+            Assert.Equal("releasedate", sourceDetails.ReleaseDate);
             Assert.Equal(true, sourceDetails.ReleaseDateInfo);
-            Assert.Equal("XXXXXX", sourceDetails.Dumper);
-            Assert.Equal("XXXXXX", sourceDetails.Project);
-            Assert.Equal("XXXXXX", sourceDetails.OriginalFormat);
+            Assert.Equal("dumper", sourceDetails.Dumper);
+            Assert.Equal("project", sourceDetails.Project);
+            Assert.Equal("originalformat", sourceDetails.OriginalFormat);
             Assert.Equal(true, sourceDetails.Nodump);
-            Assert.Equal("XXXXXX", sourceDetails.Tool);
-            Assert.Equal("XXXXXX", sourceDetails.Origin);
-            Assert.Equal("XXXXXX", sourceDetails.Comment1);
-            Assert.Equal("XXXXXX", sourceDetails.Comment2);
-            Assert.Equal("XXXXXX", sourceDetails.Link1);
+            Assert.Equal("tool", sourceDetails.Tool);
+            Assert.Equal("origin", sourceDetails.Origin);
+            Assert.Equal("comment1", sourceDetails.Comment1);
+            Assert.Equal("comment2", sourceDetails.Comment2);
+            Assert.Equal("link1", sourceDetails.Link1);
             Assert.Equal(true, sourceDetails.Link1Public);
-            Assert.Equal("XXXXXX", sourceDetails.Link2);
+            Assert.Equal("link2", sourceDetails.Link2);
             Assert.Equal(true, sourceDetails.Link2Public);
-            Assert.Equal("XXXXXX", sourceDetails.Link3);
+            Assert.Equal("link3", sourceDetails.Link3);
             Assert.Equal(true, sourceDetails.Link3Public);
-            Assert.Equal("XXXXXX", sourceDetails.Region);
-            Assert.Equal("XXXXXX", sourceDetails.MediaTitle);
+            Assert.Equal("region", sourceDetails.Region);
+            Assert.Equal("mediatitle", sourceDetails.MediaTitle);
         }
 
         /// <summary>
@@ -459,22 +459,22 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.NoIntroDatabase.ReleaseDetails? releaseDetails)
         {
             Assert.NotNull(releaseDetails);
-            Assert.Equal("XXXXXX", releaseDetails.Id);
-            Assert.Equal("XXXXXX", releaseDetails.AppendToNumber);
-            Assert.Equal("XXXXXX", releaseDetails.Date);
-            Assert.Equal("XXXXXX", releaseDetails.OriginalFormat);
-            Assert.Equal("XXXXXX", releaseDetails.Group);
-            Assert.Equal("XXXXXX", releaseDetails.DirName);
-            Assert.Equal("XXXXXX", releaseDetails.NfoName);
-            Assert.Equal("XXXXXX", releaseDetails.NfoSize);
-            Assert.Equal("XXXXXX", releaseDetails.NfoCRC);
-            Assert.Equal("XXXXXX", releaseDetails.ArchiveName);
-            Assert.Equal("XXXXXX", releaseDetails.RomInfo);
-            Assert.Equal("XXXXXX", releaseDetails.Category);
-            Assert.Equal("XXXXXX", releaseDetails.Comment);
-            Assert.Equal("XXXXXX", releaseDetails.Tool);
-            Assert.Equal("XXXXXX", releaseDetails.Region);
-            Assert.Equal("XXXXXX", releaseDetails.Origin);
+            Assert.Equal("id", releaseDetails.Id);
+            Assert.Equal("appendtonumber", releaseDetails.AppendToNumber);
+            Assert.Equal("date", releaseDetails.Date);
+            Assert.Equal("originalformat", releaseDetails.OriginalFormat);
+            Assert.Equal("group", releaseDetails.Group);
+            Assert.Equal("dirname", releaseDetails.DirName);
+            Assert.Equal("nfoname", releaseDetails.NfoName);
+            Assert.Equal("nfosize", releaseDetails.NfoSize);
+            Assert.Equal("nfocrc", releaseDetails.NfoCRC);
+            Assert.Equal("archivename", releaseDetails.ArchiveName);
+            Assert.Equal("rominfo", releaseDetails.RomInfo);
+            Assert.Equal("category", releaseDetails.Category);
+            Assert.Equal("comment", releaseDetails.Comment);
+            Assert.Equal("tool", releaseDetails.Tool);
+            Assert.Equal("region", releaseDetails.Region);
+            Assert.Equal("origin", releaseDetails.Origin);
         }
     }
 }
