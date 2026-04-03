@@ -25,8 +25,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         [JsonProperty("value"), XmlElement("value")]
         public bool? Value
         {
-            get => _internal.ReadBool(Data.Models.Metadata.Original.ValueKey);
-            set => _internal[Data.Models.Metadata.Original.ValueKey] = value;
+            get => _internal.Value;
+            set => _internal.Value = value;
         }
 
         #endregion

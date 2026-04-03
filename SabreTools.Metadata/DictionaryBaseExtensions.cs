@@ -291,7 +291,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Original selfOriginal && other is Original otherOriginal)
             {
-                if (selfOriginal.Content != otherOriginal.Content)
+                if (!selfOriginal.Equals(otherOriginal))
                     return false;
             }
             else if (self is Part selfPart && other is Part otherPart)

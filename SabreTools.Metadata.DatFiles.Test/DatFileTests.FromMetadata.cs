@@ -697,7 +697,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Original
             {
                 Content = "content",
-                [Data.Models.Metadata.Original.ValueKey] = true,
+                Value = true,
             };
         }
 

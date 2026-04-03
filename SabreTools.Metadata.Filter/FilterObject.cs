@@ -752,6 +752,9 @@ namespace SabreTools.Metadata.Filter
                 case Original item when fieldName == "content":
                     checkValue = item.Content;
                     return true;
+                case Original item when fieldName == "value":
+                    checkValue = item.Value.FromYesNo();
+                    return true;
 
                 case Part item when fieldName == "interface":
                     checkValue = item.Interface;

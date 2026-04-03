@@ -191,7 +191,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             {
                 Write<Original?>("ORIGINAL", new Original
                 {
-                    Value = original.ReadBool(Data.Models.Metadata.Original.ValueKey),
+                    Value = original.Value,
                     Content = original.Content,
                 });
             }

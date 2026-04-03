@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using SabreTools.Data.Extensions;
 using SabreTools.Metadata.DatItems;
 using OpenMSXSubType = SabreTools.Data.Models.Metadata.OpenMSXSubType;
 
@@ -983,7 +982,7 @@ namespace SabreTools.Metadata.DatFiles
                     {
                         var newOriginal = new Data.Models.Metadata.Original
                         {
-                            [Data.Models.Metadata.Original.ValueKey] = romOriginal.Value.FromYesNo(),
+                            Value = romOriginal.Value,
                             Content = romOriginal.Content,
                         };
                         dumpRom[Data.Models.Metadata.Dump.OriginalKey] = newOriginal;
@@ -1011,7 +1010,7 @@ namespace SabreTools.Metadata.DatFiles
                     {
                         var newOriginal = new Data.Models.Metadata.Original
                         {
-                            [Data.Models.Metadata.Original.ValueKey] = megaRomOriginal.Value.FromYesNo(),
+                            Value = megaRomOriginal.Value,
                             Content = megaRomOriginal.Content,
                         };
                         dumpMegaRom[Data.Models.Metadata.Dump.OriginalKey] = newOriginal;
@@ -1039,7 +1038,7 @@ namespace SabreTools.Metadata.DatFiles
                     {
                         var newOriginal = new Data.Models.Metadata.Original
                         {
-                            [Data.Models.Metadata.Original.ValueKey] = sccPlusCartOriginal.Value.FromYesNo(),
+                            Value = sccPlusCartOriginal.Value,
                             Content = sccPlusCartOriginal.Content,
                         };
                         dumpSccPlusCart[Data.Models.Metadata.Dump.OriginalKey] = newOriginal;

@@ -174,6 +174,8 @@ namespace SabreTools.Data.Extensions
                 return info.Clone() as Info;
             else if (self is Instance instance)
                 return instance.Clone() as Instance;
+            else if (self is Original original)
+                return original.Clone() as Original;
             else if (self is RamOption ramOption)
                 return ramOption.Clone() as RamOption;
             else if (self is SharedFeat sharedFeat)
@@ -300,10 +302,6 @@ namespace SabreTools.Data.Extensions
                 cloneMachine.IsMechanical = selfMachine.IsMechanical;
                 cloneMachine.Runnable = selfMachine.Runnable;
                 cloneMachine.Supported = selfMachine.Supported;
-            }
-            else if (self is Original selfOriginal && clone is Original cloneOriginal)
-            {
-                cloneOriginal.Content = selfOriginal.Content;
             }
             else if (self is Part selfPart && clone is Part clonePart)
             {

@@ -103,7 +103,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var original = new Data.Models.Metadata.Original
             {
-                [Data.Models.Metadata.Original.ValueKey] = item.Value,
+                Value = item.Value,
                 Content = item.Content,
             };
             return original;
