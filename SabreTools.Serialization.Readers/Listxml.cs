@@ -923,10 +923,10 @@ namespace SabreTools.Serialization.Readers
 
             obj.Service = reader.GetAttribute("service").AsYesNo();
             obj.Tilt = reader.GetAttribute("tilt").AsYesNo();
-            obj.Players = reader.GetAttribute("players");
+            obj.Players = NumberHelper.ConvertToInt64(reader.GetAttribute("players"));
             obj.ControlAttr = reader.GetAttribute("control");
-            obj.Buttons = reader.GetAttribute("buttons");
-            obj.Coins = reader.GetAttribute("coins");
+            obj.Buttons = NumberHelper.ConvertToInt64(reader.GetAttribute("buttons"));
+            obj.Coins = NumberHelper.ConvertToInt64(reader.GetAttribute("coins"));
 
             List<Control> controls = [];
 

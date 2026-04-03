@@ -875,16 +875,16 @@ namespace SabreTools.Serialization.Readers
                 switch (kvp.Key?.ToLowerInvariant())
                 {
                     case "players":
-                        input.Players = kvp.Value;
+                        input.Players = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "control":
                         input.Control = kvp.Value;
                         break;
                     case "buttons":
-                        input.Buttons = kvp.Value;
+                        input.Buttons = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "coins":
-                        input.Coins = kvp.Value;
+                        input.Coins = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "tilt":
                         input.Tilt = kvp.Value.AsYesNo();

@@ -13,6 +13,18 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public long? Buttons
+        {
+            get => (_internal as Data.Models.Metadata.Input)?.Buttons;
+            set => (_internal as Data.Models.Metadata.Input)?.Buttons = value;
+        }
+
+        public long? Coins
+        {
+            get => (_internal as Data.Models.Metadata.Input)?.Coins;
+            set => (_internal as Data.Models.Metadata.Input)?.Coins = value;
+        }
+
         [JsonIgnore]
         public bool ControlsSpecified
         {
@@ -26,6 +38,12 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.Input;
+
+        public long? Players
+        {
+            get => (_internal as Data.Models.Metadata.Input)?.Players;
+            set => (_internal as Data.Models.Metadata.Input)?.Players = value;
+        }
 
         public bool? Service
         {
@@ -47,19 +65,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Input(Data.Models.Metadata.Input item) : base(item)
         {
-            // Process flag values
-            long? buttons = ReadLong(Data.Models.Metadata.Input.ButtonsKey);
-            if (buttons is not null)
-                Write<string?>(Data.Models.Metadata.Input.ButtonsKey, buttons.ToString());
-
-            long? coins = ReadLong(Data.Models.Metadata.Input.CoinsKey);
-            if (coins is not null)
-                Write<string?>(Data.Models.Metadata.Input.CoinsKey, coins.ToString());
-
-            long? players = ReadLong(Data.Models.Metadata.Input.PlayersKey);
-            if (players is not null)
-                Write<string?>(Data.Models.Metadata.Input.PlayersKey, players.ToString());
-
             // Handle subitems
             var controls = item.ReadArray<Data.Models.Metadata.Control>(Data.Models.Metadata.Input.ControlKey);
             if (controls is not null)

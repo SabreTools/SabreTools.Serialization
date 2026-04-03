@@ -286,6 +286,9 @@ namespace SabreTools.Data.Extensions
             }
             else if (self is Input selfInput && clone is Input cloneInput)
             {
+                cloneInput.Buttons = selfInput.Buttons;
+                cloneInput.Coins = selfInput.Coins;
+                cloneInput.Players = selfInput.Players;
                 cloneInput.Service = selfInput.Service;
                 cloneInput.Tilt = selfInput.Tilt;
             }

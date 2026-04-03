@@ -254,6 +254,12 @@ namespace SabreTools.Metadata
             }
             else if (self is Input selfInput && other is Input otherInput)
             {
+                if (selfInput.Buttons != otherInput.Buttons)
+                    return false;
+                if (selfInput.Coins != otherInput.Coins)
+                    return false;
+                if (selfInput.Players != otherInput.Players)
+                    return false;
                 if (selfInput.Service != otherInput.Service)
                     return false;
                 if (selfInput.Tilt != otherInput.Tilt)

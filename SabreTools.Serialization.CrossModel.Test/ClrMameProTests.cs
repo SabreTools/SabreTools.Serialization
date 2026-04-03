@@ -180,10 +180,10 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var input = new Data.Models.ClrMamePro.Input
             {
-                Players = "XXXXXX",
+                Players = 12345,
                 Control = "XXXXXX",
-                Buttons = "XXXXXX",
-                Coins = "XXXXXX",
+                Buttons = 12345,
+                Coins = 12345,
                 Tilt = true,
                 Service = true,
             };
@@ -475,10 +475,10 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.ClrMamePro.Input? input)
         {
             Assert.NotNull(input);
-            Assert.Equal("XXXXXX", input.Players);
+            Assert.Equal(12345, input.Players);
             Assert.Equal("XXXXXX", input.Control);
-            Assert.Equal("XXXXXX", input.Buttons);
-            Assert.Equal("XXXXXX", input.Coins);
+            Assert.Equal(12345, input.Buttons);
+            Assert.Equal(12345, input.Coins);
             Assert.Equal(true, input.Tilt);
             Assert.Equal(true, input.Service);
         }

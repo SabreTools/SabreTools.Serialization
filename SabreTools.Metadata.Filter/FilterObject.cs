@@ -714,6 +714,15 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Value;
                     return true;
 
+                case Input item when fieldName == "buttons":
+                    checkValue = item.Buttons?.ToString();
+                    return true;
+                case Input item when fieldName == "coins":
+                    checkValue = item.Coins?.ToString();
+                    return true;
+                case Input item when fieldName == "players":
+                    checkValue = item.Players?.ToString();
+                    return true;
                 case Input item when fieldName == "service":
                     checkValue = item.Service.FromYesNo();
                     return true;

@@ -8,6 +8,12 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public long? Buttons { get; set; }
+
+        public long? Coins { get; set; }
+
+        public long? Players { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Service { get; set; }
 
@@ -18,17 +24,8 @@ namespace SabreTools.Data.Models.Metadata
 
         #region Keys
 
-        /// <remarks>long</remarks>
-        public const string ButtonsKey = "buttons";
-
-        /// <remarks>long</remarks>
-        public const string CoinsKey = "coins";
-
         /// <remarks>string / Control[]</remarks>
         public const string ControlKey = "control";
-
-        /// <remarks>long</remarks>
-        public const string PlayersKey = "players";
 
         #endregion
 

@@ -536,10 +536,10 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Service = item.Service,
                 Tilt = item.Tilt,
-                [Data.Models.Metadata.Input.PlayersKey] = item.Players,
+                Players = item.Players,
                 [Data.Models.Metadata.Input.ControlKey] = item.ControlAttr,
-                [Data.Models.Metadata.Input.ButtonsKey] = item.Buttons,
-                [Data.Models.Metadata.Input.CoinsKey] = item.Coins,
+                Buttons = item.Buttons,
+                Coins = item.Coins,
             };
 
             if (item.Control is not null && item.Control.Length > 0)

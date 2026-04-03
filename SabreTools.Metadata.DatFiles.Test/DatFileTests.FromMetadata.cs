@@ -662,10 +662,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Input
             {
-                [Data.Models.Metadata.Input.ButtonsKey] = 12345L,
-                [Data.Models.Metadata.Input.CoinsKey] = 12345L,
+                Buttons = 12345,
+                Coins = 12345,
                 [Data.Models.Metadata.Input.ControlKey] = new Data.Models.Metadata.Control[] { CreateMetadataControl() },
-                [Data.Models.Metadata.Input.PlayersKey] = 12345L,
+                Players = 12345,
                 Service = true,
                 Tilt = true,
             };
@@ -1413,9 +1413,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateInput(Input? input)
         {
             Assert.NotNull(input);
-            Assert.Equal(12345L, input.ReadLong(Data.Models.Metadata.Input.ButtonsKey));
-            Assert.Equal(12345L, input.ReadLong(Data.Models.Metadata.Input.CoinsKey));
-            Assert.Equal(12345L, input.ReadLong(Data.Models.Metadata.Input.PlayersKey));
+            Assert.Equal(12345, input.Buttons);
+            Assert.Equal(12345, input.Coins);
+            Assert.Equal(12345, input.Players);
             Assert.True(input.Service);
             Assert.True(input.Tilt);
 
@@ -1665,8 +1665,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateVideo(Display? display)
         {
             Assert.NotNull(display);
-            Assert.Equal(12345L, display.AspectX);
-            Assert.Equal(12345L, display.AspectY);
+            Assert.Equal(12345, display.AspectX);
+            Assert.Equal(12345, display.AspectY);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
             Assert.Equal(12345, display.Height);
             Assert.Equal(123.45, display.Refresh);

@@ -649,10 +649,10 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteOptionalAttributeString("service", obj.Service.FromYesNo());
             writer.WriteOptionalAttributeString("tilt", obj.Tilt.FromYesNo());
-            writer.WriteRequiredAttributeString("players", obj.Players);
+            writer.WriteRequiredAttributeString("players", obj.Players?.ToString());
             writer.WriteOptionalAttributeString("control", obj.ControlAttr);
-            writer.WriteOptionalAttributeString("buttons", obj.Buttons);
-            writer.WriteOptionalAttributeString("coins", obj.Coins);
+            writer.WriteOptionalAttributeString("buttons", obj.Buttons?.ToString());
+            writer.WriteOptionalAttributeString("coins", obj.Coins?.ToString());
 
             if (obj.Control is not null && obj.Control.Length > 0)
             {

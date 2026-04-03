@@ -229,7 +229,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Input.PlayersKey,
+                nameof(Data.Models.Metadata.Input.Players),
                 Data.Models.Metadata.Input.ControlKey,
             ]));
         }
@@ -908,7 +908,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Input.PlayersKey,
+                nameof(Data.Models.Metadata.Input.Players),
             ]));
         }
 

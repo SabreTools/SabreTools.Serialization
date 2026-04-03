@@ -172,10 +172,10 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Service = true,
                 Tilt = true,
-                Players = "XXXXXX",
+                Players = 12345,
                 //ControlAttr = "XXXXXX", // Mututally exclusive with input.Control
-                Buttons = "XXXXXX",
-                Coins = "XXXXXX",
+                Buttons = 12345,
+                Coins = 12345,
                 Control = [control],
             };
 
@@ -600,10 +600,10 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(input);
             Assert.Equal(true, input.Service);
             Assert.Equal(true, input.Tilt);
-            Assert.Equal("XXXXXX", input.Players);
+            Assert.Equal(12345, input.Players);
             //Assert.Equal("XXXXXX", input.ControlAttr); // Mututally exclusive with input.Control
-            Assert.Equal("XXXXXX", input.Buttons);
-            Assert.Equal("XXXXXX", input.Coins);
+            Assert.Equal(12345, input.Buttons);
+            Assert.Equal(12345, input.Coins);
 
             Assert.NotNull(input.Control);
             var control = Assert.Single(input.Control);

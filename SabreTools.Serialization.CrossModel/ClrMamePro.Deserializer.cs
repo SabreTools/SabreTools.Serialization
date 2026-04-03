@@ -229,10 +229,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var input = new Input
             {
-                Players = item.ReadString(Data.Models.Metadata.Input.PlayersKey),
+                Players = item.Players,
                 Control = item.ReadString(Data.Models.Metadata.Input.ControlKey),
-                Buttons = item.ReadString(Data.Models.Metadata.Input.ButtonsKey),
-                Coins = item.ReadString(Data.Models.Metadata.Input.CoinsKey),
+                Buttons = item.Buttons,
+                Coins = item.Coins,
                 Tilt = item.Tilt,
                 Service = item.Service,
             };

@@ -498,9 +498,9 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Service = item.Service,
                 Tilt = item.Tilt,
-                Players = item.ReadString(Data.Models.Metadata.Input.PlayersKey),
-                Buttons = item.ReadString(Data.Models.Metadata.Input.ButtonsKey),
-                Coins = item.ReadString(Data.Models.Metadata.Input.CoinsKey),
+                Players = item.Players,
+                Buttons = item.Buttons,
+                Coins = item.Coins,
             };
 
             var controlAttr = item.ReadString(Data.Models.Metadata.Input.ControlKey);

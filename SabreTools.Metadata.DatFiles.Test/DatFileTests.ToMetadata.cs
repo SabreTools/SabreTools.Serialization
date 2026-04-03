@@ -894,7 +894,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Emulation);
             Assert.True(driver.Incomplete);
             Assert.True(driver.NoSoundHardware);
-            Assert.Equal("pallettesize", driver.PaletteSize);
+            Assert.Equal("palettesize", driver.PaletteSize);
             Assert.True(driver.RequiresArtwork);
             Assert.Equal(Data.Models.Metadata.Supported.Yes, driver.SaveState);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);
@@ -928,9 +928,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataInput(Data.Models.Metadata.Input? input)
         {
             Assert.NotNull(input);
-            Assert.Equal(12345, input.ReadLong(Data.Models.Metadata.Input.ButtonsKey));
-            Assert.Equal(12345, input.ReadLong(Data.Models.Metadata.Input.CoinsKey));
-            Assert.Equal(12345, input.ReadLong(Data.Models.Metadata.Input.PlayersKey));
+            Assert.Equal(12345, input.Buttons);
+            Assert.Equal(12345, input.Coins);
+            Assert.Equal(12345, input.Players);
             Assert.True(input.Service);
             Assert.True(input.Tilt);
 

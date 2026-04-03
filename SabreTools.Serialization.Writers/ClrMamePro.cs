@@ -451,10 +451,10 @@ namespace SabreTools.Serialization.Writers
                 return;
 
             writer.WriteStartElement("input");
-            writer.WriteRequiredAttributeString("players", input.Players, throwOnError: true);
+            writer.WriteRequiredAttributeString("players", input.Players?.ToString(), throwOnError: true);
             writer.WriteOptionalAttributeString("control", input.Control);
-            writer.WriteRequiredAttributeString("buttons", input.Buttons, throwOnError: true);
-            writer.WriteOptionalAttributeString("coins", input.Coins);
+            writer.WriteRequiredAttributeString("buttons", input.Buttons?.ToString(), throwOnError: true);
+            writer.WriteOptionalAttributeString("coins", input.Coins?.ToString());
             writer.WriteOptionalAttributeString("tilt", input.Tilt.FromYesNo());
             writer.WriteOptionalAttributeString("service", input.Service.FromYesNo());
             writer.WriteEndElement(); // input

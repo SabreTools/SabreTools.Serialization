@@ -152,8 +152,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Input input:
-                    if (input.ReadLong(Data.Models.Metadata.Input.PlayersKey) is null)
-                        missingFields.Add(Data.Models.Metadata.Input.PlayersKey);
+                    if (input.Players is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Input.Players));
                     if (!input.ControlsSpecified)
                         missingFields.Add(Data.Models.Metadata.Input.ControlKey);
                     break;
