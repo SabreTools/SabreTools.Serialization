@@ -161,8 +161,9 @@ namespace SabreTools.Data.Extensions
                 return deviceRef.Clone() as DeviceRef;
             else if (self is Extension extension)
                 return extension.Clone() as Extension;
-            else if (self is Feature feature)
-                return feature.Clone() as Feature;
+            // TODO: Reenable when PartFeature no longer needs nesting
+            // else if (self is Feature feature)
+            //     return feature.Clone() as Feature;
             else if (self is Info info)
                 return info.Clone() as Info;
             else if (self is Instance instance)
@@ -253,6 +254,15 @@ namespace SabreTools.Data.Extensions
                 cloneDriver.Sound = selfDriver.Sound;
                 cloneDriver.Status = selfDriver.Status;
                 cloneDriver.Unofficial = selfDriver.Unofficial;
+            }
+            else if (self is Feature selfFeature && clone is Feature cloneFeature)
+            {
+                // TODO: Remove when PartFeature no longer needs nesting
+                cloneFeature.FeatureType = selfFeature.FeatureType;
+                cloneFeature.Name = selfFeature.Name;
+                cloneFeature.Overall = selfFeature.Overall;
+                cloneFeature.Status = selfFeature.Status;
+                cloneFeature.Value = selfFeature.Value;
             }
             else if (self is Header selfHeader && clone is Header cloneHeader)
             {
