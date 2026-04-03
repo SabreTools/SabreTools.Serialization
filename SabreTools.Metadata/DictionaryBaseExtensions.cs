@@ -14,7 +14,6 @@ namespace SabreTools.Metadata
         /// Check equality of two DictionaryBase objects
         /// </summary>
         /// TODO: Fix equality checking with case sensitivity of string properties
-        /// TODO: Use IEquatable where possible
         public static bool EqualTo(this DictionaryBase self, DictionaryBase other)
         {
             // Check types first
@@ -46,7 +45,6 @@ namespace SabreTools.Metadata
         /// Check equality of two DictionaryBase objects
         /// </summary>
         /// TODO: Fix equality checking with case sensitivity of string properties
-        /// TODO: Use IEquatable where possible
         private static bool EqualsImpl(this DictionaryBase self, DictionaryBase other)
         {
             // If the number of key-value pairs doesn't match, they can't match
@@ -71,7 +69,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Analog selfAnalog && other is Analog otherAnalog)
             {
-                if (selfAnalog.Mask != otherAnalog.Mask)
+                if (!selfAnalog.Equals(otherAnalog))
                     return false;
             }
             else if (self is Archive selfArchive && other is Archive otherArchive)
@@ -81,9 +79,7 @@ namespace SabreTools.Metadata
             }
             else if (self is BiosSet selfBiosSet && other is BiosSet otherBiosSet)
             {
-                if (selfBiosSet.Default != otherBiosSet.Default)
-                    return false;
-                if (selfBiosSet.Description != otherBiosSet.Description)
+                if (!selfBiosSet.Equals(otherBiosSet))
                     return false;
             }
             else if (self is Chip selfChip && other is Chip otherChip)
@@ -97,13 +93,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Condition selfCondition && other is Condition otherCondition)
             {
-                if (selfCondition.Mask != otherCondition.Mask)
-                    return false;
-                if (selfCondition.Relation != otherCondition.Relation)
-                    return false;
-                if (selfCondition.Tag != otherCondition.Tag)
-                    return false;
-                if (selfCondition.Value != otherCondition.Value)
+                if (!selfCondition.Equals(otherCondition))
                     return false;
             }
             else if (self is Configuration selfConfiguration && other is Configuration otherConfiguration)
@@ -127,29 +117,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Control selfControl && other is Control otherControl)
             {
-                if (selfControl.Buttons != otherControl.Buttons)
-                    return false;
-                if (selfControl.ControlType != otherControl.ControlType)
-                    return false;
-                if (selfControl.KeyDelta != otherControl.KeyDelta)
-                    return false;
-                if (selfControl.Maximum != otherControl.Maximum)
-                    return false;
-                if (selfControl.Minimum != otherControl.Minimum)
-                    return false;
-                if (selfControl.Player != otherControl.Player)
-                    return false;
-                if (selfControl.ReqButtons != otherControl.ReqButtons)
-                    return false;
-                if (selfControl.Reverse != otherControl.Reverse)
-                    return false;
-                if (selfControl.Sensitivity != otherControl.Sensitivity)
-                    return false;
-                if (selfControl.Ways != otherControl.Ways)
-                    return false;
-                if (selfControl.Ways2 != otherControl.Ways2)
-                    return false;
-                if (selfControl.Ways3 != otherControl.Ways3)
+                if (!selfControl.Equals(otherControl))
                     return false;
             }
             else if (self is DataArea selfDataArea && other is DataArea otherDataArea)
@@ -235,13 +203,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Feature selfFeature && other is Feature otherFeature)
             {
-                if (selfFeature.FeatureType != otherFeature.FeatureType)
-                    return false;
-                if (selfFeature.Overall != otherFeature.Overall)
-                    return false;
-                if (selfFeature.Status != otherFeature.Status)
-                    return false;
-                if (selfFeature.Value != otherFeature.Value)
+                if (!selfFeature.Equals(otherFeature))
                     return false;
             }
             else if (self is Header selfHeader && other is Header otherHeader)
@@ -317,7 +279,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Info selfInfo && other is Info otherInfo)
             {
-                if (selfInfo.Value != otherInfo.Value)
+                if (!selfInfo.Equals(otherInfo))
                     return false;
             }
             else if (self is Input selfInput && other is Input otherInput)
@@ -329,7 +291,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Instance selfInstance && other is Instance otherInstance)
             {
-                if (selfInstance.BriefName != otherInstance.BriefName)
+                if (!selfInstance.Equals(otherInstance))
                     return false;
             }
             else if (self is Machine selfMachine && other is Machine otherMachine)
@@ -368,9 +330,7 @@ namespace SabreTools.Metadata
             }
             else if (self is RamOption selfRamOption && other is RamOption otherRamOption)
             {
-                if (selfRamOption.Content != otherRamOption.Content)
-                    return false;
-                if (selfRamOption.Default != otherRamOption.Default)
+                if (!selfRamOption.Equals(otherRamOption))
                     return false;
             }
             else if (self is Release selfRelease && other is Release otherRelease)
@@ -384,14 +344,12 @@ namespace SabreTools.Metadata
             }
             else if (self is SharedFeat selfSharedFeat && other is SharedFeat otherSharedFeat)
             {
-                if (selfSharedFeat.Value != otherSharedFeat.Value)
+                if (!selfSharedFeat.Equals(otherSharedFeat))
                     return false;
             }
             else if (self is SlotOption selfSlotOption && other is SlotOption otherSlotOption)
             {
-                if (selfSlotOption.Default != otherSlotOption.Default)
-                    return false;
-                if (selfSlotOption.DevName != otherSlotOption.DevName)
+                if (!selfSlotOption.Equals(otherSlotOption))
                     return false;
             }
             else if (self is Software selfSoftware && other is Software otherSoftware)
@@ -412,7 +370,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Sound selfSound && other is Sound otherSound)
             {
-                if (selfSound.Channels != otherSound.Channels)
+                if (!selfSound.Equals(otherSound))
                     return false;
             }
             else if (self is Video selfVideo && other is Video otherVideo)
