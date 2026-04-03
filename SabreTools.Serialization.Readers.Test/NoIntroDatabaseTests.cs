@@ -196,7 +196,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Date = "XXXXXX",
                 Format = "XXXXXX",
                 Note = "XXXXXX",
-                Filter = "XXXXXX",
+                Filter = "filter",
                 Version = "XXXXXX",
                 UpdateType = "XXXXXX",
                 Size = "XXXXXX",
@@ -420,7 +420,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", file.Date);
             Assert.Equal("XXXXXX", file.Format);
             Assert.Equal("XXXXXX", file.Note);
-            Assert.Equal("XXXXXX", file.Filter);
+            Assert.Equal("filter", file.Filter);
             Assert.Equal("XXXXXX", file.Version);
             Assert.Equal("XXXXXX", file.UpdateType);
             Assert.Equal("XXXXXX", file.Size);

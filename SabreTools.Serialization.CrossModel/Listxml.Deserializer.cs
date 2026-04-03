@@ -634,7 +634,7 @@ namespace SabreTools.Serialization.CrossModel
                 Tag = item.Tag,
                 Name = item.Name,
                 Status = item.Status,
-                Filter = item.ReadString(Data.Models.Metadata.SoftwareList.FilterKey),
+                Filter = item.Filter,
             };
             return softwareList;
         }

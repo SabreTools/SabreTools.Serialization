@@ -1,11 +1,12 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
     /// <summary>
-    /// SoftwareList part information
+    /// PartList part information
     /// </summary>
     /// <remarks>One Part can contain multiple PartFeature, DataArea, DiskArea, and DipSwitch items</remarks>
     [JsonObject("part"), XmlRoot("part")]
@@ -59,6 +60,42 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override object Clone() => new Part(_internal.DeepClone() as Data.Models.Metadata.Part ?? []);
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Part GetInternalClone()
+        {
+            var partItem = base.GetInternalClone();
+
+            var dataAreas = Read<DataArea[]?>(Data.Models.Metadata.Part.DataAreaKey);
+            if (dataAreas is not null)
+            {
+                Data.Models.Metadata.DataArea[] dataAreaItems = Array.ConvertAll(dataAreas, dataArea => dataArea.GetInternalClone());
+                partItem[Data.Models.Metadata.Part.DataAreaKey] = dataAreaItems;
+            }
+
+            var diskAreas = Read<DiskArea[]?>(Data.Models.Metadata.Part.DiskAreaKey);
+            if (diskAreas is not null)
+            {
+                Data.Models.Metadata.DiskArea[] diskAreaItems = Array.ConvertAll(diskAreas, diskArea => diskArea.GetInternalClone());
+                partItem[Data.Models.Metadata.Part.DiskAreaKey] = diskAreaItems;
+            }
+
+            var dipSwitches = Read<DipSwitch[]?>(Data.Models.Metadata.Part.DipSwitchKey);
+            if (dipSwitches is not null)
+            {
+                Data.Models.Metadata.DipSwitch[] dipSwitchItems = Array.ConvertAll(dipSwitches, dipSwitch => dipSwitch.GetInternalClone());
+                partItem[Data.Models.Metadata.Part.DipSwitchKey] = dipSwitchItems;
+            }
+
+            var features = Read<Feature[]?>(Data.Models.Metadata.Part.FeatureKey);
+            if (features is not null)
+            {
+                Data.Models.Metadata.Feature[] featureItems = Array.ConvertAll(features, feature => feature.GetInternalClone());
+                partItem[Data.Models.Metadata.Part.FeatureKey] = featureItems;
+            }
+
+            return partItem;
+        }
 
         #endregion
     }

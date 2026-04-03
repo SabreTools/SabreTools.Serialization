@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(newSl);
             Assert.Equal("name", newSl.Name);
             Assert.Equal("description", newSl.Description);
-            Assert.Equal("XXXXXX", newSl.Notes);
+            Assert.Equal("notes", newSl.Notes);
 
             Assert.NotNull(newSl.Software);
             var newSoftware = Assert.Single(newSl.Software);
@@ -197,7 +197,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Description = "description",
                 Year = "XXXXXX",
                 Publisher = "XXXXXX",
-                Notes = "XXXXXX",
+                Notes = "notes",
                 Info = [info],
                 SharedFeat = [sharedfeat],
                 Part = [part],
@@ -207,7 +207,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Name = "name",
                 Description = "description",
-                Notes = "XXXXXX",
+                Notes = "notes",
                 Software = [software],
             };
         }
@@ -224,7 +224,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("description", software.Description);
             Assert.Equal("XXXXXX", software.Year);
             Assert.Equal("XXXXXX", software.Publisher);
-            Assert.Equal("XXXXXX", software.Notes);
+            Assert.Equal("notes", software.Notes);
 
             Assert.NotNull(software.Info);
             var info = Assert.Single(software.Info);

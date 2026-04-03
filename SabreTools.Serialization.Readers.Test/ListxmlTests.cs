@@ -384,7 +384,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Tag = "tag",
                 Name = "name",
                 Status = Data.Models.Metadata.SoftwareListStatus.Original,
-                Filter = "XXXXXX",
+                Filter = "filter",
             };
 
             var ramoption = new Data.Models.Listxml.RamOption
@@ -928,7 +928,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("tag", softwarelist.Tag);
             Assert.Equal("name", softwarelist.Name);
             Assert.Equal(Data.Models.Metadata.SoftwareListStatus.Original, softwarelist.Status);
-            Assert.Equal("XXXXXX", softwarelist.Filter);
+            Assert.Equal("filter", softwarelist.Filter);
         }
 
         /// <summary>

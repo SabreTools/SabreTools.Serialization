@@ -339,6 +339,10 @@ namespace SabreTools.Metadata
             {
                 if (selfSoftwareList.Description != otherSoftwareList.Description)
                     return false;
+                if (selfSoftwareList.Filter != otherSoftwareList.Filter)
+                    return false;
+                if (selfSoftwareList.Notes != otherSoftwareList.Notes)
+                    return false;
                 if (selfSoftwareList.Status != otherSoftwareList.Status)
                     return false;
                 if (selfSoftwareList.Tag != otherSoftwareList.Tag)

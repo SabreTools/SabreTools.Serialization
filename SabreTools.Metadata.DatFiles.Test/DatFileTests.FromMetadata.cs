@@ -950,9 +950,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.SoftwareList
             {
                 Description = "description",
-                [Data.Models.Metadata.SoftwareList.FilterKey] = "filter",
+                Filter = "filter",
                 Name = "name",
-                [Data.Models.Metadata.SoftwareList.NotesKey] = "notes",
+                Notes = "notes",
                 [Data.Models.Metadata.SoftwareList.SoftwareKey] = new Data.Models.Metadata.Software[] { CreateMetadataSoftware() },
                 Status = Data.Models.Metadata.SoftwareListStatus.Original,
                 Tag = "tag",
@@ -1628,12 +1628,43 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(softwareList);
             Assert.Equal("description", softwareList.Description);
-            Assert.Equal("filter", softwareList.ReadString(Data.Models.Metadata.SoftwareList.FilterKey));
+            Assert.Equal("filter", softwareList.Filter);
             Assert.Equal("name", softwareList.Name);
-            Assert.Equal("notes", softwareList.ReadString(Data.Models.Metadata.SoftwareList.NotesKey));
-            // TODO: Figure out why Data.Models.Metadata.SoftwareList.SoftwareKey doesn't get processed
+            Assert.Equal("notes", softwareList.Notes);
             Assert.Equal(Data.Models.Metadata.SoftwareListStatus.Original, softwareList.Status);
             Assert.Equal("tag", softwareList.Tag);
+
+            Software[]? softwares = softwareList.Read<Software[]>(Data.Models.Metadata.SoftwareList.SoftwareKey);
+            Assert.NotNull(softwares);
+            Software? software = Assert.Single(softwares);
+            ValidateSoftware(software);
+        }
+
+        private static void ValidateSoftware(Software? software)
+        {
+            Assert.NotNull(software);
+            Assert.Equal("cloneof", software.ReadString(Data.Models.Metadata.Software.CloneOfKey));
+            Assert.Equal("description", software.Description);
+            Assert.Equal("name", software.Name);
+            Assert.Equal("notes", software.ReadString(Data.Models.Metadata.Software.NotesKey));
+            Assert.Equal("publisher", software.ReadString(Data.Models.Metadata.Software.PublisherKey));
+            Assert.Equal(Data.Models.Metadata.Supported.Yes, software.Supported);
+            Assert.Equal("year", software.ReadString(Data.Models.Metadata.Software.YearKey));
+
+            Info[]? infos = software.Read<Info[]>(Data.Models.Metadata.Software.InfoKey);
+            Assert.NotNull(infos);
+            Info? info = Assert.Single(infos);
+            ValidateInfo(info);
+
+            Part[]? parts = software.Read<Part[]>(Data.Models.Metadata.Software.PartKey);
+            Assert.NotNull(parts);
+            Part? part = Assert.Single(parts);
+            ValidatePart(part);
+
+            SharedFeat[]? sharedFeats = software.Read<SharedFeat[]>(Data.Models.Metadata.Software.SharedFeatKey);
+            Assert.NotNull(sharedFeats);
+            SharedFeat? sharedFeat = Assert.Single(sharedFeats);
+            ValidateSharedFeat(sharedFeat);
         }
 
         private static void ValidateSound(Sound? sound)

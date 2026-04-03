@@ -839,6 +839,12 @@ namespace SabreTools.Metadata.Filter
                 case SoftwareList item when fieldName == "description":
                     checkValue = item.Description;
                     return true;
+                case SoftwareList item when fieldName == "filter":
+                    checkValue = item.Filter;
+                    return true;
+                case SoftwareList item when fieldName == "notes":
+                    checkValue = item.Notes;
+                    return true;
                 case SoftwareList item when fieldName == "status":
                     checkValue = item.Status?.AsStringValue();
                     return true;

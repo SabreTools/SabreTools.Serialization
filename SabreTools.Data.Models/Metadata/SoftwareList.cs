@@ -10,7 +10,11 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Description { get; set; }
 
+        public string? Filter { get; set; }
+
         public string? Name { get; set; }
+
+        public string? Notes { get; set; }
 
         /// <remarks>(original|compatible)</remarks>
         public SoftwareListStatus? Status { get; set; }
@@ -20,12 +24,6 @@ namespace SabreTools.Data.Models.Metadata
         #endregion
 
         #region Keys
-
-        /// <remarks>string</remarks>
-        public const string FilterKey = "filter";
-
-        /// <remarks>string</remarks>
-        public const string NotesKey = "notes";
 
         /// <remarks>Software[]</remarks>
         [NoFilter]

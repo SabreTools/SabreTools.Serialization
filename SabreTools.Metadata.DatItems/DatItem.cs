@@ -51,6 +51,7 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(SharedFeat))]
     [XmlInclude(typeof(Slot))]
     [XmlInclude(typeof(SlotOption))]
+    [XmlInclude(typeof(Software))]
     [XmlInclude(typeof(SoftwareList))]
     [XmlInclude(typeof(Sound))]
     [XmlInclude(typeof(SourceDetails))]
