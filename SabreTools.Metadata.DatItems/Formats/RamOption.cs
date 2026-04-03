@@ -24,6 +24,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.RamOption)?.Default = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.RamOption;
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.RamOption)?.Name;

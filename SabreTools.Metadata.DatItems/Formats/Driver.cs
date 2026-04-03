@@ -42,6 +42,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Driver)?.Incomplete = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Driver;
+
         public bool? NoSoundHardware
         {
             get => (_internal as Data.Models.Metadata.Driver)?.NoSoundHardware;

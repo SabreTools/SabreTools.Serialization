@@ -10,6 +10,14 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("release_details"), XmlRoot("release_details")]
     public sealed class ReleaseDetails : DatItem<Data.Models.Metadata.ReleaseDetails>
     {
+        #region Fields
+
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.ReleaseDetails;
+
+        #endregion
+
         #region Constructors
 
         public ReleaseDetails() : base() { }

@@ -18,6 +18,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Feature)?.FeatureType = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Feature;
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.Feature)?.Name;

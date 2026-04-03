@@ -60,6 +60,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Rom)?.Inverted = value;
         }
 
+        /// <inheritdoc>/>
+        public override ItemType ItemType => ItemType.Rom;
+
         public LoadFlag? LoadFlag
         {
             get => (_internal as Data.Models.Metadata.Rom)?.LoadFlag;

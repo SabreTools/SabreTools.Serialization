@@ -25,6 +25,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Display)?.FlipX = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Display;
+
         public string? Tag
         {
             get => (_internal as Data.Models.Metadata.Display)?.Tag;

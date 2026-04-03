@@ -9,12 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("original"), XmlRoot("original")]
     public sealed class Original
     {
-        [JsonProperty("value"), XmlElement("value")]
-        public bool? Value
-        {
-            get => _internal.ReadBool(Data.Models.Metadata.Original.ValueKey);
-            set => _internal[Data.Models.Metadata.Original.ValueKey] = value;
-        }
+        #region Fields
 
         [JsonProperty("content"), XmlElement("content")]
         public string? Content
@@ -22,6 +17,19 @@ namespace SabreTools.Metadata.DatItems.Formats
             get => _internal.Content;
             set => _internal.Content = value;
         }
+
+        /// <inheritdoc cref="DatItem.ItemType">/>
+        public Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Original;
+
+        [JsonProperty("value"), XmlElement("value")]
+        public bool? Value
+        {
+            get => _internal.ReadBool(Data.Models.Metadata.Original.ValueKey);
+            set => _internal[Data.Models.Metadata.Original.ValueKey] = value;
+        }
+
+        #endregion
 
         /// <summary>
         /// Internal Original model

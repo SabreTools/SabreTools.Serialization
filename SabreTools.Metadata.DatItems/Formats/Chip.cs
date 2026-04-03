@@ -18,6 +18,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Chip)?.ChipType = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Chip;
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.Chip)?.Name;

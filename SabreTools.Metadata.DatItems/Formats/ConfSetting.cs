@@ -28,6 +28,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.ConfSetting)?.Default = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.ConfSetting;
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.ConfSetting)?.Name;

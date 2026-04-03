@@ -38,6 +38,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        /// <inheritdoc>/>
+        public override ItemType ItemType => ItemType.Disk;
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.Disk)?.Name;

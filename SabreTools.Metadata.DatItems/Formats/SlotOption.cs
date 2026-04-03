@@ -24,6 +24,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.SlotOption)?.DevName = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.SlotOption;
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.SlotOption)?.Name;

@@ -10,6 +10,14 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("serials"), XmlRoot("serials")]
     public sealed class Serials : DatItem<Data.Models.Metadata.Serials>
     {
+        #region Fields
+
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Serials;
+
+        #endregion
+
         #region Constructors
 
         public Serials() : base() { }

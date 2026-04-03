@@ -23,6 +23,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Input;
+
         public bool? Service
         {
             get => (_internal as Data.Models.Metadata.Input)?.Service;

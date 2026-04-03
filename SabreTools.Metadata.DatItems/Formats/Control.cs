@@ -18,6 +18,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Control)?.ControlType = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Control;
+
         public bool? Reverse
         {
             get => (_internal as Data.Models.Metadata.Control)?.Reverse;

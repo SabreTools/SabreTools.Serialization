@@ -12,6 +12,10 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Analog;
+
         public string? Mask
         {
             get => (_internal as Data.Models.Metadata.Analog)?.Mask;

@@ -10,6 +10,14 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("blank"), XmlRoot("blank")]
     public sealed class Blank : DatItem<Data.Models.Metadata.Blank>
     {
+        #region Fields
+
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Blank;
+
+        #endregion
+
         #region Constructors
 
         public Blank() : base() { }

@@ -23,6 +23,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Configuration;
+
         [JsonIgnore]
         public bool LocationsSpecified
         {

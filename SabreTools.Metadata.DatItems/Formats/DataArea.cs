@@ -19,6 +19,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.DataArea)?.Endianness = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.DataArea;
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.DataArea)?.Name;

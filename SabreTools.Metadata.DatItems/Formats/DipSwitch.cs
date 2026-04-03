@@ -39,6 +39,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.DipSwitch)?.Default = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.DipSwitch;
+
         [JsonIgnore]
         public bool LocationsSpecified
         {
@@ -62,16 +66,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         }
 
         [JsonIgnore]
-        public bool ValuesSpecified
-        {
-            get
-            {
-                var values = Read<DipValue[]?>(Data.Models.Metadata.DipSwitch.DipValueKey);
-                return values is not null && values.Length > 0;
-            }
-        }
-
-        [JsonIgnore]
         public bool PartSpecified
         {
             get
@@ -87,6 +81,16 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             get => (_internal as Data.Models.Metadata.DipSwitch)?.Tag;
             set => (_internal as Data.Models.Metadata.DipSwitch)?.Tag = value;
+        }
+
+        [JsonIgnore]
+        public bool ValuesSpecified
+        {
+            get
+            {
+                var values = Read<DipValue[]?>(Data.Models.Metadata.DipSwitch.DipValueKey);
+                return values is not null && values.Length > 0;
+            }
         }
 
         #endregion

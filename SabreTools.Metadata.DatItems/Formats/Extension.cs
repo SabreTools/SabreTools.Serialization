@@ -12,6 +12,10 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Extension;
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.Extension)?.Name;

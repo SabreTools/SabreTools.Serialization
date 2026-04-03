@@ -51,6 +51,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Device)?.Interface = value;
         }
 
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Device;
+
         public bool? Mandatory
         {
             get => (_internal as Data.Models.Metadata.Device)?.Mandatory;
