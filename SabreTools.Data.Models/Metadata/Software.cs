@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
+    // TODO: What DAT type does this come from?
     [JsonObject("software"), XmlRoot("software")]
     public class Software : DatItem
     {
