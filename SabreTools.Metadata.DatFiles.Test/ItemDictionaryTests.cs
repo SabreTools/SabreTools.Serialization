@@ -276,7 +276,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem rom2 = new Rom();
             rom2.SetName("rom-2");
             rom2.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "DEAEEF");
-            rom2.Write<bool?>(DatItem.RemoveKey, true);
+            rom2.RemoveFlag = true;
             rom2.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, "000000e948edcb4f7704b8af85a77a3339ecce44");
             rom2.Write<string?>(Data.Models.Metadata.Rom.SizeKey, "1024");
             rom2.CopyMachineInformation(machine);
@@ -345,7 +345,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Name = "machine";
 
             DatItem item = new Rom();
-            item.Write<bool?>(DatItem.RemoveKey, true);
+            item.RemoveFlag = true;
             item.Source = source;
             item.Machine = machine;
 
@@ -366,7 +366,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Name = "machine";
 
             DatItem item = new Rom();
-            item.Write<bool?>(DatItem.RemoveKey, true);
+            item.RemoveFlag = true;
             item.Source = source;
             item.Machine = machine;
 

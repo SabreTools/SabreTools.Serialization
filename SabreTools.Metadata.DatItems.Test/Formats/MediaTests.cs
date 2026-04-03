@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             media.Write(Data.Models.Metadata.Media.SpamSumKey, HashType.SpamSum.ZeroString);
             media.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
             media.Machine = machine;
-            media.Write(DatItem.RemoveKey, (bool?)false);
+            media.RemoveFlag = false;
             media.Source = source;
 
             Rom actual = media.ConvertToRom();
@@ -39,7 +39,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.NotNull(actualMachine);
             Assert.Equal("name", actualMachine.Name);
 
-            Assert.Equal(false, actual.ReadBool(DatItem.RemoveKey));
+            Assert.False(actual.RemoveFlag);
 
             Source? actualSource = actual.Source;
             Assert.NotNull(actualSource);

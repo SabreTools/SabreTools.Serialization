@@ -63,11 +63,6 @@ namespace SabreTools.Metadata.DatItems
         /// </summary>
         public const string DupeTypeKey = "DUPETYPE";
 
-        /// <summary>
-        /// Flag if item should be removed
-        /// </summary>
-        public const string RemoveKey = "REMOVE";
-
         #endregion
 
         #region Fields
@@ -81,6 +76,11 @@ namespace SabreTools.Metadata.DatItems
         /// Get the machine for a DatItem
         /// </summary>
         public Machine? Machine { get; set; }
+
+        /// <summary>
+        /// Flag if item should be removed
+        /// </summary>
+        public bool RemoveFlag { get; set; } = false;
 
         /// <summary>
         /// Source information

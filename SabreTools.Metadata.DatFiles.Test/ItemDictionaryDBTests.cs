@@ -307,7 +307,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem rom2 = new Rom();
             rom2.SetName("rom-2");
             rom2.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            rom2.Write<bool?>(DatItem.RemoveKey, true);
+            rom2.RemoveFlag = true;
             rom2.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, "000000e948edcb4f7704b8af85a77a3339ecce44");
             rom2.Write<string?>(Data.Models.Metadata.Rom.SizeKey, "1024");
 
@@ -378,7 +378,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Name = "machine";
 
             DatItem item = new Rom();
-            item.Write<bool?>(DatItem.RemoveKey, true);
+            item.RemoveFlag = true;
 
             var dict = new ItemDictionaryDB();
             long sourceIndex = dict.AddSource(source);
@@ -399,7 +399,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Name = "machine";
 
             DatItem item = new Rom();
-            item.Write<bool?>(DatItem.RemoveKey, true);
+            item.RemoveFlag = true;
 
             var dict = new ItemDictionaryDB();
             long sourceIndex = dict.AddSource(source);

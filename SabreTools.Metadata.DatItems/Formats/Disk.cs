@@ -132,7 +132,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             rom.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
             rom.Machine = Machine?.Clone() as Machine;
             rom.Write(Rom.PartKey, Read<Part>(PartKey)?.Clone() as Part);
-            rom.Write(RemoveKey, ReadBool(RemoveKey));
+            rom.RemoveFlag = RemoveFlag;
             rom.Source = Source?.Clone() as Source;
 
             return rom;

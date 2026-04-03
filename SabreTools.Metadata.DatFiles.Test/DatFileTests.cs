@@ -2287,7 +2287,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ShouldIgnore_RemoveSet_True()
         {
             DatItem? datItem = new Rom();
-            datItem.Write(DatItem.RemoveKey, true);
+            datItem.RemoveFlag = true;
             DatFile datFile = new Logiqx(null, useGame: false);
 
             bool actual = datFile.ShouldIgnore(datItem, ignoreBlanks: true);

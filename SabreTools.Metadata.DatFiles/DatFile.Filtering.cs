@@ -242,7 +242,7 @@ namespace SabreTools.Metadata.DatFiles
             foreach (var item in items)
             {
                 if (!item.PassesFilter(filterRunner))
-                    item.Write<bool?>(DatItem.RemoveKey, true);
+                    item.RemoveFlag = true;
             }
         }
 
@@ -263,7 +263,7 @@ namespace SabreTools.Metadata.DatFiles
             foreach (var item in items)
             {
                 if (!item.Value.PassesFilterDB(filterRunner))
-                    item.Value.Write<bool?>(DatItem.RemoveKey, true);
+                    item.Value.RemoveFlag = true;
             }
         }
 

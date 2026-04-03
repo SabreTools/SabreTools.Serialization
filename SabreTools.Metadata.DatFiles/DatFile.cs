@@ -980,7 +980,7 @@ namespace SabreTools.Metadata.DatFiles
             }
 
             // If the item is supposed to be removed, we ignore
-            if (datItem.ReadBool(DatItem.RemoveKey) == true)
+            if (datItem.RemoveFlag)
             {
                 string itemString = JsonConvert.SerializeObject(datItem, Formatting.None);
                 _logger.Verbose($"Item '{itemString}' was skipped because it was marked for removal");

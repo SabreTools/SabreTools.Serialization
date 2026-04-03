@@ -36,7 +36,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             var actualDatItems = datFile.GetItemsForBucket("machine");
             DatItem actualRom = Assert.Single(actualDatItems);
-            Assert.Equal(true, actualRom.ReadBool(DatItem.RemoveKey));
+            Assert.True(actualRom.RemoveFlag);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             var actualDatItems = datFile.GetItemsForBucketDB("machine");
             DatItem actualRom = Assert.Single(actualDatItems).Value;
-            Assert.Equal(true, actualRom.ReadBool(DatItem.RemoveKey));
+            Assert.True(actualRom.RemoveFlag);
         }
 
         #endregion

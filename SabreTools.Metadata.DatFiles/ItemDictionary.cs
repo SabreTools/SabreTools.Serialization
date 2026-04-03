@@ -227,7 +227,7 @@ namespace SabreTools.Metadata.DatFiles
         /// Get the items associated with a bucket name
         /// </summary>
         /// <param name="bucketName">Name of the bucket to retrive items for</param>
-        /// <param name="filter">Indicates if RemoveKey filtering is performed</param>
+        /// <param name="filter">Indicates if RemoveFlag filtering is performed</param>
         /// <returns>List representing the bucket items, empty on missing</returns>
         public List<DatItem> GetItemsForBucket(string? bucketName, bool filter = false)
         {
@@ -250,7 +250,7 @@ namespace SabreTools.Metadata.DatFiles
             var datItems = new List<DatItem>();
             foreach (DatItem item in items)
             {
-                if (item.ReadBool(DatItem.RemoveKey) != true)
+                if (!item.RemoveFlag)
                     datItems.Add(item);
             }
 
@@ -601,13 +601,13 @@ namespace SabreTools.Metadata.DatFiles
             foreach (DatItem other in items)
             {
                 // Skip items marked for removal
-                if (other.ReadBool(DatItem.RemoveKey) == true)
+                if (other.RemoveFlag)
                     continue;
 
                 // Mark duplicates for future removal
                 if (datItem.Equals(other))
                 {
-                    other.Write<bool?>(DatItem.RemoveKey, true);
+                    other.RemoveFlag = true;
                     output.Add(other);
                 }
             }
@@ -767,7 +767,7 @@ namespace SabreTools.Metadata.DatFiles
                 for (int i = 0; i < GetItemsForBucket(key).Count; i++)
                 {
                     DatItem item = GetItemsForBucket(key)[i];
-                    if (item is null || item.ReadBool(DatItem.RemoveKey) == true)
+                    if (item is null || item.RemoveFlag)
                         continue;
 
                     // Get the machine and source

@@ -28,7 +28,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             };
             file.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
             file.Machine = machine;
-            file.Write(DatItem.RemoveKey, (bool?)false);
+            file.RemoveFlag = false;
             file.Source = source;
             file.Machine = machine;
             file.Source = source;
@@ -47,7 +47,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.NotNull(actualMachine);
             Assert.Equal("name", actualMachine.GetName());
 
-            Assert.Equal(false, actual.ReadBool(DatItem.RemoveKey));
+            Assert.False(actual.RemoveFlag);
 
             Source? actualSource = actual.Source;
             Assert.NotNull(actualSource);

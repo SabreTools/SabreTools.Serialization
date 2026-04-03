@@ -33,7 +33,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             disk.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
             disk.Machine = machine;
             disk.Write(Disk.PartKey, part);
-            disk.Write(DatItem.RemoveKey, (bool?)false);
+            disk.RemoveFlag = false;
             disk.Source = source;
 
             Rom actual = disk.ConvertToRom();
@@ -55,7 +55,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.NotNull(actualMachine);
             Assert.Equal("name", actualMachine.Name);
 
-            Assert.Equal(false, actual.ReadBool(DatItem.RemoveKey));
+            Assert.False(actual.RemoveFlag);
 
             Part? actualPart = actual.Read<Part?>(Rom.PartKey);
             Assert.NotNull(actualPart);

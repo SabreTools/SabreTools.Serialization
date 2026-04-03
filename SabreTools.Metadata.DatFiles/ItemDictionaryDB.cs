@@ -332,7 +332,7 @@ namespace SabreTools.Metadata.DatFiles
                 var datItem = _items[itemIndex];
 #endif
 
-                if (datItem.ReadBool(DatItem.RemoveKey) != true)
+                if (!datItem.RemoveFlag)
                     continue;
 
                 RemoveItem(itemIndex);
@@ -378,7 +378,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 #endif
 
-                if (!filter || datItem.ReadBool(DatItem.RemoveKey) != true)
+                if (!filter || !datItem.RemoveFlag)
                     datItems[itemId] = datItem;
             }
 
@@ -805,13 +805,13 @@ namespace SabreTools.Metadata.DatFiles
             foreach (var rom in items)
             {
                 // Skip items marked for removal
-                if (rom.Value.ReadBool(DatItem.RemoveKey) == true)
+                if (rom.Value.RemoveFlag)
                     continue;
 
                 // Mark duplicates for future removal
                 if (datItem.Value.Equals(rom.Value))
                 {
-                    rom.Value.Write<bool?>(DatItem.RemoveKey, true);
+                    rom.Value.RemoveFlag = true;
                     output[rom.Key] = rom.Value;
                 }
             }
