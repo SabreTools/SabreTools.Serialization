@@ -97,7 +97,7 @@ namespace SabreTools.Metadata.DatFiles
             // Get the header strings
             string? name = Header.Name;
             string? description = Header.Description;
-            string? date = Header.ReadString(Data.Models.Metadata.Header.DateKey);
+            string? date = Header.Date;
 
             // If the description is defined but not the name, set the name from the description
             if (string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(description))

@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var m1 = new Data.Models.Listxml.Mess
             {
-                Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
+                Version = item.Version,
             };
             return m1;
         }

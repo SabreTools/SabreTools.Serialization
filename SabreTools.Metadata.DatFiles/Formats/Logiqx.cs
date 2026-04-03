@@ -384,7 +384,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 // TODO: Enable No-Intro doctype writing instead of Logiqx
                 // Only write the doctype if we don't have No-Intro data
                 bool success;
-                if (string.IsNullOrEmpty(Header.ReadString(Data.Models.Metadata.Header.IdKey)))
+                if (string.IsNullOrEmpty(Header.Id))
                     success = new Serialization.Writers.Logiqx().SerializeFile(datafile, outfile);
                 else
                     success = new Serialization.Writers.Logiqx().SerializeFile(datafile, outfile);

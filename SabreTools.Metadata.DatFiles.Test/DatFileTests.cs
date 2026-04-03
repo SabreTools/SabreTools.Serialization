@@ -115,7 +115,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = string.Empty;
             datFile.Header.Description = string.Empty;
-            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Date = "1980-01-01";
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
@@ -130,7 +130,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = string.Empty;
             datFile.Header.Description = string.Empty;
-            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Date = "1980-01-01";
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
@@ -145,7 +145,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = string.Empty;
             datFile.Header.Description = "Description";
-            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Date = "1980-01-01";
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
@@ -160,7 +160,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = string.Empty;
             datFile.Header.Description = "Description";
-            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Date = "1980-01-01";
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
@@ -175,7 +175,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "Name";
             datFile.Header.Description = string.Empty;
-            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Date = "1980-01-01";
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
@@ -190,7 +190,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "Name";
             datFile.Header.Description = string.Empty;
-            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Date = "1980-01-01";
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
@@ -205,7 +205,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "Name";
             datFile.Header.Description = "Description";
-            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Date = "1980-01-01";
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
@@ -220,7 +220,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "Name ";
             datFile.Header.Description = "Description ";
-            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Date = "1980-01-01";
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);

@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name =  item.Name,
                 Description = item.Description,
-                [Data.Models.Metadata.Header.NotesKey] = item.Notes,
+                Notes = item.Notes,
             };
             return header;
         }

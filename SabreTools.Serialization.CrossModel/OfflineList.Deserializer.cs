@@ -38,29 +38,29 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.Name is not null
                 || item.ContainsKey(Data.Models.Metadata.Header.ImFolderKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.DatVersionKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.SystemKey)
+                || item.DatVersion != null
+                || item.System != null
                 || item.ContainsKey(Data.Models.Metadata.Header.ScreenshotsWidthKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.ScreenshotsHeightKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.InfosKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.CanOpenKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.NewDatKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.SearchKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.RomTitleKey))
+                || item.RomTitle != null)
             {
                 dat.Configuration = new Configuration
                 {
                     DatName = item.Name,
                     ImFolder = item.ReadString(Data.Models.Metadata.Header.ImFolderKey),
-                    DatVersion = item.ReadString(Data.Models.Metadata.Header.DatVersionKey),
-                    System = item.ReadString(Data.Models.Metadata.Header.SystemKey),
+                    DatVersion = item.DatVersion,
+                    System = item.System,
                     ScreenshotsWidth = item.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey),
                     ScreenshotsHeight = item.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey),
                     Infos = item.Read<Infos>(Data.Models.Metadata.Header.InfosKey),
                     CanOpen = item.Read<CanOpen>(Data.Models.Metadata.Header.CanOpenKey),
                     NewDat = item.Read<NewDat>(Data.Models.Metadata.Header.NewDatKey),
                     Search = item.Read<Search>(Data.Models.Metadata.Header.SearchKey),
-                    RomTitle = item.ReadString(Data.Models.Metadata.Header.RomTitleKey),
+                    RomTitle = item.RomTitle,
                 };
             }
 

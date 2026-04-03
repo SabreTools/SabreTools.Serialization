@@ -90,28 +90,28 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Write<Data.Models.OfflineList.Search?>(Data.Models.Metadata.Header.SearchKey, search);
 
             // Selectively set all possible fields -- TODO: Figure out how to make this less manual
-            if (Header.ReadString(Data.Models.Metadata.Header.AuthorKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.AuthorKey, header.ReadString(Data.Models.Metadata.Header.AuthorKey));
+            if (Header.Author is null)
+                Header.Author = header.Author;
             if (Header.BiosMode == MergingFlag.None)
                 Header.BiosMode = header.BiosMode;
-            if (Header.ReadString(Data.Models.Metadata.Header.BuildKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.BuildKey, header.ReadString(Data.Models.Metadata.Header.BuildKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.CategoryKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.CategoryKey, header.ReadString(Data.Models.Metadata.Header.CategoryKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.CommentKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.CommentKey, header.ReadString(Data.Models.Metadata.Header.CommentKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.DateKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.DateKey, header.ReadString(Data.Models.Metadata.Header.DateKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.DatVersionKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.DatVersionKey, header.ReadString(Data.Models.Metadata.Header.DatVersionKey));
+            if (Header.Build is null)
+                Header.Build = header.Build;
+            if (Header.Category is null)
+                Header.Category = header.Category;
+            if (Header.Comment is null)
+                Header.Comment = header.Comment;
+            if (Header.Date is null)
+                Header.Date = header.Date;
+            if (Header.DatVersion is null)
+                Header.DatVersion = header.DatVersion;
             if (Header.Debug is null)
                 Header.Debug = header.Debug;
             if (Header.Description is null)
                 Header.Description = header.Description;
-            if (Header.ReadString(Data.Models.Metadata.Header.EmailKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.EmailKey, header.ReadString(Data.Models.Metadata.Header.EmailKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.EmulatorVersionKey, header.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey));
+            if (Header.Email is null)
+                Header.Email = header.Email;
+            if (Header.EmulatorVersion is null)
+                Header.EmulatorVersion = header.EmulatorVersion;
             if (Header.ForceMerging == MergingFlag.None)
                 Header.ForceMerging = header.ForceMerging;
             if (Header.ForceNodump == NodumpFlag.None)
@@ -122,10 +122,10 @@ namespace SabreTools.Metadata.DatFiles
                 Header.ForceZipping = header.ForceZipping;
             if (Header.ReadString(Data.Models.Metadata.Header.HeaderKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.HeaderKey, header.ReadString(Data.Models.Metadata.Header.HeaderKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.HomepageKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.HomepageKey, header.ReadString(Data.Models.Metadata.Header.HomepageKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.IdKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.IdKey, header.ReadString(Data.Models.Metadata.Header.IdKey));
+            if (Header.Homepage is null)
+                Header.Homepage = header.Homepage;
+            if (Header.Id is null)
+                Header.Id = header.Id;
             if (Header.ReadString(Data.Models.Metadata.Header.ImFolderKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.ImFolderKey, header.ReadString(Data.Models.Metadata.Header.ImFolderKey));
             if (Header.LockBiosMode is null)
@@ -134,22 +134,22 @@ namespace SabreTools.Metadata.DatFiles
                 Header.LockRomMode = header.LockRomMode;
             if (Header.LockSampleMode is null)
                 Header.LockSampleMode = header.LockSampleMode;
-            if (Header.ReadString(Data.Models.Metadata.Header.MameConfigKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.MameConfigKey, header.ReadString(Data.Models.Metadata.Header.MameConfigKey));
+            if (Header.MameConfig is null)
+                Header.MameConfig = header.MameConfig;
             if (Header.Name is null)
                 Header.Name = header.Name;
-            if (Header.ReadString(Data.Models.Metadata.Header.NotesKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.NotesKey, header.ReadString(Data.Models.Metadata.Header.NotesKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.PluginKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.PluginKey, header.ReadString(Data.Models.Metadata.Header.PluginKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.RefNameKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.RefNameKey, header.ReadString(Data.Models.Metadata.Header.RefNameKey));
+            if (Header.Notes is null)
+                Header.Notes = header.Notes;
+            if (Header.Plugin is null)
+                Header.Plugin = header.Plugin;
+            if (Header.RefName is null)
+                Header.RefName = header.RefName;
             if (Header.RomMode == MergingFlag.None)
                 Header.RomMode = header.RomMode;
-            if (Header.ReadString(Data.Models.Metadata.Header.RomTitleKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.RomTitleKey, header.ReadString(Data.Models.Metadata.Header.RomTitleKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.RootDirKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.RootDirKey, header.ReadString(Data.Models.Metadata.Header.RootDirKey));
+            if (Header.RomTitle is null)
+                Header.RomTitle = header.RomTitle;
+            if (Header.RootDir is null)
+                Header.RootDir = header.RootDir;
             if (Header.SampleMode == MergingFlag.None)
                 Header.SampleMode = header.SampleMode;
             if (Header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey) is null)
@@ -158,22 +158,22 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Write<string?>(Data.Models.Metadata.Header.ScreenshotsHeightKey, header.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey));
             if (Header.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.ScreenshotsWidthKey, header.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.SystemKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.SystemKey, header.ReadString(Data.Models.Metadata.Header.SystemKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.TimestampKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.TimestampKey, header.ReadString(Data.Models.Metadata.Header.TimestampKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.TypeKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.TypeKey, header.ReadString(Data.Models.Metadata.Header.TypeKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.UrlKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.UrlKey, header.ReadString(Data.Models.Metadata.Header.UrlKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.VersionKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.VersionKey, header.ReadString(Data.Models.Metadata.Header.VersionKey));
+            if (Header.System is null)
+                Header.System = header.System;
+            if (Header.Timestamp is null)
+                Header.Timestamp = header.Timestamp;
+            if (Header.Type is null)
+                Header.Type = header.Type;
+            if (Header.Url is null)
+                Header.Url = header.Url;
+            if (Header.Version is null)
+                Header.Version = header.Version;
 
             // Handle implied SuperDAT
             if (Header.Name?.Contains(" - SuperDAT") == true && keep)
             {
-                if (Header.ReadString(Data.Models.Metadata.Header.TypeKey) is null)
-                    Header.Write<string?>(Data.Models.Metadata.Header.TypeKey, "SuperDAT");
+                if (Header.Type is null)
+                    Header.Type = "SuperDAT";
             }
         }
 

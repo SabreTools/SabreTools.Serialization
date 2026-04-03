@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.VersionKey] = item.Version,
+                Version = item.Version,
             };
             return header;
         }

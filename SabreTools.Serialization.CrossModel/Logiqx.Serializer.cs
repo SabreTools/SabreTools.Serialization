@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = item.Header is not null ? ConvertHeaderToInternalModel(item.Header) : [];
 
-            header[Data.Models.Metadata.Header.BuildKey] = item.Build;
+            header.Build = item.Build;
             header.Debug = item.Debug;
             header[Data.Models.Metadata.Header.SchemaLocationKey] = item.SchemaLocation;
 
@@ -53,19 +53,19 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.IdKey] = item.Id,
+                Id = item.Id,
                 Name = item.Name,
                 Description = item.Description,
-                [Data.Models.Metadata.Header.RootDirKey] = item.RootDir,
-                [Data.Models.Metadata.Header.CategoryKey] = item.Category,
-                [Data.Models.Metadata.Header.VersionKey] = item.Version,
-                [Data.Models.Metadata.Header.DateKey] = item.Date,
-                [Data.Models.Metadata.Header.AuthorKey] = item.Author,
-                [Data.Models.Metadata.Header.EmailKey] = item.Email,
-                [Data.Models.Metadata.Header.HomepageKey] = item.Homepage,
-                [Data.Models.Metadata.Header.UrlKey] = item.Url,
-                [Data.Models.Metadata.Header.CommentKey] = item.Comment,
-                [Data.Models.Metadata.Header.TypeKey] = item.Type,
+                RootDir = item.RootDir,
+                Category = item.Category,
+                Version = item.Version,
+                Date = item.Date,
+                Author = item.Author,
+                Email = item.Email,
+                Homepage = item.Homepage,
+                Url = item.Url,
+                Comment = item.Comment,
+                Type = item.Type,
             };
 
             if (item.ClrMamePro is not null)
@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.RomCenter is not null)
             {
-                header[Data.Models.Metadata.Header.PluginKey] = item.RomCenter.Plugin;
+                header.Plugin = item.RomCenter.Plugin;
                 header.RomMode = item.RomCenter.RomMode;
                 header.BiosMode = item.RomCenter.BiosMode;
                 header.SampleMode = item.RomCenter.SampleMode;

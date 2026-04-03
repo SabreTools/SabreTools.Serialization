@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var softwareDb = new SoftwareDb
             {
-                Timestamp = item.ReadString(Data.Models.Metadata.Header.TimestampKey),
+                Timestamp = item.Timestamp,
             };
             return softwareDb;
         }

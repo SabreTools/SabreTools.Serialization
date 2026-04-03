@@ -33,46 +33,46 @@ namespace SabreTools.Serialization.CrossModel
         {
             var metadataFile = new MetadataFile();
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.AuthorKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.VersionKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.EmailKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.HomepageKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.UrlKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.DateKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.CommentKey))
+            if (item.Author != null
+                || item.Version != null
+                || item.Email != null
+                || item.Homepage != null
+                || item.Url != null
+                || item.Date != null
+                || item.Comment != null)
             {
                 metadataFile.Credits = new Credits
                 {
-                    Author = item.ReadString(Data.Models.Metadata.Header.AuthorKey),
-                    Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
-                    Email = item.ReadString(Data.Models.Metadata.Header.EmailKey),
-                    Homepage = item.ReadString(Data.Models.Metadata.Header.HomepageKey),
-                    Url = item.ReadString(Data.Models.Metadata.Header.UrlKey),
-                    Date = item.ReadString(Data.Models.Metadata.Header.DateKey),
-                    Comment = item.ReadString(Data.Models.Metadata.Header.CommentKey),
+                    Author = item.Author,
+                    Version = item.Version,
+                    Email = item.Email,
+                    Homepage = item.Homepage,
+                    Url = item.Url,
+                    Date = item.Date,
+                    Comment = item.Comment,
                 };
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.DatVersionKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.PluginKey)
+            if (item.DatVersion != null
+                || item.Plugin != null
                 || item.ForceMerging != Data.Models.Metadata.MergingFlag.None)
             {
                 metadataFile.Dat = new Dat
                 {
-                    Version = item.ReadString(Data.Models.Metadata.Header.DatVersionKey),
-                    Plugin = item.ReadString(Data.Models.Metadata.Header.PluginKey),
+                    Version = item.DatVersion,
+                    Plugin = item.Plugin,
                     Split = item.ForceMerging == Data.Models.Metadata.MergingFlag.Split ? "yes" : "no",
                     Merge = item.ForceMerging == Data.Models.Metadata.MergingFlag.Merged ? "yes" : "no",
                 };
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.RefNameKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.EmulatorVersionKey))
+            if (item.RefName != null
+                || item.EmulatorVersion != null)
             {
                 metadataFile.Emulator = new Emulator
                 {
-                    RefName = item.ReadString(Data.Models.Metadata.Header.RefNameKey),
-                    Version = item.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey),
+                    RefName = item.RefName,
+                    Version = item.EmulatorVersion,
                 };
             }
 

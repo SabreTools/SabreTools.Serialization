@@ -32,9 +32,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.BuildKey] = item.Build,
+                Build = item.Build,
                 Debug = item.Debug,
-                [Data.Models.Metadata.Header.MameConfigKey] = item.MameConfig,
+                MameConfig = item.MameConfig,
             };
             return header;
         }

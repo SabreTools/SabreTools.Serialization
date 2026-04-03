@@ -201,50 +201,50 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             return new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.AuthorKey] = "author",
+                Author = "author",
                 BiosMode = Data.Models.Metadata.MergingFlag.Merged,
-                [Data.Models.Metadata.Header.BuildKey] = "build",
+                Build = "build",
                 [Data.Models.Metadata.Header.CanOpenKey] = canOpen,
-                [Data.Models.Metadata.Header.CategoryKey] = "category",
-                [Data.Models.Metadata.Header.CommentKey] = "comment",
-                [Data.Models.Metadata.Header.DateKey] = "date",
-                [Data.Models.Metadata.Header.DatVersionKey] = "datversion",
+                Category = "category",
+                Comment = "comment",
+                Date = "date",
+                DatVersion = "datversion",
                 Debug = true,
                 Description = "description",
-                [Data.Models.Metadata.Header.EmailKey] = "email",
-                [Data.Models.Metadata.Header.EmulatorVersionKey] = "emulatorversion",
+                Email = "email",
+                EmulatorVersion = "emulatorversion",
                 ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
                 ForceNodump = Data.Models.Metadata.NodumpFlag.Required,
                 ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
                 ForceZipping = true,
                 [Data.Models.Metadata.Header.HeaderKey] = "header",
-                [Data.Models.Metadata.Header.HomepageKey] = "homepage",
-                [Data.Models.Metadata.Header.IdKey] = "id",
+                Homepage = "homepage",
+                Id = "id",
                 [Data.Models.Metadata.Header.ImagesKey] = images,
                 [Data.Models.Metadata.Header.ImFolderKey] = "imfolder",
                 [Data.Models.Metadata.Header.InfosKey] = infos,
                 LockBiosMode = true,
                 LockRomMode = true,
                 LockSampleMode = true,
-                [Data.Models.Metadata.Header.MameConfigKey] = "mameconfig",
+                MameConfig = "mameconfig",
                 Name = "name",
                 [Data.Models.Metadata.Header.NewDatKey] = newDat,
-                [Data.Models.Metadata.Header.NotesKey] = "notes",
-                [Data.Models.Metadata.Header.PluginKey] = "plugin",
-                [Data.Models.Metadata.Header.RefNameKey] = "refname",
+                Notes = "notes",
+                Plugin = "plugin",
+                RefName = "refname",
                 RomMode = Data.Models.Metadata.MergingFlag.Merged,
-                [Data.Models.Metadata.Header.RomTitleKey] = "romtitle",
-                [Data.Models.Metadata.Header.RootDirKey] = "rootdir",
+                RomTitle = "romtitle",
+                RootDir = "rootdir",
                 SampleMode = Data.Models.Metadata.MergingFlag.Merged,
                 [Data.Models.Metadata.Header.SchemaLocationKey] = "schemalocation",
                 [Data.Models.Metadata.Header.ScreenshotsHeightKey] = "screenshotsheight",
                 [Data.Models.Metadata.Header.ScreenshotsWidthKey] = "screenshotsWidth",
                 [Data.Models.Metadata.Header.SearchKey] = search,
-                [Data.Models.Metadata.Header.SystemKey] = "system",
-                [Data.Models.Metadata.Header.TimestampKey] = "timestamp",
-                [Data.Models.Metadata.Header.TypeKey] = "type",
-                [Data.Models.Metadata.Header.UrlKey] = "url",
-                [Data.Models.Metadata.Header.VersionKey] = "version",
+                System = "system",
+                Timestamp = "timestamp",
+                Type = "type",
+                Url = "url",
+                Version = "version",
             };
         }
 
@@ -1037,50 +1037,50 @@ namespace SabreTools.Metadata.DatFiles.Test
 
         private static void ValidateHeader(DatHeader datHeader)
         {
-            Assert.Equal("author", datHeader.ReadString(Data.Models.Metadata.Header.AuthorKey));
+            Assert.Equal("author", datHeader.Author);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.BiosMode);
-            Assert.Equal("build", datHeader.ReadString(Data.Models.Metadata.Header.BuildKey));
+            Assert.Equal("build", datHeader.Build);
             Assert.Equal("ext", datHeader.ReadString(Data.Models.Metadata.Header.CanOpenKey));
-            Assert.Equal("category", datHeader.ReadString(Data.Models.Metadata.Header.CategoryKey));
-            Assert.Equal("comment", datHeader.ReadString(Data.Models.Metadata.Header.CommentKey));
-            Assert.Equal("date", datHeader.ReadString(Data.Models.Metadata.Header.DateKey));
-            Assert.Equal("datversion", datHeader.ReadString(Data.Models.Metadata.Header.DatVersionKey));
+            Assert.Equal("category", datHeader.Category);
+            Assert.Equal("comment", datHeader.Comment);
+            Assert.Equal("date", datHeader.Date);
+            Assert.Equal("datversion", datHeader.DatVersion);
             Assert.True(datHeader.Debug);
             Assert.Equal("description", datHeader.Description);
-            Assert.Equal("email", datHeader.ReadString(Data.Models.Metadata.Header.EmailKey));
-            Assert.Equal("emulatorversion", datHeader.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey));
+            Assert.Equal("email", datHeader.Email);
+            Assert.Equal("emulatorversion", datHeader.EmulatorVersion);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.ForceMerging);
             Assert.Equal(Data.Models.Metadata.NodumpFlag.Required, datHeader.ForceNodump);
             Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, datHeader.ForcePacking);
             Assert.True(datHeader.ForceZipping);
             Assert.Equal("header", datHeader.ReadString(Data.Models.Metadata.Header.HeaderKey));
-            Assert.Equal("homepage", datHeader.ReadString(Data.Models.Metadata.Header.HomepageKey));
-            Assert.Equal("id", datHeader.ReadString(Data.Models.Metadata.Header.IdKey));
+            Assert.Equal("homepage", datHeader.Homepage);
+            Assert.Equal("id", datHeader.Id);
             Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.ImagesKey));
             Assert.Equal("imfolder", datHeader.ReadString(Data.Models.Metadata.Header.ImFolderKey));
             Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.InfosKey));
             Assert.True(datHeader.LockBiosMode);
             Assert.True(datHeader.LockRomMode);
             Assert.True(datHeader.LockSampleMode);
-            Assert.Equal("mameconfig", datHeader.ReadString(Data.Models.Metadata.Header.MameConfigKey));
+            Assert.Equal("mameconfig", datHeader.MameConfig);
             Assert.Equal("name", datHeader.Name);
             Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.NewDatKey));
-            Assert.Equal("notes", datHeader.ReadString(Data.Models.Metadata.Header.NotesKey));
-            Assert.Equal("plugin", datHeader.ReadString(Data.Models.Metadata.Header.PluginKey));
-            Assert.Equal("refname", datHeader.ReadString(Data.Models.Metadata.Header.RefNameKey));
+            Assert.Equal("notes", datHeader.Notes);
+            Assert.Equal("plugin", datHeader.Plugin);
+            Assert.Equal("refname", datHeader.RefName);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.RomMode);
-            Assert.Equal("romtitle", datHeader.ReadString(Data.Models.Metadata.Header.RomTitleKey));
-            Assert.Equal("rootdir", datHeader.ReadString(Data.Models.Metadata.Header.RootDirKey));
+            Assert.Equal("romtitle", datHeader.RomTitle);
+            Assert.Equal("rootdir", datHeader.RootDir);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.SampleMode);
             Assert.Equal("schemalocation", datHeader.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
             Assert.Equal("screenshotsheight", datHeader.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey));
             Assert.Equal("screenshotsWidth", datHeader.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey));
             Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.SearchKey));
-            Assert.Equal("system", datHeader.ReadString(Data.Models.Metadata.Header.SystemKey));
-            Assert.Equal("timestamp", datHeader.ReadString(Data.Models.Metadata.Header.TimestampKey));
-            Assert.Equal("type", datHeader.ReadString(Data.Models.Metadata.Header.TypeKey));
-            Assert.Equal("url", datHeader.ReadString(Data.Models.Metadata.Header.UrlKey));
-            Assert.Equal("version", datHeader.ReadString(Data.Models.Metadata.Header.VersionKey));
+            Assert.Equal("system", datHeader.System);
+            Assert.Equal("timestamp", datHeader.Timestamp);
+            Assert.Equal("type", datHeader.Type);
+            Assert.Equal("url", datHeader.Url);
+            Assert.Equal("version", datHeader.Version);
         }
 
 #pragma warning disable IDE0051

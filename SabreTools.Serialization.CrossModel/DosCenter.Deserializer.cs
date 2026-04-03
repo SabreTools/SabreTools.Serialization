@@ -33,11 +33,11 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Description = item.Description,
-                Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
-                Date = item.ReadString(Data.Models.Metadata.Header.DateKey),
-                Author = item.ReadString(Data.Models.Metadata.Header.AuthorKey),
-                Homepage = item.ReadString(Data.Models.Metadata.Header.HomepageKey),
-                Comment = item.ReadString(Data.Models.Metadata.Header.CommentKey),
+                Version = item.Version,
+                Date = item.Date,
+                Author = item.Author,
+                Homepage = item.Homepage,
+                Comment = item.Comment,
             };
             return dosCenter;
         }

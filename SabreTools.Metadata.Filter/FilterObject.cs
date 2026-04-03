@@ -527,14 +527,38 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Value;
                     return true;
 
+                case Header item when fieldName == "author":
+                    checkValue = item.Author;
+                    return true;
                 case Header item when fieldName == "biosmode":
                     checkValue = item.BiosMode.AsStringValue();
+                    return true;
+                case Header item when fieldName == "build":
+                    checkValue = item.Build;
+                    return true;
+                case Header item when fieldName == "category":
+                    checkValue = item.Category;
+                    return true;
+                case Header item when fieldName == "comment":
+                    checkValue = item.Comment;
+                    return true;
+                case Header item when fieldName == "date":
+                    checkValue = item.Date;
+                    return true;
+                case Header item when fieldName == "datversion":
+                    checkValue = item.DatVersion;
                     return true;
                 case Header item when fieldName == "debug":
                     checkValue = item.Debug.FromYesNo();
                     return true;
                 case Header item when fieldName == "description":
                     checkValue = item.Description;
+                    return true;
+                case Header item when fieldName == "email":
+                    checkValue = item.Email;
+                    return true;
+                case Header item when fieldName == "emulatorversion":
+                    checkValue = item.EmulatorVersion;
                     return true;
                 case Header item when fieldName == "forcemerging":
                     checkValue = item.ForceMerging.AsStringValue();
@@ -548,6 +572,12 @@ namespace SabreTools.Metadata.Filter
                 case Header item when fieldName == "forcezipping":
                     checkValue = item.ForceZipping.FromYesNo();
                     return true;
+                case Header item when fieldName == "homepage":
+                    checkValue = item.Homepage;
+                    return true;
+                case Header item when fieldName == "id":
+                    checkValue = item.Id;
+                    return true;
                 case Header item when fieldName == "lockbiosmode":
                     checkValue = item.LockBiosMode.FromYesNo();
                     return true;
@@ -557,11 +587,44 @@ namespace SabreTools.Metadata.Filter
                 case Header item when fieldName == "locksamplemode":
                     checkValue = item.LockSampleMode.FromYesNo();
                     return true;
+                case Header item when fieldName == "mameconfig":
+                    checkValue = item.MameConfig;
+                    return true;
+                case Header item when fieldName == "notes":
+                    checkValue = item.Notes;
+                    return true;
+                case Header item when fieldName == "plugin":
+                    checkValue = item.Plugin;
+                    return true;
+                case Header item when fieldName == "refname":
+                    checkValue = item.RefName;
+                    return true;
                 case Header item when fieldName == "rommode":
                     checkValue = item.RomMode.AsStringValue();
                     return true;
+                case Header item when fieldName == "romtitle":
+                    checkValue = item.RomTitle;
+                    return true;
+                case Header item when fieldName == "rootdir":
+                    checkValue = item.RootDir;
+                    return true;
                 case Header item when fieldName == "samplemode":
                     checkValue = item.SampleMode.AsStringValue();
+                    return true;
+                case Header item when fieldName == "system":
+                    checkValue = item.System;
+                    return true;
+                case Header item when fieldName == "timestamp":
+                    checkValue = item.Timestamp;
+                    return true;
+                case Header item when fieldName == "type":
+                    checkValue = item.Timestamp;
+                    return true;
+                case Header item when fieldName == "url":
+                    checkValue = item.Url;
+                    return true;
+                case Header item when fieldName == "version":
+                    checkValue = item.Version;
                     return true;
 
                 case Info item when fieldName == "value":

@@ -31,10 +31,22 @@ namespace SabreTools.Metadata.DatFiles
 
         #region Fields
 
+        public string? Author
+        {
+            get => _internal.Author;
+            set => _internal.Author = value;
+        }
+
         public MergingFlag BiosMode
         {
             get => _internal.BiosMode;
             set => _internal.BiosMode = value;
+        }
+
+        public string? Build
+        {
+            get => _internal.Build;
+            set => _internal.Build = value;
         }
 
         [JsonIgnore]
@@ -47,6 +59,30 @@ namespace SabreTools.Metadata.DatFiles
             }
         }
 
+        public string? Category
+        {
+            get => _internal.Category;
+            set => _internal.Category = value;
+        }
+
+        public string? Comment
+        {
+            get => _internal.Comment;
+            set => _internal.Comment = value;
+        }
+
+        public string? Date
+        {
+            get => _internal.Date;
+            set => _internal.Date = value;
+        }
+
+        public string? DatVersion
+        {
+            get => _internal.DatVersion;
+            set => _internal.DatVersion = value;
+        }
+
         public bool? Debug
         {
             get => _internal.Debug;
@@ -57,6 +93,18 @@ namespace SabreTools.Metadata.DatFiles
         {
             get => _internal.Description;
             set => _internal.Description = value;
+        }
+
+        public string? Email
+        {
+            get => _internal.Email;
+            set => _internal.Email = value;
+        }
+
+        public string? EmulatorVersion
+        {
+            get => _internal.EmulatorVersion;
+            set => _internal.EmulatorVersion = value;
         }
 
         public MergingFlag ForceMerging
@@ -81,6 +129,18 @@ namespace SabreTools.Metadata.DatFiles
         {
             get => _internal.ForceZipping;
             set => _internal.ForceZipping = value;
+        }
+
+        public string? Homepage
+        {
+            get => _internal.Homepage;
+            set => _internal.Homepage = value;
+        }
+
+        public string? Id
+        {
+            get => _internal.Id;
+            set => _internal.Id = value;
         }
 
         [JsonIgnore]
@@ -119,6 +179,12 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.LockSampleMode = value;
         }
 
+        public string? MameConfig
+        {
+            get => _internal.MameConfig;
+            set => _internal.MameConfig = value;
+        }
+
         public string? Name
         {
             get => _internal.Name;
@@ -134,10 +200,40 @@ namespace SabreTools.Metadata.DatFiles
             }
         }
 
+        public string? Notes
+        {
+            get => _internal.Notes;
+            set => _internal.Notes = value;
+        }
+
+        public string? Plugin
+        {
+            get => _internal.Plugin;
+            set => _internal.Plugin = value;
+        }
+
+        public string? RefName
+        {
+            get => _internal.RefName;
+            set => _internal.RefName = value;
+        }
+
         public MergingFlag RomMode
         {
             get => _internal.RomMode;
             set => _internal.RomMode = value;
+        }
+
+        public string? RomTitle
+        {
+            get => _internal.RomTitle;
+            set => _internal.RomTitle = value;
+        }
+
+        public string? RootDir
+        {
+            get => _internal.RootDir;
+            set => _internal.RootDir = value;
         }
 
         public MergingFlag SampleMode
@@ -153,6 +249,36 @@ namespace SabreTools.Metadata.DatFiles
             {
                 return Read<Data.Models.OfflineList.Search?>(Data.Models.Metadata.Header.SearchKey) is not null;
             }
+        }
+
+        public string? System
+        {
+            get => _internal.System;
+            set => _internal.System = value;
+        }
+
+        public string? Timestamp
+        {
+            get => _internal.Timestamp;
+            set => _internal.Timestamp = value;
+        }
+
+        public string? Type
+        {
+            get => _internal.Type;
+            set => _internal.Type = value;
+        }
+
+        public string? Url
+        {
+            get => _internal.Url;
+            set => _internal.Url = value;
+        }
+
+        public string? Version
+        {
+            get => _internal.Version;
+            set => _internal.Version = value;
         }
 
         #endregion

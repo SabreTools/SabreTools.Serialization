@@ -258,18 +258,40 @@ namespace SabreTools.Data.Extensions
             }
             else if (self is Header selfHeader && clone is Header cloneHeader)
             {
+                cloneHeader.Author = selfHeader.Author;
                 cloneHeader.BiosMode = selfHeader.BiosMode;
+                cloneHeader.Build = selfHeader.Build;
+                cloneHeader.Category = selfHeader.Category;
+                cloneHeader.Comment = selfHeader.Comment;
+                cloneHeader.Date = selfHeader.Date;
+                cloneHeader.DatVersion = selfHeader.DatVersion;
                 cloneHeader.Debug = selfHeader.Debug;
                 cloneHeader.Description = selfHeader.Description;
+                cloneHeader.Email = selfHeader.Email;
+                cloneHeader.EmulatorVersion = selfHeader.EmulatorVersion;
                 cloneHeader.ForceMerging = selfHeader.ForceMerging;
                 cloneHeader.ForceNodump = selfHeader.ForceNodump;
                 cloneHeader.ForcePacking = selfHeader.ForcePacking;
                 cloneHeader.ForceZipping = selfHeader.ForceZipping;
+                cloneHeader.Homepage = selfHeader.Homepage;
+                cloneHeader.Id = selfHeader.Id;
                 cloneHeader.LockBiosMode = selfHeader.LockBiosMode;
                 cloneHeader.LockRomMode = selfHeader.LockRomMode;
                 cloneHeader.LockSampleMode = selfHeader.LockSampleMode;
+                cloneHeader.MameConfig = selfHeader.MameConfig;
+                cloneHeader.Name = selfHeader.Name;
+                cloneHeader.Notes = selfHeader.Notes;
+                cloneHeader.Plugin = selfHeader.Plugin;
+                cloneHeader.RefName = selfHeader.RefName;
                 cloneHeader.RomMode = selfHeader.RomMode;
+                cloneHeader.RomTitle = selfHeader.RomTitle;
+                cloneHeader.RootDir = selfHeader.RootDir;
                 cloneHeader.SampleMode = selfHeader.SampleMode;
+                cloneHeader.System = selfHeader.System;
+                cloneHeader.Timestamp = selfHeader.Timestamp;
+                cloneHeader.Type = selfHeader.Type;
+                cloneHeader.Url = selfHeader.Url;
+                cloneHeader.Version = selfHeader.Version;
             }
             else if (self is Info selfInfo && clone is Info cloneInfo)
             {

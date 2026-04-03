@@ -33,7 +33,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Header_Null_False()
         {
-            var header = new Header { [Header.AuthorKey] = null };
+            var header = new Header { Author = null };
             bool actual = _filterRunner.Run(header);
             Assert.False(actual);
         }
@@ -41,7 +41,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Header_Empty_False()
         {
-            var header = new Header { [Header.AuthorKey] = "" };
+            var header = new Header { Author = "" };
             bool actual = _filterRunner.Run(header);
             Assert.False(actual);
         }
@@ -49,7 +49,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Header_Incorrect_False()
         {
-            var header = new Header { [Header.AuthorKey] = "NO_MATCH" };
+            var header = new Header { Author = "NO_MATCH" };
             bool actual = _filterRunner.Run(header);
             Assert.False(actual);
         }
@@ -57,7 +57,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Header_Correct_True()
         {
-            var header = new Header { [Header.AuthorKey] = "auth" };
+            var header = new Header { Author = "auth" };
             bool actual = _filterRunner.Run(header);
             Assert.True(actual);
         }

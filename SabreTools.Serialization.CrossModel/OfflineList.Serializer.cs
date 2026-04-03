@@ -39,15 +39,15 @@ namespace SabreTools.Serialization.CrossModel
             {
                 header.Name =  item.Configuration.DatName;
                 header[Data.Models.Metadata.Header.ImFolderKey] = item.Configuration.ImFolder;
-                header[Data.Models.Metadata.Header.DatVersionKey] = item.Configuration.DatVersion;
-                header[Data.Models.Metadata.Header.SystemKey] = item.Configuration.System;
+                header.DatVersion = item.Configuration.DatVersion;
+                header.System = item.Configuration.System;
                 header[Data.Models.Metadata.Header.ScreenshotsWidthKey] = item.Configuration.ScreenshotsWidth;
                 header[Data.Models.Metadata.Header.ScreenshotsHeightKey] = item.Configuration.ScreenshotsHeight;
                 header[Data.Models.Metadata.Header.InfosKey] = item.Configuration.Infos;
                 header[Data.Models.Metadata.Header.CanOpenKey] = item.Configuration.CanOpen;
                 header[Data.Models.Metadata.Header.NewDatKey] = item.Configuration.NewDat;
                 header[Data.Models.Metadata.Header.SearchKey] = item.Configuration.Search;
-                header[Data.Models.Metadata.Header.RomTitleKey] = item.Configuration.RomTitle;
+                header.RomTitle = item.Configuration.RomTitle;
             }
 
             if (item.GUI is not null)

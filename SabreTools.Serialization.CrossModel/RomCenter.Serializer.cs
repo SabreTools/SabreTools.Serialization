@@ -34,19 +34,19 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.Credits is not null)
             {
-                header[Data.Models.Metadata.Header.AuthorKey] = item.Credits.Author;
-                header[Data.Models.Metadata.Header.VersionKey] = item.Credits.Version;
-                header[Data.Models.Metadata.Header.EmailKey] = item.Credits.Email;
-                header[Data.Models.Metadata.Header.HomepageKey] = item.Credits.Homepage;
-                header[Data.Models.Metadata.Header.UrlKey] = item.Credits.Url;
-                header[Data.Models.Metadata.Header.DateKey] = item.Credits.Date;
-                header[Data.Models.Metadata.Header.CommentKey] = item.Credits.Comment;
+                header.Author = item.Credits.Author;
+                header.Version = item.Credits.Version;
+                header.Email = item.Credits.Email;
+                header.Homepage = item.Credits.Homepage;
+                header.Url = item.Credits.Url;
+                header.Date = item.Credits.Date;
+                header.Comment = item.Credits.Comment;
             }
 
             if (item.Dat is not null)
             {
-                header[Data.Models.Metadata.Header.DatVersionKey] = item.Dat.Version;
-                header[Data.Models.Metadata.Header.PluginKey] = item.Dat.Plugin;
+                header.DatVersion = item.Dat.Version;
+                header.Plugin = item.Dat.Plugin;
 
                 if (item.Dat.Split == "yes" || item.Dat.Split == "1")
                     header.ForceMerging = Data.Models.Metadata.MergingFlag.Split;
@@ -56,8 +56,8 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.Emulator is not null)
             {
-                header[Data.Models.Metadata.Header.RefNameKey] = item.Emulator.RefName;
-                header[Data.Models.Metadata.Header.EmulatorVersionKey] = item.Emulator.Version;
+                header.RefName = item.Emulator.RefName;
+                header.EmulatorVersion = item.Emulator.Version;
             }
 
             return header;

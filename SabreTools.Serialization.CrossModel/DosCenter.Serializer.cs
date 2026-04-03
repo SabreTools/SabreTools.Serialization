@@ -34,11 +34,11 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name =  item.Name,
                 Description = item.Description,
-                [Data.Models.Metadata.Header.VersionKey] = item.Version,
-                [Data.Models.Metadata.Header.DateKey] = item.Date,
-                [Data.Models.Metadata.Header.AuthorKey] = item.Author,
-                [Data.Models.Metadata.Header.HomepageKey] = item.Homepage,
-                [Data.Models.Metadata.Header.CommentKey] = item.Comment,
+                Version = item.Version,
+                Date = item.Date,
+                Author = item.Author,
+                Homepage = item.Homepage,
+                Comment = item.Comment,
             };
             return header;
         }

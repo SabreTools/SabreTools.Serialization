@@ -28,9 +28,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var mame = new Mame
             {
-                Build = item.ReadString(Data.Models.Metadata.Header.BuildKey),
+                Build = item.Build,
                 Debug = item.Debug,
-                MameConfig = item.ReadString(Data.Models.Metadata.Header.MameConfigKey),
+                MameConfig = item.MameConfig,
             };
 
             return mame;

@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Description = item.Description,
-                Notes = item.ReadString(Data.Models.Metadata.Header.NotesKey),
+                Notes = item.Notes,
             };
             return softwareList;
         }

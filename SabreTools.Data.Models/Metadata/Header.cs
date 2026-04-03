@@ -8,13 +8,29 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? Author { get; set; }
+
         /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
         public MergingFlag BiosMode { get; set; }
+
+        public string? Build { get; set; }
+
+        public string? Category { get; set; }
+
+        public string? Comment { get; set; }
+
+        public string? Date { get; set; }
+
+        public string? DatVersion { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Debug { get; set; }
 
         public string? Description { get; set; }
+
+        public string? Email { get; set; }
+
+        public string? EmulatorVersion { get; set; }
 
         /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
         public MergingFlag ForceMerging { get; set; }
@@ -28,6 +44,10 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "yes"</remarks>
         public bool? ForceZipping { get; set; }
 
+        public string? Homepage { get; set; }
+
+        public string? Id { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? LockBiosMode { get; set; }
 
@@ -37,55 +57,47 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? LockSampleMode { get; set; }
 
+        public string? MameConfig { get; set; }
+
         public string? Name { get; set; }
+
+        public string? Notes { get; set; }
+
+        public string? Plugin { get; set; }
+
+        public string? RefName { get; set; }
 
         /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
         public MergingFlag RomMode { get; set; }
 
+        public string? RomTitle { get; set; }
+
+        public string? RootDir { get; set; }
+
         /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
         public MergingFlag SampleMode { get; set; }
+
+        public string? System { get; set; }
+
+        public string? Timestamp { get; set; }
+
+        public string? Type { get; set; }
+
+        public string? Url { get; set; }
+
+        public string? Version { get; set; }
 
         #endregion
 
         #region Keys
-
-        /// <remarks>string</remarks>
-        public const string AuthorKey = "author";
-
-        /// <remarks>string</remarks>
-        public const string BuildKey = "build";
 
         /// TODO: This needs an internal model OR mapping to fields
         /// <remarks>CanOpen</remarks>
         [NoFilter]
         public const string CanOpenKey = "canOpen";
 
-        /// <remarks>string</remarks>
-        public const string CategoryKey = "category";
-
-        /// <remarks>string</remarks>
-        public const string CommentKey = "comment";
-
-        /// <remarks>string</remarks>
-        public const string DateKey = "date";
-
-        /// <remarks>string</remarks>
-        public const string DatVersionKey = "datversion";
-
-        /// <remarks>string</remarks>
-        public const string EmailKey = "email";
-
-        /// <remarks>string</remarks>
-        public const string EmulatorVersionKey = "emulatorversion";
-
         /// <remarks>string, string[]</remarks>
         public const string HeaderKey = "header";
-
-        /// <remarks>string</remarks>
-        public const string HomepageKey = "homepage";
-
-        /// <remarks>string</remarks>
-        public const string IdKey = "id";
 
         /// TODO: This needs an internal model OR mapping to fields
         /// <remarks>Search</remarks>
@@ -100,28 +112,10 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string InfosKey = "infos";
 
-        /// <remarks>string</remarks>
-        public const string MameConfigKey = "mameconfig";
-
         /// TODO: This needs an internal model OR mapping to fields
         /// <remarks>NewDat</remarks>
         [NoFilter]
         public const string NewDatKey = "newDat";
-
-        /// <remarks>string</remarks>
-        public const string NotesKey = "notes";
-
-        /// <remarks>string</remarks>
-        public const string PluginKey = "plugin";
-
-        /// <remarks>string</remarks>
-        public const string RefNameKey = "refname";
-
-        /// <remarks>string</remarks>
-        public const string RomTitleKey = "romTitle";
-
-        /// <remarks>string</remarks>
-        public const string RootDirKey = "rootdir";
 
         /// <remarks>string</remarks>
         public const string SchemaLocationKey = "schemaLocation";
@@ -136,21 +130,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>Search</remarks>
         [NoFilter]
         public const string SearchKey = "search";
-
-        /// <remarks>string</remarks>
-        public const string SystemKey = "system";
-
-        /// <remarks>string</remarks>
-        public const string TimestampKey = "timestamp";
-
-        /// <remarks>string</remarks>
-        public const string TypeKey = "type";
-
-        /// <remarks>string</remarks>
-        public const string UrlKey = "url";
-
-        /// <remarks>string</remarks>
-        public const string VersionKey = "version";
 
         #endregion
     }

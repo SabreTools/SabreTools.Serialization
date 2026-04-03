@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.CrossModel
             var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
             if (header is not null)
             {
-                datafile.Build = header.ReadString(Data.Models.Metadata.Header.BuildKey);
+                datafile.Build = header.Build;
                 datafile.Debug = header.Debug;
                 datafile.SchemaLocation = header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey);
                 datafile.Header = ConvertHeaderFromInternalModel(header);
@@ -41,19 +41,19 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Header
             {
-                Id = item.ReadString(Data.Models.Metadata.Header.IdKey),
+                Id = item.Id,
                 Name = item.Name,
                 Description = item.Description,
-                RootDir = item.ReadString(Data.Models.Metadata.Header.RootDirKey),
-                Category = item.ReadString(Data.Models.Metadata.Header.CategoryKey),
-                Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
-                Date = item.ReadString(Data.Models.Metadata.Header.DateKey),
-                Author = item.ReadString(Data.Models.Metadata.Header.AuthorKey),
-                Email = item.ReadString(Data.Models.Metadata.Header.EmailKey),
-                Homepage = item.ReadString(Data.Models.Metadata.Header.HomepageKey),
-                Url = item.ReadString(Data.Models.Metadata.Header.UrlKey),
-                Comment = item.ReadString(Data.Models.Metadata.Header.CommentKey),
-                Type = item.ReadString(Data.Models.Metadata.Header.TypeKey),
+                RootDir = item.RootDir,
+                Category = item.Category,
+                Version = item.Version,
+                Date = item.Date,
+                Author = item.Author,
+                Email = item.Email,
+                Homepage = item.Homepage,
+                Url = item.Url,
+                Comment = item.Comment,
+                Type = item.Type,
             };
 
             string? headerVal = item.ReadString(Data.Models.Metadata.Header.HeaderKey);
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.CrossModel
                     header.ClrMamePro.ForcePacking = forcePacking;
             }
 
-            string? plugin = item.ReadString(Data.Models.Metadata.Header.PluginKey);
+            string? plugin = item.Plugin;
             Data.Models.Metadata.MergingFlag romMode = item.RomMode;
             Data.Models.Metadata.MergingFlag biosMode = item.BiosMode;
             Data.Models.Metadata.MergingFlag sampleMode = item.SampleMode;
