@@ -142,6 +142,38 @@ namespace SabreTools.Data.Extensions
         /// TODO: Move this to Clone methods in each file when keys go away entirely
         public static DictionaryBase? DeepClone(this DictionaryBase self)
         {
+            // Handle types that are cloneable
+            if (self is Analog analog)
+                return analog.Clone() as Analog;
+            else if (self is BiosSet biosSet)
+                return biosSet.Clone() as BiosSet;
+            else if (self is Blank blank)
+                return blank.Clone() as Blank;
+            else if (self is Chip chip)
+                return chip.Clone() as Chip;
+            else if (self is Condition condition)
+                return condition.Clone() as Condition;
+            else if (self is Control control)
+                return control.Clone() as Control;
+            else if (self is DeviceRef deviceRef)
+                return deviceRef.Clone() as DeviceRef;
+            else if (self is Extension extension)
+                return extension.Clone() as Extension;
+            else if (self is Feature feature)
+                return feature.Clone() as Feature;
+            else if (self is Info info)
+                return info.Clone() as Info;
+            else if (self is Instance instance)
+                return instance.Clone() as Instance;
+            else if (self is RamOption ramOption)
+                return ramOption.Clone() as RamOption;
+            else if (self is SharedFeat sharedFeat)
+                return sharedFeat.Clone() as SharedFeat;
+            else if (self is SlotOption slotOption)
+                return slotOption.Clone() as SlotOption;
+            else if (self is Sound sound)
+                return sound.Clone() as Sound;
+
             // If construction failed, we can't do anything
             if (Activator.CreateInstance(self.GetType()) is not DictionaryBase clone)
                 return null;
@@ -151,33 +183,9 @@ namespace SabreTools.Data.Extensions
             {
                 cloneAdjuster.Default = selfAdjuster.Default;
             }
-            else if (self is Analog selfAnalog && clone is Analog cloneAnalog)
-            {
-                cloneAnalog.Mask = selfAnalog.Mask;
-            }
             else if (self is Archive selfArchive && clone is Archive cloneArchive)
             {
                 cloneArchive.Description = selfArchive.Description;
-            }
-            else if (self is BiosSet selfBiosSet && clone is BiosSet cloneBiosSet)
-            {
-                cloneBiosSet.Default = selfBiosSet.Default;
-                cloneBiosSet.Description = selfBiosSet.Description;
-            }
-            else if (self is Chip selfChip && clone is Chip cloneChip)
-            {
-                cloneChip.ChipType = selfChip.ChipType;
-                cloneChip.Clock = selfChip.Clock;
-                cloneChip.Flags = selfChip.Flags;
-                cloneChip.SoundOnly = selfChip.SoundOnly;
-                cloneChip.Tag = selfChip.Tag;
-            }
-            else if (self is Condition selfCondition && clone is Condition cloneCondition)
-            {
-                cloneCondition.Mask = selfCondition.Mask;
-                cloneCondition.Relation = selfCondition.Relation;
-                cloneCondition.Tag = selfCondition.Tag;
-                cloneCondition.Value = selfCondition.Value;
             }
             else if (self is Configuration selfConfiguration && clone is Configuration cloneConfiguration)
             {
@@ -192,21 +200,6 @@ namespace SabreTools.Data.Extensions
             {
                 cloneConfSetting.Default = selfConfSetting.Default;
                 cloneConfSetting.Value = selfConfSetting.Value;
-            }
-            else if (self is Control selfControl && clone is Control cloneControl)
-            {
-                cloneControl.Buttons = selfControl.Buttons;
-                cloneControl.ControlType = selfControl.ControlType;
-                cloneControl.KeyDelta = selfControl.KeyDelta;
-                cloneControl.Maximum = selfControl.Maximum;
-                cloneControl.Minimum = selfControl.Minimum;
-                cloneControl.Player = selfControl.Player;
-                cloneControl.ReqButtons = selfControl.ReqButtons;
-                cloneControl.Reverse = selfControl.Reverse;
-                cloneControl.Sensitivity = selfControl.Sensitivity;
-                cloneControl.Ways = selfControl.Ways;
-                cloneControl.Ways2 = selfControl.Ways2;
-                cloneControl.Ways3 = selfControl.Ways3;
             }
             else if (self is DataArea selfDataArea && clone is DataArea cloneDataArea)
             {
@@ -263,13 +256,6 @@ namespace SabreTools.Data.Extensions
                 cloneDriver.Status = selfDriver.Status;
                 cloneDriver.Unofficial = selfDriver.Unofficial;
             }
-            else if (self is Feature selfFeature && clone is Feature cloneFeature)
-            {
-                cloneFeature.FeatureType = selfFeature.FeatureType;
-                cloneFeature.Overall = selfFeature.Overall;
-                cloneFeature.Status = selfFeature.Status;
-                cloneFeature.Value = selfFeature.Value;
-            }
             else if (self is Header selfHeader && clone is Header cloneHeader)
             {
                 cloneHeader.Author = selfHeader.Author;
@@ -307,18 +293,10 @@ namespace SabreTools.Data.Extensions
                 cloneHeader.Url = selfHeader.Url;
                 cloneHeader.Version = selfHeader.Version;
             }
-            else if (self is Info selfInfo && clone is Info cloneInfo)
-            {
-                cloneInfo.Value = selfInfo.Value;
-            }
             else if (self is Input selfInput && clone is Input cloneInput)
             {
                 cloneInput.Service = selfInput.Service;
                 cloneInput.Tilt = selfInput.Tilt;
-            }
-            else if (self is Instance selfInstance && clone is Instance cloneInstance)
-            {
-                cloneInstance.BriefName = selfInstance.BriefName;
             }
             else if (self is Machine selfMachine && clone is Machine cloneMachine)
             {
@@ -341,11 +319,6 @@ namespace SabreTools.Data.Extensions
             {
                 clonePort.Tag = selfPort.Tag;
             }
-            else if (self is RamOption selfRamOption && clone is RamOption cloneRamOption)
-            {
-                cloneRamOption.Content = selfRamOption.Content;
-                cloneRamOption.Default = selfRamOption.Default;
-            }
             else if (self is Release selfRelease && clone is Release cloneRelease)
             {
                 cloneRelease.Default = selfRelease.Default;
@@ -364,15 +337,6 @@ namespace SabreTools.Data.Extensions
                 cloneRom.Status = selfRom.Status;
                 cloneRom.Value = selfRom.Value;
             }
-            else if (self is SharedFeat selfSharedFeat && clone is SharedFeat cloneSharedFeat)
-            {
-                cloneSharedFeat.Value = selfSharedFeat.Value;
-            }
-            else if (self is SlotOption selfSlotOption && clone is SlotOption cloneSlotOption)
-            {
-                cloneSlotOption.Default = selfSlotOption.Default;
-                cloneSlotOption.DevName = selfSlotOption.DevName;
-            }
             else if (self is Software selfSoftware && clone is Software cloneSoftware)
             {
                 cloneSoftware.Description = selfSoftware.Description;
@@ -383,10 +347,6 @@ namespace SabreTools.Data.Extensions
                 cloneSoftwareList.Description = selfSoftwareList.Description;
                 cloneSoftwareList.Status = selfSoftwareList.Status;
                 cloneSoftwareList.Tag = selfSoftwareList.Tag;
-            }
-            else if (self is Sound selfSound && clone is Sound cloneSound)
-            {
-                cloneSound.Channels = selfSound.Channels;
             }
             else if (self is Video selfVideo && clone is Video cloneVideo)
             {
