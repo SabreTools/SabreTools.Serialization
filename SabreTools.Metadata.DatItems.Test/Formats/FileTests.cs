@@ -26,7 +26,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = "DEADBEEF",
                 Format = "XXXXXX"
             };
-            file.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
+            file.DupeType = DupeType.All | DupeType.External;
             file.Machine = machine;
             file.RemoveFlag = false;
             file.Source = source;
@@ -41,7 +41,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal("000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
             Assert.Equal("00000000000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
             Assert.Equal("00000000000000000000000000000000000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Equal(DupeType.All | DupeType.External, actual.Read<DupeType>(DatItem.DupeTypeKey));
+            Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
 
             Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);

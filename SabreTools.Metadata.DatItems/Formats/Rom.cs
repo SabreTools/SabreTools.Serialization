@@ -136,7 +136,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Rom() : base()
         {
-            Write<DupeType>(DupeTypeKey, 0x00);
+            DupeType = 0x00;
             Status = ItemStatus.None;
         }
 
@@ -247,7 +247,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Rom(Data.Models.Metadata.Rom item) : base(item)
         {
-            Write<DupeType>(DupeTypeKey, 0x00);
+            DupeType = 0x00;
 
             // Process hash values
             long? size = ReadLong(Data.Models.Metadata.Rom.SizeKey);

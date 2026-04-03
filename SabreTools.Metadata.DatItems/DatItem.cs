@@ -56,16 +56,12 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(SourceDetails))]
     public abstract class DatItem : ModelBackedItem<Data.Models.Metadata.DatItem>, IEquatable<DatItem>, IComparable<DatItem>, ICloneable
     {
-        #region Constants
+        #region Fields
 
         /// <summary>
         /// Duplicate type when compared to another item
         /// </summary>
-        public const string DupeTypeKey = "DUPETYPE";
-
-        #endregion
-
-        #region Fields
+        public DupeType DupeType { get; set; } = 0x00;
 
         /// <summary>
         /// Item type for the object

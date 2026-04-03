@@ -25,12 +25,12 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Media() : base()
         {
-            Write<DupeType>(DupeTypeKey, 0x00);
+            DupeType = 0x00;
         }
 
         public Media(Data.Models.Metadata.Media item) : base(item)
         {
-            Write<DupeType>(DupeTypeKey, 0x00);
+            DupeType = 0x00;
 
             // Process hash values
             string? md5 = ReadString(Data.Models.Metadata.Media.MD5Key);
@@ -67,7 +67,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var rom = new Rom(_internal.ConvertToRom()!);
 
-            rom.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
+            rom.DupeType = DupeType;
             rom.Machine = Machine?.Clone() as Machine;
             rom.RemoveFlag = RemoveFlag;
             rom.Source = Source?.Clone() as Source;

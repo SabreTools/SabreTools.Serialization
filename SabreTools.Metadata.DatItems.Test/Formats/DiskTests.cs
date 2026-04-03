@@ -30,7 +30,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             disk.Optional = true;
             disk.Write(Data.Models.Metadata.Disk.MD5Key, HashType.MD5.ZeroString);
             disk.Write(Data.Models.Metadata.Disk.SHA1Key, HashType.SHA1.ZeroString);
-            disk.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
+            disk.DupeType = DupeType.All | DupeType.External;
             disk.Machine = machine;
             disk.Write(Disk.PartKey, part);
             disk.RemoveFlag = false;
@@ -45,7 +45,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal(true, actual.Optional);
             Assert.Equal(HashType.MD5.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
             Assert.Equal(HashType.SHA1.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal(DupeType.All | DupeType.External, actual.Read<DupeType>(DatItem.DupeTypeKey));
+            Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
 
             DataArea? actualDataArea = actual.Read<DataArea?>(Rom.DataAreaKey);
             Assert.NotNull(actualDataArea);

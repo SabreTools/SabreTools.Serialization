@@ -80,13 +80,13 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Disk() : base()
         {
-            Write<DupeType>(DupeTypeKey, 0x00);
+            DupeType = 0x00;
             Status = ItemStatus.None;
         }
 
         public Disk(Data.Models.Metadata.Disk item) : base(item)
         {
-            Write<DupeType>(DupeTypeKey, 0x00);
+            DupeType = 0x00;
 
             // Process hash values
             string? md5 = ReadString(Data.Models.Metadata.Disk.MD5Key);
@@ -129,7 +129,7 @@ namespace SabreTools.Metadata.DatItems.Formats
                 rom.Write<DataArea?>(Rom.DataAreaKey, dataArea);
             }
 
-            rom.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
+            rom.DupeType = DupeType;
             rom.Machine = Machine?.Clone() as Machine;
             rom.Write(Rom.PartKey, Read<Part>(PartKey)?.Clone() as Part);
             rom.RemoveFlag = RemoveFlag;

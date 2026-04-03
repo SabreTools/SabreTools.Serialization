@@ -444,9 +444,9 @@ namespace SabreTools.Metadata.DatFiles
 
             // If the duplicate is external already
 #if NET20 || NET35
-            if ((last.Read<DupeType>(DatItem.DupeTypeKey) & DupeType.External) != 0)
+            if ((last.DupeType & DupeType.External) != 0)
 #else
-            if (last.Read<DupeType>(DatItem.DupeTypeKey).HasFlag(DupeType.External))
+            if (last.DupeType.HasFlag(DupeType.External))
 #endif
                 output |= DupeType.External;
 
@@ -539,7 +539,7 @@ namespace SabreTools.Metadata.DatFiles
                     savedRom.FillMissingInformation(romItem);
 
                 // Set the duplicate type on the saved item
-                savedItem.Write(DatItem.DupeTypeKey, dupetype);
+                savedItem.DupeType = dupetype;
 
                 // Get the sources associated with the items
                 var savedSource = savedItem.Source;

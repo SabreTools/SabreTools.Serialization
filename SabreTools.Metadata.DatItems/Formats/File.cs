@@ -120,7 +120,7 @@ namespace SabreTools.Metadata.DatItems.Formats
                 _sha256 = this._sha256,
                 Format = this.Format,
             };
-            file.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
+            file.DupeType = DupeType;
             file.Machine = Machine!.Clone() as Machine ?? new Machine();
             file.RemoveFlag = RemoveFlag;
             file.Source = Source?.Clone() as Source;
@@ -143,7 +143,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, SHA1);
             rom.Write<string?>(Data.Models.Metadata.Rom.SHA256Key, SHA256);
 
-            rom.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
+            rom.DupeType = DupeType;
             rom.Machine = Machine?.Clone() as Machine;
             rom.RemoveFlag = RemoveFlag;
             rom.Source = Source?.Clone() as Source;
