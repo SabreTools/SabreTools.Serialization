@@ -309,7 +309,6 @@ namespace SabreTools.Data.Models.Metadata
         SharedFeat,
         Slot,
         SlotOption,
-        Software,
         SoftwareList,
         Sound,
         SourceDetails,

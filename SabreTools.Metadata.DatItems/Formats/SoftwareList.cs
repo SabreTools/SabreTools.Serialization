@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 
@@ -12,12 +11,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     public sealed class SoftwareList : DatItem<Data.Models.Metadata.SoftwareList>
     {
         #region Fields
-
-        public string? Description
-        {
-            get => (_internal as Data.Models.Metadata.SoftwareList)?.Description;
-            set => (_internal as Data.Models.Metadata.SoftwareList)?.Description = value;
-        }
 
         public string? Filter
         {
@@ -33,12 +26,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             get => (_internal as Data.Models.Metadata.SoftwareList)?.Name;
             set => (_internal as Data.Models.Metadata.SoftwareList)?.Name = value;
-        }
-
-        public string? Notes
-        {
-            get => (_internal as Data.Models.Metadata.SoftwareList)?.Notes;
-            set => (_internal as Data.Models.Metadata.SoftwareList)?.Notes = value;
         }
 
         public Data.Models.Metadata.SoftwareListStatus? Status
@@ -59,16 +46,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public SoftwareList() : base() { }
 
-        public SoftwareList(Data.Models.Metadata.SoftwareList item) : base(item)
-        {
-            // Handle subitems
-            var softwares = item.ReadArray<Data.Models.Metadata.Software>(Data.Models.Metadata.SoftwareList.SoftwareKey);
-            if (softwares is not null)
-            {
-                Software[] softwareItems = Array.ConvertAll(softwares, software => new Software(software));
-                Write<Software[]?>(Data.Models.Metadata.SoftwareList.SoftwareKey, softwareItems);
-            }
-        }
+        public SoftwareList(Data.Models.Metadata.SoftwareList item) : base(item) { }
 
         public SoftwareList(Data.Models.Metadata.SoftwareList item, Machine machine, Source source) : this(item)
         {
@@ -82,21 +60,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override object Clone() => new SoftwareList(_internal.DeepClone() as Data.Models.Metadata.SoftwareList ?? []);
-
-        /// <inheritdoc/>
-        public override Data.Models.Metadata.SoftwareList GetInternalClone()
-        {
-            var softwareListItem = base.GetInternalClone();
-
-            var softwares = Read<Software[]?>(Data.Models.Metadata.SoftwareList.SoftwareKey);
-            if (softwares is not null)
-            {
-                Data.Models.Metadata.Software[] softwareItems = Array.ConvertAll(softwares, software => software.GetInternalClone());
-                softwareListItem[Data.Models.Metadata.SoftwareList.SoftwareKey] = softwareItems;
-            }
-
-            return softwareListItem;
-        }
 
         #endregion
     }

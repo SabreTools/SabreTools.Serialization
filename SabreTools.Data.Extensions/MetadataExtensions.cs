@@ -63,7 +63,6 @@ namespace SabreTools.Data.Extensions
                 SharedFeat sharedFeat => sharedFeat.Name,
                 Slot slot => slot.Name,
                 SlotOption slotOption => slotOption.Name,
-                Software software => software.Name,
                 SoftwareList softwareList => softwareList.Name,
                 Sound => null,
                 SourceDetails => null,
@@ -124,7 +123,6 @@ namespace SabreTools.Data.Extensions
                 case SharedFeat sharedFeat: sharedFeat.Name = name; break;
                 case Slot slot: slot.Name = name; break;
                 case SlotOption slotOption: slotOption.Name = name; break;
-                case Software software: software.Name = name; break;
                 case SoftwareList softwareList: softwareList.Name = name; break;
                 case Sound: break;
                 case SourceDetails: break;
@@ -186,6 +184,8 @@ namespace SabreTools.Data.Extensions
                 return sharedFeat.Clone() as SharedFeat;
             else if (self is SlotOption slotOption)
                 return slotOption.Clone() as SlotOption;
+            else if (self is SoftwareList softwareList)
+                return softwareList.Clone() as SoftwareList;
             else if (self is Sound sound)
                 return sound.Clone() as Sound;
             else if (self is Video video)
@@ -328,19 +328,6 @@ namespace SabreTools.Data.Extensions
                 cloneRom.SoundOnly = selfRom.SoundOnly;
                 cloneRom.Status = selfRom.Status;
                 cloneRom.Value = selfRom.Value;
-            }
-            else if (self is Software selfSoftware && clone is Software cloneSoftware)
-            {
-                cloneSoftware.Description = selfSoftware.Description;
-                cloneSoftware.Supported = selfSoftware.Supported;
-            }
-            else if (self is SoftwareList selfSoftwareList && clone is SoftwareList cloneSoftwareList)
-            {
-                cloneSoftwareList.Description = selfSoftwareList.Description;
-                cloneSoftwareList.Filter = selfSoftwareList.Filter;
-                cloneSoftwareList.Notes = selfSoftwareList.Notes;
-                cloneSoftwareList.Status = selfSoftwareList.Status;
-                cloneSoftwareList.Tag = selfSoftwareList.Tag;
             }
 
             // Handle known properties

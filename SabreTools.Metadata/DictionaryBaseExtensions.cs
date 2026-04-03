@@ -328,24 +328,9 @@ namespace SabreTools.Metadata
                 if (!selfSlotOption.Equals(otherSlotOption))
                     return false;
             }
-            else if (self is Software selfSoftware && other is Software otherSoftware)
-            {
-                if (selfSoftware.Description != otherSoftware.Description)
-                    return false;
-                if (selfSoftware.Supported != otherSoftware.Supported)
-                    return false;
-            }
             else if (self is SoftwareList selfSoftwareList && other is SoftwareList otherSoftwareList)
             {
-                if (selfSoftwareList.Description != otherSoftwareList.Description)
-                    return false;
-                if (selfSoftwareList.Filter != otherSoftwareList.Filter)
-                    return false;
-                if (selfSoftwareList.Notes != otherSoftwareList.Notes)
-                    return false;
-                if (selfSoftwareList.Status != otherSoftwareList.Status)
-                    return false;
-                if (selfSoftwareList.Tag != otherSoftwareList.Tag)
+                if (!selfSoftwareList.Equals(otherSoftwareList))
                     return false;
             }
             else if (self is Sound selfSound && other is Sound otherSound)

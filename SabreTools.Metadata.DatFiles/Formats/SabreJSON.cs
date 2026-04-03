@@ -389,7 +389,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                     // TODO: Implement these?
                     case Data.Models.Metadata.ItemType.Dump:
-                    case Data.Models.Metadata.ItemType.Software:
                     case Data.Models.Metadata.ItemType.Video:
                     case Data.Models.Metadata.ItemType.NULL:
                     default:
