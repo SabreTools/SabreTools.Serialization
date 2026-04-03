@@ -31,7 +31,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public SabreXML(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.SabreXML);
+            Header.DatFormat = DatFormat.SabreXML;
         }
 
         /// <inheritdoc/>

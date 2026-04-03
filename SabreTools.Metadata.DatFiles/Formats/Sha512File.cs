@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha512File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA512;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA512);
+            Header.DatFormat = DatFormat.RedumpSHA512;
         }
 
         /// <inheritdoc/>

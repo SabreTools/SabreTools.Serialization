@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public SpamSumFile(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SpamSum;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSpamSum);
+            Header.DatFormat = DatFormat.RedumpSpamSum;
         }
 
         /// <inheritdoc/>

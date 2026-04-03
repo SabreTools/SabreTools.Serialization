@@ -60,7 +60,7 @@ The softwaredb.xml file contains information about rom mapper types
         /// <param name="datFile">Parent DatFile to copy from</param>
         public OpenMSX(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.OpenMSX);
+            Header.DatFormat = DatFormat.OpenMSX;
         }
 
         /// <inheritdoc/>

@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public SoftwareList(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.SoftwareList);
+            Header.DatFormat = DatFormat.SoftwareList;
         }
 
         /// <inheritdoc/>

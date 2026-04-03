@@ -39,7 +39,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public ClrMamePro(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.ClrMamePro);
+            Header.DatFormat = DatFormat.ClrMamePro;
         }
 
         /// <inheritdoc/>

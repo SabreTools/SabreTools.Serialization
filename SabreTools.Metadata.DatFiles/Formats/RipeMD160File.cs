@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public RipeMD160File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.RIPEMD160;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpRIPEMD160);
+            Header.DatFormat = DatFormat.RedumpRIPEMD160;
         }
 
         /// <inheritdoc/>

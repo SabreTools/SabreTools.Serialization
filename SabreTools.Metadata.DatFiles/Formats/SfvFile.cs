@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public SfvFile(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.CRC32;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSFV);
+            Header.DatFormat = DatFormat.RedumpSFV;
         }
 
         /// <inheritdoc/>

@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha1File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA1;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA1);
+            Header.DatFormat = DatFormat.RedumpSHA1;
         }
 
         /// <inheritdoc/>

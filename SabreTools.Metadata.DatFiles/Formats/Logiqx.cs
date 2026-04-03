@@ -253,9 +253,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             _useGame = useGame;
             if (useGame)
-                Header.Write(DatHeader.DatFormatKey, DatFormat.LogiqxDeprecated);
+                Header.DatFormat = DatFormat.LogiqxDeprecated;
             else
-                Header.Write(DatHeader.DatFormatKey, DatFormat.Logiqx);
+                Header.DatFormat = DatFormat.Logiqx;
         }
 
         /// <inheritdoc/>

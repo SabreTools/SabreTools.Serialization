@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Md5File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.MD5;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpMD5);
+            Header.DatFormat = DatFormat.RedumpMD5;
         }
 
         /// <inheritdoc/>

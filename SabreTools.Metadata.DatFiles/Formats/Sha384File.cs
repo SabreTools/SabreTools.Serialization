@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha384File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA384;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA384);
+            Header.DatFormat = DatFormat.RedumpSHA384;
         }
 
         /// <inheritdoc/>

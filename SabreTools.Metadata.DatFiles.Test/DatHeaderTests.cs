@@ -134,12 +134,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void CloneFormatTest()
         {
             DatHeader header = new DatHeader();
-            header.Write(DatHeader.DatFormatKey, DatFormat.Logiqx);
+            header.DatFormat = DatFormat.Logiqx;
 
             object clone = header.Clone();
             DatHeader? actual = clone as DatHeader;
             Assert.NotNull(actual);
-            Assert.Equal(DatFormat.Logiqx, actual.Read<DatFormat>(DatHeader.DatFormatKey));
+            Assert.Equal(DatFormat.Logiqx, actual.DatFormat);
         }
 
         #endregion

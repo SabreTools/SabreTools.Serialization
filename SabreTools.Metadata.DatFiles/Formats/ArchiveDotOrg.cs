@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Metadata.DatFiles.Formats
+namespace SabreTools.Metadata.DatFiles.Formats
 {
     /// <summary>
     /// Represents a Archive.org file list
@@ -17,7 +17,7 @@
         /// <param name="datFile">Parent DatFile to copy from</param>
         public ArchiveDotOrg(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.ArchiveDotOrg);
+            Header.DatFormat = DatFormat.ArchiveDotOrg;
         }
     }
 }

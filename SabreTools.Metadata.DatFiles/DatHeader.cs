@@ -18,11 +18,6 @@ namespace SabreTools.Metadata.DatFiles
         #region Constants
 
         /// <summary>
-        /// Read or write format
-        /// </summary>
-        public const string DatFormatKey = "DATFORMAT";
-
-        /// <summary>
         /// External name of the DAT
         /// </summary>
         public const string FileNameKey = "FILENAME";
@@ -76,6 +71,11 @@ namespace SabreTools.Metadata.DatFiles
             get => _internal.Date;
             set => _internal.Date = value;
         }
+
+        /// <summary>
+        /// Read or write format
+        /// </summary>
+        public DatFormat? DatFormat { get; set; }
 
         public string? DatVersion
         {
@@ -299,7 +299,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Clone the current header
         /// </summary>
-        public object Clone() => new DatHeader(GetInternalClone());
+        public object Clone() => new DatHeader(GetInternalClone()) { DatFormat = DatFormat };
 
         /// <summary>
         /// Clone just the format from the current header
@@ -308,7 +308,7 @@ namespace SabreTools.Metadata.DatFiles
         {
             var header = new DatHeader();
 
-            header.Write(DatFormatKey, Read<DatFormat>(DatFormatKey));
+            header.DatFormat = DatFormat;
 
             return header;
         }

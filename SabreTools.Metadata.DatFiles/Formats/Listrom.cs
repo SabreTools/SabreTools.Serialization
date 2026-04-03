@@ -22,7 +22,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public Listrom(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.Listrom);
+            Header.DatFormat = DatFormat.Listrom;
         }
 
         /// <inheritdoc/>

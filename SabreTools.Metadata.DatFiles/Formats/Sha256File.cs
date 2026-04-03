@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha256File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA256;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA256);
+            Header.DatFormat = DatFormat.RedumpSHA256;
         }
 
         /// <inheritdoc/>

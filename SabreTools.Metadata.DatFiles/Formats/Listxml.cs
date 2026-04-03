@@ -216,7 +216,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public Listxml(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.Listxml);
+            Header.DatFormat = DatFormat.Listxml;
         }
 
         /// <inheritdoc/>

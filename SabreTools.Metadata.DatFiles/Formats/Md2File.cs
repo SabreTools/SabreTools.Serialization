@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Md2File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.MD2;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpMD2);
+            Header.DatFormat = DatFormat.RedumpMD2;
         }
 
         /// <inheritdoc/>

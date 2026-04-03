@@ -21,7 +21,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public DosCenter(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.DOSCenter);
+            Header.DatFormat = DatFormat.DOSCenter;
         }
 
         /// <inheritdoc/>
