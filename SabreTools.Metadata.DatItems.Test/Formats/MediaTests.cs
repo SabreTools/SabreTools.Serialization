@@ -17,10 +17,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Media media = new Media();
             media.Name = "name";
-            media.Write(Data.Models.Metadata.Media.MD5Key, HashType.MD5.ZeroString);
-            media.Write(Data.Models.Metadata.Media.SHA1Key, HashType.SHA1.ZeroString);
-            media.Write(Data.Models.Metadata.Media.SHA256Key, HashType.SHA256.ZeroString);
-            media.Write(Data.Models.Metadata.Media.SpamSumKey, HashType.SpamSum.ZeroString);
+            media.MD5 = HashType.MD5.ZeroString;
+            media.SHA1 = HashType.SHA1.ZeroString;
+            media.SHA256 = HashType.SHA256.ZeroString;
+            media.SpamSum = HashType.SpamSum.ZeroString;
             media.DupeType = DupeType.All | DupeType.External;
             media.Machine = machine;
             media.RemoveFlag = false;
@@ -59,10 +59,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             self.FillMissingInformation(other);
 
-            Assert.Null(self.ReadString(Data.Models.Metadata.Media.MD5Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Media.SHA1Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Media.SHA256Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Media.SpamSumKey));
+            Assert.Null(self.MD5);
+            Assert.Null(self.SHA1);
+            Assert.Null(self.SHA256);
+            Assert.Null(self.SpamSum);
         }
 
         [Fact]
@@ -71,17 +71,17 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Media self = new Media();
 
             Media other = new Media();
-            other.Write(Data.Models.Metadata.Media.MD5Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Media.SHA1Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Media.SHA256Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Media.SpamSumKey, "XXXXXX");
+            other.MD5 = "XXXXXX";
+            other.SHA1 = "XXXXXX";
+            other.SHA256 = "XXXXXX";
+            other.SpamSum = "XXXXXX";
 
             self.FillMissingInformation(other);
 
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Media.MD5Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Media.SHA1Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Media.SHA256Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Media.SpamSumKey));
+            Assert.Equal("XXXXXX", self.MD5);
+            Assert.Equal("XXXXXX", self.SHA1);
+            Assert.Equal("XXXXXX", self.SHA256);
+            Assert.Equal("XXXXXX", self.SpamSum);
         }
 
         #endregion
@@ -100,10 +100,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasHashes_MD5_True()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Media.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, string.Empty);
+            self.MD5 = "XXXXXX";
+            self.SHA1 = string.Empty;
+            self.SHA256 = string.Empty;
+            self.SpamSum = string.Empty;
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -113,10 +113,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasHashes_SHA1_True()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA1Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Media.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, string.Empty);
+            self.MD5 = string.Empty;
+            self.SHA1 = "XXXXXX";
+            self.SHA256 = string.Empty;
+            self.SpamSum = string.Empty;
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -126,10 +126,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasHashes_SHA256_True()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA256Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, string.Empty);
+            self.MD5 = string.Empty;
+            self.SHA1 = string.Empty;
+            self.SHA256 = "XXXXXX";
+            self.SpamSum = string.Empty;
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -139,10 +139,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasHashes_SpamSum_True()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, "XXXXXX");
+            self.MD5 = string.Empty;
+            self.SHA1 = string.Empty;
+            self.SHA256 = string.Empty;
+            self.SpamSum = "XXXXXX";
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -152,10 +152,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasHashes_All_True()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Media.SHA1Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Media.SHA256Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, "XXXXXX");
+            self.MD5 = "XXXXXX";
+            self.SHA1 = "XXXXXX";
+            self.SHA256 = "XXXXXX";
+            self.SpamSum = "XXXXXX";
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -177,10 +177,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasZeroHash_NonZeroHash_False()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Media.SHA1Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Media.SHA256Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, "XXXXXX");
+            self.MD5 = "XXXXXX";
+            self.SHA1 = "XXXXXX";
+            self.SHA256 = "XXXXXX";
+            self.SpamSum = "XXXXXX";
 
             bool actual = self.HasZeroHash();
             Assert.False(actual);
@@ -190,10 +190,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasZeroHash_ZeroMD5_True()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, HashType.MD5.ZeroString);
-            self.Write(Data.Models.Metadata.Media.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, string.Empty);
+            self.MD5 = HashType.MD5.ZeroString;
+            self.SHA1 = string.Empty;
+            self.SHA256 = string.Empty;
+            self.SpamSum = string.Empty;
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -203,10 +203,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasZeroHash_ZeroSHA1_True()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA1Key, HashType.SHA1.ZeroString);
-            self.Write(Data.Models.Metadata.Media.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, string.Empty);
+            self.MD5 = string.Empty;
+            self.SHA1 = HashType.SHA1.ZeroString;
+            self.SHA256 = string.Empty;
+            self.SpamSum = string.Empty;
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -216,10 +216,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasZeroHash_ZeroSHA256_True()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA256Key, HashType.SHA256.ZeroString);
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, string.Empty);
+            self.MD5 = string.Empty;
+            self.SHA1 = string.Empty;
+            self.SHA256 = HashType.SHA256.ZeroString;
+            self.SpamSum = string.Empty;
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -229,10 +229,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasZeroHash_ZeroSpamSum_True()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, HashType.SpamSum.ZeroString);
+            self.MD5 = string.Empty;
+            self.SHA1 = string.Empty;
+            self.SHA256 = string.Empty;
+            self.SpamSum = HashType.SpamSum.ZeroString;
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -242,10 +242,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void HasZeroHash_ZeroAll_True()
         {
             Media self = new Media();
-            self.Write(Data.Models.Metadata.Media.MD5Key, HashType.MD5.ZeroString);
-            self.Write(Data.Models.Metadata.Media.SHA1Key, HashType.SHA1.ZeroString);
-            self.Write(Data.Models.Metadata.Media.SHA256Key, HashType.SHA256.ZeroString);
-            self.Write(Data.Models.Metadata.Media.SpamSumKey, HashType.SpamSum.ZeroString);
+            self.MD5 = HashType.MD5.ZeroString;
+            self.SHA1 = HashType.SHA1.ZeroString;
+            self.SHA256 = HashType.SHA256.ZeroString;
+            self.SpamSum = HashType.SpamSum.ZeroString;
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -308,12 +308,13 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Machine machine = new Machine();
             machine.Name = "Machine";
 
-            DatItem datItem = new Media();
-            datItem.Write(Data.Models.Metadata.Media.MD5Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Media.SHA1Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Media.SHA256Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Media.SpamSumKey, "DEADBEEF");
-
+            DatItem datItem = new Media
+            {
+                MD5 = "DEADBEEF",
+                SHA1 = "DEADBEEF",
+                SHA256 = "DEADBEEF",
+                SpamSum = "DEADBEEF"
+            };
             string actual = datItem.GetKey(bucketedBy, machine, source, lower, norename);
             Assert.Equal(expected, actual);
         }

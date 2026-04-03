@@ -265,10 +265,10 @@ namespace SabreTools.Serialization.Readers.Test
             var media = new Data.Models.ClrMamePro.Media
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             var chip = new Data.Models.ClrMamePro.Chip
@@ -544,10 +544,10 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(media);
             Assert.Equal("name", media.Name);
-            Assert.Equal("XXXXXX", media.MD5);
-            Assert.Equal("XXXXXX", media.SHA1);
-            Assert.Equal("XXXXXX", media.SHA256);
-            Assert.Equal("XXXXXX", media.SpamSum);
+            Assert.Equal("md5", media.MD5);
+            Assert.Equal("sha1", media.SHA1);
+            Assert.Equal("sha256", media.SHA256);
+            Assert.Equal("spamsum", media.SpamSum);
         }
 
         /// <summary>

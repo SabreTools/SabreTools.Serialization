@@ -950,11 +950,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataMedia(Data.Models.Metadata.Media? media)
         {
             Assert.NotNull(media);
-            Assert.Equal(HashType.MD5.ZeroString, media.ReadString(Data.Models.Metadata.Media.MD5Key));
+            Assert.Equal(HashType.MD5.ZeroString, media.MD5);
             Assert.Equal("name", media.Name);
-            Assert.Equal(HashType.SHA1.ZeroString, media.ReadString(Data.Models.Metadata.Media.SHA1Key));
-            Assert.Equal(HashType.SHA256.ZeroString, media.ReadString(Data.Models.Metadata.Media.SHA256Key));
-            Assert.Equal(HashType.SpamSum.ZeroString, media.ReadString(Data.Models.Metadata.Media.SpamSumKey));
+            Assert.Equal(HashType.SHA1.ZeroString, media.SHA1);
+            Assert.Equal(HashType.SHA256.ZeroString, media.SHA256);
+            Assert.Equal(HashType.SpamSum.ZeroString, media.SpamSum);
         }
 
         private static void ValidateMetadataPart(Data.Models.Metadata.Part? part)

@@ -442,7 +442,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Media.Name),
-                Data.Models.Metadata.Media.MD5Key,
+                nameof(Data.Models.Metadata.Media.MD5),
             ]));
         }
 
@@ -549,7 +549,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Media.Name),
-                Data.Models.Metadata.Media.SHA1Key,
+                nameof(Data.Models.Metadata.Media.SHA1),
             ]));
         }
 
@@ -590,7 +590,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Media.Name),
-                Data.Models.Metadata.Media.SHA256Key,
+                nameof(Data.Models.Metadata.Media.SHA256),
             ]));
         }
 
@@ -681,7 +681,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Media.Name),
-                Data.Models.Metadata.Media.SpamSumKey,
+                nameof(Data.Models.Metadata.Media.SpamSum),
             ]));
         }
 
@@ -1154,7 +1154,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Media.Name),
-                Data.Models.Metadata.Media.SHA1Key,
+                nameof(Data.Models.Metadata.Media.SHA1),
             ]));
         }
 
@@ -1406,7 +1406,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Media.Name),
-                Data.Models.Metadata.Media.SHA1Key,
+                nameof(Data.Models.Metadata.Media.SHA1),
             ]));
         }
 
@@ -1464,7 +1464,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Media.Name),
-                Data.Models.Metadata.Media.SHA1Key,
+                nameof(Data.Models.Metadata.Media.SHA1),
             ]));
         }
 
@@ -1522,7 +1522,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Media.Name),
-                Data.Models.Metadata.Media.SHA1Key,
+                nameof(Data.Models.Metadata.Media.SHA1),
             ]));
         }
 

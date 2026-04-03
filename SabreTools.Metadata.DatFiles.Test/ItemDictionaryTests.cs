@@ -96,9 +96,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
             Machine machine = new Machine();
 
-            DatItem media = new Media();
+            DatItem media = new Media() { SHA1 = "deadbeef" };
             media.SetName("item");
-            media.Write<string?>(Data.Models.Metadata.Media.SHA1Key, "deadbeef");
             media.Source = source;
             media.Machine = machine;
 

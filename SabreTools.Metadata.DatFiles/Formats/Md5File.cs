@@ -45,8 +45,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.MD5Key)))
-                        missingFields.Add(Data.Models.Metadata.Media.MD5Key);
+                    if (string.IsNullOrEmpty(medium.MD5))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.MD5));
                     break;
 
                 case Rom rom:

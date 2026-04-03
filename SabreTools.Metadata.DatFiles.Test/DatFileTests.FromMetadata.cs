@@ -684,11 +684,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Media
             {
-                [Data.Models.Metadata.Media.MD5Key] = HashType.MD5.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
                 Name = "name",
-                [Data.Models.Metadata.Media.SHA1Key] = HashType.SHA1.ZeroString,
-                [Data.Models.Metadata.Media.SHA256Key] = HashType.SHA256.ZeroString,
-                [Data.Models.Metadata.Media.SpamSumKey] = HashType.SpamSum.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SpamSum = HashType.SpamSum.ZeroString,
             };
         }
 
@@ -1415,11 +1415,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMedia(Media? media)
         {
             Assert.NotNull(media);
-            Assert.Equal(HashType.MD5.ZeroString, media.ReadString(Data.Models.Metadata.Media.MD5Key));
+            Assert.Equal(HashType.MD5.ZeroString, media.MD5);
             Assert.Equal("name", media.Name);
-            Assert.Equal(HashType.SHA1.ZeroString, media.ReadString(Data.Models.Metadata.Media.SHA1Key));
-            Assert.Equal(HashType.SHA256.ZeroString, media.ReadString(Data.Models.Metadata.Media.SHA256Key));
-            Assert.Equal(HashType.SpamSum.ZeroString, media.ReadString(Data.Models.Metadata.Media.SpamSumKey));
+            Assert.Equal(HashType.SHA1.ZeroString, media.SHA1);
+            Assert.Equal(HashType.SHA256.ZeroString, media.SHA256);
+            Assert.Equal(HashType.SpamSum.ZeroString, media.SpamSum);
         }
 
         private static void ValidatePart(Part? part)

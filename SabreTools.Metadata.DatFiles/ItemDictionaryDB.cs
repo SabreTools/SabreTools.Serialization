@@ -213,10 +213,10 @@ namespace SabreTools.Metadata.DatFiles
             else if (item is Media media)
             {
                 // If the file has aboslutely no hashes, skip and log
-                if (string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.MD5Key))
-                    && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA1Key))
-                    && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA256Key))
-                    && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SpamSumKey)))
+                if (string.IsNullOrEmpty(media.MD5)
+                    && string.IsNullOrEmpty(media.SHA1)
+                    && string.IsNullOrEmpty(media.SHA256)
+                    && string.IsNullOrEmpty(media.SpamSum))
                 {
                     _logger.Verbose($"Incomplete entry for '{media.Name}' will be output as nodump");
                 }

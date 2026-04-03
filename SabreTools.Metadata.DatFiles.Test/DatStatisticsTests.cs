@@ -284,10 +284,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             var media = new Media();
 
-            media.Write<string?>(Data.Models.Metadata.Media.MD5Key, HashType.MD5.ZeroString);
-            media.Write<string?>(Data.Models.Metadata.Media.SHA1Key, HashType.SHA1.ZeroString);
-            media.Write<string?>(Data.Models.Metadata.Media.SHA256Key, HashType.SHA256.ZeroString);
-            media.Write<string?>(Data.Models.Metadata.Media.SpamSumKey, HashType.SpamSum.ZeroString);
+            media.MD5 = HashType.MD5.ZeroString;
+            media.SHA1 = HashType.SHA1.ZeroString;
+            media.SHA256 = HashType.SHA256.ZeroString;
+            media.SpamSum = HashType.SpamSum.ZeroString;
 
             return media;
         }

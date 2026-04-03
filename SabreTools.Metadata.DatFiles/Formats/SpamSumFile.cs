@@ -39,8 +39,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.SpamSumKey)))
-                        missingFields.Add(Data.Models.Metadata.Media.SpamSumKey);
+                    if (string.IsNullOrEmpty(medium.SpamSum))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.SpamSum));
                     break;
 
                 case Rom rom:

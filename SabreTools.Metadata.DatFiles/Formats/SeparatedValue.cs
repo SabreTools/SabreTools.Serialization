@@ -82,12 +82,12 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Media media:
-                    if (string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.MD5Key))
-                        && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA1Key))
-                        && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA256Key))
-                        && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SpamSumKey)))
+                    if (string.IsNullOrEmpty(media.MD5)
+                        && string.IsNullOrEmpty(media.SHA1)
+                        && string.IsNullOrEmpty(media.SHA256)
+                        && string.IsNullOrEmpty(media.SpamSum))
                     {
-                        missingFields.Add(Data.Models.Metadata.Media.SHA1Key);
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.SHA1));
                     }
 
                     break;

@@ -523,7 +523,7 @@ namespace SabreTools.Metadata.DatFiles
                 else if (item is Media media)
                 {
                     // We can only write out if there's a SHA-1
-                    string? sha1 = media.ReadString(Data.Models.Metadata.Media.SHA1Key);
+                    string? sha1 = media.SHA1;
                     if (!string.IsNullOrEmpty(sha1))
                     {
                         name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
@@ -620,10 +620,10 @@ namespace SabreTools.Metadata.DatFiles
             }
             else if (item is Media media)
             {
-                md5 = media.ReadString(Data.Models.Metadata.Media.MD5Key) ?? string.Empty;
-                sha1 = media.ReadString(Data.Models.Metadata.Media.SHA1Key) ?? string.Empty;
-                sha256 = media.ReadString(Data.Models.Metadata.Media.SHA256Key) ?? string.Empty;
-                spamsum = media.ReadString(Data.Models.Metadata.Media.SpamSumKey) ?? string.Empty;
+                md5 = media.MD5 ?? string.Empty;
+                sha1 = media.SHA1 ?? string.Empty;
+                sha256 = media.SHA256 ?? string.Empty;
+                spamsum = media.SpamSum ?? string.Empty;
             }
             else if (item is Rom rom)
             {
@@ -1072,19 +1072,19 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         private static string GetDuplicateSuffix(Media datItem)
         {
-            string? md5 = datItem.ReadString(Data.Models.Metadata.Media.MD5Key);
+            string? md5 = datItem.MD5;
             if (!string.IsNullOrEmpty(md5))
                 return $"_{md5}";
 
-            string? sha1 = datItem.ReadString(Data.Models.Metadata.Media.SHA1Key);
+            string? sha1 = datItem.SHA1;
             if (!string.IsNullOrEmpty(sha1))
                 return $"_{sha1}";
 
-            string? sha256 = datItem.ReadString(Data.Models.Metadata.Media.SHA256Key);
+            string? sha256 = datItem.SHA256;
             if (!string.IsNullOrEmpty(sha256))
                 return $"_{sha256}";
 
-            string? spamSum = datItem.ReadString(Data.Models.Metadata.Media.SpamSumKey);
+            string? spamSum = datItem.SpamSum;
             if (!string.IsNullOrEmpty(spamSum))
                 return $"_{spamSum}";
 

@@ -13,6 +13,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public string? MD5
+        {
+            get => (_internal as Data.Models.Metadata.Media)?.MD5;
+            set => (_internal as Data.Models.Metadata.Media)?.MD5 = value;
+        }
+
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.Media;
@@ -21,6 +27,24 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             get => (_internal as Data.Models.Metadata.Media)?.Name;
             set => (_internal as Data.Models.Metadata.Media)?.Name = value;
+        }
+
+        public string? SHA1
+        {
+            get => (_internal as Data.Models.Metadata.Media)?.SHA1;
+            set => (_internal as Data.Models.Metadata.Media)?.SHA1 = value;
+        }
+
+        public string? SHA256
+        {
+            get => (_internal as Data.Models.Metadata.Media)?.SHA256;
+            set => (_internal as Data.Models.Metadata.Media)?.SHA256 = value;
+        }
+
+        public string? SpamSum
+        {
+            get => (_internal as Data.Models.Metadata.Media)?.SpamSum;
+            set => (_internal as Data.Models.Metadata.Media)?.SpamSum = value;
         }
 
         #endregion
@@ -37,17 +61,14 @@ namespace SabreTools.Metadata.DatItems.Formats
             DupeType = 0x00;
 
             // Process hash values
-            string? md5 = ReadString(Data.Models.Metadata.Media.MD5Key);
-            if (md5 is not null)
-                Write<string?>(Data.Models.Metadata.Media.MD5Key, TextHelper.NormalizeMD5(md5));
+            if (MD5 is not null)
+                MD5 = TextHelper.NormalizeMD5(MD5);
 
-            string? sha1 = ReadString(Data.Models.Metadata.Media.SHA1Key);
-            if (sha1 is not null)
-                Write<string?>(Data.Models.Metadata.Media.SHA1Key, TextHelper.NormalizeSHA1(sha1));
+            if (SHA1 is not null)
+                SHA1 = TextHelper.NormalizeSHA1(SHA1);
 
-            string? sha256 = ReadString(Data.Models.Metadata.Media.SHA256Key);
-            if (sha256 is not null)
-                Write<string?>(Data.Models.Metadata.Media.SHA256Key, TextHelper.NormalizeSHA256(sha256));
+            if (SHA256 is not null)
+                SHA256 = TextHelper.NormalizeSHA256(SHA256);
         }
 
         public Media(Data.Models.Metadata.Media item, Machine machine, Source source) : this(item)
@@ -117,19 +138,19 @@ namespace SabreTools.Metadata.DatItems.Formats
             switch (bucketedBy)
             {
                 case ItemKey.MD5:
-                    key = ReadString(Data.Models.Metadata.Media.MD5Key);
+                    key = MD5;
                     break;
 
                 case ItemKey.SHA1:
-                    key = ReadString(Data.Models.Metadata.Media.SHA1Key);
+                    key = SHA1;
                     break;
 
                 case ItemKey.SHA256:
-                    key = ReadString(Data.Models.Metadata.Media.SHA256Key);
+                    key = SHA256;
                     break;
 
                 case ItemKey.SpamSum:
-                    key = ReadString(Data.Models.Metadata.Media.SpamSumKey);
+                    key = SpamSum;
                     break;
 
                 // Let the base handle generic stuff

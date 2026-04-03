@@ -97,10 +97,10 @@ namespace SabreTools.Serialization.CrossModel
                 "media" => new Data.Models.Metadata.Media
                 {
                     Name = item.DiskName,
-                    [Data.Models.Metadata.Media.MD5Key] = item.MD5,
-                    [Data.Models.Metadata.Media.SHA1Key] = item.SHA1,
-                    [Data.Models.Metadata.Media.SHA256Key] = item.SHA256,
-                    [Data.Models.Metadata.Media.SpamSumKey] = item.SpamSum,
+                    MD5 = item.MD5,
+                    SHA1 = item.SHA1,
+                    SHA256 = item.SHA256,
+                    SpamSum = item.SpamSum,
                 },
                 "rom" => new Data.Models.Metadata.Rom
                 {

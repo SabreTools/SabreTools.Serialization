@@ -752,6 +752,19 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Supported?.AsStringValue();
                     return true;
 
+                case Media item when fieldName == "md5":
+                    checkValue = item.MD5;
+                    return true;
+                case Media item when fieldName == "sha1":
+                    checkValue = item.SHA1;
+                    return true;
+                case Media item when fieldName == "sha256":
+                    checkValue = item.SHA256;
+                    return true;
+                case Media item when fieldName == "spamsum":
+                    checkValue = item.SpamSum;
+                    return true;
+
                 case Original item when fieldName == "content":
                     checkValue = item.Content;
                     return true;

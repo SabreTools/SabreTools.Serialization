@@ -114,12 +114,12 @@ namespace SabreTools.Serialization.CrossModel
                 DiskName = item.Name,
                 Size = null,
                 CRC = null,
-                MD5 = item.ReadString(Data.Models.Metadata.Media.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Media.SHA1Key),
-                SHA256 = item.ReadString(Data.Models.Metadata.Media.SHA256Key),
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                SHA256 = item.SHA256,
                 SHA384 = null,
                 SHA512 = null,
-                SpamSum = item.ReadString(Data.Models.Metadata.Media.SpamSumKey),
+                SpamSum = item.SpamSum,
             };
             return row;
         }

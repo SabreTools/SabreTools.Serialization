@@ -125,18 +125,18 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SpamSum = string.Empty,
             };
             DictionaryBase other = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.EqualTo(other);
@@ -149,18 +149,18 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
             };
             DictionaryBase other = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.EqualTo(other);
@@ -173,18 +173,18 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
             };
             DictionaryBase other = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.EqualTo(other);
@@ -197,18 +197,18 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SpamSum = string.Empty,
             };
             DictionaryBase other = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.EqualTo(other);
@@ -221,18 +221,18 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = "XXXXXX",
             };
             DictionaryBase other = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.EqualTo(other);
@@ -245,18 +245,18 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
             DictionaryBase other = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.EqualTo(other);

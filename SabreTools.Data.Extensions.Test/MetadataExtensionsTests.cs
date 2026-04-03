@@ -84,10 +84,10 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase? self = new Media
             {
                 Name = "name",
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             Rom? actual = self.ConvertToRom();
@@ -225,17 +225,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -247,17 +247,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -269,17 +269,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -291,17 +291,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -313,17 +313,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = "XXXXXX",
             };
             Media other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -335,17 +335,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
             Media other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -1029,10 +1029,10 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HasZeroHash();
@@ -1044,10 +1044,10 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Media
             {
-                [Media.MD5Key] = HashType.MD5.ZeroString,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1059,10 +1059,10 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = HashType.SHA1.ZeroString,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1074,10 +1074,10 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = HashType.SHA256.ZeroString,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = HashType.SHA256.ZeroString,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1089,10 +1089,10 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = HashType.SpamSum.ZeroString,
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = HashType.SpamSum.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1104,10 +1104,10 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Media
             {
-                [Media.MD5Key] = HashType.MD5.ZeroString,
-                [Media.SHA1Key] = HashType.SHA1.ZeroString,
-                [Media.SHA256Key] = HashType.SHA256.ZeroString,
-                [Media.SpamSumKey] = HashType.SpamSum.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SpamSum = HashType.SpamSum.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1532,10 +1532,10 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase self = new Media();
             DictionaryBase other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             self.FillMissingHashes(other);

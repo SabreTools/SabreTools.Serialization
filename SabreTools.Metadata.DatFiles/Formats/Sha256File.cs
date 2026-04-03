@@ -39,8 +39,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.SHA256Key)))
-                        missingFields.Add(Data.Models.Metadata.Media.SHA256Key);
+                    if (string.IsNullOrEmpty(medium.SHA256))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.SHA256));
                     break;
 
                 case Rom rom:

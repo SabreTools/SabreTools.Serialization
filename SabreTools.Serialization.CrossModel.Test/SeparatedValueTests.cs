@@ -61,10 +61,10 @@ namespace SabreTools.Serialization.CrossModel.Test
                 GameDescription = "description",
                 Type = "media",
                 DiskName = "XXXXXX",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             var rom = new Data.Models.SeparatedValue.Row
@@ -145,12 +145,12 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", row.DiskName);
             Assert.Null(row.Size);
             Assert.Null(row.CRC);
-            Assert.Equal("XXXXXX", row.MD5);
-            Assert.Equal("XXXXXX", row.SHA1);
-            Assert.Equal("XXXXXX", row.SHA256);
+            Assert.Equal("md5", row.MD5);
+            Assert.Equal("sha1", row.SHA1);
+            Assert.Equal("sha256", row.SHA256);
             Assert.Null(row.SHA384);
             Assert.Null(row.SHA512);
-            Assert.Equal("XXXXXX", row.SpamSum);
+            Assert.Equal("spamsum", row.SpamSum);
             Assert.Null(row.Status);
         }
 

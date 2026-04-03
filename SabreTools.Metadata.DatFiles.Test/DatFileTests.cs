@@ -1448,12 +1448,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
-            DatItem item = new Media();
+            DatItem item = new Media
+            {
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
+            };
             item.SetName("name");
-            item.Write(Data.Models.Metadata.Media.MD5Key, "md5");
-            item.Write(Data.Models.Metadata.Media.SHA1Key, "sha1");
-            item.Write(Data.Models.Metadata.Media.SHA256Key, "sha256");
-            item.Write(Data.Models.Metadata.Media.SpamSumKey, "spamsum");
 
             string actual = DatFile.FormatPrefixPostfix(item, machine, fix);
             Assert.Equal(expected, actual);
@@ -1731,8 +1733,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void GetDuplicateSuffix_Media_MD5()
         {
             string hash = "XXXXXX";
-            DatItem datItem = new Media();
-            datItem.Write(Data.Models.Metadata.Media.MD5Key, hash);
+            DatItem datItem = new Media() { MD5 = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1742,8 +1743,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void GetDuplicateSuffix_Media_SHA1()
         {
             string hash = "XXXXXX";
-            DatItem datItem = new Media();
-            datItem.Write(Data.Models.Metadata.Media.SHA1Key, hash);
+            DatItem datItem = new Media() { SHA1 = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1753,8 +1753,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void GetDuplicateSuffix_Media_SHA256()
         {
             string hash = "XXXXXX";
-            DatItem datItem = new Media();
-            datItem.Write(Data.Models.Metadata.Media.SHA256Key, hash);
+            DatItem datItem = new Media() { SHA256 = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1764,8 +1763,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void GetDuplicateSuffix_Media_SpamSum()
         {
             string hash = "XXXXXX";
-            DatItem datItem = new Media();
-            datItem.Write(Data.Models.Metadata.Media.SpamSumKey, hash);
+            DatItem datItem = new Media() { SpamSum = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);

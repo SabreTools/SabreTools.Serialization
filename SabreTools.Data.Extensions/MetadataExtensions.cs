@@ -314,6 +314,13 @@ namespace SabreTools.Data.Extensions
                 cloneMachine.Runnable = selfMachine.Runnable;
                 cloneMachine.Supported = selfMachine.Supported;
             }
+            else if (self is Media selfMedia && clone is Media cloneMedia)
+            {
+                cloneMedia.MD5 = selfMedia.MD5;
+                cloneMedia.SHA1 = selfMedia.SHA1;
+                cloneMedia.SHA256 = selfMedia.SHA256;
+                cloneMedia.SpamSum = selfMedia.SpamSum;
+            }
             else if (self is Part selfPart && clone is Part clonePart)
             {
                 clonePart.Interface = selfPart.Interface;
@@ -431,10 +438,10 @@ namespace SabreTools.Data.Extensions
             return new Rom
             {
                 Name = name,
-                [Rom.MD5Key] = media.ReadString(Media.MD5Key),
-                [Rom.SHA1Key] = media.ReadString(Media.SHA1Key),
-                [Rom.SHA256Key] = media.ReadString(Media.SHA256Key),
-                [Rom.SpamSumKey] = media.ReadString(Media.SpamSumKey),
+                [Rom.MD5Key] = media.MD5,
+                [Rom.SHA1Key] = media.SHA1,
+                [Rom.SHA256Key] = media.SHA256,
+                [Rom.SpamSumKey] = media.SpamSum,
             };
         }
 
@@ -516,21 +523,10 @@ namespace SabreTools.Data.Extensions
                 return false;
 
             // Return if all hashes match according to merge rules
-            string? selfMd5 = self.ReadString(Media.MD5Key);
-            string? otherMd5 = other.ReadString(Media.MD5Key);
-            bool conditionalMd5 = ConditionalHashEquals(selfMd5, otherMd5);
-
-            string? selfSha1 = self.ReadString(Media.SHA1Key);
-            string? otherSha1 = other.ReadString(Media.SHA1Key);
-            bool conditionalSha1 = ConditionalHashEquals(selfSha1, otherSha1);
-
-            string? selfSha256 = self.ReadString(Media.SHA256Key);
-            string? otherSha256 = other.ReadString(Media.SHA256Key);
-            bool conditionalSha256 = ConditionalHashEquals(selfSha256, otherSha256);
-
-            string? selfSpamSum = self.ReadString(Media.SpamSumKey);
-            string? otherSpamSum = other.ReadString(Media.SpamSumKey);
-            bool conditionalSpamSum = ConditionalHashEquals(selfSpamSum, otherSpamSum);
+            bool conditionalMd5 = ConditionalHashEquals(self.MD5, other.MD5);
+            bool conditionalSha1 = ConditionalHashEquals(self.SHA1, other.SHA1);
+            bool conditionalSha256 = ConditionalHashEquals(self.SHA256, other.SHA256);
+            bool conditionalSpamSum = ConditionalHashEquals(self.SpamSum, other.SpamSum);
 
             return conditionalMd5
                 && conditionalSha1
@@ -667,17 +663,17 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         private static bool HasCommonHash(this Media self, Media other)
         {
-            bool md5Null = string.IsNullOrEmpty(self.ReadString(Media.MD5Key));
-            md5Null ^= string.IsNullOrEmpty(other.ReadString(Media.MD5Key));
+            bool md5Null = string.IsNullOrEmpty(self.MD5);
+            md5Null ^= string.IsNullOrEmpty(other.MD5);
 
-            bool sha1Null = string.IsNullOrEmpty(self.ReadString(Media.SHA1Key));
-            sha1Null ^= string.IsNullOrEmpty(other.ReadString(Media.SHA1Key));
+            bool sha1Null = string.IsNullOrEmpty(self.SHA1);
+            sha1Null ^= string.IsNullOrEmpty(other.SHA1);
 
-            bool sha256Null = string.IsNullOrEmpty(self.ReadString(Media.SHA256Key));
-            sha256Null ^= string.IsNullOrEmpty(other.ReadString(Media.SHA256Key));
+            bool sha256Null = string.IsNullOrEmpty(self.SHA256);
+            sha256Null ^= string.IsNullOrEmpty(other.SHA256);
 
-            bool spamsumNull = string.IsNullOrEmpty(self.ReadString(Media.SpamSumKey));
-            spamsumNull ^= string.IsNullOrEmpty(other.ReadString(Media.SpamSumKey));
+            bool spamsumNull = string.IsNullOrEmpty(self.SpamSum);
+            spamsumNull ^= string.IsNullOrEmpty(other.SpamSum);
 
             return !md5Null
                 || !sha1Null
@@ -761,10 +757,10 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         private static bool HasHashes(this Media media)
         {
-            bool md5Null = string.IsNullOrEmpty(media.ReadString(Media.MD5Key));
-            bool sha1Null = string.IsNullOrEmpty(media.ReadString(Media.SHA1Key));
-            bool sha256Null = string.IsNullOrEmpty(media.ReadString(Media.SHA256Key));
-            bool spamsumNull = string.IsNullOrEmpty(media.ReadString(Media.SpamSumKey));
+            bool md5Null = string.IsNullOrEmpty(media.MD5);
+            bool sha1Null = string.IsNullOrEmpty(media.SHA1);
+            bool sha256Null = string.IsNullOrEmpty(media.SHA256);
+            bool spamsumNull = string.IsNullOrEmpty(media.SpamSum);
 
             return !md5Null
                 || !sha1Null
@@ -826,16 +822,16 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         private static bool HasZeroHash(this Media media)
         {
-            string? md5 = media.ReadString(Media.MD5Key);
+            string? md5 = media.MD5;
             bool md5Null = string.IsNullOrEmpty(md5) || string.Equals(md5, HashType.MD5.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? sha1 = media.ReadString(Media.SHA1Key);
+            string? sha1 = media.SHA1;
             bool sha1Null = string.IsNullOrEmpty(sha1) || string.Equals(sha1, HashType.SHA1.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? sha256 = media.ReadString(Media.SHA256Key);
+            string? sha256 = media.SHA256;
             bool sha256Null = string.IsNullOrEmpty(sha256) || string.Equals(sha256, HashType.SHA256.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? spamsum = media.ReadString(Media.SpamSumKey);
+            string? spamsum = media.SpamSum;
             bool spamsumNull = string.IsNullOrEmpty(spamsum) || string.Equals(spamsum, HashType.SpamSum.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             return md5Null
@@ -968,25 +964,25 @@ namespace SabreTools.Data.Extensions
             if (self is null || other is null)
                 return;
 
-            string? selfMd5 = self.ReadString(Media.MD5Key);
-            string? otherMd5 = other.ReadString(Media.MD5Key);
+            string? selfMd5 = self.MD5;
+            string? otherMd5 = other.MD5;
             if (string.IsNullOrEmpty(selfMd5) && !string.IsNullOrEmpty(otherMd5))
-                self[Media.MD5Key] = otherMd5;
+                self.MD5 = otherMd5;
 
-            string? selfSha1 = self.ReadString(Media.SHA1Key);
-            string? otherSha1 = other.ReadString(Media.SHA1Key);
+            string? selfSha1 = self.SHA1;
+            string? otherSha1 = other.SHA1;
             if (string.IsNullOrEmpty(selfSha1) && !string.IsNullOrEmpty(otherSha1))
-                self[Media.SHA1Key] = otherSha1;
+                self.SHA1 = otherSha1;
 
-            string? selfSha256 = self.ReadString(Media.SHA256Key);
-            string? otherSha256 = other.ReadString(Media.SHA256Key);
+            string? selfSha256 = self.SHA256;
+            string? otherSha256 = other.SHA256;
             if (string.IsNullOrEmpty(selfSha256) && !string.IsNullOrEmpty(otherSha256))
-                self[Media.SHA256Key] = otherSha256;
+                self.SHA256 = otherSha256;
 
-            string? selfSpamSum = self.ReadString(Media.SpamSumKey);
-            string? otherSpamSum = other.ReadString(Media.SpamSumKey);
+            string? selfSpamSum = self.SpamSum;
+            string? otherSpamSum = other.SpamSum;
             if (string.IsNullOrEmpty(selfSpamSum) && !string.IsNullOrEmpty(otherSpamSum))
-                self[Media.SpamSumKey] = otherSpamSum;
+                self.SpamSum = otherSpamSum;
         }
 
         /// <summary>

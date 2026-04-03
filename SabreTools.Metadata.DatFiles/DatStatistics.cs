@@ -359,10 +359,10 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="media">Item to add info from</param>
         private void AddItemStatistics(Media media)
         {
-            AddHashCount(HashType.MD5, string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.MD5Key)) ? 0 : 1);
-            AddHashCount(HashType.SHA1, string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA1Key)) ? 0 : 1);
-            AddHashCount(HashType.SHA256, string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA256Key)) ? 0 : 1);
-            AddHashCount(HashType.SpamSum, string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SpamSumKey)) ? 0 : 1);
+            AddHashCount(HashType.MD5, string.IsNullOrEmpty(media.MD5) ? 0 : 1);
+            AddHashCount(HashType.SHA1, string.IsNullOrEmpty(media.SHA1) ? 0 : 1);
+            AddHashCount(HashType.SHA256, string.IsNullOrEmpty(media.SHA256) ? 0 : 1);
+            AddHashCount(HashType.SpamSum, string.IsNullOrEmpty(media.SpamSum) ? 0 : 1);
         }
 
         /// <summary>
@@ -488,10 +488,10 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="media">Item to remove info for</param>
         private void RemoveItemStatistics(Media media)
         {
-            RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.MD5Key)) ? 0 : 1);
-            RemoveHashCount(HashType.SHA1, string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA1Key)) ? 0 : 1);
-            RemoveHashCount(HashType.SHA256, string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA256Key)) ? 0 : 1);
-            RemoveHashCount(HashType.SpamSum, string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SpamSumKey)) ? 0 : 1);
+            RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(media.MD5) ? 0 : 1);
+            RemoveHashCount(HashType.SHA1, string.IsNullOrEmpty(media.SHA1) ? 0 : 1);
+            RemoveHashCount(HashType.SHA256, string.IsNullOrEmpty(media.SHA256) ? 0 : 1);
+            RemoveHashCount(HashType.SpamSum, string.IsNullOrEmpty(media.SpamSum) ? 0 : 1);
         }
 
         /// <summary>

@@ -269,10 +269,10 @@ namespace SabreTools.Serialization.CrossModel
             var media = new Media
             {
                 Name = item.Name,
-                MD5 = item.ReadString(Data.Models.Metadata.Media.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Media.SHA1Key),
-                SHA256 = item.ReadString(Data.Models.Metadata.Media.SHA256Key),
-                SpamSum = item.ReadString(Data.Models.Metadata.Media.SpamSumKey),
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                SHA256 = item.SHA256,
+                SpamSum = item.SpamSum,
             };
             return media;
         }
