@@ -35,6 +35,6 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>Numeric</remarks>
         [XmlAttribute("refresh")]
-        public string? Refresh { get; set; }
+        public double? Refresh { get; set; }
     }
 }

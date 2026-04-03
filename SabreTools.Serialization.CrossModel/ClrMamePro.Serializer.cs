@@ -359,7 +359,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Video.HeightKey] = item.Y,
                 [Data.Models.Metadata.Video.AspectXKey] = item.AspectX,
                 [Data.Models.Metadata.Video.AspectYKey] = item.AspectY,
-                [Data.Models.Metadata.Video.RefreshKey] = item.Freq,
+                Refresh = item.Freq,
             };
             return video;
         }

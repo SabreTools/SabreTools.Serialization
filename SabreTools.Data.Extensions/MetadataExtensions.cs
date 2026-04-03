@@ -234,6 +234,7 @@ namespace SabreTools.Data.Extensions
             {
                 cloneDisplay.DisplayType = selfDisplay.DisplayType;
                 cloneDisplay.FlipX = selfDisplay.FlipX;
+                cloneDisplay.Refresh = selfDisplay.Refresh;
                 cloneDisplay.Tag = selfDisplay.Tag;
             }
             else if (self is Driver selfDriver && clone is Driver cloneDriver)
@@ -377,6 +378,7 @@ namespace SabreTools.Data.Extensions
             }
             else if (self is Video selfVideo && clone is Video cloneVideo)
             {
+                cloneVideo.Refresh = selfVideo.Refresh;
                 cloneVideo.Screen = selfVideo.Screen;
             }
 

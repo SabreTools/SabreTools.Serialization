@@ -395,7 +395,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("flipx", obj.FlipX.FromYesNo());
             writer.WriteOptionalAttributeString("width", obj.Width);
             writer.WriteOptionalAttributeString("height", obj.Height);
-            writer.WriteRequiredAttributeString("refresh", obj.Refresh);
+            writer.WriteRequiredAttributeString("refresh", obj.Refresh?.ToString("0.000000"));
             writer.WriteOptionalAttributeString("pixclock", obj.PixClock);
             writer.WriteOptionalAttributeString("htotal", obj.HTotal);
             writer.WriteOptionalAttributeString("hbend", obj.HBEnd);
@@ -843,7 +843,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("height", obj.Height);
             writer.WriteOptionalAttributeString("aspectx", obj.AspectX);
             writer.WriteOptionalAttributeString("aspecty", obj.AspectY);
-            writer.WriteRequiredAttributeString("refresh", obj.Refresh);
+            writer.WriteRequiredAttributeString("refresh", obj.Refresh?.ToString("0.000000"));
 
             writer.WriteEndElement();
         }

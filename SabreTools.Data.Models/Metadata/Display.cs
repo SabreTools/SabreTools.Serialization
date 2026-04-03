@@ -14,6 +14,8 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? FlipX { get; set; }
 
+        public double? Refresh { get; set; }
+
         public string? Tag { get; set; }
 
         #endregion
@@ -34,9 +36,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>long</remarks>
         public const string PixClockKey = "pixclock";
-
-        /// <remarks>double</remarks>
-        public const string RefreshKey = "refresh";
 
         /// <remarks>(0|90|180|270)</remarks>
         /// TODO: Convert to enum

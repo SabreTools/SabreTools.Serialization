@@ -578,7 +578,7 @@ namespace SabreTools.Serialization.Readers
             obj.FlipX = reader.GetAttribute("flipx").AsYesNo();
             obj.Width = reader.GetAttribute("width");
             obj.Height = reader.GetAttribute("height");
-            obj.Refresh = reader.GetAttribute("refresh");
+            obj.Refresh = NumberHelper.ConvertToDouble(reader.GetAttribute("refresh"));
             obj.PixClock = reader.GetAttribute("pixclock");
             obj.HTotal = reader.GetAttribute("htotal");
             obj.HBEnd = reader.GetAttribute("hbend");
@@ -1179,7 +1179,7 @@ namespace SabreTools.Serialization.Readers
             obj.Height = reader.GetAttribute("height");
             obj.AspectX = reader.GetAttribute("aspectx");
             obj.AspectY = reader.GetAttribute("aspecty");
-            obj.Refresh = reader.GetAttribute("refresh");
+            obj.Refresh = NumberHelper.ConvertToDouble(reader.GetAttribute("refresh"));
 
             return obj;
         }

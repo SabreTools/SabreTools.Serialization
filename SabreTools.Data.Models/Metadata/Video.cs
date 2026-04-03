@@ -8,6 +8,9 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>Originally "freq"</remarks>
+        public double? Refresh { get; set; }
+
         /// <remarks>(raster|vector)</remarks>
         public DisplayType? Screen { get; set; }
 
@@ -26,9 +29,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>(vertical|horizontal)</remarks>
         public const string OrientationKey = "orientation";
-
-        /// <remarks>double; Originally "freq"</remarks>
-        public const string RefreshKey = "refresh";
 
         /// <remarks>long; Originally "x"</remarks>
         public const string WidthKey = "width";

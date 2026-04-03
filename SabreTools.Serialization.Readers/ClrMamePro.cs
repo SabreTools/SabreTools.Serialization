@@ -821,7 +821,7 @@ namespace SabreTools.Serialization.Readers
                         video.AspectY = kvp.Value;
                         break;
                     case "freq":
-                        video.Freq = kvp.Value;
+                        video.Freq = NumberHelper.ConvertToDouble(kvp.Value);
                         break;
                     default:
                         // TODO: Log invalid values

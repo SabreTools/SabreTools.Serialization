@@ -31,10 +31,9 @@ namespace SabreTools.Data.Models.Listxml
         [XmlAttribute("height")]
         public string? Height { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [Required]
         [XmlAttribute("refresh")]
-        public string? Refresh { get; set; }
+        public double? Refresh { get; set; }
 
         /// <remarks>Numeric</remarks>
         [XmlAttribute("pixclock")]

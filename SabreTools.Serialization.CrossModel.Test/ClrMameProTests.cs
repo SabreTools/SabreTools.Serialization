@@ -170,7 +170,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Y = "XXXXXX",
                 AspectX = "XXXXXX",
                 AspectY = "XXXXXX",
-                Freq = "XXXXXX",
+                Freq = 123.45,
             };
 
             var sound = new Data.Models.ClrMamePro.Sound
@@ -457,7 +457,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", video.Y);
             Assert.Equal("XXXXXX", video.AspectX);
             Assert.Equal("XXXXXX", video.AspectY);
-            Assert.Equal("XXXXXX", video.Freq);
+            Assert.Equal(123.45, video.Freq);
         }
 
         /// <summary>

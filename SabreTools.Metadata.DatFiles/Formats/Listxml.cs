@@ -310,8 +310,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case Display display:
                     if (display.DisplayType is null)
                         missingFields.Add(nameof(Data.Models.Metadata.Display.DisplayType));
-                    if (display.ReadDouble(Data.Models.Metadata.Display.RefreshKey) is null)
-                        missingFields.Add(Data.Models.Metadata.Display.RefreshKey);
+                    if (display.Refresh is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Display.Refresh));
                     break;
 
                 case Sound sound:

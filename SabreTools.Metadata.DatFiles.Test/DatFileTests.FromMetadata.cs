@@ -582,7 +582,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Display.HeightKey] = 12345L,
                 [Data.Models.Metadata.Display.HTotalKey] = 12345L,
                 [Data.Models.Metadata.Display.PixClockKey] = 12345L,
-                [Data.Models.Metadata.Display.RefreshKey] = 12345L,
+                Refresh = 123.45,
                 [Data.Models.Metadata.Display.RotateKey] = 90,
                 Tag = "tag",
                 DisplayType = Data.Models.Metadata.DisplayType.Vector,
@@ -1025,7 +1025,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Video.AspectYKey] = 12345L,
                 [Data.Models.Metadata.Video.HeightKey] = 12345L,
                 [Data.Models.Metadata.Video.OrientationKey] = "vertical",
-                [Data.Models.Metadata.Video.RefreshKey] = 12345L,
+                Refresh = 123.45,
                 Screen = Data.Models.Metadata.DisplayType.Vector,
                 [Data.Models.Metadata.Video.WidthKey] = 12345L,
             };
@@ -1356,7 +1356,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HeightKey));
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HTotalKey));
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.PixClockKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.RefreshKey));
+            Assert.Equal(123.45, display.Refresh);
             Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
             Assert.Equal("tag", display.Tag);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
@@ -1665,7 +1665,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Video.AspectYKey));
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HeightKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.RefreshKey));
+            Assert.Equal(123.45, display.Refresh);
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.WidthKey));
             Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
         }

@@ -40,6 +40,7 @@ namespace SabreTools.Metadata
         /// </summary>
         /// <param name="fieldName">Field to retrieve</param>
         /// <returns>Value from the field, if possible</returns>
+        /// TODO: Determine if this can be removed
         public bool? ReadBool(string fieldName)
             => _internal.ReadBool(fieldName);
 
@@ -48,6 +49,7 @@ namespace SabreTools.Metadata
         /// </summary>
         /// <param name="fieldName">Field to retrieve</param>
         /// <returns>Value from the field, if possible</returns>
+        /// TODO: Determine if this can be removed
         public double? ReadDouble(string fieldName)
             => _internal.ReadDouble(fieldName);
 

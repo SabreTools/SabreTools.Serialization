@@ -476,6 +476,9 @@ namespace SabreTools.Metadata.Filter
                 case Display item when fieldName == "flipx":
                     checkValue = item.FlipX.FromYesNo();
                     return true;
+                case Display item when fieldName == "refresh":
+                    checkValue = item.Refresh?.ToString();
+                    return true;
                 case Display item when fieldName == "type":
                     checkValue = item.DisplayType?.AsStringValue();
                     return true;
@@ -749,6 +752,9 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Channels?.ToString();
                     return true;
 
+                case Video item when fieldName == "refresh":
+                    checkValue = item.Refresh?.ToString();
+                    return true;
                 case Video item when fieldName == "screen":
                     checkValue = item.Screen?.AsStringValue();
                     return true;

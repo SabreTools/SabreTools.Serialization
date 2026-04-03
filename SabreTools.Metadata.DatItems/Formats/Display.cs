@@ -29,6 +29,12 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.Display;
 
+        public double? Refresh
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.Refresh;
+            set => (_internal as Data.Models.Metadata.Display)?.Refresh = value;
+        }
+
         public string? Tag
         {
             get => (_internal as Data.Models.Metadata.Display)?.Tag;
@@ -64,10 +70,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (pixClock is not null)
                 Write<string?>(Data.Models.Metadata.Display.PixClockKey, pixClock.ToString());
 
-            double? refresh = ReadDouble(Data.Models.Metadata.Display.RefreshKey);
-            if (refresh is not null)
-                Write<string?>(Data.Models.Metadata.Display.RefreshKey, refresh.ToString());
-
             long? rotate = ReadLong(Data.Models.Metadata.Display.RotateKey);
             if (rotate is not null)
                 Write<string?>(Data.Models.Metadata.Display.RotateKey, rotate.ToString());
@@ -102,7 +104,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             Write(Data.Models.Metadata.Video.AspectYKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.AspectYKey)));
             DisplayType = item.Screen;
             Write(Data.Models.Metadata.Display.HeightKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.HeightKey)));
-            Write(Data.Models.Metadata.Display.RefreshKey, NumberHelper.ConvertToDouble(item.ReadString(Data.Models.Metadata.Video.RefreshKey)));
+            Refresh = item.Refresh;
             Write(Data.Models.Metadata.Display.WidthKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.WidthKey)));
 
             switch (item.ReadString(Data.Models.Metadata.Video.OrientationKey))
@@ -130,10 +132,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             long? height = ReadLong(Data.Models.Metadata.Video.HeightKey);
             if (height is not null)
                 Write<string?>(Data.Models.Metadata.Display.HeightKey, height.ToString());
-
-            double? refresh = ReadDouble(Data.Models.Metadata.Video.RefreshKey);
-            if (refresh is not null)
-                Write<string?>(Data.Models.Metadata.Display.RefreshKey, refresh.ToString());
 
             long? width = ReadLong(Data.Models.Metadata.Video.WidthKey);
             if (width is not null)

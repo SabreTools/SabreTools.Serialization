@@ -27,6 +27,6 @@ namespace SabreTools.Data.Models.ClrMamePro
         public string? AspectY { get; set; }
 
         /// <remarks>freq, Numeric?</remarks>
-        public string? Freq { get; set; }
+        public double? Freq { get; set; }
     }
 }

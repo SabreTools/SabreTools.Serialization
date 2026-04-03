@@ -346,7 +346,7 @@ namespace SabreTools.Serialization.CrossModel
                 Y = item.ReadString(Data.Models.Metadata.Video.HeightKey),
                 AspectX = item.ReadString(Data.Models.Metadata.Video.AspectXKey),
                 AspectY = item.ReadString(Data.Models.Metadata.Video.AspectYKey),
-                Freq = item.ReadString(Data.Models.Metadata.Video.RefreshKey),
+                Freq = item.Refresh,
             };
             return video;
         }

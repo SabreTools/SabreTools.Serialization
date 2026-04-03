@@ -880,7 +880,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Display.DisplayType),
-                Data.Models.Metadata.Display.RefreshKey,
+                nameof(Data.Models.Metadata.Display.Refresh),
             ]));
         }
 

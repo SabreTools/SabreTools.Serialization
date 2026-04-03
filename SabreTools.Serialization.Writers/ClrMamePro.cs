@@ -418,7 +418,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteOptionalAttributeString("y", video.Y);
                 writer.WriteOptionalAttributeString("aspectx", video.AspectX);
                 writer.WriteOptionalAttributeString("aspecty", video.AspectY);
-                writer.WriteOptionalAttributeString("freq", video.Freq);
+                writer.WriteOptionalAttributeString("freq", video.Freq?.ToString("0.000000"));
                 writer.WriteEndElement(); // video
             }
         }

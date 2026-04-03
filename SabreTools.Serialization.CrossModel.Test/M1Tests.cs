@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 FlipX = true,
                 Width = "XXXXXX",
                 Height = "XXXXXX",
-                Refresh = "XXXXXX",
+                Refresh = 123.45,
                 PixClock = "XXXXXX",
                 HTotal = "XXXXXX",
                 HBEnd = "XXXXXX",
@@ -140,7 +140,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Height = "XXXXXX",
                 AspectX = "XXXXXX",
                 AspectY = "XXXXXX",
-                Refresh = "XXXXXX",
+                Refresh = 123.45,
             };
 
             var sound = new Data.Models.Listxml.Sound
@@ -552,7 +552,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal(true, display.FlipX);
             Assert.Equal("XXXXXX", display.Width);
             Assert.Equal("XXXXXX", display.Height);
-            Assert.Equal("XXXXXX", display.Refresh);
+            Assert.Equal(123.45, display.Refresh);
             Assert.Equal("XXXXXX", display.PixClock);
             Assert.Equal("XXXXXX", display.HTotal);
             Assert.Equal("XXXXXX", display.HBEnd);
@@ -574,7 +574,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", video.Height);
             Assert.Equal("XXXXXX", video.AspectX);
             Assert.Equal("XXXXXX", video.AspectY);
-            Assert.Equal("XXXXXX", video.Refresh);
+            Assert.Equal(123.45, video.Refresh);
         }
 
         /// <summary>

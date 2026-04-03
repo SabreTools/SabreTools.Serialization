@@ -429,7 +429,7 @@ namespace SabreTools.Serialization.CrossModel
                 FlipX = item.FlipX,
                 Width = item.ReadString(Data.Models.Metadata.Display.WidthKey),
                 Height = item.ReadString(Data.Models.Metadata.Display.HeightKey),
-                Refresh = item.ReadString(Data.Models.Metadata.Display.RefreshKey),
+                Refresh = item.Refresh,
                 PixClock = item.ReadString(Data.Models.Metadata.Display.PixClockKey),
                 HTotal = item.ReadString(Data.Models.Metadata.Display.HTotalKey),
                 HBEnd = item.ReadString(Data.Models.Metadata.Display.HBEndKey),
@@ -664,7 +664,7 @@ namespace SabreTools.Serialization.CrossModel
                 Height = item.ReadString(Data.Models.Metadata.Video.HeightKey),
                 AspectX = item.ReadString(Data.Models.Metadata.Video.AspectXKey),
                 AspectY = item.ReadString(Data.Models.Metadata.Video.AspectYKey),
-                Refresh = item.ReadString(Data.Models.Metadata.Video.RefreshKey),
+                Refresh = item.Refresh,
             };
             return video;
         }
