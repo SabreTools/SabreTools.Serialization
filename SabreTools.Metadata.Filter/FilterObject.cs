@@ -739,6 +739,10 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Tag;
                     return true;
 
+                case Sound item when fieldName == "channels":
+                    checkValue = item.Channels?.ToString();
+                    return true;
+
                 case Video item when fieldName == "screen":
                     checkValue = item.Screen?.AsStringValue();
                     return true;

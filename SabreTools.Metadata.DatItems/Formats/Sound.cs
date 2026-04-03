@@ -12,6 +12,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public long? Channels
+        {
+            get => (_internal as Data.Models.Metadata.Sound)?.Channels;
+            set => (_internal as Data.Models.Metadata.Sound)?.Channels = value;
+        }
+
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.Sound;
@@ -22,13 +28,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Sound() : base() { }
 
-        public Sound(Data.Models.Metadata.Sound item) : base(item)
-        {
-            // Process flag values
-            long? channels = ReadLong(Data.Models.Metadata.Sound.ChannelsKey);
-            if (channels is not null)
-                Write<string?>(Data.Models.Metadata.Sound.ChannelsKey, channels.ToString());
-        }
+        public Sound(Data.Models.Metadata.Sound item) : base(item) { }
 
         public Sound(Data.Models.Metadata.Sound item, Machine machine, Source source) : this(item)
         {

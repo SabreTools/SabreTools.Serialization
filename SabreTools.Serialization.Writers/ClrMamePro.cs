@@ -435,7 +435,7 @@ namespace SabreTools.Serialization.Writers
                 return;
 
             writer.WriteStartElement("sound");
-            writer.WriteRequiredAttributeString("channels", sound.Channels, throwOnError: true);
+            writer.WriteRequiredAttributeString("channels", sound.Channels?.ToString(), throwOnError: true);
             writer.WriteEndElement(); // sound
         }
 

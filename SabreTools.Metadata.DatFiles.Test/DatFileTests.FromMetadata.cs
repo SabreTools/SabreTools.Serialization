@@ -961,7 +961,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Sound
             {
-                [Data.Models.Metadata.Sound.ChannelsKey] = 12345L,
+                Channels = 12345L,
             };
         }
 
@@ -1635,7 +1635,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateSound(Sound? sound)
         {
             Assert.NotNull(sound);
-            Assert.Equal(12345L, sound.ReadLong(Data.Models.Metadata.Sound.ChannelsKey));
+            Assert.Equal(12345L, sound.Channels);
         }
 
         // TODO: Figure out why so many fields are omitted

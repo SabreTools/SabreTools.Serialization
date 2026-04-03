@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Listxml;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -1160,7 +1161,7 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Sound();
 
-            obj.Channels = reader.GetAttribute("channels");
+            obj.Channels = NumberHelper.ConvertToInt64(reader.GetAttribute("channels"));
 
             return obj;
         }

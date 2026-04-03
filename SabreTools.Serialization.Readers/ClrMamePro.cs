@@ -5,6 +5,7 @@ using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ClrMamePro;
 using SabreTools.Text.ClrMamePro;
+using SabreTools.Text.Extensions;
 
 #pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Readers
@@ -847,7 +848,7 @@ namespace SabreTools.Serialization.Readers
                 switch (kvp.Key?.ToLowerInvariant())
                 {
                     case "channels":
-                        sound.Channels = kvp.Value;
+                        sound.Channels = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     default:
                         // TODO: Log invalid values

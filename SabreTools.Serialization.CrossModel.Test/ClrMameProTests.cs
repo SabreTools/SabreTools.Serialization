@@ -175,7 +175,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var sound = new Data.Models.ClrMamePro.Sound
             {
-                Channels = "XXXXXX",
+                Channels = 12345L,
             };
 
             var input = new Data.Models.ClrMamePro.Input
@@ -466,7 +466,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.ClrMamePro.Sound? sound)
         {
             Assert.NotNull(sound);
-            Assert.Equal("XXXXXX", sound.Channels);
+            Assert.Equal(12345L, sound.Channels);
         }
 
         /// <summary>

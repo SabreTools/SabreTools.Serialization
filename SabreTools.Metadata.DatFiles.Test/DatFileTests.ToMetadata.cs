@@ -1200,7 +1200,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataSound(Data.Models.Metadata.Sound? sound)
         {
             Assert.NotNull(sound);
-            Assert.Equal(12345, sound.ReadLong(Data.Models.Metadata.Sound.ChannelsKey));
+            Assert.Equal(12345, sound.Channels);
         }
 
         private static void ValidateMetadataSourceDetails(Data.Models.Metadata.SourceDetails? sourceDetails)

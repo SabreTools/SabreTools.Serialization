@@ -6,10 +6,9 @@ namespace SabreTools.Data.Models.Metadata
     [JsonObject("sound"), XmlRoot("sound")]
     public class Sound : DatItem
     {
-        #region Keys
+        #region Properties
 
-        /// <remarks>long</remarks>
-        public const string ChannelsKey = "channels";
+        public long? Channels { get; set; }
 
         #endregion
 

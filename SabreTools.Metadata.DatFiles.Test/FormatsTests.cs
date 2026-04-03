@@ -215,7 +215,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Sound.ChannelsKey,
+                nameof(Data.Models.Metadata.Sound.Channels),
             ]));
         }
 
@@ -894,7 +894,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Sound.ChannelsKey,
+                nameof(Data.Models.Metadata.Sound.Channels),
             ]));
         }
 

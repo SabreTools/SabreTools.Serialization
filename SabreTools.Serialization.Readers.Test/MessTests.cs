@@ -212,7 +212,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var sound = new Data.Models.Listxml.Sound
             {
-                Channels = "XXXXXX",
+                Channels = 12345L,
             };
 
             var control = new Data.Models.Listxml.Control
@@ -650,7 +650,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Listxml.Sound? sound)
         {
             Assert.NotNull(sound);
-            Assert.Equal("XXXXXX", sound.Channels);
+            Assert.Equal(12345L, sound.Channels);
         }
 
         /// <summary>

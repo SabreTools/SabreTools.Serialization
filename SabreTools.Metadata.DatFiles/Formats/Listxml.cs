@@ -315,8 +315,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Sound sound:
-                    if (sound.ReadLong(Data.Models.Metadata.Sound.ChannelsKey) is null)
-                        missingFields.Add(Data.Models.Metadata.Sound.ChannelsKey);
+                    if (sound.Channels is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Sound.Channels));
                     break;
 
                 case Input input:

@@ -687,7 +687,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sound = new Data.Models.Metadata.Sound
             {
-                [Data.Models.Metadata.Sound.ChannelsKey] = item.Channels,
+                Channels = item.Channels,
             };
             return sound;
         }

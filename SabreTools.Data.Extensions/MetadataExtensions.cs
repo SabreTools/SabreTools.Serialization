@@ -369,6 +369,10 @@ namespace SabreTools.Data.Extensions
                 cloneSoftwareList.Status = selfSoftwareList.Status;
                 cloneSoftwareList.Tag = selfSoftwareList.Tag;
             }
+            else if (self is Sound selfSound && clone is Sound cloneSound)
+            {
+                cloneSound.Channels = selfSound.Channels;
+            }
             else if (self is Video selfVideo && clone is Video cloneVideo)
             {
                 cloneVideo.Screen = selfVideo.Screen;

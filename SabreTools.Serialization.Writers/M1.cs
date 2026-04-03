@@ -821,7 +821,7 @@ namespace SabreTools.Serialization.Writers
         {
             writer.WriteStartElement("sound");
 
-            writer.WriteRequiredAttributeString("channels", obj.Channels);
+            writer.WriteRequiredAttributeString("channels", obj.Channels?.ToString());
 
             writer.WriteEndElement();
         }
