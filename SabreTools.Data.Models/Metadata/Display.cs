@@ -14,44 +14,35 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? FlipX { get; set; }
 
+        public long? HBEnd { get; set; }
+
+        public long? HBStart { get; set; }
+
+        public long? Height { get; set; }
+
+        public long? HTotal { get; set; }
+
+        public long? PixClock { get; set; }
+
         public double? Refresh { get; set; }
 
         public string? Tag { get; set; }
+
+        public long? VBEnd { get; set; }
+
+        public long? VBStart { get; set; }
+
+        public long? VTotal { get; set; }
+
+        public long? Width { get; set; }
 
         #endregion
 
         #region Keys
 
-        /// <remarks>long</remarks>
-        public const string HBEndKey = "hbend";
-
-        /// <remarks>long</remarks>
-        public const string HBStartKey = "hbstart";
-
-        /// <remarks>long</remarks>
-        public const string HeightKey = "height";
-
-        /// <remarks>long</remarks>
-        public const string HTotalKey = "htotal";
-
-        /// <remarks>long</remarks>
-        public const string PixClockKey = "pixclock";
-
         /// <remarks>(0|90|180|270)</remarks>
         /// TODO: Convert to enum
         public const string RotateKey = "rotate";
-
-        /// <remarks>long</remarks>
-        public const string VBEndKey = "vbend";
-
-        /// <remarks>long</remarks>
-        public const string VBStartKey = "vbstart";
-
-        /// <remarks>long</remarks>
-        public const string VTotalKey = "vtotal";
-
-        /// <remarks>long</remarks>
-        public const string WidthKey = "width";
 
         #endregion
 

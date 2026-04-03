@@ -577,19 +577,19 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Display
             {
                 FlipX = true,
-                [Data.Models.Metadata.Display.HBEndKey] = 12345L,
-                [Data.Models.Metadata.Display.HBStartKey] = 12345L,
-                [Data.Models.Metadata.Display.HeightKey] = 12345L,
-                [Data.Models.Metadata.Display.HTotalKey] = 12345L,
-                [Data.Models.Metadata.Display.PixClockKey] = 12345L,
+                HBEnd = 12345L,
+                HBStart = 12345L,
+                Height = 12345L,
+                HTotal = 12345L,
+                PixClock = 12345L,
                 Refresh = 123.45,
                 [Data.Models.Metadata.Display.RotateKey] = 90,
                 Tag = "tag",
                 DisplayType = Data.Models.Metadata.DisplayType.Vector,
-                [Data.Models.Metadata.Display.VBEndKey] = 12345L,
-                [Data.Models.Metadata.Display.VBStartKey] = 12345L,
-                [Data.Models.Metadata.Display.VTotalKey] = 12345L,
-                [Data.Models.Metadata.Display.WidthKey] = 12345L,
+                VBEnd = 12345L,
+                VBStart = 12345L,
+                VTotal = 12345L,
+                Width = 12345L,
             };
         }
 
@@ -1351,19 +1351,19 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(display);
             Assert.True(display.FlipX);
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HBEndKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HBStartKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HeightKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HTotalKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.PixClockKey));
+            Assert.Equal(12345L, display.HBEnd);
+            Assert.Equal(12345L, display.HBStart);
+            Assert.Equal(12345L, display.Height);
+            Assert.Equal(12345L, display.HTotal);
+            Assert.Equal(12345L, display.PixClock);
             Assert.Equal(123.45, display.Refresh);
             Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
             Assert.Equal("tag", display.Tag);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.VBEndKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.VBStartKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.VTotalKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.WidthKey));
+            Assert.Equal(12345L, display.VBEnd);
+            Assert.Equal(12345L, display.VBStart);
+            Assert.Equal(12345L, display.VTotal);
+            Assert.Equal(12345L, display.Width);
         }
 
         private static void ValidateDriver(Driver? driver)
@@ -1664,9 +1664,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Video.AspectXKey));
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Video.AspectYKey));
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HeightKey));
+            Assert.Equal(12345L, display.Height);
             Assert.Equal(123.45, display.Refresh);
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.WidthKey));
+            Assert.Equal(12345L, display.Width);
             Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
         }
 

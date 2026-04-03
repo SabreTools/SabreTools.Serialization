@@ -935,10 +935,10 @@ namespace SabreTools.Metadata.DatFiles
                 {
                     [Data.Models.Metadata.Video.AspectXKey] = displayItem.ReadLong(Data.Models.Metadata.Video.AspectXKey).ToString(),
                     [Data.Models.Metadata.Video.AspectYKey] = displayItem.ReadLong(Data.Models.Metadata.Video.AspectYKey).ToString(),
-                    [Data.Models.Metadata.Video.HeightKey] = displayItem.ReadLong(Data.Models.Metadata.Display.HeightKey).ToString(),
+                    [Data.Models.Metadata.Video.HeightKey] = displayItem.Height.ToString(),
                     Refresh = displayItem.Refresh,
                     Screen = displayItem.DisplayType,
-                    [Data.Models.Metadata.Video.WidthKey] = displayItem.ReadLong(Data.Models.Metadata.Display.WidthKey).ToString()
+                    [Data.Models.Metadata.Video.WidthKey] = displayItem.Width.ToString()
                 };
 
                 switch (displayItem.ReadLong(Data.Models.Metadata.Display.RotateKey))

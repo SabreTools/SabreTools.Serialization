@@ -25,9 +25,39 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Display)?.FlipX = value;
         }
 
+        public long? HBEnd
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.HBEnd;
+            set => (_internal as Data.Models.Metadata.Display)?.HBEnd = value;
+        }
+
+        public long? HBStart
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.HBStart;
+            set => (_internal as Data.Models.Metadata.Display)?.HBStart = value;
+        }
+
+        public long? Height
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.Height;
+            set => (_internal as Data.Models.Metadata.Display)?.Height = value;
+        }
+
+        public long? HTotal
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.HTotal;
+            set => (_internal as Data.Models.Metadata.Display)?.HTotal = value;
+        }
+
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.Display;
+
+        public long? PixClock
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.PixClock;
+            set => (_internal as Data.Models.Metadata.Display)?.PixClock = value;
+        }
 
         public double? Refresh
         {
@@ -41,6 +71,30 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Display)?.Tag = value;
         }
 
+        public long? VBEnd
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.VBEnd;
+            set => (_internal as Data.Models.Metadata.Display)?.VBEnd = value;
+        }
+
+        public long? VBStart
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.VBStart;
+            set => (_internal as Data.Models.Metadata.Display)?.VBStart = value;
+        }
+
+        public long? VTotal
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.VTotal;
+            set => (_internal as Data.Models.Metadata.Display)?.VTotal = value;
+        }
+
+        public long? Width
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.Width;
+            set => (_internal as Data.Models.Metadata.Display)?.Width = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -50,45 +104,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Display(Data.Models.Metadata.Display item) : base(item)
         {
             // Process flag values
-            long? hbEnd = ReadLong(Data.Models.Metadata.Display.HBEndKey);
-            if (hbEnd is not null)
-                Write<string?>(Data.Models.Metadata.Display.HBEndKey, hbEnd.ToString());
-
-            long? hbStart = ReadLong(Data.Models.Metadata.Display.HBStartKey);
-            if (hbStart is not null)
-                Write<string?>(Data.Models.Metadata.Display.HBStartKey, hbStart.ToString());
-
-            long? height = ReadLong(Data.Models.Metadata.Display.HeightKey);
-            if (height is not null)
-                Write<string?>(Data.Models.Metadata.Display.HeightKey, height.ToString());
-
-            long? hTotal = ReadLong(Data.Models.Metadata.Display.HTotalKey);
-            if (hTotal is not null)
-                Write<string?>(Data.Models.Metadata.Display.HTotalKey, hTotal.ToString());
-
-            long? pixClock = ReadLong(Data.Models.Metadata.Display.PixClockKey);
-            if (pixClock is not null)
-                Write<string?>(Data.Models.Metadata.Display.PixClockKey, pixClock.ToString());
-
             long? rotate = ReadLong(Data.Models.Metadata.Display.RotateKey);
             if (rotate is not null)
                 Write<string?>(Data.Models.Metadata.Display.RotateKey, rotate.ToString());
-
-            long? vbEnd = ReadLong(Data.Models.Metadata.Display.VBEndKey);
-            if (vbEnd is not null)
-                Write<string?>(Data.Models.Metadata.Display.VBEndKey, vbEnd.ToString());
-
-            long? vbStart = ReadLong(Data.Models.Metadata.Display.VBStartKey);
-            if (vbStart is not null)
-                Write<string?>(Data.Models.Metadata.Display.VBStartKey, vbStart.ToString());
-
-            long? vTotal = ReadLong(Data.Models.Metadata.Display.VTotalKey);
-            if (vTotal is not null)
-                Write<string?>(Data.Models.Metadata.Display.VTotalKey, vTotal.ToString());
-
-            long? width = ReadLong(Data.Models.Metadata.Display.WidthKey);
-            if (width is not null)
-                Write<string?>(Data.Models.Metadata.Display.WidthKey, width.ToString());
         }
 
         public Display(Data.Models.Metadata.Display item, Machine machine, Source source) : this(item)
@@ -103,9 +121,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             Write(Data.Models.Metadata.Video.AspectXKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.AspectXKey)));
             Write(Data.Models.Metadata.Video.AspectYKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.AspectYKey)));
             DisplayType = item.Screen;
-            Write(Data.Models.Metadata.Display.HeightKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.HeightKey)));
+            Height = NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.HeightKey));
             Refresh = item.Refresh;
-            Write(Data.Models.Metadata.Display.WidthKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.WidthKey)));
+            Width = NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.WidthKey));
 
             switch (item.ReadString(Data.Models.Metadata.Video.OrientationKey))
             {
@@ -128,14 +146,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             long? aspectY = ReadLong(Data.Models.Metadata.Video.AspectYKey);
             if (aspectY is not null)
                 Write<string?>(Data.Models.Metadata.Video.AspectYKey, aspectY.ToString());
-
-            long? height = ReadLong(Data.Models.Metadata.Video.HeightKey);
-            if (height is not null)
-                Write<string?>(Data.Models.Metadata.Display.HeightKey, height.ToString());
-
-            long? width = ReadLong(Data.Models.Metadata.Video.WidthKey);
-            if (width is not null)
-                Write<string?>(Data.Models.Metadata.Display.WidthKey, width.ToString());
         }
 
         public Display(Data.Models.Metadata.Video item, Machine machine, Source source) : this(item)

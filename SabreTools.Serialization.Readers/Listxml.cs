@@ -578,16 +578,16 @@ namespace SabreTools.Serialization.Readers
             obj.Type = reader.GetAttribute("type").AsDisplayType();
             obj.Rotate = reader.GetAttribute("rotate");
             obj.FlipX = reader.GetAttribute("flipx").AsYesNo();
-            obj.Width = reader.GetAttribute("width");
-            obj.Height = reader.GetAttribute("height");
+            obj.Width = NumberHelper.ConvertToInt64(reader.GetAttribute("width"));
+            obj.Height = NumberHelper.ConvertToInt64(reader.GetAttribute("height"));
             obj.Refresh = NumberHelper.ConvertToDouble(reader.GetAttribute("refresh"));
-            obj.PixClock = reader.GetAttribute("pixclock");
-            obj.HTotal = reader.GetAttribute("htotal");
-            obj.HBEnd = reader.GetAttribute("hbend");
-            obj.HBStart = reader.GetAttribute("hbstart");
-            obj.VTotal = reader.GetAttribute("vtotal");
-            obj.VBEnd = reader.GetAttribute("vbend");
-            obj.VBStart = reader.GetAttribute("vbstart");
+            obj.PixClock = NumberHelper.ConvertToInt64(reader.GetAttribute("pixclock"));
+            obj.HTotal = NumberHelper.ConvertToInt64(reader.GetAttribute("htotal"));
+            obj.HBEnd = NumberHelper.ConvertToInt64(reader.GetAttribute("hbend"));
+            obj.HBStart = NumberHelper.ConvertToInt64(reader.GetAttribute("hbstart"));
+            obj.VTotal = NumberHelper.ConvertToInt64(reader.GetAttribute("vtotal"));
+            obj.VBEnd = NumberHelper.ConvertToInt64(reader.GetAttribute("vbend"));
+            obj.VBStart = NumberHelper.ConvertToInt64(reader.GetAttribute("vbstart"));
 
             return obj;
         }

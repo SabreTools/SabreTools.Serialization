@@ -393,16 +393,16 @@ namespace SabreTools.Serialization.Writers
             writer.WriteRequiredAttributeString("type", obj.Type?.AsStringValue());
             writer.WriteOptionalAttributeString("rotate", obj.Rotate);
             writer.WriteOptionalAttributeString("flipx", obj.FlipX.FromYesNo());
-            writer.WriteOptionalAttributeString("width", obj.Width);
-            writer.WriteOptionalAttributeString("height", obj.Height);
+            writer.WriteOptionalAttributeString("width", obj.Width?.ToString());
+            writer.WriteOptionalAttributeString("height", obj.Height?.ToString());
             writer.WriteRequiredAttributeString("refresh", obj.Refresh?.ToString("0.000000"));
-            writer.WriteOptionalAttributeString("pixclock", obj.PixClock);
-            writer.WriteOptionalAttributeString("htotal", obj.HTotal);
-            writer.WriteOptionalAttributeString("hbend", obj.HBEnd);
-            writer.WriteOptionalAttributeString("hbstart", obj.HBStart);
-            writer.WriteOptionalAttributeString("vtotal", obj.VTotal);
-            writer.WriteOptionalAttributeString("vbend", obj.VBEnd);
-            writer.WriteOptionalAttributeString("vbstart", obj.VBStart);
+            writer.WriteOptionalAttributeString("pixclock", obj.PixClock?.ToString());
+            writer.WriteOptionalAttributeString("htotal", obj.HTotal?.ToString());
+            writer.WriteOptionalAttributeString("hbend", obj.HBEnd?.ToString());
+            writer.WriteOptionalAttributeString("hbstart", obj.HBStart?.ToString());
+            writer.WriteOptionalAttributeString("vtotal", obj.VTotal?.ToString());
+            writer.WriteOptionalAttributeString("vbend", obj.VBEnd?.ToString());
+            writer.WriteOptionalAttributeString("vbstart", obj.VBStart?.ToString());
 
             writer.WriteEndElement();
         }

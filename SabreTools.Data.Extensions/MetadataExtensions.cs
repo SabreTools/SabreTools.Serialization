@@ -236,8 +236,17 @@ namespace SabreTools.Data.Extensions
             {
                 cloneDisplay.DisplayType = selfDisplay.DisplayType;
                 cloneDisplay.FlipX = selfDisplay.FlipX;
+                cloneDisplay.HBEnd = selfDisplay.HBEnd;
+                cloneDisplay.HBStart = selfDisplay.HBStart;
+                cloneDisplay.Height = selfDisplay.Height;
+                cloneDisplay.HTotal = selfDisplay.HTotal;
+                cloneDisplay.PixClock = selfDisplay.PixClock;
                 cloneDisplay.Refresh = selfDisplay.Refresh;
                 cloneDisplay.Tag = selfDisplay.Tag;
+                cloneDisplay.VBEnd = selfDisplay.VBEnd;
+                cloneDisplay.VBStart = selfDisplay.VBStart;
+                cloneDisplay.VTotal = selfDisplay.VTotal;
+                cloneDisplay.Width = selfDisplay.Width;
             }
             else if (self is Driver selfDriver && clone is Driver cloneDriver)
             {

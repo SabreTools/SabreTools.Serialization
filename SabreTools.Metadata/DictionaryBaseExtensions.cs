@@ -167,9 +167,27 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfDisplay.FlipX != otherDisplay.FlipX)
                     return false;
+                if (selfDisplay.HBEnd != otherDisplay.HBEnd)
+                    return false;
+                if (selfDisplay.HBStart != otherDisplay.HBStart)
+                    return false;
+                if (selfDisplay.Height != otherDisplay.Height)
+                    return false;
+                if (selfDisplay.HTotal != otherDisplay.HTotal)
+                    return false;
+                if (selfDisplay.PixClock != otherDisplay.PixClock)
+                    return false;
                 if (selfDisplay.Refresh != otherDisplay.Refresh)
                     return false;
                 if (selfDisplay.Tag != otherDisplay.Tag)
+                    return false;
+                if (selfDisplay.VBEnd != otherDisplay.VBEnd)
+                    return false;
+                if (selfDisplay.VBStart != otherDisplay.VBStart)
+                    return false;
+                if (selfDisplay.VTotal != otherDisplay.VTotal)
+                    return false;
+                if (selfDisplay.Width != otherDisplay.Width)
                     return false;
             }
             else if (self is Driver selfDriver && other is Driver otherDriver)

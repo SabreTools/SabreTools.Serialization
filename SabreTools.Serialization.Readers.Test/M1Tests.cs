@@ -187,16 +187,16 @@ namespace SabreTools.Serialization.Readers.Test
                 Type = Data.Models.Metadata.DisplayType.Vector,
                 Rotate = "XXXXXX",
                 FlipX = true,
-                Width = "XXXXXX",
-                Height = "XXXXXX",
+                Width = 12345,
+                Height = 12345,
                 Refresh = 123.45,
-                PixClock = "XXXXXX",
-                HTotal = "XXXXXX",
-                HBEnd = "XXXXXX",
-                HBStart = "XXXXXX",
-                VTotal = "XXXXXX",
-                VBEnd = "XXXXXX",
-                VBStart = "XXXXXX",
+                PixClock = 12345,
+                HTotal = 12345,
+                HBEnd = 12345,
+                HBStart = 12345,
+                VTotal = 12345,
+                VBEnd = 12345,
+                VBStart = 12345,
             };
 
             var video = new Data.Models.Listxml.Video
@@ -617,16 +617,16 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.Type);
             Assert.Equal("XXXXXX", display.Rotate);
             Assert.Equal(true, display.FlipX);
-            Assert.Equal("XXXXXX", display.Width);
-            Assert.Equal("XXXXXX", display.Height);
+            Assert.Equal(12345, display.Width);
+            Assert.Equal(12345, display.Height);
             Assert.Equal(123.45, display.Refresh);
-            Assert.Equal("XXXXXX", display.PixClock);
-            Assert.Equal("XXXXXX", display.HTotal);
-            Assert.Equal("XXXXXX", display.HBEnd);
-            Assert.Equal("XXXXXX", display.HBStart);
-            Assert.Equal("XXXXXX", display.VTotal);
-            Assert.Equal("XXXXXX", display.VBEnd);
-            Assert.Equal("XXXXXX", display.VBStart);
+            Assert.Equal(12345, display.PixClock);
+            Assert.Equal(12345, display.HTotal);
+            Assert.Equal(12345, display.HBEnd);
+            Assert.Equal(12345, display.HBStart);
+            Assert.Equal(12345, display.VTotal);
+            Assert.Equal(12345, display.VBEnd);
+            Assert.Equal(12345, display.VBStart);
         }
 
         /// <summary>

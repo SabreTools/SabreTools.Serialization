@@ -514,6 +514,21 @@ namespace SabreTools.Metadata.Filter
                 case Display item when fieldName == "flipx":
                     checkValue = item.FlipX.FromYesNo();
                     return true;
+                case Display item when fieldName == "hbend":
+                    checkValue = item.HBEnd?.ToString();
+                    return true;
+                case Display item when fieldName == "hbstart":
+                    checkValue = item.HBStart?.ToString();
+                    return true;
+                case Display item when fieldName == "height":
+                    checkValue = item.Height?.ToString();
+                    return true;
+                case Display item when fieldName == "htotal":
+                    checkValue = item.HTotal?.ToString();
+                    return true;
+                case Display item when fieldName == "pixclock":
+                    checkValue = item.PixClock?.ToString();
+                    return true;
                 case Display item when fieldName == "refresh":
                     checkValue = item.Refresh?.ToString();
                     return true;
@@ -522,6 +537,18 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case Display item when fieldName == "tag":
                     checkValue = item.Tag;
+                    return true;
+                case Display item when fieldName == "vbend":
+                    checkValue = item.VBEnd?.ToString();
+                    return true;
+                case Display item when fieldName == "vbstart":
+                    checkValue = item.VBStart?.ToString();
+                    return true;
+                case Display item when fieldName == "vtotal":
+                    checkValue = item.VTotal?.ToString();
+                    return true;
+                case Display item when fieldName == "width":
+                    checkValue = item.Width?.ToString();
                     return true;
 
                 case Driver item when fieldName == "blit":
