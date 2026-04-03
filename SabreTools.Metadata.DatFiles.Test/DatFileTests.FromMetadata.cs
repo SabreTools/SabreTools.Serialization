@@ -792,7 +792,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Rom.DateKey] = "date",
                 Dispose = true,
                 [Data.Models.Metadata.Rom.ExtensionKey] = "extension",
-                [Data.Models.Metadata.Rom.FileCountKey] = 12345L,
+                FileCount = 12345,
                 FileIsAvailable = true,
                 [Data.Models.Metadata.Rom.FlagsKey] = "flags",
                 [Data.Models.Metadata.Rom.FormatKey] = "format",
@@ -1494,7 +1494,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("date", rom.ReadString(Data.Models.Metadata.Rom.DateKey));
             Assert.True(rom.Dispose);
             Assert.Equal("extension", rom.ReadString(Data.Models.Metadata.Rom.ExtensionKey));
-            Assert.Equal(12345L, rom.ReadLong(Data.Models.Metadata.Rom.FileCountKey));
+            Assert.Equal(12345, rom.FileCount);
             Assert.True(rom.FileIsAvailable);
             Assert.Equal("flags", rom.ReadString(Data.Models.Metadata.Rom.FlagsKey));
             Assert.Equal("format", rom.ReadString(Data.Models.Metadata.Rom.FormatKey));

@@ -790,6 +790,9 @@ namespace SabreTools.Metadata.Filter
                 case Rom item when fieldName == "dispose":
                     checkValue = item.Dispose.FromYesNo();
                     return true;
+                case Rom item when fieldName == "filecount":
+                    checkValue = item.FileCount?.ToString();
+                    return true;
                 case Rom item when fieldName == "fileisavailable":
                     checkValue = item.FileIsAvailable.FromYesNo();
                     return true;

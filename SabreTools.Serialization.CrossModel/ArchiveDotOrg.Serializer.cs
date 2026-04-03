@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Rom.MD5Key] = item.MD5,
                 [Data.Models.Metadata.Rom.CRCKey] = item.CRC32,
                 [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
-                [Data.Models.Metadata.Rom.FileCountKey] = item.FileCount,
+                FileCount = item.FileCount,
                 [Data.Models.Metadata.Rom.FormatKey] = item.Format,
                 [Data.Models.Metadata.Rom.OriginalKey] = item.Original,
                 [Data.Models.Metadata.Rom.SummationKey] = item.Summation,

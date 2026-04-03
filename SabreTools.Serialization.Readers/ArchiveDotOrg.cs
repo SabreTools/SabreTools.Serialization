@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 using SabreTools.Data.Models.ArchiveDotOrg;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -136,7 +137,7 @@ namespace SabreTools.Serialization.Readers
                         obj.SHA1 = reader.ReadElementContentAsString();
                         break;
                     case "filecount":
-                        obj.FileCount = reader.ReadElementContentAsString();
+                        obj.FileCount = NumberHelper.ConvertToInt64(reader.ReadElementContentAsString());
                         break;
                     case "format":
                         obj.Format = reader.ReadElementContentAsString();

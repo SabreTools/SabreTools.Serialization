@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.CrossModel
                 MD5 = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
                 CRC32 = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                FileCount = item.ReadString(Data.Models.Metadata.Rom.FileCountKey),
+                FileCount = item.FileCount,
                 Format = item.ReadString(Data.Models.Metadata.Rom.FormatKey),
                 Original = item.ReadString(Data.Models.Metadata.Rom.OriginalKey),
                 Summation = item.ReadString(Data.Models.Metadata.Rom.SummationKey),

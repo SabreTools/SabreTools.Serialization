@@ -1057,7 +1057,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("date", rom.ReadString(Data.Models.Metadata.Rom.DateKey));
             Assert.True(rom.Dispose);
             Assert.Equal("extension", rom.ReadString(Data.Models.Metadata.Rom.ExtensionKey));
-            Assert.Equal(12345, rom.ReadLong(Data.Models.Metadata.Rom.FileCountKey));
+            Assert.Equal(12345, rom.FileCount);
             Assert.True(rom.FileIsAvailable);
             Assert.Equal("flags", rom.ReadString(Data.Models.Metadata.Rom.FlagsKey));
             Assert.Equal("format", rom.ReadString(Data.Models.Metadata.Rom.FormatKey));

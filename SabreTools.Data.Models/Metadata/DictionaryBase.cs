@@ -31,6 +31,7 @@ namespace SabreTools.Data.Models.Metadata
         /// <summary>
         /// Read a key as a bool, returning null on error
         /// </summary>
+        /// TODO: Determine if this can be removed
         public bool? ReadBool(string key)
         {
             if (!ValidateReadKey(key))
@@ -52,6 +53,7 @@ namespace SabreTools.Data.Models.Metadata
         /// <summary>
         /// Read a key as a double, returning null on error
         /// </summary>
+        /// TODO: Determine if this can be removed
         public double? ReadDouble(string key)
         {
             if (!ValidateReadKey(key))
@@ -82,6 +84,7 @@ namespace SabreTools.Data.Models.Metadata
         /// Read a key as a long, returning null on error
         /// </summary>
         /// <remarks>TODO: Add logic to convert SI suffixes and hex</remarks>
+        /// TODO: Determine if this can be removed
         public long? ReadLong(string key)
         {
             if (!ValidateReadKey(key))

@@ -319,6 +319,7 @@ namespace SabreTools.Data.Extensions
             else if (self is Rom selfRom && clone is Rom cloneRom)
             {
                 cloneRom.Dispose = selfRom.Dispose;
+                cloneRom.FileCount = selfRom.FileCount;
                 cloneRom.FileIsAvailable = selfRom.FileIsAvailable;
                 cloneRom.Inverted = selfRom.Inverted;
                 cloneRom.LoadFlag = selfRom.LoadFlag;

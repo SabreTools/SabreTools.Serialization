@@ -11,6 +11,9 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Dispose { get; set; }
 
+        /// <remarks>ArchiveDotOrg.File</remarks>
+        public long? FileCount { get; set; }
+
         /// <remarks>bool; AttractMode.Row</remarks>
         public bool? FileIsAvailable { get; set; }
 
@@ -101,9 +104,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string; OfflineList.FileRomCRC</remarks>
         public const string ExtensionKey = "extension";
-
-        /// <remarks>long; ArchiveDotOrg.File</remarks>
-        public const string FileCountKey = "filecount";
 
         /// <remarks>string</remarks>
         public const string FlagsKey = "flags";

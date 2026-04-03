@@ -48,6 +48,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Rom)?.Dispose = value;
         }
 
+        public long? FileCount
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.FileCount;
+            set => (_internal as Data.Models.Metadata.Rom)?.FileCount = value;
+        }
+
         public bool? FileIsAvailable
         {
             get => (_internal as Data.Models.Metadata.Rom)?.FileIsAvailable;

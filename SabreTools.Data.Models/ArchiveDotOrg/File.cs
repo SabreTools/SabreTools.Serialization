@@ -33,7 +33,7 @@ namespace SabreTools.Data.Models.ArchiveDotOrg
         public string? SHA1 { get; set; }
 
         [XmlElement("filecount")]
-        public string? FileCount { get; set; }
+        public long? FileCount { get; set; }
 
         /// <remarks>Is this a set of defined values?</remarks>
         [XmlElement("format")]
