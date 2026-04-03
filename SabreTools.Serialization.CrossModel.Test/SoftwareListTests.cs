@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var rom = new Data.Models.SoftwareList.Rom
             {
                 Name = "name",
-                Size = 12345L,
+                Size = 12345,
                 Length = "XXXXXX",
                 CRC = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var dataarea = new Data.Models.SoftwareList.DataArea
             {
                 Name = "name",
-                Size = 12345L,
+                Size = 12345,
                 Width = "XXXXXX",
                 Endianness = Data.Models.Metadata.Endianness.Big,
                 Rom = [rom],
@@ -229,7 +229,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(dataarea);
             Assert.Equal("name", dataarea.Name);
-            Assert.Equal(12345L, dataarea.Size);
+            Assert.Equal(12345, dataarea.Size);
             Assert.Equal("XXXXXX", dataarea.Width);
             Assert.Equal(Data.Models.Metadata.Endianness.Big, dataarea.Endianness);
 
@@ -245,7 +245,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(rom);
             Assert.Equal("name", rom.Name);
-            Assert.Equal(12345L, rom.Size);
+            Assert.Equal(12345, rom.Size);
             Assert.Equal("XXXXXX", rom.Length);
             Assert.Equal("XXXXXX", rom.CRC);
             Assert.Equal("XXXXXX", rom.SHA1);

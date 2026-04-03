@@ -171,7 +171,7 @@ namespace SabreTools.Serialization.Readers.Test
                 GameDescription = "description",
                 Type = "rom",
                 RomName = "XXXXXX",
-                Size = 12345L,
+                Size = 12345,
                 CRC = "XXXXXX",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -286,7 +286,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", row.RomName);
             Assert.NotNull(row.DiskName);
             Assert.Empty(row.DiskName);
-            Assert.Equal(12345L, row.Size);
+            Assert.Equal(12345, row.Size);
             Assert.Equal("XXXXXX", row.CRC);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.SHA1);

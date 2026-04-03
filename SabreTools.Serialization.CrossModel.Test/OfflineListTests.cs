@@ -191,7 +191,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 ReleaseNumber = "XXXXXX",
                 Title = "XXXXXX",
                 SaveType = "XXXXXX",
-                RomSize = 12345L,
+                RomSize = 12345,
                 Publisher = "XXXXXX",
                 Location = "XXXXXX",
                 SourceRom = "XXXXXX",
@@ -379,7 +379,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", game.ReleaseNumber);
             Assert.Equal("XXXXXX", game.Title);
             Assert.Equal("XXXXXX", game.SaveType);
-            Assert.Equal(12345L, game.RomSize);
+            Assert.Equal(12345, game.RomSize);
             Assert.Equal("XXXXXX", game.Publisher);
             Assert.Equal("XXXXXX", game.Location);
             Assert.Equal("XXXXXX", game.SourceRom);

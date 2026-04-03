@@ -132,7 +132,7 @@ namespace SabreTools.Serialization.Readers.Test
                 GameDescription = "description",
                 RomName = "XXXXXX",
                 RomCRC = "XXXXXX",
-                RomSize = 12345L,
+                RomSize = 12345,
                 RomOf = "XXXXXX",
                 MergeName = "XXXXXX",
             };
@@ -211,7 +211,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("description", rom.GameDescription);
             Assert.Equal("XXXXXX", rom.RomName);
             Assert.Equal("XXXXXX", rom.RomCRC);
-            Assert.Equal(12345L, rom.RomSize);
+            Assert.Equal(12345, rom.RomSize);
             Assert.Equal("XXXXXX", rom.RomOf);
             Assert.Equal("XXXXXX", rom.MergeName);
         }

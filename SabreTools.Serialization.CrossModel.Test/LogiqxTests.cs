@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var rom = new Data.Models.Logiqx.Rom
             {
                 Name = "name",
-                Size = 12345L,
+                Size = 12345,
                 CRC16 = "XXXXXX",
                 CRC = "XXXXXX",
                 CRC64 = "XXXXXX",
@@ -464,7 +464,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(rom);
             Assert.Equal("name", rom.Name);
-            Assert.Equal(12345L, rom.Size);
+            Assert.Equal(12345, rom.Size);
             Assert.Equal("XXXXXX", rom.CRC16);
             Assert.Equal("XXXXXX", rom.CRC);
             Assert.Equal("XXXXXX", rom.CRC64);

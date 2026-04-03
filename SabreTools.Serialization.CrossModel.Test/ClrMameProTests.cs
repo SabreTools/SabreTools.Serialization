@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var rom = new Data.Models.ClrMamePro.Rom
             {
                 Name = "name",
-                Size = 12345L,
+                Size = 12345,
                 CRC16 = "XXXXXX",
                 CRC = "XXXXXX",
                 CRC64 = "XXXXXX",
@@ -175,7 +175,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var sound = new Data.Models.ClrMamePro.Sound
             {
-                Channels = 12345L,
+                Channels = 12345,
             };
 
             var input = new Data.Models.ClrMamePro.Input
@@ -360,7 +360,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(rom);
             Assert.Equal("name", rom.Name);
-            Assert.Equal(12345L, rom.Size);
+            Assert.Equal(12345, rom.Size);
             Assert.Equal("XXXXXX", rom.CRC16);
             Assert.Equal("XXXXXX", rom.CRC);
             Assert.Equal("XXXXXX", rom.CRC64);
@@ -466,7 +466,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.ClrMamePro.Sound? sound)
         {
             Assert.NotNull(sound);
-            Assert.Equal(12345L, sound.Channels);
+            Assert.Equal(12345, sound.Channels);
         }
 
         /// <summary>

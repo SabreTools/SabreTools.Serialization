@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var rom = new Data.Models.Listrom.Row
             {
                 Name = "name",
-                Size = 12345L,
+                Size = 12345,
                 Bad = true,
                 CRC = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(row);
             Assert.Equal("name", row.Name);
-            Assert.Equal(12345L, row.Size);
+            Assert.Equal(12345, row.Size);
             Assert.True(row.Bad);
             Assert.Equal("XXXXXX", row.CRC);
             Assert.Equal("XXXXXX", row.SHA1);

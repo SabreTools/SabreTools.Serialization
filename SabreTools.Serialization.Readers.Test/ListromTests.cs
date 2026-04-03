@@ -103,7 +103,7 @@ namespace SabreTools.Serialization.Readers.Test
             var romGood = new Data.Models.Listrom.Row
             {
                 Name = "name",
-                Size = 12345L,
+                Size = 12345,
                 Bad = false,
                 CRC = Hashing.HashType.CRC32.ZeroString,
                 SHA1 = Hashing.HashType.SHA1.ZeroString,
@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.Readers.Test
             var romBad = new Data.Models.Listrom.Row
             {
                 Name = "name",
-                Size = 12345L,
+                Size = 12345,
                 Bad = true,
                 CRC = Hashing.HashType.CRC32.ZeroString,
                 SHA1 = Hashing.HashType.SHA1.ZeroString,
@@ -203,7 +203,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(row);
             Assert.Equal("name", row.Name);
-            Assert.Equal(12345L, row.Size);
+            Assert.Equal(12345, row.Size);
             Assert.False(row.Bad);
             Assert.Equal(Hashing.HashType.CRC32.ZeroString, row.CRC);
             Assert.Equal(Hashing.HashType.SHA1.ZeroString, row.SHA1);
@@ -217,7 +217,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(row);
             Assert.Equal("name", row.Name);
-            Assert.Equal(12345L, row.Size);
+            Assert.Equal(12345, row.Size);
             Assert.True(row.Bad);
             Assert.Equal(Hashing.HashType.CRC32.ZeroString, row.CRC);
             Assert.Equal(Hashing.HashType.SHA1.ZeroString, row.SHA1);

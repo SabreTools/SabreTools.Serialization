@@ -404,7 +404,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Chip
             {
-                Clock = 12345L,
+                Clock = 12345,
                 Flags = "flags",
                 Name = "name",
                 SoundOnly = true,
@@ -462,14 +462,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Control
             {
-                Buttons = 12345L,
-                KeyDelta = 12345L,
-                Maximum = 12345L,
-                Minimum = 12345L,
-                Player = 12345L,
-                ReqButtons = 12345L,
+                Buttons = 12345,
+                KeyDelta = 12345,
+                Maximum = 12345,
+                Minimum = 12345,
+                Player = 12345,
+                ReqButtons = 12345,
                 Reverse = true,
-                Sensitivity = 12345L,
+                Sensitivity = 12345,
                 ControlType = Data.Models.Metadata.ControlType.Lightgun,
                 Ways = "ways",
                 Ways2 = "ways2",
@@ -542,7 +542,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Endianness = Data.Models.Metadata.Endianness.Big,
                 Name = "name",
                 [Data.Models.Metadata.DataArea.RomKey] = new Data.Models.Metadata.Rom[] { [] },
-                Size = 12345L,
+                Size = 12345,
                 [Data.Models.Metadata.DataArea.WidthKey] = 64,
             };
         }
@@ -577,19 +577,19 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Display
             {
                 FlipX = true,
-                HBEnd = 12345L,
-                HBStart = 12345L,
-                Height = 12345L,
-                HTotal = 12345L,
-                PixClock = 12345L,
+                HBEnd = 12345,
+                HBStart = 12345,
+                Height = 12345,
+                HTotal = 12345,
+                PixClock = 12345,
                 Refresh = 123.45,
                 [Data.Models.Metadata.Display.RotateKey] = 90,
                 Tag = "tag",
                 DisplayType = Data.Models.Metadata.DisplayType.Vector,
-                VBEnd = 12345L,
-                VBStart = 12345L,
-                VTotal = 12345L,
-                Width = 12345L,
+                VBEnd = 12345,
+                VBStart = 12345,
+                VTotal = 12345,
+                Width = 12345,
             };
         }
 
@@ -838,7 +838,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Rom.SHA256Key] = HashType.SHA256.ZeroString,
                 [Data.Models.Metadata.Rom.SHA384Key] = HashType.SHA384.ZeroString,
                 [Data.Models.Metadata.Rom.SHA512Key] = HashType.SHA512.ZeroString,
-                Size = 12345L,
+                Size = 12345,
                 SoundOnly = true,
                 [Data.Models.Metadata.Rom.SourceKey] = "source",
                 [Data.Models.Metadata.Rom.SpamSumKey] = HashType.SpamSum.ZeroString,
@@ -961,7 +961,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Sound
             {
-                Channels = 12345L,
+                Channels = 12345,
             };
         }
 
@@ -1174,7 +1174,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateChip(Chip? chip)
         {
             Assert.NotNull(chip);
-            Assert.Equal(12345L, chip.Clock);
+            Assert.Equal(12345, chip.Clock);
             Assert.Equal("flags", chip.Flags);
             Assert.Equal("name", chip.Name);
             Assert.True(chip.SoundOnly);
@@ -1234,14 +1234,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateControl(Control? control)
         {
             Assert.NotNull(control);
-            Assert.Equal(12345L, control.Buttons);
-            Assert.Equal(12345L, control.KeyDelta);
-            Assert.Equal(12345L, control.Maximum);
-            Assert.Equal(12345L, control.Minimum);
-            Assert.Equal(12345L, control.Player);
-            Assert.Equal(12345L, control.ReqButtons);
+            Assert.Equal(12345, control.Buttons);
+            Assert.Equal(12345, control.KeyDelta);
+            Assert.Equal(12345, control.Maximum);
+            Assert.Equal(12345, control.Minimum);
+            Assert.Equal(12345, control.Player);
+            Assert.Equal(12345, control.ReqButtons);
             Assert.True(control.Reverse);
-            Assert.Equal(12345L, control.Sensitivity);
+            Assert.Equal(12345, control.Sensitivity);
             Assert.Equal(Data.Models.Metadata.ControlType.Lightgun, control.ControlType);
             Assert.Equal("ways", control.Ways);
             Assert.Equal("ways2", control.Ways2);
@@ -1253,7 +1253,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(dataArea);
             Assert.Equal(Data.Models.Metadata.Endianness.Big, dataArea.Endianness);
             Assert.Equal("name", dataArea.Name);
-            Assert.Equal(12345L, dataArea.Size);
+            Assert.Equal(12345, dataArea.Size);
             Assert.Equal(64, dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey));
         }
 
@@ -1351,19 +1351,19 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(display);
             Assert.True(display.FlipX);
-            Assert.Equal(12345L, display.HBEnd);
-            Assert.Equal(12345L, display.HBStart);
-            Assert.Equal(12345L, display.Height);
-            Assert.Equal(12345L, display.HTotal);
-            Assert.Equal(12345L, display.PixClock);
+            Assert.Equal(12345, display.HBEnd);
+            Assert.Equal(12345, display.HBStart);
+            Assert.Equal(12345, display.Height);
+            Assert.Equal(12345, display.HTotal);
+            Assert.Equal(12345, display.PixClock);
             Assert.Equal(123.45, display.Refresh);
             Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
             Assert.Equal("tag", display.Tag);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
-            Assert.Equal(12345L, display.VBEnd);
-            Assert.Equal(12345L, display.VBStart);
-            Assert.Equal(12345L, display.VTotal);
-            Assert.Equal(12345L, display.Width);
+            Assert.Equal(12345, display.VBEnd);
+            Assert.Equal(12345, display.VBStart);
+            Assert.Equal(12345, display.VTotal);
+            Assert.Equal(12345, display.Width);
         }
 
         private static void ValidateDriver(Driver? driver)
@@ -1558,7 +1558,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.SHA256.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA256Key));
             Assert.Equal(HashType.SHA384.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA384Key));
             Assert.Equal(HashType.SHA512.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA512Key));
-            Assert.Equal(12345L, rom.Size);
+            Assert.Equal(12345, rom.Size);
             Assert.True(rom.SoundOnly);
             Assert.Equal("source", rom.ReadString(Data.Models.Metadata.Rom.SourceKey));
             Assert.Equal(HashType.SpamSum.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
@@ -1635,7 +1635,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateSound(Sound? sound)
         {
             Assert.NotNull(sound);
-            Assert.Equal(12345L, sound.Channels);
+            Assert.Equal(12345, sound.Channels);
         }
 
         // TODO: Figure out why so many fields are omitted
@@ -1664,9 +1664,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Video.AspectXKey));
             Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Video.AspectYKey));
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
-            Assert.Equal(12345L, display.Height);
+            Assert.Equal(12345, display.Height);
             Assert.Equal(123.45, display.Refresh);
-            Assert.Equal(12345L, display.Width);
+            Assert.Equal(12345, display.Width);
             Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
         }
 

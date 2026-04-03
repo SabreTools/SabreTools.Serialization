@@ -141,7 +141,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Name = "name",
                 Bios = "XXXXXX",
-                Size = 12345L,
+                Size = 12345,
                 CRC = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Merge = "XXXXXX",
@@ -216,7 +216,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var sound = new Data.Models.Listxml.Sound
             {
-                Channels = 12345L,
+                Channels = 12345,
             };
 
             var control = new Data.Models.Listxml.Control
@@ -553,7 +553,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(rom);
             Assert.Equal("name", rom.Name);
             Assert.Equal("XXXXXX", rom.Bios);
-            Assert.Equal(12345L, rom.Size);
+            Assert.Equal(12345, rom.Size);
             Assert.Equal("XXXXXX", rom.CRC);
             Assert.Equal("XXXXXX", rom.SHA1);
             Assert.Equal("XXXXXX", rom.Merge);
@@ -656,7 +656,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Listxml.Sound? sound)
         {
             Assert.NotNull(sound);
-            Assert.Equal(12345L, sound.Channels);
+            Assert.Equal(12345, sound.Channels);
         }
 
         /// <summary>
