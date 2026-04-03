@@ -229,7 +229,7 @@ namespace SabreTools.Serialization.CrossModel
                 Status = item.Status,
                 Color = item.Color,
                 Sound = item.Sound,
-                [Data.Models.Metadata.Driver.PaletteSizeKey] = item.PaletteSize,
+                PaletteSize = item.PaletteSize,
                 Blit = item.Blit,
             };
             return driver;

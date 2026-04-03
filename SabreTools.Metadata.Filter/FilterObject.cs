@@ -578,6 +578,9 @@ namespace SabreTools.Metadata.Filter
                 case Driver item when fieldName == "nosoundhardware":
                     checkValue = item.NoSoundHardware.FromYesNo();
                     return true;
+                case Driver item when fieldName == "palettesize":
+                    checkValue = item.PaletteSize;
+                    return true;
                 case Driver item when fieldName == "requiresartwork":
                     checkValue = item.RequiresArtwork.FromYesNo();
                     return true;

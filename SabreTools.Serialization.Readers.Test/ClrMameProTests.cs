@@ -317,7 +317,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Status = Data.Models.Metadata.SupportStatus.Good,
                 Color = Data.Models.Metadata.SupportStatus.Good,
                 Sound = Data.Models.Metadata.SupportStatus.Good,
-                PaletteSize = "XXXXXX",
+                PaletteSize = "palettesize",
                 Blit = Data.Models.Metadata.Blit.Plain,
             };
 
@@ -624,7 +624,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Status);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Color);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);
-            Assert.Equal("XXXXXX", driver.PaletteSize);
+            Assert.Equal("palettesize", driver.PaletteSize);
             Assert.Equal(Data.Models.Metadata.Blit.Plain, driver.Blit);
         }
 

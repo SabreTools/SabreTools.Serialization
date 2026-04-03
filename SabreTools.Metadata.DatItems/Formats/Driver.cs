@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 
@@ -52,6 +52,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Driver)?.NoSoundHardware = value;
         }
 
+        public string? PaletteSize
+        {
+            get => (_internal as Data.Models.Metadata.Driver)?.PaletteSize;
+            set => (_internal as Data.Models.Metadata.Driver)?.PaletteSize = value;
+        }
+
         public bool? RequiresArtwork
         {
             get => (_internal as Data.Models.Metadata.Driver)?.RequiresArtwork;
@@ -88,13 +94,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Driver() : base() { }
 
-        public Driver(Data.Models.Metadata.Driver item) : base(item)
-        {
-            // Process flag values
-            long? paletteSize = ReadLong(Data.Models.Metadata.Driver.PaletteSizeKey);
-            if (paletteSize is not null)
-                Write<string?>(Data.Models.Metadata.Driver.PaletteSizeKey, paletteSize.ToString());
-        }
+        public Driver(Data.Models.Metadata.Driver item) : base(item) { }
 
         public Driver(Data.Models.Metadata.Driver item, Machine machine, Source source) : this(item)
         {

@@ -605,7 +605,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Emulation = Data.Models.Metadata.SupportStatus.Good,
                 Incomplete = true,
                 NoSoundHardware = true,
-                [Data.Models.Metadata.Driver.PaletteSizeKey] = "pallettesize",
+                PaletteSize = "palettesize",
                 RequiresArtwork = true,
                 SaveState = Data.Models.Metadata.Supported.Yes,
                 Sound = Data.Models.Metadata.SupportStatus.Good,
@@ -1379,7 +1379,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Emulation);
             Assert.True(driver.Incomplete);
             Assert.True(driver.NoSoundHardware);
-            Assert.Equal("pallettesize", driver.ReadString(Data.Models.Metadata.Driver.PaletteSizeKey));
+            Assert.Equal("palettesize", driver.PaletteSize);
             Assert.True(driver.RequiresArtwork);
             Assert.Equal(Data.Models.Metadata.Supported.Yes, driver.SaveState);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);

@@ -894,7 +894,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Emulation);
             Assert.True(driver.Incomplete);
             Assert.True(driver.NoSoundHardware);
-            Assert.Equal("pallettesize", driver.ReadString(Data.Models.Metadata.Driver.PaletteSizeKey));
+            Assert.Equal("pallettesize", driver.PaletteSize);
             Assert.True(driver.RequiresArtwork);
             Assert.Equal(Data.Models.Metadata.Supported.Yes, driver.SaveState);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);

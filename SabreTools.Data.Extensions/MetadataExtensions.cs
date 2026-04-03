@@ -163,6 +163,8 @@ namespace SabreTools.Data.Extensions
                 return dipLocation.Clone() as DipLocation;
             else if (self is Display display)
                 return display.Clone() as Display;
+            else if (self is Driver driver)
+                return driver.Clone() as Driver;
             else if (self is Extension extension)
                 return extension.Clone() as Extension;
             // TODO: Reenable when PartFeature no longer needs nesting
@@ -235,20 +237,6 @@ namespace SabreTools.Data.Extensions
                 cloneDisk.Optional = selfDisk.Optional;
                 cloneDisk.Status = selfDisk.Status;
                 cloneDisk.Writable = selfDisk.Writable;
-            }
-            else if (self is Driver selfDriver && clone is Driver cloneDriver)
-            {
-                cloneDriver.Blit = selfDriver.Blit;
-                cloneDriver.Cocktail = selfDriver.Cocktail;
-                cloneDriver.Color = selfDriver.Color;
-                cloneDriver.Emulation = selfDriver.Emulation;
-                cloneDriver.Incomplete = selfDriver.Incomplete;
-                cloneDriver.NoSoundHardware = selfDriver.NoSoundHardware;
-                cloneDriver.RequiresArtwork = selfDriver.RequiresArtwork;
-                cloneDriver.SaveState = selfDriver.SaveState;
-                cloneDriver.Sound = selfDriver.Sound;
-                cloneDriver.Status = selfDriver.Status;
-                cloneDriver.Unofficial = selfDriver.Unofficial;
             }
             else if (self is Feature selfFeature && clone is Feature cloneFeature)
             {

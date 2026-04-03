@@ -260,7 +260,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Status = Data.Models.Metadata.SupportStatus.Good,
                 Color = Data.Models.Metadata.SupportStatus.Good,
                 Sound = Data.Models.Metadata.SupportStatus.Good,
-                PaletteSize = "XXXXXX",
+                PaletteSize = "palettesize",
                 Emulation = Data.Models.Metadata.SupportStatus.Good,
                 Cocktail = Data.Models.Metadata.SupportStatus.Good,
                 SaveState = Data.Models.Metadata.Supported.Yes,
@@ -770,7 +770,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Status);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Color);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);
-            Assert.Equal("XXXXXX", driver.PaletteSize);
+            Assert.Equal("palettesize", driver.PaletteSize);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Emulation);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Cocktail);
             Assert.Equal(Data.Models.Metadata.Supported.Yes, driver.SaveState);

@@ -168,27 +168,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Driver selfDriver && other is Driver otherDriver)
             {
-                if (selfDriver.Blit != otherDriver.Blit)
-                    return false;
-                if (selfDriver.Cocktail != otherDriver.Cocktail)
-                    return false;
-                if (selfDriver.Color != otherDriver.Color)
-                    return false;
-                if (selfDriver.Emulation != otherDriver.Emulation)
-                    return false;
-                if (selfDriver.Incomplete != otherDriver.Incomplete)
-                    return false;
-                if (selfDriver.NoSoundHardware != otherDriver.NoSoundHardware)
-                    return false;
-                if (selfDriver.RequiresArtwork != otherDriver.RequiresArtwork)
-                    return false;
-                if (selfDriver.SaveState != otherDriver.SaveState)
-                    return false;
-                if (selfDriver.Sound != otherDriver.Sound)
-                    return false;
-                if (selfDriver.Status != otherDriver.Status)
-                    return false;
-                if (selfDriver.Unofficial != otherDriver.Unofficial)
+                if (!selfDriver.Equals(otherDriver))
                     return false;
             }
             else if (self is Feature selfFeature && other is Feature otherFeature)
