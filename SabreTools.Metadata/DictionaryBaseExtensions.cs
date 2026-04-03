@@ -122,6 +122,8 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfDataArea.Size != otherDataArea.Size)
                     return false;
+                if (selfDataArea.Width != otherDataArea.Width)
+                    return false;
             }
             else if (self is Device selfDevice && other is Device otherDevice)
             {

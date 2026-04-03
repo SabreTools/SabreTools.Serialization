@@ -37,7 +37,7 @@ namespace SabreTools.Metadata.DatItems.Formats
                 return dataArea is not null
                     && (!string.IsNullOrEmpty(dataArea.Name)
                         || dataArea.Size is not null
-                        || dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey) is not null
+                        || dataArea.Width is not null
                         || dataArea.Endianness is not null);
             }
         }

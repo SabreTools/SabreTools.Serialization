@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.SoftwareList
 
         /// <remarks>(8|16|32|64) "8"</remarks>
         [XmlAttribute("width")]
-        public string? Width { get; set; }
+        public Width? Width { get; set; }
 
         /// <remarks>(big|little) "little"</remarks>
         [XmlAttribute("endianness")]

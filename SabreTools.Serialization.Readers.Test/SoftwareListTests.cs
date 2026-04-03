@@ -144,7 +144,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Name = "name",
                 Size = 12345,
-                Width = "XXXXXX",
+                Width = Data.Models.Metadata.Width.Long,
                 Endianness = Data.Models.Metadata.Endianness.Big,
                 Rom = [rom],
             };
@@ -303,7 +303,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(dataarea);
             Assert.Equal("name", dataarea.Name);
             Assert.Equal(12345, dataarea.Size);
-            Assert.Equal("XXXXXX", dataarea.Width);
+            Assert.Equal(Data.Models.Metadata.Width.Long, dataarea.Width);
             Assert.Equal(Data.Models.Metadata.Endianness.Big, dataarea.Endianness);
 
             Assert.NotNull(dataarea.Rom);

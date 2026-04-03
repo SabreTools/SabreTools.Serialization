@@ -218,6 +218,7 @@ namespace SabreTools.Data.Extensions
             {
                 cloneDataArea.Endianness = selfDataArea.Endianness;
                 cloneDataArea.Size = selfDataArea.Size;
+                cloneDataArea.Width = selfDataArea.Width;
             }
             else if (self is Device selfDevice && clone is Device cloneDevice)
             {
@@ -1449,6 +1450,23 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static Width? AsWidth(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "8" or "byte" => Width.Byte,
+                "16" or "short" => Width.Short,
+                "32" or "int" => Width.Int,
+                "64" or "long" => Width.Long,
+                _ => null,
+            };
+        }
+
+        /// <summary>
         /// Get bool? value from input string
         /// </summary>
         /// <param name="yesno">String to get value from</param>
@@ -1835,6 +1853,23 @@ namespace SabreTools.Data.Extensions
                 Supported.No => useSecond ? "unsupported" : "no",
                 Supported.Partial => "partial",
                 Supported.Yes => useSecond ? "supported" : "yes",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this Width value)
+        {
+            return value switch
+            {
+                Width.Byte =>"8",
+                Width.Short =>"16",
+                Width.Int =>"32",
+                Width.Long =>"64",
                 _ => null,
             };
         }

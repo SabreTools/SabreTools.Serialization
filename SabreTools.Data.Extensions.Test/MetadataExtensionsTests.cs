@@ -1881,6 +1881,22 @@ namespace SabreTools.Data.Extensions.Test
 
         [Theory]
         [InlineData(null, null)]
+        [InlineData("8", Width.Byte)]
+        [InlineData("byte", Width.Byte)]
+        [InlineData("16", Width.Short)]
+        [InlineData("short", Width.Short)]
+        [InlineData("32", Width.Int)]
+        [InlineData("int", Width.Int)]
+        [InlineData("64", Width.Long)]
+        [InlineData("long", Width.Long)]
+        public void AsWidth(string? field, Width? expected)
+        {
+            Width? actual = field.AsWidth();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
         [InlineData("INVALID", null)]
         [InlineData("1", true)]
         [InlineData("yes", true)]
@@ -2200,6 +2216,18 @@ namespace SabreTools.Data.Extensions.Test
         [InlineData(SupportStatus.Imperfect, "imperfect")]
         [InlineData(SupportStatus.Preliminary, "preliminary")]
         public void FromSupportStatusTest(SupportStatus field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((Width)int.MaxValue, null)]
+        [InlineData(Width.Byte, "8")]
+        [InlineData(Width.Short, "16")]
+        [InlineData(Width.Int, "32")]
+        [InlineData(Width.Long, "64")]
+        public void FromWidthTest(Width field, string? expected)
         {
             string? actual = field.AsStringValue();
             Assert.Equal(expected, actual);

@@ -15,6 +15,9 @@ namespace SabreTools.Data.Models.Metadata
 
         public long? Size { get; set; }
 
+        /// <remarks>(8|16|32|64) "8"</remarks>
+        public Width? Width { get; set; }
+
         #endregion
 
         #region Keys
@@ -22,10 +25,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>Rom[]</remarks>
         [NoFilter]
         public const string RomKey = "rom";
-
-        /// <remarks>(8|16|32|64) "8"</remarks>
-        /// TODO: Convert to enum
-        public const string WidthKey = "width";
 
         #endregion
 

@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Size = item.Size,
-                [Data.Models.Metadata.DataArea.WidthKey] = item.Width,
+                Width = item.Width,
                 Endianness = item.Endianness,
             };
 

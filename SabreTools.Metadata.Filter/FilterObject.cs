@@ -460,6 +460,9 @@ namespace SabreTools.Metadata.Filter
                 case DataArea item when fieldName == "size":
                     checkValue = item.Size?.ToString();
                     return true;
+                case DataArea item when fieldName == "width":
+                    checkValue = item.Width?.AsStringValue();
+                    return true;
 
                 case Device item when fieldName == "type":
                     checkValue = item.DeviceType?.AsStringValue();

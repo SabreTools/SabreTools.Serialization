@@ -543,7 +543,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "name",
                 [Data.Models.Metadata.DataArea.RomKey] = new Data.Models.Metadata.Rom[] { [] },
                 Size = 12345,
-                [Data.Models.Metadata.DataArea.WidthKey] = 64,
+                Width = Data.Models.Metadata.Width.Long,
             };
         }
 
@@ -1236,7 +1236,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.Endianness.Big, dataArea.Endianness);
             Assert.Equal("name", dataArea.Name);
             Assert.Equal(12345, dataArea.Size);
-            Assert.Equal(64, dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey));
+            Assert.Equal(Data.Models.Metadata.Width.Long, dataArea.Width);
         }
 
         private static void ValidateDevice(Device? device)

@@ -761,7 +761,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.Endianness.Big, dataArea.Endianness);
             Assert.Equal("name", dataArea.Name);
             Assert.Equal(12345, dataArea.Size);
-            Assert.Equal(64, dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey));
+            Assert.Equal(Data.Models.Metadata.Width.Long, dataArea.Width);
 
             Data.Models.Metadata.Rom[]? roms = dataArea.ReadArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.DataArea.RomKey);
             Assert.NotNull(roms);

@@ -574,4 +574,22 @@ namespace SabreTools.Data.Models.Metadata
         /// <summary>"test"</summary>
         Test,
     }
+
+    /// <summary>
+    /// Determine area width
+    /// </summary>
+    public enum Width
+    {
+        /// <summary>8</summary>
+        Byte = 8,
+
+        /// <summary>16</summary>
+        Short = 16,
+
+        /// <summary>32</summary>
+        Int = 32,
+
+        /// <summary>64</summary>
+        Long = 64,
+    }
 }

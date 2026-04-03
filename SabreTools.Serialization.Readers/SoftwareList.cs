@@ -127,7 +127,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Size = NumberHelper.ConvertToInt64(reader.GetAttribute("size"));
-            obj.Width = reader.GetAttribute("width");
+            obj.Width = reader.GetAttribute("width").AsWidth();
             obj.Endianness = reader.GetAttribute("endianness").AsEndianness();
 
             List<Rom> roms = [];

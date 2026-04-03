@@ -35,19 +35,19 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.DataArea)?.Size = value;
         }
 
+        public Data.Models.Metadata.Width? Width
+        {
+            get => (_internal as Data.Models.Metadata.DataArea)?.Width;
+            set => (_internal as Data.Models.Metadata.DataArea)?.Width = value;
+        }
+
         #endregion
 
         #region Constructors
 
         public DataArea() : base() { }
 
-        public DataArea(Data.Models.Metadata.DataArea item) : base(item)
-        {
-            // Process flag values
-            long? width = ReadLong(Data.Models.Metadata.DataArea.WidthKey);
-            if (width is not null)
-                Write<string?>(Data.Models.Metadata.DataArea.WidthKey, width.ToString());
-        }
+        public DataArea(Data.Models.Metadata.DataArea item) : base(item) { }
 
         public DataArea(Data.Models.Metadata.DataArea item, Machine machine, Source source) : this(item)
         {

@@ -105,7 +105,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteRequiredAttributeString("size", obj.Size?.ToString());
-            writer.WriteOptionalAttributeString("width", obj.Width);
+            writer.WriteOptionalAttributeString("width", obj.Width?.AsStringValue());
             writer.WriteOptionalAttributeString("endianness", obj.Endianness?.AsStringValue());
 
             if (obj.Rom is not null && obj.Rom.Length > 0)
