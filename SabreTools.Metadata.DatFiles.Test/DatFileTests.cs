@@ -1368,9 +1368,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
-            DatItem item = new Rom();
+            DatItem item = new Rom() { Size = 12345 };
             item.SetName("name");
-            item.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             item.Write(Data.Models.Metadata.Rom.CRC16Key, "crc16");
             item.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             item.Write(Data.Models.Metadata.Rom.CRC64Key, "crc64");
@@ -1472,9 +1471,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
-            DatItem item = new Rom();
+            DatItem item = new Rom() { Size = 12345 };
             item.SetName("name");
-            item.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             item.Write(Data.Models.Metadata.Rom.CRC16Key, "crc16");
             item.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             item.Write(Data.Models.Metadata.Rom.CRC64Key, "crc64");
@@ -1505,7 +1503,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem actual = DatFile.ProcessNullifiedItem(item);
             Sample? sample = actual as Sample;
             Assert.NotNull(sample);
-            Assert.Null(sample.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Null(sample.ReadString("size"));
             Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.CRC16Key));
             Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.CRCKey));
             Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.CRC64Key));
@@ -1524,13 +1522,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ProcessNullifiedItem_SizeNonNull()
         {
-            DatItem item = new Rom();
-            item.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            DatItem item = new Rom() { Size = 12345 };
 
             DatItem actual = DatFile.ProcessNullifiedItem(item);
             Rom? rom = actual as Rom;
             Assert.NotNull(rom);
-            Assert.Equal(12345, rom.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, rom.Size);
             Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key));
             Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.CRCKey));
             Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.CRC64Key));
@@ -1555,7 +1552,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem actual = DatFile.ProcessNullifiedItem(item);
             Rom? rom = actual as Rom;
             Assert.NotNull(rom);
-            Assert.Null(rom.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Null(rom.Size);
             Assert.Equal(HashType.CRC32.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRCKey));
             Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.MD2Key));
             Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.MD4Key));
@@ -1590,7 +1587,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem actual = DatFile.ProcessNullifiedItem(item);
             Rom? rom = actual as Rom;
             Assert.NotNull(rom);
-            Assert.Equal(0, rom.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(0, rom.Size);
             Assert.Equal(HashType.CRC16.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC16Key));
             Assert.Equal(HashType.CRC32.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRCKey));
             Assert.Equal(HashType.CRC64.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC64Key));
@@ -1958,7 +1955,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom romA = new Rom();
             romA.SetName("name");
-            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Size = 12345;
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
@@ -1972,7 +1969,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actualItemA as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("name", actualRomA.Name);
-            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, actualRomA.Size);
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
@@ -1986,14 +1983,14 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom romA = new Rom();
             romA.SetName("romA");
-            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Size = 12345;
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
 
             Rom romB = new Rom();
             romB.SetName("romB");
-            romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
+            romB.Size = 23456;
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
             romB.Machine = (Machine)machine.Clone();
             romB.Source = (Source)source.Clone();
@@ -2008,13 +2005,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actual[0] as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("romA", actualRomA.Name);
-            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, actualRomA.Size);
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1] as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("romB", actualRomB.Name);
-            Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(23456, actualRomB.Size);
             Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
@@ -2028,14 +2025,14 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom romA = new Rom();
             romA.SetName("rom");
-            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Size = 12345;
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
 
             Rom romB = new Rom();
             romB.SetName("rom");
-            romB.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romB.Size = 12345;
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romB.Machine = (Machine)machine.Clone();
             romB.Source = (Source)source.Clone();
@@ -2049,7 +2046,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actualItemA as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.Name);
-            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, actualRomA.Size);
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
@@ -2063,14 +2060,14 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom romA = new Rom();
             romA.SetName("rom");
-            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Size = 12345;
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
 
             Rom romB = new Rom();
             romB.SetName("rom");
-            romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
+            romB.Size = 23456;
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
             romB.Machine = (Machine)machine.Clone();
             romB.Source = (Source)source.Clone();
@@ -2085,13 +2082,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actual[0] as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.Name);
-            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, actualRomA.Size);
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1] as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("rom_crc2", actualRomB.Name);
-            Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(23456, actualRomB.Size);
             Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
@@ -2120,7 +2117,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom romA = new Rom();
             romA.SetName("name");
-            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Size = 12345;
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
@@ -2136,7 +2133,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actualItemA.Value as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("name", actualRomA.Name);
-            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, actualRomA.Size);
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
@@ -2150,14 +2147,14 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom romA = new Rom();
             romA.SetName("romA");
-            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Size = 12345;
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
 
             Rom romB = new Rom();
             romB.SetName("romB");
-            romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
+            romB.Size = 23456;
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
             romB.Machine = (Machine)machine.Clone();
             romB.Source = (Source)source.Clone();
@@ -2175,13 +2172,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actual[0].Value as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("romA", actualRomA.Name);
-            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, actualRomA.Size);
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1].Value as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("romB", actualRomB.Name);
-            Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(23456, actualRomB.Size);
             Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
@@ -2199,13 +2196,13 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom romA = new Rom();
             romA.SetName("rom");
-            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Size = 12345;
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             long romAIndex = datFile.AddItemDB(romA, machineIndex, sourceIndex, statsOnly: false);
 
             Rom romB = new Rom();
             romB.SetName("rom");
-            romB.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romB.Size = 12345;
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             long romBIndex = datFile.AddItemDB(romB, machineIndex, sourceIndex, statsOnly: false);
 
@@ -2220,7 +2217,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actualItemA.Value as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.Name);
-            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, actualRomA.Size);
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
@@ -2234,14 +2231,14 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom romA = new Rom();
             romA.SetName("rom");
-            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Size = 12345;
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
 
             Rom romB = new Rom();
             romB.SetName("rom");
-            romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
+            romB.Size = 23456;
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
             romB.Machine = (Machine)machine.Clone();
             romB.Source = (Source)source.Clone();
@@ -2259,13 +2256,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actual[0].Value as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.Name);
-            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, actualRomA.Size);
             Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1].Value as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("rom_crc2", actualRomB.Name);
-            Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(23456, actualRomB.Size);
             Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
@@ -2317,9 +2314,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ShouldIgnore_NoIgnoreBlanksZeroRom_False()
         {
-            DatItem? datItem = new Rom();
+            DatItem? datItem = new Rom() { Size = 12345 };
             datItem.SetName("name");
-            datItem.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             datItem.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             DatFile datFile = new Logiqx(null, useGame: false);
 
@@ -2340,9 +2336,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ShouldIgnore_MissingRequired_True()
         {
-            DatItem? datItem = new Rom();
+            DatItem? datItem = new Rom() { Size = 12345 };
             datItem.SetName("name");
-            datItem.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             DatFile datFile = new Logiqx(null, useGame: false);
 
             bool actual = datFile.ShouldIgnore(datItem, ignoreBlanks: true);
@@ -2352,9 +2347,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ShouldIgnore_AllVerified_False()
         {
-            DatItem? datItem = new Rom();
+            DatItem? datItem = new Rom() { Size = 12345 };
             datItem.SetName("name");
-            datItem.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             datItem.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             datItem.Write(Data.Models.Metadata.Rom.MD2Key, "crc");
             datItem.Write(Data.Models.Metadata.Rom.MD4Key, "crc");

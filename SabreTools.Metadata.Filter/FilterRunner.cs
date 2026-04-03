@@ -84,13 +84,11 @@ namespace SabreTools.Metadata.Filter
             GroupType groupType = GroupType.OR;
 
             // Special case for size
-            if (filter.Key.ItemName == "item" && filter.Key.FieldName == DataArea.SizeKey)
+            if (filter.Key.ItemName == "item" && filter.Key.FieldName == "size")
                 groupType = GroupType.AND;
-            else if (filter.Key.ItemName == "item" && filter.Key.FieldName == Rom.SizeKey)
+            else if (filter.Key.ItemName == "dataarea" && filter.Key.FieldName == "size")
                 groupType = GroupType.AND;
-            if (filter.Key.ItemName == "dataarea" && filter.Key.FieldName == DataArea.SizeKey)
-                groupType = GroupType.AND;
-            else if (filter.Key.ItemName == "rom" && filter.Key.FieldName == Rom.SizeKey)
+            else if (filter.Key.ItemName == "rom" && filter.Key.FieldName == "size")
                 groupType = GroupType.AND;
 
             // Ensure the key exists

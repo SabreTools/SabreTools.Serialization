@@ -729,7 +729,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteOptionalAttributeString("bios", obj.Bios);
-            writer.WriteRequiredAttributeString("size", obj.Size);
+            writer.WriteRequiredAttributeString("size", obj.Size?.ToString());
             writer.WriteOptionalAttributeString("crc", obj.CRC);
             writer.WriteOptionalAttributeString("sha1", obj.SHA1);
             writer.WriteOptionalAttributeString("merge", obj.Merge);

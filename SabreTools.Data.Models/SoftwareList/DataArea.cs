@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.SoftwareList
 
         [Required]
         [XmlAttribute("size")]
-        public string? Size { get; set; }
+        public long? Size { get; set; }
 
         /// <remarks>(8|16|32|64) "8"</remarks>
         [XmlAttribute("width")]

@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.CrossModel
             var dataArea = new DataArea
             {
                 Name = item.Name,
-                Size = item.ReadString(Data.Models.Metadata.DataArea.SizeKey),
+                Size = item.Size,
                 Width = item.ReadString(Data.Models.Metadata.DataArea.WidthKey),
                 Endianness = item.Endianness,
             };
@@ -216,7 +216,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Rom
             {
                 Name = item.Name,
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                Size = item.Size,
                 Length = item.ReadString(Data.Models.Metadata.Rom.LengthKey),
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),

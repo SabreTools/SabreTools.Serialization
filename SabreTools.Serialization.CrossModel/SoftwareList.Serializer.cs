@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                Name =  item.Name,
+                Name = item.Name,
                 Description = item.Description,
                 Notes = item.Notes,
             };
@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.CrossModel
             var dataArea = new Data.Models.Metadata.DataArea
             {
                 Name = item.Name,
-                [Data.Models.Metadata.DataArea.SizeKey] = item.Size,
+                Size = item.Size,
                 [Data.Models.Metadata.DataArea.WidthKey] = item.Width,
                 Endianness = item.Endianness,
             };
@@ -210,7 +210,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Rom.SizeKey] = item.Size,
+                Size = item.Size,
                 [Data.Models.Metadata.Rom.LengthKey] = item.Length,
                 [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
                 [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,

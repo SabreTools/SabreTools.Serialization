@@ -36,8 +36,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Rom rom:
-                    if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
-                        missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
+                    if (rom.Size is null || rom.Size < 0)
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
                     // if (string.IsNullOrEmpty(rom.Date))
                     //     missingFields.Add(Data.Models.Metadata.Rom.DateKey);
                     if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)))

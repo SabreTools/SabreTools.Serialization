@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 GameDescription = "description",
                 RomName = "XXXXXX",
                 RomCRC = "XXXXXX",
-                RomSize = "XXXXXX",
+                RomSize = 12345L,
                 RomOf = "XXXXXX",
                 MergeName = "XXXXXX",
             };
@@ -145,7 +145,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("description", rom.GameDescription);
             Assert.Equal("XXXXXX", rom.RomName);
             Assert.Equal("XXXXXX", rom.RomCRC);
-            Assert.Equal("XXXXXX", rom.RomSize);
+            Assert.Equal(12345L, rom.RomSize);
             Assert.Equal("XXXXXX", rom.RomOf);
             Assert.Equal("XXXXXX", rom.MergeName);
         }

@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 SHA1 = "XXXXXX",
                 MD5 = "XXXXXX",
                 CRC32 = "XXXXXX",
-                Size = "XXXXXX",
+                Size = 12345L,
             };
 
             return new Data.Models.EverdriveSMDB.MetadataFile
@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", row.SHA1);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.CRC32);
-            Assert.Equal("XXXXXX", row.Size);
+            Assert.Equal(12345L, row.Size);
         }
     }
 }

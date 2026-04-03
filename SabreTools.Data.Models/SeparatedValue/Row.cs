@@ -35,7 +35,7 @@ namespace SabreTools.Data.Models.SeparatedValue
         public string? DiskName { get; set; }
 
         /// <remarks>Size, Numeric</remarks>
-        public string? Size { get; set; }
+        public long? Size { get; set; }
 
         /// <remarks>CRC</remarks>
         public string? CRC { get; set; }

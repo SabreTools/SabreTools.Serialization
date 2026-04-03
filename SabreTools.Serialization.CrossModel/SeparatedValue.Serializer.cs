@@ -105,7 +105,7 @@ namespace SabreTools.Serialization.CrossModel
                 "rom" => new Data.Models.Metadata.Rom
                 {
                     Name = item.RomName,
-                    [Data.Models.Metadata.Rom.SizeKey] = item.Size,
+                    Size = item.Size,
                     [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
                     [Data.Models.Metadata.Rom.MD5Key] = item.MD5,
                     [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,

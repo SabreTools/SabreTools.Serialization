@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalElementString("releaseNumber", obj.ReleaseNumber);
             writer.WriteOptionalElementString("title", obj.Title);
             writer.WriteOptionalElementString("saveType", obj.SaveType);
-            writer.WriteOptionalElementString("romSize", obj.RomSize);
+            writer.WriteOptionalElementString("romSize", obj.RomSize?.ToString());
             writer.WriteOptionalElementString("publisher", obj.Publisher);
             writer.WriteOptionalElementString("location", obj.Location);
             writer.WriteOptionalElementString("sourceRom", obj.SourceRom);

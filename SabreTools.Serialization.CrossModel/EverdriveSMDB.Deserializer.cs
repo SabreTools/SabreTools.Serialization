@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.CrossModel
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
                 MD5 = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
                 CRC32 = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                Size = item.Size,
             };
             return row;
         }

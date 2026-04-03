@@ -489,7 +489,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("rom");
 
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteRequiredAttributeString("size", obj.Size);
+            writer.WriteRequiredAttributeString("size", obj.Size?.ToString());
             writer.WriteOptionalAttributeString("crc16", obj.CRC16);
             writer.WriteOptionalAttributeString("crc", obj.CRC);
             writer.WriteOptionalAttributeString("crc64", obj.CRC64);

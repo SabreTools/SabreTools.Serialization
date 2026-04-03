@@ -374,7 +374,7 @@ namespace SabreTools.Metadata.DatFiles
             ItemStatus? status = rom.Status;
             if (status != ItemStatus.Nodump)
             {
-                TotalSize += rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) ?? 0;
+                TotalSize += rom.Size ?? 0;
                 AddHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key)) ? 0 : 1);
                 AddHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)) ? 0 : 1);
                 AddHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC64Key)) ? 0 : 1);
@@ -503,7 +503,7 @@ namespace SabreTools.Metadata.DatFiles
             ItemStatus? status = rom.Status;
             if (status != ItemStatus.Nodump)
             {
-                TotalSize -= rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) ?? 0;
+                TotalSize -= rom.Size ?? 0;
                 RemoveHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key)) ? 0 : 1);
                 RemoveHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)) ? 0 : 1);
                 RemoveHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC64Key)) ? 0 : 1);

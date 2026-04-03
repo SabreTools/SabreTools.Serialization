@@ -29,6 +29,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.DataArea)?.Name = value;
         }
 
+        public long? Size
+        {
+            get => (_internal as Data.Models.Metadata.DataArea)?.Size;
+            set => (_internal as Data.Models.Metadata.DataArea)?.Size = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -38,10 +44,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         public DataArea(Data.Models.Metadata.DataArea item) : base(item)
         {
             // Process flag values
-            long? size = ReadLong(Data.Models.Metadata.DataArea.SizeKey);
-            if (size is not null)
-                Write<string?>(Data.Models.Metadata.DataArea.SizeKey, size.ToString());
-
             long? width = ReadLong(Data.Models.Metadata.DataArea.WidthKey);
             if (width is not null)
                 Write<string?>(Data.Models.Metadata.DataArea.WidthKey, width.ToString());

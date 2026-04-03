@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Logiqx;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -689,7 +690,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new Rom();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Size = reader.GetAttribute("size");
+            obj.Size = NumberHelper.ConvertToInt64(reader.GetAttribute("size"));
             obj.CRC16 = reader.GetAttribute("crc16");
             obj.CRC = reader.GetAttribute("crc");
             obj.CRC64 = reader.GetAttribute("crc64");

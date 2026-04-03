@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.SoftwareList
         public string? Name { get; set; }
 
         [XmlAttribute("size")]
-        public string? Size { get; set; }
+        public long? Size { get; set; }
 
         [XmlAttribute("length")]
         public string? Length { get; set; }

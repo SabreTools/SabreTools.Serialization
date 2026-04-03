@@ -609,7 +609,7 @@ namespace SabreTools.Metadata.DatFiles
 
                             // Convert the item
                             var romItem = new Rom(rom, machine, source);
-                            long? size = romItem.ReadLong(Data.Models.Metadata.Rom.SizeKey);
+                            long? size = romItem.Size;
 
                             // If the rom is a continue or ignore
                             Data.Models.Metadata.LoadFlag? loadFlag = rom.LoadFlag;
@@ -618,8 +618,8 @@ namespace SabreTools.Metadata.DatFiles
                                     || loadFlag == Data.Models.Metadata.LoadFlag.Ignore))
                             {
                                 var lastRom = addRoms[addRoms.Count - 1];
-                                long? lastSize = lastRom.ReadLong(Data.Models.Metadata.Rom.SizeKey);
-                                lastRom.Write(Data.Models.Metadata.Rom.SizeKey, lastSize + size);
+                                long? lastSize = lastRom.Size;
+                                lastRom.Size = lastSize + size;
                                 continue;
                             }
 

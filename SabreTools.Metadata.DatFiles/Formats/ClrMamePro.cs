@@ -90,8 +90,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case Rom rom:
                     if (string.IsNullOrEmpty(rom.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
-                    if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
-                        missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
+                    if (rom.Size is null || rom.Size < 0)
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
                     if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key))
                         && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey))
                         && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC64Key))

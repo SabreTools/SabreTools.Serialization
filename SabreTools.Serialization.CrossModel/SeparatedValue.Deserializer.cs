@@ -139,7 +139,7 @@ namespace SabreTools.Serialization.CrossModel
                 Type = "rom",
                 RomName = item.Name,
                 DiskName = null,
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                Size = item.Size,
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 MD5 = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),

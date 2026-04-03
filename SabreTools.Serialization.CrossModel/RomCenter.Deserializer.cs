@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.CrossModel
                 GameDescription = parent.Description,
                 RomName = item.Name,
                 RomCRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                RomSize = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                RomSize = item.Size,
                 RomOf = parent.ReadString(Data.Models.Metadata.Machine.RomOfKey),
                 MergeName = item.ReadString(Data.Models.Metadata.Rom.MergeKey),
             };

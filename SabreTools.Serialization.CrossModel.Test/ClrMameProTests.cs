@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var rom = new Data.Models.ClrMamePro.Rom
             {
                 Name = "name",
-                Size = "XXXXXX",
+                Size = 12345L,
                 CRC16 = "XXXXXX",
                 CRC = "XXXXXX",
                 CRC64 = "XXXXXX",
@@ -360,7 +360,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(rom);
             Assert.Equal("name", rom.Name);
-            Assert.Equal("XXXXXX", rom.Size);
+            Assert.Equal(12345L, rom.Size);
             Assert.Equal("XXXXXX", rom.CRC16);
             Assert.Equal("XXXXXX", rom.CRC);
             Assert.Equal("XXXXXX", rom.CRC64);

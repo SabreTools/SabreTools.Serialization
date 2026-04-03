@@ -498,8 +498,8 @@ namespace SabreTools.Metadata
             string? selfName = self.Name;
             string? otherName = other.Name;
 
-            long? selfSize = self.ReadLong(Rom.SizeKey);
-            long? otherSize = other.ReadLong(Rom.SizeKey);
+            long? selfSize = self.Size;
+            long? otherSize = other.Size;
 
             // If all hashes are empty but they're both nodump and the names match, then they're dupes
             if (selfStatus == ItemStatus.Nodump

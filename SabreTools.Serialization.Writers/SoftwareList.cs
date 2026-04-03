@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("dataarea");
 
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteRequiredAttributeString("size", obj.Size);
+            writer.WriteRequiredAttributeString("size", obj.Size?.ToString());
             writer.WriteOptionalAttributeString("width", obj.Width);
             writer.WriteOptionalAttributeString("endianness", obj.Endianness?.AsStringValue());
 
@@ -286,7 +286,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("rom");
 
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteOptionalAttributeString("size", obj.Size);
+            writer.WriteOptionalAttributeString("size", obj.Size?.ToString());
             writer.WriteOptionalAttributeString("length", obj.Length);
             writer.WriteOptionalAttributeString("crc", obj.CRC);
             writer.WriteOptionalAttributeString("sha1", obj.SHA1);

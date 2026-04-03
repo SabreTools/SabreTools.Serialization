@@ -760,7 +760,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(dataArea);
             Assert.Equal(Data.Models.Metadata.Endianness.Big, dataArea.Endianness);
             Assert.Equal("name", dataArea.Name);
-            Assert.Equal(12345, dataArea.ReadLong(Data.Models.Metadata.DataArea.SizeKey));
+            Assert.Equal(12345, dataArea.Size);
             Assert.Equal(64, dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey));
 
             Data.Models.Metadata.Rom[]? roms = dataArea.ReadArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.DataArea.RomKey);
@@ -1103,7 +1103,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.SHA256.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA256Key));
             Assert.Equal(HashType.SHA384.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA384Key));
             Assert.Equal(HashType.SHA512.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA512Key));
-            Assert.Equal(12345, rom.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, rom.Size);
             Assert.True(rom.SoundOnly);
             Assert.Equal("source", rom.ReadString(Data.Models.Metadata.Rom.SourceKey));
             Assert.Equal(HashType.SpamSum.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey));

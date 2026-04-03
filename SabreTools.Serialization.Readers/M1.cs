@@ -1045,7 +1045,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Bios = reader.GetAttribute("bios");
-            obj.Size = reader.GetAttribute("size");
+            obj.Size = NumberHelper.ConvertToInt64(reader.GetAttribute("size"));
             obj.CRC = reader.GetAttribute("crc");
             obj.SHA1 = reader.GetAttribute("sha1");
             obj.Merge = reader.GetAttribute("merge");

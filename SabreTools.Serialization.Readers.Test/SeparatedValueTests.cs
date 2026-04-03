@@ -171,7 +171,7 @@ namespace SabreTools.Serialization.Readers.Test
                 GameDescription = "description",
                 Type = "rom",
                 RomName = "XXXXXX",
-                Size = "XXXXXX",
+                Size = 12345L,
                 CRC = "XXXXXX",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -215,7 +215,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("disk", row.Type);
             Assert.NotNull(row.RomName); Assert.Empty(row.RomName);
             Assert.Equal("XXXXXX", row.DiskName);
-            Assert.NotNull(row.Size); Assert.Empty(row.Size);
+            Assert.Null(row.Size);
             Assert.NotNull(row.CRC); Assert.Empty(row.CRC);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.SHA1);
@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("media", row.Type);
             Assert.NotNull(row.RomName); Assert.Empty(row.RomName);
             Assert.Equal("XXXXXX", row.DiskName);
-            Assert.NotNull(row.Size); Assert.Empty(row.Size);
+            Assert.Null(row.Size);
             Assert.NotNull(row.CRC); Assert.Empty(row.CRC);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.SHA1);
@@ -286,7 +286,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", row.RomName);
             Assert.NotNull(row.DiskName);
             Assert.Empty(row.DiskName);
-            Assert.Equal("XXXXXX", row.Size);
+            Assert.Equal(12345L, row.Size);
             Assert.Equal("XXXXXX", row.CRC);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.SHA1);

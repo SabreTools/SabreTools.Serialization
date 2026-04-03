@@ -1,5 +1,6 @@
 using System;
 using SabreTools.Data.Models.ArchiveDotOrg;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.CrossModel
 {
@@ -65,7 +66,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Rom.SourceKey] = item.Source,
                 [Data.Models.Metadata.Rom.BitTorrentMagnetHashKey] = item.BitTorrentMagnetHash,
                 [Data.Models.Metadata.Rom.LastModifiedTimeKey] = item.LastModifiedTime,
-                [Data.Models.Metadata.Rom.SizeKey] = item.Size,
+                Size = NumberHelper.ConvertToInt64(item.Size),
                 [Data.Models.Metadata.Rom.MD5Key] = item.MD5,
                 [Data.Models.Metadata.Rom.CRCKey] = item.CRC32,
                 [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,

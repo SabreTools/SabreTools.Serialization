@@ -418,6 +418,9 @@ namespace SabreTools.Metadata.Filter
                 case DataArea item when fieldName == "endianness":
                     checkValue = item.Endianness?.AsStringValue();
                     return true;
+                case DataArea item when fieldName == "size":
+                    checkValue = item.Size?.ToString();
+                    return true;
 
                 case Device item when fieldName == "type":
                     checkValue = item.DeviceType?.AsStringValue();
@@ -700,6 +703,9 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case Rom item when fieldName == "optional":
                     checkValue = item.Optional.FromYesNo();
+                    return true;
+                case Rom item when fieldName == "size":
+                    checkValue = item.Size?.ToString();
                     return true;
                 case Rom item when fieldName == "soundonly":
                     checkValue = item.SoundOnly.FromYesNo();

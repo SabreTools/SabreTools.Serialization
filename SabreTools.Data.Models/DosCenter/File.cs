@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.DosCenter
 
         /// <remarks>size, attribute, numeric</remarks>
         [Required]
-        public string? Size { get; set; }
+        public long? Size { get; set; }
 
         /// <remarks>crc, attribute</remarks>
         [Required]

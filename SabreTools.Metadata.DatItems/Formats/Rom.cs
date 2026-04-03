@@ -36,7 +36,7 @@ namespace SabreTools.Metadata.DatItems.Formats
                 var dataArea = Read<DataArea?>(DataAreaKey);
                 return dataArea is not null
                     && (!string.IsNullOrEmpty(dataArea.Name)
-                        || dataArea.ReadLong(Data.Models.Metadata.DataArea.SizeKey) is not null
+                        || dataArea.Size is not null
                         || dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey) is not null
                         || dataArea.Endianness is not null);
             }
@@ -113,6 +113,12 @@ namespace SabreTools.Metadata.DatItems.Formats
                     && (!string.IsNullOrEmpty(part.Name)
                         || !string.IsNullOrEmpty(part.Interface));
             }
+        }
+
+        public long? Size
+        {
+            get => (_internal as Data.Models.Metadata.Rom)?.Size;
+            set => (_internal as Data.Models.Metadata.Rom)?.Size = value;
         }
 
         public bool? SoundOnly
@@ -193,10 +199,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             CopyMachineInformation(machine);
 
             // Process hash values
-            long? size = ReadLong(Data.Models.Metadata.Rom.SizeKey);
-            if (size is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SizeKey, size.ToString());
-
             // TODO: This should be normalized to CRC-16
             string? crc16 = ReadString(Data.Models.Metadata.Rom.CRC16Key);
             if (crc16 is not null)
@@ -253,10 +255,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             DupeType = 0x00;
 
             // Process hash values
-            long? size = ReadLong(Data.Models.Metadata.Rom.SizeKey);
-            if (size is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SizeKey, size.ToString());
-
             // TODO: This should be normalized to CRC-16
             string? crc16 = ReadString(Data.Models.Metadata.Rom.CRC16Key);
             if (crc16 is not null)

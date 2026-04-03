@@ -116,7 +116,7 @@ namespace SabreTools.Serialization.Writers
 
                 var rowBuilder = new StringBuilder();
 
-                int padding = 40 - (row.Size?.Length ?? 0);
+                int padding = 40 - (row.Size?.ToString()?.Length ?? 0);
                 if (padding < row.Name!.Length)
                     padding = row.Name.Length + 2;
 

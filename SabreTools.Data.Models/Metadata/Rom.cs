@@ -31,6 +31,8 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? Optional { get; set; }
 
+        public long? Size { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? SoundOnly { get; set; }
 
@@ -222,9 +224,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string SHA512Key = "sha512";
-
-        /// <remarks>long</remarks>
-        public const string SizeKey = "size";
 
         /// <remarks>string; ArchiveDotOrg.File</remarks>
         public const string SourceKey = "source";

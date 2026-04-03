@@ -199,6 +199,7 @@ namespace SabreTools.Data.Extensions
             else if (self is DataArea selfDataArea && clone is DataArea cloneDataArea)
             {
                 cloneDataArea.Endianness = selfDataArea.Endianness;
+                cloneDataArea.Size = selfDataArea.Size;
             }
             else if (self is Device selfDevice && clone is Device cloneDevice)
             {
@@ -345,6 +346,7 @@ namespace SabreTools.Data.Extensions
                 cloneRom.MIA = selfRom.MIA;
                 cloneRom.OpenMSXMediaType = selfRom.OpenMSXMediaType;
                 cloneRom.Optional = selfRom.Optional;
+                cloneRom.Size = selfRom.Size;
                 cloneRom.SoundOnly = selfRom.SoundOnly;
                 cloneRom.Status = selfRom.Status;
                 cloneRom.Value = selfRom.Value;
@@ -1037,10 +1039,10 @@ namespace SabreTools.Data.Extensions
             if (self is null || other is null)
                 return;
 
-            long? selfSize = self.ReadLong(Rom.SizeKey);
-            long? otherSize = other.ReadLong(Rom.SizeKey);
+            long? selfSize = self.Size;
+            long? otherSize = other.Size;
             if (selfSize is null && otherSize is not null)
-                self[Rom.SizeKey] = otherSize;
+                self.Size = otherSize;
 
             string? selfCrc16 = self.ReadString(Rom.CRC16Key);
             string? otherCrc16 = other.ReadString(Rom.CRC16Key);

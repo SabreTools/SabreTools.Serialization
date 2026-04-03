@@ -90,7 +90,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.RomName,
                 [Data.Models.Metadata.Rom.CRCKey] = item.RomCRC,
-                [Data.Models.Metadata.Rom.SizeKey] = item.RomSize,
+                Size = item.RomSize,
                 [Data.Models.Metadata.Rom.MergeKey] = item.MergeName,
             };
             return rom;

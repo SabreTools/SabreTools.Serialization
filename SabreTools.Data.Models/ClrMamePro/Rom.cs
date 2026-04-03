@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.ClrMamePro
 
         /// <remarks>size, Numeric</remarks>
         [Required]
-        public string? Size { get; set; }
+        public long? Size { get; set; }
 
         /// <remarks>crc</remarks>
         public string? CRC { get; set; }

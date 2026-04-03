@@ -360,7 +360,7 @@ namespace SabreTools.Metadata.DatFiles
                                     aggregateDataArea = [];
                                     aggregateDataArea.Endianness = dataArea.Endianness;
                                     aggregateDataArea.Name = dataArea.Name;
-                                    aggregateDataArea[Data.Models.Metadata.DataArea.SizeKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.SizeKey);
+                                    aggregateDataArea.Size = dataArea.Size;
                                     aggregateDataArea[Data.Models.Metadata.DataArea.WidthKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.WidthKey);
                                 }
 
@@ -786,7 +786,7 @@ namespace SabreTools.Metadata.DatFiles
                                     aggregateDataArea = [];
                                     aggregateDataArea.Endianness = dataArea.Endianness;
                                     aggregateDataArea.Name = dataArea.Name;
-                                    aggregateDataArea[Data.Models.Metadata.DataArea.SizeKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.SizeKey);
+                                    aggregateDataArea.Size = dataArea.Size;
                                     aggregateDataArea[Data.Models.Metadata.DataArea.WidthKey] = dataArea.ReadString(Data.Models.Metadata.DataArea.WidthKey);
                                 }
 

@@ -127,7 +127,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Size),
                 Data.Models.Metadata.Rom.SHA1Key,
             ]));
         }
@@ -288,7 +288,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Size),
                 Data.Models.Metadata.Rom.CRCKey,
             ]));
         }
@@ -741,7 +741,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Size),
                 Data.Models.Metadata.Rom.CRCKey,
                 Data.Models.Metadata.Rom.SHA1Key,
             ]));
@@ -806,7 +806,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Size),
                 Data.Models.Metadata.Rom.SHA1Key,
             ]));
         }
@@ -1123,7 +1123,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Size),
                 Data.Models.Metadata.Rom.SHA1Key,
             ]));
         }
@@ -1276,7 +1276,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Size),
                 Data.Models.Metadata.Rom.CRCKey,
             ]));
         }
@@ -1336,7 +1336,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
                 Data.Models.Metadata.Rom.CRCKey,
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Size),
             ]));
         }
 
@@ -1421,7 +1421,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Size),
                 Data.Models.Metadata.Rom.SHA1Key,
             ]));
         }
@@ -1479,7 +1479,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Size),
                 Data.Models.Metadata.Rom.SHA1Key,
             ]));
         }
@@ -1537,7 +1537,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Size),
                 Data.Models.Metadata.Rom.SHA1Key,
             ]));
         }
@@ -1623,7 +1623,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 nameof(Data.Models.Metadata.Part.Name),
                 nameof(Data.Models.Metadata.Part.Interface),
                 nameof(Data.Models.Metadata.DataArea.Name),
-                Data.Models.Metadata.DataArea.SizeKey,
+                nameof(Data.Models.Metadata.DataArea.Size),
             ]));
         }
 

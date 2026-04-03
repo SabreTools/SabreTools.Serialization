@@ -639,7 +639,7 @@ namespace SabreTools.Metadata.DatFiles
                 sha256 = rom.ReadString(Data.Models.Metadata.Rom.SHA256Key) ?? string.Empty;
                 sha384 = rom.ReadString(Data.Models.Metadata.Rom.SHA384Key) ?? string.Empty;
                 sha512 = rom.ReadString(Data.Models.Metadata.Rom.SHA512Key) ?? string.Empty;
-                size = rom.ReadLong(Data.Models.Metadata.Rom.SizeKey).ToString() ?? string.Empty;
+                size = rom.Size.ToString() ?? string.Empty;
                 spamsum = rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey) ?? string.Empty;
             }
 
@@ -681,7 +681,7 @@ namespace SabreTools.Metadata.DatFiles
                 return item;
 
             // If the item has a size
-            if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is not null)
+            if (rom.Size is not null)
                 return rom;
 
             // If the item CRC isn't "null"
@@ -690,7 +690,7 @@ namespace SabreTools.Metadata.DatFiles
 
             // If the Rom has "null" characteristics, ensure all fields
             rom.Name = rom.Name == "null" ? "-" : rom.Name;
-            rom.Write<string?>(Data.Models.Metadata.Rom.SizeKey, "0");
+            rom.Size = 0;
             rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key,
                 rom.ReadString(Data.Models.Metadata.Rom.CRC16Key) == "null" ? HashType.CRC16.ZeroString : null);
             rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey,
@@ -999,7 +999,7 @@ namespace SabreTools.Metadata.DatFiles
             if (ignoreBlanks && datItem is Rom rom)
             {
                 // If we have a 0-size or blank rom, then we ignore
-                long? size = rom.ReadLong(Data.Models.Metadata.Rom.SizeKey);
+                long? size = rom.Size;
                 if (size == 0 || size is null)
                 {
                     string itemString = JsonConvert.SerializeObject(datItem, Formatting.None);

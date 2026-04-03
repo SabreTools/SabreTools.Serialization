@@ -300,7 +300,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var rom = new Rom();
 
             rom.Status = ItemStatus.Good;
-            rom.Write<long>(Data.Models.Metadata.Rom.SizeKey, 1);
+            rom.Size = 1;
             rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key, HashType.CRC16.ZeroString);
             rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
             rom.Write<string?>(Data.Models.Metadata.Rom.CRC64Key, HashType.CRC64.ZeroString);

@@ -187,14 +187,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (!rom.DataAreaSpecified)
                     {
                         missingFields.Add(nameof(Data.Models.Metadata.DataArea.Name));
-                        missingFields.Add(Data.Models.Metadata.DataArea.SizeKey);
+                        missingFields.Add(nameof(Data.Models.Metadata.DataArea.Size));
                     }
                     else
                     {
                         if (string.IsNullOrEmpty(rom.Read<DataArea?>(Rom.DataAreaKey)!.Name))
                             missingFields.Add(nameof(Data.Models.Metadata.DataArea.Name));
-                        if (rom.Read<DataArea?>(Rom.DataAreaKey)!.ReadLong(Data.Models.Metadata.DataArea.SizeKey) is null)
-                            missingFields.Add(Data.Models.Metadata.DataArea.SizeKey);
+                        if (rom.Read<DataArea?>(Rom.DataAreaKey)!.Size is null)
+                            missingFields.Add(nameof(Data.Models.Metadata.DataArea.Size));
                     }
 
                     break;

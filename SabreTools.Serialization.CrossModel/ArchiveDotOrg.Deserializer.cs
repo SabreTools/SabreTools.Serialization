@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.CrossModel
                 Source = item.ReadString(Data.Models.Metadata.Rom.SourceKey),
                 BitTorrentMagnetHash = item.ReadString(Data.Models.Metadata.Rom.BitTorrentMagnetHashKey),
                 LastModifiedTime = item.ReadString(Data.Models.Metadata.Rom.LastModifiedTimeKey),
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                Size = item.Size?.ToString(),
                 MD5 = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
                 CRC32 = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),

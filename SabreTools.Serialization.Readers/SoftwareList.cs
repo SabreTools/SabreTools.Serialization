@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.SoftwareList;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -125,7 +126,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new DataArea();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Size = reader.GetAttribute("size");
+            obj.Size = NumberHelper.ConvertToInt64(reader.GetAttribute("size"));
             obj.Width = reader.GetAttribute("width");
             obj.Endianness = reader.GetAttribute("endianness").AsEndianness();
 
@@ -413,7 +414,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new Rom();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Size = reader.GetAttribute("size");
+            obj.Size = NumberHelper.ConvertToInt64(reader.GetAttribute("size"));
             obj.Length = reader.GetAttribute("length");
             obj.CRC = reader.GetAttribute("crc");
             obj.SHA1 = reader.GetAttribute("sha1");

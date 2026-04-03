@@ -225,7 +225,7 @@ namespace SabreTools.Metadata.DatFiles
             }
             else if (item is Rom rom)
             {
-                long? size = rom.ReadLong(Data.Models.Metadata.Rom.SizeKey);
+                long? size = rom.Size;
 
                 // If we have the case where there is SHA-1 and nothing else, we don't fill in any other part of the data
                 if (size is null && !string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
@@ -238,7 +238,7 @@ namespace SabreTools.Metadata.DatFiles
                 else if ((size == 0 || size is null)
                     && (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)) || rom.HasZeroHash()))
                 {
-                    rom.Write<string?>(Data.Models.Metadata.Rom.SizeKey, "0");
+                    rom.Size = 0;
                     rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key, null); // HashType.CRC16.ZeroString
                     rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
                     rom.Write<string?>(Data.Models.Metadata.Rom.CRC64Key, null); // HashType.CRC64.ZeroString

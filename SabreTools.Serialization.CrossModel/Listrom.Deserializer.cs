@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.CrossModel
             var row = new Row
             {
                 Name = item.Name,
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                Size = item.Size,
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
             };

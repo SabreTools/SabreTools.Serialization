@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.Readers.Test
             var file = new Data.Models.DosCenter.File
             {
                 Name = "name",
-                Size = "XXXXXX",
+                Size = 12345L,
                 CRC = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Date = "XXXXXX XXXXXX",
@@ -167,7 +167,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(rom);
             Assert.Equal("name", rom.Name);
-            Assert.Equal("XXXXXX", rom.Size);
+            Assert.Equal(12345L, rom.Size);
             Assert.Equal("XXXXXX", rom.CRC);
             Assert.Equal("XXXXXX", rom.SHA1);
             Assert.Equal("XXXXXX XXXXXX", rom.Date);

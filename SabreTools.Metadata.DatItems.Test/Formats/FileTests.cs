@@ -36,7 +36,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom actual = file.ConvertToRom();
 
             Assert.Equal("XXXXXX.XXXXXX", actual.GetName());
-            Assert.Equal(12345, actual.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345, actual.Size);
             Assert.Equal("deadbeef", actual.ReadString(Data.Models.Metadata.Rom.CRCKey));
             Assert.Equal("000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
             Assert.Equal("00000000000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));

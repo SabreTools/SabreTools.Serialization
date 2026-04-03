@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.RomCenter;
+using SabreTools.Text.Extensions;
 using SabreTools.Text.INI;
 
 #pragma warning disable CA1847 // Use char literal for a single character lookup
@@ -166,7 +167,7 @@ namespace SabreTools.Serialization.Readers
                             GameDescription = splitLine[4],
                             RomName = splitLine[5],
                             RomCRC = splitLine[6],
-                            RomSize = splitLine[7],
+                            RomSize = NumberHelper.ConvertToInt64(splitLine[7]),
                             RomOf = splitLine[8],
                             MergeName = splitLine[9],
                             // EMPTY = splitLine[10]

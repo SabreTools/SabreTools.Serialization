@@ -270,7 +270,7 @@ namespace SabreTools.Metadata.Test
             {
                 Status = ItemStatus.Nodump,
                 Name = "name",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -289,7 +289,7 @@ namespace SabreTools.Metadata.Test
             {
                 Status = ItemStatus.Nodump,
                 Name = "name",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -315,7 +315,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "name",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = "XXXXXX",
@@ -333,7 +333,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "name",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = string.Empty,
@@ -376,7 +376,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -402,7 +402,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -445,7 +445,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -463,7 +463,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -489,7 +489,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = string.Empty,
@@ -507,7 +507,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -533,7 +533,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = "XXXXXX",
@@ -551,7 +551,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -577,7 +577,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -595,7 +595,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -621,7 +621,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -639,7 +639,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -665,7 +665,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -683,7 +683,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -709,7 +709,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -727,7 +727,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -753,7 +753,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -771,7 +771,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -797,7 +797,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -815,7 +815,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -841,7 +841,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -859,7 +859,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -885,7 +885,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -903,7 +903,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -929,7 +929,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -947,7 +947,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -973,7 +973,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
                 [Rom.CRC64Key] = string.Empty,
@@ -991,7 +991,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -1017,7 +1017,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 Name = "XXXXXX1",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",
@@ -1035,7 +1035,7 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 Name = "XXXXXX2",
-                [Rom.SizeKey] = 12345,
+                Size = 12345,
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
                 [Rom.CRC64Key] = "XXXXXX",

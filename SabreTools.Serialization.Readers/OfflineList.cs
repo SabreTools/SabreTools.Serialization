@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.OfflineList;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -416,7 +417,7 @@ namespace SabreTools.Serialization.Readers
                         if (obj.RomSize is not null && Debug)
                             Console.WriteLine($"'{reader.Name}' element already found, overwriting");
 
-                        obj.RomSize = reader.ReadElementContentAsString();
+                        obj.RomSize = NumberHelper.ConvertToInt64(reader.ReadElementContentAsString());
                         break;
                     case "publisher":
                         if (obj.Publisher is not null && Debug)

@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.CrossModel
                     = Array.ConvertAll(item.Files.RomCRC, romCRC =>
                         {
                             var rom = ConvertToInternalModel(romCRC);
-                            rom[Data.Models.Metadata.Rom.SizeKey] = item.RomSize;
+                            rom.Size = item.RomSize;
                             return rom;
                         });
             }

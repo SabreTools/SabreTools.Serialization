@@ -301,7 +301,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Rom
             {
                 Name = item.Name,
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                Size = item.Size,
                 CRC16 = item.ReadString(Data.Models.Metadata.Rom.CRC16Key),
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 CRC64 = item.ReadString(Data.Models.Metadata.Rom.CRC64Key),

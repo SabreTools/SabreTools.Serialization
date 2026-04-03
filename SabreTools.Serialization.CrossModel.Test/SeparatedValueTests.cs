@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 GameDescription = "description",
                 Type = "rom",
                 RomName = "XXXXXX",
-                Size = "XXXXXX",
+                Size = 12345L,
                 CRC = "XXXXXX",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -168,7 +168,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("rom", row.Type);
             Assert.Equal("XXXXXX", row.RomName);
             Assert.Null(row.DiskName);
-            Assert.Equal("XXXXXX", row.Size);
+            Assert.Equal(12345L, row.Size);
             Assert.Equal("XXXXXX", row.CRC);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.SHA1);

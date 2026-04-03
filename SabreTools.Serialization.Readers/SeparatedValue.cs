@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.SeparatedValue;
+using SabreTools.Text.Extensions;
 using SabreTools.Text.SeparatedValue;
 
 #pragma warning disable CA1822 // Mark members as static
@@ -122,7 +123,7 @@ namespace SabreTools.Serialization.Readers
                             Type = reader.Line[5],
                             RomName = reader.Line[6],
                             DiskName = reader.Line[7],
-                            Size = reader.Line[8],
+                            Size = NumberHelper.ConvertToInt64(reader.Line[8]),
                             CRC = reader.Line[9],
                             MD5 = reader.Line[10],
                             SHA1 = reader.Line[11],
@@ -142,7 +143,7 @@ namespace SabreTools.Serialization.Readers
                             Type = reader.Line[5],
                             RomName = reader.Line[6],
                             DiskName = reader.Line[7],
-                            Size = reader.Line[8],
+                            Size = NumberHelper.ConvertToInt64(reader.Line[8]),
                             CRC = reader.Line[9],
                             MD5 = reader.Line[10],
                             SHA1 = reader.Line[11],

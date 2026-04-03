@@ -542,7 +542,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Endianness = Data.Models.Metadata.Endianness.Big,
                 Name = "name",
                 [Data.Models.Metadata.DataArea.RomKey] = new Data.Models.Metadata.Rom[] { [] },
-                [Data.Models.Metadata.DataArea.SizeKey] = 12345L,
+                Size = 12345L,
                 [Data.Models.Metadata.DataArea.WidthKey] = 64,
             };
         }
@@ -838,7 +838,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Rom.SHA256Key] = HashType.SHA256.ZeroString,
                 [Data.Models.Metadata.Rom.SHA384Key] = HashType.SHA384.ZeroString,
                 [Data.Models.Metadata.Rom.SHA512Key] = HashType.SHA512.ZeroString,
-                [Data.Models.Metadata.Rom.SizeKey] = 12345L,
+                Size = 12345L,
                 SoundOnly = true,
                 [Data.Models.Metadata.Rom.SourceKey] = "source",
                 [Data.Models.Metadata.Rom.SpamSumKey] = HashType.SpamSum.ZeroString,
@@ -1253,7 +1253,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(dataArea);
             Assert.Equal(Data.Models.Metadata.Endianness.Big, dataArea.Endianness);
             Assert.Equal("name", dataArea.Name);
-            Assert.Equal(12345L, dataArea.ReadLong(Data.Models.Metadata.DataArea.SizeKey));
+            Assert.Equal(12345L, dataArea.Size);
             Assert.Equal(64, dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey));
         }
 
@@ -1558,7 +1558,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.SHA256.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA256Key));
             Assert.Equal(HashType.SHA384.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA384Key));
             Assert.Equal(HashType.SHA512.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA512Key));
-            Assert.Equal(12345L, rom.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(12345L, rom.Size);
             Assert.True(rom.SoundOnly);
             Assert.Equal("source", rom.ReadString(Data.Models.Metadata.Rom.SourceKey));
             Assert.Equal(HashType.SpamSum.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey));

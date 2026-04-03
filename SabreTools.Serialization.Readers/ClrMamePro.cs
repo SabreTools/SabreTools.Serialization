@@ -530,7 +530,7 @@ namespace SabreTools.Serialization.Readers
                         rom.Name = kvp.Value;
                         break;
                     case "size":
-                        rom.Size = kvp.Value;
+                        rom.Size = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "crc":
                         rom.CRC = kvp.Value;

@@ -606,7 +606,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.Rom.BiosKey] = item.Bios,
-                [Data.Models.Metadata.Rom.SizeKey] = item.Size,
+                Size = item.Size,
                 [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
                 [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
                 [Data.Models.Metadata.Rom.MergeKey] = item.Merge,
