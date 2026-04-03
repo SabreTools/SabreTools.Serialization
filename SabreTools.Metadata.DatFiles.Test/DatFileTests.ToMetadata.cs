@@ -1144,20 +1144,20 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataSerials(Data.Models.Metadata.Serials? serials)
         {
             Assert.NotNull(serials);
-            Assert.Equal("mediaserial1", serials.ReadString(Data.Models.Metadata.Serials.MediaSerial1Key));
-            Assert.Equal("mediaserial2", serials.ReadString(Data.Models.Metadata.Serials.MediaSerial2Key));
-            Assert.Equal("mediaserial3", serials.ReadString(Data.Models.Metadata.Serials.MediaSerial3Key));
-            Assert.Equal("pcbserial", serials.ReadString(Data.Models.Metadata.Serials.PCBSerialKey));
-            Assert.Equal("romchipserial1", serials.ReadString(Data.Models.Metadata.Serials.RomChipSerial1Key));
-            Assert.Equal("romchipserial2", serials.ReadString(Data.Models.Metadata.Serials.RomChipSerial2Key));
-            Assert.Equal("lockoutserial", serials.ReadString(Data.Models.Metadata.Serials.LockoutSerialKey));
-            Assert.Equal("savechipserial", serials.ReadString(Data.Models.Metadata.Serials.SaveChipSerialKey));
-            Assert.Equal("chipserial", serials.ReadString(Data.Models.Metadata.Serials.ChipSerialKey));
-            Assert.Equal("boxserial", serials.ReadString(Data.Models.Metadata.Serials.BoxSerialKey));
-            Assert.Equal("mediastamp", serials.ReadString(Data.Models.Metadata.Serials.MediaStampKey));
-            Assert.Equal("boxbarcode", serials.ReadString(Data.Models.Metadata.Serials.BoxBarcodeKey));
-            Assert.Equal("digitalserial1", serials.ReadString(Data.Models.Metadata.Serials.DigitalSerial1Key));
-            Assert.Equal("digitalserial2", serials.ReadString(Data.Models.Metadata.Serials.DigitalSerial2Key));
+            Assert.Equal("boxbarcode", serials.BoxBarcode);
+            Assert.Equal("boxserial", serials.BoxSerial);
+            Assert.Equal("chipserial", serials.ChipSerial);
+            Assert.Equal("digitalserial1", serials.DigitalSerial1);
+            Assert.Equal("digitalserial2", serials.DigitalSerial2);
+            Assert.Equal("lockoutserial", serials.LockoutSerial);
+            Assert.Equal("mediaserial1", serials.MediaSerial1);
+            Assert.Equal("mediaserial2", serials.MediaSerial2);
+            Assert.Equal("mediaserial3", serials.MediaSerial3);
+            Assert.Equal("mediastamp", serials.MediaStamp);
+            Assert.Equal("pcbserial", serials.PCBSerial);
+            Assert.Equal("romchipserial1", serials.RomChipSerial1);
+            Assert.Equal("romchipserial2", serials.RomChipSerial2);
+            Assert.Equal("savechipserial", serials.SaveChipSerial);
         }
 
         private static void ValidateMetadataSharedFeat(Data.Models.Metadata.SharedFeat? sharedFeat)

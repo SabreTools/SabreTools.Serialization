@@ -883,20 +883,20 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Serials
             {
-                [Data.Models.Metadata.Serials.MediaSerial1Key] = "mediaserial1",
-                [Data.Models.Metadata.Serials.MediaSerial2Key] = "mediaserial2",
-                [Data.Models.Metadata.Serials.MediaSerial3Key] = "mediaserial3",
-                [Data.Models.Metadata.Serials.PCBSerialKey] = "pcbserial",
-                [Data.Models.Metadata.Serials.RomChipSerial1Key] = "romchipserial1",
-                [Data.Models.Metadata.Serials.RomChipSerial2Key] = "romchipserial2",
-                [Data.Models.Metadata.Serials.LockoutSerialKey] = "lockoutserial",
-                [Data.Models.Metadata.Serials.SaveChipSerialKey] = "savechipserial",
-                [Data.Models.Metadata.Serials.ChipSerialKey] = "chipserial",
-                [Data.Models.Metadata.Serials.BoxSerialKey] = "boxserial",
-                [Data.Models.Metadata.Serials.MediaStampKey] = "mediastamp",
-                [Data.Models.Metadata.Serials.BoxBarcodeKey] = "boxbarcode",
-                [Data.Models.Metadata.Serials.DigitalSerial1Key] = "digitalserial1",
-                [Data.Models.Metadata.Serials.DigitalSerial2Key] = "digitalserial2",
+                BoxBarcode = "boxbarcode",
+                BoxSerial = "boxserial",
+                ChipSerial = "chipserial",
+                DigitalSerial1 = "digitalserial1",
+                DigitalSerial2 = "digitalserial2",
+                LockoutSerial = "lockoutserial",
+                MediaSerial1 = "mediaserial1",
+                MediaSerial2 = "mediaserial2",
+                MediaSerial3 = "mediaserial3",
+                MediaStamp = "mediastamp",
+                PCBSerial = "pcbserial",
+                RomChipSerial1 = "romchipserial1",
+                RomChipSerial2 = "romchipserial2",
+                SaveChipSerial = "savechipserial",
             };
         }
 
@@ -1583,6 +1583,25 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(sharedFeat);
             Assert.Equal("name", sharedFeat.Name);
             Assert.Equal("value", sharedFeat.Value);
+        }
+
+        private static void ValidateSerials(Serials? serials)
+        {
+            Assert.NotNull(serials);
+            Assert.Equal("boxbarcode", serials.BoxBarcode);
+            Assert.Equal("boxserial", serials.BoxSerial);
+            Assert.Equal("chipserial", serials.ChipSerial);
+            Assert.Equal("digitalserial1", serials.DigitalSerial1);
+            Assert.Equal("digitalserial2", serials.DigitalSerial2);
+            Assert.Equal("lockoutserial", serials.LockoutSerial);
+            Assert.Equal("mediaserial1", serials.MediaSerial1);
+            Assert.Equal("mediaserial2", serials.MediaSerial2);
+            Assert.Equal("mediaserial3", serials.MediaSerial3);
+            Assert.Equal("mediastamp", serials.MediaStamp);
+            Assert.Equal("pcbserial", serials.PCBSerial);
+            Assert.Equal("romchipserial1", serials.RomChipSerial1);
+            Assert.Equal("romchipserial2", serials.RomChipSerial2);
+            Assert.Equal("savechipserial", serials.SaveChipSerial);
         }
 
         private static void ValidateSlot(Slot? slot)

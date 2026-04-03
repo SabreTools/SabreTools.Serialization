@@ -824,6 +824,49 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Value;
                     return true;
 
+                case Serials item when fieldName == "boxbarcode":
+                    checkValue = item.BoxBarcode;
+                    return true;
+                case Serials item when fieldName == "boxserial":
+                    checkValue = item.BoxSerial;
+                    return true;
+                case Serials item when fieldName == "chipserial":
+                    checkValue = item.ChipSerial;
+                    return true;
+                case Serials item when fieldName == "digitalserial1":
+                    checkValue = item.DigitalSerial1;
+                    return true;
+                case Serials item when fieldName == "digitalserial2":
+                    checkValue = item.DigitalSerial2;
+                    return true;
+                case Serials item when fieldName == "lockoutserial":
+                    checkValue = item.LockoutSerial;
+                    return true;
+                case Serials item when fieldName == "mediaserial1":
+                    checkValue = item.MediaSerial1;
+                    return true;
+                case Serials item when fieldName == "mediaserial2":
+                    checkValue = item.MediaSerial2;
+                    return true;
+                case Serials item when fieldName == "mediaserial3":
+                    checkValue = item.MediaSerial3;
+                    return true;
+                case Serials item when fieldName == "mediastamp":
+                    checkValue = item.MediaStamp;
+                    return true;
+                case Serials item when fieldName == "pcbserial":
+                    checkValue = item.PCBSerial;
+                    return true;
+                case Serials item when fieldName == "romchipserial1":
+                    checkValue = item.RomChipSerial1;
+                    return true;
+                case Serials item when fieldName == "romchipserial2":
+                    checkValue = item.RomChipSerial2;
+                    return true;
+                case Serials item when fieldName == "savechipserial":
+                    checkValue = item.SaveChipSerial;
+                    return true;
+
                 case SharedFeat item when fieldName == "value":
                     checkValue = item.Value;
                     return true;

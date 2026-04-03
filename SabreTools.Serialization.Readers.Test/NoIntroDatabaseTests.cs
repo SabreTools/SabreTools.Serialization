@@ -168,20 +168,20 @@ namespace SabreTools.Serialization.Readers.Test
 
             var serials = new Data.Models.NoIntroDatabase.Serials
             {
-                MediaSerial1 = "XXXXXX",
-                MediaSerial2 = "XXXXXX",
-                MediaSerial3 = "XXXXXX",
-                PCBSerial = "XXXXXX",
-                RomChipSerial1 = "XXXXXX",
-                RomChipSerial2 = "XXXXXX",
-                LockoutSerial = "XXXXXX",
-                SaveChipSerial = "XXXXXX",
-                ChipSerial = "XXXXXX",
-                BoxSerial = "XXXXXX",
-                MediaStamp = "XXXXXX",
-                BoxBarcode = "XXXXXX",
-                DigitalSerial1 = "XXXXXX",
-                DigitalSerial2 = "XXXXXX",
+                BoxBarcode = "boxbarcode",
+                BoxSerial = "boxserial",
+                ChipSerial = "chipserial",
+                DigitalSerial1 = "digitalserial1",
+                DigitalSerial2 = "digitalserial2",
+                LockoutSerial = "lockoutserial",
+                MediaSerial1 = "mediaserial1",
+                MediaSerial2 = "mediaserial2",
+                MediaSerial3 = "mediaserial3",
+                MediaStamp = "mediastamp",
+                PCBSerial = "pcbserial",
+                RomChipSerial1 = "romchipserial1",
+                RomChipSerial2 = "romchipserial2",
+                SaveChipSerial = "savechipserial",
             };
 
             var file = new Data.Models.NoIntroDatabase.File
@@ -388,20 +388,20 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.NoIntroDatabase.Serials? serials)
         {
             Assert.NotNull(serials);
-            Assert.Equal("XXXXXX", serials.MediaSerial1);
-            Assert.Equal("XXXXXX", serials.MediaSerial2);
-            Assert.Equal("XXXXXX", serials.MediaSerial3);
-            Assert.Equal("XXXXXX", serials.PCBSerial);
-            Assert.Equal("XXXXXX", serials.RomChipSerial1);
-            Assert.Equal("XXXXXX", serials.RomChipSerial2);
-            Assert.Equal("XXXXXX", serials.LockoutSerial);
-            Assert.Equal("XXXXXX", serials.SaveChipSerial);
-            Assert.Equal("XXXXXX", serials.ChipSerial);
-            Assert.Equal("XXXXXX", serials.BoxSerial);
-            Assert.Equal("XXXXXX", serials.MediaStamp);
-            Assert.Equal("XXXXXX", serials.BoxBarcode);
-            Assert.Equal("XXXXXX", serials.DigitalSerial1);
-            Assert.Equal("XXXXXX", serials.DigitalSerial2);
+            Assert.Equal("boxbarcode", serials.BoxBarcode);
+            Assert.Equal("boxserial", serials.BoxSerial);
+            Assert.Equal("chipserial", serials.ChipSerial);
+            Assert.Equal("digitalserial1", serials.DigitalSerial1);
+            Assert.Equal("digitalserial2", serials.DigitalSerial2);
+            Assert.Equal("lockoutserial", serials.LockoutSerial);
+            Assert.Equal("mediaserial1", serials.MediaSerial1);
+            Assert.Equal("mediaserial2", serials.MediaSerial2);
+            Assert.Equal("mediaserial3", serials.MediaSerial3);
+            Assert.Equal("mediastamp", serials.MediaStamp);
+            Assert.Equal("pcbserial", serials.PCBSerial);
+            Assert.Equal("romchipserial1", serials.RomChipSerial1);
+            Assert.Equal("romchipserial2", serials.RomChipSerial2);
+            Assert.Equal("savechipserial", serials.SaveChipSerial);
         }
 
         /// <summary>

@@ -320,6 +320,11 @@ namespace SabreTools.Metadata
             {
                 // Intentionally skipped here
             }
+            else if (self is Serials selfSerials && other is Serials otherSerials)
+            {
+                if (!selfSerials.Equals(otherSerials))
+                    return false;
+            }
             else if (self is SharedFeat selfSharedFeat && other is SharedFeat otherSharedFeat)
             {
                 if (!selfSharedFeat.Equals(otherSharedFeat))
