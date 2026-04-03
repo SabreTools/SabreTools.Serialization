@@ -576,8 +576,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Display
             {
-                AspectX = 12345,
-                AspectY = 12345,
+                AspectX = null, // Null to ensure it is not Video
+                AspectY = null, // Null to ensure it is not Video
                 FlipX = true,
                 HBEnd = 12345,
                 HBStart = 12345,
