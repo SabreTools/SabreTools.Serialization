@@ -76,8 +76,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case Release release:
                     if (string.IsNullOrEmpty(release.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Release.Name));
-                    if (string.IsNullOrEmpty(release.ReadString(Data.Models.Metadata.Release.RegionKey)))
-                        missingFields.Add(Data.Models.Metadata.Release.RegionKey);
+                    if (string.IsNullOrEmpty(release.Region))
+                        missingFields.Add(nameof(Data.Models.Metadata.Release.Region));
                     break;
 
                 case BiosSet biosset:

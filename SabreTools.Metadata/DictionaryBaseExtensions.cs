@@ -311,7 +311,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Release selfRelease && other is Release otherRelease)
             {
-                if (selfRelease.Default != otherRelease.Default)
+                if (!selfRelease.Equals(otherRelease))
                     return false;
             }
             else if (self is Rom selfRom && other is Rom otherRom)

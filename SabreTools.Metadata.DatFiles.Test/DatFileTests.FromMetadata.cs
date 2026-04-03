@@ -737,11 +737,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Release
             {
-                [Data.Models.Metadata.Release.DateKey] = "date",
+                Date = "date",
                 Default = true,
-                [Data.Models.Metadata.Release.LanguageKey] = "language",
+                Language = "language",
                 Name = "name",
-                [Data.Models.Metadata.Release.RegionKey] = "region",
+                Region = "region",
             };
         }
 
@@ -1484,11 +1484,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateRelease(Release? release)
         {
             Assert.NotNull(release);
-            Assert.Equal("date", release.ReadString(Data.Models.Metadata.Release.DateKey));
+            Assert.Equal("date", release.Date);
             Assert.True(release.Default);
-            Assert.Equal("language", release.ReadString(Data.Models.Metadata.Release.LanguageKey));
+            Assert.Equal("language", release.Language);
             Assert.Equal("name", release.Name);
-            Assert.Equal("region", release.ReadString(Data.Models.Metadata.Release.RegionKey));
+            Assert.Equal("region", release.Region);
         }
 
         private static void ValidateRom(Rom? rom)

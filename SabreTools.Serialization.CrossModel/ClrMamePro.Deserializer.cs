@@ -263,9 +263,9 @@ namespace SabreTools.Serialization.CrossModel
             var release = new Release
             {
                 Name = item.Name,
-                Region = item.ReadString(Data.Models.Metadata.Release.RegionKey),
-                Language = item.ReadString(Data.Models.Metadata.Release.LanguageKey),
-                Date = item.ReadString(Data.Models.Metadata.Release.DateKey),
+                Region = item.Region,
+                Language = item.Language,
+                Date = item.Date,
                 Default = item.Default,
             };
             return release;

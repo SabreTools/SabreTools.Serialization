@@ -12,6 +12,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Properties
 
+        public string? Date
+        {
+            get => (_internal as Data.Models.Metadata.Release)?.Date;
+            set => (_internal as Data.Models.Metadata.Release)?.Date = value;
+        }
+
         public bool? Default
         {
             get => (_internal as Data.Models.Metadata.Release)?.Default;
@@ -22,10 +28,22 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.Release;
 
+        public string? Language
+        {
+            get => (_internal as Data.Models.Metadata.Release)?.Language;
+            set => (_internal as Data.Models.Metadata.Release)?.Language = value;
+        }
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.Release)?.Name;
             set => (_internal as Data.Models.Metadata.Release)?.Name = value;
+        }
+
+        public string? Region
+        {
+            get => (_internal as Data.Models.Metadata.Release)?.Region;
+            set => (_internal as Data.Models.Metadata.Release)?.Region = value;
         }
 
         #endregion

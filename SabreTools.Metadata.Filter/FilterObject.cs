@@ -771,8 +771,17 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Default.FromYesNo();
                     return true;
 
+                case Release item when fieldName == "date":
+                    checkValue = item.Date;
+                    return true;
                 case Release item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
+                    return true;
+                case Release item when fieldName == "language":
+                    checkValue = item.Language;
+                    return true;
+                case Release item when fieldName == "region":
+                    checkValue = item.Region;
                     return true;
 
                 case Rom item when fieldName == "dispose":

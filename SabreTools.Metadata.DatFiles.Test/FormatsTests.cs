@@ -97,7 +97,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Release.Name),
-                Data.Models.Metadata.Release.RegionKey,
+                nameof(Data.Models.Metadata.Release.Region),
             ]));
         }
 
@@ -1093,7 +1093,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Release.Name),
-                Data.Models.Metadata.Release.RegionKey,
+                nameof(Data.Models.Metadata.Release.Region),
             ]));
         }
 

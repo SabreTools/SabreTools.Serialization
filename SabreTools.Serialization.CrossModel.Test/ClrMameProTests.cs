@@ -81,9 +81,9 @@ namespace SabreTools.Serialization.CrossModel.Test
             var release = new Data.Models.ClrMamePro.Release
             {
                 Name = "name",
-                Region = "XXXXXX",
-                Language = "XXXXXX",
-                Date = "XXXXXX",
+                Region = "region",
+                Language = "language",
+                Date = "date",
                 Default = true,
             };
 
@@ -336,9 +336,9 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(release);
             Assert.Equal("name", release.Name);
-            Assert.Equal("XXXXXX", release.Region);
-            Assert.Equal("XXXXXX", release.Language);
-            Assert.Equal("XXXXXX", release.Date);
+            Assert.Equal("region", release.Region);
+            Assert.Equal("language", release.Language);
+            Assert.Equal("date", release.Date);
             Assert.Equal(true, release.Default);
         }
 
