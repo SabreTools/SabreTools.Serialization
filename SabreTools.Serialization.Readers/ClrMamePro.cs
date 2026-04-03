@@ -806,7 +806,7 @@ namespace SabreTools.Serialization.Readers
                         video.Screen = kvp.Value.AsDisplayType();
                         break;
                     case "orientation":
-                        video.Orientation = kvp.Value;
+                        video.Orientation = kvp.Value.AsRotation();
                         break;
                     case "x":
                         video.X = NumberHelper.ConvertToInt64(kvp.Value);

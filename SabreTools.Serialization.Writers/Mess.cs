@@ -389,7 +389,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteOptionalAttributeString("tag", obj.Tag);
             writer.WriteRequiredAttributeString("type", obj.Type?.AsStringValue());
-            writer.WriteOptionalAttributeString("rotate", obj.Rotate);
+            writer.WriteOptionalAttributeString("rotate", obj.Rotate?.AsStringValue(useSecond: false));
             writer.WriteOptionalAttributeString("flipx", obj.FlipX.FromYesNo());
             writer.WriteOptionalAttributeString("width", obj.Width?.ToString());
             writer.WriteOptionalAttributeString("height", obj.Height?.ToString());
@@ -836,7 +836,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("video");
 
             writer.WriteRequiredAttributeString("screen", obj.Screen?.AsStringValue());
-            writer.WriteRequiredAttributeString("orientation", obj.Orientation);
+            writer.WriteRequiredAttributeString("orientation", obj.Orientation?.AsStringValue(useSecond: true));
             writer.WriteOptionalAttributeString("width", obj.Width.ToString());
             writer.WriteOptionalAttributeString("height", obj.Height.ToString());
             writer.WriteOptionalAttributeString("aspectx", obj.AspectX.ToString());

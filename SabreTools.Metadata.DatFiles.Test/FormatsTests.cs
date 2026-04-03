@@ -201,7 +201,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Display.DisplayType),
-                Data.Models.Metadata.Display.RotateKey,
+                nameof(Data.Models.Metadata.Display.Rotate),
             ]));
         }
 

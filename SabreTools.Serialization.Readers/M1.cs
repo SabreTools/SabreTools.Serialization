@@ -574,7 +574,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Tag = reader.GetAttribute("tag");
             obj.Type = reader.GetAttribute("type").AsDisplayType();
-            obj.Rotate = reader.GetAttribute("rotate");
+            obj.Rotate = reader.GetAttribute("rotate").AsRotation();
             obj.FlipX = reader.GetAttribute("flipx").AsYesNo();
             obj.Width = NumberHelper.ConvertToInt64(reader.GetAttribute("width"));
             obj.Height = NumberHelper.ConvertToInt64(reader.GetAttribute("height"));
@@ -1174,7 +1174,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new Video();
 
             obj.Screen = reader.GetAttribute("screen").AsDisplayType();
-            obj.Orientation = reader.GetAttribute("orientation");
+            obj.Orientation = reader.GetAttribute("orientation").AsRotation();
             obj.Width = NumberHelper.ConvertToInt64(reader.GetAttribute("width"));
             obj.Height = NumberHelper.ConvertToInt64(reader.GetAttribute("height"));
             obj.AspectX = NumberHelper.ConvertToInt64(reader.GetAttribute("aspectx"));

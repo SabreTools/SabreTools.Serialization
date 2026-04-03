@@ -463,7 +463,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Tag = item.Tag,
                 DisplayType = item.Type,
-                [Data.Models.Metadata.Display.RotateKey] = item.Rotate,
+                Rotate = item.Rotate,
                 FlipX = item.FlipX,
                 Width = item.Width,
                 Height = item.Height,
@@ -700,7 +700,7 @@ namespace SabreTools.Serialization.CrossModel
             var video = new Data.Models.Metadata.Video
             {
                 Screen = item.Screen,
-                [Data.Models.Metadata.Video.OrientationKey] = item.Orientation,
+                Orientation = item.Orientation,
                 Width = item.Width,
                 Height = item.Height,
                 AspectX = item.AspectX,

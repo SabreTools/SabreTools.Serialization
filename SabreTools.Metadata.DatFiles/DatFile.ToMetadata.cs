@@ -936,25 +936,11 @@ namespace SabreTools.Metadata.DatFiles
                     AspectX = displayItem.AspectX,
                     AspectY = displayItem.AspectY,
                     Height = displayItem.Height,
+                    Orientation = displayItem.Rotate,
                     Refresh = displayItem.Refresh,
                     Screen = displayItem.DisplayType,
                     Width = displayItem.Width,
                 };
-
-                switch (displayItem.ReadLong(Data.Models.Metadata.Display.RotateKey))
-                {
-                    case 0:
-                    case 180:
-                        videoItem[Data.Models.Metadata.Video.OrientationKey] = "horizontal";
-                        break;
-                    case 90:
-                    case 270:
-                        videoItem[Data.Models.Metadata.Video.OrientationKey] = "vertical";
-                        break;
-                    default:
-                        // This should never happen
-                        break;
-                }
 
                 EnsureMachineKey<Data.Models.Metadata.Video?>(machine, Data.Models.Metadata.Machine.VideoKey);
                 AppendToMachineKey(machine, Data.Models.Metadata.Machine.VideoKey, videoItem);

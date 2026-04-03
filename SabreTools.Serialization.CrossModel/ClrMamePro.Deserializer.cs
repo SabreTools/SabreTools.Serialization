@@ -341,7 +341,7 @@ namespace SabreTools.Serialization.CrossModel
             var video = new Video
             {
                 Screen = item.Screen,
-                Orientation = item.ReadString(Data.Models.Metadata.Video.OrientationKey),
+                Orientation = item.Orientation,
                 X = item.Width,
                 Y = item.Height,
                 AspectX = item.AspectX,

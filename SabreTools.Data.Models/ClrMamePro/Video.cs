@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.ClrMamePro
 
         /// <remarks>orientation, (vertical|horizontal)</remarks>
         [Required]
-        public string? Orientation { get; set; }
+        public Rotation? Orientation { get; set; }
 
         /// <remarks>x</remarks>
         public long? X { get; set; }

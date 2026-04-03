@@ -165,7 +165,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var video = new Data.Models.ClrMamePro.Video
             {
                 Screen = Data.Models.Metadata.DisplayType.Vector,
-                Orientation = "XXXXXX",
+                Orientation = Data.Models.Metadata.Rotation.East,
                 X = 12345,
                 Y = 12345,
                 AspectX = 12345,
@@ -452,7 +452,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(video);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, video.Screen);
-            Assert.Equal("XXXXXX", video.Orientation);
+            Assert.Equal(Data.Models.Metadata.Rotation.East, video.Orientation);
             Assert.Equal(12345, video.X);
             Assert.Equal(12345, video.Y);
             Assert.Equal(12345, video.AspectX);

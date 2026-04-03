@@ -163,31 +163,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Display selfDisplay && other is Display otherDisplay)
             {
-                if (selfDisplay.DisplayType != otherDisplay.DisplayType)
-                    return false;
-                if (selfDisplay.FlipX != otherDisplay.FlipX)
-                    return false;
-                if (selfDisplay.HBEnd != otherDisplay.HBEnd)
-                    return false;
-                if (selfDisplay.HBStart != otherDisplay.HBStart)
-                    return false;
-                if (selfDisplay.Height != otherDisplay.Height)
-                    return false;
-                if (selfDisplay.HTotal != otherDisplay.HTotal)
-                    return false;
-                if (selfDisplay.PixClock != otherDisplay.PixClock)
-                    return false;
-                if (selfDisplay.Refresh != otherDisplay.Refresh)
-                    return false;
-                if (selfDisplay.Tag != otherDisplay.Tag)
-                    return false;
-                if (selfDisplay.VBEnd != otherDisplay.VBEnd)
-                    return false;
-                if (selfDisplay.VBStart != otherDisplay.VBStart)
-                    return false;
-                if (selfDisplay.VTotal != otherDisplay.VTotal)
-                    return false;
-                if (selfDisplay.Width != otherDisplay.Width)
+                if (!selfDisplay.Equals(otherDisplay))
                     return false;
             }
             else if (self is Driver selfDriver && other is Driver otherDriver)
@@ -389,17 +365,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Video selfVideo && other is Video otherVideo)
             {
-                if (selfVideo.AspectX != otherVideo.AspectX)
-                    return false;
-                if (selfVideo.AspectY != otherVideo.AspectY)
-                    return false;
-                if (selfVideo.Height != otherVideo.Height)
-                    return false;
-                if (selfVideo.Refresh != otherVideo.Refresh)
-                    return false;
-                if (selfVideo.Screen != otherVideo.Screen)
-                    return false;
-                if (selfVideo.Width != otherVideo.Width)
+                if (!selfVideo.Equals(otherVideo))
                     return false;
             }
 

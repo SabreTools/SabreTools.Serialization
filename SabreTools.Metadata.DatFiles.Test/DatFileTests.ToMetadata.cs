@@ -876,7 +876,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345, display.HTotal);
             Assert.Equal(12345, display.PixClock);
             Assert.Equal(123.45, display.Refresh);
-            Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
+            Assert.Equal(Data.Models.Metadata.Rotation.East, display.Rotate);
             Assert.Equal("tag", display.Tag);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
             Assert.Equal(12345, display.VBEnd);
@@ -1259,7 +1259,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345, video.AspectX);
             Assert.Equal(12345, video.AspectY);
             Assert.Equal(12345, video.Height);
-            Assert.Equal("vertical", video.ReadString(Data.Models.Metadata.Video.OrientationKey));
+            Assert.Equal(Data.Models.Metadata.Rotation.East, video.Orientation);
             Assert.Equal(123.45, video.Refresh);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, video.Screen);
             Assert.Equal(12345, video.Width);

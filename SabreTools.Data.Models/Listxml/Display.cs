@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(0|90|180|270)</remarks>
         [XmlAttribute("rotate")]
-        public string? Rotate { get; set; }
+        public Rotation? Rotate { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("flipx")]

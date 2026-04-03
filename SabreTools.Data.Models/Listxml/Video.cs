@@ -15,7 +15,7 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>(vertical|horizontal)</remarks>
         [Required]
         [XmlAttribute("orientation")]
-        public string? Orientation { get; set; }
+        public Rotation? Orientation { get; set; }
 
         [XmlAttribute("width")]
         public long? Width { get; set; }

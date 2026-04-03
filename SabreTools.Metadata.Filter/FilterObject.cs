@@ -538,7 +538,10 @@ namespace SabreTools.Metadata.Filter
                 case Display item when fieldName == "refresh" || fieldName == "freq":
                     checkValue = item.Refresh?.ToString();
                     return true;
-                case Display item when fieldName == "type":
+                case Display item when fieldName == "rotate" || fieldName == "orientation":
+                    checkValue = item.Rotate?.AsStringValue();
+                    return true;
+                case Display item when fieldName == "type" || fieldName == "screen":
                     checkValue = item.DisplayType?.AsStringValue();
                     return true;
                 case Display item when fieldName == "tag":
@@ -832,10 +835,13 @@ namespace SabreTools.Metadata.Filter
                 case Video item when fieldName == "height" || fieldName == "y":
                     checkValue = item.Height?.ToString();
                     return true;
+                case Video item when fieldName == "orientation" || fieldName == "rotate":
+                    checkValue = item.Orientation?.AsStringValue();
+                    return true;
                 case Video item when fieldName == "refresh" || fieldName == "freq":
                     checkValue = item.Refresh?.ToString();
                     return true;
-                case Video item when fieldName == "screen":
+                case Video item when fieldName == "screen" || fieldName == "type":
                     checkValue = item.Screen?.AsStringValue();
                     return true;
                 case Video item when fieldName == "width" || fieldName == "x":

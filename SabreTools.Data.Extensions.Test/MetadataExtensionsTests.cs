@@ -1817,6 +1817,24 @@ namespace SabreTools.Data.Extensions.Test
 
         [Theory]
         [InlineData(null, null)]
+        [InlineData("0", Rotation.North)]
+        [InlineData("north", Rotation.North)]
+        [InlineData("vertical", Rotation.North)]
+        [InlineData("90", Rotation.East)]
+        [InlineData("east", Rotation.East)]
+        [InlineData("horizontal", Rotation.East)]
+        [InlineData("180", Rotation.South)]
+        [InlineData("south", Rotation.South)]
+        [InlineData("270", Rotation.West)]
+        [InlineData("west", Rotation.West)]
+        public void AsRotationTest(string? field, Rotation? expected)
+        {
+            Rotation? actual = field.AsRotation();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
         [InlineData("no", Runnable.No)]
         [InlineData("partial", Runnable.Partial)]
         [InlineData("yes", Runnable.Yes)]
@@ -2121,6 +2139,21 @@ namespace SabreTools.Data.Extensions.Test
         public void FromRelationTest(Relation field, string? expected)
         {
             string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(Rotation.North, true, "vertical")]
+        [InlineData(Rotation.North, false, "0")]
+        [InlineData(Rotation.East, true, "horizontal")]
+        [InlineData(Rotation.East, false, "90")]
+        [InlineData(Rotation.South, true, "vertical")]
+        [InlineData(Rotation.South, false, "180")]
+        [InlineData(Rotation.West, true, "horizontal")]
+        [InlineData(Rotation.West, false, "270")]
+        public void FromRotationTest(Rotation field, bool useSecond, string? expected)
+        {
+            string? actual = field.AsStringValue(useSecond);
             Assert.Equal(expected, actual);
         }
 

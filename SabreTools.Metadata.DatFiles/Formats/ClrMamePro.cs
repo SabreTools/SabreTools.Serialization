@@ -142,8 +142,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case Display display:
                     if (display.DisplayType is null)
                         missingFields.Add(nameof(Data.Models.Metadata.Display.DisplayType));
-                    if (display.ReadLong(Data.Models.Metadata.Display.RotateKey) is null)
-                        missingFields.Add(Data.Models.Metadata.Display.RotateKey);
+                    if (display.Rotate is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Display.Rotate));
                     break;
 
                 case Sound sound:

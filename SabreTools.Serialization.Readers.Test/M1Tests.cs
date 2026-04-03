@@ -185,7 +185,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Tag = "tag",
                 Type = Data.Models.Metadata.DisplayType.Vector,
-                Rotate = "XXXXXX",
+                Rotate = Data.Models.Metadata.Rotation.East,
                 FlipX = true,
                 Width = 12345,
                 Height = 12345,
@@ -202,7 +202,7 @@ namespace SabreTools.Serialization.Readers.Test
             var video = new Data.Models.Listxml.Video
             {
                 Screen = Data.Models.Metadata.DisplayType.Vector,
-                Orientation = "XXXXXX",
+                Orientation = Data.Models.Metadata.Rotation.East,
                 Width = 12345,
                 Height = 12345,
                 AspectX = 12345,
@@ -615,7 +615,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(display);
             Assert.Equal("tag", display.Tag);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.Type);
-            Assert.Equal("XXXXXX", display.Rotate);
+            Assert.Equal(Data.Models.Metadata.Rotation.East, display.Rotate);
             Assert.Equal(true, display.FlipX);
             Assert.Equal(12345, display.Width);
             Assert.Equal(12345, display.Height);
@@ -636,7 +636,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(video);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, video.Screen);
-            Assert.Equal("XXXXXX", video.Orientation);
+            Assert.Equal(Data.Models.Metadata.Rotation.East, video.Orientation);
             Assert.Equal(12345, video.Width);
             Assert.Equal(12345, video.Height);
             Assert.Equal(12345, video.AspectX);

@@ -496,6 +496,24 @@ namespace SabreTools.Data.Models.Metadata
     }
 
     /// <summary>
+    /// Determine display rotation
+    /// </summary>
+    public enum Rotation
+    {
+        /// <summary>0</summary>
+        North = 0,
+
+        /// <summary>90</summary>
+        East = 90,
+
+        /// <summary>180</summary>
+        South = 180,
+
+        /// <summary>270</summary>
+        West = 270,
+    }
+
+    /// <summary>
     /// Determine machine runnable status
     /// </summary>
     public enum Runnable

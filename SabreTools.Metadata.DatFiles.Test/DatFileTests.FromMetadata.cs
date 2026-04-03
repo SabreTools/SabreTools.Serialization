@@ -585,7 +585,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 HTotal = 12345,
                 PixClock = 12345,
                 Refresh = 123.45,
-                [Data.Models.Metadata.Display.RotateKey] = 90,
+                Rotate = Data.Models.Metadata.Rotation.East,
                 Tag = "tag",
                 DisplayType = Data.Models.Metadata.DisplayType.Vector,
                 VBEnd = 12345,
@@ -1026,7 +1026,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 AspectX = 12345,
                 AspectY = 12345,
                 Height = 12345,
-                [Data.Models.Metadata.Video.OrientationKey] = "vertical",
+                Orientation = Data.Models.Metadata.Rotation.East,
                 Refresh = 123.45,
                 Screen = Data.Models.Metadata.DisplayType.Vector,
                 Width = 12345,
@@ -1361,7 +1361,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345, display.HTotal);
             Assert.Equal(12345, display.PixClock);
             Assert.Equal(123.45, display.Refresh);
-            Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
+            Assert.Equal(Data.Models.Metadata.Rotation.East, display.Rotate);
             Assert.Equal("tag", display.Tag);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
             Assert.Equal(12345, display.VBEnd);
@@ -1671,7 +1671,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345, display.Height);
             Assert.Equal(123.45, display.Refresh);
             Assert.Equal(12345, display.Width);
-            Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
+            Assert.Equal(Data.Models.Metadata.Rotation.East, display.Rotate);
         }
 
         #endregion

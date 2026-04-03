@@ -1,10 +1,11 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("video"), XmlRoot("video")]
-    public class Video : DatItem
+    public class Video : DatItem, ICloneable, IEquatable<Display>, IEquatable<Video>
     {
         #region Properties
 
@@ -14,6 +15,9 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>Originally "y"</remarks>
         public long? Height { get; set; }
+
+        /// <remarks>(vertical|horizontal)</remarks>
+        public Rotation? Orientation { get; set; }
 
         /// <remarks>Originally "freq"</remarks>
         public double? Refresh { get; set; }
@@ -26,13 +30,86 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
-        #region Keys
-
-        /// <remarks>(vertical|horizontal)</remarks>
-        public const string OrientationKey = "orientation";
-
-        #endregion
-
         public Video() => ItemType = ItemType.Video;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Video();
+
+            obj.AspectX = AspectX;
+            obj.AspectY = AspectY;
+            obj.Height = Height;
+            obj.Orientation = Orientation;
+            obj.Refresh = Refresh;
+            obj.Screen = Screen;
+            obj.Width = Width;
+
+            return obj;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Display? other)
+        {
+            // Null never matches
+            if (other is null)
+                return false;
+
+            // Properties
+            if (AspectX != other.AspectX)
+                return false;
+
+            if (AspectY != other.AspectY)
+                return false;
+
+            if (Height != other.Height)
+                return false;
+
+            if (Orientation != other.Rotate)
+                return false;
+
+            if (Refresh != other.Refresh)
+                return false;
+
+            if (Screen != other.DisplayType)
+                return false;
+
+            if (Width != other.Width)
+                return false;
+
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Video? other)
+        {
+            // Null never matches
+            if (other is null)
+                return false;
+
+            // Properties
+            if (AspectX != other.AspectX)
+                return false;
+
+            if (AspectY != other.AspectY)
+                return false;
+
+            if (Height != other.Height)
+                return false;
+
+            if (Orientation != other.Orientation)
+                return false;
+
+            if (Refresh != other.Refresh)
+                return false;
+
+            if (Screen != other.Screen)
+                return false;
+
+            if (Width != other.Width)
+                return false;
+
+            return true;
+        }
     }
 }

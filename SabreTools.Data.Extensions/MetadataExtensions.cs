@@ -161,6 +161,8 @@ namespace SabreTools.Data.Extensions
                 return deviceRef.Clone() as DeviceRef;
             else if (self is DipLocation dipLocation)
                 return dipLocation.Clone() as DipLocation;
+            else if (self is Display display)
+                return display.Clone() as Display;
             else if (self is Extension extension)
                 return extension.Clone() as Extension;
             // TODO: Reenable when PartFeature no longer needs nesting
@@ -178,6 +180,8 @@ namespace SabreTools.Data.Extensions
                 return slotOption.Clone() as SlotOption;
             else if (self is Sound sound)
                 return sound.Clone() as Sound;
+            else if (self is Video video)
+                return video.Clone() as Video;
 
             // If construction failed, we can't do anything
             if (Activator.CreateInstance(self.GetType()) is not DictionaryBase clone)
@@ -231,24 +235,6 @@ namespace SabreTools.Data.Extensions
                 cloneDisk.Optional = selfDisk.Optional;
                 cloneDisk.Status = selfDisk.Status;
                 cloneDisk.Writable = selfDisk.Writable;
-            }
-            else if (self is Display selfDisplay && clone is Display cloneDisplay)
-            {
-                cloneDisplay.AspectX = selfDisplay.AspectX;
-                cloneDisplay.AspectY = selfDisplay.AspectY;
-                cloneDisplay.DisplayType = selfDisplay.DisplayType;
-                cloneDisplay.FlipX = selfDisplay.FlipX;
-                cloneDisplay.HBEnd = selfDisplay.HBEnd;
-                cloneDisplay.HBStart = selfDisplay.HBStart;
-                cloneDisplay.Height = selfDisplay.Height;
-                cloneDisplay.HTotal = selfDisplay.HTotal;
-                cloneDisplay.PixClock = selfDisplay.PixClock;
-                cloneDisplay.Refresh = selfDisplay.Refresh;
-                cloneDisplay.Tag = selfDisplay.Tag;
-                cloneDisplay.VBEnd = selfDisplay.VBEnd;
-                cloneDisplay.VBStart = selfDisplay.VBStart;
-                cloneDisplay.VTotal = selfDisplay.VTotal;
-                cloneDisplay.Width = selfDisplay.Width;
             }
             else if (self is Driver selfDriver && clone is Driver cloneDriver)
             {
@@ -364,15 +350,6 @@ namespace SabreTools.Data.Extensions
                 cloneSoftwareList.Description = selfSoftwareList.Description;
                 cloneSoftwareList.Status = selfSoftwareList.Status;
                 cloneSoftwareList.Tag = selfSoftwareList.Tag;
-            }
-            else if (self is Video selfVideo && clone is Video cloneVideo)
-            {
-                cloneVideo.AspectX = selfVideo.AspectX;
-                cloneVideo.AspectY = selfVideo.AspectY;
-                cloneVideo.Height = selfVideo.Height;
-                cloneVideo.Refresh = selfVideo.Refresh;
-                cloneVideo.Screen = selfVideo.Screen;
-                cloneVideo.Width = selfVideo.Width;
             }
 
             // Handle known properties
@@ -1417,6 +1394,23 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         /// <param name="value">String value to parse/param>
         /// <returns>Enum value representing the input, null on error</returns>
+        public static Rotation? AsRotation(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "0" or "north" or "vertical" => Rotation.North,
+                "90" or "east" or "horizontal" => Rotation.East,
+                "180" or "south" => Rotation.South,
+                "270" or "west" => Rotation.West,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
         public static Runnable? AsRunnable(this string? value)
         {
             return value?.ToLowerInvariant() switch
@@ -1797,6 +1791,23 @@ namespace SabreTools.Data.Extensions
                 Relation.LessThanOrEqual => "le",
                 Relation.LessThan => "lt",
                 Relation.GreaterThanOrEqual => "ge",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this Rotation value, bool useSecond = false)
+        {
+            return value switch
+            {
+                Rotation.North => useSecond ? "vertical" : "0",
+                Rotation.East => useSecond ? "horizontal" : "90",
+                Rotation.South => useSecond ? "vertical" : "180",
+                Rotation.West => useSecond ? "horizontal" : "270",
                 _ => null,
             };
         }

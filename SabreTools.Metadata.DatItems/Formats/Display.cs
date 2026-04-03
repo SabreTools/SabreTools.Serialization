@@ -76,6 +76,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Display)?.Refresh = value;
         }
 
+        public Data.Models.Metadata.Rotation? Rotate
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.Rotate;
+            set => (_internal as Data.Models.Metadata.Display)?.Rotate = value;
+        }
+
         public string? Tag
         {
             get => (_internal as Data.Models.Metadata.Display)?.Tag;
@@ -112,13 +118,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Display() : base() { }
 
-        public Display(Data.Models.Metadata.Display item) : base(item)
-        {
-            // Process flag values
-            long? rotate = ReadLong(Data.Models.Metadata.Display.RotateKey);
-            if (rotate is not null)
-                Write<string?>(Data.Models.Metadata.Display.RotateKey, rotate.ToString());
-        }
+        public Display(Data.Models.Metadata.Display item) : base(item) { }
 
         public Display(Data.Models.Metadata.Display item, Machine machine, Source source) : this(item)
         {
@@ -133,20 +133,8 @@ namespace SabreTools.Metadata.DatItems.Formats
             DisplayType = item.Screen;
             Height = item.Height;
             Refresh = item.Refresh;
+            Rotate = item.Orientation;
             Width = item.Width;
-
-            switch (item.ReadString(Data.Models.Metadata.Video.OrientationKey))
-            {
-                case "horizontal":
-                    Write<long?>(Data.Models.Metadata.Display.RotateKey, 0);
-                    break;
-                case "vertical":
-                    Write<long?>(Data.Models.Metadata.Display.RotateKey, 90);
-                    break;
-                default:
-                    // TODO: Log invalid values
-                    break;
-            }
         }
 
         public Display(Data.Models.Metadata.Video item, Machine machine, Source source) : this(item)
