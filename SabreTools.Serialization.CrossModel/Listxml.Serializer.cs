@@ -701,10 +701,10 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Screen = item.Screen,
                 [Data.Models.Metadata.Video.OrientationKey] = item.Orientation,
-                [Data.Models.Metadata.Video.WidthKey] = item.Width,
-                [Data.Models.Metadata.Video.HeightKey] = item.Height,
-                [Data.Models.Metadata.Video.AspectXKey] = item.AspectX,
-                [Data.Models.Metadata.Video.AspectYKey] = item.AspectY,
+                Width = item.Width,
+                Height = item.Height,
+                AspectX = item.AspectX,
+                AspectY = item.AspectY,
                 Refresh = item.Refresh,
             };
             return video;

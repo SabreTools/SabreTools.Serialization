@@ -929,16 +929,16 @@ namespace SabreTools.Metadata.DatFiles
             var displayItem = item.GetInternalClone();
 
             // Create a Video for any item that has specific fields
-            if (displayItem.ContainsKey(Data.Models.Metadata.Video.AspectXKey))
+            if (displayItem.AspectX != null)
             {
                 var videoItem = new Data.Models.Metadata.Video
                 {
-                    [Data.Models.Metadata.Video.AspectXKey] = displayItem.ReadLong(Data.Models.Metadata.Video.AspectXKey).ToString(),
-                    [Data.Models.Metadata.Video.AspectYKey] = displayItem.ReadLong(Data.Models.Metadata.Video.AspectYKey).ToString(),
-                    [Data.Models.Metadata.Video.HeightKey] = displayItem.Height.ToString(),
+                    AspectX = displayItem.AspectX,
+                    AspectY = displayItem.AspectY,
+                    Height = displayItem.Height,
                     Refresh = displayItem.Refresh,
                     Screen = displayItem.DisplayType,
-                    [Data.Models.Metadata.Video.WidthKey] = displayItem.Width.ToString()
+                    Width = displayItem.Width,
                 };
 
                 switch (displayItem.ReadLong(Data.Models.Metadata.Display.RotateKey))

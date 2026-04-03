@@ -1,7 +1,6 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
-using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -12,6 +11,18 @@ namespace SabreTools.Metadata.DatItems.Formats
     public sealed class Display : DatItem<Data.Models.Metadata.Display>
     {
         #region Fields
+
+        public long? AspectX
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.AspectX;
+            set => (_internal as Data.Models.Metadata.Display)?.AspectX = value;
+        }
+
+        public long? AspectY
+        {
+            get => (_internal as Data.Models.Metadata.Display)?.AspectY;
+            set => (_internal as Data.Models.Metadata.Display)?.AspectY = value;
+        }
 
         public Data.Models.Metadata.DisplayType? DisplayType
         {
@@ -117,13 +128,12 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Display(Data.Models.Metadata.Video item) : base()
         {
-            // TODO: Convert this block to more traditional set of if/then
-            Write(Data.Models.Metadata.Video.AspectXKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.AspectXKey)));
-            Write(Data.Models.Metadata.Video.AspectYKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.AspectYKey)));
+            AspectX = item.AspectX;
+            AspectY = item.AspectY;
             DisplayType = item.Screen;
-            Height = NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.HeightKey));
+            Height = item.Height;
             Refresh = item.Refresh;
-            Width = NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.WidthKey));
+            Width = item.Width;
 
             switch (item.ReadString(Data.Models.Metadata.Video.OrientationKey))
             {
@@ -137,15 +147,6 @@ namespace SabreTools.Metadata.DatItems.Formats
                     // TODO: Log invalid values
                     break;
             }
-
-            // Process flag values
-            long? aspectX = ReadLong(Data.Models.Metadata.Video.AspectXKey);
-            if (aspectX is not null)
-                Write<string?>(Data.Models.Metadata.Video.AspectXKey, aspectX.ToString());
-
-            long? aspectY = ReadLong(Data.Models.Metadata.Video.AspectYKey);
-            if (aspectY is not null)
-                Write<string?>(Data.Models.Metadata.Video.AspectYKey, aspectY.ToString());
         }
 
         public Display(Data.Models.Metadata.Video item, Machine machine, Source source) : this(item)

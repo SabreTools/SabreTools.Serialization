@@ -414,10 +414,10 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteStartElement("video");
                 writer.WriteRequiredAttributeString("screen", video.Screen?.AsStringValue(), throwOnError: true);
                 writer.WriteRequiredAttributeString("orientation", video.Orientation, throwOnError: true);
-                writer.WriteOptionalAttributeString("x", video.X);
-                writer.WriteOptionalAttributeString("y", video.Y);
-                writer.WriteOptionalAttributeString("aspectx", video.AspectX);
-                writer.WriteOptionalAttributeString("aspecty", video.AspectY);
+                writer.WriteOptionalAttributeString("x", video.X?.ToString());
+                writer.WriteOptionalAttributeString("y", video.Y.ToString());
+                writer.WriteOptionalAttributeString("aspectx", video.AspectX.ToString());
+                writer.WriteOptionalAttributeString("aspecty", video.AspectY.ToString());
                 writer.WriteOptionalAttributeString("freq", video.Freq?.ToString("0.000000"));
                 writer.WriteEndElement(); // video
             }

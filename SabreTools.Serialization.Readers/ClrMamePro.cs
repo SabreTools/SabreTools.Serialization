@@ -809,16 +809,16 @@ namespace SabreTools.Serialization.Readers
                         video.Orientation = kvp.Value;
                         break;
                     case "x":
-                        video.X = kvp.Value;
+                        video.X = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "y":
-                        video.Y = kvp.Value;
+                        video.Y = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "aspectx":
-                        video.AspectX = kvp.Value;
+                        video.AspectX = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "aspecty":
-                        video.AspectY = kvp.Value;
+                        video.AspectY = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "freq":
                         video.Freq = NumberHelper.ConvertToDouble(kvp.Value);

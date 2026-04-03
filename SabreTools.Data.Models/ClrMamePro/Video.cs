@@ -14,19 +14,19 @@ namespace SabreTools.Data.Models.ClrMamePro
         [Required]
         public string? Orientation { get; set; }
 
-        /// <remarks>x, Numeric?</remarks>
-        public string? X { get; set; }
+        /// <remarks>x</remarks>
+        public long? X { get; set; }
 
-        /// <remarks>y, Numeric?</remarks>
-        public string? Y { get; set; }
+        /// <remarks>y</remarks>
+        public long? Y { get; set; }
 
-        /// <remarks>aspectx, Numeric?</remarks>
-        public string? AspectX { get; set; }
+        /// <remarks>aspectx</remarks>
+        public long? AspectX { get; set; }
 
-        /// <remarks>aspecty, Numeric?</remarks>
-        public string? AspectY { get; set; }
+        /// <remarks>aspecty</remarks>
+        public long? AspectY { get; set; }
 
-        /// <remarks>freq, Numeric?</remarks>
+        /// <remarks>freq</remarks>
         public double? Freq { get; set; }
     }
 }

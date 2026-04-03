@@ -389,9 +389,17 @@ namespace SabreTools.Metadata
             }
             else if (self is Video selfVideo && other is Video otherVideo)
             {
+                if (selfVideo.AspectX != otherVideo.AspectX)
+                    return false;
+                if (selfVideo.AspectY != otherVideo.AspectY)
+                    return false;
+                if (selfVideo.Height != otherVideo.Height)
+                    return false;
                 if (selfVideo.Refresh != otherVideo.Refresh)
                     return false;
                 if (selfVideo.Screen != otherVideo.Screen)
+                    return false;
+                if (selfVideo.Width != otherVideo.Width)
                     return false;
             }
 

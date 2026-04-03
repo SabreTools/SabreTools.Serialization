@@ -521,7 +521,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.Display[]? displays = machine.ReadArray<Data.Models.Metadata.Display>(Data.Models.Metadata.Machine.DisplayKey);
             Assert.NotNull(displays);
             Assert.Equal(2, displays.Length);
-            Data.Models.Metadata.Display? display = Array.Find(displays, d => !d.ContainsKey(Data.Models.Metadata.Video.AspectXKey));
+            Data.Models.Metadata.Display? display = Array.Find(displays, d => d.AspectX == null);
             ValidateMetadataDisplay(display);
 
             Data.Models.Metadata.Driver[]? drivers = machine.ReadArray<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey);
@@ -867,6 +867,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataDisplay(Data.Models.Metadata.Display? display)
         {
             Assert.NotNull(display);
+            Assert.Null(display.AspectX);
+            Assert.Null(display.AspectY);
             Assert.True(display.FlipX);
             Assert.Equal(12345, display.HBEnd);
             Assert.Equal(12345, display.HBStart);
@@ -1254,13 +1256,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataVideo(Data.Models.Metadata.Video? video)
         {
             Assert.NotNull(video);
-            Assert.Equal(12345, video.ReadLong(Data.Models.Metadata.Video.AspectXKey));
-            Assert.Equal(12345, video.ReadLong(Data.Models.Metadata.Video.AspectYKey));
-            Assert.Equal(12345, video.ReadLong(Data.Models.Metadata.Video.HeightKey));
+            Assert.Equal(12345, video.AspectX);
+            Assert.Equal(12345, video.AspectY);
+            Assert.Equal(12345, video.Height);
             Assert.Equal("vertical", video.ReadString(Data.Models.Metadata.Video.OrientationKey));
             Assert.Equal(123.45, video.Refresh);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, video.Screen);
-            Assert.Equal(12345, video.ReadLong(Data.Models.Metadata.Video.WidthKey));
+            Assert.Equal(12345, video.Width);
         }
 
         #endregion

@@ -283,10 +283,10 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Screen = Data.Models.Metadata.DisplayType.Vector,
                 Orientation = "XXXXXX",
-                X = "XXXXXX",
-                Y = "XXXXXX",
-                AspectX = "XXXXXX",
-                AspectY = "XXXXXX",
+                X = 12345,
+                Y = 12345,
+                AspectX = 12345,
+                AspectY = 12345,
                 Freq = 123.45,
             };
 
@@ -570,10 +570,10 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(video);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, video.Screen);
             Assert.Equal("XXXXXX", video.Orientation);
-            Assert.Equal("XXXXXX", video.X);
-            Assert.Equal("XXXXXX", video.Y);
-            Assert.Equal("XXXXXX", video.AspectX);
-            Assert.Equal("XXXXXX", video.AspectY);
+            Assert.Equal(12345, video.X);
+            Assert.Equal(12345, video.Y);
+            Assert.Equal(12345, video.AspectX);
+            Assert.Equal(12345, video.AspectY);
             Assert.Equal(123.45, video.Freq);
         }
 

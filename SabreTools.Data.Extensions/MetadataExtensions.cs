@@ -234,6 +234,8 @@ namespace SabreTools.Data.Extensions
             }
             else if (self is Display selfDisplay && clone is Display cloneDisplay)
             {
+                cloneDisplay.AspectX = selfDisplay.AspectX;
+                cloneDisplay.AspectY = selfDisplay.AspectY;
                 cloneDisplay.DisplayType = selfDisplay.DisplayType;
                 cloneDisplay.FlipX = selfDisplay.FlipX;
                 cloneDisplay.HBEnd = selfDisplay.HBEnd;
@@ -365,8 +367,12 @@ namespace SabreTools.Data.Extensions
             }
             else if (self is Video selfVideo && clone is Video cloneVideo)
             {
+                cloneVideo.AspectX = selfVideo.AspectX;
+                cloneVideo.AspectY = selfVideo.AspectY;
+                cloneVideo.Height = selfVideo.Height;
                 cloneVideo.Refresh = selfVideo.Refresh;
                 cloneVideo.Screen = selfVideo.Screen;
+                cloneVideo.Width = selfVideo.Width;
             }
 
             // Handle known properties

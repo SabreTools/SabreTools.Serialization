@@ -511,6 +511,12 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Writable.FromYesNo();
                     return true;
 
+                case Display item when fieldName == "aspectx":
+                    checkValue = item.AspectX?.ToString();
+                    return true;
+                case Display item when fieldName == "aspecty":
+                    checkValue = item.AspectY?.ToString();
+                    return true;
                 case Display item when fieldName == "flipx":
                     checkValue = item.FlipX.FromYesNo();
                     return true;
@@ -520,7 +526,7 @@ namespace SabreTools.Metadata.Filter
                 case Display item when fieldName == "hbstart":
                     checkValue = item.HBStart?.ToString();
                     return true;
-                case Display item when fieldName == "height":
+                case Display item when fieldName == "height" || fieldName == "y":
                     checkValue = item.Height?.ToString();
                     return true;
                 case Display item when fieldName == "htotal":
@@ -529,7 +535,7 @@ namespace SabreTools.Metadata.Filter
                 case Display item when fieldName == "pixclock":
                     checkValue = item.PixClock?.ToString();
                     return true;
-                case Display item when fieldName == "refresh":
+                case Display item when fieldName == "refresh" || fieldName == "freq":
                     checkValue = item.Refresh?.ToString();
                     return true;
                 case Display item when fieldName == "type":
@@ -547,7 +553,7 @@ namespace SabreTools.Metadata.Filter
                 case Display item when fieldName == "vtotal":
                     checkValue = item.VTotal?.ToString();
                     return true;
-                case Display item when fieldName == "width":
+                case Display item when fieldName == "width" || fieldName == "x":
                     checkValue = item.Width?.ToString();
                     return true;
 
@@ -817,11 +823,23 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Channels?.ToString();
                     return true;
 
-                case Video item when fieldName == "refresh":
+                case Video item when fieldName == "aspectx":
+                    checkValue = item.AspectX?.ToString();
+                    return true;
+                case Video item when fieldName == "aspecty":
+                    checkValue = item.AspectY?.ToString();
+                    return true;
+                case Video item when fieldName == "height" || fieldName == "y":
+                    checkValue = item.Height?.ToString();
+                    return true;
+                case Video item when fieldName == "refresh" || fieldName == "freq":
                     checkValue = item.Refresh?.ToString();
                     return true;
                 case Video item when fieldName == "screen":
                     checkValue = item.Screen?.AsStringValue();
+                    return true;
+                case Video item when fieldName == "width" || fieldName == "x":
+                    checkValue = item.Width?.ToString();
                     return true;
 
                 // Fallthrough to Dictionary-based checking

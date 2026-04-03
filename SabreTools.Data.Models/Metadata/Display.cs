@@ -8,6 +8,12 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        /// <remarks>Only found in Video</remarks>
+        public long? AspectX { get; set; }
+
+        /// <remarks>Only found in Video</remarks>
+        public long? AspectY { get; set; }
+
         /// <remarks>(raster|vector|lcd|svg|unknown)</remarks>
         public DisplayType? DisplayType { get; set; }
 

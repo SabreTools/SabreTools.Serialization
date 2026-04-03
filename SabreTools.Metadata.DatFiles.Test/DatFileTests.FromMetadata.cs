@@ -101,7 +101,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Disk? disk = Array.Find(datItems, item => item is Disk disk && !disk.DiskAreaSpecified && !disk.PartSpecified) as Disk;
             ValidateDisk(disk);
 
-            Display? display = Array.Find(datItems, item => item is Display display && display.ReadLong(Data.Models.Metadata.Video.AspectXKey) is null) as Display;
+            Display? display = Array.Find(datItems, item => item is Display display && display.AspectX is null) as Display;
             ValidateDisplay(display);
 
             Driver? driver = Array.Find(datItems, item => item is Driver) as Driver;
@@ -176,7 +176,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Sound? sound = Array.Find(datItems, item => item is Sound) as Sound;
             ValidateSound(sound);
 
-            Display? video = Array.Find(datItems, item => item is Display display && display.ReadLong(Data.Models.Metadata.Video.AspectXKey) is not null) as Display;
+            Display? video = Array.Find(datItems, item => item is Display display && display.AspectX is not null) as Display;
             ValidateVideo(video);
         }
 
@@ -576,6 +576,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Display
             {
+                AspectX = 12345,
+                AspectY = 12345,
                 FlipX = true,
                 HBEnd = 12345,
                 HBStart = 12345,
@@ -1021,13 +1023,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Video
             {
-                [Data.Models.Metadata.Video.AspectXKey] = 12345L,
-                [Data.Models.Metadata.Video.AspectYKey] = 12345L,
-                [Data.Models.Metadata.Video.HeightKey] = 12345L,
+                AspectX = 12345,
+                AspectY = 12345,
+                Height = 12345,
                 [Data.Models.Metadata.Video.OrientationKey] = "vertical",
                 Refresh = 123.45,
                 Screen = Data.Models.Metadata.DisplayType.Vector,
-                [Data.Models.Metadata.Video.WidthKey] = 12345L,
+                Width = 12345,
             };
         }
 
@@ -1350,6 +1352,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateDisplay(Display? display)
         {
             Assert.NotNull(display);
+            Assert.Null(display.AspectX);
+            Assert.Null(display.AspectY);
             Assert.True(display.FlipX);
             Assert.Equal(12345, display.HBEnd);
             Assert.Equal(12345, display.HBStart);
@@ -1661,8 +1665,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateVideo(Display? display)
         {
             Assert.NotNull(display);
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Video.AspectXKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Video.AspectYKey));
+            Assert.Equal(12345L, display.AspectX);
+            Assert.Equal(12345L, display.AspectY);
             Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
             Assert.Equal(12345, display.Height);
             Assert.Equal(123.45, display.Refresh);

@@ -8,30 +8,28 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public long? AspectX { get; set; }
+
+        public long? AspectY { get; set; }
+
+        /// <remarks>Originally "y"</remarks>
+        public long? Height { get; set; }
+
         /// <remarks>Originally "freq"</remarks>
         public double? Refresh { get; set; }
 
         /// <remarks>(raster|vector)</remarks>
         public DisplayType? Screen { get; set; }
 
+        /// <remarks>Originally "x"</remarks>
+        public long? Width { get; set; }
+
         #endregion
 
         #region Keys
 
-        /// <remarks>long</remarks>
-        public const string AspectXKey = "aspectx";
-
-        /// <remarks>long</remarks>
-        public const string AspectYKey = "aspecty";
-
-        /// <remarks>long; Originally "y"</remarks>
-        public const string HeightKey = "height";
-
         /// <remarks>(vertical|horizontal)</remarks>
         public const string OrientationKey = "orientation";
-
-        /// <remarks>long; Originally "x"</remarks>
-        public const string WidthKey = "width";
 
         #endregion
 

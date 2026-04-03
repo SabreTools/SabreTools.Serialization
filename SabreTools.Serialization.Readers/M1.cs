@@ -1175,10 +1175,10 @@ namespace SabreTools.Serialization.Readers
 
             obj.Screen = reader.GetAttribute("screen").AsDisplayType();
             obj.Orientation = reader.GetAttribute("orientation");
-            obj.Width = reader.GetAttribute("width");
-            obj.Height = reader.GetAttribute("height");
-            obj.AspectX = reader.GetAttribute("aspectx");
-            obj.AspectY = reader.GetAttribute("aspecty");
+            obj.Width = NumberHelper.ConvertToInt64(reader.GetAttribute("width"));
+            obj.Height = NumberHelper.ConvertToInt64(reader.GetAttribute("height"));
+            obj.AspectX = NumberHelper.ConvertToInt64(reader.GetAttribute("aspectx"));
+            obj.AspectY = NumberHelper.ConvertToInt64(reader.GetAttribute("aspecty"));
             obj.Refresh = NumberHelper.ConvertToDouble(reader.GetAttribute("refresh"));
 
             return obj;

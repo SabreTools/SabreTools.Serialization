@@ -839,10 +839,10 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("screen", obj.Screen?.AsStringValue());
             writer.WriteRequiredAttributeString("orientation", obj.Orientation);
-            writer.WriteOptionalAttributeString("width", obj.Width);
-            writer.WriteOptionalAttributeString("height", obj.Height);
-            writer.WriteOptionalAttributeString("aspectx", obj.AspectX);
-            writer.WriteOptionalAttributeString("aspecty", obj.AspectY);
+            writer.WriteOptionalAttributeString("width", obj.Width.ToString());
+            writer.WriteOptionalAttributeString("height", obj.Height.ToString());
+            writer.WriteOptionalAttributeString("aspectx", obj.AspectX.ToString());
+            writer.WriteOptionalAttributeString("aspecty", obj.AspectY.ToString());
             writer.WriteRequiredAttributeString("refresh", obj.Refresh?.ToString("0.000000"));
 
             writer.WriteEndElement();
