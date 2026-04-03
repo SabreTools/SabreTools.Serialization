@@ -406,6 +406,9 @@ namespace SabreTools.Metadata.Filter
                 case ConfLocation item when fieldName == "inverted":
                     checkValue = item.Inverted.FromYesNo();
                     return true;
+                case ConfLocation item when fieldName == "number":
+                    checkValue = item.Number?.ToString();
+                    return true;
 
                 case ConfSetting item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();

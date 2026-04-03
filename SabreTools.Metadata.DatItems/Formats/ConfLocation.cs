@@ -16,16 +16,22 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.ConfLocation;
 
+        public bool? Inverted
+        {
+            get => (_internal as Data.Models.Metadata.ConfLocation)?.Inverted;
+            set => (_internal as Data.Models.Metadata.ConfLocation)?.Inverted = value;
+        }
+
         public string? Name
         {
             get => (_internal as Data.Models.Metadata.ConfLocation)?.Name;
             set => (_internal as Data.Models.Metadata.ConfLocation)?.Name = value;
         }
 
-        public bool? Inverted
+        public long? Number
         {
-            get => (_internal as Data.Models.Metadata.ConfLocation)?.Inverted;
-            set => (_internal as Data.Models.Metadata.ConfLocation)?.Inverted = value;
+            get => (_internal as Data.Models.Metadata.ConfLocation)?.Number;
+            set => (_internal as Data.Models.Metadata.ConfLocation)?.Number = value;
         }
 
         #endregion

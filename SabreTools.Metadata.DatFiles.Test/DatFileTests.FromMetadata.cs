@@ -443,7 +443,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Inverted = true,
                 Name = "name",
-                [Data.Models.Metadata.ConfLocation.NumberKey] = "number",
+                Number = 12345,
             };
         }
 
@@ -1217,7 +1217,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(confLocation);
             Assert.True(confLocation.Inverted);
             Assert.Equal("name", confLocation.Name);
-            Assert.Equal("number", confLocation.ReadString(Data.Models.Metadata.ConfLocation.NumberKey));
+            Assert.Equal(12345, confLocation.Number);
         }
 
         private static void ValidateConfSetting(ConfSetting? confSetting)

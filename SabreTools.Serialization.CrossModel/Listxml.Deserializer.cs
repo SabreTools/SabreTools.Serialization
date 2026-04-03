@@ -251,7 +251,7 @@ namespace SabreTools.Serialization.CrossModel
             var confLocation = new ConfLocation
             {
                 Name = item.Name,
-                Number = item.ReadString(Data.Models.Metadata.ConfLocation.NumberKey),
+                Number = item.Number,
                 Inverted = item.Inverted,
             };
             return confLocation;

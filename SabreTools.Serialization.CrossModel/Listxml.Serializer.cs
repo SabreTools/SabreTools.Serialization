@@ -287,7 +287,7 @@ namespace SabreTools.Serialization.CrossModel
             var confLocation = new Data.Models.Metadata.ConfLocation
             {
                 Name = item.Name,
-                [Data.Models.Metadata.ConfLocation.NumberKey] = item.Number,
+                Number = item.Number,
                 Inverted = item.Inverted,
             };
             return confLocation;

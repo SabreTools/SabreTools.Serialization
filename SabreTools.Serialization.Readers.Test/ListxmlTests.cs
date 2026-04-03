@@ -282,7 +282,7 @@ namespace SabreTools.Serialization.Readers.Test
             var conflocation = new Data.Models.Listxml.ConfLocation
             {
                 Name = "name",
-                Number = "XXXXXX",
+                Number = 12345,
                 Inverted = true,
             };
 
@@ -779,7 +779,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(conflocation);
             Assert.Equal("name", conflocation.Name);
-            Assert.Equal("XXXXXX", conflocation.Number);
+            Assert.Equal(12345, conflocation.Number);
             Assert.Equal(true, conflocation.Inverted);
         }
 

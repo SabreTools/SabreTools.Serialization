@@ -153,6 +153,8 @@ namespace SabreTools.Data.Extensions
                 return chip.Clone() as Chip;
             else if (self is Condition condition)
                 return condition.Clone() as Condition;
+            else if (self is ConfLocation confLocation)
+                return confLocation.Clone() as ConfLocation;
             else if (self is Control control)
                 return control.Clone() as Control;
             else if (self is DeviceRef deviceRef)
@@ -191,10 +193,6 @@ namespace SabreTools.Data.Extensions
             {
                 cloneConfiguration.Mask = selfConfiguration.Mask;
                 cloneConfiguration.Tag = selfConfiguration.Tag;
-            }
-            else if (self is ConfLocation selfConfLocation && clone is ConfLocation cloneConfLocation)
-            {
-                cloneConfLocation.Inverted = selfConfLocation.Inverted;
             }
             else if (self is ConfSetting selfConfSetting && clone is ConfSetting cloneConfSetting)
             {

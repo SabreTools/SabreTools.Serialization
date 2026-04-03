@@ -101,7 +101,7 @@ namespace SabreTools.Metadata
             }
             else if (self is ConfLocation selfConfLocation && other is ConfLocation otherConfLocation)
             {
-                if (selfConfLocation.Inverted != otherConfLocation.Inverted)
+                if (!selfConfLocation.Equals(otherConfLocation))
                     return false;
             }
             else if (self is ConfSetting selfConfSetting && other is ConfSetting otherConfSetting)
