@@ -14,6 +14,7 @@ namespace SabreTools.Metadata
         /// Check equality of two DictionaryBase objects
         /// </summary>
         /// TODO: Fix equality checking with case sensitivity of string properties
+        /// TODO: Use IEquatable where possible
         public static bool EqualTo(this DictionaryBase self, DictionaryBase other)
         {
             // Check types first
@@ -44,6 +45,8 @@ namespace SabreTools.Metadata
         /// <summary>
         /// Check equality of two DictionaryBase objects
         /// </summary>
+        /// TODO: Fix equality checking with case sensitivity of string properties
+        /// TODO: Use IEquatable where possible
         private static bool EqualsImpl(this DictionaryBase self, DictionaryBase other)
         {
             // If the number of key-value pairs doesn't match, they can't match
@@ -61,275 +64,362 @@ namespace SabreTools.Metadata
                 return false;
 
             // Handle individual type properties
-            if (self is Adjuster selfAdjuster && other is Adjuster cloneAdjuster)
+            if (self is Adjuster selfAdjuster && other is Adjuster otherAdjuster)
             {
-                if (selfAdjuster.Default != cloneAdjuster.Default)
+                if (selfAdjuster.Default != otherAdjuster.Default)
                     return false;
             }
-            else if (self is Analog selfAnalog && other is Analog cloneAnalog)
+            else if (self is Analog selfAnalog && other is Analog otherAnalog)
             {
-                if (selfAnalog.Mask != cloneAnalog.Mask)
+                if (selfAnalog.Mask != otherAnalog.Mask)
                     return false;
             }
-            else if (self is Archive selfArchive && other is Archive cloneArchive)
+            else if (self is Archive selfArchive && other is Archive otherArchive)
             {
-                if (selfArchive.Description != cloneArchive.Description)
+                if (selfArchive.Description != otherArchive.Description)
                     return false;
             }
-            else if (self is BiosSet selfBiosSet && other is BiosSet cloneBiosSet)
+            else if (self is BiosSet selfBiosSet && other is BiosSet otherBiosSet)
             {
-                if (selfBiosSet.Default != cloneBiosSet.Default)
+                if (selfBiosSet.Default != otherBiosSet.Default)
                     return false;
-                if (selfBiosSet.Description != cloneBiosSet.Description)
+                if (selfBiosSet.Description != otherBiosSet.Description)
                     return false;
             }
-            else if (self is Chip selfChip && other is Chip cloneChip)
+            else if (self is Chip selfChip && other is Chip otherChip)
             {
-                if (selfChip.ChipType != cloneChip.ChipType)
+                if (selfChip.ChipType != otherChip.ChipType)
                     return false;
-                if (selfChip.SoundOnly != cloneChip.SoundOnly)
+                if (selfChip.SoundOnly != otherChip.SoundOnly)
                     return false;
-                if (selfChip.Tag != cloneChip.Tag)
+                if (selfChip.Tag != otherChip.Tag)
                     return false;
             }
-            else if (self is Condition selfCondition && other is Condition cloneCondition)
+            else if (self is Condition selfCondition && other is Condition otherCondition)
             {
-                if (selfCondition.Mask != cloneCondition.Mask)
+                if (selfCondition.Mask != otherCondition.Mask)
                     return false;
-                if (selfCondition.Relation != cloneCondition.Relation)
+                if (selfCondition.Relation != otherCondition.Relation)
                     return false;
-                if (selfCondition.Tag != cloneCondition.Tag)
+                if (selfCondition.Tag != otherCondition.Tag)
                     return false;
-                if (selfCondition.Value != cloneCondition.Value)
+                if (selfCondition.Value != otherCondition.Value)
                     return false;
             }
-            else if (self is Configuration selfConfiguration && other is Configuration cloneConfiguration)
+            else if (self is Configuration selfConfiguration && other is Configuration otherConfiguration)
             {
-                if (selfConfiguration.Mask != cloneConfiguration.Mask)
+                if (selfConfiguration.Mask != otherConfiguration.Mask)
                     return false;
-                if (selfConfiguration.Tag != cloneConfiguration.Tag)
+                if (selfConfiguration.Tag != otherConfiguration.Tag)
                     return false;
             }
-            else if (self is ConfLocation selfConfLocation && other is ConfLocation cloneConfLocation)
+            else if (self is ConfLocation selfConfLocation && other is ConfLocation otherConfLocation)
             {
-                if (selfConfLocation.Inverted != cloneConfLocation.Inverted)
+                if (selfConfLocation.Inverted != otherConfLocation.Inverted)
                     return false;
             }
-            else if (self is ConfSetting selfConfSetting && other is ConfSetting cloneConfSetting)
+            else if (self is ConfSetting selfConfSetting && other is ConfSetting otherConfSetting)
             {
-                if (selfConfSetting.Default != cloneConfSetting.Default)
+                if (selfConfSetting.Default != otherConfSetting.Default)
                     return false;
-                if (selfConfSetting.Value != cloneConfSetting.Value)
+                if (selfConfSetting.Value != otherConfSetting.Value)
                     return false;
             }
-            else if (self is Control selfControl && other is Control cloneControl)
+            else if (self is Control selfControl && other is Control otherControl)
             {
-                if (selfControl.ControlType != cloneControl.ControlType)
+                if (selfControl.Buttons != otherControl.Buttons)
                     return false;
-                if (selfControl.Reverse != cloneControl.Reverse)
+                if (selfControl.ControlType != otherControl.ControlType)
+                    return false;
+                if (selfControl.KeyDelta != otherControl.KeyDelta)
+                    return false;
+                if (selfControl.Maximum != otherControl.Maximum)
+                    return false;
+                if (selfControl.Minimum != otherControl.Minimum)
+                    return false;
+                if (selfControl.Player != otherControl.Player)
+                    return false;
+                if (selfControl.ReqButtons != otherControl.ReqButtons)
+                    return false;
+                if (selfControl.Reverse != otherControl.Reverse)
+                    return false;
+                if (selfControl.Sensitivity != otherControl.Sensitivity)
+                    return false;
+                if (selfControl.Ways != otherControl.Ways)
+                    return false;
+                if (selfControl.Ways2 != otherControl.Ways2)
+                    return false;
+                if (selfControl.Ways3 != otherControl.Ways3)
                     return false;
             }
-            else if (self is DataArea selfDataArea && other is DataArea cloneDataArea)
+            else if (self is DataArea selfDataArea && other is DataArea otherDataArea)
             {
-                if (selfDataArea.Endianness != cloneDataArea.Endianness)
+                if (selfDataArea.Endianness != otherDataArea.Endianness)
+                    return false;
+                if (selfDataArea.Size != otherDataArea.Size)
                     return false;
             }
-            else if (self is Device selfDevice && other is Device cloneDevice)
+            else if (self is Device selfDevice && other is Device otherDevice)
             {
-                if (selfDevice.DeviceType != cloneDevice.DeviceType)
+                if (selfDevice.DeviceType != otherDevice.DeviceType)
                     return false;
-                if (selfDevice.FixedImage != cloneDevice.FixedImage)
+                if (selfDevice.FixedImage != otherDevice.FixedImage)
                     return false;
-                if (selfDevice.Interface != cloneDevice.Interface)
+                if (selfDevice.Interface != otherDevice.Interface)
                     return false;
-                if (selfDevice.Mandatory != cloneDevice.Mandatory)
+                if (selfDevice.Mandatory != otherDevice.Mandatory)
                     return false;
-                if (selfDevice.Tag != cloneDevice.Tag)
+                if (selfDevice.Tag != otherDevice.Tag)
                     return false;
             }
-            else if (self is DipLocation selfDipLocation && other is DipLocation cloneDipLocation)
+            else if (self is DipLocation selfDipLocation && other is DipLocation otherDipLocation)
             {
-                if (selfDipLocation.Inverted != cloneDipLocation.Inverted)
+                if (selfDipLocation.Inverted != otherDipLocation.Inverted)
                     return false;
             }
-            else if (self is DipSwitch selfDipSwitch && other is DipSwitch cloneDipSwitch)
+            else if (self is DipSwitch selfDipSwitch && other is DipSwitch otherDipSwitch)
             {
-                if (selfDipSwitch.Default != cloneDipSwitch.Default)
+                if (selfDipSwitch.Default != otherDipSwitch.Default)
                     return false;
-                if (selfDipSwitch.Mask != cloneDipSwitch.Mask)
+                if (selfDipSwitch.Mask != otherDipSwitch.Mask)
                     return false;
-                if (selfDipSwitch.Tag != cloneDipSwitch.Tag)
+                if (selfDipSwitch.Tag != otherDipSwitch.Tag)
                     return false;
             }
-            else if (self is DipValue selfDipValue && other is DipValue cloneDipValue)
+            else if (self is DipValue selfDipValue && other is DipValue otherDipValue)
             {
-                if (selfDipValue.Default != cloneDipValue.Default)
+                if (selfDipValue.Default != otherDipValue.Default)
                     return false;
-                if (selfDipValue.Value != cloneDipValue.Value)
+                if (selfDipValue.Value != otherDipValue.Value)
                     return false;
             }
-            else if (self is Display selfDisplay && other is Display cloneDisplay)
+            else if (self is Disk selfDisk && other is Disk otherDisk)
             {
-                if (selfDisplay.DisplayType != cloneDisplay.DisplayType)
+                // Intentionally skipped here
+            }
+            else if (self is Display selfDisplay && other is Display otherDisplay)
+            {
+                if (selfDisplay.DisplayType != otherDisplay.DisplayType)
                     return false;
-                if (selfDisplay.FlipX != cloneDisplay.FlipX)
+                if (selfDisplay.FlipX != otherDisplay.FlipX)
                     return false;
-                if (selfDisplay.Tag != cloneDisplay.Tag)
+                if (selfDisplay.Refresh != otherDisplay.Refresh)
+                    return false;
+                if (selfDisplay.Tag != otherDisplay.Tag)
                     return false;
             }
-            else if (self is Driver selfDriver && other is Driver cloneDriver)
+            else if (self is Driver selfDriver && other is Driver otherDriver)
             {
-                if (selfDriver.Blit != cloneDriver.Blit)
+                if (selfDriver.Blit != otherDriver.Blit)
                     return false;
-                if (selfDriver.Cocktail != cloneDriver.Cocktail)
+                if (selfDriver.Cocktail != otherDriver.Cocktail)
                     return false;
-                if (selfDriver.Color != cloneDriver.Color)
+                if (selfDriver.Color != otherDriver.Color)
                     return false;
-                if (selfDriver.Emulation != cloneDriver.Emulation)
+                if (selfDriver.Emulation != otherDriver.Emulation)
                     return false;
-                if (selfDriver.Incomplete != cloneDriver.Incomplete)
+                if (selfDriver.Incomplete != otherDriver.Incomplete)
                     return false;
-                if (selfDriver.NoSoundHardware != cloneDriver.NoSoundHardware)
+                if (selfDriver.NoSoundHardware != otherDriver.NoSoundHardware)
                     return false;
-                if (selfDriver.RequiresArtwork != cloneDriver.RequiresArtwork)
+                if (selfDriver.RequiresArtwork != otherDriver.RequiresArtwork)
                     return false;
-                if (selfDriver.SaveState != cloneDriver.SaveState)
+                if (selfDriver.SaveState != otherDriver.SaveState)
                     return false;
-                if (selfDriver.Sound != cloneDriver.Sound)
+                if (selfDriver.Sound != otherDriver.Sound)
                     return false;
-                if (selfDriver.Status != cloneDriver.Status)
+                if (selfDriver.Status != otherDriver.Status)
                     return false;
-                if (selfDriver.Unofficial != cloneDriver.Unofficial)
+                if (selfDriver.Unofficial != otherDriver.Unofficial)
                     return false;
             }
-            else if (self is Feature selfFeature && other is Feature cloneFeature)
+            else if (self is Feature selfFeature && other is Feature otherFeature)
             {
-                if (selfFeature.FeatureType != cloneFeature.FeatureType)
+                if (selfFeature.FeatureType != otherFeature.FeatureType)
                     return false;
-                if (selfFeature.Overall != cloneFeature.Overall)
+                if (selfFeature.Overall != otherFeature.Overall)
                     return false;
-                if (selfFeature.Status != cloneFeature.Status)
+                if (selfFeature.Status != otherFeature.Status)
                     return false;
-                if (selfFeature.Value != cloneFeature.Value)
+                if (selfFeature.Value != otherFeature.Value)
                     return false;
             }
-            else if (self is Header selfHeader && other is Header cloneHeader)
+            else if (self is Header selfHeader && other is Header otherHeader)
             {
-                if (selfHeader.BiosMode != cloneHeader.BiosMode)
+                if (selfHeader.Author != otherHeader.Author)
                     return false;
-                if (selfHeader.Debug != cloneHeader.Debug)
+                if (selfHeader.BiosMode != otherHeader.BiosMode)
                     return false;
-                if (selfHeader.Description != cloneHeader.Description)
+                if (selfHeader.Build != otherHeader.Build)
                     return false;
-                if (selfHeader.ForceMerging != cloneHeader.ForceMerging)
+                if (selfHeader.Category != otherHeader.Category)
                     return false;
-                if (selfHeader.ForceNodump != cloneHeader.ForceNodump)
+                if (selfHeader.Comment != otherHeader.Comment)
                     return false;
-                if (selfHeader.ForcePacking != cloneHeader.ForcePacking)
+                if (selfHeader.Date != otherHeader.Date)
                     return false;
-                if (selfHeader.ForceZipping != cloneHeader.ForceZipping)
+                if (selfHeader.DatVersion != otherHeader.DatVersion)
                     return false;
-                if (selfHeader.LockBiosMode != cloneHeader.LockBiosMode)
+                if (selfHeader.Debug != otherHeader.Debug)
                     return false;
-                if (selfHeader.LockRomMode != cloneHeader.LockRomMode)
+                if (selfHeader.Description != otherHeader.Description)
                     return false;
-                if (selfHeader.LockSampleMode != cloneHeader.LockSampleMode)
+                if (selfHeader.Email != otherHeader.Email)
                     return false;
-                if (selfHeader.RomMode != cloneHeader.RomMode)
+                if (selfHeader.EmulatorVersion != otherHeader.EmulatorVersion)
                     return false;
-                if (selfHeader.SampleMode != cloneHeader.SampleMode)
+                if (selfHeader.ForceMerging != otherHeader.ForceMerging)
+                    return false;
+                if (selfHeader.ForceNodump != otherHeader.ForceNodump)
+                    return false;
+                if (selfHeader.ForcePacking != otherHeader.ForcePacking)
+                    return false;
+                if (selfHeader.ForceZipping != otherHeader.ForceZipping)
+                    return false;
+                if (selfHeader.Homepage != otherHeader.Homepage)
+                    return false;
+                if (selfHeader.Id != otherHeader.Id)
+                    return false;
+                if (selfHeader.LockBiosMode != otherHeader.LockBiosMode)
+                    return false;
+                if (selfHeader.LockRomMode != otherHeader.LockRomMode)
+                    return false;
+                if (selfHeader.LockSampleMode != otherHeader.LockSampleMode)
+                    return false;
+                if (selfHeader.MameConfig != otherHeader.MameConfig)
+                    return false;
+                if (selfHeader.Name != otherHeader.Name)
+                    return false;
+                if (selfHeader.Notes != otherHeader.Notes)
+                    return false;
+                if (selfHeader.Plugin != otherHeader.Plugin)
+                    return false;
+                if (selfHeader.RefName != otherHeader.RefName)
+                    return false;
+                if (selfHeader.RomMode != otherHeader.RomMode)
+                    return false;
+                if (selfHeader.RomTitle != otherHeader.RomTitle)
+                    return false;
+                if (selfHeader.RootDir != otherHeader.RootDir)
+                    return false;
+                if (selfHeader.SampleMode != otherHeader.SampleMode)
+                    return false;
+                if (selfHeader.System != otherHeader.System)
+                    return false;
+                if (selfHeader.Timestamp != otherHeader.Timestamp)
+                    return false;
+                if (selfHeader.Type != otherHeader.Type)
+                    return false;
+                if (selfHeader.Url != otherHeader.Url)
+                    return false;
+                if (selfHeader.Version != otherHeader.Version)
                     return false;
             }
-            else if (self is Info selfInfo && other is Info cloneInfo)
+            else if (self is Info selfInfo && other is Info otherInfo)
             {
-                if (selfInfo.Value != cloneInfo.Value)
+                if (selfInfo.Value != otherInfo.Value)
                     return false;
             }
-            else if (self is Input selfInput && other is Input cloneInput)
+            else if (self is Input selfInput && other is Input otherInput)
             {
-                if (selfInput.Service != cloneInput.Service)
+                if (selfInput.Service != otherInput.Service)
                     return false;
-                if (selfInput.Tilt != cloneInput.Tilt)
+                if (selfInput.Tilt != otherInput.Tilt)
                     return false;
             }
-            else if (self is Instance selfInstance && other is Instance cloneInstance)
+            else if (self is Instance selfInstance && other is Instance otherInstance)
             {
-                if (selfInstance.BriefName != cloneInstance.BriefName)
+                if (selfInstance.BriefName != otherInstance.BriefName)
                     return false;
             }
-            else if (self is Machine selfMachine && other is Machine cloneMachine)
+            else if (self is Machine selfMachine && other is Machine otherMachine)
             {
-                if (selfMachine.Description != cloneMachine.Description)
+                if (selfMachine.Description != otherMachine.Description)
                     return false;
-                if (selfMachine.IsBios != cloneMachine.IsBios)
+                if (selfMachine.IsBios != otherMachine.IsBios)
                     return false;
-                if (selfMachine.IsDevice != cloneMachine.IsDevice)
+                if (selfMachine.IsDevice != otherMachine.IsDevice)
                     return false;
-                if (selfMachine.IsMechanical != cloneMachine.IsMechanical)
+                if (selfMachine.IsMechanical != otherMachine.IsMechanical)
                     return false;
-                if (selfMachine.Runnable != cloneMachine.Runnable)
+                if (selfMachine.Runnable != otherMachine.Runnable)
                     return false;
-                if (selfMachine.Supported != cloneMachine.Supported)
+                if (selfMachine.Supported != otherMachine.Supported)
                     return false;
             }
-            else if (self is Original selfOriginal && other is Original cloneOriginal)
+            else if (self is Media selfMedia && other is Media otherMedia)
             {
-                if (selfOriginal.Content != cloneOriginal.Content)
+                // Intentionally skipped here
+            }
+            else if (self is Original selfOriginal && other is Original otherOriginal)
+            {
+                if (selfOriginal.Content != otherOriginal.Content)
                     return false;
             }
-            else if (self is Part selfPart && other is Part clonePart)
+            else if (self is Part selfPart && other is Part otherPart)
             {
-                if (selfPart.Interface != clonePart.Interface)
+                if (selfPart.Interface != otherPart.Interface)
                     return false;
             }
-            else if (self is Port selfPort && other is Port clonePort)
+            else if (self is Port selfPort && other is Port otherPort)
             {
-                if (selfPort.Tag != clonePort.Tag)
+                if (selfPort.Tag != otherPort.Tag)
                     return false;
             }
-            else if (self is RamOption selfRamOption && other is RamOption cloneRamOption)
+            else if (self is RamOption selfRamOption && other is RamOption otherRamOption)
             {
-                if (selfRamOption.Content != cloneRamOption.Content)
+                if (selfRamOption.Content != otherRamOption.Content)
                     return false;
-                if (selfRamOption.Default != cloneRamOption.Default)
+                if (selfRamOption.Default != otherRamOption.Default)
                     return false;
             }
-            else if (self is Release selfRelease && other is Release cloneRelease)
+            else if (self is Release selfRelease && other is Release otherRelease)
             {
-                if (selfRelease.Default != cloneRelease.Default)
+                if (selfRelease.Default != otherRelease.Default)
                     return false;
             }
-            else if (self is SharedFeat selfSharedFeat && other is SharedFeat cloneSharedFeat)
+            else if (self is Rom selfRom && other is Rom otherRom)
             {
-                if (selfSharedFeat.Value != cloneSharedFeat.Value)
+                // Intentionally skipped here
+            }
+            else if (self is SharedFeat selfSharedFeat && other is SharedFeat otherSharedFeat)
+            {
+                if (selfSharedFeat.Value != otherSharedFeat.Value)
                     return false;
             }
-            else if (self is SlotOption selfSlotOption && other is SlotOption cloneSlotOption)
+            else if (self is SlotOption selfSlotOption && other is SlotOption otherSlotOption)
             {
-                if (selfSlotOption.Default != cloneSlotOption.Default)
+                if (selfSlotOption.Default != otherSlotOption.Default)
                     return false;
-                if (selfSlotOption.DevName != cloneSlotOption.DevName)
+                if (selfSlotOption.DevName != otherSlotOption.DevName)
                     return false;
             }
-            else if (self is Software selfSoftware && other is Software cloneSoftware)
+            else if (self is Software selfSoftware && other is Software otherSoftware)
             {
-                if (selfSoftware.Description != cloneSoftware.Description)
+                if (selfSoftware.Description != otherSoftware.Description)
                     return false;
-                if (selfSoftware.Supported != cloneSoftware.Supported)
+                if (selfSoftware.Supported != otherSoftware.Supported)
                     return false;
             }
-            else if (self is SoftwareList selfSoftwareList && other is SoftwareList cloneSoftwareList)
+            else if (self is SoftwareList selfSoftwareList && other is SoftwareList otherSoftwareList)
             {
-                if (selfSoftwareList.Description != cloneSoftwareList.Description)
+                if (selfSoftwareList.Description != otherSoftwareList.Description)
                     return false;
-                if (selfSoftwareList.Status != cloneSoftwareList.Status)
+                if (selfSoftwareList.Status != otherSoftwareList.Status)
                     return false;
-                if (selfSoftwareList.Tag != cloneSoftwareList.Tag)
+                if (selfSoftwareList.Tag != otherSoftwareList.Tag)
                     return false;
             }
-            else if (self is Video selfVideo && other is Video cloneVideo)
+            else if (self is Sound selfSound && other is Sound otherSound)
             {
-                if (selfVideo.Screen != cloneVideo.Screen)
+                if (selfSound.Channels != otherSound.Channels)
+                    return false;
+            }
+            else if (self is Video selfVideo && other is Video otherVideo)
+            {
+                if (selfVideo.Refresh != otherVideo.Refresh)
+                    return false;
+                if (selfVideo.Screen != otherVideo.Screen)
                     return false;
             }
 
