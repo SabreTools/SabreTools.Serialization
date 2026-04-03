@@ -344,7 +344,7 @@ namespace SabreTools.Serialization.CrossModel
             var dipLocation = new DipLocation
             {
                 Name = item.Name,
-                Number = item.ReadString(Data.Models.Metadata.DipLocation.NumberKey),
+                Number = item.Number,
                 Inverted = item.Inverted,
             };
             return dipLocation;

@@ -380,7 +380,7 @@ namespace SabreTools.Serialization.CrossModel
             var dipLocation = new Data.Models.Metadata.DipLocation
             {
                 Name = item.Name,
-                [Data.Models.Metadata.DipLocation.NumberKey] = item.Number,
+                Number = item.Number,
                 Inverted = item.Inverted,
             };
             return dipLocation;

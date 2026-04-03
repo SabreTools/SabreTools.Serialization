@@ -138,7 +138,7 @@ namespace SabreTools.Metadata
             }
             else if (self is DipLocation selfDipLocation && other is DipLocation otherDipLocation)
             {
-                if (selfDipLocation.Inverted != otherDipLocation.Inverted)
+                if (!selfDipLocation.Equals(otherDipLocation))
                     return false;
             }
             else if (self is DipSwitch selfDipSwitch && other is DipSwitch otherDipSwitch)

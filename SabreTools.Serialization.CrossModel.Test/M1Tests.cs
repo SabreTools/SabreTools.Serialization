@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var diplocation = new Data.Models.Listxml.DipLocation
             {
                 Name = "name",
-                Number = "XXXXXX",
+                Number = 12345,
                 Inverted = true,
             };
 
@@ -663,7 +663,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(diplocation);
             Assert.Equal("name", diplocation.Name);
-            Assert.Equal("XXXXXX", diplocation.Number);
+            Assert.Equal(12345, diplocation.Number);
             Assert.Equal(true, diplocation.Inverted);
         }
 

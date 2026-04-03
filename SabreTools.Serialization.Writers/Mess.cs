@@ -296,7 +296,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("diplocation");
 
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteRequiredAttributeString("number", obj.Number);
+            writer.WriteRequiredAttributeString("number", obj.Number?.ToString());
             writer.WriteOptionalAttributeString("inverted", obj.Inverted.FromYesNo());
 
             writer.WriteEndElement();

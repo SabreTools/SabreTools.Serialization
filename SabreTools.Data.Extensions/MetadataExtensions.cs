@@ -159,6 +159,8 @@ namespace SabreTools.Data.Extensions
                 return control.Clone() as Control;
             else if (self is DeviceRef deviceRef)
                 return deviceRef.Clone() as DeviceRef;
+            else if (self is DipLocation dipLocation)
+                return dipLocation.Clone() as DipLocation;
             else if (self is Extension extension)
                 return extension.Clone() as Extension;
             // TODO: Reenable when PartFeature no longer needs nesting
@@ -212,10 +214,6 @@ namespace SabreTools.Data.Extensions
                 cloneDevice.Interface = selfDevice.Interface;
                 cloneDevice.Mandatory = selfDevice.Mandatory;
                 cloneDevice.Tag = selfDevice.Tag;
-            }
-            else if (self is DipLocation selfDipLocation && clone is DipLocation cloneDipLocation)
-            {
-                cloneDipLocation.Inverted = selfDipLocation.Inverted;
             }
             else if (self is DipSwitch selfDipSwitch && clone is DipSwitch cloneDipSwitch)
             {

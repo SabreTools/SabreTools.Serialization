@@ -28,6 +28,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.DipLocation)?.Name = value;
         }
 
+        public long? Number
+        {
+            get => (_internal as Data.Models.Metadata.DipLocation)?.Number;
+            set => (_internal as Data.Models.Metadata.DipLocation)?.Number = value;
+        }
+
         #endregion
 
         #region Constructors

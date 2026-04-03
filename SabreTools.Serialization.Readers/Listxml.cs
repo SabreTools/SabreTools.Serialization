@@ -435,7 +435,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new DipLocation();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Number = reader.GetAttribute("number");
+            obj.Number = NumberHelper.ConvertToInt64(reader.GetAttribute("number"));
             obj.Inverted = reader.GetAttribute("inverted").AsYesNo();
 
             return obj;

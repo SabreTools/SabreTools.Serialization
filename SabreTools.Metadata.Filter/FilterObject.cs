@@ -480,9 +480,8 @@ namespace SabreTools.Metadata.Filter
                 case DipLocation item when fieldName == "inverted":
                     checkValue = item.Inverted.FromYesNo();
                     return true;
-
-                case DipLocation item when fieldName == "invertwed":
-                    checkValue = item.Inverted.FromYesNo();
+                case DipLocation item when fieldName == "number":
+                    checkValue = item.Number?.ToString();
                     return true;
 
                 case DipSwitch item when fieldName == "default":

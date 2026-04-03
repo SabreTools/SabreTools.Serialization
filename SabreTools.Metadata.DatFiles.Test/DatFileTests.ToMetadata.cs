@@ -798,7 +798,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(dipLocation);
             Assert.True(dipLocation.Inverted);
             Assert.Equal("name", dipLocation.Name);
-            Assert.Equal("number", dipLocation.ReadString(Data.Models.Metadata.DipLocation.NumberKey));
+            Assert.Equal(12345, dipLocation.Number);
         }
 
         private static void ValidateMetadataDipSwitch(Data.Models.Metadata.DipSwitch? dipSwitch)
