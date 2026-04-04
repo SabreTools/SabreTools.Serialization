@@ -27,6 +27,12 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.Buttons = value;
         }
 
+        public string[]? Category
+        {
+            get => _internal.Category;
+            set => _internal.Category = value;
+        }
+
         public string? CloneOf
         {
             get => _internal.CloneOf;
@@ -37,6 +43,12 @@ namespace SabreTools.Metadata.DatItems
         {
             get => _internal.CloneOfId;
             set => _internal.CloneOfId = value;
+        }
+
+        public string[]? Comment
+        {
+            get => _internal.Comment;
+            set => _internal.Comment = value;
         }
 
         public string? Company
@@ -380,7 +392,36 @@ namespace SabreTools.Metadata.DatItems
 
         public Machine(Data.Models.Metadata.Machine machine)
         {
-            _internal = machine.DeepClone() as Data.Models.Metadata.Machine ?? [];
+            _internal = machine.Clone() as Data.Models.Metadata.Machine ?? [];
+
+            // Clear all lists
+            _internal.Adjuster = null;
+            _internal.Archive = null;
+            _internal.BiosSet = null;
+            _internal.Chip = null;
+            _internal.Configuration = null;
+            _internal.Device = null;
+            _internal.DeviceRef = null;
+            _internal.DipSwitch = null;
+            _internal.Disk = null;
+            _internal.Display = null;
+            _internal.Driver = null;
+            _internal.Dump = null;
+            _internal.Feature = null;
+            _internal.Info = null;
+            _internal.Input = null;
+            _internal.Media = null;
+            _internal.Part = null;
+            _internal.Port = null;
+            _internal.RamOption = null;
+            _internal.Release = null;
+            _internal.Rom = null;
+            _internal.Sample = null;
+            _internal.SharedFeat = null;
+            _internal.Slot = null;
+            _internal.SoftwareList = null;
+            _internal.Sound = null;
+            _internal.Video = null;
 
             // Process flag values
             if (Im1CRC is not null)

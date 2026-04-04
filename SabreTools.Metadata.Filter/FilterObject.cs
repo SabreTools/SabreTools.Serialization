@@ -907,11 +907,17 @@ namespace SabreTools.Metadata.Filter
                 case Machine item when fieldName == "buttons":
                     checkValue = item.Buttons;
                     return true;
+                case Machine item when fieldName == "category":
+                    checkValue = item.Category is null ? null : string.Join(", ", item.Category);
+                    return true;
                 case Machine item when fieldName == "cloneof":
                     checkValue = item.CloneOf;
                     return true;
                 case Machine item when fieldName == "cloneofid":
                     checkValue = item.CloneOfId;
+                    return true;
+                case Machine item when fieldName == "comment":
+                    checkValue = item.Comment is null ? null : string.Join(", ", item.Comment);
                     return true;
                 case Machine item when fieldName == "company":
                     checkValue = item.Company;

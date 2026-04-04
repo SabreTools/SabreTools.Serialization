@@ -122,12 +122,12 @@ namespace SabreTools.Serialization.CrossModel
             gameBase.Id = item.Id;
             gameBase.CloneOfId = item.CloneOfId;
             gameBase.Runnable = item.Runnable;
-            gameBase.Comment = item.ReadStringArray(Data.Models.Metadata.Machine.CommentKey);
+            gameBase.Comment = item.Comment;
             gameBase.Description = item.Description;
             gameBase.Year = item.Year;
             gameBase.Manufacturer = item.Manufacturer;
             gameBase.Publisher = item.Publisher;
-            gameBase.Category = item.ReadStringArray(Data.Models.Metadata.Machine.CategoryKey);
+            gameBase.Category = item.Category;
 
             if (item.TitleID is not null
                 || item.Developer is not null

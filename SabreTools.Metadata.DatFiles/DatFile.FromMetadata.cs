@@ -225,7 +225,7 @@ namespace SabreTools.Metadata.DatFiles
             FilterRunner? filterRunner)
         {
             // If the machine is invalid, we can't do anything
-            if (item is null || item.Count == 0)
+            if (item is null)
                 return;
 
             // If the machine doesn't pass the filter

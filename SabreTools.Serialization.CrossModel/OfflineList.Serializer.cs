@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.CrossModel
                 Language = item.Language,
                 Im1CRC = item.Im1CRC,
                 Im2CRC = item.Im2CRC,
-                [Data.Models.Metadata.Machine.CommentKey] = item.Comment,
+                Comment = item.Comment is null ? null : [item.Comment],
                 DuplicateID = item.DuplicateID,
             };
 

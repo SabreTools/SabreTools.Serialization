@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.CrossModel
                 CloneOf = parent.CloneOf,
                 Year = parent.Year,
                 Manufacturer = parent.Manufacturer,
-                Category = parent.ReadString(Data.Models.Metadata.Machine.CategoryKey),
+                Category = parent.Category is null ? null : string.Join(", ", parent.Category),
                 Players = parent.Players,
                 Rotation = parent.Rotation,
                 Control = parent.Control,

@@ -127,10 +127,10 @@ namespace SabreTools.Serialization.CrossModel
             var machine = new Data.Models.Metadata.Machine
             {
                 Board = item.Board,
-                [Data.Models.Metadata.Machine.CategoryKey] = item.Category,
+                Category = item.Category,
                 CloneOf = item.CloneOf ?? item.Trurip?.CloneOf,
                 CloneOfId = item.CloneOfId,
-                [Data.Models.Metadata.Machine.CommentKey] = item.Comment,
+                Comment = item.Comment,
                 CRC = item.Trurip?.CRC,
                 Description = item.Description,
                 Developer = item.Trurip?.Developer,

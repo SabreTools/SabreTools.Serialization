@@ -69,7 +69,7 @@ namespace SabreTools.Serialization.CrossModel
                 // Driver = item.DriverStatus, // TODO: Needs metadata mapping
                 Year = item.Year,
                 Manufacturer = item.Manufacturer,
-                [Data.Models.Metadata.Machine.CategoryKey] = item.Category,
+                Category = item.Category is null ? null : [item.Category],
                 CloneOf = item.CloneOf,
                 RomOf = item.RomOf,
                 SampleOf = item.SampleOf,

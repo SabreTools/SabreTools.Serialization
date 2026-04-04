@@ -576,7 +576,7 @@ namespace SabreTools.Metadata.DatFiles
                 game = machine?.Name ?? string.Empty,
                 manufacturer = machine?.Manufacturer ?? string.Empty,
                 publisher = machine?.Publisher ?? string.Empty,
-                category = machine?.ReadString(Data.Models.Metadata.Machine.CategoryKey) ?? string.Empty,
+                category = machine?.Category is null ? string.Empty : string.Join(", ", machine.Category),
                 name = item.GetName() ?? type.AsStringValue() ?? string.Empty,
                 crc16 = string.Empty,
                 crc = string.Empty,

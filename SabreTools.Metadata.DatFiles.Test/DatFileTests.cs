@@ -1361,11 +1361,11 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine machine = new Machine
             {
-                Name = "machine",
+                Category = ["category"],
                 Manufacturer = "manufacturer",
-                Publisher = "publisher"
+                Name = "machine",
+                Publisher = "publisher",
             };
-            machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Rom
             {
@@ -1398,11 +1398,11 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine machine = new Machine
             {
-                Name = "machine",
+                Category = ["category"],
                 Manufacturer = "manufacturer",
+                Name = "machine",
                 Publisher = "publisher"
             };
-            machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Disk
             {
@@ -1423,11 +1423,11 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine machine = new Machine
             {
-                Name = "machine",
+                Category = ["category"],
                 Manufacturer = "manufacturer",
+                Name = "machine",
                 Publisher = "publisher"
             };
-            machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new DatItems.Formats.File
             {
@@ -1452,11 +1452,11 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine machine = new Machine
             {
-                Name = "machine",
+                Category = ["category"],
                 Manufacturer = "manufacturer",
+                Name = "machine",
                 Publisher = "publisher"
             };
-            machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Media
             {
@@ -1479,11 +1479,11 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine machine = new Machine
             {
-                Name = "machine",
+                Category = ["category"],
                 Manufacturer = "manufacturer",
+                Name = "machine",
                 Publisher = "publisher"
             };
-            machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Rom
             {

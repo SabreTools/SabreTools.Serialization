@@ -401,10 +401,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.Equal("board", machine.Board);
             Assert.Equal("buttons", machine.Buttons);
-            Assert.Equal("category", machine.ReadString(Data.Models.Metadata.Machine.CategoryKey));
             Assert.Equal("cloneof", machine.CloneOf);
             Assert.Equal("cloneofid", machine.CloneOfId);
-            Assert.Equal("comment", machine.ReadString(Data.Models.Metadata.Machine.CommentKey));
             Assert.Equal("company", machine.Company);
             Assert.Equal("control", machine.Control);
             Assert.Equal("country", machine.Country);
@@ -474,10 +472,20 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.BiosSet biosSet = Assert.Single(biosSets);
             ValidateMetadataBiosSet(biosSet);
 
+            string[]? categories = machine.Category;
+            Assert.NotNull(categories);
+            string? category = Assert.Single(categories);
+            Assert.Equal("category", category);
+
             Data.Models.Metadata.Chip[]? chips = machine.Chip;
             Assert.NotNull(chips);
             Data.Models.Metadata.Chip chip = Assert.Single(chips);
             ValidateMetadataChip(chip);
+
+            string[]? comments = machine.Comment;
+            Assert.NotNull(comments);
+            string? comment = Assert.Single(comments);
+            Assert.Equal("comment", comment);
 
             Data.Models.Metadata.Configuration[]? configurations = machine.Configuration;
             Assert.NotNull(configurations);

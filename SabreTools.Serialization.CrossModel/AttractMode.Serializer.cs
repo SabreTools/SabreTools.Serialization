@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.CrossModel
                 CloneOf = item.CloneOf,
                 Year = item.Year,
                 Manufacturer = item.Manufacturer,
-                [Data.Models.Metadata.Machine.CategoryKey] = item.Category,
+                Category = item.Category is null ? null : [item.Category],
                 Players = item.Players,
                 Rotation = item.Rotation,
                 Control = item.Control,

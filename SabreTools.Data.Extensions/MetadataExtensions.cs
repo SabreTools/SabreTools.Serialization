@@ -73,6 +73,8 @@ namespace SabreTools.Data.Extensions
                 return input.Clone() as Input;
             else if (self is Instance instance)
                 return instance.Clone() as Instance;
+            else if (self is Machine machine)
+                return machine.Clone() as Machine;
             else if (self is Media media)
                 return media.Clone() as Media;
             else if (self is Original original)
@@ -149,68 +151,6 @@ namespace SabreTools.Data.Extensions
                 cloneHeader.Type = selfHeader.Type;
                 cloneHeader.Url = selfHeader.Url;
                 cloneHeader.Version = selfHeader.Version;
-            }
-            else if (self is Machine selfMachine && clone is Machine cloneMachine)
-            {
-                cloneMachine.Board = selfMachine.Board;
-                cloneMachine.Buttons = selfMachine.Buttons;
-                cloneMachine.CloneOf = selfMachine.CloneOf;
-                cloneMachine.CloneOfId = selfMachine.CloneOfId;
-                cloneMachine.Company = selfMachine.Company;
-                cloneMachine.Control = selfMachine.Control;
-                cloneMachine.Country = selfMachine.Country;
-                cloneMachine.CRC = selfMachine.CRC;
-                cloneMachine.Description = selfMachine.Description;
-                cloneMachine.Developer = selfMachine.Developer;
-                cloneMachine.DirName = selfMachine.DirName;
-                cloneMachine.DisplayCount = selfMachine.DisplayCount;
-                cloneMachine.DisplayType = selfMachine.DisplayType;
-                cloneMachine.DuplicateID = selfMachine.DuplicateID;
-                cloneMachine.Emulator = selfMachine.Emulator;
-                cloneMachine.Enabled = selfMachine.Enabled;
-                cloneMachine.Extra = selfMachine.Extra;
-                cloneMachine.Favorite = selfMachine.Favorite;
-                cloneMachine.GenMSXID = selfMachine.GenMSXID;
-                cloneMachine.Genre = selfMachine.Genre;
-                cloneMachine.Hash = selfMachine.Hash;
-                cloneMachine.History = selfMachine.History;
-                cloneMachine.Id = selfMachine.Id;
-                cloneMachine.Im1CRC = selfMachine.Im1CRC;
-                cloneMachine.Im2CRC = selfMachine.Im2CRC;
-                cloneMachine.ImageNumber = selfMachine.ImageNumber;
-                cloneMachine.IsBios = selfMachine.IsBios;
-                cloneMachine.IsDevice = selfMachine.IsDevice;
-                cloneMachine.IsMechanical = selfMachine.IsMechanical;
-                cloneMachine.Language = selfMachine.Language;
-                cloneMachine.Location = selfMachine.Location;
-                cloneMachine.Manufacturer = selfMachine.Manufacturer;
-                cloneMachine.Name = selfMachine.Name;
-                cloneMachine.Notes = selfMachine.Notes;
-                cloneMachine.PlayedCount = selfMachine.PlayedCount;
-                cloneMachine.PlayedTime = selfMachine.PlayedTime;
-                cloneMachine.Players = selfMachine.Players;
-                cloneMachine.Publisher = selfMachine.Publisher;
-                cloneMachine.Ratings = selfMachine.Ratings;
-                cloneMachine.RebuildTo = selfMachine.RebuildTo;
-                cloneMachine.RelatedTo = selfMachine.RelatedTo;
-                cloneMachine.ReleaseNumber = selfMachine.ReleaseNumber;
-                cloneMachine.RomOf = selfMachine.RomOf;
-                cloneMachine.Rotation = selfMachine.Rotation;
-                cloneMachine.Runnable = selfMachine.Runnable;
-                cloneMachine.SampleOf = selfMachine.SampleOf;
-                cloneMachine.SaveType = selfMachine.SaveType;
-                cloneMachine.Score = selfMachine.Score;
-                cloneMachine.Source = selfMachine.Source;
-                cloneMachine.SourceFile = selfMachine.SourceFile;
-                cloneMachine.SourceRom = selfMachine.SourceRom;
-                cloneMachine.Status = selfMachine.Status;
-                cloneMachine.Subgenre = selfMachine.Subgenre;
-                cloneMachine.Supported = selfMachine.Supported;
-                cloneMachine.System = selfMachine.System;
-                cloneMachine.Tags = selfMachine.Tags;
-                cloneMachine.TitleID = selfMachine.TitleID;
-                cloneMachine.Url = selfMachine.Url;
-                cloneMachine.Year = selfMachine.Year;
             }
 
             // Loop through and clone per type

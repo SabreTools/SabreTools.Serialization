@@ -255,11 +255,11 @@ namespace SabreTools.Metadata.DatFiles.Test
                 BiosSet = [CreateMetadataBiosSet()],
                 Board = "board",
                 Buttons = "buttons",
-                [Data.Models.Metadata.Machine.CategoryKey] = "category",
+                Category = ["category"],
                 Chip = [CreateMetadataChip()],
                 CloneOf = "cloneof",
                 CloneOfId = "cloneofid",
-                [Data.Models.Metadata.Machine.CommentKey] = "comment",
+                Comment = ["comment"],
                 Company = "company",
                 Configuration = [CreateMetadataConfiguration()],
                 Control = "control",
@@ -1057,10 +1057,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.Equal("board", machine.Board);
             Assert.Equal("buttons", machine.Buttons);
-            Assert.Equal("category", machine.ReadString(Data.Models.Metadata.Machine.CategoryKey));
             Assert.Equal("cloneof", machine.CloneOf);
             Assert.Equal("cloneofid", machine.CloneOfId);
-            Assert.Equal("comment", machine.ReadString(Data.Models.Metadata.Machine.CommentKey));
             Assert.Equal("company", machine.Company);
             Assert.Equal("control", machine.Control);
             Assert.Equal("country", machine.Country);
@@ -1114,6 +1112,16 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("tags", machine.Tags);
             Assert.Equal("titleid", machine.TitleID);
             Assert.Equal("year", machine.Year);
+
+            string[]? categories = machine.Category;
+            Assert.NotNull(categories);
+            string? category = Assert.Single(categories);
+            Assert.Equal("category", category);
+
+            string[]? comments = machine.Comment;
+            Assert.NotNull(comments);
+            string? comment = Assert.Single(comments);
+            Assert.Equal("comment", comment);
         }
 #pragma warning restore IDE0051
 

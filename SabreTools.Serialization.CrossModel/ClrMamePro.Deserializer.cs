@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.CrossModel
             // gameBase.DriverStatus = item.ReadString(Data.Models.Metadata.Machine.DriverKey); // TODO: Needs metadata mapping
             gameBase.Year = item.Year;
             gameBase.Manufacturer = item.Manufacturer;
-            gameBase.Category = item.ReadString(Data.Models.Metadata.Machine.CategoryKey);
+            gameBase.Category = item.Category is null ? null : string.Join(", ", item.Category);
             gameBase.CloneOf = item.CloneOf;
             gameBase.RomOf = item.RomOf;
             gameBase.SampleOf = item.SampleOf;

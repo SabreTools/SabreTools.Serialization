@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.CrossModel
                 Language = item.Language,
                 Im1CRC = item.Im1CRC,
                 Im2CRC = item.Im2CRC,
-                Comment = item.ReadString(Data.Models.Metadata.Machine.CommentKey),
+                Comment = item.Comment is null ? null : string.Join(", ", item.Comment),
                 DuplicateID = item.DuplicateID,
             };
 
