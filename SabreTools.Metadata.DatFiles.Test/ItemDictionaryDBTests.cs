@@ -59,7 +59,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine machine = new Machine();
 
             var file = new File { SHA1 = "deadbeef" };
-            file.SetName("item");
 
             var dict = new ItemDictionaryDB();
             long sourceIndex = dict.AddSource(source);
@@ -78,7 +77,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine machine = new Machine();
 
             DatItem file = new File();
-            file.SetName("item");
 
             var dict = new ItemDictionaryDB();
             long sourceIndex = dict.AddSource(source);

@@ -338,22 +338,6 @@ namespace SabreTools.Metadata.DatItems
 
         #endregion
 
-        #region Accessors
-
-        /// <summary>
-        /// Gets the name to use for a Machine
-        /// </summary>
-        /// <returns>Name if available, null otherwise</returns>
-        public string? GetName() => Name;
-
-        /// <summary>
-        /// Sets the name to use for a Machine
-        /// </summary>
-        /// <param name="name">Name to set for the item</param>
-        public void SetName(string? name) => Name = name;
-
-        #endregion
-
         #region Cloning methods
 
         /// <summary>

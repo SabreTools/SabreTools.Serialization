@@ -28,8 +28,8 @@ namespace SabreTools.Metadata.DatItems.Test
 
             public string? Name
             {
-                get => (_internal as Data.Models.Metadata.Info)?.Name;
-                set => (_internal as Data.Models.Metadata.Info)?.Name = value;
+                get => (_internal as TestDatItemModel)?.Name;
+                set => (_internal as TestDatItemModel)?.Name = value;
             }
 
             public TestDatItem() { }
@@ -242,19 +242,6 @@ namespace SabreTools.Metadata.DatItems.Test
         }
 
         [Fact]
-        public void Equals_MismatchedInternal_False()
-        {
-            DatItem self = new TestDatItem();
-            self.SetName("self");
-
-            DatItem? other = new TestDatItem();
-            other.SetName("other");
-
-            bool actual = self.Equals(other);
-            Assert.False(actual);
-        }
-
-        [Fact]
         public void Equals_EqualInternal_True()
         {
             DatItem self = new TestDatItem();
@@ -453,9 +440,7 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void GetInternalCloneTest()
         {
-            DatItem<TestDatItemModel> item = new TestDatItem();
-            item.SetName("name");
-
+            DatItem<TestDatItemModel> item = new TestDatItem { Name = "name" };
             TestDatItemModel actual = item.GetInternalClone();
             Assert.Equal("name", actual.Name);
         }

@@ -262,7 +262,7 @@ namespace SabreTools.Metadata.DatItems
             string key = string.Empty;
 
             string sourceKeyPadded = source?.Index.ToString().PadLeft(10, '0') + '-';
-            string machineName = machine?.GetName() ?? "Default";
+            string machineName = machine?.Name ?? "Default";
 
             // Now determine what the key should be based on the bucketedBy value
             switch (bucketedBy)

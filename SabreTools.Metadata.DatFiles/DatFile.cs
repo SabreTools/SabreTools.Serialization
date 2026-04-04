@@ -510,16 +510,6 @@ namespace SabreTools.Metadata.DatFiles
                         disk.Name = $"{pre}{name}{post}";
                     }
                 }
-                else if (item is DatItems.Formats.File file)
-                {
-                    // We can only write out if there's a SHA-1
-                    string? sha1 = file.SHA1;
-                    if (!string.IsNullOrEmpty(sha1))
-                    {
-                        name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
-                        file.SetName($"{pre}{name}{post}");
-                    }
-                }
                 else if (item is Media media)
                 {
                     // We can only write out if there's a SHA-1

@@ -67,7 +67,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Source = source,
                 Machine = machine
             };
-            file.SetName("item");
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(file, statsOnly: false);
@@ -88,7 +87,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Source = source,
                 Machine = machine
             };
-            file.SetName("item");
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(file, statsOnly: false);
