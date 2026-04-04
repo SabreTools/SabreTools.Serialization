@@ -252,6 +252,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Archive otherArchive)
+                return ((Data.Models.Metadata.Archive)_internal).Equals((Data.Models.Metadata.Archive)otherArchive._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.Archive>? other)
         {
             // If the other value is invalid
@@ -260,7 +275,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Archive otherArchive)
-                return _internal.Equals(otherArchive._internal);
+                return ((Data.Models.Metadata.Archive)_internal).Equals((Data.Models.Metadata.Archive)otherArchive._internal);
 
             // Everything else fails
             return false;

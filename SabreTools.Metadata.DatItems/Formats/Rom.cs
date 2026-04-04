@@ -419,6 +419,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Rom otherRom)
+                return ((Data.Models.Metadata.Rom)_internal).PartialEquals((Data.Models.Metadata.Rom)otherRom._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.Rom>? other)
         {
             // If the other value is invalid
@@ -427,7 +442,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Rom otherRom)
-                return _internal.Equals(otherRom._internal);
+                return ((Data.Models.Metadata.Rom)_internal).PartialEquals((Data.Models.Metadata.Rom)otherRom._internal);
 
             // Everything else fails
             return false;

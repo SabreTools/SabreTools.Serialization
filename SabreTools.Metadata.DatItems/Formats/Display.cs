@@ -168,6 +168,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Display otherDisplay)
+                return ((Data.Models.Metadata.Display)_internal).Equals((Data.Models.Metadata.Display)otherDisplay._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.Display>? other)
         {
             // If the other value is invalid
@@ -176,7 +191,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Display otherDisplay)
-                return _internal.Equals(otherDisplay._internal);
+                return ((Data.Models.Metadata.Display)_internal).Equals((Data.Models.Metadata.Display)otherDisplay._internal);
 
             // Everything else fails
             return false;

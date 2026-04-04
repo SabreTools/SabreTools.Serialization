@@ -11,12 +11,21 @@ namespace SabreTools.Metadata.DatItems.Test
         /// <summary>
         /// Testing implementation of Data.Models.Metadata.DatItem
         /// </summary>
-        private class TestDatItemModel : Data.Models.Metadata.DatItem, ICloneable
+        private class TestDatItemModel : Data.Models.Metadata.DatItem, ICloneable, IEquatable<TestDatItemModel>
         {
             public string? Name { get; set; }
 
             /// <inheritdoc/>
             public object Clone() => new TestDatItemModel { Name = Name };
+
+            /// <inheritdoc/>
+            public bool Equals(TestDatItemModel? other)
+            {
+                if (other is null)
+                    return false;
+
+                return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
         /// <summary>
@@ -52,6 +61,20 @@ namespace SabreTools.Metadata.DatItems.Test
             /// <inheritdoc/>
             public override void SetName(string? name) => Name = name;
 
+            /// <inheritdoc/>
+            public override bool Equals(DatItem? other)
+            {
+                // If the other value is invalid
+                if (other is null)
+                    return false;
+
+                // If the type matches
+                if (other is TestDatItem otherTestDatItem)
+                    return ((TestDatItemModel)_internal).Equals((TestDatItemModel)otherTestDatItem._internal);
+
+                // Everything else fails
+                return false;
+            }
 
             /// <inheritdoc/>
             public override bool Equals(DatItem<TestDatItemModel>? other)
@@ -62,7 +85,7 @@ namespace SabreTools.Metadata.DatItems.Test
 
                 // If the type matches
                 if (other is TestDatItem otherTestDatItem)
-                    return _internal.Equals(otherTestDatItem._internal);
+                    return ((TestDatItemModel)_internal).Equals((TestDatItemModel)otherTestDatItem._internal);
 
                 // Everything else fails
                 return false;

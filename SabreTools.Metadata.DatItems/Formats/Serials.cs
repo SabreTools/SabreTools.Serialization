@@ -139,6 +139,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Serials otherSerials)
+                return ((Data.Models.Metadata.Serials)_internal).Equals((Data.Models.Metadata.Serials)otherSerials._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.Serials>? other)
         {
             // If the other value is invalid
@@ -147,7 +162,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Serials otherSerials)
-                return _internal.Equals(otherSerials._internal);
+                return ((Data.Models.Metadata.Serials)_internal).Equals((Data.Models.Metadata.Serials)otherSerials._internal);
 
             // Everything else fails
             return false;

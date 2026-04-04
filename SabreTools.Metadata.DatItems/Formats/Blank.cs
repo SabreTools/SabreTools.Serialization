@@ -55,6 +55,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Blank otherBlank)
+                return ((Data.Models.Metadata.Blank)_internal).Equals((Data.Models.Metadata.Blank)otherBlank._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.Blank>? other)
         {
             // If the other value is invalid
@@ -63,7 +78,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Blank otherBlank)
-                return _internal.Equals(otherBlank._internal);
+                return ((Data.Models.Metadata.Blank)_internal).Equals((Data.Models.Metadata.Blank)otherBlank._internal);
 
             // Everything else fails
             return false;

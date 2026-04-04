@@ -91,6 +91,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Chip otherChip)
+                return ((Data.Models.Metadata.Chip)_internal).Equals((Data.Models.Metadata.Chip)otherChip._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.Chip>? other)
         {
             // If the other value is invalid
@@ -99,7 +114,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Chip otherChip)
-                return _internal.Equals(otherChip._internal);
+                return ((Data.Models.Metadata.Chip)_internal).Equals((Data.Models.Metadata.Chip)otherChip._internal);
 
             // Everything else fails
             return false;

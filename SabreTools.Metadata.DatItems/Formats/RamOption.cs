@@ -73,6 +73,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is RamOption otherRamOption)
+                return ((Data.Models.Metadata.RamOption)_internal).Equals((Data.Models.Metadata.RamOption)otherRamOption._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.RamOption>? other)
         {
             // If the other value is invalid
@@ -81,7 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is RamOption otherRamOption)
-                return _internal.Equals(otherRamOption._internal);
+                return ((Data.Models.Metadata.RamOption)_internal).Equals((Data.Models.Metadata.RamOption)otherRamOption._internal);
 
             // Everything else fails
             return false;

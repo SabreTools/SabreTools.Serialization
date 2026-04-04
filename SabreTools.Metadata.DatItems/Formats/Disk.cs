@@ -174,6 +174,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Disk otherDisk)
+                return ((Data.Models.Metadata.Disk)_internal).PartialEquals((Data.Models.Metadata.Disk)otherDisk._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.Disk>? other)
         {
             // If the other value is invalid
@@ -182,7 +197,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Disk otherDisk)
-                return _internal.Equals(otherDisk._internal);
+                return ((Data.Models.Metadata.Disk)_internal).PartialEquals((Data.Models.Metadata.Disk)otherDisk._internal);
 
             // Everything else fails
             return false;

@@ -120,6 +120,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Device otherDevice)
+                return ((Data.Models.Metadata.Device)_internal).Equals((Data.Models.Metadata.Device)otherDevice._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.Device>? other)
         {
             // If the other value is invalid
@@ -128,7 +143,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Device otherDevice)
-                return _internal.Equals(otherDevice._internal);
+                return ((Data.Models.Metadata.Device)_internal).Equals((Data.Models.Metadata.Device)otherDevice._internal);
 
             // Everything else fails
             return false;

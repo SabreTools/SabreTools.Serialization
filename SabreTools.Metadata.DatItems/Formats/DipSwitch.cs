@@ -143,6 +143,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is DipSwitch otherDipSwitch)
+                return ((Data.Models.Metadata.DipSwitch)_internal).Equals((Data.Models.Metadata.DipSwitch)otherDipSwitch._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.DipSwitch>? other)
         {
             // If the other value is invalid
@@ -151,7 +166,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DipSwitch otherDipSwitch)
-                return _internal.Equals(otherDipSwitch._internal);
+                return ((Data.Models.Metadata.DipSwitch)_internal).Equals((Data.Models.Metadata.DipSwitch)otherDipSwitch._internal);
 
             // Everything else fails
             return false;

@@ -39,7 +39,7 @@ namespace SabreTools.Metadata
                 (DipLocation selfDipLocation, DipLocation otherDipLocation) => selfDipLocation.Equals(otherDipLocation),
                 (DipSwitch selfDipSwitch, DipSwitch otherDipSwitch) => selfDipSwitch.Equals(otherDipSwitch),
                 (DipValue selfDipValue, DipValue otherDipValue) => selfDipValue.Equals(otherDipValue),
-                (Disk selfDisk, Disk otherDisk) => EqualsImpl(selfDisk, otherDisk),
+                (Disk selfDisk, Disk otherDisk) => PartialEquals(selfDisk, otherDisk),
                 (DiskArea selfDiskArea, DiskArea otherDiskArea) => selfDiskArea.Equals(otherDiskArea),
                 (Display selfDisplay, Display otherDisplay) => selfDisplay.Equals(otherDisplay),
                 (Driver selfDriver, Driver otherDriver) => selfDriver.Equals(otherDriver),
@@ -50,14 +50,14 @@ namespace SabreTools.Metadata
                 (Input selfInput, Input otherInput) => selfInput.Equals(otherInput),
                 (Instance selfInstance, Instance otherInstance) => selfInstance.Equals(otherInstance),
                 (Machine selfMachine, Machine otherMachine) => EqualsImpl(selfMachine, otherMachine),
-                (Media selfMedia, Media otherMedia) => EqualsImpl(selfMedia, otherMedia),
+                (Media selfMedia, Media otherMedia) => PartialEquals(selfMedia, otherMedia),
                 (Original selfOriginal, Original otherOriginal) => selfOriginal.Equals(otherOriginal),
                 (Part selfPart, Part otherPart) => selfPart.Equals(otherPart),
                 (Port selfPort, Port otherPort) => selfPort.Equals(otherPort),
                 (RamOption selfRamOption, RamOption otherRamOption) => selfRamOption.Equals(otherRamOption),
                 (Release selfRelease, Release otherRelease) => selfRelease.Equals(otherRelease),
                 (ReleaseDetails selfReleaseDetails, ReleaseDetails otherReleaseDetails) => selfReleaseDetails.Equals(otherReleaseDetails),
-                (Rom selfRom, Rom otherRom) => EqualsImpl(selfRom, otherRom),
+                (Rom selfRom, Rom otherRom) => PartialEquals(selfRom, otherRom),
                 (Serials selfSerials, Serials otherSerials) => selfSerials.Equals(otherSerials),
                 (SharedFeat selfSharedFeat, SharedFeat otherSharedFeat) => selfSharedFeat.Equals(otherSharedFeat),
                 (Slot selfSlot, Slot otherSlot) => selfSlot.Equals(otherSlot),
@@ -100,7 +100,7 @@ namespace SabreTools.Metadata
             else if (self is DipValue selfDipValue && other is DipValue otherDipValue)
                 return selfDipValue.Equals(otherDipValue);
             else if (self is Disk selfDisk && other is Disk otherDisk)
-                return EqualsImpl(selfDisk, otherDisk);
+                return PartialEquals(selfDisk, otherDisk);
             else if (self is DiskArea selfDiskArea && other is DiskArea otherDiskArea)
                 return selfDiskArea.Equals(otherDiskArea);
             else if (self is Display selfDisplay && other is Display otherDisplay)
@@ -122,7 +122,7 @@ namespace SabreTools.Metadata
             else if (self is Machine selfMachine && other is Machine otherMachine)
                 return EqualsImpl(selfMachine, otherMachine);
             else if (self is Media selfMedia && other is Media otherMedia)
-                return EqualsImpl(selfMedia, otherMedia);
+                return PartialEquals(selfMedia, otherMedia);
             else if (self is Original selfOriginal && other is Original otherOriginal)
                 return selfOriginal.Equals(otherOriginal);
             else if (self is Part selfPart && other is Part otherPart)
@@ -136,7 +136,7 @@ namespace SabreTools.Metadata
             else if (self is ReleaseDetails selfReleaseDetails && other is ReleaseDetails otherReleaseDetails)
                 return selfReleaseDetails.Equals(otherReleaseDetails);
             else if (self is Rom selfRom && other is Rom otherRom)
-                return EqualsImpl(selfRom, otherRom);
+                return PartialEquals(selfRom, otherRom);
             else if (self is Serials selfSerials && other is Serials otherSerials)
                 return selfSerials.Equals(otherSerials);
             else if (self is SharedFeat selfSharedFeat && other is SharedFeat otherSharedFeat)
@@ -289,7 +289,7 @@ namespace SabreTools.Metadata
         /// <summary>
         /// Check equality of two Disk objects
         /// </summary>
-        private static bool EqualsImpl(this Disk self, Disk other)
+        public static bool PartialEquals(this Disk self, Disk other)
         {
             ItemStatus? selfStatus = self.Status;
             ItemStatus? otherStatus = other.Status;
@@ -318,7 +318,7 @@ namespace SabreTools.Metadata
         /// <summary>
         /// Check equality of two Media objects
         /// </summary>
-        private static bool EqualsImpl(this Media self, Media other)
+        public static bool PartialEquals(this Media self, Media other)
         {
             // If we get a partial match
             if (self.HashMatch(other))
@@ -331,7 +331,7 @@ namespace SabreTools.Metadata
         /// <summary>
         /// Check equality of two Rom objects
         /// </summary>
-        private static bool EqualsImpl(this Rom self, Rom other)
+        public static bool PartialEquals(this Rom self, Rom other)
         {
             ItemStatus? selfStatus = self.Status;
             ItemStatus? otherStatus = other.Status;

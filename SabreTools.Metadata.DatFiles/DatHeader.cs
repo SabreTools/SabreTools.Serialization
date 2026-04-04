@@ -385,7 +385,7 @@ namespace SabreTools.Metadata.DatFiles
                 return false;
 
             // Compare internal models
-            return _internal.EqualTo(otherItem._internal);
+            return _internal.Equals(otherItem._internal);
         }
 
         /// <inheritdoc/>
@@ -400,7 +400,7 @@ namespace SabreTools.Metadata.DatFiles
                 return false;
 
             // Compare internal models
-            return _internal.EqualTo(otherItem._internal);
+            return _internal.Equals(otherItem._internal);
         }
 
         #endregion

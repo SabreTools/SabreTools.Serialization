@@ -84,6 +84,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Adjuster otherAdjuster)
+                return ((Data.Models.Metadata.Adjuster)_internal).Equals((Data.Models.Metadata.Adjuster)otherAdjuster._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.Adjuster>? other)
         {
             // If the other value is invalid
@@ -92,7 +107,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Adjuster otherAdjuster)
-                return _internal.Equals(otherAdjuster._internal);
+                return ((Data.Models.Metadata.Adjuster)_internal).Equals((Data.Models.Metadata.Adjuster)otherAdjuster._internal);
 
             // Everything else fails
             return false;

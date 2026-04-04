@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Metadata.DatItems.Formats
@@ -85,6 +85,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Release otherRelease)
+                return ((Data.Models.Metadata.Release)_internal).Equals((Data.Models.Metadata.Release)otherRelease._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(DatItem<Data.Models.Metadata.Release>? other)
         {
             // If the other value is invalid
@@ -93,7 +108,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Release otherRelease)
-                return _internal.Equals(otherRelease._internal);
+                return ((Data.Models.Metadata.Release)_internal).Equals((Data.Models.Metadata.Release)otherRelease._internal);
 
             // Everything else fails
             return false;
