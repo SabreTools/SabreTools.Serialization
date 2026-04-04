@@ -254,9 +254,13 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfMachine.Control != otherMachine.Control)
                     return false;
+                if (selfMachine.CRC != otherMachine.CRC)
+                    return false;
                 if (selfMachine.Country != otherMachine.Country)
                     return false;
                 if (selfMachine.Description != otherMachine.Description)
+                    return false;
+                if (selfMachine.Developer != otherMachine.Developer)
                     return false;
                 if (selfMachine.DirName != otherMachine.DirName)
                     return false;
@@ -268,11 +272,15 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfMachine.Emulator != otherMachine.Emulator)
                     return false;
+                if (selfMachine.Enabled != otherMachine.Enabled)
+                    return false;
                 if (selfMachine.Extra != otherMachine.Extra)
                     return false;
                 if (selfMachine.Favorite != otherMachine.Favorite)
                     return false;
                 if (selfMachine.GenMSXID != otherMachine.GenMSXID)
+                    return false;
+                if (selfMachine.Genre != otherMachine.Genre)
                     return false;
                 if (selfMachine.Hash != otherMachine.Hash)
                     return false;
@@ -308,7 +316,11 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfMachine.Publisher != otherMachine.Publisher)
                     return false;
+                if (selfMachine.Ratings != otherMachine.Ratings)
+                    return false;
                 if (selfMachine.RebuildTo != otherMachine.RebuildTo)
+                    return false;
+                if (selfMachine.RelatedTo != otherMachine.RelatedTo)
                     return false;
                 if (selfMachine.ReleaseNumber != otherMachine.ReleaseNumber)
                     return false;
@@ -322,17 +334,25 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfMachine.SaveType != otherMachine.SaveType)
                     return false;
+                if (selfMachine.Score != otherMachine.Score)
+                    return false;
+                if (selfMachine.Source != otherMachine.Source)
+                    return false;
                 if (selfMachine.SourceFile != otherMachine.SourceFile)
                     return false;
                 if (selfMachine.SourceRom != otherMachine.SourceRom)
                     return false;
                 if (selfMachine.Status != otherMachine.Status)
                     return false;
+                if (selfMachine.Subgenre != otherMachine.Subgenre)
+                    return false;
                 if (selfMachine.Supported != otherMachine.Supported)
                     return false;
                 if (selfMachine.System != otherMachine.System)
                     return false;
                 if (selfMachine.Tags != otherMachine.Tags)
+                    return false;
+                if (selfMachine.TitleID != otherMachine.TitleID)
                     return false;
                 if (selfMachine.Url != otherMachine.Url)
                     return false;

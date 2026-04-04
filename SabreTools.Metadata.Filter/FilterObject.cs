@@ -919,11 +919,17 @@ namespace SabreTools.Metadata.Filter
                 case Machine item when fieldName == "control":
                     checkValue = item.Control;
                     return true;
+                case Machine item when fieldName == "crc":
+                    checkValue = item.CRC;
+                    return true;
                 case Machine item when fieldName == "country":
                     checkValue = item.Country;
                     return true;
                 case Machine item when fieldName == "description":
                     checkValue = item.Description;
+                    return true;
+                case Machine item when fieldName == "developer":
+                    checkValue = item.Developer;
                     return true;
                 case Machine item when fieldName == "dirname":
                     checkValue = item.DirName;
@@ -940,6 +946,9 @@ namespace SabreTools.Metadata.Filter
                 case Machine item when fieldName == "emulator":
                     checkValue = item.Emulator;
                     return true;
+                case Machine item when fieldName == "enabled":
+                    checkValue = item.Enabled;
+                    return true;
                 case Machine item when fieldName == "extra":
                     checkValue = item.Extra;
                     return true;
@@ -948,6 +957,9 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case Machine item when fieldName == "genmsxid":
                     checkValue = item.GenMSXID;
+                    return true;
+                case Machine item when fieldName == "genre":
+                    checkValue = item.Genre;
                     return true;
                 case Machine item when fieldName == "hash":
                     checkValue = item.Hash;
@@ -1003,8 +1015,14 @@ namespace SabreTools.Metadata.Filter
                 case Machine item when fieldName == "publisher":
                     checkValue = item.Publisher;
                     return true;
+                case Machine item when fieldName == "ratings":
+                    checkValue = item.Ratings;
+                    return true;
                 case Machine item when fieldName == "rebuildto":
                     checkValue = item.RebuildTo;
+                    return true;
+                case Machine item when fieldName == "relatedto":
+                    checkValue = item.RelatedTo;
                     return true;
                 case Machine item when fieldName == "releasenumber":
                     checkValue = item.ReleaseNumber;
@@ -1024,6 +1042,12 @@ namespace SabreTools.Metadata.Filter
                 case Machine item when fieldName == "savetype":
                     checkValue = item.SaveType;
                     return true;
+                case Machine item when fieldName == "score":
+                    checkValue = item.Score;
+                    return true;
+                case Machine item when fieldName == "source":
+                    checkValue = item.Source;
+                    return true;
                 case Machine item when fieldName == "sourcefile":
                     checkValue = item.SourceFile;
                     return true;
@@ -1033,6 +1057,9 @@ namespace SabreTools.Metadata.Filter
                 case Machine item when fieldName == "status":
                     checkValue = item.Status;
                     return true;
+                case Machine item when fieldName == "subgenre":
+                    checkValue = item.Subgenre;
+                    return true;
                 case Machine item when fieldName == "supported":
                     checkValue = item.Supported?.AsStringValue();
                     return true;
@@ -1041,6 +1068,9 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case Machine item when fieldName == "tags":
                     checkValue = item.Tags;
+                    return true;
+                case Machine item when fieldName == "titleid":
+                    checkValue = item.TitleID;
                     return true;
                 case Machine item when fieldName == "url":
                     checkValue = item.Url;

@@ -110,7 +110,6 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static Machine CreateMachine()
         {
             Machine item = new Machine(CreateMetadataMachine());
-            item.Write(Data.Models.Metadata.Machine.TruripKey, CreateTrurip());
             return item;
         }
 
@@ -338,27 +337,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             return item;
         }
 
-        private static Trurip CreateTrurip()
-        {
-            return new Trurip
-            {
-                TitleID = "titleid",
-                // Publisher = "publisher",
-                Developer = "developer",
-                // Year = "year",
-                Genre = "genre",
-                Subgenre = "subgenre",
-                Ratings = "ratings",
-                Score = "score",
-                // Players = "players",
-                Enabled = "enabled",
-                Crc = true,
-                // Source = "source",
-                // CloneOf = "cloneof",
-                RelatedTo = "relatedto",
-            };
-        }
-
         private static Display CreateVideo(Machine machine)
         {
             Display item = new Display(CreateMetadataVideo());
@@ -430,15 +408,19 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("company", machine.Company);
             Assert.Equal("control", machine.Control);
             Assert.Equal("country", machine.Country);
+            Assert.Equal("crc", machine.CRC);
             Assert.Equal("description", machine.Description);
+            Assert.Equal("developer", machine.Developer);
             Assert.Equal("dirname", machine.DirName);
             Assert.Equal("displaycount", machine.DisplayCount);
             Assert.Equal("displaytype", machine.DisplayType);
             Assert.Equal("duplicateid", machine.DuplicateID);
             Assert.Equal("emulator", machine.Emulator);
+            Assert.Equal("enabled", machine.Enabled);
             Assert.Equal("extra", machine.Extra);
             Assert.Equal("favorite", machine.Favorite);
             Assert.Equal("genmsxid", machine.GenMSXID);
+            Assert.Equal("genre", machine.Genre);
             Assert.Equal("history", machine.History);
             Assert.Equal("id", machine.Id);
             Assert.Equal(HashType.CRC32.ZeroString, machine.Im1CRC);
@@ -456,19 +438,25 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("playedtime", machine.PlayedTime);
             Assert.Equal("players", machine.Players);
             Assert.Equal("publisher", machine.Publisher);
+            Assert.Equal("ratings", machine.Ratings);
             Assert.Equal("rebuildto", machine.RebuildTo);
+            Assert.Equal("relatedto", machine.RelatedTo);
             Assert.Equal("releasenumber", machine.ReleaseNumber);
             Assert.Equal("romof", machine.RomOf);
             Assert.Equal("rotation", machine.Rotation);
             Assert.Equal(Data.Models.Metadata.Runnable.Yes, machine.Runnable);
             Assert.Equal("sampleof", machine.SampleOf);
             Assert.Equal("savetype", machine.SaveType);
+            Assert.Equal("score", machine.Score);
+            Assert.Equal("source", machine.Source);
             Assert.Equal("sourcefile", machine.SourceFile);
             Assert.Equal("sourcerom", machine.SourceRom);
             Assert.Equal("status", machine.Status);
+            Assert.Equal("subgenre", machine.Subgenre);
             Assert.Equal(Data.Models.Metadata.Supported.Yes, machine.Supported);
             Assert.Equal("system", machine.System);
             Assert.Equal("tags", machine.Tags);
+            Assert.Equal("titleid", machine.TitleID);
             Assert.Equal("year", machine.Year);
 
             Data.Models.Metadata.Adjuster[]? adjusters = machine.Adjuster;
@@ -603,9 +591,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.Sound? sound = machine.Sound;
             Assert.NotNull(sound);
             ValidateMetadataSound(sound);
-
-            Data.Models.Logiqx.Trurip? trurip = machine.Read<Data.Models.Logiqx.Trurip>(Data.Models.Metadata.Machine.TruripKey);
-            ValidateMetadataTrurip(trurip);
 
             Data.Models.Metadata.Video[]? videos = machine.Video;
             Assert.NotNull(videos);
@@ -1221,25 +1206,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("rominfo", sourceDetails.RomInfo);
             Assert.Equal("section", sourceDetails.Section);
             Assert.Equal("tool", sourceDetails.Tool);
-        }
-
-        private static void ValidateMetadataTrurip(Data.Models.Logiqx.Trurip? trurip)
-        {
-            Assert.NotNull(trurip);
-            Assert.Equal("titleid", trurip.TitleID);
-            Assert.Equal("publisher", trurip.Publisher);
-            Assert.Equal("developer", trurip.Developer);
-            Assert.Equal("year", trurip.Year);
-            Assert.Equal("genre", trurip.Genre);
-            Assert.Equal("subgenre", trurip.Subgenre);
-            Assert.Equal("ratings", trurip.Ratings);
-            Assert.Equal("score", trurip.Score);
-            Assert.Equal("players", trurip.Players);
-            Assert.Equal(expected: "enabled", trurip.Enabled);
-            Assert.Equal("yes", trurip.CRC);
-            Assert.Equal("sourcefile", trurip.Source);
-            Assert.Equal("cloneof", trurip.CloneOf);
-            Assert.Equal("relatedto", trurip.RelatedTo);
         }
 
         private static void ValidateMetadataVideo(Data.Models.Metadata.Video? video)

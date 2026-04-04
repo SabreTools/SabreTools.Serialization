@@ -57,57 +57,46 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             string? headerVal = item.ReadString(Data.Models.Metadata.Header.HeaderKey);
-            Data.Models.Metadata.MergingFlag forceMerging = item.ForceMerging;
-            Data.Models.Metadata.NodumpFlag forceNodump = item.ForceNodump;
-            Data.Models.Metadata.PackingFlag forcePacking = item.ForcePacking;
 
             if (headerVal is not null
-                || forceMerging is not Data.Models.Metadata.MergingFlag.None
-                || forceNodump is not Data.Models.Metadata.NodumpFlag.None
-                || forcePacking is not Data.Models.Metadata.PackingFlag.None)
+                || item.ForceMerging is not Data.Models.Metadata.MergingFlag.None
+                || item.ForceNodump is not Data.Models.Metadata.NodumpFlag.None
+                || item.ForcePacking is not Data.Models.Metadata.PackingFlag.None)
             {
                 header.ClrMamePro = new Data.Models.Logiqx.ClrMamePro();
                 if (headerVal is not null)
                     header.ClrMamePro.Header = headerVal;
-                if (forceMerging is not Data.Models.Metadata.MergingFlag.None)
-                    header.ClrMamePro.ForceMerging = forceMerging;
-                if (forceNodump is not Data.Models.Metadata.NodumpFlag.None)
-                    header.ClrMamePro.ForceNodump = forceNodump;
-                if (forcePacking is not Data.Models.Metadata.PackingFlag.None)
-                    header.ClrMamePro.ForcePacking = forcePacking;
+                if (item.ForceMerging is not Data.Models.Metadata.MergingFlag.None)
+                    header.ClrMamePro.ForceMerging = item.ForceMerging;
+                if (item.ForceNodump is not Data.Models.Metadata.NodumpFlag.None)
+                    header.ClrMamePro.ForceNodump = item.ForceNodump;
+                if (item.ForcePacking is not Data.Models.Metadata.PackingFlag.None)
+                    header.ClrMamePro.ForcePacking = item.ForcePacking;
             }
 
-            string? plugin = item.Plugin;
-            Data.Models.Metadata.MergingFlag romMode = item.RomMode;
-            Data.Models.Metadata.MergingFlag biosMode = item.BiosMode;
-            Data.Models.Metadata.MergingFlag sampleMode = item.SampleMode;
-            bool? lockRomMode = item.LockRomMode;
-            bool? lockBiosMode = item.LockBiosMode;
-            bool? lockSampleMode = item.LockSampleMode;
-
-            if (plugin is not null
-                || romMode is not Data.Models.Metadata.MergingFlag.None
-                || biosMode is not Data.Models.Metadata.MergingFlag.None
-                || sampleMode is not Data.Models.Metadata.MergingFlag.None
-                || lockRomMode is not null
-                || lockBiosMode is not null
-                || lockSampleMode is not null)
+            if (item.Plugin is not null
+                || item.RomMode is not Data.Models.Metadata.MergingFlag.None
+                || item.BiosMode is not Data.Models.Metadata.MergingFlag.None
+                || item.SampleMode is not Data.Models.Metadata.MergingFlag.None
+                || item.LockRomMode is not null
+                || item.LockBiosMode is not null
+                || item.LockSampleMode is not null)
             {
                 header.RomCenter = new Data.Models.Logiqx.RomCenter();
-                if (plugin is not null)
-                    header.RomCenter.Plugin = plugin;
-                if (romMode is not Data.Models.Metadata.MergingFlag.None)
-                    header.RomCenter.RomMode = romMode;
-                if (biosMode is not Data.Models.Metadata.MergingFlag.None)
-                    header.RomCenter.BiosMode = biosMode;
-                if (sampleMode is not Data.Models.Metadata.MergingFlag.None)
-                    header.RomCenter.SampleMode = sampleMode;
-                if (lockRomMode is not null)
-                    header.RomCenter.LockRomMode = lockRomMode;
-                if (lockBiosMode is not null)
-                    header.RomCenter.LockBiosMode = lockBiosMode;
-                if (lockSampleMode is not null)
-                    header.RomCenter.LockSampleMode = lockSampleMode;
+                if (item.Plugin is not null)
+                    header.RomCenter.Plugin = item.Plugin;
+                if (item.RomMode is not Data.Models.Metadata.MergingFlag.None)
+                    header.RomCenter.RomMode = item.RomMode;
+                if (item.BiosMode is not Data.Models.Metadata.MergingFlag.None)
+                    header.RomCenter.BiosMode = item.BiosMode;
+                if (item.SampleMode is not Data.Models.Metadata.MergingFlag.None)
+                    header.RomCenter.SampleMode = item.SampleMode;
+                if (item.LockRomMode is not null)
+                    header.RomCenter.LockRomMode = item.LockRomMode;
+                if (item.LockBiosMode is not null)
+                    header.RomCenter.LockBiosMode = item.LockBiosMode;
+                if (item.LockSampleMode is not null)
+                    header.RomCenter.LockSampleMode = item.LockSampleMode;
             }
 
             return header;
@@ -140,9 +129,47 @@ namespace SabreTools.Serialization.CrossModel
             gameBase.Publisher = item.Publisher;
             gameBase.Category = item.ReadStringArray(Data.Models.Metadata.Machine.CategoryKey);
 
-            var trurip = item.Read<Trurip>(Data.Models.Metadata.Machine.TruripKey);
-            if (trurip is not null)
-                gameBase.Trurip = trurip;
+            if (item.TitleID is not null
+                || item.Developer is not null
+                || item.Genre is not null
+                || item.Subgenre is not null
+                || item.Ratings is not null
+                || item.Score is not null
+                || item.Enabled is not null
+                || item.CRC is not null
+                || item.Source is not null
+                || item.RelatedTo is not null)
+            {
+                gameBase.Trurip = new Trurip();
+                if (item.TitleID is not null)
+                    gameBase.Trurip.TitleID = item.TitleID;
+                if (item.Publisher is not null)
+                    gameBase.Trurip.Publisher = item.Publisher;
+                if (item.Developer is not null)
+                    gameBase.Trurip.Developer = item.Developer;
+                if (item.Year is not null)
+                    gameBase.Trurip.Year = item.Year;
+                if (item.Genre is not null)
+                    gameBase.Trurip.Genre = item.Genre;
+                if (item.Subgenre is not null)
+                    gameBase.Trurip.Subgenre = item.Subgenre;
+                if (item.Ratings is not null)
+                    gameBase.Trurip.Ratings = item.Ratings;
+                if (item.Score is not null)
+                    gameBase.Trurip.Score = item.Score;
+                if (item.Players is not null)
+                    gameBase.Trurip.Players = item.Players;
+                if (item.Enabled is not null)
+                    gameBase.Trurip.Enabled = item.Enabled;
+                if (item.CRC is not null)
+                    gameBase.Trurip.CRC = item.CRC;
+                if (item.Source is not null)
+                    gameBase.Trurip.Source = item.Source;
+                if (item.CloneOf is not null)
+                    gameBase.Trurip.CloneOf = item.CloneOf;
+                if (item.RelatedTo is not null)
+                    gameBase.Trurip.RelatedTo = item.RelatedTo;
+            }
 
             var releases = item.Release;
             if (releases is not null && releases.Length > 0)

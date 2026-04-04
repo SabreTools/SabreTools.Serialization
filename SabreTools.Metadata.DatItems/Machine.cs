@@ -51,6 +51,12 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.Control = value;
         }
 
+        public string? CRC
+        {
+            get => _internal.CRC;
+            set => _internal.CRC = value;
+        }
+
         public string? Country
         {
             get => _internal.Country;
@@ -61,6 +67,12 @@ namespace SabreTools.Metadata.DatItems
         {
             get => _internal.Description;
             set => _internal.Description = value;
+        }
+
+        public string? Developer
+        {
+            get => _internal.Developer;
+            set => _internal.Developer = value;
         }
 
         public string? DirName
@@ -93,6 +105,12 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.Emulator = value;
         }
 
+        public string? Enabled
+        {
+            get => _internal.Enabled;
+            set => _internal.Enabled = value;
+        }
+
         public string? Extra
         {
             get => _internal.Extra;
@@ -109,6 +127,12 @@ namespace SabreTools.Metadata.DatItems
         {
             get => _internal.GenMSXID;
             set => _internal.GenMSXID = value;
+        }
+
+        public string? Genre
+        {
+            get => _internal.Genre;
+            set => _internal.Genre = value;
         }
 
         public string? Hash
@@ -219,10 +243,22 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.Publisher = value;
         }
 
+        public string? Ratings
+        {
+            get => _internal.Ratings;
+            set => _internal.Ratings = value;
+        }
+
         public string? RebuildTo
         {
             get => _internal.RebuildTo;
             set => _internal.RebuildTo = value;
+        }
+
+        public string? RelatedTo
+        {
+            get => _internal.RelatedTo;
+            set => _internal.RelatedTo = value;
         }
 
         public string? ReleaseNumber
@@ -261,6 +297,18 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.SaveType = value;
         }
 
+        public string? Score
+        {
+            get => _internal.Score;
+            set => _internal.Score = value;
+        }
+
+        public string? Source
+        {
+            get => _internal.Source;
+            set => _internal.Source = value;
+        }
+
         public string? SourceFile
         {
             get => _internal.SourceFile;
@@ -279,6 +327,12 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.Status = value;
         }
 
+        public string? Subgenre
+        {
+            get => _internal.Subgenre;
+            set => _internal.Subgenre = value;
+        }
+
         public Data.Models.Metadata.Supported? Supported
         {
             get => _internal.Supported;
@@ -295,6 +349,12 @@ namespace SabreTools.Metadata.DatItems
         {
             get => _internal.Tags;
             set => _internal.Tags = value;
+        }
+
+        public string? TitleID
+        {
+            get => _internal.TitleID;
+            set => _internal.TitleID = value;
         }
 
         public string? Url
@@ -321,7 +381,6 @@ namespace SabreTools.Metadata.DatItems
         public Machine(Data.Models.Metadata.Machine machine)
         {
             _internal = machine.DeepClone() as Data.Models.Metadata.Machine ?? [];
-            Remove(Data.Models.Metadata.Machine.TruripKey);
 
             // Process flag values
             if (Im1CRC is not null)
@@ -329,11 +388,6 @@ namespace SabreTools.Metadata.DatItems
 
             if (Im2CRC is not null)
                 Im2CRC = TextHelper.NormalizeCRC32(Im2CRC);
-
-            // Handle Trurip object, if it exists
-            var truripItem = machine.Read<Data.Models.Logiqx.Trurip>(Data.Models.Metadata.Machine.TruripKey);
-            if (truripItem is not null)
-                Write(Data.Models.Metadata.Machine.TruripKey, new Trurip(truripItem));
         }
 
         #endregion

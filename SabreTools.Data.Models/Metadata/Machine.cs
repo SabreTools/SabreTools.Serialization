@@ -1,4 +1,3 @@
-
 namespace SabreTools.Data.Models.Metadata
 {
     /// <summary>
@@ -167,6 +166,38 @@ namespace SabreTools.Data.Models.Metadata
 
         #endregion
 
+        #region From Trurip
+
+        // public string? CloneOf { get; set; }
+
+        public string? CRC { get; set; }
+
+        public string? Developer { get; set; }
+
+        public string? Enabled { get; set; }
+
+        public string? Genre { get; set; }
+
+        // public string? Players { get; set; }
+
+        // public string? Publisher { get; set; }
+
+        public string? Ratings { get; set; }
+
+        public string? RelatedTo { get; set; }
+
+        public string? Score { get; set; }
+
+        public string? Source { get; set; }
+
+        public string? Subgenre { get; set; }
+
+        public string? TitleID { get; set; }
+
+        // public string? Year { get; set; }
+
+        #endregion
+
         #region Keys
 
         /// <remarks>string, string[]</remarks>
@@ -174,11 +205,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string, string[]</remarks>
         public const string CommentKey = "comment";
-
-        /// TODO: This needs an internal model OR mapping to fields
-        /// <remarks>Trurip</remarks>
-        [NoFilter]
-        public const string TruripKey = "trurip";
 
         #endregion
     }

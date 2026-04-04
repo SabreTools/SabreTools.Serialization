@@ -77,22 +77,6 @@ namespace SabreTools.Metadata.DatFiles
                 // Create a machine to hold everything
                 var machine = items[0].Machine!.GetInternalClone();
 
-                // Handle Trurip object, if it exists
-                if (machine.ContainsKey(Data.Models.Metadata.Machine.TruripKey))
-                {
-                    var trurip = machine.Read<Trurip>(Data.Models.Metadata.Machine.TruripKey);
-                    if (trurip is not null)
-                    {
-                        var truripItem = trurip.ConvertToLogiqx();
-                        truripItem.Publisher = machine.Publisher;
-                        truripItem.Year = machine.Year;
-                        truripItem.Players = machine.Players;
-                        truripItem.Source = machine.SourceFile;
-                        truripItem.CloneOf = machine.CloneOf;
-                        machine[Data.Models.Metadata.Machine.TruripKey] = truripItem;
-                    }
-                }
-
                 // Create mapping dictionaries for the Parts, DataAreas, and DiskAreas associated with this machine
                 Dictionary<Data.Models.Metadata.Part, Data.Models.Metadata.DatItem> partMappings = [];
                 Dictionary<Data.Models.Metadata.Part, (Data.Models.Metadata.DataArea, Data.Models.Metadata.Rom)> dataAreaMappings = [];
@@ -471,22 +455,6 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Create a machine to hold everything
                 var machine = GetMachineForItemDB(items.First().Key).Value!.GetInternalClone();
-
-                // Handle Trurip object, if it exists
-                if (machine.ContainsKey(Data.Models.Metadata.Machine.TruripKey))
-                {
-                    var trurip = machine.Read<Trurip>(Data.Models.Metadata.Machine.TruripKey);
-                    if (trurip is not null)
-                    {
-                        var truripItem = trurip.ConvertToLogiqx();
-                        truripItem.Publisher = machine.Publisher;
-                        truripItem.Year = machine.Year;
-                        truripItem.Players = machine.Players;
-                        truripItem.Source = machine.SourceFile;
-                        truripItem.CloneOf = machine.CloneOf;
-                        machine[Data.Models.Metadata.Machine.TruripKey] = truripItem;
-                    }
-                }
 
                 // Create mapping dictionaries for the Parts, DataAreas, and DiskAreas associated with this machine
                 Dictionary<Data.Models.Metadata.Part, Data.Models.Metadata.DatItem> partMappings = [];
