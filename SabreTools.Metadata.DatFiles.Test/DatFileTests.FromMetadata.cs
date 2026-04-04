@@ -717,7 +717,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Port
             {
-                [Data.Models.Metadata.Port.AnalogKey] = new Data.Models.Metadata.Analog[] { CreateMetadataAnalog() },
+                Analog = [CreateMetadataAnalog()],
                 Tag = "tag",
             };
         }
@@ -1441,7 +1441,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(port);
             Assert.Equal("tag", port.Tag);
 
-            Analog[]? dipValues = port.Read<Analog[]>(Data.Models.Metadata.Port.AnalogKey);
+            Analog[]? dipValues = port.Analog;
             Assert.NotNull(dipValues);
             Analog? dipValue = Assert.Single(dipValues);
             ValidateAnalog(dipValue);

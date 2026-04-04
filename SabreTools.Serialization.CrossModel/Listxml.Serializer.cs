@@ -557,10 +557,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Analog is not null && item.Analog.Length > 0)
-            {
-                port[Data.Models.Metadata.Port.AnalogKey]
-                    = Array.ConvertAll(item.Analog, ConvertToInternalModel);
-            }
+                port.Analog = Array.ConvertAll(item.Analog, ConvertToInternalModel);
 
             return port;
         }

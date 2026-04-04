@@ -361,7 +361,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Port selfPort && other is Port otherPort)
             {
-                if (selfPort.Tag != otherPort.Tag)
+                if (!selfPort.Equals(otherPort))
                     return false;
             }
             else if (self is RamOption selfRamOption && other is RamOption otherRamOption)

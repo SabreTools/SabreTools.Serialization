@@ -534,7 +534,7 @@ namespace SabreTools.Serialization.CrossModel
                 Tag = item.Tag,
             };
 
-            var analogs = item.Read<Data.Models.Metadata.Analog[]>(Data.Models.Metadata.Port.AnalogKey);
+            var analogs = item.Analog;
             if (analogs is not null && analogs.Length > 0)
                 port.Analog = Array.ConvertAll(analogs, ConvertFromInternalModel);
 

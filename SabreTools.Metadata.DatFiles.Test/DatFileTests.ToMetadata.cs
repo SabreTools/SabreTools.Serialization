@@ -985,7 +985,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(port);
             Assert.Equal("tag", port.Tag);
 
-            Data.Models.Metadata.Analog[]? dipValues = port.ReadArray<Data.Models.Metadata.Analog>(Data.Models.Metadata.Port.AnalogKey);
+            Data.Models.Metadata.Analog[]? dipValues = port.Analog;
             Assert.NotNull(dipValues);
             Data.Models.Metadata.Analog? dipValue = Assert.Single(dipValues);
             ValidateMetadataAnalog(dipValue);

@@ -194,6 +194,8 @@ namespace SabreTools.Data.Extensions
                 return media.Clone() as Media;
             else if (self is Original original)
                 return original.Clone() as Original;
+            else if (self is Port port)
+                return port.Clone() as Port;
             else if (self is RamOption ramOption)
                 return ramOption.Clone() as RamOption;
             else if (self is Release release)
@@ -330,10 +332,6 @@ namespace SabreTools.Data.Extensions
             else if (self is Part selfPart && clone is Part clonePart)
             {
                 clonePart.Interface = selfPart.Interface;
-            }
-            else if (self is Port selfPort && clone is Port clonePort)
-            {
-                clonePort.Tag = selfPort.Tag;
             }
             else if (self is Rom selfRom && clone is Rom cloneRom)
             {

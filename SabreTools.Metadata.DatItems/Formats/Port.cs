@@ -13,15 +13,10 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public Analog[]? Analog { get; set; }
+
         [JsonIgnore]
-        public bool AnalogsSpecified
-        {
-            get
-            {
-                var analogs = Read<Analog[]?>(Data.Models.Metadata.Port.AnalogKey);
-                return analogs is not null && analogs.Length > 0;
-            }
-        }
+        public bool AnalogSpecified => Analog is not null && Analog.Length > 0;
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType
@@ -42,12 +37,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Port(Data.Models.Metadata.Port item) : base(item)
         {
             // Handle subitems
-            var analogs = item.ReadArray<Data.Models.Metadata.Analog>(Data.Models.Metadata.Port.AnalogKey);
-            if (analogs is not null)
-            {
-                Analog[] analogItems = Array.ConvertAll(analogs, analog => new Analog(analog));
-                Write<Analog[]?>(Data.Models.Metadata.Port.AnalogKey, analogItems);
-            }
+            if (item.Analog is not null)
+                Analog = Array.ConvertAll(item.Analog, analog => new Analog(analog)); ;
         }
 
         public Port(Data.Models.Metadata.Port item, Machine machine, Source source) : this(item)
@@ -68,12 +59,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var portItem = base.GetInternalClone();
 
-            var analogs = Read<Analog[]?>(Data.Models.Metadata.Port.AnalogKey);
-            if (analogs is not null)
-            {
-                Data.Models.Metadata.Analog[] analogItems = Array.ConvertAll(analogs, analog => analog.GetInternalClone());
-                portItem[Data.Models.Metadata.Port.AnalogKey] = analogItems;
-            }
+            if (Analog is not null)
+                portItem.Analog = Array.ConvertAll(Analog, analog => analog.GetInternalClone());
 
             return portItem;
         }

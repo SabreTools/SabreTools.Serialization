@@ -1,25 +1,51 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("port"), XmlRoot("port")]
-    public class Port : DatItem
+    public class Port : DatItem, ICloneable, IEquatable<Port>
     {
         #region Properties
+
+        public Analog[]? Analog { get; set; }
 
         public string? Tag { get; set; }
 
         #endregion
 
-        #region Keys
-
-        /// <remarks>Analog[]</remarks>
-        [NoFilter]
-        public const string AnalogKey = "analog";
-
-        #endregion
-
         public Port() => ItemType = ItemType.Port;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Port();
+
+            if (Analog is not null)
+                obj.Analog = Array.ConvertAll(Analog, i => (Analog)i.Clone());
+            obj.Tag = Tag;
+
+            return obj;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Port? other)
+        {
+            // Null never matches
+            if (other is null)
+                return false;
+
+            // Properties
+            if ((Tag is null) ^ (other.Tag is null))
+                return false;
+            else if (Tag is not null && !Tag.Equals(other.Tag, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            // Sub-items
+            // TODO: Figure out how to properly check arrays
+
+            return true;
+        }
     }
 }
