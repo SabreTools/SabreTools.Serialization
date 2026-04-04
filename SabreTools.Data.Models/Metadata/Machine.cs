@@ -29,9 +29,13 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Control { get; set; }
 
+        public string? CRC { get; set; }
+
         public string? Country { get; set; }
 
         public string? Description { get; set; }
+
+        public string? Developer { get; set; }
 
         public Device[]? Device { get; set; }
 
@@ -57,6 +61,8 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Emulator { get; set; }
 
+        public string? Enabled { get; set; }
+
         public string? Extra { get; set; }
 
         public string? Favorite { get; set; }
@@ -64,6 +70,8 @@ namespace SabreTools.Data.Models.Metadata
         public Feature[]? Feature { get; set; }
 
         public string? GenMSXID { get; set; }
+
+        public string? Genre { get; set; }
 
         public string? Hash { get; set; }
 
@@ -116,7 +124,11 @@ namespace SabreTools.Data.Models.Metadata
 
         public RamOption[]? RamOption { get; set; }
 
+        public string? Ratings { get; set; }
+
         public string? RebuildTo { get; set; }
+
+        public string? RelatedTo { get; set; }
 
         public Release[]? Release { get; set; }
 
@@ -137,6 +149,8 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? SaveType { get; set; }
 
+        public string? Score { get; set; }
+
         public SharedFeat[]? SharedFeat { get; set; }
 
         public Slot[]? Slot { get; set; }
@@ -145,11 +159,15 @@ namespace SabreTools.Data.Models.Metadata
 
         public Sound? Sound { get; set; }
 
+        public string? Source { get; set; }
+
         public string? SourceFile { get; set; }
 
         public string? SourceRom { get; set; }
 
         public string? Status { get; set; }
+
+        public string? Subgenre { get; set; }
 
         /// <remarks>(yes|partial|no) "yes"</remarks>
         public Supported? Supported { get; set; }
@@ -158,43 +176,13 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Tags { get; set; }
 
+        public string? TitleID { get; set; }
+
         public string? Url { get; set; }
 
         public Video[]? Video { get; set; }
 
         public string? Year { get; set; }
-
-        #endregion
-
-        #region From Trurip
-
-        // public string? CloneOf { get; set; }
-
-        public string? CRC { get; set; }
-
-        public string? Developer { get; set; }
-
-        public string? Enabled { get; set; }
-
-        public string? Genre { get; set; }
-
-        // public string? Players { get; set; }
-
-        // public string? Publisher { get; set; }
-
-        public string? Ratings { get; set; }
-
-        public string? RelatedTo { get; set; }
-
-        public string? Score { get; set; }
-
-        public string? Source { get; set; }
-
-        public string? Subgenre { get; set; }
-
-        public string? TitleID { get; set; }
-
-        // public string? Year { get; set; }
 
         #endregion
 
