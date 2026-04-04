@@ -215,7 +215,8 @@ namespace SabreTools.Metadata.DatFiles.Test
                 ForceNodump = Data.Models.Metadata.NodumpFlag.Required,
                 ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
                 ForceZipping = true,
-                [Data.Models.Metadata.Header.HeaderKey] = "header",
+                HeaderRow = ["header"],
+                HeaderSkipper = "header",
                 Homepage = "homepage",
                 Id = "id",
                 [Data.Models.Metadata.Header.ImagesKey] = images,
@@ -1022,7 +1023,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.NodumpFlag.Required, datHeader.ForceNodump);
             Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, datHeader.ForcePacking);
             Assert.True(datHeader.ForceZipping);
-            Assert.Equal("header", datHeader.ReadString(Data.Models.Metadata.Header.HeaderKey));
+            Assert.Equal("header", datHeader.HeaderSkipper);
             Assert.Equal("homepage", datHeader.Homepage);
             Assert.Equal("id", datHeader.Id);
             Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.ImagesKey));

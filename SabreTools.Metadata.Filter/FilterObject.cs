@@ -813,6 +813,10 @@ namespace SabreTools.Metadata.Filter
                 case Header item when fieldName == "forcezipping":
                     checkValue = item.ForceZipping.FromYesNo();
                     return true;
+                // Header.HeaderRow is intentionally skipped
+                case Header item when fieldName == "header" || fieldName == "headerskipper" || fieldName == "skipper":
+                    checkValue = item.HeaderSkipper;
+                    return true;
                 case Header item when fieldName == "homepage":
                     checkValue = item.Homepage;
                     return true;

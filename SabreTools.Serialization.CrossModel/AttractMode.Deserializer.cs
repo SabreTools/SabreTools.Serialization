@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var metadataFile = new MetadataFile
             {
-                Header = item.ReadStringArray(Data.Models.Metadata.Header.HeaderKey),
+                Header = item.HeaderRow,
             };
             return metadataFile;
         }

@@ -367,7 +367,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.NodumpFlag.Required, header.ForceNodump);
             Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, header.ForcePacking);
             Assert.True(header.ForceZipping);
-            Assert.Equal("header", header.ReadString(Data.Models.Metadata.Header.HeaderKey));
+            Assert.Equal("header", header.HeaderSkipper);
             Assert.Equal("homepage", header.Homepage);
             Assert.Equal("id", header.Id);
             Assert.NotNull(header.Read<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey));
@@ -395,6 +395,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("type", header.Type);
             Assert.Equal("url", header.Url);
             Assert.Equal("version", header.Version);
+
+            string[]? headerRowTitles = header.HeaderRow;
+            Assert.NotNull(headerRowTitles);
+            string? headerRowTitle = Assert.Single(headerRowTitles);
+            Assert.Equal("header", headerRowTitle);
         }
 
         private static void ValidateMetadataMachine(Data.Models.Metadata.Machine machine)

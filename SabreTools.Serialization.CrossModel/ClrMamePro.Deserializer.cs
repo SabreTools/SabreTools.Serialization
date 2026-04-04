@@ -53,7 +53,7 @@ namespace SabreTools.Serialization.CrossModel
                 Homepage = item.Homepage,
                 Url = item.Url,
                 Comment = item.Comment,
-                Header = item.ReadString(Data.Models.Metadata.Header.HeaderKey),
+                Header = item.HeaderSkipper,
                 Type = item.Type,
                 ForceMerging = item.ForceMerging,
                 ForceZipping = item.ForceZipping,

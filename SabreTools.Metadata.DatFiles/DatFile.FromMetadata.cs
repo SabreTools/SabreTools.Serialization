@@ -120,8 +120,8 @@ namespace SabreTools.Metadata.DatFiles
                 Header.ForcePacking = header.ForcePacking;
             if (Header.ForceZipping is null)
                 Header.ForceZipping = header.ForceZipping;
-            if (Header.ReadString(Data.Models.Metadata.Header.HeaderKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.HeaderKey, header.ReadString(Data.Models.Metadata.Header.HeaderKey));
+            if (Header.HeaderSkipper is null)
+                Header.HeaderSkipper = header.HeaderSkipper;
             if (Header.Homepage is null)
                 Header.Homepage = header.Homepage;
             if (Header.Id is null)

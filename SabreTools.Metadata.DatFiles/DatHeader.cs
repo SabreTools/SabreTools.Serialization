@@ -127,6 +127,18 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.ForceZipping = value;
         }
 
+        public string[]? HeaderRow
+        {
+            get => _internal.HeaderRow;
+            set => _internal.HeaderRow = value;
+        }
+
+        public string? HeaderSkipper
+        {
+            get => _internal.HeaderSkipper;
+            set => _internal.HeaderSkipper = value;
+        }
+
         public string? Homepage
         {
             get => _internal.Homepage;

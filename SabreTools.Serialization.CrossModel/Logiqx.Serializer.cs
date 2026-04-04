@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.ClrMamePro is not null)
             {
-                header[Data.Models.Metadata.Header.HeaderKey] = item.ClrMamePro.Header;
+                header.HeaderSkipper = item.ClrMamePro.Header;
                 header.ForceMerging = item.ClrMamePro.ForceMerging;
                 header.ForceNodump = item.ClrMamePro.ForceNodump;
                 header.ForcePacking = item.ClrMamePro.ForcePacking;

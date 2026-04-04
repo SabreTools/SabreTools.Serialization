@@ -56,16 +56,14 @@ namespace SabreTools.Serialization.CrossModel
                 Type = item.Type,
             };
 
-            string? headerVal = item.ReadString(Data.Models.Metadata.Header.HeaderKey);
-
-            if (headerVal is not null
+            if (item.HeaderSkipper is not null
                 || item.ForceMerging is not Data.Models.Metadata.MergingFlag.None
                 || item.ForceNodump is not Data.Models.Metadata.NodumpFlag.None
                 || item.ForcePacking is not Data.Models.Metadata.PackingFlag.None)
             {
                 header.ClrMamePro = new Data.Models.Logiqx.ClrMamePro();
-                if (headerVal is not null)
-                    header.ClrMamePro.Header = headerVal;
+                if (item.HeaderSkipper is not null)
+                    header.ClrMamePro.Header = item.HeaderSkipper;
                 if (item.ForceMerging is not Data.Models.Metadata.MergingFlag.None)
                     header.ClrMamePro.ForceMerging = item.ForceMerging;
                 if (item.ForceNodump is not Data.Models.Metadata.NodumpFlag.None)

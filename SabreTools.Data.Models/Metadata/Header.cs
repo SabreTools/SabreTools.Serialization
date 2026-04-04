@@ -44,6 +44,10 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "yes"</remarks>
         public bool? ForceZipping { get; set; }
 
+        public string[]? HeaderRow { get; set; }
+
+        public string? HeaderSkipper { get; set; }
+
         public string? Homepage { get; set; }
 
         public string? Id { get; set; }
@@ -99,9 +103,6 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>CanOpen</remarks>
         [NoFilter]
         public const string CanOpenKey = "canOpen";
-
-        /// <remarks>string, string[]</remarks>
-        public const string HeaderKey = "header";
 
         /// TODO: This needs an internal model OR mapping to fields
         /// <remarks>Search</remarks>

@@ -204,6 +204,8 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfHeader.ForceZipping != otherHeader.ForceZipping)
                     return false;
+                if (selfHeader.HeaderSkipper != otherHeader.HeaderSkipper)
+                    return false;
                 if (selfHeader.Homepage != otherHeader.Homepage)
                     return false;
                 if (selfHeader.Id != otherHeader.Id)

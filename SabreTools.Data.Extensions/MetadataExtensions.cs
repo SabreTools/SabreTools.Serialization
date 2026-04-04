@@ -132,6 +132,8 @@ namespace SabreTools.Data.Extensions
                 cloneHeader.ForceNodump = selfHeader.ForceNodump;
                 cloneHeader.ForcePacking = selfHeader.ForcePacking;
                 cloneHeader.ForceZipping = selfHeader.ForceZipping;
+                cloneHeader.HeaderRow = selfHeader.HeaderRow;
+                cloneHeader.HeaderSkipper = selfHeader.HeaderSkipper;
                 cloneHeader.Homepage = selfHeader.Homepage;
                 cloneHeader.Id = selfHeader.Id;
                 cloneHeader.LockBiosMode = selfHeader.LockBiosMode;

@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.HeaderKey] = item.Header,
+                HeaderRow = item.Header,
             };
 
             if (item.Row is not null && item.Row.Length > 0)
