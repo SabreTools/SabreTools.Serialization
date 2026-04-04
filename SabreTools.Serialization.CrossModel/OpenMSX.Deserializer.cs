@@ -41,11 +41,11 @@ namespace SabreTools.Serialization.CrossModel
             var game = new Software
             {
                 Title = item.Name,
-                GenMSXID = item.ReadString(Data.Models.Metadata.Machine.GenMSXIDKey),
-                System = item.ReadString(Data.Models.Metadata.Machine.SystemKey),
-                Company = item.ReadString(Data.Models.Metadata.Machine.CompanyKey),
-                Year = item.ReadString(Data.Models.Metadata.Machine.YearKey),
-                Country = item.ReadString(Data.Models.Metadata.Machine.CountryKey),
+                GenMSXID = item.GenMSXID,
+                System = item.System,
+                Company = item.Company,
+                Year = item.Year,
+                Country = item.Country,
             };
 
             var dumps = item.Read<Data.Models.Metadata.Dump[]>(Data.Models.Metadata.Machine.DumpKey);

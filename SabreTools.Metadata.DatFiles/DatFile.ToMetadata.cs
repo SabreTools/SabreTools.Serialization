@@ -84,11 +84,11 @@ namespace SabreTools.Metadata.DatFiles
                     if (trurip is not null)
                     {
                         var truripItem = trurip.ConvertToLogiqx();
-                        truripItem.Publisher = machine.ReadString(Data.Models.Metadata.Machine.PublisherKey);
-                        truripItem.Year = machine.ReadString(Data.Models.Metadata.Machine.YearKey);
-                        truripItem.Players = machine.ReadString(Data.Models.Metadata.Machine.PlayersKey);
-                        truripItem.Source = machine.ReadString(Data.Models.Metadata.Machine.SourceFileKey);
-                        truripItem.CloneOf = machine.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
+                        truripItem.Publisher = machine.Publisher;
+                        truripItem.Year = machine.Year;
+                        truripItem.Players = machine.Players;
+                        truripItem.Source = machine.SourceFile;
+                        truripItem.CloneOf = machine.CloneOf;
                         machine[Data.Models.Metadata.Machine.TruripKey] = truripItem;
                     }
                 }
@@ -513,11 +513,11 @@ namespace SabreTools.Metadata.DatFiles
                     if (trurip is not null)
                     {
                         var truripItem = trurip.ConvertToLogiqx();
-                        truripItem.Publisher = machine.ReadString(Data.Models.Metadata.Machine.PublisherKey);
-                        truripItem.Year = machine.ReadString(Data.Models.Metadata.Machine.YearKey);
-                        truripItem.Players = machine.ReadString(Data.Models.Metadata.Machine.PlayersKey);
-                        truripItem.Source = machine.ReadString(Data.Models.Metadata.Machine.SourceFileKey);
-                        truripItem.CloneOf = machine.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
+                        truripItem.Publisher = machine.Publisher;
+                        truripItem.Year = machine.Year;
+                        truripItem.Players = machine.Players;
+                        truripItem.Source = machine.SourceFile;
+                        truripItem.CloneOf = machine.CloneOf;
                         machine[Data.Models.Metadata.Machine.TruripKey] = truripItem;
                     }
                 }

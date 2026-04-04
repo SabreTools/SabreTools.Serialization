@@ -274,7 +274,49 @@ namespace SabreTools.Metadata
             }
             else if (self is Machine selfMachine && other is Machine otherMachine)
             {
+                if (selfMachine.Board != otherMachine.Board)
+                    return false;
+                if (selfMachine.Buttons != otherMachine.Buttons)
+                    return false;
+                if (selfMachine.CloneOf != otherMachine.CloneOf)
+                    return false;
+                if (selfMachine.CloneOfId != otherMachine.CloneOfId)
+                    return false;
+                if (selfMachine.Company != otherMachine.Company)
+                    return false;
+                if (selfMachine.Control != otherMachine.Control)
+                    return false;
+                if (selfMachine.Country != otherMachine.Country)
+                    return false;
                 if (selfMachine.Description != otherMachine.Description)
+                    return false;
+                if (selfMachine.DirName != otherMachine.DirName)
+                    return false;
+                if (selfMachine.DisplayCount != otherMachine.DisplayCount)
+                    return false;
+                if (selfMachine.DisplayType != otherMachine.DisplayType)
+                    return false;
+                if (selfMachine.DuplicateID != otherMachine.DuplicateID)
+                    return false;
+                if (selfMachine.Emulator != otherMachine.Emulator)
+                    return false;
+                if (selfMachine.Extra != otherMachine.Extra)
+                    return false;
+                if (selfMachine.Favorite != otherMachine.Favorite)
+                    return false;
+                if (selfMachine.GenMSXID != otherMachine.GenMSXID)
+                    return false;
+                if (selfMachine.Hash != otherMachine.Hash)
+                    return false;
+                if (selfMachine.History != otherMachine.History)
+                    return false;
+                if (selfMachine.Id != otherMachine.Id)
+                    return false;
+                if (selfMachine.Im1CRC != otherMachine.Im1CRC)
+                    return false;
+                if (selfMachine.Im2CRC != otherMachine.Im2CRC)
+                    return false;
+                if (selfMachine.ImageNumber != otherMachine.ImageNumber)
                     return false;
                 if (selfMachine.IsBios != otherMachine.IsBios)
                     return false;
@@ -282,9 +324,51 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfMachine.IsMechanical != otherMachine.IsMechanical)
                     return false;
+                if (selfMachine.Language != otherMachine.Language)
+                    return false;
+                if (selfMachine.Location != otherMachine.Location)
+                    return false;
+                if (selfMachine.Manufacturer != otherMachine.Manufacturer)
+                    return false;
+                if (selfMachine.Notes != otherMachine.Notes)
+                    return false;
+                if (selfMachine.PlayedCount != otherMachine.PlayedCount)
+                    return false;
+                if (selfMachine.PlayedTime != otherMachine.PlayedTime)
+                    return false;
+                if (selfMachine.Players != otherMachine.Players)
+                    return false;
+                if (selfMachine.Publisher != otherMachine.Publisher)
+                    return false;
+                if (selfMachine.RebuildTo != otherMachine.RebuildTo)
+                    return false;
+                if (selfMachine.ReleaseNumber != otherMachine.ReleaseNumber)
+                    return false;
+                if (selfMachine.RomOf != otherMachine.RomOf)
+                    return false;
+                if (selfMachine.Rotation != otherMachine.Rotation)
+                    return false;
                 if (selfMachine.Runnable != otherMachine.Runnable)
                     return false;
+                if (selfMachine.SampleOf != otherMachine.SampleOf)
+                    return false;
+                if (selfMachine.SaveType != otherMachine.SaveType)
+                    return false;
+                if (selfMachine.SourceFile != otherMachine.SourceFile)
+                    return false;
+                if (selfMachine.SourceRom != otherMachine.SourceRom)
+                    return false;
+                if (selfMachine.Status != otherMachine.Status)
+                    return false;
                 if (selfMachine.Supported != otherMachine.Supported)
+                    return false;
+                if (selfMachine.System != otherMachine.System)
+                    return false;
+                if (selfMachine.Tags != otherMachine.Tags)
+                    return false;
+                if (selfMachine.Url != otherMachine.Url)
+                    return false;
+                if (selfMachine.Year != otherMachine.Year)
                     return false;
             }
             else if (self is Media selfMedia && other is Media otherMedia)

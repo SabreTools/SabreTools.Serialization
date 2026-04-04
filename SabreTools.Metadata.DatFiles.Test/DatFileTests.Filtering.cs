@@ -19,8 +19,10 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
             DatItem datItem = new Rom();
             datItem.SetName("rom.bin");
@@ -47,8 +49,10 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
             DatItem datItem = new Rom();
             datItem.SetName("rom.bin");
@@ -78,13 +82,17 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
-            machine.Description = "description";
+            Machine machine = new Machine
+            {
+                Name = "machine",
+                Description = "description"
+            };
 
-            DatItem datItem = new Rom();
-            datItem.Machine = machine;
-            datItem.Source = source;
+            DatItem datItem = new Rom
+            {
+                Machine = machine,
+                Source = source
+            };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(datItem, statsOnly: false);
@@ -102,9 +110,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void MachineDescriptionToName_ItemsDB()
         {
-            Machine machine = new Machine();
-            machine.Name = "machine";
-            machine.Description = "description";
+            Machine machine = new Machine
+            {
+                Name = "machine",
+                Description = "description"
+            };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             _ = datFile.AddMachineDB(machine);
@@ -125,13 +135,17 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
-            DatItem rom = new Rom();
-            rom.SetName("rom.bin");
-            rom.Machine = machine;
-            rom.Source = source;
+            DatItem rom = new Rom
+            {
+                Name = "rom.bin",
+                Machine = machine,
+                Source = source
+            };
 
             DatItem disk = new Disk();
             disk.SetName("disk");
@@ -164,11 +178,15 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
-            DatItem rom = new Rom();
-            rom.SetName("rom.bin");
+            DatItem rom = new Rom
+            {
+                Name = "rom.bin"
+            };
 
             DatItem disk = new Disk();
             disk.SetName("disk");
@@ -203,12 +221,16 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void SetOneGamePerRegion_Items()
         {
-            Machine nowhereMachine = new Machine();
-            nowhereMachine.Name = "machine (Nowhere)";
+            Machine nowhereMachine = new Machine
+            {
+                Name = "machine (Nowhere)"
+            };
 
-            Machine worldMachine = new Machine();
-            worldMachine.Name = "machine (World)";
-            worldMachine.Write(Data.Models.Metadata.Machine.CloneOfKey, "machine (Nowhere)");
+            Machine worldMachine = new Machine
+            {
+                Name = "machine (World)",
+                CloneOf = "machine (Nowhere)"
+            };
 
             DatItem nowhereRom = new Rom();
             nowhereRom.SetName("rom.bin");
@@ -237,12 +259,16 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void SetOneGamePerRegion_ItemsDB()
         {
-            Machine nowhereMachine = new Machine();
-            nowhereMachine.Name = "machine (Nowhere)";
+            Machine nowhereMachine = new Machine
+            {
+                Name = "machine (Nowhere)"
+            };
 
-            Machine worldMachine = new Machine();
-            worldMachine.Name = "machine (World)";
-            worldMachine.Write(Data.Models.Metadata.Machine.CloneOfKey, "machine (Nowhere)");
+            Machine worldMachine = new Machine
+            {
+                Name = "machine (World)",
+                CloneOf = "machine (Nowhere)"
+            };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             _ = datFile.AddMachineDB(nowhereMachine);
@@ -265,12 +291,16 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine();
-            machine.Name = "10.10.10-machine-name";
+            Machine machine = new Machine
+            {
+                Name = "10.10.10-machine-name"
+            };
 
-            DatItem datItem = new Rom();
-            datItem.Machine = machine;
-            datItem.Source = source;
+            DatItem datItem = new Rom
+            {
+                Machine = machine,
+                Source = source
+            };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(datItem, statsOnly: false);
@@ -287,8 +317,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void StripSceneDatesFromItems_ItemsDB()
         {
-            Machine machine = new Machine();
-            machine.Name = "10.10.10-machine-name";
+            Machine machine = new Machine
+            {
+                Name = "10.10.10-machine-name"
+            };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             _ = datFile.AddMachineDB(machine);

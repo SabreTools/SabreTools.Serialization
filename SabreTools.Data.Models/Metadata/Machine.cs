@@ -8,7 +8,49 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? Board { get; set; }
+
+        public string? Buttons { get; set; }
+
+        public string? CloneOf { get; set; }
+
+        public string? CloneOfId { get; set; }
+
+        public string? Company { get; set; }
+
+        public string? Control { get; set; }
+
+        public string? Country { get; set; }
+
         public string? Description { get; set; }
+
+        public string? DirName { get; set; }
+
+        public string? DisplayCount { get; set; }
+
+        public string? DisplayType { get; set; }
+
+        public string? DuplicateID { get; set; }
+
+        public string? Emulator { get; set; }
+
+        public string? Extra { get; set; }
+
+        public string? Favorite { get; set; }
+
+        public string? GenMSXID { get; set; }
+
+        public string? Hash { get; set; }
+
+        public string? History { get; set; }
+
+        public string? Id { get; set; }
+
+        public string? Im1CRC { get; set; }
+
+        public string? Im2CRC { get; set; }
+
+        public string? ImageNumber { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         public bool? IsBios { get; set; }
@@ -19,13 +61,55 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|no) "no"</remarks>
         public bool? IsMechanical { get; set; }
 
+        public string? Language { get; set; }
+
+        public string? Location { get; set; }
+
+        public string? Manufacturer { get; set; }
+
         public string? Name { get; set; }
+
+        public string? Notes { get; set; }
+
+        public string? PlayedCount { get; set; }
+
+        public string? PlayedTime { get; set; }
+
+        public string? Players { get; set; }
+
+        public string? Publisher { get; set; }
+
+        public string? RebuildTo { get; set; }
+
+        public string? ReleaseNumber { get; set; }
+
+        public string? RomOf { get; set; }
+
+        public string? Rotation { get; set; }
 
         /// <remarks>(yes|partial|no) "no"</remarks>
         public Runnable? Runnable { get; set; }
 
+        public string? SampleOf { get; set; }
+
+        public string? SaveType { get; set; }
+
+        public string? SourceFile { get; set; }
+
+        public string? SourceRom { get; set; }
+
+        public string? Status { get; set; }
+
         /// <remarks>(yes|partial|no) "yes"</remarks>
         public Supported? Supported { get; set; }
+
+        public string? System { get; set; }
+
+        public string? Tags { get; set; }
+
+        public string? Url { get; set; }
+
+        public string? Year { get; set; }
 
         #endregion
 
@@ -43,12 +127,6 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string BiosSetKey = "biosset";
 
-        /// <remarks>string</remarks>
-        public const string BoardKey = "board";
-
-        /// <remarks>string</remarks>
-        public const string ButtonsKey = "buttons";
-
         /// <remarks>string, string[]</remarks>
         public const string CategoryKey = "category";
 
@@ -56,27 +134,12 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string ChipKey = "chip";
 
-        /// <remarks>string</remarks>
-        public const string CloneOfKey = "cloneof";
-
-        /// <remarks>string</remarks>
-        public const string CloneOfIdKey = "cloneofid";
-
         /// <remarks>string, string[]</remarks>
         public const string CommentKey = "comment";
-
-        /// <remarks>string</remarks>
-        public const string CompanyKey = "company";
 
         /// <remarks>Configuration[]</remarks>
         [NoFilter]
         public const string ConfigurationKey = "configuration";
-
-        /// <remarks>string</remarks>
-        public const string ControlKey = "control";
-
-        /// <remarks>string</remarks>
-        public const string CountryKey = "country";
 
         /// <remarks>Device[]</remarks>
         [NoFilter]
@@ -90,22 +153,13 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string DipSwitchKey = "dipswitch";
 
-        /// <remarks>string</remarks>
-        public const string DirNameKey = "dirName";
-
         /// <remarks>Disk[]</remarks>
         [NoFilter]
         public const string DiskKey = "disk";
 
-        /// <remarks>string</remarks>
-        public const string DisplayCountKey = "displaycount";
-
         /// <remarks>Display[]</remarks>
         [NoFilter]
         public const string DisplayKey = "display";
-
-        /// <remarks>string</remarks>
-        public const string DisplayTypeKey = "displaytype";
 
         /// <remarks>Driver</remarks>
         [NoFilter]
@@ -115,42 +169,9 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string DumpKey = "dump";
 
-        /// <remarks>string</remarks>
-        public const string DuplicateIDKey = "duplicateID";
-
-        /// <remarks>string</remarks>
-        public const string EmulatorKey = "emulator";
-
-        /// <remarks>string</remarks>
-        public const string ExtraKey = "extra";
-
-        /// <remarks>string</remarks>
-        public const string FavoriteKey = "favorite";
-
         /// <remarks>Feature[]</remarks>
         [NoFilter]
         public const string FeatureKey = "feature";
-
-        /// <remarks>string</remarks>
-        public const string GenMSXIDKey = "genmsxid";
-
-        /// <remarks>string</remarks>
-        public const string HashKey = "hash";
-
-        /// <remarks>string</remarks>
-        public const string HistoryKey = "history";
-
-        /// <remarks>string</remarks>
-        public const string IdKey = "id";
-
-        /// <remarks>string</remarks>
-        public const string Im1CRCKey = "im1CRC";
-
-        /// <remarks>string</remarks>
-        public const string Im2CRCKey = "im2CRC";
-
-        /// <remarks>string</remarks>
-        public const string ImageNumberKey = "imageNumber";
 
         /// <remarks>Info[]</remarks>
         [NoFilter]
@@ -160,75 +181,33 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string InputKey = "input";
 
-        /// <remarks>string</remarks>
-        public const string LanguageKey = "language";
-
-        /// <remarks>string</remarks>
-        public const string LocationKey = "location";
-
-        /// <remarks>string</remarks>
-        public const string ManufacturerKey = "manufacturer";
-
         /// <remarks>Media[]</remarks>
         [NoFilter]
         public const string MediaKey = "media";
-
-        /// <remarks>string</remarks>
-        public const string NotesKey = "notes";
 
         /// <remarks>Part[]</remarks>
         [NoFilter]
         public const string PartKey = "part";
 
-        /// <remarks>string</remarks>
-        public const string PlayedCountKey = "playedcount";
-
-        /// <remarks>string</remarks>
-        public const string PlayedTimeKey = "playedtime";
-
-        /// <remarks>string</remarks>
-        public const string PlayersKey = "players";
-
         /// <remarks>Port[]</remarks>
         [NoFilter]
         public const string PortKey = "port";
-
-        /// <remarks>string</remarks>
-        public const string PublisherKey = "publisher";
 
         /// <remarks>RamOption[]</remarks>
         [NoFilter]
         public const string RamOptionKey = "ramoption";
 
-        /// <remarks>string</remarks>
-        public const string RebuildToKey = "rebuildto";
-
         /// <remarks>Release[]</remarks>
         [NoFilter]
         public const string ReleaseKey = "release";
-
-        /// <remarks>string</remarks>
-        public const string ReleaseNumberKey = "releaseNumber";
 
         /// <remarks>Rom[]</remarks>
         [NoFilter]
         public const string RomKey = "rom";
 
-        /// <remarks>string</remarks>
-        public const string RomOfKey = "romof";
-
-        /// <remarks>string</remarks>
-        public const string RotationKey = "rotation";
-
         /// <remarks>Sample[]</remarks>
         [NoFilter]
         public const string SampleKey = "sample";
-
-        /// <remarks>string</remarks>
-        public const string SampleOfKey = "sampleof";
-
-        /// <remarks>string</remarks>
-        public const string SaveTypeKey = "saveType";
 
         /// <remarks>SharedFeat[]</remarks>
         [NoFilter]
@@ -246,35 +225,14 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string SoundKey = "sound";
 
-        /// <remarks>string</remarks>
-        public const string SourceFileKey = "sourcefile";
-
-        /// <remarks>string</remarks>
-        public const string SourceRomKey = "sourceRom";
-
-        /// <remarks>string</remarks>
-        public const string StatusKey = "status";
-
-        /// <remarks>string</remarks>
-        public const string SystemKey = "system";
-
-        /// <remarks>string</remarks>
-        public const string TagsKey = "tags";
-
         /// TODO: This needs an internal model OR mapping to fields
         /// <remarks>Trurip</remarks>
         [NoFilter]
         public const string TruripKey = "trurip";
 
-        /// <remarks>string</remarks>
-        public const string UrlKey = "url";
-
         /// <remarks>Video[]</remarks>
         [NoFilter]
         public const string VideoKey = "video";
-
-        /// <remarks>string</remarks>
-        public const string YearKey = "year";
 
         #endregion
     }

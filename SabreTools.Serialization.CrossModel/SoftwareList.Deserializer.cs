@@ -43,12 +43,12 @@ namespace SabreTools.Serialization.CrossModel
             var software = new Software
             {
                 Name = item.Name,
-                CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
+                CloneOf = item.CloneOf,
                 Supported = item.Supported,
                 Description = item.Description,
-                Year = item.ReadString(Data.Models.Metadata.Machine.YearKey),
-                Publisher = item.ReadString(Data.Models.Metadata.Machine.PublisherKey),
-                Notes = item.ReadString(Data.Models.Metadata.Machine.NotesKey),
+                Year = item.Year,
+                Publisher = item.Publisher,
+                Notes = item.Notes,
             };
 
             var infos = item.Read<Data.Models.Metadata.Info[]>(Data.Models.Metadata.Machine.InfoKey);

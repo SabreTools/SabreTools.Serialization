@@ -65,18 +65,18 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.ImageNumberKey] = item.ImageNumber,
-                [Data.Models.Metadata.Machine.ReleaseNumberKey] = item.ReleaseNumber,
+                ImageNumber = item.ImageNumber,
+                ReleaseNumber = item.ReleaseNumber,
                 Name = item.Title,
-                [Data.Models.Metadata.Machine.SaveTypeKey] = item.SaveType,
-                [Data.Models.Metadata.Machine.PublisherKey] = item.Publisher,
-                [Data.Models.Metadata.Machine.LocationKey] = item.Location,
-                [Data.Models.Metadata.Machine.SourceRomKey] = item.SourceRom,
-                [Data.Models.Metadata.Machine.LanguageKey] = item.Language,
-                [Data.Models.Metadata.Machine.Im1CRCKey] = item.Im1CRC,
-                [Data.Models.Metadata.Machine.Im2CRCKey] = item.Im2CRC,
+                SaveType = item.SaveType,
+                Publisher = item.Publisher,
+                Location = item.Location,
+                SourceRom = item.SourceRom,
+                Language = item.Language,
+                Im1CRC = item.Im1CRC,
+                Im2CRC = item.Im2CRC,
                 [Data.Models.Metadata.Machine.CommentKey] = item.Comment,
-                [Data.Models.Metadata.Machine.DuplicateIDKey] = item.DuplicateID,
+                DuplicateID = item.DuplicateID,
             };
 
             if (item.Files?.RomCRC is not null && item.Files.RomCRC.Length > 0)

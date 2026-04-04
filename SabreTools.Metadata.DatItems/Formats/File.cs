@@ -136,7 +136,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var rom = new Rom();
 
-            rom.SetName($"{Id}.{Extension}");
+            rom.Name = $"{Id}.{Extension}";
             rom.Size = Size;
             rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, CRC);
             rom.Write<string?>(Data.Models.Metadata.Rom.MD5Key, MD5);

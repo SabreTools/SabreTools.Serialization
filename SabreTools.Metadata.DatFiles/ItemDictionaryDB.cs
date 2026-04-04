@@ -940,8 +940,8 @@ namespace SabreTools.Metadata.DatFiles
                 }
 
                 // If the saved machine is a child of the current machine, use the current machine instead
-                if (savedMachine.ReadString(Data.Models.Metadata.Machine.CloneOfKey) == itemMachine.Name
-                    || savedMachine.ReadString(Data.Models.Metadata.Machine.RomOfKey) == itemMachine.Name)
+                if (savedMachine.CloneOf == itemMachine.Name
+                    || savedMachine.RomOf == itemMachine.Name)
                 {
                     _machines[_itemToMachineMapping[savedIndex]] = (itemMachine.Clone() as Machine)!;
                     savedItem.SetName(datItem.GetName());

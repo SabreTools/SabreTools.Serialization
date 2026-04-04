@@ -10,19 +10,27 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void ConvertToRomTest()
         {
-            DiskArea diskArea = new DiskArea();
-            diskArea.Name = "name";
+            DiskArea diskArea = new DiskArea
+            {
+                Name = "name"
+            };
 
-            Machine machine = new Machine();
-            machine.Name = "name";
+            Machine machine = new Machine
+            {
+                Name = "name"
+            };
 
-            Part part = new Part();
-            part.Name = "name";
+            Part part = new Part
+            {
+                Name = "name"
+            };
 
             Source source = new Source(0, "XXXXXX");
 
-            Disk disk = new Disk();
-            disk.Name = "name";
+            Disk disk = new Disk
+            {
+                Name = "name"
+            };
             disk.Write(Disk.DiskAreaKey, diskArea);
             disk.Write(Data.Models.Metadata.Disk.MergeKey, "XXXXXX");
             disk.Write(Data.Models.Metadata.Disk.RegionKey, "XXXXXX");
@@ -253,8 +261,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine();
-            machine.Name = "Machine";
+            Machine machine = new Machine
+            {
+                Name = "Machine"
+            };
 
             DatItem datItem = new Disk();
             datItem.Write(Data.Models.Metadata.Disk.MD5Key, "DEADBEEF");

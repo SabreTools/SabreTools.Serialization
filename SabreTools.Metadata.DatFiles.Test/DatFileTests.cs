@@ -30,11 +30,15 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine();
-            machine.Name = "key";
+            Machine machine = new Machine
+            {
+                Name = "key"
+            };
 
-            DatItem rom = new Rom();
-            rom.SetName("rom");
+            DatItem rom = new Rom
+            {
+                Name = "rom"
+            };
             rom.Write(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
             rom.Source = source;
             rom.Machine = machine;
@@ -72,12 +76,16 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine();
-            machine.Name = "game-1";
+            Machine machine = new Machine
+            {
+                Name = "game-1"
+            };
 
-            DatItem datItem = new Rom();
-            datItem.Source = source;
-            datItem.Machine = machine;
+            DatItem datItem = new Rom
+            {
+                Source = source,
+                Machine = machine
+            };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(datItem, statsOnly: false);
@@ -91,8 +99,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine();
-            machine.Name = "game-1";
+            Machine machine = new Machine
+            {
+                Name = "game-1"
+            };
 
             DatItem datItem = new Rom();
 
@@ -236,8 +246,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void SetHeaderTest()
         {
-            DatHeader datHeader = new DatHeader();
-            datHeader.Name = "name";
+            DatHeader datHeader = new DatHeader
+            {
+                Name = "name"
+            };
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "notname";
@@ -254,8 +266,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void SetModifiersTest()
         {
-            DatModifiers datModifiers = new DatModifiers();
-            datModifiers.AddExtension = ".new";
+            DatModifiers datModifiers = new DatModifiers
+            {
+                AddExtension = ".new"
+            };
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Modifiers.AddExtension = ".old";
@@ -1328,11 +1342,15 @@ namespace SabreTools.Metadata.DatFiles.Test
             bool gameName,
             string expected)
         {
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
-            DatItem item = new Rom();
-            item.SetName("name");
+            DatItem item = new Rom
+            {
+                Name = "name"
+            };
             item.Write(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
@@ -1362,14 +1380,19 @@ namespace SabreTools.Metadata.DatFiles.Test
             string fix = string.Empty;
             string expected = string.Empty;
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
-            machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
-            machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
+            Machine machine = new Machine
+            {
+                Name = "machine",
+                Manufacturer = "manufacturer",
+                Publisher = "publisher"
+            };
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
-            DatItem item = new Rom() { Size = 12345 };
-            item.SetName("name");
+            DatItem item = new Rom
+            {
+                Name = "name",
+                Size = 12345,
+            };
             item.Write(Data.Models.Metadata.Rom.CRC16Key, "crc16");
             item.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             item.Write(Data.Models.Metadata.Rom.CRC64Key, "crc64");
@@ -1394,14 +1417,18 @@ namespace SabreTools.Metadata.DatFiles.Test
             string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc16%_%crc%_%crc64%_%md2%_%md4%_%md5%_%ripemd128%_%ripemd160%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
             string expected = "machine_machine_name_manufacturer_publisher_category______md5___sha1_____";
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
-            machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
-            machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
+            Machine machine = new Machine
+            {
+                Name = "machine",
+                Manufacturer = "manufacturer",
+                Publisher = "publisher"
+            };
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
-            DatItem item = new Disk();
-            item.SetName("name");
+            DatItem item = new Disk
+            {
+                Name = "name"
+            };
             item.Write(Data.Models.Metadata.Disk.MD5Key, "md5");
             item.Write(Data.Models.Metadata.Disk.SHA1Key, "sha1");
 
@@ -1415,10 +1442,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc16%_%crc%_%crc64%_%md2%_%md4%_%md5%_%ripemd128%_%ripemd160%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
             string expected = "machine_machine_name.bin_manufacturer_publisher_category__00000000____d41d8cd98f00b204e9800998ecf8427e___da39a3ee5e6b4b0d3255bfef95601890afd80709_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855___12345_";
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
-            machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
-            machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
+            Machine machine = new Machine
+            {
+                Name = "machine",
+                Manufacturer = "manufacturer",
+                Publisher = "publisher"
+            };
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new DatItems.Formats.File
@@ -1442,20 +1471,22 @@ namespace SabreTools.Metadata.DatFiles.Test
             string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc16%_%crc%_%crc64%_%md2%_%md4%_%md5%_%ripemd128%_%ripemd160%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
             string expected = "machine_machine_name_manufacturer_publisher_category______md5___sha1_sha256____spamsum";
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
-            machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
-            machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
+            Machine machine = new Machine
+            {
+                Name = "machine",
+                Manufacturer = "manufacturer",
+                Publisher = "publisher"
+            };
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Media
             {
+                Name = "name",
                 MD5 = "md5",
                 SHA1 = "sha1",
                 SHA256 = "sha256",
                 SpamSum = "spamsum",
             };
-            item.SetName("name");
 
             string actual = DatFile.FormatPrefixPostfix(item, machine, fix);
             Assert.Equal(expected, actual);
@@ -1467,14 +1498,19 @@ namespace SabreTools.Metadata.DatFiles.Test
             string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc16%_%crc%_%crc64%_%md2%_%md4%_%md5%_%ripemd128%_%ripemd160%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
             string expected = "machine_machine_name_manufacturer_publisher_category_crc16_crc_crc64_md2_md4_md5_ripemd128_ripemd160_sha1_sha256_sha384_sha512_12345_spamsum";
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
-            machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
-            machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
+            Machine machine = new Machine
+            {
+                Name = "machine",
+                Manufacturer = "manufacturer",
+                Publisher = "publisher"
+            };
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
-            DatItem item = new Rom() { Size = 12345 };
-            item.SetName("name");
+            DatItem item = new Rom
+            {
+                Name = "name",
+                Size = 12345,
+            };
             item.Write(Data.Models.Metadata.Rom.CRC16Key, "crc16");
             item.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             item.Write(Data.Models.Metadata.Rom.CRC64Key, "crc64");
@@ -1524,7 +1560,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ProcessNullifiedItem_SizeNonNull()
         {
-            DatItem item = new Rom() { Size = 12345 };
+            DatItem item = new Rom()
+            {
+                Size = 12345
+            };
 
             DatItem actual = DatFile.ProcessNullifiedItem(item);
             Rom? rom = actual as Rom;
@@ -1946,14 +1985,18 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNames_SingleItem_Single()
         {
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
             Source source = new Source(0);
 
-            Rom romA = new Rom();
-            romA.SetName("name");
-            romA.Size = 12345;
+            Rom romA = new Rom
+            {
+                Name = "name",
+                Size = 12345
+            };
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
@@ -1974,21 +2017,27 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNames_NonDuplicate_AllUntouched()
         {
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
             Source source = new Source(0);
 
-            Rom romA = new Rom();
-            romA.SetName("romA");
-            romA.Size = 12345;
+            Rom romA = new Rom
+            {
+                Name = "romA",
+                Size = 12345
+            };
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
 
-            Rom romB = new Rom();
-            romB.SetName("romB");
-            romB.Size = 23456;
+            Rom romB = new Rom
+            {
+                Name = "romB",
+                Size = 23456
+            };
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
             romB.Machine = (Machine)machine.Clone();
             romB.Source = (Source)source.Clone();
@@ -2016,21 +2065,27 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNames_AllDuplicate_Single()
         {
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
             Source source = new Source(0);
 
-            Rom romA = new Rom();
-            romA.SetName("rom");
-            romA.Size = 12345;
+            Rom romA = new Rom
+            {
+                Name = "rom",
+                Size = 12345
+            };
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
 
-            Rom romB = new Rom();
-            romB.SetName("rom");
-            romB.Size = 12345;
+            Rom romB = new Rom
+            {
+                Name = "rom",
+                Size = 12345
+            };
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romB.Machine = (Machine)machine.Clone();
             romB.Source = (Source)source.Clone();
@@ -2051,21 +2106,27 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNames_NameMatch_SingleRenamed()
         {
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
             Source source = new Source(0);
 
-            Rom romA = new Rom();
-            romA.SetName("rom");
-            romA.Size = 12345;
+            Rom romA = new Rom
+            {
+                Name = "rom",
+                Size = 12345
+            };
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
 
-            Rom romB = new Rom();
-            romB.SetName("rom");
-            romB.Size = 23456;
+            Rom romB = new Rom
+            {
+                Name = "rom",
+                Size = 23456
+            };
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
             romB.Machine = (Machine)machine.Clone();
             romB.Source = (Source)source.Clone();
@@ -2108,14 +2169,18 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNamesDB_SingleItem_Single()
         {
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
             Source source = new Source(0);
 
-            Rom romA = new Rom();
-            romA.SetName("name");
-            romA.Size = 12345;
+            Rom romA = new Rom
+            {
+                Name = "name",
+                Size = 12345
+            };
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
@@ -2138,21 +2203,27 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNamesDB_NonDuplicate_AllUntouched()
         {
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
             Source source = new Source(0);
 
-            Rom romA = new Rom();
-            romA.SetName("romA");
-            romA.Size = 12345;
+            Rom romA = new Rom
+            {
+                Name = "romA",
+                Size = 12345
+            };
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
 
-            Rom romB = new Rom();
-            romB.SetName("romB");
-            romB.Size = 23456;
+            Rom romB = new Rom
+            {
+                Name = "romB",
+                Size = 23456
+            };
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
             romB.Machine = (Machine)machine.Clone();
             romB.Source = (Source)source.Clone();
@@ -2185,22 +2256,28 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatFile datFile = new Logiqx(null, useGame: false);
 
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
             long machineIndex = datFile.AddMachineDB(machine);
 
             Source source = new Source(0);
             long sourceIndex = datFile.AddSourceDB(source);
 
-            Rom romA = new Rom();
-            romA.SetName("rom");
-            romA.Size = 12345;
+            Rom romA = new Rom
+            {
+                Name = "rom",
+                Size = 12345
+            };
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             long romAIndex = datFile.AddItemDB(romA, machineIndex, sourceIndex, statsOnly: false);
 
-            Rom romB = new Rom();
-            romB.SetName("rom");
-            romB.Size = 12345;
+            Rom romB = new Rom
+            {
+                Name = "rom",
+                Size = 12345
+            };
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             long romBIndex = datFile.AddItemDB(romB, machineIndex, sourceIndex, statsOnly: false);
 
@@ -2222,21 +2299,27 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNamesDB_NameMatch_SingleRenamed()
         {
-            Machine machine = new Machine();
-            machine.Name = "machine";
+            Machine machine = new Machine
+            {
+                Name = "machine"
+            };
 
             Source source = new Source(0);
 
-            Rom romA = new Rom();
-            romA.SetName("rom");
-            romA.Size = 12345;
+            Rom romA = new Rom
+            {
+                Name = "rom",
+                Size = 12345
+            };
             romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             romA.Machine = (Machine)machine.Clone();
             romA.Source = (Source)source.Clone();
 
-            Rom romB = new Rom();
-            romB.SetName("rom");
-            romB.Size = 23456;
+            Rom romB = new Rom
+            {
+                Name = "rom",
+                Size = 23456
+            };
             romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
             romB.Machine = (Machine)machine.Clone();
             romB.Source = (Source)source.Clone();
@@ -2281,8 +2364,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ShouldIgnore_RemoveSet_True()
         {
-            DatItem? datItem = new Rom();
-            datItem.RemoveFlag = true;
+            DatItem? datItem = new Rom
+            {
+                RemoveFlag = true
+            };
             DatFile datFile = new Logiqx(null, useGame: false);
 
             bool actual = datFile.ShouldIgnore(datItem, ignoreBlanks: true);

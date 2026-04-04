@@ -9,8 +9,10 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CloneTest()
         {
-            Machine item = new Machine();
-            item.Name = "name";
+            Machine item = new Machine
+            {
+                Name = "name"
+            };
 
             object clone = item.Clone();
             Machine? actual = clone as Machine;
@@ -25,8 +27,10 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void GetInternalCloneTest()
         {
-            Machine item = new Machine();
-            item.Name = "name";
+            Machine item = new Machine
+            {
+                Name = "name"
+            };
 
             Data.Models.Metadata.Machine actual = item.GetInternalClone();
             Assert.Equal("name", actual.Name);
@@ -59,11 +63,15 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void Equals_MismatchedInternal_False()
         {
-            Machine self = new Machine();
-            self.Name = "self";
+            Machine self = new Machine
+            {
+                Name = "self"
+            };
 
-            Machine? other = new Machine();
-            other.Name = "other";
+            Machine? other = new Machine
+            {
+                Name = "other"
+            };
 
             bool actual = self.Equals(other);
             Assert.False(actual);
@@ -72,11 +80,15 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void Equals_EqualInternal_True()
         {
-            Machine self = new Machine();
-            self.Name = "name";
+            Machine self = new Machine
+            {
+                Name = "name"
+            };
 
-            Machine? other = new Machine();
-            other.Name = "name";
+            Machine? other = new Machine
+            {
+                Name = "name"
+            };
 
             bool actual = self.Equals(other);
             Assert.True(actual);

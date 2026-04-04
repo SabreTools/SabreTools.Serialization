@@ -98,14 +98,14 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Rom
             {
-                ParentName = parent.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
+                ParentName = parent.CloneOf,
                 //ParentDescription = parent.ReadString(Data.Models.Metadata.Machine.ParentDescriptionKey), // This is unmappable
                 GameName = parent.Name,
                 GameDescription = parent.Description,
                 RomName = item.Name,
                 RomCRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
                 RomSize = item.Size,
-                RomOf = parent.ReadString(Data.Models.Metadata.Machine.RomOfKey),
+                RomOf = parent.RomOf,
                 MergeName = item.ReadString(Data.Models.Metadata.Rom.MergeKey),
             };
             return row;

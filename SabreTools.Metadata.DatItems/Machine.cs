@@ -15,10 +15,136 @@ namespace SabreTools.Metadata.DatItems
     {
         #region Fields
 
+        public string? Board
+        {
+            get => _internal.Board;
+            set => _internal.Board = value;
+        }
+
+        public string? Buttons
+        {
+            get => _internal.Buttons;
+            set => _internal.Buttons = value;
+        }
+
+        public string? CloneOf
+        {
+            get => _internal.CloneOf;
+            set => _internal.CloneOf = value;
+        }
+
+        public string? CloneOfId
+        {
+            get => _internal.CloneOfId;
+            set => _internal.CloneOfId = value;
+        }
+
+        public string? Company
+        {
+            get => _internal.Company;
+            set => _internal.Company = value;
+        }
+
+        public string? Control
+        {
+            get => _internal.Control;
+            set => _internal.Control = value;
+        }
+
+        public string? Country
+        {
+            get => _internal.Country;
+            set => _internal.Country = value;
+        }
+
         public string? Description
         {
             get => _internal.Description;
             set => _internal.Description = value;
+        }
+
+        public string? DirName
+        {
+            get => _internal.DirName;
+            set => _internal.DirName = value;
+        }
+
+        public string? DisplayCount
+        {
+            get => _internal.DisplayCount;
+            set => _internal.DisplayCount = value;
+        }
+
+        public string? DisplayType
+        {
+            get => _internal.DisplayType;
+            set => _internal.DisplayType = value;
+        }
+
+        public string? DuplicateID
+        {
+            get => _internal.DuplicateID;
+            set => _internal.DuplicateID = value;
+        }
+
+        public string? Emulator
+        {
+            get => _internal.Emulator;
+            set => _internal.Emulator = value;
+        }
+
+        public string? Extra
+        {
+            get => _internal.Extra;
+            set => _internal.Extra = value;
+        }
+
+        public string? Favorite
+        {
+            get => _internal.Favorite;
+            set => _internal.Favorite = value;
+        }
+
+        public string? GenMSXID
+        {
+            get => _internal.GenMSXID;
+            set => _internal.GenMSXID = value;
+        }
+
+        public string? Hash
+        {
+            get => _internal.Hash;
+            set => _internal.Hash = value;
+        }
+
+        public string? History
+        {
+            get => _internal.History;
+            set => _internal.History = value;
+        }
+
+        public string? Id
+        {
+            get => _internal.Id;
+            set => _internal.Id = value;
+        }
+
+        public string? Im1CRC
+        {
+            get => _internal.Im1CRC;
+            set => _internal.Im1CRC = value;
+        }
+
+        public string? Im2CRC
+        {
+            get => _internal.Im2CRC;
+            set => _internal.Im2CRC = value;
+        }
+
+        public string? ImageNumber
+        {
+            get => _internal.ImageNumber;
+            set => _internal.ImageNumber = value;
         }
 
         public bool? IsBios
@@ -39,10 +165,82 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.IsMechanical = value;
         }
 
+        public string? Language
+        {
+            get => _internal.Language;
+            set => _internal.Language = value;
+        }
+
+        public string? Location
+        {
+            get => _internal.Location;
+            set => _internal.Location = value;
+        }
+
+        public string? Manufacturer
+        {
+            get => _internal.Manufacturer;
+            set => _internal.Manufacturer = value;
+        }
+
         public string? Name
         {
             get => _internal.Name;
             set => _internal.Name = value;
+        }
+
+        public string? Notes
+        {
+            get => _internal.Notes;
+            set => _internal.Notes = value;
+        }
+
+        public string? PlayedCount
+        {
+            get => _internal.PlayedCount;
+            set => _internal.PlayedCount = value;
+        }
+
+        public string? PlayedTime
+        {
+            get => _internal.PlayedTime;
+            set => _internal.PlayedTime = value;
+        }
+
+        public string? Players
+        {
+            get => _internal.Players;
+            set => _internal.Players = value;
+        }
+
+        public string? Publisher
+        {
+            get => _internal.Publisher;
+            set => _internal.Publisher = value;
+        }
+
+        public string? RebuildTo
+        {
+            get => _internal.RebuildTo;
+            set => _internal.RebuildTo = value;
+        }
+
+        public string? ReleaseNumber
+        {
+            get => _internal.ReleaseNumber;
+            set => _internal.ReleaseNumber = value;
+        }
+
+        public string? RomOf
+        {
+            get => _internal.RomOf;
+            set => _internal.RomOf = value;
+        }
+
+        public string? Rotation
+        {
+            get => _internal.Rotation;
+            set => _internal.Rotation = value;
         }
 
         public Data.Models.Metadata.Runnable? Runnable
@@ -51,10 +249,64 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.Runnable = value;
         }
 
+        public string? SampleOf
+        {
+            get => _internal.SampleOf;
+            set => _internal.SampleOf = value;
+        }
+
+        public string? SaveType
+        {
+            get => _internal.SaveType;
+            set => _internal.SaveType = value;
+        }
+
+        public string? SourceFile
+        {
+            get => _internal.SourceFile;
+            set => _internal.SourceFile = value;
+        }
+
+        public string? SourceRom
+        {
+            get => _internal.SourceRom;
+            set => _internal.SourceRom = value;
+        }
+
+        public string? Status
+        {
+            get => _internal.Status;
+            set => _internal.Status = value;
+        }
+
         public Data.Models.Metadata.Supported? Supported
         {
             get => _internal.Supported;
             set => _internal.Supported = value;
+        }
+
+        public string? System
+        {
+            get => _internal.System;
+            set => _internal.System = value;
+        }
+
+        public string? Tags
+        {
+            get => _internal.Tags;
+            set => _internal.Tags = value;
+        }
+
+        public string? Url
+        {
+            get => _internal.Url;
+            set => _internal.Url = value;
+        }
+
+        public string? Year
+        {
+            get => _internal.Year;
+            set => _internal.Year = value;
         }
 
         #endregion
@@ -101,13 +353,11 @@ namespace SabreTools.Metadata.DatItems
             Remove(Data.Models.Metadata.Machine.VideoKey);
 
             // Process flag values
-            string? im1Crc = ReadString(Data.Models.Metadata.Machine.Im1CRCKey);
-            if (im1Crc is not null)
-                Write<string?>(Data.Models.Metadata.Machine.Im1CRCKey, TextHelper.NormalizeCRC32(im1Crc));
+            if (Im1CRC is not null)
+                Im1CRC = TextHelper.NormalizeCRC32(Im1CRC);
 
-            string? im2Crc = ReadString(Data.Models.Metadata.Machine.Im2CRCKey);
-            if (im2Crc is not null)
-                Write<string?>(Data.Models.Metadata.Machine.Im2CRCKey, TextHelper.NormalizeCRC32(im2Crc));
+            if (Im2CRC is not null)
+                Im2CRC = TextHelper.NormalizeCRC32(Im2CRC);
 
             // Handle Trurip object, if it exists
             var truripItem = machine.Read<Data.Models.Logiqx.Trurip>(Data.Models.Metadata.Machine.TruripKey);
@@ -202,7 +452,7 @@ namespace SabreTools.Metadata.DatItems
             if (IsBios != other.IsBios)
                 return false;
 
-             if (IsDevice != other.IsDevice)
+            if (IsDevice != other.IsDevice)
                 return false;
 
             if (IsMechanical != other.IsMechanical)

@@ -273,7 +273,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the cloneof parent items
-                string? cloneOf = machine.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
+                string? cloneOf = machine.CloneOf;
                 List<DatItem> parentItems = GetItemsForBucket(cloneOf);
                 if (cloneOf is null)
                     continue;
@@ -408,7 +408,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the clone parent
-                string? cloneOf = machine.Value.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
+                string? cloneOf = machine.Value.CloneOf;
                 if (string.IsNullOrEmpty(cloneOf))
                     continue;
 
@@ -542,7 +542,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the cloneof parent items
-                string? cloneOf = machine.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
+                string? cloneOf = machine.CloneOf;
                 List<DatItem> parentItems = GetItemsForBucket(cloneOf);
                 if (parentItems.Count == 0)
                     continue;
@@ -562,10 +562,10 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Now we want to get the parent romof tag and put it in each of the items
                 items = GetItemsForBucket(bucket);
-                string? romof = GetItemsForBucket(cloneOf)[0].Machine!.ReadString(Data.Models.Metadata.Machine.RomOfKey);
+                string? romof = GetItemsForBucket(cloneOf)[0].Machine!.RomOf;
                 foreach (DatItem item in items)
                 {
-                    item.Machine!.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, romof);
+                    item.Machine!.RomOf = romof;
                 }
             }
         }
@@ -596,7 +596,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the clone parent
-                string? cloneOf = machine.Value.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
+                string? cloneOf = machine.Value.CloneOf;
                 if (string.IsNullOrEmpty(cloneOf))
                     continue;
 
@@ -623,7 +623,7 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Now we want to get the parent romof tag and put it in each of the items
                 items = GetItemsForBucketDB(bucket);
-                string? romof = parentMachine.Value.ReadString(Data.Models.Metadata.Machine.RomOfKey);
+                string? romof = parentMachine.Value.RomOf;
                 foreach (var key in items.Keys)
                 {
                     var itemMachine = GetMachineForItemDB(key);
@@ -631,7 +631,7 @@ namespace SabreTools.Metadata.DatFiles
                         continue;
 
                     // TODO: Remove merge tags here
-                    itemMachine.Value.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, romof);
+                    itemMachine.Value.RomOf = romof;
                 }
             }
         }
@@ -981,7 +981,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the romof parent items
-                string? romOf = machine.ReadString(Data.Models.Metadata.Machine.RomOfKey);
+                string? romOf = machine.RomOf;
                 List<DatItem> parentItems = GetItemsForBucket(romOf);
                 if (parentItems.Count == 0)
                     continue;
@@ -1024,7 +1024,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the romof parent items
-                string? romOf = machine.Value.ReadString(Data.Models.Metadata.Machine.RomOfKey);
+                string? romOf = machine.Value.RomOf;
                 Dictionary<long, DatItem> parentItems = GetItemsForBucketDB(romOf);
                 if (parentItems.Count == 0)
                     continue;
@@ -1163,7 +1163,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the cloneof parent items
-                string? cloneOf = machine.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
+                string? cloneOf = machine.CloneOf;
                 List<DatItem> parentItems = GetItemsForBucket(cloneOf);
                 if (parentItems.Count == 0)
                     continue;
@@ -1186,10 +1186,10 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Now we want to get the parent romof tag and put it in each of the remaining items
                 items = GetItemsForBucket(bucket);
-                string? romof = GetItemsForBucket(cloneOf)[0].Machine!.ReadString(Data.Models.Metadata.Machine.RomOfKey);
+                string? romof = GetItemsForBucket(cloneOf)[0].Machine!.RomOf;
                 foreach (DatItem item in items)
                 {
-                    item.Machine!.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, romof);
+                    item.Machine!.RomOf = romof;
                 }
             }
         }
@@ -1217,7 +1217,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the cloneof parent items
-                string? cloneOf = machine.Value.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
+                string? cloneOf = machine.Value.CloneOf;
                 Dictionary<long, DatItem> parentItems = GetItemsForBucketDB(cloneOf);
                 if (parentItems is null || parentItems.Count == 0)
                     continue;
@@ -1238,14 +1238,14 @@ namespace SabreTools.Metadata.DatFiles
                 if (machine.Value is null)
                     continue;
 
-                string? romof = machine.Value.ReadString(Data.Models.Metadata.Machine.RomOfKey);
+                string? romof = machine.Value.RomOf;
                 foreach (var item in items)
                 {
                     machine = GetMachineForItemDB(item.Key);
                     if (machine.Value is null)
                         continue;
 
-                    machine.Value.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, romof);
+                    machine.Value.RomOf = romof;
                 }
             }
         }
@@ -1273,7 +1273,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the romof parent items
-                string? romOf = machine.ReadString(Data.Models.Metadata.Machine.RomOfKey);
+                string? romOf = machine.RomOf;
                 List<DatItem> parentItems = GetItemsForBucket(romOf);
                 if (parentItems.Count == 0)
                     continue;
@@ -1320,7 +1320,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the romof parent items
-                string? romOf = machine.Value.ReadString(Data.Models.Metadata.Machine.RomOfKey);
+                string? romOf = machine.Value.RomOf;
                 Dictionary<long, DatItem> parentItems = GetItemsForBucketDB(romOf);
                 if (parentItems.Count == 0)
                     continue;
@@ -1370,9 +1370,9 @@ namespace SabreTools.Metadata.DatFiles
                     if (machine is null)
                         continue;
 
-                    machine.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, null);
-                    machine.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, null);
-                    machine.Write<string?>(Data.Models.Metadata.Machine.SampleOfKey, null);
+                    machine.CloneOf = null;
+                    machine.RomOf = null;
+                    machine.SampleOf = null;
                 }
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
@@ -1404,9 +1404,9 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 #endif
 
-                machine.Value.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, null);
-                machine.Value.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, null);
-                machine.Value.Write<string?>(Data.Models.Metadata.Machine.SampleOfKey, null);
+                machine.Value.CloneOf = null;
+                machine.Value.RomOf = null;
+                machine.Value.SampleOf = null;
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
 #else

@@ -72,12 +72,12 @@ namespace SabreTools.Serialization.CrossModel
             gameBase.Name = item.Name;
             gameBase.Description = item.Description;
             // gameBase.DriverStatus = item.ReadString(Data.Models.Metadata.Machine.DriverKey); // TODO: Needs metadata mapping
-            gameBase.Year = item.ReadString(Data.Models.Metadata.Machine.YearKey);
-            gameBase.Manufacturer = item.ReadString(Data.Models.Metadata.Machine.ManufacturerKey);
+            gameBase.Year = item.Year;
+            gameBase.Manufacturer = item.Manufacturer;
             gameBase.Category = item.ReadString(Data.Models.Metadata.Machine.CategoryKey);
-            gameBase.CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
-            gameBase.RomOf = item.ReadString(Data.Models.Metadata.Machine.RomOfKey);
-            gameBase.SampleOf = item.ReadString(Data.Models.Metadata.Machine.SampleOfKey);
+            gameBase.CloneOf = item.CloneOf;
+            gameBase.RomOf = item.RomOf;
+            gameBase.SampleOf = item.SampleOf;
 
             var releases = item.Read<Data.Models.Metadata.Release[]>(Data.Models.Metadata.Machine.ReleaseKey);
             if (releases is not null && releases.Length > 0)

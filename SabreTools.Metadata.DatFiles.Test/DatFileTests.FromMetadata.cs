@@ -255,80 +255,80 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Machine.AdjusterKey] = new Data.Models.Metadata.Adjuster[] { CreateMetadataAdjuster() },
                 [Data.Models.Metadata.Machine.ArchiveKey] = new Data.Models.Metadata.Archive[] { CreateMetadataArchive() },
                 [Data.Models.Metadata.Machine.BiosSetKey] = new Data.Models.Metadata.BiosSet[] { CreateMetadataBiosSet() },
-                [Data.Models.Metadata.Machine.BoardKey] = "board",
-                [Data.Models.Metadata.Machine.ButtonsKey] = "buttons",
+                Board = "board",
+                Buttons = "buttons",
                 [Data.Models.Metadata.Machine.CategoryKey] = "category",
                 [Data.Models.Metadata.Machine.ChipKey] = new Data.Models.Metadata.Chip[] { CreateMetadataChip() },
-                [Data.Models.Metadata.Machine.CloneOfKey] = "cloneof",
-                [Data.Models.Metadata.Machine.CloneOfIdKey] = "cloneofid",
+                CloneOf = "cloneof",
+                CloneOfId = "cloneofid",
                 [Data.Models.Metadata.Machine.CommentKey] = "comment",
-                [Data.Models.Metadata.Machine.CompanyKey] = "company",
+                Company = "company",
                 [Data.Models.Metadata.Machine.ConfigurationKey] = new Data.Models.Metadata.Configuration[] { CreateMetadataConfiguration() },
-                [Data.Models.Metadata.Machine.ControlKey] = "control",
-                [Data.Models.Metadata.Machine.CountryKey] = "country",
+                Control = "control",
+                Country = "country",
                 Description = "description",
                 [Data.Models.Metadata.Machine.DeviceKey] = new Data.Models.Metadata.Device[] { CreateMetadataDevice() },
                 [Data.Models.Metadata.Machine.DeviceRefKey] = new Data.Models.Metadata.DeviceRef[] { CreateMetadataDeviceRef() },
                 [Data.Models.Metadata.Machine.DipSwitchKey] = new Data.Models.Metadata.DipSwitch[] { CreateMetadataDipSwitch() },
-                [Data.Models.Metadata.Machine.DirNameKey] = "dirname",
+                DirName = "dirname",
                 [Data.Models.Metadata.Machine.DiskKey] = new Data.Models.Metadata.Disk[] { CreateMetadataDisk() },
-                [Data.Models.Metadata.Machine.DisplayCountKey] = "displaycount",
+                DisplayCount = "displaycount",
                 [Data.Models.Metadata.Machine.DisplayKey] = new Data.Models.Metadata.Display[] { CreateMetadataDisplay() },
-                [Data.Models.Metadata.Machine.DisplayTypeKey] = "displaytype",
+                DisplayType = "displaytype",
                 [Data.Models.Metadata.Machine.DriverKey] = CreateMetadataDriver(),
                 [Data.Models.Metadata.Machine.DumpKey] = new Data.Models.Metadata.Dump[] { CreateMetadataDump() },
-                [Data.Models.Metadata.Machine.DuplicateIDKey] = "duplicateid",
-                [Data.Models.Metadata.Machine.EmulatorKey] = "emulator",
-                [Data.Models.Metadata.Machine.ExtraKey] = "extra",
-                [Data.Models.Metadata.Machine.FavoriteKey] = "favorite",
+                DuplicateID = "duplicateid",
+                Emulator = "emulator",
+                Extra = "extra",
+                Favorite = "favorite",
                 [Data.Models.Metadata.Machine.FeatureKey] = new Data.Models.Metadata.Feature[] { CreateMetadataFeature() },
-                [Data.Models.Metadata.Machine.GenMSXIDKey] = "genmsxid",
-                [Data.Models.Metadata.Machine.HistoryKey] = "history",
-                [Data.Models.Metadata.Machine.IdKey] = "id",
-                [Data.Models.Metadata.Machine.Im1CRCKey] = HashType.CRC32.ZeroString,
-                [Data.Models.Metadata.Machine.Im2CRCKey] = HashType.CRC32.ZeroString,
-                [Data.Models.Metadata.Machine.ImageNumberKey] = "imagenumber",
+                GenMSXID = "genmsxid",
+                History = "history",
+                Id = "id",
+                Im1CRC = HashType.CRC32.ZeroString,
+                Im2CRC = HashType.CRC32.ZeroString,
+                ImageNumber = "imagenumber",
                 [Data.Models.Metadata.Machine.InfoKey] = new Data.Models.Metadata.Info[] { CreateMetadataInfo() },
                 [Data.Models.Metadata.Machine.InputKey] = CreateMetadataInput(),
                 IsBios = true,
                 IsDevice = true,
                 IsMechanical = true,
-                [Data.Models.Metadata.Machine.LanguageKey] = "language",
-                [Data.Models.Metadata.Machine.LocationKey] = "location",
-                [Data.Models.Metadata.Machine.ManufacturerKey] = "manufacturer",
+                Language = "language",
+                Location = "location",
+                Manufacturer = "manufacturer",
                 [Data.Models.Metadata.Machine.MediaKey] = new Data.Models.Metadata.Media[] { CreateMetadataMedia() },
                 Name = "name",
-                [Data.Models.Metadata.Machine.NotesKey] = "notes",
+                Notes = "notes",
                 [Data.Models.Metadata.Machine.PartKey] = new Data.Models.Metadata.Part[] { CreateMetadataPart() },
-                [Data.Models.Metadata.Machine.PlayedCountKey] = "playedcount",
-                [Data.Models.Metadata.Machine.PlayedTimeKey] = "playedtime",
-                [Data.Models.Metadata.Machine.PlayersKey] = "players",
+                PlayedCount = "playedcount",
+                PlayedTime = "playedtime",
+                Players = "players",
                 [Data.Models.Metadata.Machine.PortKey] = new Data.Models.Metadata.Port[] { CreateMetadataPort() },
-                [Data.Models.Metadata.Machine.PublisherKey] = "publisher",
+                Publisher = "publisher",
                 [Data.Models.Metadata.Machine.RamOptionKey] = new Data.Models.Metadata.RamOption[] { CreateMetadataRamOption() },
-                [Data.Models.Metadata.Machine.RebuildToKey] = "rebuildto",
+                RebuildTo = "rebuildto",
                 [Data.Models.Metadata.Machine.ReleaseKey] = new Data.Models.Metadata.Release[] { CreateMetadataRelease() },
-                [Data.Models.Metadata.Machine.ReleaseNumberKey] = "releasenumber",
+                ReleaseNumber = "releasenumber",
                 [Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { CreateMetadataRom() },
-                [Data.Models.Metadata.Machine.RomOfKey] = "romof",
-                [Data.Models.Metadata.Machine.RotationKey] = "rotation",
+                RomOf = "romof",
+                Rotation = "rotation",
                 Runnable = Data.Models.Metadata.Runnable.Yes,
                 [Data.Models.Metadata.Machine.SampleKey] = new Data.Models.Metadata.Sample[] { CreateMetadataSample() },
-                [Data.Models.Metadata.Machine.SampleOfKey] = "sampleof",
-                [Data.Models.Metadata.Machine.SaveTypeKey] = "savetype",
+                SampleOf = "sampleof",
+                SaveType = "savetype",
                 [Data.Models.Metadata.Machine.SharedFeatKey] = new Data.Models.Metadata.SharedFeat[] { CreateMetadataSharedFeat() },
                 [Data.Models.Metadata.Machine.SlotKey] = new Data.Models.Metadata.Slot[] { CreateMetadataSlot() },
                 [Data.Models.Metadata.Machine.SoftwareListKey] = new Data.Models.Metadata.SoftwareList[] { CreateMetadataSoftwareList() },
                 [Data.Models.Metadata.Machine.SoundKey] = CreateMetadataSound(),
-                [Data.Models.Metadata.Machine.SourceFileKey] = "sourcefile",
-                [Data.Models.Metadata.Machine.SourceRomKey] = "sourcerom",
-                [Data.Models.Metadata.Machine.StatusKey] = "status",
+                SourceFile = "sourcefile",
+                SourceRom = "sourcerom",
+                Status = "status",
                 Supported = Data.Models.Metadata.Supported.Yes,
-                [Data.Models.Metadata.Machine.SystemKey] = "system",
-                [Data.Models.Metadata.Machine.TagsKey] = "tags",
+                System = "system",
+                Tags = "tags",
                 [Data.Models.Metadata.Machine.TruripKey] = CreateMetadataTrurip(),
                 [Data.Models.Metadata.Machine.VideoKey] = new Data.Models.Metadata.Video[] { CreateMetadataVideo() },
-                [Data.Models.Metadata.Machine.YearKey] = "year",
+                Year = "year",
             };
         }
 
@@ -1068,55 +1068,55 @@ namespace SabreTools.Metadata.DatFiles.Test
 #pragma warning disable IDE0051
         private static void ValidateMachine(DatItems.Machine machine)
         {
-            Assert.Equal("board", machine.ReadString(Data.Models.Metadata.Machine.BoardKey));
-            Assert.Equal("buttons", machine.ReadString(Data.Models.Metadata.Machine.ButtonsKey));
+            Assert.Equal("board", machine.Board);
+            Assert.Equal("buttons", machine.Buttons);
             Assert.Equal("category", machine.ReadString(Data.Models.Metadata.Machine.CategoryKey));
-            Assert.Equal("cloneof", machine.ReadString(Data.Models.Metadata.Machine.CloneOfKey));
-            Assert.Equal("cloneofid", machine.ReadString(Data.Models.Metadata.Machine.CloneOfIdKey));
+            Assert.Equal("cloneof", machine.CloneOf);
+            Assert.Equal("cloneofid", machine.CloneOfId);
             Assert.Equal("comment", machine.ReadString(Data.Models.Metadata.Machine.CommentKey));
-            Assert.Equal("company", machine.ReadString(Data.Models.Metadata.Machine.CompanyKey));
-            Assert.Equal("control", machine.ReadString(Data.Models.Metadata.Machine.ControlKey));
-            Assert.Equal("country", machine.ReadString(Data.Models.Metadata.Machine.CountryKey));
+            Assert.Equal("company", machine.Company);
+            Assert.Equal("control", machine.Control);
+            Assert.Equal("country", machine.Country);
             Assert.Equal("description", machine.Description);
-            Assert.Equal("dirname", machine.ReadString(Data.Models.Metadata.Machine.DirNameKey));
-            Assert.Equal("displaycount", machine.ReadString(Data.Models.Metadata.Machine.DisplayCountKey));
-            Assert.Equal("displaytype", machine.ReadString(Data.Models.Metadata.Machine.DisplayTypeKey));
-            Assert.Equal("duplicateid", machine.ReadString(Data.Models.Metadata.Machine.DuplicateIDKey));
-            Assert.Equal("emulator", machine.ReadString(Data.Models.Metadata.Machine.EmulatorKey));
-            Assert.Equal("extra", machine.ReadString(Data.Models.Metadata.Machine.ExtraKey));
-            Assert.Equal("favorite", machine.ReadString(Data.Models.Metadata.Machine.FavoriteKey));
-            Assert.Equal("genmsxid", machine.ReadString(Data.Models.Metadata.Machine.GenMSXIDKey));
-            Assert.Equal("history", machine.ReadString(Data.Models.Metadata.Machine.HistoryKey));
-            Assert.Equal("id", machine.ReadString(Data.Models.Metadata.Machine.IdKey));
-            Assert.Equal(HashType.CRC32.ZeroString, machine.ReadString(Data.Models.Metadata.Machine.Im1CRCKey));
-            Assert.Equal(HashType.CRC32.ZeroString, machine.ReadString(Data.Models.Metadata.Machine.Im2CRCKey));
-            Assert.Equal("imagenumber", machine.ReadString(Data.Models.Metadata.Machine.ImageNumberKey));
+            Assert.Equal("dirname", machine.DirName);
+            Assert.Equal("displaycount", machine.DisplayCount);
+            Assert.Equal("displaytype", machine.DisplayType);
+            Assert.Equal("duplicateid", machine.DuplicateID);
+            Assert.Equal("emulator", machine.Emulator);
+            Assert.Equal("extra", machine.Extra);
+            Assert.Equal("favorite", machine.Favorite);
+            Assert.Equal("genmsxid", machine.GenMSXID);
+            Assert.Equal("history", machine.History);
+            Assert.Equal("id", machine.Id);
+            Assert.Equal(HashType.CRC32.ZeroString, machine.Im1CRC);
+            Assert.Equal(HashType.CRC32.ZeroString, machine.Im2CRC);
+            Assert.Equal("imagenumber", machine.ImageNumber);
             Assert.Equal(true, machine.IsBios);
             Assert.Equal(true, machine.IsDevice);
             Assert.Equal(true, machine.IsMechanical);
-            Assert.Equal("language", machine.ReadString(Data.Models.Metadata.Machine.LanguageKey));
-            Assert.Equal("location", machine.ReadString(Data.Models.Metadata.Machine.LocationKey));
-            Assert.Equal("manufacturer", machine.ReadString(Data.Models.Metadata.Machine.ManufacturerKey));
+            Assert.Equal("language", machine.Language);
+            Assert.Equal("location", machine.Location);
+            Assert.Equal("manufacturer", machine.Manufacturer);
             Assert.Equal("name", machine.Name);
-            Assert.Equal("notes", machine.ReadString(Data.Models.Metadata.Machine.NotesKey));
-            Assert.Equal("playedcount", machine.ReadString(Data.Models.Metadata.Machine.PlayedCountKey));
-            Assert.Equal("playedtime", machine.ReadString(Data.Models.Metadata.Machine.PlayedTimeKey));
-            Assert.Equal("players", machine.ReadString(Data.Models.Metadata.Machine.PlayersKey));
-            Assert.Equal("publisher", machine.ReadString(Data.Models.Metadata.Machine.PublisherKey));
-            Assert.Equal("rebuildto", machine.ReadString(Data.Models.Metadata.Machine.RebuildToKey));
-            Assert.Equal("releasenumber", machine.ReadString(Data.Models.Metadata.Machine.ReleaseNumberKey));
-            Assert.Equal("romof", machine.ReadString(Data.Models.Metadata.Machine.RomOfKey));
-            Assert.Equal("rotation", machine.ReadString(Data.Models.Metadata.Machine.RotationKey));
+            Assert.Equal("notes", machine.Notes);
+            Assert.Equal("playedcount", machine.PlayedCount);
+            Assert.Equal("playedtime", machine.PlayedTime);
+            Assert.Equal("players", machine.Players);
+            Assert.Equal("publisher", machine.Publisher);
+            Assert.Equal("rebuildto", machine.RebuildTo);
+            Assert.Equal("releasenumber", machine.ReleaseNumber);
+            Assert.Equal("romof", machine.RomOf);
+            Assert.Equal("rotation", machine.Rotation);
             Assert.Equal(Data.Models.Metadata.Runnable.Yes, machine.Runnable);
-            Assert.Equal("sampleof", machine.ReadString(Data.Models.Metadata.Machine.SampleOfKey));
-            Assert.Equal("savetype", machine.ReadString(Data.Models.Metadata.Machine.SaveTypeKey));
-            Assert.Equal("sourcefile", machine.ReadString(Data.Models.Metadata.Machine.SourceFileKey));
-            Assert.Equal("sourcerom", machine.ReadString(Data.Models.Metadata.Machine.SourceRomKey));
-            Assert.Equal("status", machine.ReadString(Data.Models.Metadata.Machine.StatusKey));
+            Assert.Equal("sampleof", machine.SampleOf);
+            Assert.Equal("savetype", machine.SaveType);
+            Assert.Equal("sourcefile", machine.SourceFile);
+            Assert.Equal("sourcerom", machine.SourceRom);
+            Assert.Equal("status", machine.Status);
             Assert.Equal(Data.Models.Metadata.Supported.Yes, machine.Supported);
-            Assert.Equal("system", machine.ReadString(Data.Models.Metadata.Machine.SystemKey));
-            Assert.Equal("tags", machine.ReadString(Data.Models.Metadata.Machine.TagsKey));
-            Assert.Equal("year", machine.ReadString(Data.Models.Metadata.Machine.YearKey));
+            Assert.Equal("system", machine.System);
+            Assert.Equal("tags", machine.Tags);
+            Assert.Equal("year", machine.Year);
 
             DatItems.Trurip? trurip = machine.Read<DatItems.Trurip>(Data.Models.Metadata.Machine.TruripKey);
             ValidateTrurip(trurip);

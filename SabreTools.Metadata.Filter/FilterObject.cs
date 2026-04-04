@@ -733,8 +733,71 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Tilt.FromYesNo();
                     return true;
 
+                case Machine item when fieldName == "board":
+                    checkValue = item.Board;
+                    return true;
+                case Machine item when fieldName == "buttons":
+                    checkValue = item.Buttons;
+                    return true;
+                case Machine item when fieldName == "cloneof":
+                    checkValue = item.CloneOf;
+                    return true;
+                case Machine item when fieldName == "cloneofid":
+                    checkValue = item.CloneOfId;
+                    return true;
+                case Machine item when fieldName == "company":
+                    checkValue = item.Company;
+                    return true;
+                case Machine item when fieldName == "control":
+                    checkValue = item.Control;
+                    return true;
+                case Machine item when fieldName == "country":
+                    checkValue = item.Country;
+                    return true;
                 case Machine item when fieldName == "description":
                     checkValue = item.Description;
+                    return true;
+                case Machine item when fieldName == "dirname":
+                    checkValue = item.DirName;
+                    return true;
+                case Machine item when fieldName == "displaycount":
+                    checkValue = item.DisplayCount;
+                    return true;
+                case Machine item when fieldName == "displaytype":
+                    checkValue = item.DisplayType;
+                    return true;
+                case Machine item when fieldName == "duplicateid":
+                    checkValue = item.DuplicateID;
+                    return true;
+                case Machine item when fieldName == "emulator":
+                    checkValue = item.Emulator;
+                    return true;
+                case Machine item when fieldName == "extra":
+                    checkValue = item.Extra;
+                    return true;
+                case Machine item when fieldName == "favorite":
+                    checkValue = item.Favorite;
+                    return true;
+                case Machine item when fieldName == "genmsxid":
+                    checkValue = item.GenMSXID;
+                    return true;
+                case Machine item when fieldName == "hash":
+                    checkValue = item.Hash;
+                    return true;
+                case Machine item when fieldName == "history":
+                    checkValue = item.History;
+                    return true;
+                case Machine item when fieldName == "id":
+                    checkValue = item.Id;
+                    return true;
+                case Machine item when fieldName == "im1crc":
+                    checkValue = item.Im1CRC;
+                    return true;
+                case Machine item when fieldName == "im2crc":
+                    checkValue = item.Im2CRC;
+                    return true;
+                case Machine item when fieldName == "imagenumber":
+                    checkValue = item.ImageNumber;
                     return true;
                 case Machine item when fieldName == "isbios":
                     checkValue = item.IsBios.FromYesNo();
@@ -745,11 +808,74 @@ namespace SabreTools.Metadata.Filter
                 case Machine item when fieldName == "ismechanical":
                     checkValue = item.IsMechanical.FromYesNo();
                     return true;
+                case Machine item when fieldName == "language":
+                    checkValue = item.Language;
+                    return true;
+                case Machine item when fieldName == "location":
+                    checkValue = item.Location;
+                    return true;
+                case Machine item when fieldName == "manufacturer":
+                    checkValue = item.Manufacturer;
+                    return true;
+                case Machine item when fieldName == "notes":
+                    checkValue = item.Notes;
+                    return true;
+                case Machine item when fieldName == "playedcount":
+                    checkValue = item.PlayedCount;
+                    return true;
+                case Machine item when fieldName == "playedtime":
+                    checkValue = item.PlayedTime;
+                    return true;
+                case Machine item when fieldName == "players":
+                    checkValue = item.Players;
+                    return true;
+                case Machine item when fieldName == "publisher":
+                    checkValue = item.Publisher;
+                    return true;
+                case Machine item when fieldName == "rebuildto":
+                    checkValue = item.RebuildTo;
+                    return true;
+                case Machine item when fieldName == "releasenumber":
+                    checkValue = item.ReleaseNumber;
+                    return true;
+                case Machine item when fieldName == "romof":
+                    checkValue = item.RomOf;
+                    return true;
+                case Machine item when fieldName == "rotation":
+                    checkValue = item.Rotation;
+                    return true;
                 case Machine item when fieldName == "runnable":
                     checkValue = item.Runnable?.AsStringValue();
                     return true;
+                case Machine item when fieldName == "sampleof":
+                    checkValue = item.SampleOf;
+                    return true;
+                case Machine item when fieldName == "savetype":
+                    checkValue = item.SaveType;
+                    return true;
+                case Machine item when fieldName == "sourcefile":
+                    checkValue = item.SourceFile;
+                    return true;
+                case Machine item when fieldName == "sourcerom":
+                    checkValue = item.SourceRom;
+                    return true;
+                case Machine item when fieldName == "status":
+                    checkValue = item.Status;
+                    return true;
                 case Machine item when fieldName == "supported":
                     checkValue = item.Supported?.AsStringValue();
+                    return true;
+                case Machine item when fieldName == "system":
+                    checkValue = item.System;
+                    return true;
+                case Machine item when fieldName == "tags":
+                    checkValue = item.Tags;
+                    return true;
+                case Machine item when fieldName == "url":
+                    checkValue = item.Url;
+                    return true;
+                case Machine item when fieldName == "year":
+                    checkValue = item.Year;
                     return true;
 
                 case Media item when fieldName == "md5":

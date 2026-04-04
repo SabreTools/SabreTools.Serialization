@@ -251,9 +251,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         /// </summary>
         private static Disk CreateDisk()
         {
-            var disk = new Disk();
-
-            disk.Status = ItemStatus.Good;
+            var disk = new Disk
+            {
+                Status = ItemStatus.Good
+            };
             disk.Write<string?>(Data.Models.Metadata.Disk.MD5Key, HashType.MD5.ZeroString);
             disk.Write<string?>(Data.Models.Metadata.Disk.SHA1Key, HashType.SHA1.ZeroString);
 
@@ -282,12 +283,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         /// </summary>
         private static Media CreateMedia()
         {
-            var media = new Media();
-
-            media.MD5 = HashType.MD5.ZeroString;
-            media.SHA1 = HashType.SHA1.ZeroString;
-            media.SHA256 = HashType.SHA256.ZeroString;
-            media.SpamSum = HashType.SpamSum.ZeroString;
+            var media = new Media
+            {
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SpamSum = HashType.SpamSum.ZeroString
+            };
 
             return media;
         }
@@ -297,10 +299,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         /// </summary>
         private static Rom CreateRom()
         {
-            var rom = new Rom();
-
-            rom.Status = ItemStatus.Good;
-            rom.Size = 1;
+            var rom = new Rom
+            {
+                Status = ItemStatus.Good,
+                Size = 1
+            };
             rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key, HashType.CRC16.ZeroString);
             rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
             rom.Write<string?>(Data.Models.Metadata.Rom.CRC64Key, HashType.CRC64.ZeroString);

@@ -45,11 +45,11 @@ namespace SabreTools.Serialization.CrossModel
             var machine = new Data.Models.Metadata.Machine
             {
                 Name = item.Title,
-                [Data.Models.Metadata.Machine.GenMSXIDKey] = item.GenMSXID,
-                [Data.Models.Metadata.Machine.SystemKey] = item.System,
-                [Data.Models.Metadata.Machine.CompanyKey] = item.Company,
-                [Data.Models.Metadata.Machine.YearKey] = item.Year,
-                [Data.Models.Metadata.Machine.CountryKey] = item.Country,
+                GenMSXID = item.GenMSXID,
+                System = item.System,
+                Company = item.Company,
+                Year = item.Year,
+                Country = item.Country,
             };
 
             if (item.Dump is not null && item.Dump.Length > 0)

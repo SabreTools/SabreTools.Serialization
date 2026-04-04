@@ -70,8 +70,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.RomOfKey] = item.RomOf,
-                [Data.Models.Metadata.Machine.CloneOfKey] = item.ParentName,
+                RomOf = item.RomOf,
+                CloneOf = item.ParentName,
                 //[Data.Models.Metadata.Machine.ParentDescriptionKey] = item.ParentDescription, // This is unmappable
                 Name = item.GameName,
                 Description = item.GameDescription,

@@ -82,18 +82,18 @@ namespace SabreTools.Serialization.CrossModel
         {
             var game = new Game
             {
-                ImageNumber = item.ReadString(Data.Models.Metadata.Machine.ImageNumberKey),
-                ReleaseNumber = item.ReadString(Data.Models.Metadata.Machine.ReleaseNumberKey),
+                ImageNumber = item.ImageNumber,
+                ReleaseNumber = item.ReleaseNumber,
                 Title = item.Name,
-                SaveType = item.ReadString(Data.Models.Metadata.Machine.SaveTypeKey),
-                Publisher = item.ReadString(Data.Models.Metadata.Machine.PublisherKey),
-                Location = item.ReadString(Data.Models.Metadata.Machine.LocationKey),
-                SourceRom = item.ReadString(Data.Models.Metadata.Machine.SourceRomKey),
-                Language = item.ReadString(Data.Models.Metadata.Machine.LanguageKey),
-                Im1CRC = item.ReadString(Data.Models.Metadata.Machine.Im1CRCKey),
-                Im2CRC = item.ReadString(Data.Models.Metadata.Machine.Im2CRCKey),
+                SaveType = item.SaveType,
+                Publisher = item.Publisher,
+                Location = item.Location,
+                SourceRom = item.SourceRom,
+                Language = item.Language,
+                Im1CRC = item.Im1CRC,
+                Im2CRC = item.Im2CRC,
                 Comment = item.ReadString(Data.Models.Metadata.Machine.CommentKey),
-                DuplicateID = item.ReadString(Data.Models.Metadata.Machine.DuplicateIDKey),
+                DuplicateID = item.DuplicateID,
             };
 
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);

@@ -10,8 +10,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void ConvertToRomTest()
         {
-            Machine machine = new Machine();
-            machine.Name = "name";
+            Machine machine = new Machine
+            {
+                Name = "name"
+            };
 
             Source source = new Source(0, "XXXXXX");
 
@@ -24,12 +26,12 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 MD5 = "DEADBEEF",
                 SHA1 = "DEADBEEF",
                 SHA256 = "DEADBEEF",
-                Format = "XXXXXX"
+                Format = "XXXXXX",
+                DupeType = DupeType.All | DupeType.External,
+                Machine = machine,
+                RemoveFlag = false,
+                Source = source
             };
-            file.DupeType = DupeType.All | DupeType.External;
-            file.Machine = machine;
-            file.RemoveFlag = false;
-            file.Source = source;
             file.Machine = machine;
             file.Source = source;
 
@@ -340,8 +342,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine();
-            machine.Name = "Machine";
+            Machine machine = new Machine
+            {
+                Name = "Machine"
+            };
 
             DatItem datItem = new File
             {

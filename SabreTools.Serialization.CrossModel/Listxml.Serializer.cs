@@ -47,18 +47,18 @@ namespace SabreTools.Serialization.CrossModel
             var machine = new Data.Models.Metadata.Machine
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Machine.SourceFileKey] = item.SourceFile,
+                SourceFile = item.SourceFile,
                 IsBios = item.IsBios,
                 IsDevice = item.IsDevice,
                 IsMechanical = item.IsMechanical,
                 Runnable = item.Runnable,
-                [Data.Models.Metadata.Machine.CloneOfKey] = item.CloneOf,
-                [Data.Models.Metadata.Machine.RomOfKey] = item.RomOf,
-                [Data.Models.Metadata.Machine.SampleOfKey] = item.SampleOf,
+                CloneOf = item.CloneOf,
+                RomOf = item.RomOf,
+                SampleOf = item.SampleOf,
                 Description = item.Description,
-                [Data.Models.Metadata.Machine.YearKey] = item.Year,
-                [Data.Models.Metadata.Machine.ManufacturerKey] = item.Manufacturer,
-                [Data.Models.Metadata.Machine.HistoryKey] = item.History,
+                Year = item.Year,
+                Manufacturer = item.Manufacturer,
+                History = item.History,
             };
 
             if (item.BiosSet is not null && item.BiosSet.Length > 0)

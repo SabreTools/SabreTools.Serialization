@@ -584,8 +584,8 @@ namespace SabreTools.Metadata.DatFiles
             Data.Models.Metadata.ItemType type = item.ItemType;
             string
                 game = machine?.Name ?? string.Empty,
-                manufacturer = machine?.ReadString(Data.Models.Metadata.Machine.ManufacturerKey) ?? string.Empty,
-                publisher = machine?.ReadString(Data.Models.Metadata.Machine.PublisherKey) ?? string.Empty,
+                manufacturer = machine?.Manufacturer ?? string.Empty,
+                publisher = machine?.Publisher ?? string.Empty,
                 category = machine?.ReadString(Data.Models.Metadata.Machine.CategoryKey) ?? string.Empty,
                 name = item.GetName() ?? type.AsStringValue() ?? string.Empty,
                 crc16 = string.Empty,

@@ -47,12 +47,12 @@ namespace SabreTools.Serialization.CrossModel
             var machine = new Data.Models.Metadata.Machine
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Machine.CloneOfKey] = item.CloneOf,
+                CloneOf = item.CloneOf,
                 Supported = item.Supported,
                 Description = item.Description,
-                [Data.Models.Metadata.Machine.YearKey] = item.Year,
-                [Data.Models.Metadata.Machine.PublisherKey] = item.Publisher,
-                [Data.Models.Metadata.Machine.NotesKey] = item.Notes,
+                Year = item.Year,
+                Publisher = item.Publisher,
+                Notes = item.Notes,
             };
 
             if (item.Info is not null && item.Info.Length > 0)

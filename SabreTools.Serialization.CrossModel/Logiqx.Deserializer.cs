@@ -121,23 +121,23 @@ namespace SabreTools.Serialization.CrossModel
             GameBase gameBase = game ? new Game() : new Machine();
 
             gameBase.Name = item.Name;
-            gameBase.SourceFile = item.ReadString(Data.Models.Metadata.Machine.SourceFileKey);
+            gameBase.SourceFile = item.SourceFile;
             gameBase.IsBios = item.IsBios;
             gameBase.IsDevice = item.IsDevice;
             gameBase.IsMechanical = item.IsMechanical;
-            gameBase.CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
-            gameBase.RomOf = item.ReadString(Data.Models.Metadata.Machine.RomOfKey);
-            gameBase.SampleOf = item.ReadString(Data.Models.Metadata.Machine.SampleOfKey);
-            gameBase.Board = item.ReadString(Data.Models.Metadata.Machine.BoardKey);
-            gameBase.RebuildTo = item.ReadString(Data.Models.Metadata.Machine.RebuildToKey);
-            gameBase.Id = item.ReadString(Data.Models.Metadata.Machine.IdKey);
-            gameBase.CloneOfId = item.ReadString(Data.Models.Metadata.Machine.CloneOfIdKey);
+            gameBase.CloneOf = item.CloneOf;
+            gameBase.RomOf = item.RomOf;
+            gameBase.SampleOf = item.SampleOf;
+            gameBase.Board = item.Board;
+            gameBase.RebuildTo = item.RebuildTo;
+            gameBase.Id = item.Id;
+            gameBase.CloneOfId = item.CloneOfId;
             gameBase.Runnable = item.Runnable;
             gameBase.Comment = item.ReadStringArray(Data.Models.Metadata.Machine.CommentKey);
             gameBase.Description = item.Description;
-            gameBase.Year = item.ReadString(Data.Models.Metadata.Machine.YearKey);
-            gameBase.Manufacturer = item.ReadString(Data.Models.Metadata.Machine.ManufacturerKey);
-            gameBase.Publisher = item.ReadString(Data.Models.Metadata.Machine.PublisherKey);
+            gameBase.Year = item.Year;
+            gameBase.Manufacturer = item.Manufacturer;
+            gameBase.Publisher = item.Publisher;
             gameBase.Category = item.ReadStringArray(Data.Models.Metadata.Machine.CategoryKey);
 
             var trurip = item.Read<Trurip>(Data.Models.Metadata.Machine.TruripKey);
