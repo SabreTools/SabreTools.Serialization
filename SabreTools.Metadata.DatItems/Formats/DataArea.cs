@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 
@@ -29,6 +30,11 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.DataArea)?.Name = value;
         }
 
+        public Rom[]? Rom { get; set; }
+
+        [JsonIgnore]
+        public bool RomSpecified => Rom is not null && Rom.Length > 0;
+
         public long? Size
         {
             get => (_internal as Data.Models.Metadata.DataArea)?.Size;
@@ -47,7 +53,12 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DataArea() : base() { }
 
-        public DataArea(Data.Models.Metadata.DataArea item) : base(item) { }
+        public DataArea(Data.Models.Metadata.DataArea item) : base(item)
+        {
+            // Handle subitems
+            if (item.Rom is not null)
+                Rom = Array.ConvertAll(item.Rom, rom => new Rom(rom));
+        }
 
         public DataArea(Data.Models.Metadata.DataArea item, Machine machine, Source source) : this(item)
         {
@@ -71,6 +82,16 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override object Clone() => new DataArea(_internal.DeepClone() as Data.Models.Metadata.DataArea ?? []);
+
+        public override Data.Models.Metadata.DataArea GetInternalClone()
+        {
+            var partItem = base.GetInternalClone();
+
+            if (Rom is not null)
+                partItem.Rom = Array.ConvertAll(Rom, rom => rom.GetInternalClone());
+
+            return partItem;
+        }
 
         #endregion
     }

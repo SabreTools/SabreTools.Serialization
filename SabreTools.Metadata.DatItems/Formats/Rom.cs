@@ -12,33 +12,20 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("rom"), XmlRoot("rom")]
     public sealed class Rom : DatItem<Data.Models.Metadata.Rom>
     {
-        #region Constants
-
-        /// <summary>
-        /// Non-standard key for inverted logic
-        /// </summary>
-        public const string DataAreaKey = "DATAAREA";
-
-        /// <summary>
-        /// Non-standard key for inverted logic
-        /// </summary>
-        public const string PartKey = "PART";
-
-        #endregion
-
         #region Fields
+
+        public DataArea? DataArea { get; set; }
 
         [JsonIgnore]
         public bool DataAreaSpecified
         {
             get
             {
-                var dataArea = Read<DataArea?>(DataAreaKey);
-                return dataArea is not null
-                    && (!string.IsNullOrEmpty(dataArea.Name)
-                        || dataArea.Size is not null
-                        || dataArea.Width is not null
-                        || dataArea.Endianness is not null);
+                return DataArea is not null
+                    && (!string.IsNullOrEmpty(DataArea.Name)
+                        || DataArea.Size is not null
+                        || DataArea.Width is not null
+                        || DataArea.Endianness is not null);
             }
         }
 
@@ -109,15 +96,16 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        public Part? Part { get; set; }
+
         [JsonIgnore]
         public bool PartSpecified
         {
             get
             {
-                var part = Read<Part?>(PartKey);
-                return part is not null
-                    && (!string.IsNullOrEmpty(part.Name)
-                        || !string.IsNullOrEmpty(part.Interface));
+                return Part is not null
+                    && (!string.IsNullOrEmpty(Part.Name)
+                        || !string.IsNullOrEmpty(Part.Interface));
             }
         }
 

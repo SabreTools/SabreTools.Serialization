@@ -261,7 +261,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             PartFeature item = new PartFeature(CreateMetadataFeature());
             item.CopyMachineInformation(machine);
-            item.Write(PartFeature.PartKey, CreatePart(machine));
+            item.Part = CreatePart(machine);
             return item;
         }
 
@@ -298,8 +298,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Rom item = new Rom(CreateMetadataRom());
             item.CopyMachineInformation(machine);
-            item.Write(Rom.DataAreaKey, CreateDataArea(machine));
-            item.Write(Rom.PartKey, CreatePart(machine));
+            item.DataArea = CreateDataArea(machine);
+            item.Part = CreatePart(machine);
             return item;
         }
 
@@ -761,7 +761,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345, dataArea.Size);
             Assert.Equal(Data.Models.Metadata.Width.Long, dataArea.Width);
 
-            Data.Models.Metadata.Rom[]? roms = dataArea.ReadArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.DataArea.RomKey);
+            Data.Models.Metadata.Rom[]? roms = dataArea.Rom;
             Assert.NotNull(roms);
             Data.Models.Metadata.Rom? rom = Assert.Single(roms);
             ValidateMetadataRom(rom);
@@ -853,7 +853,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(diskArea);
             Assert.Equal("name", diskArea.Name);
 
-            Data.Models.Metadata.Disk[]? disks = diskArea.ReadArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.DiskArea.DiskKey);
+            Data.Models.Metadata.Disk[]? disks = diskArea.Disk;
             Assert.NotNull(disks);
             Data.Models.Metadata.Disk? disk = Assert.Single(disks);
             ValidateMetadataDisk(disk);
@@ -959,22 +959,22 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("interface", part.Interface);
             Assert.Equal("name", part.Name);
 
-            Data.Models.Metadata.DataArea[]? dataAreas = part.ReadArray<Data.Models.Metadata.DataArea>(Data.Models.Metadata.Part.DataAreaKey);
+            Data.Models.Metadata.DataArea[]? dataAreas = part.DataArea;
             Assert.NotNull(dataAreas);
             Data.Models.Metadata.DataArea? dataArea = Assert.Single(dataAreas);
             ValidateMetadataDataArea(dataArea);
 
-            Data.Models.Metadata.DiskArea[]? diskAreas = part.ReadArray<Data.Models.Metadata.DiskArea>(Data.Models.Metadata.Part.DiskAreaKey);
+            Data.Models.Metadata.DiskArea[]? diskAreas = part.DiskArea;
             Assert.NotNull(diskAreas);
             Data.Models.Metadata.DiskArea? diskArea = Assert.Single(diskAreas);
             ValidateMetadataDiskArea(diskArea);
 
-            Data.Models.Metadata.DipSwitch[]? dipSwitches = part.ReadArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Part.DipSwitchKey);
+            Data.Models.Metadata.DipSwitch[]? dipSwitches = part.DipSwitch;
             Assert.NotNull(dipSwitches);
             Data.Models.Metadata.DipSwitch? dipSwitch = Assert.Single(dipSwitches);
             ValidateMetadataDipSwitch(dipSwitch);
 
-            Data.Models.Metadata.Feature[]? features = part.ReadArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Part.FeatureKey);
+            Data.Models.Metadata.Feature[]? features = part.Feature;
             Assert.NotNull(features);
             Data.Models.Metadata.Feature? feature = Assert.Single(features);
             ValidateMetadataFeature(feature);

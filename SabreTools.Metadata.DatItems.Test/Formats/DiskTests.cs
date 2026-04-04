@@ -46,7 +46,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal(HashType.SHA1.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
             Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
 
-            DataArea? actualDataArea = actual.Read<DataArea?>(Rom.DataAreaKey);
+            DataArea? actualDataArea = actual.DataArea;
             Assert.NotNull(actualDataArea);
             Assert.Equal("name", actualDataArea.Name);
 
@@ -56,7 +56,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Assert.False(actual.RemoveFlag);
 
-            Part? actualPart = actual.Read<Part?>(Rom.PartKey);
+            Part? actualPart = actual.Part;
             Assert.NotNull(actualPart);
             Assert.Equal("name", actualPart.Name);
 

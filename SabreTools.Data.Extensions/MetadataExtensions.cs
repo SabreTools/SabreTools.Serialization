@@ -165,6 +165,8 @@ namespace SabreTools.Data.Extensions
                 return confSetting.Clone() as ConfSetting;
             else if (self is Control control)
                 return control.Clone() as Control;
+            else if (self is DataArea dataArea)
+                return dataArea.Clone() as DataArea;
             else if (self is Device device)
                 return device.Clone() as Device;
             else if (self is DeviceRef deviceRef)
@@ -177,15 +179,16 @@ namespace SabreTools.Data.Extensions
                 return dipValue.Clone() as DipValue;
             else if (self is Disk disk)
                 return disk.Clone() as Disk;
+            else if (self is DiskArea diskArea)
+                return diskArea.Clone() as DiskArea;
             else if (self is Display display)
                 return display.Clone() as Display;
             else if (self is Driver driver)
                 return driver.Clone() as Driver;
             else if (self is Extension extension)
                 return extension.Clone() as Extension;
-            // TODO: Reenable when PartFeature no longer needs nesting
-            // else if (self is Feature feature)
-            //     return feature.Clone() as Feature;
+            else if (self is Feature feature)
+                return feature.Clone() as Feature;
             else if (self is Info info)
                 return info.Clone() as Info;
             else if (self is Input input)
@@ -196,6 +199,8 @@ namespace SabreTools.Data.Extensions
                 return media.Clone() as Media;
             else if (self is Original original)
                 return original.Clone() as Original;
+            else if (self is Part part)
+                return part.Clone() as Part;
             else if (self is Port port)
                 return port.Clone() as Port;
             else if (self is RamOption ramOption)
@@ -204,6 +209,8 @@ namespace SabreTools.Data.Extensions
                 return release.Clone() as Release;
             else if (self is ReleaseDetails releaseDetails)
                 return releaseDetails.Clone() as ReleaseDetails;
+            else if (self is Rom rom)
+                return rom.Clone() as Rom;
             else if (self is Serials serials)
                 return serials.Clone() as Serials;
             else if (self is SharedFeat sharedFeat)
@@ -226,22 +233,7 @@ namespace SabreTools.Data.Extensions
                 return null;
 
             // Handle individual type properties
-            if (self is DataArea selfDataArea && clone is DataArea cloneDataArea)
-            {
-                cloneDataArea.Endianness = selfDataArea.Endianness;
-                cloneDataArea.Size = selfDataArea.Size;
-                cloneDataArea.Width = selfDataArea.Width;
-            }
-            else if (self is Feature selfFeature && clone is Feature cloneFeature)
-            {
-                // TODO: Remove when PartFeature no longer needs nesting
-                cloneFeature.FeatureType = selfFeature.FeatureType;
-                cloneFeature.Name = selfFeature.Name;
-                cloneFeature.Overall = selfFeature.Overall;
-                cloneFeature.Status = selfFeature.Status;
-                cloneFeature.Value = selfFeature.Value;
-            }
-            else if (self is Header selfHeader && clone is Header cloneHeader)
+            if (self is Header selfHeader && clone is Header cloneHeader)
             {
                 cloneHeader.Author = selfHeader.Author;
                 cloneHeader.BiosMode = selfHeader.BiosMode;
@@ -328,25 +320,6 @@ namespace SabreTools.Data.Extensions
                 cloneMachine.Tags = selfMachine.Tags;
                 cloneMachine.Url = selfMachine.Url;
                 cloneMachine.Year = selfMachine.Year;
-            }
-            else if (self is Part selfPart && clone is Part clonePart)
-            {
-                clonePart.Interface = selfPart.Interface;
-            }
-            else if (self is Rom selfRom && clone is Rom cloneRom)
-            {
-                cloneRom.Dispose = selfRom.Dispose;
-                cloneRom.FileCount = selfRom.FileCount;
-                cloneRom.FileIsAvailable = selfRom.FileIsAvailable;
-                cloneRom.Inverted = selfRom.Inverted;
-                cloneRom.LoadFlag = selfRom.LoadFlag;
-                cloneRom.MIA = selfRom.MIA;
-                cloneRom.OpenMSXMediaType = selfRom.OpenMSXMediaType;
-                cloneRom.Optional = selfRom.Optional;
-                cloneRom.Size = selfRom.Size;
-                cloneRom.SoundOnly = selfRom.SoundOnly;
-                cloneRom.Status = selfRom.Status;
-                cloneRom.Value = selfRom.Value;
             }
 
             // Handle known properties

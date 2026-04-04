@@ -164,20 +164,11 @@ namespace SabreTools.Metadata.DatFiles
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.DiskKey, diskItem);
 
                             // Add Part and DiskArea mappings
-                            bool diskContainsPart = disk.Part is not null;
-                            bool diskContainsDiskArea = disk.DiskArea is not null;
-                            if (diskContainsPart && diskContainsDiskArea)
+                            if (disk.Part is not null && disk.DiskArea is not null)
                             {
-                                var partItem = disk.Part;
-                                if (partItem is not null)
-                                {
-                                    var partItemInternal = partItem.GetInternalClone();
-                                    partMappings[partItemInternal] = diskItem;
-
-                                    var diskAreaItem = disk.DiskArea;
-                                    if (diskAreaItem is not null)
-                                        diskAreaMappings[partItemInternal] = (diskAreaItem.GetInternalClone(), diskItem);
-                                }
+                                var partItemInternal = disk.Part.GetInternalClone();
+                                partMappings[partItemInternal] = diskItem;
+                                diskAreaMappings[partItemInternal] = (disk.DiskArea.GetInternalClone(), diskItem);
                             }
 
                             break;
@@ -217,13 +208,8 @@ namespace SabreTools.Metadata.DatFiles
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.FeatureKey, partFeatureItem);
 
                             // Add Part mapping
-                            bool partFeatureContainsPart = partFeatureItem.ContainsKey(DatItems.Formats.PartFeature.PartKey);
-                            if (partFeatureContainsPart)
-                            {
-                                var partItem = partFeatureItem.Read<DatItems.Formats.Part>(DatItems.Formats.PartFeature.PartKey);
-                                if (partItem is not null)
-                                    partMappings[partItem.GetInternalClone()] = partFeatureItem;
-                            }
+                            if (partFeature.Part is not null)
+                                partMappings[partFeature.Part.GetInternalClone()] = partFeatureItem;
 
                             break;
                         case DatItems.Formats.Port port:
@@ -247,20 +233,11 @@ namespace SabreTools.Metadata.DatFiles
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.RomKey, romItem);
 
                             // Add Part and DataArea mappings
-                            bool romContainsPart = romItem.ContainsKey(DatItems.Formats.Rom.PartKey);
-                            bool romContainsDataArea = romItem.ContainsKey(DatItems.Formats.Rom.DataAreaKey);
-                            if (romContainsPart && romContainsDataArea)
+                            if (rom.Part is not null && rom.DataArea is not null)
                             {
-                                var partItem = romItem.Read<DatItems.Formats.Part>(DatItems.Formats.Rom.PartKey);
-                                if (partItem is not null)
-                                {
-                                    var partItemInternal = partItem.GetInternalClone();
-                                    partMappings[partItemInternal] = romItem;
-
-                                    var dataAreaItem = romItem.Read<DatItems.Formats.DataArea>(DatItems.Formats.Rom.DataAreaKey);
-                                    if (dataAreaItem is not null)
-                                        dataAreaMappings[partItemInternal] = (dataAreaItem.GetInternalClone(), romItem);
-                                }
+                                var partItemInternal = rom.Part.GetInternalClone();
+                                partMappings[partItemInternal] = romItem;
+                                dataAreaMappings[partItemInternal] = (rom.DataArea.GetInternalClone(), romItem);
                             }
 
                             break;
@@ -339,7 +316,7 @@ namespace SabreTools.Metadata.DatFiles
                             if (dataAreaName is not null)
                             {
                                 // Get existing data areas as a list
-                                var dataAreasArr = partItems[partName].Read<Data.Models.Metadata.DataArea[]>(Data.Models.Metadata.Part.DataAreaKey) ?? [];
+                                var dataAreasArr = partItems[partName].DataArea ?? [];
                                 List<Data.Models.Metadata.DataArea> dataAreas = [.. dataAreasArr];
 
                                 // Find the existing disk area to append to, otherwise create a new disk area
@@ -362,14 +339,14 @@ namespace SabreTools.Metadata.DatFiles
                                 ClearEmptyKeys(aggregateDataArea);
 
                                 // Get existing roms as a list
-                                var romsArr = aggregateDataArea.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.DataArea.RomKey) ?? [];
+                                var romsArr = aggregateDataArea.Rom ?? [];
                                 List<Data.Models.Metadata.Rom> roms = [.. romsArr];
 
                                 // Add the rom to the data area
                                 roms.Add(romItem);
 
                                 // Assign back the roms
-                                aggregateDataArea[Data.Models.Metadata.DataArea.RomKey] = roms.ToArray();
+                                aggregateDataArea.Rom = roms.ToArray();
 
                                 // Assign back the data area
                                 if (dataAreaIndex > -1)
@@ -378,7 +355,7 @@ namespace SabreTools.Metadata.DatFiles
                                     dataAreas.Add(aggregateDataArea);
 
                                 // Assign back the data areas array
-                                partItems[partName][Data.Models.Metadata.Part.DataAreaKey] = dataAreas.ToArray();
+                                partItems[partName].DataArea = dataAreas.ToArray();
                             }
                         }
 
@@ -396,7 +373,7 @@ namespace SabreTools.Metadata.DatFiles
                             if (diskAreaName is not null)
                             {
                                 // Get existing disk areas as a list
-                                var diskAreasArr = partItems[partName].Read<Data.Models.Metadata.DiskArea[]>(Data.Models.Metadata.Part.DiskAreaKey) ?? [];
+                                var diskAreasArr = partItems[partName].DiskArea ?? [];
                                 List<Data.Models.Metadata.DiskArea> diskAreas = [.. diskAreasArr];
 
                                 // Find the existing disk area to append to, otherwise create a new disk area
@@ -416,14 +393,14 @@ namespace SabreTools.Metadata.DatFiles
                                 ClearEmptyKeys(aggregateDiskArea);
 
                                 // Get existing disks as a list
-                                var disksArr = aggregateDiskArea.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.DiskArea.DiskKey) ?? [];
+                                var disksArr = aggregateDiskArea.Disk ?? [];
                                 List<Data.Models.Metadata.Disk> disks = [.. disksArr];
 
                                 // Add the disk to the data area
                                 disks.Add(diskItem);
 
                                 // Assign back the disks
-                                aggregateDiskArea[Data.Models.Metadata.DiskArea.DiskKey] = disks.ToArray();
+                                aggregateDiskArea.Disk = disks.ToArray();
 
                                 // Assign back the disk area
                                 if (diskAreaIndex > -1)
@@ -432,7 +409,7 @@ namespace SabreTools.Metadata.DatFiles
                                     diskAreas.Add(aggregateDiskArea);
 
                                 // Assign back the disk areas array
-                                partItems[partName][Data.Models.Metadata.Part.DiskAreaKey] = diskAreas.ToArray();
+                                partItems[partName].DiskArea = diskAreas.ToArray();
                             }
                         }
 
@@ -440,7 +417,7 @@ namespace SabreTools.Metadata.DatFiles
                         if (datItem is Data.Models.Metadata.DipSwitch dipSwitchItem)
                         {
                             // Get existing dipswitches as a list
-                            var dipSwitchesArr = partItems[partName].Read<Data.Models.Metadata.DipSwitch[]>(Data.Models.Metadata.Part.DipSwitchKey) ?? [];
+                            var dipSwitchesArr = partItems[partName].DipSwitch ?? [];
                             List<Data.Models.Metadata.DipSwitch> dipSwitches = [.. dipSwitchesArr];
 
                             // Clear any empty fields
@@ -450,14 +427,14 @@ namespace SabreTools.Metadata.DatFiles
                             dipSwitches.Add(dipSwitchItem);
 
                             // Assign back the dipswitches
-                            partItems[partName][Data.Models.Metadata.Part.DipSwitchKey] = dipSwitches.ToArray();
+                            partItems[partName].DipSwitch = dipSwitches.ToArray();
                         }
 
                         // If the item is a Feature
                         else if (datItem is Data.Models.Metadata.Feature featureItem)
                         {
                             // Get existing features as a list
-                            var featuresArr = partItems[partName].Read<Data.Models.Metadata.Feature[]>(Data.Models.Metadata.Part.FeatureKey) ?? [];
+                            var featuresArr = partItems[partName].Feature ?? [];
                             List<Data.Models.Metadata.Feature> features = [.. featuresArr];
 
                             // Clear any empty fields
@@ -467,7 +444,7 @@ namespace SabreTools.Metadata.DatFiles
                             features.Add(featureItem);
 
                             // Assign back the features
-                            partItems[partName][Data.Models.Metadata.Part.FeatureKey] = features.ToArray();
+                            partItems[partName].Feature = features.ToArray();
                         }
                     }
 
@@ -585,20 +562,11 @@ namespace SabreTools.Metadata.DatFiles
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.DiskKey, diskItem);
 
                             // Add Part and DiskArea mappings
-                            bool diskContainsPart = disk.Part is not null;
-                            bool diskContainsDiskArea = disk.DiskArea is not null;
-                            if (diskContainsPart && diskContainsDiskArea)
+                            if (disk.Part is not null && disk.DiskArea is not null)
                             {
-                                var partItem = disk.Part;
-                                if (partItem is not null)
-                                {
-                                    var partItemInternal = partItem.GetInternalClone();
-                                    partMappings[partItemInternal] = diskItem;
-
-                                    var diskAreaItem = disk.DiskArea;
-                                    if (diskAreaItem is not null)
-                                        diskAreaMappings[partItemInternal] = (diskAreaItem.GetInternalClone(), diskItem);
-                                }
+                                var partItemInternal = disk.Part.GetInternalClone();
+                                partMappings[partItemInternal] = diskItem;
+                                diskAreaMappings[partItemInternal] = (disk.DiskArea.GetInternalClone(), diskItem);
                             }
 
                             break;
@@ -638,13 +606,8 @@ namespace SabreTools.Metadata.DatFiles
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.FeatureKey, partFeatureItem);
 
                             // Add Part mapping
-                            bool partFeatureContainsPart = partFeatureItem.ContainsKey(DatItems.Formats.PartFeature.PartKey);
-                            if (partFeatureContainsPart)
-                            {
-                                var partItem = partFeatureItem.Read<DatItems.Formats.Part>(DatItems.Formats.PartFeature.PartKey);
-                                if (partItem is not null)
-                                    partMappings[partItem.GetInternalClone()] = partFeatureItem;
-                            }
+                            if (partFeature.Part is not null)
+                                partMappings[partFeature.Part.GetInternalClone()] = partFeatureItem;
 
                             break;
                         case DatItems.Formats.Port port:
@@ -668,20 +631,11 @@ namespace SabreTools.Metadata.DatFiles
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.RomKey, romItem);
 
                             // Add Part and DataArea mappings
-                            bool romContainsPart = romItem.ContainsKey(DatItems.Formats.Rom.PartKey);
-                            bool romContainsDataArea = romItem.ContainsKey(DatItems.Formats.Rom.DataAreaKey);
-                            if (romContainsPart && romContainsDataArea)
+                            if (rom.Part is not null && rom.DataArea is not null)
                             {
-                                var partItem = romItem.Read<DatItems.Formats.Part>(DatItems.Formats.Rom.PartKey);
-                                if (partItem is not null)
-                                {
-                                    var partItemInternal = partItem.GetInternalClone();
-                                    partMappings[partItemInternal] = romItem;
-
-                                    var dataAreaItem = romItem.Read<DatItems.Formats.DataArea>(DatItems.Formats.Rom.DataAreaKey);
-                                    if (dataAreaItem is not null)
-                                        dataAreaMappings[partItemInternal] = (dataAreaItem.GetInternalClone(), romItem);
-                                }
+                                var partItemInternal = rom.Part.GetInternalClone();
+                                partMappings[partItemInternal] = romItem;
+                                dataAreaMappings[partItemInternal] = (rom.DataArea.GetInternalClone(), romItem);
                             }
 
                             break;
@@ -760,7 +714,7 @@ namespace SabreTools.Metadata.DatFiles
                             if (dataAreaName is not null)
                             {
                                 // Get existing data areas as a list
-                                var dataAreasArr = partItems[partName].Read<Data.Models.Metadata.DataArea[]>(Data.Models.Metadata.Part.DataAreaKey) ?? [];
+                                var dataAreasArr = partItems[partName].DataArea ?? [];
                                 List<Data.Models.Metadata.DataArea> dataAreas = [.. dataAreasArr];
 
                                 // Find the existing disk area to append to, otherwise create a new disk area
@@ -783,14 +737,14 @@ namespace SabreTools.Metadata.DatFiles
                                 ClearEmptyKeys(aggregateDataArea);
 
                                 // Get existing roms as a list
-                                var romsArr = aggregateDataArea.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.DataArea.RomKey) ?? [];
+                                var romsArr = aggregateDataArea.Rom ?? [];
                                 List<Data.Models.Metadata.Rom> roms = [.. romsArr];
 
                                 // Add the rom to the data area
                                 roms.Add(romItem);
 
                                 // Assign back the roms
-                                aggregateDataArea[Data.Models.Metadata.DataArea.RomKey] = roms.ToArray();
+                                aggregateDataArea.Rom = roms.ToArray();
 
                                 // Assign back the data area
                                 if (dataAreaIndex > -1)
@@ -799,7 +753,7 @@ namespace SabreTools.Metadata.DatFiles
                                     dataAreas.Add(aggregateDataArea);
 
                                 // Assign back the data areas array
-                                partItems[partName][Data.Models.Metadata.Part.DataAreaKey] = dataAreas.ToArray();
+                                partItems[partName].DataArea = dataAreas.ToArray();
                             }
                         }
 
@@ -817,7 +771,7 @@ namespace SabreTools.Metadata.DatFiles
                             if (diskAreaName is not null)
                             {
                                 // Get existing disk areas as a list
-                                var diskAreasArr = partItems[partName].Read<Data.Models.Metadata.DiskArea[]>(Data.Models.Metadata.Part.DiskAreaKey) ?? [];
+                                var diskAreasArr = partItems[partName].DiskArea ?? [];
                                 List<Data.Models.Metadata.DiskArea> diskAreas = [.. diskAreasArr];
 
                                 // Find the existing disk area to append to, otherwise create a new disk area
@@ -837,14 +791,14 @@ namespace SabreTools.Metadata.DatFiles
                                 ClearEmptyKeys(aggregateDiskArea);
 
                                 // Get existing disks as a list
-                                var disksArr = aggregateDiskArea.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.DiskArea.DiskKey) ?? [];
+                                var disksArr = aggregateDiskArea.Disk ?? [];
                                 List<Data.Models.Metadata.Disk> disks = [.. disksArr];
 
                                 // Add the disk to the data area
                                 disks.Add(diskItem);
 
                                 // Assign back the disks
-                                aggregateDiskArea[Data.Models.Metadata.DiskArea.DiskKey] = disks.ToArray();
+                                aggregateDiskArea.Disk = disks.ToArray();
 
                                 // Assign back the disk area
                                 if (diskAreaIndex > -1)
@@ -853,7 +807,7 @@ namespace SabreTools.Metadata.DatFiles
                                     diskAreas.Add(aggregateDiskArea);
 
                                 // Assign back the disk areas array
-                                partItems[partName][Data.Models.Metadata.Part.DiskAreaKey] = diskAreas.ToArray();
+                                partItems[partName].DiskArea = diskAreas.ToArray();
                             }
                         }
 
@@ -861,7 +815,7 @@ namespace SabreTools.Metadata.DatFiles
                         if (datItem is Data.Models.Metadata.DipSwitch dipSwitchItem)
                         {
                             // Get existing dipswitches as a list
-                            var dipSwitchesArr = partItems[partName].Read<Data.Models.Metadata.DipSwitch[]>(Data.Models.Metadata.Part.DipSwitchKey) ?? [];
+                            var dipSwitchesArr = partItems[partName].DipSwitch ?? [];
                             List<Data.Models.Metadata.DipSwitch> dipSwitches = [.. dipSwitchesArr];
 
                             // Clear any empty fields
@@ -871,14 +825,14 @@ namespace SabreTools.Metadata.DatFiles
                             dipSwitches.Add(dipSwitchItem);
 
                             // Assign back the dipswitches
-                            partItems[partName][Data.Models.Metadata.Part.DipSwitchKey] = dipSwitches.ToArray();
+                            partItems[partName].DipSwitch = dipSwitches.ToArray();
                         }
 
                         // If the item is a Feature
                         else if (datItem is Data.Models.Metadata.Feature featureItem)
                         {
                             // Get existing features as a list
-                            var featuresArr = partItems[partName].Read<Data.Models.Metadata.Feature[]>(Data.Models.Metadata.Part.FeatureKey) ?? [];
+                            var featuresArr = partItems[partName].Feature ?? [];
                             List<Data.Models.Metadata.Feature> features = [.. featuresArr];
 
                             // Clear any empty fields
@@ -888,7 +842,7 @@ namespace SabreTools.Metadata.DatFiles
                             features.Add(featureItem);
 
                             // Assign back the features
-                            partItems[partName][Data.Models.Metadata.Part.FeatureKey] = features.ToArray();
+                            partItems[partName].Feature = features.ToArray();
                         }
                     }
 

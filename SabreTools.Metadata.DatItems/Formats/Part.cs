@@ -14,15 +14,25 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public DataArea[]? DataArea { get; set; }
+
         [JsonIgnore]
-        public bool FeaturesSpecified
-        {
-            get
-            {
-                var features = Read<PartFeature[]?>(Data.Models.Metadata.Part.FeatureKey);
-                return features is not null && features.Length > 0;
-            }
-        }
+        public bool DataAreaSpecified => DataArea is not null && DataArea.Length > 0;
+
+        public DiskArea[]? DiskArea { get; set; }
+
+        [JsonIgnore]
+        public bool DiskAreaSpecified => DiskArea is not null && DiskArea.Length > 0;
+
+        public DipSwitch[]? DipSwitch { get; set; }
+
+        [JsonIgnore]
+        public bool DipSwitchSpecified => DipSwitch is not null && DipSwitch.Length > 0;
+
+        public PartFeature[]? Feature { get; set; }
+
+        [JsonIgnore]
+        public bool FeatureSpecified => Feature is not null && Feature.Length > 0;
 
         public string? Interface
         {
@@ -46,7 +56,21 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Part() : base() { }
 
-        public Part(Data.Models.Metadata.Part item) : base(item) { }
+        public Part(Data.Models.Metadata.Part item) : base(item)
+        {
+            // Handle subitems
+            if (item.DataArea is not null)
+                DataArea = Array.ConvertAll(item.DataArea, dataArea => new DataArea(dataArea));
+
+            if (item.DiskArea is not null)
+                DiskArea = Array.ConvertAll(item.DiskArea, diskArea => new DiskArea(diskArea));
+
+            if (item.DipSwitch is not null)
+                DipSwitch = Array.ConvertAll(item.DipSwitch, dipSwitch => new DipSwitch(dipSwitch));
+
+            if (item.Feature is not null)
+                Feature = Array.ConvertAll(item.Feature, feature => new PartFeature(feature));
+        }
 
         public Part(Data.Models.Metadata.Part item, Machine machine, Source source) : this(item)
         {
@@ -76,33 +100,17 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var partItem = base.GetInternalClone();
 
-            var dataAreas = Read<DataArea[]?>(Data.Models.Metadata.Part.DataAreaKey);
-            if (dataAreas is not null)
-            {
-                Data.Models.Metadata.DataArea[] dataAreaItems = Array.ConvertAll(dataAreas, dataArea => dataArea.GetInternalClone());
-                partItem[Data.Models.Metadata.Part.DataAreaKey] = dataAreaItems;
-            }
+            if (DataArea is not null)
+                partItem.DataArea = Array.ConvertAll(DataArea, dataArea => dataArea.GetInternalClone());
 
-            var diskAreas = Read<DiskArea[]?>(Data.Models.Metadata.Part.DiskAreaKey);
-            if (diskAreas is not null)
-            {
-                Data.Models.Metadata.DiskArea[] diskAreaItems = Array.ConvertAll(diskAreas, diskArea => diskArea.GetInternalClone());
-                partItem[Data.Models.Metadata.Part.DiskAreaKey] = diskAreaItems;
-            }
+            if (DiskArea is not null)
+                partItem.DiskArea = Array.ConvertAll(DiskArea, diskArea => diskArea.GetInternalClone());
 
-            var dipSwitches = Read<DipSwitch[]?>(Data.Models.Metadata.Part.DipSwitchKey);
-            if (dipSwitches is not null)
-            {
-                Data.Models.Metadata.DipSwitch[] dipSwitchItems = Array.ConvertAll(dipSwitches, dipSwitch => dipSwitch.GetInternalClone());
-                partItem[Data.Models.Metadata.Part.DipSwitchKey] = dipSwitchItems;
-            }
+            if (DipSwitch is not null)
+                partItem.DipSwitch = Array.ConvertAll(DipSwitch, dipSwitch => dipSwitch.GetInternalClone());
 
-            var features = Read<Feature[]?>(Data.Models.Metadata.Part.FeatureKey);
-            if (features is not null)
-            {
-                Data.Models.Metadata.Feature[] featureItems = Array.ConvertAll(features, feature => feature.GetInternalClone());
-                partItem[Data.Models.Metadata.Part.FeatureKey] = featureItems;
-            }
+            if (Feature is not null)
+                partItem.Feature = Array.ConvertAll(Feature, feature => feature.GetInternalClone());
 
             return partItem;
         }

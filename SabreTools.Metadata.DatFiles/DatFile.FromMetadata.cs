@@ -589,13 +589,13 @@ namespace SabreTools.Metadata.DatFiles
                 var partItem = new Part(item, machine, source);
 
                 // Handle subitems
-                var dataAreas = item.ReadArray<Data.Models.Metadata.DataArea>(Data.Models.Metadata.Part.DataAreaKey);
+                var dataAreas = item.DataArea;
                 if (dataAreas is not null)
                 {
                     foreach (var dataArea in dataAreas)
                     {
                         var dataAreaItem = new DataArea(dataArea, machine, source);
-                        var roms = dataArea.ReadArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.DataArea.RomKey);
+                        var roms = dataArea.Rom;
                         if (roms is null)
                             continue;
 
@@ -623,8 +623,8 @@ namespace SabreTools.Metadata.DatFiles
                                 continue;
                             }
 
-                            romItem.Write<DataArea?>(Rom.DataAreaKey, dataAreaItem);
-                            romItem.Write<Part?>(Rom.PartKey, partItem);
+                            romItem.DataArea = dataAreaItem;
+                            romItem.Part = partItem;
 
                             addRoms.Add(romItem);
                         }
@@ -638,13 +638,13 @@ namespace SabreTools.Metadata.DatFiles
                     }
                 }
 
-                var diskAreas = item.ReadArray<Data.Models.Metadata.DiskArea>(Data.Models.Metadata.Part.DiskAreaKey);
+                var diskAreas = item.DiskArea;
                 if (diskAreas is not null)
                 {
                     foreach (var diskArea in diskAreas)
                     {
                         var diskAreaitem = new DiskArea(diskArea, machine, source);
-                        var disks = diskArea.ReadArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.DiskArea.DiskKey);
+                        var disks = diskArea.Disk;
                         if (disks is null)
                             continue;
 
@@ -666,7 +666,7 @@ namespace SabreTools.Metadata.DatFiles
                     }
                 }
 
-                var dipSwitches = item.ReadArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Part.DipSwitchKey);
+                var dipSwitches = item.DipSwitch;
                 if (dipSwitches is not null)
                 {
                     foreach (var dipSwitch in dipSwitches)
@@ -682,7 +682,7 @@ namespace SabreTools.Metadata.DatFiles
                     }
                 }
 
-                var partFeatures = item.ReadArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Part.FeatureKey);
+                var partFeatures = item.Feature;
                 if (partFeatures is not null)
                 {
                     foreach (var partFeature in partFeatures)
@@ -691,9 +691,11 @@ namespace SabreTools.Metadata.DatFiles
                         if (filterRunner is not null && !filterRunner.Run(partFeature))
                             continue;
 
-                        var partFeatureItem = new PartFeature(partFeature);
-                        partFeatureItem.Write<Part?>(PartFeature.PartKey, partItem);
-                        partFeatureItem.Source = source;
+                        var partFeatureItem = new PartFeature(partFeature)
+                        {
+                            Part = partItem,
+                            Source = source,
+                        };
                         partFeatureItem.CopyMachineInformation(machine);
 
                         AddItem(partFeatureItem, statsOnly);

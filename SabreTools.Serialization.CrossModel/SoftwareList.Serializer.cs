@@ -81,7 +81,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Rom is not null && item.Rom.Length > 0)
-                dataArea[Data.Models.Metadata.DataArea.RomKey] = Array.ConvertAll(item.Rom, ConvertToInternalModel);
+                dataArea.Rom = Array.ConvertAll(item.Rom, ConvertToInternalModel);
 
             return dataArea;
         }
@@ -145,7 +145,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Disk is not null && item.Disk.Length > 0)
-                diskArea[Data.Models.Metadata.DiskArea.DiskKey] = Array.ConvertAll(item.Disk, ConvertToInternalModel);
+                diskArea.Disk = Array.ConvertAll(item.Disk, ConvertToInternalModel);
 
             return diskArea;
         }
@@ -188,16 +188,16 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Feature is not null && item.Feature.Length > 0)
-                part[Data.Models.Metadata.Part.FeatureKey] = Array.ConvertAll(item.Feature, ConvertToInternalModel);
+                part.Feature = Array.ConvertAll(item.Feature, ConvertToInternalModel);
 
             if (item.DataArea is not null && item.DataArea.Length > 0)
-                part[Data.Models.Metadata.Part.DataAreaKey] = Array.ConvertAll(item.DataArea, ConvertToInternalModel);
+                part.DataArea = Array.ConvertAll(item.DataArea, ConvertToInternalModel);
 
             if (item.DiskArea is not null && item.DiskArea.Length > 0)
-                part[Data.Models.Metadata.Part.DiskAreaKey] = Array.ConvertAll(item.DiskArea, ConvertToInternalModel);
+                part.DiskArea = Array.ConvertAll(item.DiskArea, ConvertToInternalModel);
 
             if (item.DipSwitch is not null && item.DipSwitch.Length > 0)
-                part[Data.Models.Metadata.Part.DipSwitchKey] = Array.ConvertAll(item.DipSwitch, ConvertToInternalModel);
+                part.DipSwitch = Array.ConvertAll(item.DipSwitch, ConvertToInternalModel);
 
             return part;
         }

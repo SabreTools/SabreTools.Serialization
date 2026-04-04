@@ -10,15 +10,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("part_feature"), XmlRoot("part_feature")]
     public sealed class PartFeature : DatItem<Data.Models.Metadata.Feature>
     {
-        #region Constants
-
-        /// <summary>
-        /// Non-standard key for inverted logic
-        /// </summary>
-        public const string PartKey = "PART";
-
-        #endregion
-
         #region Fields
 
         public Data.Models.Metadata.FeatureType? FeatureType
@@ -42,6 +33,11 @@ namespace SabreTools.Metadata.DatItems.Formats
             get => (_internal as Data.Models.Metadata.Feature)?.Overall;
             set => (_internal as Data.Models.Metadata.Feature)?.Overall = value;
         }
+
+        public Part? Part { get; set; }
+
+        [JsonIgnore]
+        public bool PartSpecified => Part is not null;
 
         public Data.Models.Metadata.FeatureStatus? Status
         {

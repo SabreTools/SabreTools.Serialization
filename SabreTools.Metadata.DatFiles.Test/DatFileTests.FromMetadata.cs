@@ -142,9 +142,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             // All other fields are tested separately
             Rom? partRom = Array.Find(datItems, item => item is Rom rom && rom.DataAreaSpecified && rom.PartSpecified) as Rom;
             Assert.NotNull(partRom);
-            DataArea? romDataArea = partRom.Read<DataArea>(Rom.DataAreaKey);
+            DataArea? romDataArea = partRom.DataArea;
             ValidateDataArea(romDataArea);
-            Part? romPart = partRom.Read<Part>(Rom.PartKey);
+            Part? romPart = partRom.Part;
             ValidatePart(romPart);
 
             Port? port = Array.Find(datItems, item => item is Port) as Port;
@@ -539,7 +539,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Endianness = Data.Models.Metadata.Endianness.Big,
                 Name = "name",
-                [Data.Models.Metadata.DataArea.RomKey] = new Data.Models.Metadata.Rom[] { [] },
+                Rom = [[]],
                 Size = 12345,
                 Width = Data.Models.Metadata.Width.Long,
             };
@@ -565,7 +565,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.DiskArea
             {
-                [Data.Models.Metadata.DiskArea.DiskKey] = new Data.Models.Metadata.Disk[] { [] },
+                Disk = [[]],
                 Name = "name",
             };
         }
@@ -704,10 +704,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Part
             {
-                [Data.Models.Metadata.Part.DataAreaKey] = new Data.Models.Metadata.DataArea[] { CreateMetadataDataArea() },
-                [Data.Models.Metadata.Part.DiskAreaKey] = new Data.Models.Metadata.DiskArea[] { CreateMetadataDiskArea() },
-                [Data.Models.Metadata.Part.DipSwitchKey] = new Data.Models.Metadata.DipSwitch[] { [] },
-                [Data.Models.Metadata.Part.FeatureKey] = new Data.Models.Metadata.Feature[] { CreateMetadataFeature() },
+                DataArea = [CreateMetadataDataArea()],
+                DiskArea = [CreateMetadataDiskArea()],
+                DipSwitch = [[]],
+                Feature = [CreateMetadataFeature()],
                 Interface = "interface",
                 Name = "name",
             };
@@ -1432,7 +1432,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.FeatureType.Protection, partFeature.FeatureType);
             Assert.Equal("value", partFeature.Value);
 
-            Part? part = partFeature.Read<Part>(PartFeature.PartKey);
+            Part? part = partFeature.Part;
             ValidatePart(part);
         }
 

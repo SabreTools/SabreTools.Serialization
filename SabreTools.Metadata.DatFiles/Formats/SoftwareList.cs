@@ -178,9 +178,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(rom.Read<Part?>(Rom.PartKey)!.Name))
+                        if (string.IsNullOrEmpty(rom.Part!.Name))
                             missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        if (string.IsNullOrEmpty(rom.Read<Part?>(Rom.PartKey)!.Interface))
+                        if (string.IsNullOrEmpty(rom.Part!.Interface))
                             missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
                     }
 
@@ -191,9 +191,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(rom.Read<DataArea?>(Rom.DataAreaKey)!.Name))
+                        if (string.IsNullOrEmpty(rom.DataArea!.Name))
                             missingFields.Add(nameof(Data.Models.Metadata.DataArea.Name));
-                        if (rom.Read<DataArea?>(Rom.DataAreaKey)!.Size is null)
+                        if (rom.DataArea!.Size is null)
                             missingFields.Add(nameof(Data.Models.Metadata.DataArea.Size));
                     }
 

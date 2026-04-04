@@ -153,12 +153,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (DiskArea is not null)
             {
                 var dataArea = new DataArea { Name = DiskArea.Name };
-                rom.Write<DataArea?>(Rom.DataAreaKey, dataArea);
+                rom.DataArea = dataArea;
             }
 
             rom.DupeType = DupeType;
             rom.Machine = Machine?.Clone() as Machine;
-            rom.Write(Rom.PartKey, Part?.Clone() as Part);
+            rom.Part = Part?.Clone() as Part;
             rom.RemoveFlag = RemoveFlag;
             rom.Source = Source?.Clone() as Source;
 

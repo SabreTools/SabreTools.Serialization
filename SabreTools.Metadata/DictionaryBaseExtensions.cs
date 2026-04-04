@@ -114,11 +114,7 @@ namespace SabreTools.Metadata
             }
             else if (self is DataArea selfDataArea && other is DataArea otherDataArea)
             {
-                if (selfDataArea.Endianness != otherDataArea.Endianness)
-                    return false;
-                if (selfDataArea.Size != otherDataArea.Size)
-                    return false;
-                if (selfDataArea.Width != otherDataArea.Width)
+                if (!selfDataArea.Equals(otherDataArea))
                     return false;
             }
             else if (self is Device selfDevice && other is Device otherDevice)
@@ -144,6 +140,11 @@ namespace SabreTools.Metadata
             else if (self is Disk selfDisk && other is Disk otherDisk)
             {
                 // Intentionally skipped here
+            }
+            else if (self is DiskArea selfDiskArea && other is DiskArea otherDiskArea)
+            {
+                if (!selfDiskArea.Equals(otherDiskArea))
+                    return false;
             }
             else if (self is Display selfDisplay && other is Display otherDisplay)
             {
@@ -356,7 +357,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Part selfPart && other is Part otherPart)
             {
-                if (selfPart.Interface != otherPart.Interface)
+                if (!selfPart.Equals(otherPart))
                     return false;
             }
             else if (self is Port selfPort && other is Port otherPort)

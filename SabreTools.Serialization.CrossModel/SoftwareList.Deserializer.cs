@@ -79,7 +79,7 @@ namespace SabreTools.Serialization.CrossModel
                 Endianness = item.Endianness,
             };
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.DataArea.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
                 dataArea.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
@@ -145,7 +145,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
             };
 
-            var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.DiskArea.DiskKey);
+            var disks = item.Disk;
             if (disks is not null && disks.Length > 0)
                 diskArea.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
@@ -189,19 +189,19 @@ namespace SabreTools.Serialization.CrossModel
                 Interface = item.Interface,
             };
 
-            var features = item.Read<Data.Models.Metadata.Feature[]>(Data.Models.Metadata.Part.FeatureKey);
+            var features = item.Feature;
             if (features is not null && features.Length > 0)
                 part.Feature = Array.ConvertAll(features, ConvertFromInternalModel);
 
-            var dataAreas = item.Read<Data.Models.Metadata.DataArea[]>(Data.Models.Metadata.Part.DataAreaKey);
+            var dataAreas = item.DataArea;
             if (dataAreas is not null && dataAreas.Length > 0)
                 part.DataArea = Array.ConvertAll(dataAreas, ConvertFromInternalModel);
 
-            var diskAreas = item.Read<Data.Models.Metadata.DiskArea[]>(Data.Models.Metadata.Part.DiskAreaKey);
+            var diskAreas = item.DiskArea;
             if (diskAreas is not null && diskAreas.Length > 0)
                 part.DiskArea = Array.ConvertAll(diskAreas, ConvertFromInternalModel);
 
-            var dipSwitches = item.Read<Data.Models.Metadata.DipSwitch[]>(Data.Models.Metadata.Part.DipSwitchKey);
+            var dipSwitches = item.DipSwitch;
             if (dipSwitches is not null && dipSwitches.Length > 0)
                 part.DipSwitch = Array.ConvertAll(dipSwitches, ConvertFromInternalModel);
 
