@@ -49,7 +49,7 @@ namespace SabreTools.Metadata
                 (Info selfInfo, Info otherInfo) => selfInfo.Equals(otherInfo),
                 (Input selfInput, Input otherInput) => selfInput.Equals(otherInput),
                 (Instance selfInstance, Instance otherInstance) => selfInstance.Equals(otherInstance),
-                (Machine selfMachine, Machine otherMachine) => EqualsImpl(selfMachine, otherMachine),
+                (Machine selfMachine, Machine otherMachine) => Equals(selfMachine, otherMachine),
                 (Media selfMedia, Media otherMedia) => PartialEquals(selfMedia, otherMedia),
                 (Original selfOriginal, Original otherOriginal) => selfOriginal.Equals(otherOriginal),
                 (Part selfPart, Part otherPart) => selfPart.Equals(otherPart),
@@ -65,7 +65,7 @@ namespace SabreTools.Metadata
                 (SoftwareList selfSoftwareList, SoftwareList otherSoftwareList) => selfSoftwareList.Equals(otherSoftwareList),
                 (Sound selfSound, Sound otherSound) => selfSound.Equals(otherSound),
                 (SourceDetails selfSourceDetails, SourceDetails otherSourceDetails) => selfSourceDetails.Equals(otherSourceDetails),
-                (Video selfVideo, Video otherVideo) => EqualsImpl(selfVideo, otherVideo),
+                (Video selfVideo, Video otherVideo) => Equals(selfVideo, otherVideo),
                 _ => self.EqualsImpl(other),
             };
 #else
@@ -120,7 +120,7 @@ namespace SabreTools.Metadata
             else if (self is Instance selfInstance && other is Instance otherInstance)
                 return selfInstance.Equals(otherInstance);
             else if (self is Machine selfMachine && other is Machine otherMachine)
-                return EqualsImpl(selfMachine, otherMachine);
+                return Equals(selfMachine, otherMachine);
             else if (self is Media selfMedia && other is Media otherMedia)
                 return PartialEquals(selfMedia, otherMedia);
             else if (self is Original selfOriginal && other is Original otherOriginal)
