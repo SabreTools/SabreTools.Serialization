@@ -186,8 +186,12 @@ namespace SabreTools.Data.Extensions
             //     return feature.Clone() as Feature;
             else if (self is Info info)
                 return info.Clone() as Info;
+            else if (self is Input input)
+                return input.Clone() as Input;
             else if (self is Instance instance)
                 return instance.Clone() as Instance;
+            else if (self is Media media)
+                return media.Clone() as Media;
             else if (self is Original original)
                 return original.Clone() as Original;
             else if (self is RamOption ramOption)
@@ -272,15 +276,6 @@ namespace SabreTools.Data.Extensions
                 cloneHeader.Url = selfHeader.Url;
                 cloneHeader.Version = selfHeader.Version;
             }
-            else if (self is Input selfInput && clone is Input cloneInput)
-            {
-                cloneInput.Buttons = selfInput.Buttons;
-                cloneInput.Coins = selfInput.Coins;
-                cloneInput.ControlAttr = selfInput.ControlAttr;
-                cloneInput.Players = selfInput.Players;
-                cloneInput.Service = selfInput.Service;
-                cloneInput.Tilt = selfInput.Tilt;
-            }
             else if (self is Machine selfMachine && clone is Machine cloneMachine)
             {
                 cloneMachine.Board = selfMachine.Board;
@@ -331,13 +326,6 @@ namespace SabreTools.Data.Extensions
                 cloneMachine.Tags = selfMachine.Tags;
                 cloneMachine.Url = selfMachine.Url;
                 cloneMachine.Year = selfMachine.Year;
-            }
-            else if (self is Media selfMedia && clone is Media cloneMedia)
-            {
-                cloneMedia.MD5 = selfMedia.MD5;
-                cloneMedia.SHA1 = selfMedia.SHA1;
-                cloneMedia.SHA256 = selfMedia.SHA256;
-                cloneMedia.SpamSum = selfMedia.SpamSum;
             }
             else if (self is Part selfPart && clone is Part clonePart)
             {

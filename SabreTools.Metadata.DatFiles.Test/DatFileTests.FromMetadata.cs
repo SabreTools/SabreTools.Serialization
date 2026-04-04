@@ -662,7 +662,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Buttons = 12345,
                 Coins = 12345,
-                [Data.Models.Metadata.Input.ControlKey] = new Data.Models.Metadata.Control[] { CreateMetadataControl() },
+                Control = [CreateMetadataControl()],
                 ControlAttr = "controlattr",
                 Players = 12345,
                 Service = true,
@@ -1393,7 +1393,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.True(input.Service);
             Assert.True(input.Tilt);
 
-            Control[]? controls = input.Read<Control[]>(Data.Models.Metadata.Input.ControlKey);
+            Control[]? controls = input.Control;
             Assert.NotNull(controls);
             Control? control = Assert.Single(controls);
             ValidateControl(control);

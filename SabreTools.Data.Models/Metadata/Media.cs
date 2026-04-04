@@ -1,12 +1,12 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
-    // TODO: ICloneable
-    // TODO: IEquatable
+    // TODO: IEquatable<Media>
     [JsonObject("media"), XmlRoot("media")]
-    public class Media : DatItem
+    public class Media : DatItem, ICloneable
     {
         #region Properties
 
@@ -23,5 +23,19 @@ namespace SabreTools.Data.Models.Metadata
         #endregion
 
         public Media() => ItemType = ItemType.Media;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Media();
+
+            obj.MD5 = MD5;
+            obj.Name = Name;
+            obj.SHA1 = SHA1;
+            obj.SHA256 = SHA256;
+            obj.SpamSum = SpamSum;
+
+            return obj;
+        }
     }
 }

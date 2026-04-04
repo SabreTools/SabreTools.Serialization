@@ -154,8 +154,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case Input input:
                     if (input.Players is null)
                         missingFields.Add(nameof(Data.Models.Metadata.Input.Players));
-                    if (!input.ControlsSpecified)
-                        missingFields.Add(Data.Models.Metadata.Input.ControlKey);
+                    if (!input.ControlSpecified)
+                        missingFields.Add(nameof(Data.Models.Metadata.Input.Control));
                     break;
 
                 case DipSwitch dipswitch:

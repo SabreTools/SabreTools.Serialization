@@ -25,20 +25,15 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Input)?.Coins = value;
         }
 
+        public Control[]? Control { get; set; }
+
+        [JsonIgnore]
+        public bool ControlSpecified => Control is not null && Control.Length > 0;
+
         public string? ControlAttr
         {
             get => (_internal as Data.Models.Metadata.Input)?.ControlAttr;
             set => (_internal as Data.Models.Metadata.Input)?.ControlAttr = value;
-        }
-
-        [JsonIgnore]
-        public bool ControlsSpecified
-        {
-            get
-            {
-                var controls = Read<Control[]?>(Data.Models.Metadata.Input.ControlKey);
-                return controls is not null && controls.Length > 0;
-            }
         }
 
         /// <inheritdoc>/>
@@ -72,12 +67,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Input(Data.Models.Metadata.Input item) : base(item)
         {
             // Handle subitems
-            var controls = item.ReadArray<Data.Models.Metadata.Control>(Data.Models.Metadata.Input.ControlKey);
-            if (controls is not null)
-            {
-                Control[] controlItems = Array.ConvertAll(controls, control => new Control(control));
-                Write<Control[]?>(Data.Models.Metadata.Input.ControlKey, controlItems);
-            }
+            if (item.Control is not null)
+                Control = Array.ConvertAll(item.Control, control => new Control(control));
         }
 
         public Input(Data.Models.Metadata.Input item, Machine machine, Source source) : this(item)
@@ -98,12 +89,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var inputItem = base.GetInternalClone();
 
-            var controls = Read<Control[]?>(Data.Models.Metadata.Input.ControlKey);
-            if (controls is not null)
-            {
-                Data.Models.Metadata.Control[] controlItems = Array.ConvertAll(controls, control => control.GetInternalClone());
-                inputItem[Data.Models.Metadata.Input.ControlKey] = controlItems;
-            }
+            if (Control is not null)
+                inputItem.Control = Array.ConvertAll(Control, control => control.GetInternalClone());
 
             return inputItem;
         }

@@ -930,7 +930,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.True(input.Service);
             Assert.True(input.Tilt);
 
-            Data.Models.Metadata.Control[]? controls = input.ReadArray<Data.Models.Metadata.Control>(Data.Models.Metadata.Input.ControlKey);
+            Data.Models.Metadata.Control[]? controls = input.Control;
             Assert.NotNull(controls);
             Data.Models.Metadata.Control? control = Assert.Single(controls);
             ValidateMetadataControl(control);

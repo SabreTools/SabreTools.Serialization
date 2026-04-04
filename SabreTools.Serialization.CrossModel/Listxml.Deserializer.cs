@@ -504,7 +504,7 @@ namespace SabreTools.Serialization.CrossModel
                 Coins = item.Coins,
             };
 
-            var controls = item.Read<Data.Models.Metadata.Control[]>(Data.Models.Metadata.Input.ControlKey);
+            var controls = item.Control;
             if (controls is not null && controls.Length > 0)
                 input.Control = Array.ConvertAll(controls, ConvertFromInternalModel);
 

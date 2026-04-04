@@ -528,10 +528,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Control is not null && item.Control.Length > 0)
-            {
-                input[Data.Models.Metadata.Input.ControlKey]
-                    = Array.ConvertAll(item.Control, ConvertToInternalModel);
-            }
+                input.Control = Array.ConvertAll(item.Control, ConvertToInternalModel);
 
             return input;
         }

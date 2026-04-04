@@ -230,7 +230,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Input.Players),
-                Data.Models.Metadata.Input.ControlKey,
+                nameof(Data.Models.Metadata.Input.Control),
             ]));
         }
 
