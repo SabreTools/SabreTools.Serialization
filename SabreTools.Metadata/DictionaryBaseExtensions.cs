@@ -58,8 +58,8 @@ namespace SabreTools.Metadata
                 return false;
 
             // Check names
-            if (self.GetName() != other.GetName())
-                return false;
+            // if (self.GetName() != other.GetName())
+            //     return false;
 
             // Handle individual type properties
             if (self is Adjuster selfAdjuster && other is Adjuster otherAdjuster)

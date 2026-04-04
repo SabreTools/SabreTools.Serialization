@@ -15,6 +15,7 @@ namespace SabreTools.Data.Extensions
         /// <summary>
         /// Gets the name to use for a DictionaryBase or null
         /// </summary>
+        /// TODO: Determine if this can be removed
         public static string? GetName(this DictionaryBase self)
         {
             if (self is null)
@@ -75,6 +76,7 @@ namespace SabreTools.Data.Extensions
         /// <summary>
         /// Gets the name to use for a DictionaryBase or null
         /// </summary>
+        /// TODO: Determine if this can be removed
         public static void SetName(this DictionaryBase self, string? name)
         {
             if (self is null || string.IsNullOrEmpty(name))
@@ -211,6 +213,8 @@ namespace SabreTools.Data.Extensions
                 return releaseDetails.Clone() as ReleaseDetails;
             else if (self is Rom rom)
                 return rom.Clone() as Rom;
+            else if (self is Sample sample)
+                return sample.Clone() as Sample;
             else if (self is Serials serials)
                 return serials.Clone() as Serials;
             else if (self is SharedFeat sharedFeat)
@@ -300,6 +304,7 @@ namespace SabreTools.Data.Extensions
                 cloneMachine.Language = selfMachine.Language;
                 cloneMachine.Location = selfMachine.Location;
                 cloneMachine.Manufacturer = selfMachine.Manufacturer;
+                cloneMachine.Name = selfMachine.Name;
                 cloneMachine.Notes = selfMachine.Notes;
                 cloneMachine.PlayedCount = selfMachine.PlayedCount;
                 cloneMachine.PlayedTime = selfMachine.PlayedTime;
@@ -321,9 +326,6 @@ namespace SabreTools.Data.Extensions
                 cloneMachine.Url = selfMachine.Url;
                 cloneMachine.Year = selfMachine.Year;
             }
-
-            // Handle known properties
-            clone.SetName(self.GetName());
 
             // Loop through and clone per type
             foreach (string key in self.Keys)
