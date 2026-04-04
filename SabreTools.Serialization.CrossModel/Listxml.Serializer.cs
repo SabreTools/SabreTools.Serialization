@@ -622,10 +622,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.SlotOption is not null && item.SlotOption.Length > 0)
-            {
-                slot[Data.Models.Metadata.Slot.SlotOptionKey]
-                    = Array.ConvertAll(item.SlotOption, ConvertToInternalModel);
-            }
+                slot.SlotOption = Array.ConvertAll(item.SlotOption, ConvertToInternalModel);
 
             return slot;
         }

@@ -23,15 +23,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Slot)?.Name = value;
         }
 
+        public SlotOption[]? SlotOption { get; set; }
+
         [JsonIgnore]
-        public bool SlotOptionsSpecified
-        {
-            get
-            {
-                var slotOptions = Read<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey);
-                return slotOptions is not null && slotOptions.Length > 0;
-            }
-        }
+        public bool SlotOptionSpecified => SlotOption is not null && SlotOption.Length > 0;
 
         #endregion
 
@@ -42,12 +37,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Slot(Data.Models.Metadata.Slot item) : base(item)
         {
             // Handle subitems
-            var slotOptions = item.ReadArray<Data.Models.Metadata.SlotOption>(Data.Models.Metadata.Slot.SlotOptionKey);
-            if (slotOptions is not null)
-            {
-                SlotOption[] slotOptionItems = Array.ConvertAll(slotOptions, slotOption => new SlotOption(slotOption));
-                Write<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey, slotOptionItems);
-            }
+            if (item.SlotOption is not null)
+                SlotOption = Array.ConvertAll(item.SlotOption, slotOption => new SlotOption(slotOption));;
         }
 
         public Slot(Data.Models.Metadata.Slot item, Machine machine, Source source) : this(item)
@@ -68,12 +59,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var slotItem = base.GetInternalClone();
 
-            var slotOptions = Read<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey);
-            if (slotOptions is not null)
-            {
-                Data.Models.Metadata.SlotOption[] slotOptionItems = Array.ConvertAll(slotOptions, slotOption => slotOption.GetInternalClone());
-                slotItem[Data.Models.Metadata.Slot.SlotOptionKey] = slotOptionItems;
-            }
+            if (SlotOption is not null)
+                slotItem.SlotOption = Array.ConvertAll(SlotOption, slotOption => slotOption.GetInternalClone());
 
             return slotItem;
         }

@@ -1168,7 +1168,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(slot);
             Assert.Equal("name", slot.Name);
 
-            Data.Models.Metadata.SlotOption[]? slotOptions = slot.ReadArray<Data.Models.Metadata.SlotOption>(Data.Models.Metadata.Slot.SlotOptionKey);
+            Data.Models.Metadata.SlotOption[]? slotOptions = slot.SlotOption;
             Assert.NotNull(slotOptions);
             Data.Models.Metadata.SlotOption? slotOption = Assert.Single(slotOptions);
             ValidateMetadataSlotOption(slotOption);

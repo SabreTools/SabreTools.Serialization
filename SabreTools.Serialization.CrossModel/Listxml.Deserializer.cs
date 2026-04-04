@@ -597,7 +597,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
             };
 
-            var slotOptions = item.Read<Data.Models.Metadata.SlotOption[]>(Data.Models.Metadata.Slot.SlotOptionKey);
+            var slotOptions = item.SlotOption;
             if (slotOptions is not null && slotOptions.Length > 0)
                 slot.SlotOption = Array.ConvertAll(slotOptions, ConvertFromInternalModel);
 

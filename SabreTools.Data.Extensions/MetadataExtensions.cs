@@ -206,6 +206,8 @@ namespace SabreTools.Data.Extensions
                 return serials.Clone() as Serials;
             else if (self is SharedFeat sharedFeat)
                 return sharedFeat.Clone() as SharedFeat;
+            else if (self is Slot slot)
+                return slot.Clone() as Slot;
             else if (self is SlotOption slotOption)
                 return slotOption.Clone() as SlotOption;
             else if (self is SoftwareList softwareList)

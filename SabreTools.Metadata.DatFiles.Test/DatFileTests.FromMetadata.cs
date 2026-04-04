@@ -515,7 +515,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Default = true,
                 DipLocation = [CreateMetadataDipLocation()],
                 DipValue = [CreateMetadataDipValue()],
-                Entry = new string[] { "entry" },
+                Entry = ["entry"],
                 Mask = "mask",
                 Name = "name",
                 Tag = "tag",
@@ -913,7 +913,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Slot
             {
                 Name = "name",
-                [Data.Models.Metadata.Slot.SlotOptionKey] = new Data.Models.Metadata.SlotOption[] { CreateMetadataSlotOption() },
+                SlotOption = [CreateMetadataSlotOption()],
             };
         }
 
@@ -1624,7 +1624,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(slot);
             Assert.Equal("name", slot.Name);
 
-            SlotOption[]? slotOptions = slot.Read<SlotOption[]>(Data.Models.Metadata.Slot.SlotOptionKey);
+            SlotOption[]? slotOptions = slot.SlotOption;
             Assert.NotNull(slotOptions);
             SlotOption? slotOption = Assert.Single(slotOptions);
             ValidateSlotOption(slotOption);

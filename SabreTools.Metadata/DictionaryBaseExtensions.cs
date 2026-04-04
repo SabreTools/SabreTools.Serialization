@@ -393,6 +393,11 @@ namespace SabreTools.Metadata
                 if (!selfSharedFeat.Equals(otherSharedFeat))
                     return false;
             }
+            else if (self is Slot selfSlot && other is Slot otherSlot)
+            {
+                if (!selfSlot.Equals(otherSlot))
+                    return false;
+            }
             else if (self is SlotOption selfSlotOption && other is SlotOption otherSlotOption)
             {
                 if (!selfSlotOption.Equals(otherSlotOption))
