@@ -105,7 +105,7 @@ namespace SabreTools.Data.Models.Metadata
         public const string CanOpenKey = "canOpen";
 
         /// TODO: This needs an internal model OR mapping to fields
-        /// <remarks>Search</remarks>
+        /// <remarks>Images</remarks>
         [NoFilter]
         public const string ImagesKey = "images";
 
