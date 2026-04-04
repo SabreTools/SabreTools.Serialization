@@ -22,15 +22,10 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         #region Fields
 
+        public Condition? Condition { get; set; }
+
         [JsonIgnore]
-        public bool ConditionsSpecified
-        {
-            get
-            {
-                var conditions = Read<Condition[]?>(Data.Models.Metadata.DipSwitch.ConditionKey);
-                return conditions is not null && conditions.Length > 0;
-            }
-        }
+        public bool ConditionSpecified => Condition is not null;
 
         [JsonIgnore]
         public bool? Default
@@ -102,9 +97,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         public DipSwitch(Data.Models.Metadata.DipSwitch item) : base(item)
         {
             // Handle subitems
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
-            if (condition is not null)
-                Write<Condition?>(Data.Models.Metadata.DipSwitch.ConditionKey, new Condition(condition));
+            if (item.Condition is not null)
+                Condition = new Condition(item.Condition);
 
             var dipLocations = item.ReadArray<Data.Models.Metadata.DipLocation>(Data.Models.Metadata.DipSwitch.DipLocationKey);
             if (dipLocations is not null)
@@ -139,9 +133,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var dipSwitchItem = base.GetInternalClone();
 
-            var condition = Read<Condition?>(Data.Models.Metadata.DipSwitch.ConditionKey);
-            if (condition is not null)
-                dipSwitchItem[Data.Models.Metadata.DipSwitch.ConditionKey] = condition.GetInternalClone();
+            if (Condition is not null)
+                dipSwitchItem.Condition = Condition.GetInternalClone();
 
             var dipLocations = Read<DipLocation[]?>(Data.Models.Metadata.DipSwitch.DipLocationKey);
             if (dipLocations is not null)

@@ -12,15 +12,10 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public Condition? Condition { get; set; }
+
         [JsonIgnore]
-        public bool ConditionsSpecified
-        {
-            get
-            {
-                var conditions = Read<Condition[]?>(Data.Models.Metadata.ConfSetting.ConditionKey);
-                return conditions is not null && conditions.Length > 0;
-            }
-        }
+        public bool ConditionSpecified => Condition is not null;
 
         public bool? Default
         {
@@ -53,9 +48,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         public ConfSetting(Data.Models.Metadata.ConfSetting item) : base(item)
         {
             // Handle subitems
-            var condition = Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
-            if (condition is not null)
-                Write<Condition?>(Data.Models.Metadata.ConfSetting.ConditionKey, new Condition(condition));
+            if (item.Condition is not null)
+                Condition = new Condition(item.Condition);
         }
 
         public ConfSetting(Data.Models.Metadata.ConfSetting item, Machine machine, Source source) : this(item)
@@ -76,10 +70,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var confSettingItem = base.GetInternalClone();
 
-            // Handle subitems
-            var condition = Read<Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
-            if (condition is not null)
-                confSettingItem[Data.Models.Metadata.ConfSetting.ConditionKey] = condition.GetInternalClone();
+            if (Condition is not null)
+                confSettingItem.Condition = Condition.GetInternalClone();
 
             return confSettingItem;
         }

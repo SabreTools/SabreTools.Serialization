@@ -13,15 +13,10 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public Condition? Condition { get; set; }
+
         [JsonIgnore]
-        public bool ConditionsSpecified
-        {
-            get
-            {
-                var conditions = Read<Condition[]?>(Data.Models.Metadata.Configuration.ConditionKey);
-                return conditions is not null && conditions.Length > 0;
-            }
-        }
+        public bool ConditionSpecified => Condition is not null;
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType
@@ -74,9 +69,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Configuration(Data.Models.Metadata.Configuration item) : base(item)
         {
             // Handle subitems
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Configuration.ConditionKey);
-            if (condition is not null)
-                Write<Condition?>(Data.Models.Metadata.Configuration.ConditionKey, new Condition(condition));
+            if (item.Condition is not null)
+                Condition = new Condition(item.Condition);
 
             var confLocations = item.ReadArray<Data.Models.Metadata.ConfLocation>(Data.Models.Metadata.Configuration.ConfLocationKey);
             if (confLocations is not null)
@@ -111,9 +105,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var configurationItem = base.GetInternalClone();
 
-            var condition = Read<Condition?>(Data.Models.Metadata.Configuration.ConditionKey);
-            if (condition is not null)
-                configurationItem[Data.Models.Metadata.Configuration.ConditionKey] = condition.GetInternalClone();
+            if (Condition is not null)
+                configurationItem.Condition = Condition.GetInternalClone();
 
             var confLocations = Read<ConfLocation[]?>(Data.Models.Metadata.Configuration.ConfLocationKey);
             if (confLocations is not null)

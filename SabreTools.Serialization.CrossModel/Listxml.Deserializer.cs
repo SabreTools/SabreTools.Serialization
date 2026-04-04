@@ -152,7 +152,7 @@ namespace SabreTools.Serialization.CrossModel
                 Default = item.Default,
             };
 
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
+            var condition = item.Condition;
             if (condition is not null)
                 adjuster.Condition = ConvertFromInternalModel(condition);
 
@@ -228,7 +228,7 @@ namespace SabreTools.Serialization.CrossModel
                 Mask = item.Mask,
             };
 
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Configuration.ConditionKey);
+            var condition = item.Condition;
             if (condition is not null)
                 configuration.Condition = ConvertFromInternalModel(condition);
 
@@ -269,7 +269,7 @@ namespace SabreTools.Serialization.CrossModel
                 Default = item.Default,
             };
 
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
+            var condition = item.Condition;
             if (condition is not null)
                 confSetting.Condition = ConvertFromInternalModel(condition);
 
@@ -362,7 +362,7 @@ namespace SabreTools.Serialization.CrossModel
                 Mask = item.Mask,
             };
 
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
+            var condition = item.Condition;
             if (condition is not null)
                 dipSwitch.Condition = ConvertFromInternalModel(condition);
 
@@ -389,7 +389,7 @@ namespace SabreTools.Serialization.CrossModel
                 Default = item.Default,
             };
 
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
+            var condition = item.Condition;
             if (condition is not null)
                 dipValue.Condition = ConvertFromInternalModel(condition);
 

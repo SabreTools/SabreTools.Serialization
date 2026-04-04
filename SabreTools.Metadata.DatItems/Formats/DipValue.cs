@@ -12,15 +12,10 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public Condition? Condition { get; set; }
+
         [JsonIgnore]
-        public bool ConditionsSpecified
-        {
-            get
-            {
-                var conditions = Read<Condition[]?>(Data.Models.Metadata.DipValue.ConditionKey);
-                return conditions is not null && conditions.Length > 0;
-            }
-        }
+        public bool ConditionSpecified => Condition is not null;
 
         public bool? Default
         {
@@ -53,9 +48,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         public DipValue(Data.Models.Metadata.DipValue item) : base(item)
         {
             // Handle subitems
-            var condition = Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
-            if (condition is not null)
-                Write<Condition?>(Data.Models.Metadata.DipValue.ConditionKey, new Condition(condition));
+            if (item.Condition is not null)
+                Condition = new Condition(item.Condition);
         }
 
         public DipValue(Data.Models.Metadata.DipValue item, Machine machine, Source source) : this(item)
@@ -76,10 +70,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var dipValueItem = base.GetInternalClone();
 
-            // Handle subitems
-            var subCondition = Read<Condition>(Data.Models.Metadata.DipValue.ConditionKey);
-            if (subCondition is not null)
-                dipValueItem[Data.Models.Metadata.DipValue.ConditionKey] = subCondition.GetInternalClone();
+            if (Condition is not null)
+                dipValueItem.Condition = Condition.GetInternalClone();
 
             return dipValueItem;
         }

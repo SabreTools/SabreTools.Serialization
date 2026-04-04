@@ -143,7 +143,9 @@ namespace SabreTools.Data.Extensions
         public static DictionaryBase? DeepClone(this DictionaryBase self)
         {
             // Handle types that are cloneable
-            if (self is Analog analog)
+            if (self is Adjuster adjuster)
+                return adjuster.Clone() as Adjuster;
+            else if (self is Analog analog)
                 return analog.Clone() as Analog;
             else if (self is BiosSet biosSet)
                 return biosSet.Clone() as BiosSet;
@@ -155,12 +157,16 @@ namespace SabreTools.Data.Extensions
                 return condition.Clone() as Condition;
             else if (self is ConfLocation confLocation)
                 return confLocation.Clone() as ConfLocation;
+            else if (self is ConfSetting confSetting)
+                return confSetting.Clone() as ConfSetting;
             else if (self is Control control)
                 return control.Clone() as Control;
             else if (self is DeviceRef deviceRef)
                 return deviceRef.Clone() as DeviceRef;
             else if (self is DipLocation dipLocation)
                 return dipLocation.Clone() as DipLocation;
+            else if (self is DipValue dipValue)
+                return dipValue.Clone() as DipValue;
             else if (self is Display display)
                 return display.Clone() as Display;
             else if (self is Driver driver)
@@ -202,23 +208,15 @@ namespace SabreTools.Data.Extensions
                 return null;
 
             // Handle individual type properties
-            if (self is Adjuster selfAdjuster && clone is Adjuster cloneAdjuster)
-            {
-                cloneAdjuster.Default = selfAdjuster.Default;
-            }
-            else if (self is Archive selfArchive && clone is Archive cloneArchive)
+            if (self is Archive selfArchive && clone is Archive cloneArchive)
             {
                 cloneArchive.Description = selfArchive.Description;
             }
             else if (self is Configuration selfConfiguration && clone is Configuration cloneConfiguration)
             {
+                cloneConfiguration.Condition = selfConfiguration.Condition?.DeepClone() as Condition;
                 cloneConfiguration.Mask = selfConfiguration.Mask;
                 cloneConfiguration.Tag = selfConfiguration.Tag;
-            }
-            else if (self is ConfSetting selfConfSetting && clone is ConfSetting cloneConfSetting)
-            {
-                cloneConfSetting.Default = selfConfSetting.Default;
-                cloneConfSetting.Value = selfConfSetting.Value;
             }
             else if (self is DataArea selfDataArea && clone is DataArea cloneDataArea)
             {
@@ -236,14 +234,10 @@ namespace SabreTools.Data.Extensions
             }
             else if (self is DipSwitch selfDipSwitch && clone is DipSwitch cloneDipSwitch)
             {
+                cloneDipSwitch.Condition = selfDipSwitch.Condition?.DeepClone() as Condition;
                 cloneDipSwitch.Default = selfDipSwitch.Default;
                 cloneDipSwitch.Mask = selfDipSwitch.Mask;
                 cloneDipSwitch.Tag = selfDipSwitch.Tag;
-            }
-            else if (self is DipValue selfDipValue && clone is DipValue cloneDipValue)
-            {
-                cloneDipValue.Default = selfDipValue.Default;
-                cloneDipValue.Value = selfDipValue.Value;
             }
             else if (self is Disk selfDisk && clone is Disk cloneDisk)
             {

@@ -187,7 +187,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Condition is not null)
-                adjuster[Data.Models.Metadata.Adjuster.ConditionKey] = ConvertToInternalModel(item.Condition);
+                adjuster.Condition = ConvertToInternalModel(item.Condition);
 
             return adjuster;
         }
@@ -262,7 +262,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Condition is not null)
-                configuration[Data.Models.Metadata.Configuration.ConditionKey] = ConvertToInternalModel(item.Condition);
+                configuration.Condition = ConvertToInternalModel(item.Condition);
 
             if (item.ConfLocation is not null && item.ConfLocation.Length > 0)
             {
@@ -306,7 +306,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Condition is not null)
-                confSetting[Data.Models.Metadata.ConfSetting.ConditionKey] = ConvertToInternalModel(item.Condition);
+                confSetting.Condition = ConvertToInternalModel(item.Condition);
 
             return confSetting;
         }
@@ -399,7 +399,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Condition is not null)
-                dipSwitch[Data.Models.Metadata.DipSwitch.ConditionKey] = ConvertToInternalModel(item.Condition);
+                dipSwitch.Condition = ConvertToInternalModel(item.Condition);
 
             if (item.DipLocation is not null && item.DipLocation.Length > 0)
             {
@@ -429,7 +429,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Condition is not null)
-                dipValue[Data.Models.Metadata.DipValue.ConditionKey] = ConvertToInternalModel(item.Condition);
+                dipValue.Condition = ConvertToInternalModel(item.Condition);
 
             return dipValue;
         }

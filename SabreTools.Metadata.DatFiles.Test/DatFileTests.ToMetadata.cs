@@ -622,7 +622,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.True(adjuster.Default);
             Assert.Equal("name", adjuster.Name);
 
-            Data.Models.Metadata.Condition? condition = adjuster.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
+            Data.Models.Metadata.Condition? condition = adjuster.Condition;
             ValidateMetadataCondition(condition);
         }
 
@@ -705,8 +705,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("name", configuration.Name);
             Assert.Equal("tag", configuration.Tag);
 
-            Data.Models.Metadata.Condition? condition = configuration.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Configuration.ConditionKey);
-            ValidateMetadataCondition(condition);
+            ValidateMetadataCondition(configuration.Condition);
 
             Data.Models.Metadata.ConfLocation[]? confLocations = configuration.ReadArray<Data.Models.Metadata.ConfLocation>(Data.Models.Metadata.Configuration.ConfLocationKey);
             Assert.NotNull(confLocations);
@@ -734,8 +733,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("name", confSetting.Name);
             Assert.Equal("value", confSetting.Value);
 
-            Data.Models.Metadata.Condition? condition = confSetting.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
-            ValidateMetadataCondition(condition);
+            ValidateMetadataCondition(confSetting.Condition);
         }
 
         private static void ValidateMetadataControl(Data.Models.Metadata.Control? control)
@@ -809,8 +807,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("name", dipSwitch.Name);
             Assert.Equal("tag", dipSwitch.Tag);
 
-            Data.Models.Metadata.Condition? condition = dipSwitch.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
-            ValidateMetadataCondition(condition);
+            ValidateMetadataCondition(dipSwitch.Condition);
 
             Data.Models.Metadata.DipLocation[]? dipLocations = dipSwitch.ReadArray<Data.Models.Metadata.DipLocation>(Data.Models.Metadata.DipSwitch.DipLocationKey);
             Assert.NotNull(dipLocations);
@@ -835,8 +832,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("name", dipValue.Name);
             Assert.Equal("value", dipValue.Value);
 
-            Data.Models.Metadata.Condition? condition = dipValue.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
-            ValidateMetadataCondition(condition);
+            ValidateMetadataCondition(dipValue.Condition);
         }
 
         private static void ValidateMetadataDisk(Data.Models.Metadata.Disk? disk)

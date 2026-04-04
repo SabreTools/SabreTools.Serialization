@@ -64,7 +64,7 @@ namespace SabreTools.Metadata
             // Handle individual type properties
             if (self is Adjuster selfAdjuster && other is Adjuster otherAdjuster)
             {
-                if (selfAdjuster.Default != otherAdjuster.Default)
+                if (!selfAdjuster.Equals(otherAdjuster))
                     return false;
             }
             else if (self is Analog selfAnalog && other is Analog otherAnalog)
@@ -98,6 +98,17 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfConfiguration.Tag != otherConfiguration.Tag)
                     return false;
+
+                if ((selfConfiguration.Condition is null) ^ (otherConfiguration.Condition is null))
+                {
+                    return false;
+                }
+                else if (selfConfiguration.Condition is not null
+                    && otherConfiguration.Condition is not null
+                    && selfConfiguration.Condition.EqualTo(otherConfiguration.Condition))
+                {
+                    return false;
+                }
             }
             else if (self is ConfLocation selfConfLocation && other is ConfLocation otherConfLocation)
             {
@@ -106,9 +117,7 @@ namespace SabreTools.Metadata
             }
             else if (self is ConfSetting selfConfSetting && other is ConfSetting otherConfSetting)
             {
-                if (selfConfSetting.Default != otherConfSetting.Default)
-                    return false;
-                if (selfConfSetting.Value != otherConfSetting.Value)
+                if (!selfConfSetting.Equals(otherConfSetting))
                     return false;
             }
             else if (self is Control selfControl && other is Control otherControl)
@@ -151,12 +160,21 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfDipSwitch.Tag != otherDipSwitch.Tag)
                     return false;
+
+                if ((selfDipSwitch.Condition is null) ^ (otherDipSwitch.Condition is null))
+                {
+                    return false;
+                }
+                else if (selfDipSwitch.Condition is not null
+                    && otherDipSwitch.Condition is not null
+                    && selfDipSwitch.Condition.EqualTo(otherDipSwitch.Condition))
+                {
+                    return false;
+                }
             }
             else if (self is DipValue selfDipValue && other is DipValue otherDipValue)
             {
-                if (selfDipValue.Default != otherDipValue.Default)
-                    return false;
-                if (selfDipValue.Value != otherDipValue.Value)
+                if (!selfDipValue.Equals(otherDipValue))
                     return false;
             }
             else if (self is Disk selfDisk && other is Disk otherDisk)

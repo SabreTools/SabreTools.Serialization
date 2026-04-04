@@ -12,15 +12,10 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Fields
 
+        public Condition? Condition { get; set; }
+
         [JsonIgnore]
-        public bool ConditionsSpecified
-        {
-            get
-            {
-                var conditions = Read<Condition[]?>(Data.Models.Metadata.Adjuster.ConditionKey);
-                return conditions is not null && conditions.Length > 0;
-            }
-        }
+        public bool ConditionSpecified => Condition is not null;
 
         public bool? Default
         {
@@ -47,9 +42,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Adjuster(Data.Models.Metadata.Adjuster item) : base(item)
         {
             // Handle subitems
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
-            if (condition is not null)
-                Write(Data.Models.Metadata.Adjuster.ConditionKey, new Condition(condition));
+            if (item.Condition is not null)
+                Condition = new Condition(item.Condition);
         }
 
         public Adjuster(Data.Models.Metadata.Adjuster item, Machine machine, Source source) : this(item)
@@ -70,9 +64,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var adjusterItem = base.GetInternalClone();
 
-            var condition = Read<Condition?>(Data.Models.Metadata.Adjuster.ConditionKey);
-            if (condition is not null)
-                adjusterItem[Data.Models.Metadata.Adjuster.ConditionKey] = condition.GetInternalClone();
+            if (Condition is not null)
+                adjusterItem.Condition = Condition.GetInternalClone();
 
             return adjusterItem;
         }

@@ -8,6 +8,8 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public Condition? Condition { get; set; }
+
         public string? Mask { get; set; }
 
         public string? Name { get; set; }
@@ -17,10 +19,6 @@ namespace SabreTools.Data.Models.Metadata
         #endregion
 
         #region Keys
-
-        /// <remarks>Condition</remarks>
-        [NoFilter]
-        public const string ConditionKey = "condition";
 
         /// <remarks>ConfLocation[]</remarks>
         [NoFilter]
