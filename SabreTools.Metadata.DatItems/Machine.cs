@@ -364,14 +364,14 @@ namespace SabreTools.Metadata.DatItems
         {
             return new Machine()
             {
-                _internal = _internal.DeepClone() as Data.Models.Metadata.Machine ?? [],
+                _internal = GetInternalClone(),
             };
         }
 
         /// <summary>
         /// Get a clone of the current internal model
         /// </summary>
-        public Data.Models.Metadata.Machine GetInternalClone() => (_internal.DeepClone() as Data.Models.Metadata.Machine)!;
+        public Data.Models.Metadata.Machine GetInternalClone() => (_internal.DeepClone() as Data.Models.Metadata.Machine) ?? [];
 
         #endregion
 

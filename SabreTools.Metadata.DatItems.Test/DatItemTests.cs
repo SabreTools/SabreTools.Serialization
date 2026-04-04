@@ -32,7 +32,7 @@ namespace SabreTools.Metadata.DatItems.Test
             /// <inheritdoc/>
             public override object Clone() => new TestDatItem()
             {
-                _internal = _internal.DeepClone() as TestDatItemModel ?? []
+                _internal = GetInternalClone(),
             };
 
             /// <inheritdoc/>
