@@ -313,11 +313,11 @@ namespace SabreTools.Serialization.CrossModel
                 Interface = item.Interface,
             };
 
-            var instance = item.Read<Data.Models.Metadata.Instance>(Data.Models.Metadata.Device.InstanceKey);
+            var instance = item.Instance;
             if (instance is not null)
                 device.Instance = ConvertFromInternalModel(instance);
 
-            var extensions = item.Read<Data.Models.Metadata.Extension[]>(Data.Models.Metadata.Device.ExtensionKey);
+            var extensions = item.Extension;
             if (extensions is not null && extensions.Length > 0)
                 device.Extension = Array.ConvertAll(extensions, ConvertFromInternalModel);
 

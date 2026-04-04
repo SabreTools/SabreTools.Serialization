@@ -776,13 +776,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("tag", device.Tag);
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.DeviceType);
 
-            Data.Models.Metadata.Extension[]? extensions = device.ReadArray<Data.Models.Metadata.Extension>(Data.Models.Metadata.Device.ExtensionKey);
+            Data.Models.Metadata.Extension[]? extensions = device.Extension;
             Assert.NotNull(extensions);
             Data.Models.Metadata.Extension? extension = Assert.Single(extensions);
             ValidateMetadataExtension(extension);
 
-            Data.Models.Metadata.Instance? instance = device.Read<Data.Models.Metadata.Instance>(Data.Models.Metadata.Device.InstanceKey);
-            ValidateMetadataInstance(instance);
+            ValidateMetadataInstance(device.Instance);
         }
 
         private static void ValidateMetadataDeviceRef(Data.Models.Metadata.DeviceRef? deviceRef)

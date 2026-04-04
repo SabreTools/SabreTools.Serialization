@@ -163,6 +163,8 @@ namespace SabreTools.Data.Extensions
                 return confSetting.Clone() as ConfSetting;
             else if (self is Control control)
                 return control.Clone() as Control;
+            else if (self is Device device)
+                return device.Clone() as Device;
             else if (self is DeviceRef deviceRef)
                 return deviceRef.Clone() as DeviceRef;
             else if (self is DipLocation dipLocation)
@@ -221,14 +223,6 @@ namespace SabreTools.Data.Extensions
                 cloneDataArea.Endianness = selfDataArea.Endianness;
                 cloneDataArea.Size = selfDataArea.Size;
                 cloneDataArea.Width = selfDataArea.Width;
-            }
-            else if (self is Device selfDevice && clone is Device cloneDevice)
-            {
-                cloneDevice.DeviceType = selfDevice.DeviceType;
-                cloneDevice.FixedImage = selfDevice.FixedImage;
-                cloneDevice.Interface = selfDevice.Interface;
-                cloneDevice.Mandatory = selfDevice.Mandatory;
-                cloneDevice.Tag = selfDevice.Tag;
             }
             else if (self is Disk selfDisk && clone is Disk cloneDisk)
             {

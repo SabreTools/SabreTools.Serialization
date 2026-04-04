@@ -123,15 +123,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Device selfDevice && other is Device otherDevice)
             {
-                if (selfDevice.DeviceType != otherDevice.DeviceType)
-                    return false;
-                if (selfDevice.FixedImage != otherDevice.FixedImage)
-                    return false;
-                if (selfDevice.Interface != otherDevice.Interface)
-                    return false;
-                if (selfDevice.Mandatory != otherDevice.Mandatory)
-                    return false;
-                if (selfDevice.Tag != otherDevice.Tag)
+                if (!selfDevice.Equals(otherDevice))
                     return false;
             }
             else if (self is DipLocation selfDipLocation && other is DipLocation otherDipLocation)
@@ -141,23 +133,8 @@ namespace SabreTools.Metadata
             }
             else if (self is DipSwitch selfDipSwitch && other is DipSwitch otherDipSwitch)
             {
-                if (selfDipSwitch.Default != otherDipSwitch.Default)
+                if (!selfDipSwitch.Equals(otherDipSwitch))
                     return false;
-                if (selfDipSwitch.Mask != otherDipSwitch.Mask)
-                    return false;
-                if (selfDipSwitch.Tag != otherDipSwitch.Tag)
-                    return false;
-
-                if ((selfDipSwitch.Condition is null) ^ (otherDipSwitch.Condition is null))
-                {
-                    return false;
-                }
-                else if (selfDipSwitch.Condition is not null
-                    && otherDipSwitch.Condition is not null
-                    && selfDipSwitch.Condition.EqualTo(otherDipSwitch.Condition))
-                {
-                    return false;
-                }
             }
             else if (self is DipValue selfDipValue && other is DipValue otherDipValue)
             {

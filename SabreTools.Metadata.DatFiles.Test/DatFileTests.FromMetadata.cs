@@ -481,9 +481,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Device
             {
-                [Data.Models.Metadata.Device.ExtensionKey] = new Data.Models.Metadata.Extension[] { CreateMetadataExtension() },
+                Extension = [CreateMetadataExtension()],
                 FixedImage = "fixedimage",
-                [Data.Models.Metadata.Device.InstanceKey] = CreateMetadataInstance(),
+                Instance = CreateMetadataInstance(),
                 Interface = "interface",
                 Mandatory = true,
                 Tag = "tag",
@@ -1246,13 +1246,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("tag", device.Tag);
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.DeviceType);
 
-            Extension[]? extensions = device.Read<Extension[]>(Data.Models.Metadata.Device.ExtensionKey);
+            Extension[]? extensions = device.Extension;
             Assert.NotNull(extensions);
             Extension? extension = Assert.Single(extensions);
             ValidateExtension(extension);
 
-            Instance? instance = device.Read<Instance>(Data.Models.Metadata.Device.InstanceKey);
-            ValidateInstance(instance);
+            ValidateInstance(device.Instance);
         }
 
         private static void ValidateDeviceRef(DeviceRef? deviceRef)

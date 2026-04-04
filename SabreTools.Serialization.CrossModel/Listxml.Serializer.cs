@@ -343,13 +343,10 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Instance is not null)
-                device[Data.Models.Metadata.Device.InstanceKey] = ConvertToInternalModel(item.Instance);
+                device.Instance = ConvertToInternalModel(item.Instance);
 
             if (item.Extension is not null && item.Extension.Length > 0)
-            {
-                device[Data.Models.Metadata.Device.ExtensionKey]
-                    = Array.ConvertAll(item.Extension, ConvertToInternalModel);
-            }
+                device.Extension = Array.ConvertAll(item.Extension, ConvertToInternalModel);
 
             return device;
         }
