@@ -62,19 +62,19 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dump = new Dump();
 
-            var original = item.Read<Data.Models.Metadata.Original>(Data.Models.Metadata.Dump.OriginalKey);
+            var original = item.Original;
             if (original is not null)
                 dump.Original = ConvertFromInternalModel(original);
 
-            var rom = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.RomKey);
+            var rom = item.Rom;
             if (rom is not null)
                 dump.Rom = ConvertRomFromInternalModel(rom);
 
-            var megaRom = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.MegaRomKey);
+            var megaRom = item.MegaRom;
             if (megaRom is not null)
                 dump.Rom = ConvertMegaRomFromInternalModel(megaRom);
 
-            var sccPlusCart = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.SCCPlusCartKey);
+            var sccPlusCart = item.SCCPlusCart;
             if (sccPlusCart is not null)
                 dump.Rom = ConvertSCCPlusCartFromInternalModel(sccPlusCart);
 

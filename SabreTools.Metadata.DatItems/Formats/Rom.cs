@@ -12,6 +12,12 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("rom"), XmlRoot("rom")]
     public sealed class Rom : DatItem<Data.Models.Metadata.Rom>
     {
+        #region Temporary Constants
+
+        public const string OriginalKey = "ORIGINAL";
+
+        #endregion
+
         #region Fields
 
         public DataArea? DataArea { get; set; }
@@ -91,7 +97,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             get
             {
-                var original = Read<Original?>("ORIGINAL");
+                var original = Read<Original?>(OriginalKey);
                 return original is not null && original != default;
             }
         }
@@ -149,19 +155,19 @@ namespace SabreTools.Metadata.DatItems.Formats
             Data.Models.Metadata.Rom? rom = null;
             OpenMSXSubType? subType = null;
 
-            if (item.Read<Data.Models.Metadata.Rom>(Dump.RomKey) is not null)
+            if (item.Rom is not null)
             {
-                rom = item.Read<Data.Models.Metadata.Rom>(Dump.RomKey);
+                rom = item.Rom;
                 subType = OpenMSXSubType.Rom;
             }
-            else if (item.Read<Data.Models.Metadata.Rom>(Dump.MegaRomKey) is not null)
+            else if (item.MegaRom is not null)
             {
-                rom = item.Read<Data.Models.Metadata.Rom>(Dump.MegaRomKey);
+                rom = item.MegaRom;
                 subType = OpenMSXSubType.MegaRom;
             }
-            else if (item.Read<Data.Models.Metadata.Rom>(Dump.SCCPlusCartKey) is not null)
+            else if (item.SCCPlusCart is not null)
             {
-                rom = item.Read<Data.Models.Metadata.Rom>(Dump.SCCPlusCartKey);
+                rom = item.SCCPlusCart;
                 subType = OpenMSXSubType.SCCPlusCart;
             }
 
@@ -180,10 +186,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             Write<string?>(Data.Models.Metadata.Rom.StartKey, rom.ReadString(Data.Models.Metadata.Rom.StartKey));
             Source = source;
 
-            var original = item.Read<Data.Models.Metadata.Original>(Dump.OriginalKey);
+            var original = item.Original;
             if (original is not null)
             {
-                Write<Original?>("ORIGINAL", new Original
+                Write<Original?>(OriginalKey, new Original
                 {
                     Value = original.Value,
                     Content = original.Content,

@@ -61,6 +61,8 @@ namespace SabreTools.Data.Extensions
                 return display.Clone() as Display;
             else if (self is Driver driver)
                 return driver.Clone() as Driver;
+            else if (self is Dump dump)
+                return dump.Clone() as Dump;
             else if (self is Extension extension)
                 return extension.Clone() as Extension;
             else if (self is Feature feature)

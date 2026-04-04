@@ -907,7 +907,7 @@ namespace SabreTools.Metadata.DatFiles
                     rom[Data.Models.Metadata.Rom.SHA1Key] = romItem.ReadString(Data.Models.Metadata.Rom.SHA1Key);
                     rom[Data.Models.Metadata.Rom.StartKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
 
-                    dumpRom[Data.Models.Metadata.Dump.RomKey] = rom;
+                    dumpRom.Rom = rom;
 
                     var romOriginal = romItem.Read<DatItems.Formats.Original>("ORIGINAL");
                     if (romOriginal is not null)
@@ -917,7 +917,7 @@ namespace SabreTools.Metadata.DatFiles
                             Value = romOriginal.Value,
                             Content = romOriginal.Content,
                         };
-                        dumpRom[Data.Models.Metadata.Dump.OriginalKey] = newOriginal;
+                        dumpRom.Original = newOriginal;
                     }
 
                     machine.Dump ??= [];
@@ -935,7 +935,7 @@ namespace SabreTools.Metadata.DatFiles
                     megaRom[Data.Models.Metadata.Rom.SHA1Key] = romItem.ReadString(Data.Models.Metadata.Rom.SHA1Key);
                     megaRom[Data.Models.Metadata.Rom.StartKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
 
-                    dumpMegaRom[Data.Models.Metadata.Dump.MegaRomKey] = megaRom;
+                    dumpMegaRom.MegaRom = megaRom;
 
                     var megaRomOriginal = romItem.Read<DatItems.Formats.Original>("ORIGINAL");
                     if (megaRomOriginal is not null)
@@ -945,7 +945,7 @@ namespace SabreTools.Metadata.DatFiles
                             Value = megaRomOriginal.Value,
                             Content = megaRomOriginal.Content,
                         };
-                        dumpMegaRom[Data.Models.Metadata.Dump.OriginalKey] = newOriginal;
+                        dumpMegaRom.Original = newOriginal;
                     }
 
                     machine.Dump ??= [];
@@ -963,7 +963,7 @@ namespace SabreTools.Metadata.DatFiles
                     sccPlusCart[Data.Models.Metadata.Rom.SHA1Key] = romItem.ReadString(Data.Models.Metadata.Rom.SHA1Key);
                     sccPlusCart[Data.Models.Metadata.Rom.StartKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
 
-                    dumpSccPlusCart[Data.Models.Metadata.Dump.RomKey] = sccPlusCart;
+                    dumpSccPlusCart.SCCPlusCart = sccPlusCart;
 
                     var sccPlusCartOriginal = romItem.Read<DatItems.Formats.Original>("ORIGINAL");
                     if (sccPlusCartOriginal is not null)
@@ -973,7 +973,7 @@ namespace SabreTools.Metadata.DatFiles
                             Value = sccPlusCartOriginal.Value,
                             Content = sccPlusCartOriginal.Content,
                         };
-                        dumpSccPlusCart[Data.Models.Metadata.Dump.OriginalKey] = newOriginal;
+                        dumpSccPlusCart.Original = newOriginal;
                     }
 
                     machine.Dump ??= [];

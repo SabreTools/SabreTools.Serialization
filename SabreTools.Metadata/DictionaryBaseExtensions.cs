@@ -43,6 +43,7 @@ namespace SabreTools.Metadata
                 (DiskArea selfDiskArea, DiskArea otherDiskArea) => selfDiskArea.Equals(otherDiskArea),
                 (Display selfDisplay, Display otherDisplay) => selfDisplay.Equals(otherDisplay),
                 (Driver selfDriver, Driver otherDriver) => selfDriver.Equals(otherDriver),
+                (Dump selfDump, Dump otherDump) => selfDump.Equals(otherDump),
                 (Feature selfFeature, Feature otherFeature) => selfFeature.Equals(otherFeature),
                 (Info selfInfo, Info otherInfo) => selfInfo.Equals(otherInfo),
                 (Input selfInput, Input otherInput) => selfInput.Equals(otherInput),
@@ -104,6 +105,8 @@ namespace SabreTools.Metadata
                 return selfDisplay.Equals(otherDisplay);
             else if (self is Driver selfDriver && other is Driver otherDriver)
                 return selfDriver.Equals(otherDriver);
+            else if (self is Dump selfDump && other is Dump otherDump)
+                return selfDump.Equals(otherDump);
             else if (self is Feature selfFeature && other is Feature otherFeature)
                 return selfFeature.Equals(otherFeature);
             else if (self is Info selfInfo && other is Info otherInfo)

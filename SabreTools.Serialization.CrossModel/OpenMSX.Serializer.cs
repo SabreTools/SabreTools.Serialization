@@ -69,22 +69,22 @@ namespace SabreTools.Serialization.CrossModel
             var dump = new Data.Models.Metadata.Dump();
 
             if (item.Original is not null)
-                dump[Data.Models.Metadata.Dump.OriginalKey] = ConvertToInternalModel(item.Original);
+                dump.Original = ConvertToInternalModel(item.Original);
 
             if (item.Rom is not null)
             {
                 switch (item.Rom)
                 {
                     case Rom rom:
-                        dump[Data.Models.Metadata.Dump.RomKey] = ConvertToInternalModel(rom);
+                        dump.Rom = ConvertToInternalModel(rom);
                         break;
 
                     case MegaRom megaRom:
-                        dump[Data.Models.Metadata.Dump.MegaRomKey] = ConvertToInternalModel(megaRom);
+                        dump.MegaRom = ConvertToInternalModel(megaRom);
                         break;
 
                     case SCCPlusCart sccPlusCart:
-                        dump[Data.Models.Metadata.Dump.SCCPlusCartKey] = ConvertToInternalModel(sccPlusCart);
+                        dump.SCCPlusCart = ConvertToInternalModel(sccPlusCart);
                         break;
 
                     default:

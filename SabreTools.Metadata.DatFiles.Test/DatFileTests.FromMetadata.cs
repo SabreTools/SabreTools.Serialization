@@ -616,14 +616,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Dump
             {
-                [Data.Models.Metadata.Dump.OriginalKey] = CreateMetadataOriginal(),
+                Original = CreateMetadataOriginal(),
 
                 // The following are searched for in order
                 // For the purposes of this test, only RomKey will be populated
                 // The only difference is what OpenMSXSubType value is applied
-                [Data.Models.Metadata.Dump.RomKey] = new Data.Models.Metadata.Rom(),
-                [Data.Models.Metadata.Dump.MegaRomKey] = null,
-                [Data.Models.Metadata.Dump.SCCPlusCartKey] = null,
+                Rom = new Data.Models.Metadata.Rom(),
+                MegaRom = null,
+                SCCPlusCart = null,
             };
         }
 
