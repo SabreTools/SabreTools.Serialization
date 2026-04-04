@@ -468,7 +468,7 @@ namespace SabreTools.Metadata.DatItems
                 return false;
 
             // Compare internal models
-            return _internal.EqualTo(otherItem._internal);
+            return _internal.Equals(otherItem._internal);
         }
 
         /// <inheritdoc/>
@@ -483,7 +483,7 @@ namespace SabreTools.Metadata.DatItems
                 return false;
 
             // Compare internal models
-            return _internal.EqualTo(otherItem._internal);
+            return _internal.Equals(otherItem._internal);
         }
 
         /// <inheritdoc/>
@@ -493,34 +493,8 @@ namespace SabreTools.Metadata.DatItems
             if (other is null)
                 return false;
 
-            // Properties
-            if ((Description is null) ^ (other.Description is null))
-                return false;
-            if (Description is not null && !Description.Equals(other.Description, StringComparison.OrdinalIgnoreCase))
-                return false;
-
-            if (IsBios != other.IsBios)
-                return false;
-
-            if (IsDevice != other.IsDevice)
-                return false;
-
-            if (IsMechanical != other.IsMechanical)
-                return false;
-
-            if ((Name is null) ^ (other.Name is null))
-                return false;
-            if (Name is not null && !Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase))
-                return false;
-
-            if (Runnable != other.Runnable)
-                return false;
-
-            if (Supported != other.Supported)
-                return false;
-
             // Compare internal models
-            return _internal.EqualTo(other._internal);
+            return _internal.Equals(other._internal);
         }
 
         #endregion

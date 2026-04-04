@@ -480,6 +480,11 @@ namespace SabreTools.Data.Models.Metadata
             else if (Manufacturer is not null && !Manufacturer.Equals(other.Manufacturer, StringComparison.OrdinalIgnoreCase))
                 return false;
 
+            if ((Name is null) ^ (other.Name is null))
+                return false;
+            else if (Name is not null && !Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase))
+                return false;
+
             if ((Notes is null) ^ (other.Notes is null))
                 return false;
             else if (Notes is not null && !Notes.Equals(other.Notes, StringComparison.OrdinalIgnoreCase))
