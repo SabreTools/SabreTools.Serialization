@@ -139,7 +139,11 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Disk(_internal.DeepClone() as Data.Models.Metadata.Disk ?? []);
+        public override object Clone() => new Disk(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Disk GetInternalClone()
+            => (_internal as Data.Models.Metadata.Disk)?.Clone() as Data.Models.Metadata.Disk ?? [];
 
         /// <summary>
         /// Convert a disk to the closest Rom approximation

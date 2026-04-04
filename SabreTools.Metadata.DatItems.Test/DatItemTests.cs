@@ -36,6 +36,12 @@ namespace SabreTools.Metadata.DatItems.Test
             };
 
             /// <inheritdoc/>
+            public override TestDatItemModel GetInternalClone()
+            {
+                return _internal.DeepClone() as TestDatItemModel ?? [];
+            }
+
+            /// <inheritdoc/>
             public override string? GetName() => _nameKey is not null ? _internal.ReadString(_nameKey) : null;
 
             /// <inheritdoc/>

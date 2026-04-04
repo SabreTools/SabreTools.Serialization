@@ -1,5 +1,4 @@
 using System;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems
 {
@@ -38,7 +37,7 @@ namespace SabreTools.Metadata.DatItems
         /// <summary>
         /// Get a clone of the current internal model
         /// </summary>
-        public virtual T GetInternalClone() => (_internal.DeepClone() as T)!;
+        public abstract T GetInternalClone();
 
         #endregion
 

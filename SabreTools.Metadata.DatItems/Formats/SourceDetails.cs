@@ -1,6 +1,5 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -189,7 +188,11 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new SourceDetails(_internal.DeepClone() as Data.Models.Metadata.SourceDetails ?? []);
+        public override object Clone() => new SourceDetails(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.SourceDetails GetInternalClone()
+            => (_internal as Data.Models.Metadata.SourceDetails)?.Clone() as Data.Models.Metadata.SourceDetails ?? [];
 
         #endregion
     }

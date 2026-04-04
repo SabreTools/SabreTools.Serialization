@@ -92,7 +92,11 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Media(_internal.DeepClone() as Data.Models.Metadata.Media ?? []);
+        public override object Clone() => new Media(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Media GetInternalClone()
+            => (_internal as Data.Models.Metadata.Media)?.Clone() as Data.Models.Metadata.Media ?? [];
 
         /// <summary>
         /// Convert a media to the closest Rom approximation

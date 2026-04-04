@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -117,12 +116,12 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new DipSwitch(_internal.DeepClone() as Data.Models.Metadata.DipSwitch ?? []);
+        public override object Clone() => new DipSwitch(GetInternalClone());
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.DipSwitch GetInternalClone()
         {
-            var dipSwitchItem = base.GetInternalClone();
+            var dipSwitchItem = (_internal as Data.Models.Metadata.DipSwitch)?.Clone() as Data.Models.Metadata.DipSwitch ?? [];
 
             if (Condition is not null)
                 dipSwitchItem.Condition = Condition.GetInternalClone();
