@@ -30,15 +30,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine
-            {
-                Name = "key"
-            };
+            Machine machine = new Machine { Name = "key" };
 
-            DatItem rom = new Rom
-            {
-                Name = "rom"
-            };
+            DatItem rom = new Rom { Name = "rom" };
             rom.Write(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
             rom.Source = source;
             rom.Machine = machine;
@@ -76,10 +70,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine
-            {
-                Name = "game-1"
-            };
+            Machine machine = new Machine { Name = "game-1" };
 
             DatItem datItem = new Rom
             {
@@ -99,10 +90,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Source source = new Source(0, source: null);
 
-            Machine machine = new Machine
-            {
-                Name = "game-1"
-            };
+            Machine machine = new Machine { Name = "game-1" };
 
             DatItem datItem = new Rom();
 
@@ -246,10 +234,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void SetHeaderTest()
         {
-            DatHeader datHeader = new DatHeader
-            {
-                Name = "name"
-            };
+            DatHeader datHeader = new DatHeader { Name = "name" };
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "notname";
@@ -1342,15 +1327,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             bool gameName,
             string expected)
         {
-            Machine machine = new Machine
-            {
-                Name = "machine"
-            };
+            Machine machine = new Machine { Name = "machine" };
 
-            DatItem item = new Rom
-            {
-                Name = "name"
-            };
+            DatItem item = new Rom { Name = "name" };
             item.Write(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
@@ -1425,10 +1404,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
-            DatItem item = new Disk
-            {
-                Name = "name"
-            };
+            DatItem item = new Disk { Name = "name" };
             item.Write(Data.Models.Metadata.Disk.MD5Key, "md5");
             item.Write(Data.Models.Metadata.Disk.SHA1Key, "sha1");
 
@@ -1985,10 +1961,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNames_SingleItem_Single()
         {
-            Machine machine = new Machine
-            {
-                Name = "machine"
-            };
+            Machine machine = new Machine { Name = "machine" };
 
             Source source = new Source(0);
 
@@ -2017,10 +1990,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNames_NonDuplicate_AllUntouched()
         {
-            Machine machine = new Machine
-            {
-                Name = "machine"
-            };
+            Machine machine = new Machine { Name = "machine" };
 
             Source source = new Source(0);
 
@@ -2065,10 +2035,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNames_AllDuplicate_Single()
         {
-            Machine machine = new Machine
-            {
-                Name = "machine"
-            };
+            Machine machine = new Machine { Name = "machine" };
 
             Source source = new Source(0);
 
@@ -2106,10 +2073,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNames_NameMatch_SingleRenamed()
         {
-            Machine machine = new Machine
-            {
-                Name = "machine"
-            };
+            Machine machine = new Machine { Name = "machine" };
 
             Source source = new Source(0);
 
@@ -2169,10 +2133,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNamesDB_SingleItem_Single()
         {
-            Machine machine = new Machine
-            {
-                Name = "machine"
-            };
+            Machine machine = new Machine { Name = "machine" };
 
             Source source = new Source(0);
 
@@ -2203,10 +2164,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNamesDB_NonDuplicate_AllUntouched()
         {
-            Machine machine = new Machine
-            {
-                Name = "machine"
-            };
+            Machine machine = new Machine { Name = "machine" };
 
             Source source = new Source(0);
 
@@ -2256,10 +2214,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatFile datFile = new Logiqx(null, useGame: false);
 
-            Machine machine = new Machine
-            {
-                Name = "machine"
-            };
+            Machine machine = new Machine { Name = "machine" };
             long machineIndex = datFile.AddMachineDB(machine);
 
             Source source = new Source(0);
@@ -2299,10 +2254,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ResolveNamesDB_NameMatch_SingleRenamed()
         {
-            Machine machine = new Machine
-            {
-                Name = "machine"
-            };
+            Machine machine = new Machine { Name = "machine" };
 
             Source source = new Source(0);
 
@@ -2364,10 +2316,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ShouldIgnore_RemoveSet_True()
         {
-            DatItem? datItem = new Rom
-            {
-                RemoveFlag = true
-            };
+            DatItem? datItem = new Rom { RemoveFlag = true };
             DatFile datFile = new Logiqx(null, useGame: false);
 
             bool actual = datFile.ShouldIgnore(datItem, ignoreBlanks: true);
@@ -2397,8 +2346,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ShouldIgnore_NoIgnoreBlanksZeroRom_False()
         {
-            DatItem? datItem = new Rom() { Size = 12345 };
-            datItem.SetName("name");
+            DatItem? datItem = new Rom
+            {
+                Name = "name",
+                Size = 12345,
+            };
             datItem.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             DatFile datFile = new Logiqx(null, useGame: false);
 
@@ -2419,8 +2371,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ShouldIgnore_MissingRequired_True()
         {
-            DatItem? datItem = new Rom() { Size = 12345 };
-            datItem.SetName("name");
+            DatItem? datItem = new Rom
+            {
+                Name = "name",
+                Size = 12345,
+            };
             DatFile datFile = new Logiqx(null, useGame: false);
 
             bool actual = datFile.ShouldIgnore(datItem, ignoreBlanks: true);
@@ -2430,8 +2385,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ShouldIgnore_AllVerified_False()
         {
-            DatItem? datItem = new Rom() { Size = 12345 };
-            datItem.SetName("name");
+            DatItem? datItem = new Rom
+            {
+                Name = "name",
+                Size = 12345,
+            };
             datItem.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             datItem.Write(Data.Models.Metadata.Rom.MD2Key, "crc");
             datItem.Write(Data.Models.Metadata.Rom.MD4Key, "crc");

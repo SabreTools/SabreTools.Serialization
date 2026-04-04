@@ -507,7 +507,7 @@ namespace SabreTools.Metadata.DatFiles
                     if (!string.IsNullOrEmpty(sha1))
                     {
                         name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
-                        item.SetName($"{pre}{name}{post}");
+                        disk.Name = $"{pre}{name}{post}";
                     }
                 }
                 else if (item is DatItems.Formats.File file)
@@ -517,7 +517,7 @@ namespace SabreTools.Metadata.DatFiles
                     if (!string.IsNullOrEmpty(sha1))
                     {
                         name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
-                        item.SetName($"{pre}{name}{post}");
+                        file.SetName($"{pre}{name}{post}");
                     }
                 }
                 else if (item is Media media)
@@ -527,7 +527,7 @@ namespace SabreTools.Metadata.DatFiles
                     if (!string.IsNullOrEmpty(sha1))
                     {
                         name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
-                        item.SetName($"{pre}{name}{post}");
+                        media.Name = $"{pre}{name}{post}";
                     }
                 }
                 else if (item is Rom rom)
@@ -537,7 +537,7 @@ namespace SabreTools.Metadata.DatFiles
                     if (!string.IsNullOrEmpty(sha1))
                     {
                         name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
-                        item.SetName($"{pre}{name}{post}");
+                        rom.Name = $"{pre}{name}{post}";
                     }
                 }
 

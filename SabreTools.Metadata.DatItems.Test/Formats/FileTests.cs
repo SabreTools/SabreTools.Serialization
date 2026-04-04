@@ -10,10 +10,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void ConvertToRomTest()
         {
-            Machine machine = new Machine
-            {
-                Name = "name"
-            };
+            Machine machine = new Machine { Name = "name" };
 
             Source source = new Source(0, "XXXXXX");
 
@@ -37,7 +34,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Rom actual = file.ConvertToRom();
 
-            Assert.Equal("XXXXXX.XXXXXX", actual.GetName());
+            Assert.Equal("XXXXXX.XXXXXX", actual.Name);
             Assert.Equal(12345, actual.Size);
             Assert.Equal("deadbeef", actual.ReadString(Data.Models.Metadata.Rom.CRCKey));
             Assert.Equal("000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
@@ -47,7 +44,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);
-            Assert.Equal("name", actualMachine.GetName());
+            Assert.Equal("name", actualMachine.Name);
 
             Assert.False(actual.RemoveFlag);
 
@@ -342,10 +339,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine
-            {
-                Name = "Machine"
-            };
+            Machine machine = new Machine { Name = "Machine" };
 
             DatItem datItem = new File
             {

@@ -206,7 +206,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
             if (Modifiers.OutputDepot?.IsActive == true || Modifiers.UseRomName)
                 sw.Write($"{datItem.GetName() ?? string.Empty}\n");
             else if (!Modifiers.UseRomName && machine!.Name != lastgame)
-                sw.Write($"{machine!.GetName() ?? string.Empty}\n");
+                sw.Write($"{machine!.Name ?? string.Empty}\n");
 
             sw.Flush();
         }

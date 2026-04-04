@@ -314,10 +314,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Sample ConvertFromInternalModel(Data.Models.Metadata.Sample item)
         {
-            var sample = new Sample
-            {
-                Name = item.Name,
-            };
+            var sample = new Sample { Name = item.Name, };
             return sample;
         }
 

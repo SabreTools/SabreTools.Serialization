@@ -10,10 +10,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void ConvertToRomTest()
         {
-            Machine machine = new Machine
-            {
-                Name = "name"
-            };
+            Machine machine = new Machine { Name = "name" };
 
             Source source = new Source(0, "XXXXXX");
 
@@ -333,10 +330,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine
-            {
-                Name = "Machine"
-            };
+            Machine machine = new Machine { Name = "Machine" };
 
             DatItem datItem = new Media
             {

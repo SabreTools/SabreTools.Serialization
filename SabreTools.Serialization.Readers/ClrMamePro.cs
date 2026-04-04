@@ -309,10 +309,7 @@ namespace SabreTools.Serialization.Readers
                                 game.SampleOf = reader.Standalone?.Value;
                                 break;
                             case "sample":
-                                var sample = new Sample
-                                {
-                                    Name = reader.Standalone?.Value ?? string.Empty,
-                                };
+                                var sample = new Sample { Name = reader.Standalone?.Value ?? string.Empty, };
                                 samples.Add(sample);
                                 break;
                             default:

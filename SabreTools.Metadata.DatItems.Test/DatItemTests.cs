@@ -55,10 +55,7 @@ namespace SabreTools.Metadata.DatItems.Test
         {
             var romA = new Rom();
 
-            var romB = new Rom
-            {
-                Machine = null
-            };
+            var romB = new Rom { Machine = null };
 
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.Machine;
@@ -69,20 +66,11 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CopyMachineInformation_EmptyItem_NoChange()
         {
-            Machine? machineA = new Machine
-            {
-                Name = "machineA"
-            };
+            Machine? machineA = new Machine { Name = "machineA" };
 
-            var romA = new Rom
-            {
-                Machine = machineA
-            };
+            var romA = new Rom { Machine = machineA };
 
-            var romB = new Rom
-            {
-                Machine = null
-            };
+            var romB = new Rom { Machine = null };
 
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.Machine;
@@ -93,22 +81,13 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CopyMachineInformation_NullMachine_NoChange()
         {
-            Machine? machineA = new Machine
-            {
-                Name = "machineA"
-            };
+            Machine? machineA = new Machine { Name = "machineA" };
 
             Machine? machineB = null;
 
-            var romA = new Rom
-            {
-                Machine = machineA
-            };
+            var romA = new Rom { Machine = machineA };
 
-            var romB = new Rom
-            {
-                Machine = machineB
-            };
+            var romB = new Rom { Machine = machineB };
 
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.Machine;
@@ -119,22 +98,13 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CopyMachineInformation_EmptyMachine_Overwrite()
         {
-            Machine? machineA = new Machine
-            {
-                Name = "machineA"
-            };
+            Machine? machineA = new Machine { Name = "machineA" };
 
             Machine? machineB = new Machine();
 
-            var romA = new Rom
-            {
-                Machine = machineA
-            };
+            var romA = new Rom { Machine = machineA };
 
-            var romB = new Rom
-            {
-                Machine = machineB
-            };
+            var romB = new Rom { Machine = machineB };
 
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.Machine;
@@ -145,25 +115,13 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CopyMachineInformation_FilledMachine_Overwrite()
         {
-            Machine? machineA = new Machine
-            {
-                Name = "machineA"
-            };
+            Machine? machineA = new Machine { Name = "machineA" };
 
-            Machine? machineB = new Machine
-            {
-                Name = "machineB"
-            };
+            Machine? machineB = new Machine { Name = "machineB" };
 
-            var romA = new Rom
-            {
-                Machine = machineA
-            };
+            var romA = new Rom { Machine = machineA };
 
-            var romB = new Rom
-            {
-                Machine = machineB
-            };
+            var romB = new Rom { Machine = machineB };
 
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.Machine;
@@ -174,25 +132,13 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CopyMachineInformation_MismatchedType_Overwrite()
         {
-            Machine? machineA = new Machine
-            {
-                Name = "machineA"
-            };
+            Machine? machineA = new Machine { Name = "machineA" };
 
-            Machine? machineB = new Machine
-            {
-                Name = "machineB"
-            };
+            Machine? machineB = new Machine { Name = "machineB" };
 
-            var romA = new Rom
-            {
-                Machine = machineA
-            };
+            var romA = new Rom { Machine = machineA };
 
-            var diskB = new Disk
-            {
-                Machine = machineB
-            };
+            var diskB = new Disk { Machine = machineB };
 
             romA.CopyMachineInformation(diskB);
             var actualMachineA = romA.Machine;
@@ -217,11 +163,9 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CompareTo_DifferentOther_Returns1()
         {
-            DatItem self = new Rom();
-            self.SetName("name");
+            DatItem self = new Rom { Name = "name" };
 
-            DatItem? other = new Disk();
-            other.SetName("name");
+            DatItem? other = new Disk { Name = "name" };
 
             int actual = self.CompareTo(other);
             Assert.Equal(1, actual);
@@ -246,12 +190,10 @@ namespace SabreTools.Metadata.DatItems.Test
         [InlineData("name", "name", 0)]
         public void CompareTo_NamesOnly(string? selfName, string? otherName, int expected)
         {
-            DatItem self = new Rom();
-            self.SetName(selfName);
+            DatItem self = new Rom { Name = selfName };
             self.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
 
-            DatItem? other = new Rom();
-            other.SetName(otherName);
+            DatItem? other = new Rom { Name = otherName };
             other.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
 
             int actual = self.CompareTo(other);
@@ -388,10 +330,7 @@ namespace SabreTools.Metadata.DatItems.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine
-            {
-                Name = "Machine"
-            };
+            Machine machine = new Machine { Name = "Machine" };
 
             DatItem datItem = new Blank();
 
@@ -464,10 +403,7 @@ namespace SabreTools.Metadata.DatItems.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine
-            {
-                Name = "Machine"
-            };
+            Machine machine = new Machine { Name = "Machine" };
 
             DatItem datItem = new Rom();
             datItem.Write(Data.Models.Metadata.Rom.CRC16Key, "DEADBEEF");
@@ -573,15 +509,12 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CloneTest()
         {
-            DatItem item = new Sample
-            {
-                Name = "name"
-            };
+            DatItem item = new Sample { Name = "name" };
 
             object clone = item.Clone();
             Sample? actual = clone as Sample;
             Assert.NotNull(actual);
-            Assert.Equal("name", actual.GetName());
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion

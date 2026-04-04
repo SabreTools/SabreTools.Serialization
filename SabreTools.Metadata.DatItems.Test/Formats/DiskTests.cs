@@ -15,10 +15,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 Name = "name"
             };
 
-            Machine machine = new Machine
-            {
-                Name = "name"
-            };
+            Machine machine = new Machine { Name = "name" };
 
             Part part = new Part
             {
@@ -27,10 +24,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Source source = new Source(0, "XXXXXX");
 
-            Disk disk = new Disk
-            {
-                Name = "name"
-            };
+            Disk disk = new Disk { Name = "name" };
             disk.Write(Disk.DiskAreaKey, diskArea);
             disk.Write(Data.Models.Metadata.Disk.MergeKey, "XXXXXX");
             disk.Write(Data.Models.Metadata.Disk.RegionKey, "XXXXXX");
@@ -261,10 +255,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine
-            {
-                Name = "Machine"
-            };
+            Machine machine = new Machine { Name = "Machine" };
 
             DatItem datItem = new Disk();
             datItem.Write(Data.Models.Metadata.Disk.MD5Key, "DEADBEEF");

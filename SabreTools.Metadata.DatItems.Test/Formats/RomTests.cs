@@ -799,10 +799,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine
-            {
-                Name = "Machine"
-            };
+            Machine machine = new Machine { Name = "Machine" };
 
             DatItem datItem = new Rom();
             datItem.Write(Data.Models.Metadata.Rom.CRC16Key, "DEADBEEF");

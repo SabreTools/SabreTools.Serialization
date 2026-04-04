@@ -1068,10 +1068,7 @@ namespace SabreTools.Metadata.Test
         [Fact]
         public void EqualTo_Other_MismatchedCount_False()
         {
-            DictionaryBase self = new Sample
-            {
-                ["KEY1"] = "XXXXXX",
-            };
+            DictionaryBase self = new Sample { ["KEY1"] = "XXXXXX", };
             DictionaryBase other = new Sample
             {
                 ["KEY1"] = "XXXXXX",
@@ -1085,14 +1082,8 @@ namespace SabreTools.Metadata.Test
         [Fact]
         public void EqualTo_Other_MismatchedKeys_False()
         {
-            DictionaryBase self = new Sample
-            {
-                ["KEY1"] = "XXXXXX",
-            };
-            DictionaryBase other = new Sample
-            {
-                ["KEY2"] = "XXXXXX",
-            };
+            DictionaryBase self = new Sample { ["KEY1"] = "XXXXXX", };
+            DictionaryBase other = new Sample { ["KEY2"] = "XXXXXX", };
 
             bool actual = self.EqualTo(other);
             Assert.False(actual);
@@ -1101,14 +1092,8 @@ namespace SabreTools.Metadata.Test
         [Fact]
         public void EqualTo_Other_MismatchedValues_False()
         {
-            DictionaryBase self = new Sample
-            {
-                ["KEY1"] = "XXXXXX",
-            };
-            DictionaryBase other = new Sample
-            {
-                ["KEY1"] = "ZZZZZZ",
-            };
+            DictionaryBase self = new Sample { ["KEY1"] = "XXXXXX", };
+            DictionaryBase other = new Sample { ["KEY1"] = "ZZZZZZ", };
 
             bool actual = self.EqualTo(other);
             Assert.False(actual);
@@ -1117,14 +1102,8 @@ namespace SabreTools.Metadata.Test
         [Fact]
         public void EqualTo_Other_Matching_True()
         {
-            DictionaryBase self = new Sample
-            {
-                ["KEY1"] = "XXXXXX",
-            };
-            DictionaryBase other = new Sample
-            {
-                ["KEY1"] = "XXXXXX",
-            };
+            DictionaryBase self = new Sample { ["KEY1"] = "XXXXXX", };
+            DictionaryBase other = new Sample { ["KEY1"] = "XXXXXX", };
 
             bool actual = self.EqualTo(other);
             Assert.True(actual);
