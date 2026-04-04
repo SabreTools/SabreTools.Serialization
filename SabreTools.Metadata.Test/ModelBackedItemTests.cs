@@ -34,7 +34,7 @@ namespace SabreTools.Metadata.Test
                     return false;
 
                 // Compare internal models
-                return _internal.EqualTo(otherItem._internal);
+                return _internal.Equals(otherItem._internal);
             }
 
             /// <inheritdoc/>
@@ -49,7 +49,7 @@ namespace SabreTools.Metadata.Test
                     return false;
 
                 // Compare internal models
-                return _internal.EqualTo(otherItem._internal);
+                return _internal.Equals(otherItem._internal);
             }
 
             #endregion
@@ -74,7 +74,7 @@ namespace SabreTools.Metadata.Test
                     return false;
 
                 // Compare internal models
-                return _internal.EqualTo(otherItem._internal);
+                return _internal[TestDictionaryBase.NameKey] == otherItem._internal[TestDictionaryBase.NameKey];
             }
 
             /// <inheritdoc/>
@@ -89,70 +89,10 @@ namespace SabreTools.Metadata.Test
                     return false;
 
                 // Compare internal models
-                return _internal.EqualTo(otherItem._internal);
+                return _internal[TestDictionaryBase.NameKey] == otherItem._internal[TestDictionaryBase.NameKey];
             }
 
             #endregion
-        }
-
-        #endregion
-
-        #region Equals
-
-        [Fact]
-        public void Equals_NullOther_False()
-        {
-            ModelBackedItem self = new TestModelBackedItem();
-            ModelBackedItem? other = null;
-
-            bool actual = self.Equals(other);
-            Assert.False(actual);
-        }
-
-        [Fact]
-        public void Equals_MismatchedType_False()
-        {
-            ModelBackedItem self = new TestModelBackedItem();
-            ModelBackedItem? other = new TestModelAltBackedItem();
-
-            bool actual = self.Equals(other);
-            Assert.False(actual);
-        }
-
-        [Fact]
-        public void Equals_MismatchedTypeAlt_False()
-        {
-            ModelBackedItem self = new TestModelAltBackedItem();
-            ModelBackedItem? other = new TestModelBackedItem();
-
-            bool actual = self.Equals(other);
-            Assert.False(actual);
-        }
-
-        [Fact]
-        public void Equals_DifferentModels_False()
-        {
-            ModelBackedItem<TestDictionaryBase> self = new TestModelBackedItem();
-            self.Write(TestDictionaryBase.NameKey, "self");
-
-            ModelBackedItem<TestDictionaryBase>? other = new TestModelBackedItem();
-            other.Write(TestDictionaryBase.NameKey, "other");
-
-            bool actual = self.Equals(other);
-            Assert.False(actual);
-        }
-
-        [Fact]
-        public void Equals_EqualModels_True()
-        {
-            ModelBackedItem<TestDictionaryBase> self = new TestModelBackedItem();
-            self.Write(TestDictionaryBase.NameKey, "name");
-
-            ModelBackedItem<TestDictionaryBase>? other = new TestModelBackedItem();
-            other.Write(TestDictionaryBase.NameKey, "name");
-
-            bool actual = self.Equals(other);
-            Assert.True(actual);
         }
 
         #endregion

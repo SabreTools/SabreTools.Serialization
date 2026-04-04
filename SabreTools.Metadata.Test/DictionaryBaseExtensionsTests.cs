@@ -5,29 +5,19 @@ namespace SabreTools.Metadata.Test
 {
     public class DictionaryBaseExtensionsTests
     {
-        #region EqualTo
+        #region PartialEquals
 
         [Fact]
-        public void EqualTo_MismatchedTypes_False()
+        public void PartialEquals_Disk_Nodumps_True()
         {
-            DictionaryBase self = new Disk();
-            DictionaryBase other = new Rom();
-
-            bool actual = self.EqualTo(other);
-            Assert.False(actual);
-        }
-
-        [Fact]
-        public void EqualTo_Disk_Nodumps_True()
-        {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
                 Status = ItemStatus.Nodump,
                 Name = "name",
                 MD5 = string.Empty,
                 SHA1 = string.Empty,
             };
-            DictionaryBase other = new Disk
+            var other = new Disk
             {
                 Status = ItemStatus.Nodump,
                 Name = "name",
@@ -35,94 +25,94 @@ namespace SabreTools.Metadata.Test
                 SHA1 = string.Empty,
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Disk_Mismatch_False()
+        public void PartialEquals_Disk_Mismatch_False()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
                 Name = "name",
                 MD5 = "XXXXXX",
                 SHA1 = string.Empty,
             };
-            DictionaryBase other = new Disk
+            var other = new Disk
             {
                 Name = "name",
                 MD5 = string.Empty,
                 SHA1 = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.False(actual);
         }
 
         [Fact]
-        public void EqualTo_Disk_PartialMD5_True()
+        public void PartialEquals_Disk_PartialMD5_True()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
                 Name = "XXXXXX1",
                 MD5 = "XXXXXX",
                 SHA1 = string.Empty,
             };
-            DictionaryBase other = new Disk
+            var other = new Disk
             {
                 Name = "XXXXXX2",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Disk_PartialSHA1_True()
+        public void PartialEquals_Disk_PartialSHA1_True()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
                 Name = "XXXXXX1",
                 MD5 = string.Empty,
                 SHA1 = "XXXXXX",
             };
-            DictionaryBase other = new Disk
+            var other = new Disk
             {
                 Name = "XXXXXX2",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Disk_FullMatch_True()
+        public void PartialEquals_Disk_FullMatch_True()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
                 Name = "XXXXXX1",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
             };
-            DictionaryBase other = new Disk
+            var other = new Disk
             {
                 Name = "XXXXXX2",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Media_Mismatch_False()
+        public void PartialEquals_Media_Mismatch_False()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 Name = "name",
                 MD5 = "XXXXXX",
@@ -130,7 +120,7 @@ namespace SabreTools.Metadata.Test
                 SHA256 = "XXXXXX",
                 SpamSum = string.Empty,
             };
-            DictionaryBase other = new Media
+            var other = new Media
             {
                 Name = "name",
                 MD5 = string.Empty,
@@ -139,14 +129,14 @@ namespace SabreTools.Metadata.Test
                 SpamSum = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.False(actual);
         }
 
         [Fact]
-        public void EqualTo_Media_PartialMD5_True()
+        public void PartialEquals_Media_PartialMD5_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 Name = "name",
                 MD5 = "XXXXXX",
@@ -154,7 +144,7 @@ namespace SabreTools.Metadata.Test
                 SHA256 = string.Empty,
                 SpamSum = string.Empty,
             };
-            DictionaryBase other = new Media
+            var other = new Media
             {
                 Name = "name",
                 MD5 = "XXXXXX",
@@ -163,14 +153,14 @@ namespace SabreTools.Metadata.Test
                 SpamSum = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Media_PartialSHA1_True()
+        public void PartialEquals_Media_PartialSHA1_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 Name = "name",
                 MD5 = string.Empty,
@@ -178,7 +168,7 @@ namespace SabreTools.Metadata.Test
                 SHA256 = string.Empty,
                 SpamSum = string.Empty,
             };
-            DictionaryBase other = new Media
+            var other = new Media
             {
                 Name = "name",
                 MD5 = "XXXXXX",
@@ -187,14 +177,14 @@ namespace SabreTools.Metadata.Test
                 SpamSum = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Media_PartialSHA256_True()
+        public void PartialEquals_Media_PartialSHA256_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 Name = "name",
                 MD5 = string.Empty,
@@ -202,7 +192,7 @@ namespace SabreTools.Metadata.Test
                 SHA256 = "XXXXXX",
                 SpamSum = string.Empty,
             };
-            DictionaryBase other = new Media
+            var other = new Media
             {
                 Name = "name",
                 MD5 = "XXXXXX",
@@ -211,14 +201,14 @@ namespace SabreTools.Metadata.Test
                 SpamSum = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Media_PartialSpamSum_True()
+        public void PartialEquals_Media_PartialSpamSum_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 Name = "name",
                 MD5 = string.Empty,
@@ -226,7 +216,7 @@ namespace SabreTools.Metadata.Test
                 SHA256 = string.Empty,
                 SpamSum = "XXXXXX",
             };
-            DictionaryBase other = new Media
+            var other = new Media
             {
                 Name = "name",
                 MD5 = "XXXXXX",
@@ -235,14 +225,14 @@ namespace SabreTools.Metadata.Test
                 SpamSum = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Media_FullMatch_True()
+        public void PartialEquals_Media_FullMatch_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 Name = "name",
                 MD5 = "XXXXXX",
@@ -250,7 +240,7 @@ namespace SabreTools.Metadata.Test
                 SHA256 = "XXXXXX",
                 SpamSum = "XXXXXX",
             };
-            DictionaryBase other = new Media
+            var other = new Media
             {
                 Name = "name",
                 MD5 = "XXXXXX",
@@ -259,14 +249,14 @@ namespace SabreTools.Metadata.Test
                 SpamSum = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_Nodumps_True()
+        public void PartialEquals_Rom_Nodumps_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Status = ItemStatus.Nodump,
                 Name = "name",
@@ -285,7 +275,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Status = ItemStatus.Nodump,
                 Name = "name",
@@ -305,14 +295,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = string.Empty,
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_Mismatch_False()
+        public void PartialEquals_Rom_Mismatch_False()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "name",
                 Size = 12345,
@@ -330,7 +320,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = "XXXXXX",
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "name",
                 Size = 12345,
@@ -349,14 +339,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = string.Empty,
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.False(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_NoSelfSize_True()
+        public void PartialEquals_Rom_NoSelfSize_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 [Rom.CRC16Key] = "XXXXXX",
@@ -373,7 +363,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = "XXXXXX",
                 [Rom.SpamSumKey] = "XXXXXX",
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -392,14 +382,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_NoOtherSize_True()
+        public void PartialEquals_Rom_NoOtherSize_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -417,7 +407,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = "XXXXXX",
                 [Rom.SpamSumKey] = "XXXXXX",
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 [Rom.CRC16Key] = "XXXXXX",
@@ -435,14 +425,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialCRC16_True()
+        public void PartialEquals_Rom_PartialCRC16_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -460,7 +450,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -479,14 +469,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialCRC_True()
+        public void PartialEquals_Rom_PartialCRC_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -504,7 +494,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -523,14 +513,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialCRC64_True()
+        public void PartialEquals_Rom_PartialCRC64_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -548,7 +538,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -567,14 +557,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialMD2_True()
+        public void PartialEquals_Rom_PartialMD2_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -592,7 +582,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -611,14 +601,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialMD4_True()
+        public void PartialEquals_Rom_PartialMD4_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -636,7 +626,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -655,14 +645,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialMD5_True()
+        public void PartialEquals_Rom_PartialMD5_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -680,7 +670,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -699,14 +689,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialRIPEMD128_True()
+        public void PartialEquals_Rom_PartialRIPEMD128_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -724,7 +714,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -743,14 +733,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialRIPEMD160_True()
+        public void PartialEquals_Rom_PartialRIPEMD160_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -768,7 +758,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -787,14 +777,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialSHA1_True()
+        public void PartialEquals_Rom_PartialSHA1_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -812,7 +802,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -831,14 +821,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialSHA256_True()
+        public void PartialEquals_Rom_PartialSHA256_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -856,7 +846,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -875,14 +865,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialSHA384_True()
+        public void PartialEquals_Rom_PartialSHA384_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -900,7 +890,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -919,14 +909,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialSHA512_True()
+        public void PartialEquals_Rom_PartialSHA512_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -944,7 +934,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = "XXXXXX",
                 [Rom.SpamSumKey] = string.Empty,
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -963,14 +953,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_PartialSpamSum_True()
+        public void PartialEquals_Rom_PartialSpamSum_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -988,7 +978,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = "XXXXXX",
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -1007,14 +997,14 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
         [Fact]
-        public void EqualTo_Rom_FullMatch_True()
+        public void PartialEquals_Rom_FullMatch_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 Name = "XXXXXX1",
                 Size = 12345,
@@ -1032,7 +1022,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SHA512Key] = "XXXXXX",
                 [Rom.SpamSumKey] = "XXXXXX",
             };
-            DictionaryBase other = new Rom
+            var other = new Rom
             {
                 Name = "XXXXXX2",
                 Size = 12345,
@@ -1051,61 +1041,7 @@ namespace SabreTools.Metadata.Test
                 [Rom.SpamSumKey] = "XXXXXX",
             };
 
-            bool actual = self.EqualTo(other);
-            Assert.True(actual);
-        }
-
-        [Fact]
-        public void EqualTo_Other_BothEmpty_True()
-        {
-            DictionaryBase self = new Sample();
-            DictionaryBase other = new Sample();
-
-            bool actual = self.EqualTo(other);
-            Assert.True(actual);
-        }
-
-        [Fact]
-        public void EqualTo_Other_MismatchedCount_False()
-        {
-            DictionaryBase self = new Sample { ["KEY1"] = "XXXXXX", };
-            DictionaryBase other = new Sample
-            {
-                ["KEY1"] = "XXXXXX",
-                ["KEY2"] = "XXXXXX",
-            };
-
-            bool actual = self.EqualTo(other);
-            Assert.False(actual);
-        }
-
-        [Fact]
-        public void EqualTo_Other_MismatchedKeys_False()
-        {
-            DictionaryBase self = new Sample { ["KEY1"] = "XXXXXX", };
-            DictionaryBase other = new Sample { ["KEY2"] = "XXXXXX", };
-
-            bool actual = self.EqualTo(other);
-            Assert.False(actual);
-        }
-
-        [Fact]
-        public void EqualTo_Other_MismatchedValues_False()
-        {
-            DictionaryBase self = new Sample { ["KEY1"] = "XXXXXX", };
-            DictionaryBase other = new Sample { ["KEY1"] = "ZZZZZZ", };
-
-            bool actual = self.EqualTo(other);
-            Assert.False(actual);
-        }
-
-        [Fact]
-        public void EqualTo_Other_Matching_True()
-        {
-            DictionaryBase self = new Sample { ["KEY1"] = "XXXXXX", };
-            DictionaryBase other = new Sample { ["KEY1"] = "XXXXXX", };
-
-            bool actual = self.EqualTo(other);
+            bool actual = self.PartialEquals(other);
             Assert.True(actual);
         }
 
