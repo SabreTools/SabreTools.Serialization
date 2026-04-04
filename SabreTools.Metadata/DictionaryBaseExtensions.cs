@@ -24,18 +24,126 @@ namespace SabreTools.Metadata
 #if NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             return (self, other) switch
             {
+                (Adjuster selfAdjuster, Adjuster otherAdjuster) => selfAdjuster.Equals(otherAdjuster),
+                (Analog selfAnalog, Analog otherAnalog) => selfAnalog.Equals(otherAnalog),
+                (Archive selfArchive, Archive otherArchive) => selfArchive.Equals(otherArchive),
+                (BiosSet selfBiosSet, BiosSet otherBiosSet) => selfBiosSet.Equals(otherBiosSet),
+                (Chip selfChip, Chip otherChip) => selfChip.Equals(otherChip),
+                (Condition selfCondition, Condition otherCondition) => selfCondition.Equals(otherCondition),
+                (Configuration selfConfiguration, Configuration otherConfiguration) => selfConfiguration.Equals(otherConfiguration),
+                (ConfLocation selfConfLocation, ConfLocation otherConfLocation) => selfConfLocation.Equals(otherConfLocation),
+                (ConfSetting selfConfSetting, ConfSetting otherConfSetting) => selfConfSetting.Equals(otherConfSetting),
+                (Control selfControl, Control otherControl) => selfControl.Equals(otherControl),
+                (DataArea selfDataArea, DataArea otherDataArea) => selfDataArea.Equals(otherDataArea),
+                (Device selfDevice, Device otherDevice) => selfDevice.Equals(otherDevice),
+                (DipLocation selfDipLocation, DipLocation otherDipLocation) => selfDipLocation.Equals(otherDipLocation),
+                (DipSwitch selfDipSwitch, DipSwitch otherDipSwitch) => selfDipSwitch.Equals(otherDipSwitch),
+                (DipValue selfDipValue, DipValue otherDipValue) => selfDipValue.Equals(otherDipValue),
                 (Disk diskSelf, Disk diskOther) => EqualsImpl(diskSelf, diskOther),
+                (DiskArea selfDiskArea, DiskArea otherDiskArea) => selfDiskArea.Equals(otherDiskArea),
+                (Display selfDisplay, Display otherDisplay) => selfDisplay.Equals(otherDisplay),
+                (Driver selfDriver, Driver otherDriver) => selfDriver.Equals(otherDriver),
+                (Feature selfFeature, Feature otherFeature) => selfFeature.Equals(otherFeature),
+                (Info selfInfo, Info otherInfo) => selfInfo.Equals(otherInfo),
+                (Input selfInput, Input otherInput) => selfInput.Equals(otherInput),
+                (Instance selfInstance, Instance otherInstance) => selfInstance.Equals(otherInstance),
                 (Media mediaSelf, Media mediaOther) => EqualsImpl(mediaSelf, mediaOther),
+                (Original selfOriginal, Original otherOriginal) => selfOriginal.Equals(otherOriginal),
+                (Part selfPart, Part otherPart) => selfPart.Equals(otherPart),
+                (Port selfPort, Port otherPort) => selfPort.Equals(otherPort),
+                (RamOption selfRamOption, RamOption otherRamOption) => selfRamOption.Equals(otherRamOption),
+                (Release selfRelease, Release otherRelease) => selfRelease.Equals(otherRelease),
+                (ReleaseDetails selfReleaseDetails, ReleaseDetails otherReleaseDetails) => selfReleaseDetails.Equals(otherReleaseDetails),
                 (Rom romSelf, Rom romOther) => EqualsImpl(romSelf, romOther),
-                _ => EqualsImpl(self, other),
+                (Serials selfSerials, Serials otherSerials) => selfSerials.Equals(otherSerials),
+                (SharedFeat selfSharedFeat, SharedFeat otherSharedFeat) => selfSharedFeat.Equals(otherSharedFeat),
+                (Slot selfSlot, Slot otherSlot) => selfSlot.Equals(otherSlot),
+                (SlotOption selfSlotOption, SlotOption otherSlotOption) => selfSlotOption.Equals(otherSlotOption),
+                (SoftwareList selfSoftwareList, SoftwareList otherSoftwareList) => selfSoftwareList.Equals(otherSoftwareList),
+                (Sound selfSound, Sound otherSound) => selfSound.Equals(otherSound),
+                (SourceDetails selfSourceDetails, SourceDetails otherSourceDetails) => selfSourceDetails.Equals(otherSourceDetails),
+                (Video videoSelf, Video videoOther) => EqualsImpl(videoSelf, videoOther),
+                _ => self.EqualsImpl(other),
             };
 #else
-            if (self is Disk diskSelf && other is Disk diskOther)
+            if (self is Adjuster selfAdjuster && other is Adjuster otherAdjuster)
+                return selfAdjuster.Equals(otherAdjuster);
+            else if (self is Analog selfAnalog && other is Analog otherAnalog)
+                return selfAnalog.Equals(otherAnalog);
+            else if (self is Archive selfArchive && other is Archive otherArchive)
+                return selfArchive.Equals(otherArchive);
+            else if (self is BiosSet selfBiosSet && other is BiosSet otherBiosSet)
+                return selfBiosSet.Equals(otherBiosSet);
+            else if (self is Chip selfChip && other is Chip otherChip)
+                return selfChip.Equals(otherChip);
+            else if (self is Condition selfCondition && other is Condition otherCondition)
+                return selfCondition.Equals(otherCondition);
+            else if (self is Configuration selfConfiguration && other is Configuration otherConfiguration)
+                return selfConfiguration.Equals(otherConfiguration);
+            else if (self is ConfLocation selfConfLocation && other is ConfLocation otherConfLocation)
+                return selfConfLocation.Equals(otherConfLocation);
+            else if (self is ConfSetting selfConfSetting && other is ConfSetting otherConfSetting)
+                return selfConfSetting.Equals(otherConfSetting);
+            else if (self is Control selfControl && other is Control otherControl)
+                return selfControl.Equals(otherControl);
+            else if (self is DataArea selfDataArea && other is DataArea otherDataArea)
+                return selfDataArea.Equals(otherDataArea);
+            else if (self is Device selfDevice && other is Device otherDevice)
+                return selfDevice.Equals(otherDevice);
+            else if (self is DipLocation selfDipLocation && other is DipLocation otherDipLocation)
+                return selfDipLocation.Equals(otherDipLocation);
+            else if (self is DipSwitch selfDipSwitch && other is DipSwitch otherDipSwitch)
+                return selfDipSwitch.Equals(otherDipSwitch);
+            else if (self is DipValue selfDipValue && other is DipValue otherDipValue)
+                return selfDipValue.Equals(otherDipValue);
+            else if (self is Disk diskSelf && other is Disk diskOther)
                 return EqualsImpl(diskSelf, diskOther);
+            else if (self is DiskArea selfDiskArea && other is DiskArea otherDiskArea)
+                return selfDiskArea.Equals(otherDiskArea);
+            else if (self is Display selfDisplay && other is Display otherDisplay)
+                return selfDisplay.Equals(otherDisplay);
+            else if (self is Driver selfDriver && other is Driver otherDriver)
+                return selfDriver.Equals(otherDriver);
+            else if (self is Feature selfFeature && other is Feature otherFeature)
+                return selfFeature.Equals(otherFeature);
+            else if (self is Info selfInfo && other is Info otherInfo)
+                return selfInfo.Equals(otherInfo);
+            else if (self is Input selfInput && other is Input otherInput)
+                return selfInput.Equals(otherInput);
+            else if (self is Instance selfInstance && other is Instance otherInstance)
+                return selfInstance.Equals(otherInstance);
             else if (self is Media mediaSelf && other is Media mediaOther)
                 return EqualsImpl(mediaSelf, mediaOther);
+            else if (self is Original selfOriginal && other is Original otherOriginal)
+                return selfOriginal.Equals(otherOriginal);
+            else if (self is Part selfPart && other is Part otherPart)
+                return selfPart.Equals(otherPart);
+            else if (self is Port selfPort && other is Port otherPort)
+                return selfPort.Equals(otherPort);
+            else if (self is RamOption selfRamOption && other is RamOption otherRamOption)
+                return selfRamOption.Equals(otherRamOption);
+            else if (self is Release selfRelease && other is Release otherRelease)
+                return selfRelease.Equals(otherRelease);
+            else if (self is ReleaseDetails selfReleaseDetails && other is ReleaseDetails otherReleaseDetails)
+                return selfReleaseDetails.Equals(otherReleaseDetails);
             else if (self is Rom romSelf && other is Rom romOther)
                 return EqualsImpl(romSelf, romOther);
+            else if (self is Serials selfSerials && other is Serials otherSerials)
+                return selfSerials.Equals(otherSerials);
+            else if (self is SharedFeat selfSharedFeat && other is SharedFeat otherSharedFeat)
+                return selfSharedFeat.Equals(otherSharedFeat);
+            else if (self is Slot selfSlot && other is Slot otherSlot)
+                return selfSlot.Equals(otherSlot);
+            else if (self is SlotOption selfSlotOption && other is SlotOption otherSlotOption)
+                return selfSlotOption.Equals(otherSlotOption);
+            else if (self is SoftwareList selfSoftwareList && other is SoftwareList otherSoftwareList)
+                return selfSoftwareList.Equals(otherSoftwareList);
+            else if (self is Sound selfSound && other is Sound otherSound)
+                return selfSound.Equals(otherSound);
+            else if (self is SourceDetails selfSourceDetails && other is SourceDetails otherSourceDetails)
+                return selfSourceDetails.Equals(otherSourceDetails);
+            else if (self is Video selfVideo && other is Video otherVideo)
+                return selfVideo.Equals(otherVideo);
             else
                 return EqualsImpl(self, other);
 #endif
@@ -57,111 +165,8 @@ namespace SabreTools.Metadata
             if (!selfKeys.SetEquals(otherKeys))
                 return false;
 
-            // Check names
-            // if (self.GetName() != other.GetName())
-            //     return false;
-
             // Handle individual type properties
-            if (self is Adjuster selfAdjuster && other is Adjuster otherAdjuster)
-            {
-                if (!selfAdjuster.Equals(otherAdjuster))
-                    return false;
-            }
-            else if (self is Analog selfAnalog && other is Analog otherAnalog)
-            {
-                if (!selfAnalog.Equals(otherAnalog))
-                    return false;
-            }
-            else if (self is Archive selfArchive && other is Archive otherArchive)
-            {
-                if (!selfArchive.Equals(otherArchive))
-                    return false;
-            }
-            else if (self is BiosSet selfBiosSet && other is BiosSet otherBiosSet)
-            {
-                if (!selfBiosSet.Equals(otherBiosSet))
-                    return false;
-            }
-            else if (self is Chip selfChip && other is Chip otherChip)
-            {
-                if (!selfChip.Equals(otherChip))
-                    return false;
-            }
-            else if (self is Condition selfCondition && other is Condition otherCondition)
-            {
-                if (!selfCondition.Equals(otherCondition))
-                    return false;
-            }
-            else if (self is Configuration selfConfiguration && other is Configuration otherConfiguration)
-            {
-                if (!selfConfiguration.Equals(otherConfiguration))
-                    return false;
-            }
-            else if (self is ConfLocation selfConfLocation && other is ConfLocation otherConfLocation)
-            {
-                if (!selfConfLocation.Equals(otherConfLocation))
-                    return false;
-            }
-            else if (self is ConfSetting selfConfSetting && other is ConfSetting otherConfSetting)
-            {
-                if (!selfConfSetting.Equals(otherConfSetting))
-                    return false;
-            }
-            else if (self is Control selfControl && other is Control otherControl)
-            {
-                if (!selfControl.Equals(otherControl))
-                    return false;
-            }
-            else if (self is DataArea selfDataArea && other is DataArea otherDataArea)
-            {
-                if (!selfDataArea.Equals(otherDataArea))
-                    return false;
-            }
-            else if (self is Device selfDevice && other is Device otherDevice)
-            {
-                if (!selfDevice.Equals(otherDevice))
-                    return false;
-            }
-            else if (self is DipLocation selfDipLocation && other is DipLocation otherDipLocation)
-            {
-                if (!selfDipLocation.Equals(otherDipLocation))
-                    return false;
-            }
-            else if (self is DipSwitch selfDipSwitch && other is DipSwitch otherDipSwitch)
-            {
-                if (!selfDipSwitch.Equals(otherDipSwitch))
-                    return false;
-            }
-            else if (self is DipValue selfDipValue && other is DipValue otherDipValue)
-            {
-                if (!selfDipValue.Equals(otherDipValue))
-                    return false;
-            }
-            else if (self is Disk selfDisk && other is Disk otherDisk)
-            {
-                // Intentionally skipped here
-            }
-            else if (self is DiskArea selfDiskArea && other is DiskArea otherDiskArea)
-            {
-                if (!selfDiskArea.Equals(otherDiskArea))
-                    return false;
-            }
-            else if (self is Display selfDisplay && other is Display otherDisplay)
-            {
-                if (!selfDisplay.Equals(otherDisplay))
-                    return false;
-            }
-            else if (self is Driver selfDriver && other is Driver otherDriver)
-            {
-                if (!selfDriver.Equals(otherDriver))
-                    return false;
-            }
-            else if (self is Feature selfFeature && other is Feature otherFeature)
-            {
-                if (!selfFeature.Equals(otherFeature))
-                    return false;
-            }
-            else if (self is Header selfHeader && other is Header otherHeader)
+            if (self is Header selfHeader && other is Header otherHeader)
             {
                 if (selfHeader.Author != otherHeader.Author)
                     return false;
@@ -230,21 +235,6 @@ namespace SabreTools.Metadata
                 if (selfHeader.Url != otherHeader.Url)
                     return false;
                 if (selfHeader.Version != otherHeader.Version)
-                    return false;
-            }
-            else if (self is Info selfInfo && other is Info otherInfo)
-            {
-                if (!selfInfo.Equals(otherInfo))
-                    return false;
-            }
-            else if (self is Input selfInput && other is Input otherInput)
-            {
-                if (!selfInput.Equals(otherInput))
-                    return false;
-            }
-            else if (self is Instance selfInstance && other is Instance otherInstance)
-            {
-                if (!selfInstance.Equals(otherInstance))
                     return false;
             }
             else if (self is Machine selfMachine && other is Machine otherMachine)
@@ -344,84 +334,6 @@ namespace SabreTools.Metadata
                 if (selfMachine.Url != otherMachine.Url)
                     return false;
                 if (selfMachine.Year != otherMachine.Year)
-                    return false;
-            }
-            else if (self is Media selfMedia && other is Media otherMedia)
-            {
-                // Intentionally skipped here
-            }
-            else if (self is Original selfOriginal && other is Original otherOriginal)
-            {
-                if (!selfOriginal.Equals(otherOriginal))
-                    return false;
-            }
-            else if (self is Part selfPart && other is Part otherPart)
-            {
-                if (!selfPart.Equals(otherPart))
-                    return false;
-            }
-            else if (self is Port selfPort && other is Port otherPort)
-            {
-                if (!selfPort.Equals(otherPort))
-                    return false;
-            }
-            else if (self is RamOption selfRamOption && other is RamOption otherRamOption)
-            {
-                if (!selfRamOption.Equals(otherRamOption))
-                    return false;
-            }
-            else if (self is Release selfRelease && other is Release otherRelease)
-            {
-                if (!selfRelease.Equals(otherRelease))
-                    return false;
-            }
-            else if (self is ReleaseDetails selfReleaseDetails && other is ReleaseDetails otherReleaseDetails)
-            {
-                if (!selfReleaseDetails.Equals(otherReleaseDetails))
-                    return false;
-            }
-            else if (self is Rom selfRom && other is Rom otherRom)
-            {
-                // Intentionally skipped here
-            }
-            else if (self is Serials selfSerials && other is Serials otherSerials)
-            {
-                if (!selfSerials.Equals(otherSerials))
-                    return false;
-            }
-            else if (self is SharedFeat selfSharedFeat && other is SharedFeat otherSharedFeat)
-            {
-                if (!selfSharedFeat.Equals(otherSharedFeat))
-                    return false;
-            }
-            else if (self is Slot selfSlot && other is Slot otherSlot)
-            {
-                if (!selfSlot.Equals(otherSlot))
-                    return false;
-            }
-            else if (self is SlotOption selfSlotOption && other is SlotOption otherSlotOption)
-            {
-                if (!selfSlotOption.Equals(otherSlotOption))
-                    return false;
-            }
-            else if (self is SoftwareList selfSoftwareList && other is SoftwareList otherSoftwareList)
-            {
-                if (!selfSoftwareList.Equals(otherSoftwareList))
-                    return false;
-            }
-            else if (self is Sound selfSound && other is Sound otherSound)
-            {
-                if (!selfSound.Equals(otherSound))
-                    return false;
-            }
-            else if (self is SourceDetails selfSourceDetails && other is SourceDetails otherSourceDetails)
-            {
-                if (!selfSourceDetails.Equals(otherSourceDetails))
-                    return false;
-            }
-            else if (self is Video selfVideo && other is Video otherVideo)
-            {
-                if (!selfVideo.Equals(otherVideo))
                     return false;
             }
 
