@@ -11,7 +11,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
     /// </summary>
     public sealed class ClrMamePro : SerializableDatFile<Data.Models.ClrMamePro.MetadataFile, Serialization.Readers.ClrMamePro, Serialization.Writers.ClrMamePro, Serialization.CrossModel.ClrMamePro>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.ItemType[] SupportedTypes

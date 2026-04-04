@@ -11,7 +11,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("media"), XmlRoot("media")]
     public sealed class Media : DatItem<Data.Models.Metadata.Media>
     {
-        #region Fields
+        #region Properties
 
         public string? MD5
         {

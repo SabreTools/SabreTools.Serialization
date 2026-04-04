@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("softwarelist"), XmlRoot("softwarelist")]
     public sealed class SoftwareList : DatItem<Data.Models.Metadata.SoftwareList>
     {
-        #region Fields
+        #region Properties
 
         public string? Filter
         {

@@ -10,7 +10,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("slot"), XmlRoot("slot")]
     public sealed class Slot : DatItem<Data.Models.Metadata.Slot>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType

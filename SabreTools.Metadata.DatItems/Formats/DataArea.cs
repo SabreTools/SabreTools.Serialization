@@ -11,7 +11,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("dataarea"), XmlRoot("dataarea")]
     public sealed class DataArea : DatItem<Data.Models.Metadata.DataArea>
     {
-        #region Fields
+        #region Properties
 
         public Data.Models.Metadata.Endianness? Endianness
         {

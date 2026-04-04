@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("analog"), XmlRoot("analog")]
     public sealed class Analog : DatItem<Data.Models.Metadata.Analog>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType

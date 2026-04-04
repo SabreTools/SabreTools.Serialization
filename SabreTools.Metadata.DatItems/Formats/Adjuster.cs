@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("adjuster"), XmlRoot("adjuster")]
     public sealed class Adjuster : DatItem<Data.Models.Metadata.Adjuster>
     {
-        #region Fields
+        #region Properties
 
         public Condition? Condition { get; set; }
 

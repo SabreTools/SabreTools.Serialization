@@ -134,7 +134,7 @@ namespace SabreTools.Metadata.DatFiles
 
         #endregion
 
-        #region Fields
+        #region Properties
 
         /// <summary>
         /// Get the keys in sorted order from the file dictionary

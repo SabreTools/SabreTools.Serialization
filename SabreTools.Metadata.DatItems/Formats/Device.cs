@@ -10,7 +10,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("device"), XmlRoot("device")]
     public sealed class Device : DatItem<Data.Models.Metadata.Device>
     {
-        #region Fields
+        #region Properties
 
         public Data.Models.Metadata.DeviceType? DeviceType
         {

@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         #endregion
 
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.File;

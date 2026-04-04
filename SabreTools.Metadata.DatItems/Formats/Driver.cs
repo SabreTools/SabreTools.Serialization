@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("driver"), XmlRoot("driver")]
     public sealed class Driver : DatItem<Data.Models.Metadata.Driver>
     {
-        #region Fields
+        #region Properties
 
         public Data.Models.Metadata.Blit? Blit
         {

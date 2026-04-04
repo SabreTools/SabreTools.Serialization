@@ -10,7 +10,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("dipswitch"), XmlRoot("dipswitch")]
     public sealed class DipSwitch : DatItem<Data.Models.Metadata.DipSwitch>
     {
-        #region Fields
+        #region Properties
 
         public Condition? Condition { get; set; }
 

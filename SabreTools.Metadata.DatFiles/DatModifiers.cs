@@ -7,7 +7,7 @@ namespace SabreTools.Metadata.DatFiles
     /// </summary>
     public sealed class DatModifiers : ICloneable
     {
-        #region Fields
+        #region Properties
 
         /// <summary>
         /// Text to prepend to all outputted lines

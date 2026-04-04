@@ -11,7 +11,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("part"), XmlRoot("part")]
     public sealed class Part : DatItem<Data.Models.Metadata.Part>
     {
-        #region Fields
+        #region Properties
 
         public DataArea[]? DataArea { get; set; }
 

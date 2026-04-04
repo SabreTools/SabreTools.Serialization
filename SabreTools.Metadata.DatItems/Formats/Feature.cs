@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("feature"), XmlRoot("feature")]
     public sealed class Feature : DatItem<Data.Models.Metadata.Feature>
     {
-        #region Fields
+        #region Properties
 
         public Data.Models.Metadata.FeatureType? FeatureType
         {

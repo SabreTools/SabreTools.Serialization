@@ -19,7 +19,7 @@ namespace SabreTools.Metadata.DatFiles
     [JsonObject("datfile"), XmlRoot("datfile")]
     public abstract partial class DatFile
     {
-        #region Fields
+        #region Properties
 
         /// <summary>
         /// Header values

@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("dipvalue"), XmlRoot("dipvalue")]
     public sealed class DipValue : DatItem<Data.Models.Metadata.DipValue>
     {
-        #region Fields
+        #region Properties
 
         public Condition? Condition { get; set; }
 

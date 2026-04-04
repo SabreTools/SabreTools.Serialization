@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("sample"), XmlRoot("sample")]
     public class Sample : DatItem<Data.Models.Metadata.Sample>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType

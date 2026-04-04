@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("instance"), XmlRoot("instance")]
     public sealed class Instance : DatItem<Data.Models.Metadata.Instance>
     {
-        #region Fields
+        #region Properties
 
         public string? BriefName
         {

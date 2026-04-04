@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("source_details"), XmlRoot("source_details")]
     public sealed class SourceDetails : DatItem<Data.Models.Metadata.SourceDetails>
     {
-        #region Fields
+        #region Properties
 
         public string? AppendToNumber
         {

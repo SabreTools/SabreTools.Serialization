@@ -10,7 +10,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("input"), XmlRoot("input")]
     public sealed class Input : DatItem<Data.Models.Metadata.Input>
     {
-        #region Fields
+        #region Properties
 
         public long? Buttons
         {

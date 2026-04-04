@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("chip"), XmlRoot("chip")]
     public sealed class Chip : DatItem<Data.Models.Metadata.Chip>
     {
-        #region Fields
+        #region Properties
 
         public Data.Models.Metadata.ChipType? ChipType
         {

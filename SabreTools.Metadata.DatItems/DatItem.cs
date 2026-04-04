@@ -55,7 +55,7 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(SourceDetails))]
     public abstract class DatItem : ModelBackedItem<Data.Models.Metadata.DatItem>, IEquatable<DatItem>, IComparable<DatItem>, ICloneable
     {
-        #region Fields
+        #region Properties
 
         /// <summary>
         /// Duplicate type when compared to another item

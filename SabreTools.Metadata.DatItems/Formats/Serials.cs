@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("serials"), XmlRoot("serials")]
     public sealed class Serials : DatItem<Data.Models.Metadata.Serials>
     {
-        #region Fields
+        #region Properties
 
         public string? BoxBarcode
         {

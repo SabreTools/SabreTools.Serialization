@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("sound"), XmlRoot("sound")]
     public sealed class Sound : DatItem<Data.Models.Metadata.Sound>
     {
-        #region Fields
+        #region Properties
 
         public long? Channels
         {

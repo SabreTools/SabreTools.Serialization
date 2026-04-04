@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("sharedfeat"), XmlRoot("sharedfeat")]
     public sealed class SharedFeat : DatItem<Data.Models.Metadata.SharedFeat>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType

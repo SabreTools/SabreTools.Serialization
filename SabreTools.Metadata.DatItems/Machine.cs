@@ -13,7 +13,7 @@ namespace SabreTools.Metadata.DatItems
     [JsonObject("machine"), XmlRoot("machine")]
     public sealed class Machine : ModelBackedItem<Data.Models.Metadata.Machine>, ICloneable, IEquatable<Machine>
     {
-        #region Fields
+        #region Properties
 
         public string? Board
         {

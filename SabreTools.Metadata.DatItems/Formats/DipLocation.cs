@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("diplocation"), XmlRoot("diplocation")]
     public sealed class DipLocation : DatItem<Data.Models.Metadata.DipLocation>
     {
-        #region Fields
+        #region Properties
 
         public bool? Inverted
         {

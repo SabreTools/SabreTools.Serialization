@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("confsetting"), XmlRoot("confsetting")]
     public sealed class ConfSetting : DatItem<Data.Models.Metadata.ConfSetting>
     {
-        #region Fields
+        #region Properties
 
         public Condition? Condition { get; set; }
 

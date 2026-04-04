@@ -220,7 +220,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
         #endregion
 
-        #region Fields
+        #region Properties
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.ItemType[] SupportedTypes

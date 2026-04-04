@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("archive"), XmlRoot("archive")]
     public sealed class Archive : DatItem<Data.Models.Metadata.Archive>
     {
-        #region Fields
+        #region Properties
 
         public string? Additional
         {

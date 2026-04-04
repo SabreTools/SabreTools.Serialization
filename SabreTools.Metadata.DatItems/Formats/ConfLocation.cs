@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("conflocation"), XmlRoot("conflocation")]
     public sealed class ConfLocation : DatItem<Data.Models.Metadata.ConfLocation>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType

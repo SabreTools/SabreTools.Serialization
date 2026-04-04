@@ -15,7 +15,7 @@ namespace SabreTools.Metadata.DatFiles
     [JsonObject("header"), XmlRoot("header")]
     public sealed class DatHeader : ModelBackedItem<Data.Models.Metadata.Header>, ICloneable
     {
-        #region Fields
+        #region Properties
 
         public string? Author
         {

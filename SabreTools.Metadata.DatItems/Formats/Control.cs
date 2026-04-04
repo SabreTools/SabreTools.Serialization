@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("control"), XmlRoot("control")]
     public sealed class Control : DatItem<Data.Models.Metadata.Control>
     {
-        #region Fields
+        #region Properties
 
         public long? Buttons
         {

@@ -39,7 +39,7 @@ namespace SabreTools.Metadata.DatFiles
 
         #endregion
 
-        #region Fields
+        #region Properties
 
         /// <summary>
         /// Overall item count

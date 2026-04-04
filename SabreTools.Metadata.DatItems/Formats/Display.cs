@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("display"), XmlRoot("display")]
     public sealed class Display : DatItem<Data.Models.Metadata.Display>
     {
-        #region Fields
+        #region Properties
 
         public long? AspectX
         {

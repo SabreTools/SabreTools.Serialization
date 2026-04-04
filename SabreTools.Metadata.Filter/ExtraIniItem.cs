@@ -8,7 +8,7 @@ namespace SabreTools.Metadata.Filter
 {
     public class ExtraIniItem
     {
-        #region Fields
+        #region Properties
 
         /// <summary>
         /// Item type and field to update with INI information

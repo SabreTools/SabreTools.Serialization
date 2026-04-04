@@ -18,7 +18,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         #endregion
 
-        #region Fields
+        #region Properties
 
         public DataArea? DataArea { get; set; }
 

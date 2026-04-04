@@ -10,7 +10,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("port"), XmlRoot("port")]
     public sealed class Port : DatItem<Data.Models.Metadata.Port>
     {
-        #region Fields
+        #region Properties
 
         public Analog[]? Analog { get; set; }
 

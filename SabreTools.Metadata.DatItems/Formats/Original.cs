@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("original"), XmlRoot("original")]
     public sealed class Original
     {
-        #region Fields
+        #region Properties
 
         [JsonProperty("content"), XmlElement("content")]
         public string? Content

@@ -12,7 +12,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("disk"), XmlRoot("disk")]
     public sealed class Disk : DatItem<Data.Models.Metadata.Disk>
     {
-        #region Fields
+        #region Properties
 
         public DiskArea? DiskArea { get; set; }
 

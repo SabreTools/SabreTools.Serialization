@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("device_ref"), XmlRoot("device_ref")]
     public sealed class DeviceRef : DatItem<Data.Models.Metadata.DeviceRef>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType

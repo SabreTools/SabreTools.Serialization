@@ -12,7 +12,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
     /// </summary>
     public abstract class SeparatedValue : SerializableDatFile<Data.Models.SeparatedValue.MetadataFile, Serialization.Readers.SeparatedValue, Serialization.Writers.SeparatedValue, Serialization.CrossModel.SeparatedValue>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.ItemType[] SupportedTypes
