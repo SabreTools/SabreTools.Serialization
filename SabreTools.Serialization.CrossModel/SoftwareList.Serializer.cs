@@ -56,13 +56,13 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Info is not null && item.Info.Length > 0)
-                machine[Data.Models.Metadata.Machine.InfoKey] = Array.ConvertAll(item.Info, ConvertToInternalModel);
+                machine.Info = Array.ConvertAll(item.Info, ConvertToInternalModel);
 
             if (item.SharedFeat is not null && item.SharedFeat.Length > 0)
-                machine[Data.Models.Metadata.Machine.SharedFeatKey] = Array.ConvertAll(item.SharedFeat, ConvertToInternalModel);
+                machine.SharedFeat = Array.ConvertAll(item.SharedFeat, ConvertToInternalModel);
 
             if (item.Part is not null && item.Part.Length > 0)
-                machine[Data.Models.Metadata.Machine.PartKey] = Array.ConvertAll(item.Part, ConvertToInternalModel);
+                machine.Part = Array.ConvertAll(item.Part, ConvertToInternalModel);
 
             return machine;
         }

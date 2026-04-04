@@ -8,9 +8,17 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public Adjuster[]? Adjuster { get; set; }
+
+        public Archive[]? Archive { get; set; }
+
+        public BiosSet[]? BiosSet { get; set; }
+
         public string? Board { get; set; }
 
         public string? Buttons { get; set; }
+
+        public Chip[]? Chip { get; set; }
 
         public string? CloneOf { get; set; }
 
@@ -18,17 +26,33 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Company { get; set; }
 
+        public Configuration[]? Configuration { get; set; }
+
         public string? Control { get; set; }
 
         public string? Country { get; set; }
 
         public string? Description { get; set; }
 
+        public Device[]? Device { get; set; }
+
+        public DeviceRef[]? DeviceRef { get; set; }
+
+        public DipSwitch[]? DipSwitch { get; set; }
+
         public string? DirName { get; set; }
+
+        public Disk[]? Disk { get; set; }
+
+        public Display[]? Display { get; set; }
 
         public string? DisplayCount { get; set; }
 
         public string? DisplayType { get; set; }
+
+        public Driver? Driver { get; set; }
+
+        public Dump[]? Dump { get; set; }
 
         public string? DuplicateID { get; set; }
 
@@ -37,6 +61,8 @@ namespace SabreTools.Data.Models.Metadata
         public string? Extra { get; set; }
 
         public string? Favorite { get; set; }
+
+        public Feature[]? Feature { get; set; }
 
         public string? GenMSXID { get; set; }
 
@@ -51,6 +77,10 @@ namespace SabreTools.Data.Models.Metadata
         public string? Im2CRC { get; set; }
 
         public string? ImageNumber { get; set; }
+
+        public Info[]? Info { get; set; }
+
+        public Input? Input { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         public bool? IsBios { get; set; }
@@ -67,9 +97,13 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Manufacturer { get; set; }
 
+        public Media[]? Media { get; set; }
+
         public string? Name { get; set; }
 
         public string? Notes { get; set; }
+
+        public Part[]? Part { get; set; }
 
         public string? PlayedCount { get; set; }
 
@@ -77,11 +111,19 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Players { get; set; }
 
+        public Port[]? Port { get; set; }
+
         public string? Publisher { get; set; }
+
+        public RamOption[]? RamOption { get; set; }
 
         public string? RebuildTo { get; set; }
 
+        public Release[]? Release { get; set; }
+
         public string? ReleaseNumber { get; set; }
+
+        public Rom[]? Rom { get; set; }
 
         public string? RomOf { get; set; }
 
@@ -90,9 +132,19 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(yes|partial|no) "no"</remarks>
         public Runnable? Runnable { get; set; }
 
+        public Sample[]? Sample { get; set; }
+
         public string? SampleOf { get; set; }
 
         public string? SaveType { get; set; }
+
+        public SharedFeat[]? SharedFeat { get; set; }
+
+        public Slot[]? Slot { get; set; }
+
+        public SoftwareList[]? SoftwareList { get; set; }
+
+        public Sound? Sound { get; set; }
 
         public string? SourceFile { get; set; }
 
@@ -109,130 +161,24 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Url { get; set; }
 
+        public Video[]? Video { get; set; }
+
         public string? Year { get; set; }
 
         #endregion
 
         #region Keys
 
-        /// <remarks>Adjuster[]</remarks>
-        [NoFilter]
-        public const string AdjusterKey = "adjuster";
-
-        /// <remarks>Archive[]</remarks>
-        [NoFilter]
-        public const string ArchiveKey = "archive";
-
-        /// <remarks>BiosSet[]</remarks>
-        [NoFilter]
-        public const string BiosSetKey = "biosset";
-
         /// <remarks>string, string[]</remarks>
         public const string CategoryKey = "category";
 
-        /// <remarks>Chip[]</remarks>
-        [NoFilter]
-        public const string ChipKey = "chip";
-
         /// <remarks>string, string[]</remarks>
         public const string CommentKey = "comment";
-
-        /// <remarks>Configuration[]</remarks>
-        [NoFilter]
-        public const string ConfigurationKey = "configuration";
-
-        /// <remarks>Device[]</remarks>
-        [NoFilter]
-        public const string DeviceKey = "device";
-
-        /// <remarks>DeviceRef[]</remarks>
-        [NoFilter]
-        public const string DeviceRefKey = "device_ref";
-
-        /// <remarks>DipSwitch[]</remarks>
-        [NoFilter]
-        public const string DipSwitchKey = "dipswitch";
-
-        /// <remarks>Disk[]</remarks>
-        [NoFilter]
-        public const string DiskKey = "disk";
-
-        /// <remarks>Display[]</remarks>
-        [NoFilter]
-        public const string DisplayKey = "display";
-
-        /// <remarks>Driver</remarks>
-        [NoFilter]
-        public const string DriverKey = "driver";
-
-        /// <remarks>Dump[]</remarks>
-        [NoFilter]
-        public const string DumpKey = "dump";
-
-        /// <remarks>Feature[]</remarks>
-        [NoFilter]
-        public const string FeatureKey = "feature";
-
-        /// <remarks>Info[]</remarks>
-        [NoFilter]
-        public const string InfoKey = "info";
-
-        /// <remarks>Input</remarks>
-        [NoFilter]
-        public const string InputKey = "input";
-
-        /// <remarks>Media[]</remarks>
-        [NoFilter]
-        public const string MediaKey = "media";
-
-        /// <remarks>Part[]</remarks>
-        [NoFilter]
-        public const string PartKey = "part";
-
-        /// <remarks>Port[]</remarks>
-        [NoFilter]
-        public const string PortKey = "port";
-
-        /// <remarks>RamOption[]</remarks>
-        [NoFilter]
-        public const string RamOptionKey = "ramoption";
-
-        /// <remarks>Release[]</remarks>
-        [NoFilter]
-        public const string ReleaseKey = "release";
-
-        /// <remarks>Rom[]</remarks>
-        [NoFilter]
-        public const string RomKey = "rom";
-
-        /// <remarks>Sample[]</remarks>
-        [NoFilter]
-        public const string SampleKey = "sample";
-
-        /// <remarks>SharedFeat[]</remarks>
-        [NoFilter]
-        public const string SharedFeatKey = "sharedfeat";
-
-        /// <remarks>Slot[]</remarks>
-        [NoFilter]
-        public const string SlotKey = "slot";
-
-        /// <remarks>SoftwareList[]</remarks>
-        [NoFilter]
-        public const string SoftwareListKey = "softwarelist";
-
-        /// <remarks>Sound</remarks>
-        [NoFilter]
-        public const string SoundKey = "sound";
 
         /// TODO: This needs an internal model OR mapping to fields
         /// <remarks>Trurip</remarks>
         [NoFilter]
         public const string TruripKey = "trurip";
-
-        /// <remarks>Video[]</remarks>
-        [NoFilter]
-        public const string VideoKey = "video";
 
         #endregion
     }

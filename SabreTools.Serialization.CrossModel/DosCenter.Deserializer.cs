@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
             };
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
                 game.File = Array.ConvertAll(roms, ConvertFromInternalModel);
 

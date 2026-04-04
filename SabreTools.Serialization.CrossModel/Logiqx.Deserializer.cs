@@ -144,43 +144,43 @@ namespace SabreTools.Serialization.CrossModel
             if (trurip is not null)
                 gameBase.Trurip = trurip;
 
-            var releases = item.Read<Data.Models.Metadata.Release[]>(Data.Models.Metadata.Machine.ReleaseKey);
+            var releases = item.Release;
             if (releases is not null && releases.Length > 0)
                 gameBase.Release = Array.ConvertAll(releases, ConvertFromInternalModel);
 
-            var biosSets = item.Read<Data.Models.Metadata.BiosSet[]>(Data.Models.Metadata.Machine.BiosSetKey);
+            var biosSets = item.BiosSet;
             if (biosSets is not null && biosSets.Length > 0)
                 gameBase.BiosSet = Array.ConvertAll(biosSets, ConvertFromInternalModel);
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
                 gameBase.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
-            var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
+            var disks = item.Disk;
             if (disks is not null && disks.Length > 0)
                 gameBase.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
-            var medias = item.Read<Data.Models.Metadata.Media[]>(Data.Models.Metadata.Machine.MediaKey);
+            var medias = item.Media;
             if (medias is not null && medias.Length > 0)
                 gameBase.Media = Array.ConvertAll(medias, ConvertFromInternalModel);
 
-            var deviceRefs = item.Read<Data.Models.Metadata.DeviceRef[]>(Data.Models.Metadata.Machine.DeviceRefKey);
+            var deviceRefs = item.DeviceRef;
             if (deviceRefs is not null && deviceRefs.Length > 0)
                 gameBase.DeviceRef = Array.ConvertAll(deviceRefs, ConvertFromInternalModel);
 
-            var samples = item.Read<Data.Models.Metadata.Sample[]>(Data.Models.Metadata.Machine.SampleKey);
+            var samples = item.Sample;
             if (samples is not null && samples.Length > 0)
                 gameBase.Sample = Array.ConvertAll(samples, ConvertFromInternalModel);
 
-            var archives = item.Read<Data.Models.Metadata.Archive[]>(Data.Models.Metadata.Machine.ArchiveKey);
+            var archives = item.Archive;
             if (archives is not null && archives.Length > 0)
                 gameBase.Archive = Array.ConvertAll(archives, ConvertFromInternalModel);
 
-            var driver = item.Read<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey);
+            var driver = item.Driver;
             if (driver is not null)
                 gameBase.Driver = ConvertFromInternalModel(driver);
 
-            var softwareLists = item.Read<Data.Models.Metadata.SoftwareList[]>(Data.Models.Metadata.Machine.SoftwareListKey);
+            var softwareLists = item.SoftwareList;
             if (softwareLists is not null && softwareLists.Length > 0)
                 gameBase.SoftwareList = Array.ConvertAll(softwareLists, ConvertFromInternalModel);
 

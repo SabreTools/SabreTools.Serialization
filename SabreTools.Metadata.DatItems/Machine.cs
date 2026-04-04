@@ -321,36 +321,7 @@ namespace SabreTools.Metadata.DatItems
         public Machine(Data.Models.Metadata.Machine machine)
         {
             _internal = machine.DeepClone() as Data.Models.Metadata.Machine ?? [];
-
-            // Remove all inverted fields
-            Remove(Data.Models.Metadata.Machine.AdjusterKey);
-            Remove(Data.Models.Metadata.Machine.ArchiveKey);
-            Remove(Data.Models.Metadata.Machine.BiosSetKey);
-            Remove(Data.Models.Metadata.Machine.ChipKey);
-            Remove(Data.Models.Metadata.Machine.ConfigurationKey);
-            Remove(Data.Models.Metadata.Machine.DeviceKey);
-            Remove(Data.Models.Metadata.Machine.DeviceRefKey);
-            Remove(Data.Models.Metadata.Machine.DipSwitchKey);
-            Remove(Data.Models.Metadata.Machine.DiskKey);
-            Remove(Data.Models.Metadata.Machine.DisplayKey);
-            Remove(Data.Models.Metadata.Machine.DriverKey);
-            Remove(Data.Models.Metadata.Machine.DumpKey);
-            Remove(Data.Models.Metadata.Machine.FeatureKey);
-            Remove(Data.Models.Metadata.Machine.InfoKey);
-            Remove(Data.Models.Metadata.Machine.InputKey);
-            Remove(Data.Models.Metadata.Machine.MediaKey);
-            Remove(Data.Models.Metadata.Machine.PartKey);
-            Remove(Data.Models.Metadata.Machine.PortKey);
-            Remove(Data.Models.Metadata.Machine.RamOptionKey);
-            Remove(Data.Models.Metadata.Machine.ReleaseKey);
-            Remove(Data.Models.Metadata.Machine.RomKey);
-            Remove(Data.Models.Metadata.Machine.SampleKey);
-            Remove(Data.Models.Metadata.Machine.SharedFeatKey);
-            Remove(Data.Models.Metadata.Machine.SlotKey);
-            Remove(Data.Models.Metadata.Machine.SoftwareListKey);
-            Remove(Data.Models.Metadata.Machine.SoundKey);
             Remove(Data.Models.Metadata.Machine.TruripKey);
-            Remove(Data.Models.Metadata.Machine.VideoKey);
 
             // Process flag values
             if (Im1CRC is not null)

@@ -51,15 +51,15 @@ namespace SabreTools.Serialization.CrossModel
                 Notes = item.Notes,
             };
 
-            var infos = item.Read<Data.Models.Metadata.Info[]>(Data.Models.Metadata.Machine.InfoKey);
+            var infos = item.Info;
             if (infos is not null && infos.Length > 0)
                 software.Info = Array.ConvertAll(infos, ConvertFromInternalModel);
 
-            var sharedFeats = item.Read<Data.Models.Metadata.SharedFeat[]>(Data.Models.Metadata.Machine.SharedFeatKey);
+            var sharedFeats = item.SharedFeat;
             if (sharedFeats is not null && sharedFeats.Length > 0)
                 software.SharedFeat = Array.ConvertAll(sharedFeats, ConvertFromInternalModel);
 
-            var parts = item.Read<Data.Models.Metadata.Part[]>(Data.Models.Metadata.Machine.PartKey);
+            var parts = item.Part;
             if (parts is not null && parts.Length > 0)
                 software.Part = Array.ConvertAll(parts, ConvertFromInternalModel);
 

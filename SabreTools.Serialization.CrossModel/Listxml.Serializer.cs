@@ -63,112 +63,112 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.BiosSet is not null && item.BiosSet.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.BiosSetKey]
+                machine.BiosSet
                     = Array.ConvertAll(item.BiosSet, ConvertToInternalModel);
             }
 
             if (item.Rom is not null && item.Rom.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.RomKey]
+                machine.Rom
                     = Array.ConvertAll(item.Rom, ConvertToInternalModel);
             }
 
             if (item.Disk is not null && item.Disk.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.DiskKey]
+                machine.Disk
                     = Array.ConvertAll(item.Disk, ConvertToInternalModel);
             }
 
             if (item.DeviceRef is not null && item.DeviceRef.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.DeviceRefKey]
+                machine.DeviceRef
                     = Array.ConvertAll(item.DeviceRef, ConvertToInternalModel);
             }
 
             if (item.Sample is not null && item.Sample.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.SampleKey]
+                machine.Sample
                     = Array.ConvertAll(item.Sample, ConvertToInternalModel);
             }
 
             if (item.Chip is not null && item.Chip.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.ChipKey]
+                machine.Chip
                     = Array.ConvertAll(item.Chip, ConvertToInternalModel);
             }
 
             if (item.Display is not null && item.Display.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.DisplayKey]
+                machine.Display
                     = Array.ConvertAll(item.Display, ConvertToInternalModel);
             }
 
             if (item.Video is not null && item.Video.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.VideoKey]
+                machine.Video
                     = Array.ConvertAll(item.Video, ConvertToInternalModel);
             }
 
             if (item.Sound is not null)
-                machine[Data.Models.Metadata.Machine.SoundKey] = ConvertToInternalModel(item.Sound);
+                machine.Sound = ConvertToInternalModel(item.Sound);
 
             if (item.Input is not null)
-                machine[Data.Models.Metadata.Machine.InputKey] = ConvertToInternalModel(item.Input);
+                machine.Input = ConvertToInternalModel(item.Input);
 
             if (item.DipSwitch is not null && item.DipSwitch.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.DipSwitchKey]
+                machine.DipSwitch
                     = Array.ConvertAll(item.DipSwitch, ConvertToInternalModel);
             }
 
             if (item.Configuration is not null && item.Configuration.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.ConfigurationKey]
+                machine.Configuration
                     = Array.ConvertAll(item.Configuration, ConvertToInternalModel);
             }
 
             if (item.Port is not null && item.Port.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.PortKey]
+                machine.Port
                     = Array.ConvertAll(item.Port, ConvertToInternalModel);
             }
 
             if (item.Adjuster is not null && item.Adjuster.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.AdjusterKey]
+                machine.Adjuster
                     = Array.ConvertAll(item.Adjuster, ConvertToInternalModel);
             }
 
             if (item.Driver is not null)
-                machine[Data.Models.Metadata.Machine.DriverKey] = ConvertToInternalModel(item.Driver);
+                machine.Driver = ConvertToInternalModel(item.Driver);
 
             if (item.Feature is not null && item.Feature.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.FeatureKey]
+                machine.Feature
                     = Array.ConvertAll(item.Feature, ConvertToInternalModel);
             }
 
             if (item.Device is not null && item.Device.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.DeviceKey]
+                machine.Device
                     = Array.ConvertAll(item.Device, ConvertToInternalModel);
             }
 
             if (item.Slot is not null && item.Slot.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.SlotKey]
+                machine.Slot
                     = Array.ConvertAll(item.Slot, ConvertToInternalModel);
             }
 
             if (item.SoftwareList is not null && item.SoftwareList.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.SoftwareListKey]
+                machine.SoftwareList
                     = Array.ConvertAll(item.SoftwareList, ConvertToInternalModel);
             }
 
             if (item.RamOption is not null && item.RamOption.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.RamOptionKey]
+                machine.RamOption
                     = Array.ConvertAll(item.RamOption, ConvertToInternalModel);
             }
 

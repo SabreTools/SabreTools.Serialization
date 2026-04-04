@@ -58,83 +58,83 @@ namespace SabreTools.Serialization.CrossModel
                 History = item.History,
             };
 
-            var biosSets = item.Read<Data.Models.Metadata.BiosSet[]>(Data.Models.Metadata.Machine.BiosSetKey);
+            var biosSets = item.BiosSet;
             if (biosSets is not null && biosSets.Length > 0)
                 machine.BiosSet = Array.ConvertAll(biosSets, ConvertFromInternalModel);
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
                 machine.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
-            var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
+            var disks = item.Disk;
             if (disks is not null && disks.Length > 0)
                 machine.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
-            var deviceRefs = item.Read<Data.Models.Metadata.DeviceRef[]>(Data.Models.Metadata.Machine.DeviceRefKey);
+            var deviceRefs = item.DeviceRef;
             if (deviceRefs is not null && deviceRefs.Length > 0)
                 machine.DeviceRef = Array.ConvertAll(deviceRefs, ConvertFromInternalModel);
 
-            var samples = item.Read<Data.Models.Metadata.Sample[]>(Data.Models.Metadata.Machine.SampleKey);
+            var samples = item.Sample;
             if (samples is not null && samples.Length > 0)
                 machine.Sample = Array.ConvertAll(samples, ConvertFromInternalModel);
 
-            var chips = item.Read<Data.Models.Metadata.Chip[]>(Data.Models.Metadata.Machine.ChipKey);
+            var chips = item.Chip;
             if (chips is not null && chips.Length > 0)
                 machine.Chip = Array.ConvertAll(chips, ConvertFromInternalModel);
 
-            var displays = item.Read<Data.Models.Metadata.Display[]>(Data.Models.Metadata.Machine.DisplayKey);
+            var displays = item.Display;
             if (displays is not null && displays.Length > 0)
                 machine.Display = Array.ConvertAll(displays, ConvertFromInternalModel);
 
-            var videos = item.Read<Data.Models.Metadata.Video[]>(Data.Models.Metadata.Machine.VideoKey);
+            var videos = item.Video;
             if (videos is not null && videos.Length > 0)
                 machine.Video = Array.ConvertAll(videos, ConvertFromInternalModel);
 
-            var sound = item.Read<Data.Models.Metadata.Sound>(Data.Models.Metadata.Machine.SoundKey);
+            var sound = item.Sound;
             if (sound is not null)
                 machine.Sound = ConvertFromInternalModel(sound);
 
-            var input = item.Read<Data.Models.Metadata.Input>(Data.Models.Metadata.Machine.InputKey);
+            var input = item.Input;
             if (input is not null)
                 machine.Input = ConvertFromInternalModel(input);
 
-            var dipSwitches = item.Read<Data.Models.Metadata.DipSwitch[]>(Data.Models.Metadata.Machine.DipSwitchKey);
+            var dipSwitches = item.DipSwitch;
             if (dipSwitches is not null && dipSwitches.Length > 0)
                 machine.DipSwitch = Array.ConvertAll(dipSwitches, ConvertFromInternalModel);
 
-            var configurations = item.Read<Data.Models.Metadata.Configuration[]>(Data.Models.Metadata.Machine.ConfigurationKey);
+            var configurations = item.Configuration;
             if (configurations is not null && configurations.Length > 0)
                 machine.Configuration = Array.ConvertAll(configurations, ConvertFromInternalModel);
 
-            var ports = item.Read<Data.Models.Metadata.Port[]>(Data.Models.Metadata.Machine.PortKey);
+            var ports = item.Port;
             if (ports is not null && ports.Length > 0)
                 machine.Port = Array.ConvertAll(ports, ConvertFromInternalModel);
 
-            var adjusters = item.Read<Data.Models.Metadata.Adjuster[]>(Data.Models.Metadata.Machine.AdjusterKey);
+            var adjusters = item.Adjuster;
             if (adjusters is not null && adjusters.Length > 0)
                 machine.Adjuster = Array.ConvertAll(adjusters, ConvertFromInternalModel);
 
-            var driver = item.Read<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey);
+            var driver = item.Driver;
             if (driver is not null)
                 machine.Driver = ConvertFromInternalModel(driver);
 
-            var features = item.Read<Data.Models.Metadata.Feature[]>(Data.Models.Metadata.Machine.FeatureKey);
+            var features = item.Feature;
             if (features is not null && features.Length > 0)
                 machine.Feature = Array.ConvertAll(features, ConvertFromInternalModel);
 
-            var devices = item.Read<Data.Models.Metadata.Device[]>(Data.Models.Metadata.Machine.DeviceKey);
+            var devices = item.Device;
             if (devices is not null && devices.Length > 0)
                 machine.Device = Array.ConvertAll(devices, ConvertFromInternalModel);
 
-            var slots = item.Read<Data.Models.Metadata.Slot[]>(Data.Models.Metadata.Machine.SlotKey);
+            var slots = item.Slot;
             if (slots is not null && slots.Length > 0)
                 machine.Slot = Array.ConvertAll(slots, ConvertFromInternalModel);
 
-            var softwareLists = item.Read<Data.Models.Metadata.SoftwareList[]>(Data.Models.Metadata.Machine.SoftwareListKey);
+            var softwareLists = item.SoftwareList;
             if (softwareLists is not null && softwareLists.Length > 0)
                 machine.SoftwareList = Array.ConvertAll(softwareLists, ConvertFromInternalModel);
 
-            var ramOptions = item.Read<Data.Models.Metadata.RamOption[]>(Data.Models.Metadata.Machine.RamOptionKey);
+            var ramOptions = item.RamOption;
             if (ramOptions is not null && ramOptions.Length > 0)
                 machine.RamOption = Array.ConvertAll(ramOptions, ConvertFromInternalModel);
 

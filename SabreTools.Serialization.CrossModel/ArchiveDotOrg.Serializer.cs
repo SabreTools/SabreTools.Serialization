@@ -47,7 +47,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var rom = ConvertToInternalModel(item);
             if (rom is not null)
-                machine[Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { rom };
+                machine.Rom = new Data.Models.Metadata.Rom[] { rom };
 
             return machine;
         }

@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.CrossModel
                 DuplicateID = item.DuplicateID,
             };
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
             {
                 var romSizes = Array.ConvertAll(roms, r => r.Size ?? -1);

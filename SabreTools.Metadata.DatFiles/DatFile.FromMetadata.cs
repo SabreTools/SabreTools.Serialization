@@ -237,9 +237,9 @@ namespace SabreTools.Metadata.DatFiles
             // long machineIndex = AddMachineDB(machine);
 
             // Convert items in the machine
-            if (item.ContainsKey(Data.Models.Metadata.Machine.AdjusterKey))
+            if (item.Adjuster is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Adjuster>(Data.Models.Metadata.Machine.AdjusterKey) ?? [];
+                var items = item.Adjuster ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -249,9 +249,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.ArchiveKey))
+            if (item.Archive is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Archive>(Data.Models.Metadata.Machine.ArchiveKey) ?? [];
+                var items = item.Archive ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -261,9 +261,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.BiosSetKey))
+            if (item.BiosSet is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.BiosSet>(Data.Models.Metadata.Machine.BiosSetKey) ?? [];
+                var items = item.BiosSet ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -273,9 +273,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.ChipKey))
+            if (item.Chip is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Chip>(Data.Models.Metadata.Machine.ChipKey) ?? [];
+                var items = item.Chip ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -285,9 +285,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.ConfigurationKey))
+            if (item.Configuration is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Configuration>(Data.Models.Metadata.Machine.ConfigurationKey) ?? [];
+                var items = item.Configuration ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -297,9 +297,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.DeviceKey))
+            if (item.Device is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Device>(Data.Models.Metadata.Machine.DeviceKey) ?? [];
+                var items = item.Device ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -309,9 +309,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.DeviceRefKey))
+            if (item.DeviceRef is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.DeviceRef>(Data.Models.Metadata.Machine.DeviceRefKey) ?? [];
+                var items = item.DeviceRef ?? [];
                 // Do not filter these due to later use
                 Array.ForEach(items, item =>
                 {
@@ -321,9 +321,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.DipSwitchKey))
+            if (item.DipSwitch is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Machine.DipSwitchKey) ?? [];
+                var items = item.DipSwitch ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -333,9 +333,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.DiskKey))
+            if (item.Disk is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.Machine.DiskKey) ?? [];
+                var items = item.Disk ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -345,9 +345,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.DisplayKey))
+            if (item.Display is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Display>(Data.Models.Metadata.Machine.DisplayKey) ?? [];
+                var items = item.Display ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -357,21 +357,16 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.DriverKey))
+            if (item.Driver is not null && filterRunner?.Run(item.Driver) != false)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey) ?? [];
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
-                {
-                    var datItem = new Driver(item, machine, source);
-                    AddItem(datItem, statsOnly);
-                    // AddItemDB(datItem, machineIndex, sourceIndex, statsOnly);
-                });
+                var datItem = new Driver(item.Driver, machine, source);
+                AddItem(datItem, statsOnly);
+                // AddItemDB(datItem, machineIndex, sourceIndex, statsOnly);
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.DumpKey))
+            if (item.Dump is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Dump>(Data.Models.Metadata.Machine.DumpKey) ?? [];
+                var items = item.Dump ?? [];
                 for (int i = 0; i < items.Length; i++)
                 {
                     var datItem = new Rom(items[i], machine, source, i);
@@ -383,9 +378,9 @@ namespace SabreTools.Metadata.DatFiles
                 }
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.FeatureKey))
+            if (item.Feature is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Machine.FeatureKey) ?? [];
+                var items = item.Feature ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -395,9 +390,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.InfoKey))
+            if (item.Info is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Info>(Data.Models.Metadata.Machine.InfoKey) ?? [];
+                var items = item.Info ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -407,21 +402,16 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.InputKey))
+            if (item.Input is not null && filterRunner?.Run(item.Input) != false)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Input>(Data.Models.Metadata.Machine.InputKey) ?? [];
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
-                {
-                    var datItem = new Input(item, machine, source);
-                    AddItem(datItem, statsOnly);
-                    // AddItemDB(datItem, machineIndex, sourceIndex, statsOnly);
-                });
+                var datItem = new Input(item.Input, machine, source);
+                AddItem(datItem, statsOnly);
+                // AddItemDB(datItem, machineIndex, sourceIndex, statsOnly);
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.MediaKey))
+            if (item.Media is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Media>(Data.Models.Metadata.Machine.MediaKey) ?? [];
+                var items = item.Media ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -431,15 +421,15 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.PartKey))
+            if (item.Part is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Part>(Data.Models.Metadata.Machine.PartKey) ?? [];
+                var items = item.Part ?? [];
                 ProcessItems(items, machine, machineIndex: 0, source, sourceIndex, statsOnly, filterRunner);
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.PortKey))
+            if (item.Port is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Port>(Data.Models.Metadata.Machine.PortKey) ?? [];
+                var items = item.Port ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -449,9 +439,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.RamOptionKey))
+            if (item.RamOption is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.RamOption>(Data.Models.Metadata.Machine.RamOptionKey) ?? [];
+                var items = item.RamOption ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -461,9 +451,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.ReleaseKey))
+            if (item.Release is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Release>(Data.Models.Metadata.Machine.ReleaseKey) ?? [];
+                var items = item.Release ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -473,9 +463,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.RomKey))
+            if (item.Rom is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.Machine.RomKey) ?? [];
+                var items = item.Rom ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -488,9 +478,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.SampleKey))
+            if (item.Sample is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Sample>(Data.Models.Metadata.Machine.SampleKey) ?? [];
+                var items = item.Sample ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -500,9 +490,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.SharedFeatKey))
+            if (item.SharedFeat is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.SharedFeat>(Data.Models.Metadata.Machine.SharedFeatKey) ?? [];
+                var items = item.SharedFeat ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -512,9 +502,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.SlotKey))
+            if (item.Slot is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Slot>(Data.Models.Metadata.Machine.SlotKey) ?? [];
+                var items = item.Slot ?? [];
                 // Do not filter these due to later use
                 Array.ForEach(items, item =>
                 {
@@ -524,9 +514,9 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.SoftwareListKey))
+            if (item.SoftwareList is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.SoftwareList>(Data.Models.Metadata.Machine.SoftwareListKey) ?? [];
+                var items = item.SoftwareList ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -536,21 +526,16 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.SoundKey))
+            if (item.Sound is not null && filterRunner?.Run(item.Sound) != false)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Sound>(Data.Models.Metadata.Machine.SoundKey) ?? [];
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
-                {
-                    var datItem = new Sound(item, machine, source);
-                    AddItem(datItem, statsOnly);
-                    // AddItemDB(datItem, machineIndex, sourceIndex, statsOnly);
-                });
+                var datItem = new Sound(item.Sound, machine, source);
+                AddItem(datItem, statsOnly);
+                // AddItemDB(datItem, machineIndex, sourceIndex, statsOnly);
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Machine.VideoKey))
+            if (item.Video is not null)
             {
-                var items = item.ReadArray<Data.Models.Metadata.Video>(Data.Models.Metadata.Machine.VideoKey) ?? [];
+                var items = item.Video ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {

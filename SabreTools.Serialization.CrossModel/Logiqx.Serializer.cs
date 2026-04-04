@@ -149,34 +149,34 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Release is not null && item.Release.Length > 0)
-                machine[Data.Models.Metadata.Machine.ReleaseKey] = Array.ConvertAll(item.Release, ConvertToInternalModel);
+                machine.Release = Array.ConvertAll(item.Release, ConvertToInternalModel);
 
             if (item.BiosSet is not null && item.BiosSet.Length > 0)
-                machine[Data.Models.Metadata.Machine.BiosSetKey] = Array.ConvertAll(item.BiosSet, ConvertToInternalModel);
+                machine.BiosSet = Array.ConvertAll(item.BiosSet, ConvertToInternalModel);
 
             if (item.Rom is not null && item.Rom.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.Rom, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.Rom, ConvertToInternalModel);
 
             if (item.Disk is not null && item.Disk.Length > 0)
-                machine[Data.Models.Metadata.Machine.DiskKey] = Array.ConvertAll(item.Disk, ConvertToInternalModel);
+                machine.Disk = Array.ConvertAll(item.Disk, ConvertToInternalModel);
 
             if (item.Media is not null && item.Media.Length > 0)
-                machine[Data.Models.Metadata.Machine.MediaKey] = Array.ConvertAll(item.Media, ConvertToInternalModel);
+                machine.Media = Array.ConvertAll(item.Media, ConvertToInternalModel);
 
             if (item.DeviceRef is not null && item.DeviceRef.Length > 0)
-                machine[Data.Models.Metadata.Machine.DeviceRefKey] = Array.ConvertAll(item.DeviceRef, ConvertToInternalModel);
+                machine.DeviceRef = Array.ConvertAll(item.DeviceRef, ConvertToInternalModel);
 
             if (item.Sample is not null && item.Sample.Length > 0)
-                machine[Data.Models.Metadata.Machine.SampleKey] = Array.ConvertAll(item.Sample, ConvertToInternalModel);
+                machine.Sample = Array.ConvertAll(item.Sample, ConvertToInternalModel);
 
             if (item.Archive is not null && item.Archive.Length > 0)
-                machine[Data.Models.Metadata.Machine.ArchiveKey] = Array.ConvertAll(item.Archive, ConvertToInternalModel);
+                machine.Archive = Array.ConvertAll(item.Archive, ConvertToInternalModel);
 
             if (item.Driver is not null)
-                machine[Data.Models.Metadata.Machine.DriverKey] = ConvertToInternalModel(item.Driver);
+                machine.Driver = ConvertToInternalModel(item.Driver);
 
             if (item.SoftwareList is not null && item.SoftwareList.Length > 0)
-                machine[Data.Models.Metadata.Machine.SoftwareListKey] = Array.ConvertAll(item.SoftwareList, ConvertToInternalModel);
+                machine.SoftwareList = Array.ConvertAll(item.SoftwareList, ConvertToInternalModel);
 
             return machine;
         }

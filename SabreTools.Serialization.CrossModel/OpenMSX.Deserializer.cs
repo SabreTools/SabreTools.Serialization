@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.CrossModel
                 Country = item.Country,
             };
 
-            var dumps = item.Read<Data.Models.Metadata.Dump[]>(Data.Models.Metadata.Machine.DumpKey);
+            var dumps = item.Dump;
             if (dumps is not null && dumps.Length > 0)
                 game.Dump = Array.ConvertAll(dumps, ConvertFromInternalModel);
 

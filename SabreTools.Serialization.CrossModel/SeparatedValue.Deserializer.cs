@@ -45,21 +45,21 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rowItems = new List<Row>();
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
             {
                 rowItems.AddRange(
                     Array.ConvertAll(roms, r => ConvertFromInternalModel(r, item, header)));
             }
 
-            var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
+            var disks = item.Disk;
             if (disks is not null && disks.Length > 0)
             {
                 rowItems.AddRange(
                     Array.ConvertAll(disks, d => ConvertFromInternalModel(d, item, header)));
             }
 
-            var media = item.Read<Data.Models.Metadata.Media[]>(Data.Models.Metadata.Machine.MediaKey);
+            var media = item.Media;
             if (media is not null && media.Length > 0)
             {
                 rowItems.AddRange(

@@ -61,15 +61,15 @@ namespace SabreTools.Serialization.CrossModel
             switch (datItem)
             {
                 case Data.Models.Metadata.Disk disk:
-                    machine[Data.Models.Metadata.Machine.DiskKey] = new Data.Models.Metadata.Disk[] { disk };
+                    machine.Disk = new Data.Models.Metadata.Disk[] { disk };
                     break;
 
                 case Data.Models.Metadata.Media media:
-                    machine[Data.Models.Metadata.Machine.MediaKey] = new Data.Models.Metadata.Media[] { media };
+                    machine.Media = new Data.Models.Metadata.Media[] { media };
                     break;
 
                 case Data.Models.Metadata.Rom rom:
-                    machine[Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { rom };
+                    machine.Rom = new Data.Models.Metadata.Rom[] { rom };
                     break;
 
                 default:

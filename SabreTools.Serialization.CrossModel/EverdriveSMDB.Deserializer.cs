@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Row[] ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item)
         {
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is null || roms.Length == 0)
                 return [];
 

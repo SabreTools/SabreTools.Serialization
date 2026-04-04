@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.Dump is not null && item.Dump.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.DumpKey]
+                machine.Dump
                     = Array.ConvertAll(item.Dump, ConvertToInternalModel);
             }
 

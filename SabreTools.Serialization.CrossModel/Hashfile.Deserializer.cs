@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Data.Models.Hashfile.Hashfile ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item, HashType hash)
         {
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is null)
                 return new Data.Models.Hashfile.Hashfile();
 

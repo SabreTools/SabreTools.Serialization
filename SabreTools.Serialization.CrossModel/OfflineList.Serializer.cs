@@ -81,7 +81,7 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.Files?.RomCRC is not null && item.Files.RomCRC.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.RomKey]
+                machine.Rom
                     = Array.ConvertAll(item.Files.RomCRC, romCRC =>
                         {
                             var rom = ConvertToInternalModel(romCRC);

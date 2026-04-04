@@ -67,8 +67,8 @@ namespace SabreTools.Serialization.CrossModel
                         roms.Add(rom);
                 }
 
-                machine[Data.Models.Metadata.Machine.DiskKey] = disks.ToArray();
-                machine[Data.Models.Metadata.Machine.RomKey] = roms.ToArray();
+                machine.Disk = disks.ToArray();
+                machine.Rom = roms.ToArray();
             }
 
             return machine;
