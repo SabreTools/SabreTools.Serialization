@@ -202,7 +202,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Author = "author",
                 BiosMode = Data.Models.Metadata.MergingFlag.Merged,
                 Build = "build",
-                [Data.Models.Metadata.Header.CanOpenKey] = canOpen,
+                CanOpen = canOpen,
                 Category = "category",
                 Comment = "comment",
                 Date = "date",
@@ -219,15 +219,15 @@ namespace SabreTools.Metadata.DatFiles.Test
                 HeaderSkipper = "header",
                 Homepage = "homepage",
                 Id = "id",
-                [Data.Models.Metadata.Header.ImagesKey] = images,
-                [Data.Models.Metadata.Header.ImFolderKey] = "imfolder",
-                [Data.Models.Metadata.Header.InfosKey] = infos,
+                Images = images,
+                ImFolder = "imfolder",
+                Infos = infos,
                 LockBiosMode = true,
                 LockRomMode = true,
                 LockSampleMode = true,
                 MameConfig = "mameconfig",
                 Name = "name",
-                [Data.Models.Metadata.Header.NewDatKey] = newDat,
+                NewDat = newDat,
                 Notes = "notes",
                 Plugin = "plugin",
                 RefName = "refname",
@@ -238,7 +238,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Header.SchemaLocationKey] = "schemalocation",
                 ScreenshotsHeight = "screenshotsheight",
                 ScreenshotsWidth = "screenshotsWidth",
-                [Data.Models.Metadata.Header.SearchKey] = search,
+                Search = search,
                 System = "system",
                 Timestamp = "timestamp",
                 Type = "type",
@@ -1010,7 +1010,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("author", datHeader.Author);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.BiosMode);
             Assert.Equal("build", datHeader.Build);
-            Assert.Equal("ext", datHeader.ReadString(Data.Models.Metadata.Header.CanOpenKey));
+            Assert.NotNull(datHeader.CanOpen);
             Assert.Equal("category", datHeader.Category);
             Assert.Equal("comment", datHeader.Comment);
             Assert.Equal("date", datHeader.Date);
@@ -1026,15 +1026,15 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("header", datHeader.HeaderSkipper);
             Assert.Equal("homepage", datHeader.Homepage);
             Assert.Equal("id", datHeader.Id);
-            Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.ImagesKey));
-            Assert.Equal("imfolder", datHeader.ReadString(Data.Models.Metadata.Header.ImFolderKey));
-            Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.InfosKey));
+            Assert.NotNull(datHeader.Images);
+            Assert.Equal("imfolder", datHeader.ImFolder);
+            Assert.NotNull(datHeader.Infos);
             Assert.True(datHeader.LockBiosMode);
             Assert.True(datHeader.LockRomMode);
             Assert.True(datHeader.LockSampleMode);
             Assert.Equal("mameconfig", datHeader.MameConfig);
             Assert.Equal("name", datHeader.Name);
-            Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.NewDatKey));
+            Assert.NotNull(datHeader.NewDat);
             Assert.Equal("notes", datHeader.Notes);
             Assert.Equal("plugin", datHeader.Plugin);
             Assert.Equal("refname", datHeader.RefName);
@@ -1045,7 +1045,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("schemalocation", datHeader.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
             Assert.Equal("screenshotsheight", datHeader.ScreenshotsHeight);
             Assert.Equal("screenshotsWidth", datHeader.ScreenshotsWidth);
-            Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.SearchKey));
+            Assert.NotNull(datHeader.Search);
             Assert.Equal("system", datHeader.System);
             Assert.Equal("timestamp", datHeader.Timestamp);
             Assert.Equal("type", datHeader.Type);

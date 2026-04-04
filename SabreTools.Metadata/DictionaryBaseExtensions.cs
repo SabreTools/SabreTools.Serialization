@@ -180,6 +180,7 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfHeader.Build != otherHeader.Build)
                     return false;
+                // Header.CanOpen is intentionally skipped
                 if (selfHeader.Category != otherHeader.Category)
                     return false;
                 if (selfHeader.Comment != otherHeader.Comment)
@@ -206,10 +207,15 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfHeader.HeaderSkipper != otherHeader.HeaderSkipper)
                     return false;
+                // Header.HeaderRow is intentionally skipped
                 if (selfHeader.Homepage != otherHeader.Homepage)
                     return false;
                 if (selfHeader.Id != otherHeader.Id)
                     return false;
+                // Header.Images is intentionally skipped
+                if (selfHeader.ImFolder != otherHeader.ImFolder)
+                    return false;
+                // Header.Infos is intentionally skipped
                 if (selfHeader.LockBiosMode != otherHeader.LockBiosMode)
                     return false;
                 if (selfHeader.LockRomMode != otherHeader.LockRomMode)
@@ -220,6 +226,7 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfHeader.Name != otherHeader.Name)
                     return false;
+                // Header.NewDat is intentionally skipped
                 if (selfHeader.Notes != otherHeader.Notes)
                     return false;
                 if (selfHeader.Plugin != otherHeader.Plugin)
@@ -238,6 +245,7 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfHeader.ScreenshotsWidth != otherHeader.ScreenshotsWidth)
                     return false;
+                // Header.Search is intentionally skipped
                 if (selfHeader.System != otherHeader.System)
                     return false;
                 if (selfHeader.Timestamp != otherHeader.Timestamp)

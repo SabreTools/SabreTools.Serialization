@@ -35,15 +35,14 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.Build = value;
         }
 
-        [JsonIgnore]
-        public bool CanOpenSpecified
+        public Data.Models.OfflineList.CanOpen? CanOpen
         {
-            get
-            {
-                var canOpen = ReadStringArray(Data.Models.Metadata.Header.CanOpenKey);
-                return canOpen is not null && canOpen.Length > 0;
-            }
+            get => _internal.CanOpen;
+            set => _internal.CanOpen = value;
         }
+
+        [JsonIgnore]
+        public bool CanOpenSpecified => CanOpen is not null;
 
         public string? Category
         {
@@ -151,23 +150,29 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.Id = value;
         }
 
-        [JsonIgnore]
-        public bool ImagesSpecified
+        public Data.Models.OfflineList.Images? Images
         {
-            get
-            {
-                return Read<Data.Models.OfflineList.Images?>(Data.Models.Metadata.Header.ImagesKey) is not null;
-            }
+            get => _internal.Images;
+            set => _internal.Images = value;
         }
 
         [JsonIgnore]
-        public bool InfosSpecified
+        public bool ImagesSpecified => Images is not null;
+
+        public string? ImFolder
         {
-            get
-            {
-                return Read<Data.Models.OfflineList.Infos?>(Data.Models.Metadata.Header.InfosKey) is not null;
-            }
+            get => _internal.ImFolder;
+            set => _internal.ImFolder = value;
         }
+
+        public Data.Models.OfflineList.Infos? Infos
+        {
+            get => _internal.Infos;
+            set => _internal.Infos = value;
+        }
+
+        [JsonIgnore]
+        public bool InfosSpecified => Infos is not null;
 
         public bool? LockBiosMode
         {
@@ -199,14 +204,14 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.Name = value;
         }
 
-        [JsonIgnore]
-        public bool NewDatSpecified
+        public Data.Models.OfflineList.NewDat? NewDat
         {
-            get
-            {
-                return Read<Data.Models.OfflineList.NewDat?>(Data.Models.Metadata.Header.NewDatKey) is not null;
-            }
+            get => _internal.NewDat;
+            set => _internal.NewDat = value;
         }
+
+        [JsonIgnore]
+        public bool NewDatSpecified => NewDat is not null;
 
         public string? Notes
         {
@@ -262,14 +267,14 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.ScreenshotsWidth = value;
         }
 
-        [JsonIgnore]
-        public bool SearchSpecified
+        public Data.Models.OfflineList.Search? Search
         {
-            get
-            {
-                return Read<Data.Models.OfflineList.Search?>(Data.Models.Metadata.Header.SearchKey) is not null;
-            }
+            get => _internal.Search;
+            set => _internal.Search = value;
         }
+
+        [JsonIgnore]
+        public bool SearchSpecified => Search is not null;
 
         public string? System
         {
@@ -346,15 +351,15 @@ namespace SabreTools.Metadata.DatFiles
 
             // Convert subheader values
             if (CanOpenSpecified)
-                header[Data.Models.Metadata.Header.CanOpenKey] = new Data.Models.OfflineList.CanOpen { Extension = ReadStringArray(Data.Models.Metadata.Header.CanOpenKey) };
+                header.CanOpen = CanOpen;
             if (ImagesSpecified)
-                header[Data.Models.Metadata.Header.ImagesKey] = Read<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey);
+                header.Images = Images;
             if (InfosSpecified)
-                header[Data.Models.Metadata.Header.InfosKey] = Read<Data.Models.OfflineList.Infos>(Data.Models.Metadata.Header.InfosKey);
+                header.Infos = Infos;
             if (NewDatSpecified)
-                header[Data.Models.Metadata.Header.NewDatKey] = Read<Data.Models.OfflineList.NewDat>(Data.Models.Metadata.Header.NewDatKey);
+                header.NewDat = NewDat;
             if (SearchSpecified)
-                header[Data.Models.Metadata.Header.SearchKey] = Read<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey);
+                header.Search = Search;
 
             return header;
         }

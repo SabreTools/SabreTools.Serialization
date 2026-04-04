@@ -69,25 +69,25 @@ namespace SabreTools.Metadata.DatFiles
             Header.Name = header.Name;
 
             // Convert subheader values
-            var canOpen = item.Read<Data.Models.OfflineList.CanOpen>(Data.Models.Metadata.Header.CanOpenKey);
+            var canOpen = item.CanOpen;
             if (canOpen?.Extension is not null)
-                Header.Write<string[]?>(Data.Models.Metadata.Header.CanOpenKey, canOpen.Extension);
+                Header.CanOpen = canOpen;
 
-            var images = item.Read<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey);
+            var images = item.Images;
             if (images is not null)
-                Header.Write<Data.Models.OfflineList.Images?>(Data.Models.Metadata.Header.ImagesKey, images);
+                Header.Images = images;
 
-            var infos = item.Read<Data.Models.OfflineList.Infos>(Data.Models.Metadata.Header.InfosKey);
+            var infos = item.Infos;
             if (infos is not null)
-                Header.Write<Data.Models.OfflineList.Infos?>(Data.Models.Metadata.Header.InfosKey, infos);
+                Header.Infos = infos;
 
-            var newDat = item.Read<Data.Models.OfflineList.NewDat>(Data.Models.Metadata.Header.NewDatKey);
+            var newDat = item.NewDat;
             if (newDat is not null)
-                Header.Write<Data.Models.OfflineList.NewDat?>(Data.Models.Metadata.Header.NewDatKey, newDat);
+                Header.NewDat = newDat;
 
-            var search = item.Read<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey);
+            var search = item.Search;
             if (search is not null)
-                Header.Write<Data.Models.OfflineList.Search?>(Data.Models.Metadata.Header.SearchKey, search);
+                Header.Search = search;
 
             // Selectively set all possible fields -- TODO: Figure out how to make this less manual
             if (Header.Author is null)
@@ -126,8 +126,8 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Homepage = header.Homepage;
             if (Header.Id is null)
                 Header.Id = header.Id;
-            if (Header.ReadString(Data.Models.Metadata.Header.ImFolderKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.ImFolderKey, header.ReadString(Data.Models.Metadata.Header.ImFolderKey));
+            if (Header.ImFolder is null)
+                Header.ImFolder = header.ImFolder;
             if (Header.LockBiosMode is null)
                 Header.LockBiosMode = header.LockBiosMode;
             if (Header.LockRomMode is null)

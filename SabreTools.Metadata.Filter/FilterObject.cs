@@ -777,6 +777,7 @@ namespace SabreTools.Metadata.Filter
                 case Header item when fieldName == "build":
                     checkValue = item.Build;
                     return true;
+                // Header.CanOpen is intentionally skipped
                 case Header item when fieldName == "category":
                     checkValue = item.Category;
                     return true;
@@ -823,6 +824,11 @@ namespace SabreTools.Metadata.Filter
                 case Header item when fieldName == "id":
                     checkValue = item.Id;
                     return true;
+                // Header.Images is intentionally skipped
+                case Header item when fieldName == "imfolder":
+                    checkValue = item.ImFolder;
+                    return true;
+                // Header.Infos is intentionally skipped
                 case Header item when fieldName == "lockbiosmode":
                     checkValue = item.LockBiosMode.FromYesNo();
                     return true;
@@ -838,6 +844,7 @@ namespace SabreTools.Metadata.Filter
                 case Header item when fieldName == "name":
                     checkValue = item.Name;
                     return true;
+                // Header.NewDat is intentionally skipped
                 case Header item when fieldName == "notes":
                     checkValue = item.Notes;
                     return true;
@@ -865,6 +872,7 @@ namespace SabreTools.Metadata.Filter
                 case Header item when fieldName == "screenshotswidth":
                     checkValue = item.ScreenshotsWidth;
                     return true;
+                // Header.Search is intentionally skipped
                 case Header item when fieldName == "system":
                     checkValue = item.System;
                     return true;

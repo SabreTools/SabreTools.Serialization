@@ -92,17 +92,14 @@ namespace SabreTools.Metadata.DatFiles.Test
 
         private static DatHeader CreateHeader()
         {
-            DatHeader item = new DatHeader(CreateMetadataHeader());
-
-            item.Write<string[]>(Data.Models.Metadata.Header.CanOpenKey, ["ext"]);
-            item.Write(Data.Models.Metadata.Header.ImagesKey,
-                new Data.Models.OfflineList.Images() { Height = "height" });
-            item.Write(Data.Models.Metadata.Header.InfosKey,
-                new Data.Models.OfflineList.Infos() { Comment = new Data.Models.OfflineList.Comment() });
-            item.Write(Data.Models.Metadata.Header.NewDatKey,
-                new Data.Models.OfflineList.NewDat() { DatUrl = new Data.Models.OfflineList.DatUrl() });
-            item.Write(Data.Models.Metadata.Header.SearchKey,
-                new Data.Models.OfflineList.Search() { To = [] });
+            DatHeader item = new DatHeader(CreateMetadataHeader())
+            {
+                CanOpen = new Data.Models.OfflineList.CanOpen { Extension = ["ext"] },
+                Images = new Data.Models.OfflineList.Images() { Height = "height" },
+                Infos = new Data.Models.OfflineList.Infos() { Comment = new Data.Models.OfflineList.Comment() },
+                NewDat = new Data.Models.OfflineList.NewDat() { DatUrl = new Data.Models.OfflineList.DatUrl() },
+                Search = new Data.Models.OfflineList.Search() { To = [] },
+            };
 
             return item;
         }
@@ -354,7 +351,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("author", header.Author);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, header.BiosMode);
             Assert.Equal("build", header.Build);
-            Assert.NotNull(header.Read<Data.Models.OfflineList.CanOpen>(Data.Models.Metadata.Header.CanOpenKey));
+            Assert.NotNull(header.CanOpen);
             Assert.Equal("category", header.Category);
             Assert.Equal("comment", header.Comment);
             Assert.Equal("date", header.Date);
@@ -370,15 +367,15 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("header", header.HeaderSkipper);
             Assert.Equal("homepage", header.Homepage);
             Assert.Equal("id", header.Id);
-            Assert.NotNull(header.Read<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey));
-            Assert.Equal("imfolder", header.ReadString(Data.Models.Metadata.Header.ImFolderKey));
-            Assert.NotNull(header.Read<Data.Models.OfflineList.Infos>(Data.Models.Metadata.Header.InfosKey));
+            Assert.NotNull(header.Images);
+            Assert.Equal("imfolder", header.ImFolder);
+            Assert.NotNull(header.Infos);
             Assert.True(header.LockBiosMode);
             Assert.True(header.LockRomMode);
             Assert.True(header.LockSampleMode);
             Assert.Equal("mameconfig", header.MameConfig);
             Assert.Equal("name", header.Name);
-            Assert.NotNull(header.Read<Data.Models.OfflineList.NewDat>(Data.Models.Metadata.Header.NewDatKey));
+            Assert.NotNull(header.NewDat);
             Assert.Equal("notes", header.Notes);
             Assert.Equal("plugin", header.Plugin);
             Assert.Equal("refname", header.RefName);
@@ -389,7 +386,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("schemalocation", header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
             Assert.Equal("screenshotsheight", header.ScreenshotsHeight);
             Assert.Equal("screenshotsWidth", header.ScreenshotsWidth);
-            Assert.NotNull(header.Read<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey));
+            Assert.NotNull(header.Search);
             Assert.Equal("system", header.System);
             Assert.Equal("timestamp", header.Timestamp);
             Assert.Equal("type", header.Type);

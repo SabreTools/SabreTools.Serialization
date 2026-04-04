@@ -120,6 +120,7 @@ namespace SabreTools.Data.Extensions
                 cloneHeader.Author = selfHeader.Author;
                 cloneHeader.BiosMode = selfHeader.BiosMode;
                 cloneHeader.Build = selfHeader.Build;
+                cloneHeader.CanOpen = selfHeader.CanOpen;
                 cloneHeader.Category = selfHeader.Category;
                 cloneHeader.Comment = selfHeader.Comment;
                 cloneHeader.Date = selfHeader.Date;
@@ -136,11 +137,15 @@ namespace SabreTools.Data.Extensions
                 cloneHeader.HeaderSkipper = selfHeader.HeaderSkipper;
                 cloneHeader.Homepage = selfHeader.Homepage;
                 cloneHeader.Id = selfHeader.Id;
+                cloneHeader.Images = selfHeader.Images;
+                cloneHeader.ImFolder = selfHeader.ImFolder;
+                cloneHeader.Infos = selfHeader.Infos;
                 cloneHeader.LockBiosMode = selfHeader.LockBiosMode;
                 cloneHeader.LockRomMode = selfHeader.LockRomMode;
                 cloneHeader.LockSampleMode = selfHeader.LockSampleMode;
                 cloneHeader.MameConfig = selfHeader.MameConfig;
                 cloneHeader.Name = selfHeader.Name;
+                cloneHeader.NewDat = selfHeader.NewDat;
                 cloneHeader.Notes = selfHeader.Notes;
                 cloneHeader.Plugin = selfHeader.Plugin;
                 cloneHeader.RefName = selfHeader.RefName;
@@ -150,6 +155,7 @@ namespace SabreTools.Data.Extensions
                 cloneHeader.SampleMode = selfHeader.SampleMode;
                 cloneHeader.ScreenshotsHeight = selfHeader.ScreenshotsHeight;
                 cloneHeader.ScreenshotsWidth = selfHeader.ScreenshotsWidth;
+                cloneHeader.Search = selfHeader.Search;
                 cloneHeader.System = selfHeader.System;
                 cloneHeader.Timestamp = selfHeader.Timestamp;
                 cloneHeader.Type = selfHeader.Type;

@@ -37,40 +37,35 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Name is not null
-                || item.ContainsKey(Data.Models.Metadata.Header.ImFolderKey)
+                || item.ImFolder is not null
                 || item.DatVersion is not null
                 || item.System is not null
                 || item.ScreenshotsHeight is not null
                 || item.ScreenshotsWidth is not null
-                || item.ContainsKey(Data.Models.Metadata.Header.InfosKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.CanOpenKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.NewDatKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.SearchKey)
+                || item.Infos is not null
+                || item.CanOpen is not null
+                || item.NewDat is not null
+                || item.Search is not null
                 || item.RomTitle is not null)
             {
                 dat.Configuration = new Configuration
                 {
                     DatName = item.Name,
-                    ImFolder = item.ReadString(Data.Models.Metadata.Header.ImFolderKey),
+                    ImFolder = item.ImFolder,
                     DatVersion = item.DatVersion,
                     System = item.System,
                     ScreenshotsWidth = item.ScreenshotsHeight,
                     ScreenshotsHeight = item.ScreenshotsWidth,
-                    Infos = item.Read<Infos>(Data.Models.Metadata.Header.InfosKey),
-                    CanOpen = item.Read<CanOpen>(Data.Models.Metadata.Header.CanOpenKey),
-                    NewDat = item.Read<NewDat>(Data.Models.Metadata.Header.NewDatKey),
-                    Search = item.Read<Search>(Data.Models.Metadata.Header.SearchKey),
+                    Infos = item.Infos,
+                    CanOpen = item.CanOpen,
+                    NewDat = item.NewDat,
+                    Search = item.Search,
                     RomTitle = item.RomTitle,
                 };
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.ImagesKey))
-            {
-                dat.GUI = new GUI
-                {
-                    Images = item.Read<Images>(Data.Models.Metadata.Header.ImagesKey),
-                };
-            }
+            if (item.Images is not null)
+                dat.GUI = new GUI { Images = item.Images };
 
             return dat;
         }

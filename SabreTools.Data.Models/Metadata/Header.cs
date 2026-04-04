@@ -15,6 +15,9 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Build { get; set; }
 
+        /// TODO: This needs an internal model OR mapping to fields
+        public OfflineList.CanOpen? CanOpen { get; set; }
+
         public string? Category { get; set; }
 
         public string? Comment { get; set; }
@@ -52,6 +55,14 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Id { get; set; }
 
+        /// TODO: This needs an internal model OR mapping to fields
+        public OfflineList.Images? Images { get; set; }
+
+        public string? ImFolder { get; set; }
+
+        /// TODO: This needs an internal model OR mapping to fields
+        public OfflineList.Infos? Infos { get; set; }
+
         /// <remarks>(yes|no) "no"</remarks>
         public bool? LockBiosMode { get; set; }
 
@@ -64,6 +75,9 @@ namespace SabreTools.Data.Models.Metadata
         public string? MameConfig { get; set; }
 
         public string? Name { get; set; }
+
+        /// TODO: This needs an internal model OR mapping to fields
+        public OfflineList.NewDat? NewDat { get; set; }
 
         public string? Notes { get; set; }
 
@@ -85,6 +99,9 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? ScreenshotsWidth { get; set; }
 
+        /// TODO: This needs an internal model OR mapping to fields
+        public OfflineList.Search? Search { get; set; }
+
         public string? System { get; set; }
 
         public string? Timestamp { get; set; }
@@ -99,36 +116,8 @@ namespace SabreTools.Data.Models.Metadata
 
         #region Keys
 
-        /// TODO: This needs an internal model OR mapping to fields
-        /// <remarks>CanOpen</remarks>
-        [NoFilter]
-        public const string CanOpenKey = "canOpen";
-
-        /// TODO: This needs an internal model OR mapping to fields
-        /// <remarks>Images</remarks>
-        [NoFilter]
-        public const string ImagesKey = "images";
-
-        /// <remarks>string</remarks>
-        public const string ImFolderKey = "imFolder";
-
-        /// TODO: This needs an internal model OR mapping to fields
-        /// <remarks>Infos</remarks>
-        [NoFilter]
-        public const string InfosKey = "infos";
-
-        /// TODO: This needs an internal model OR mapping to fields
-        /// <remarks>NewDat</remarks>
-        [NoFilter]
-        public const string NewDatKey = "newDat";
-
         /// <remarks>string</remarks>
         public const string SchemaLocationKey = "schemaLocation";
-
-        /// TODO: This needs an internal model OR mapping to fields
-        /// <remarks>Search</remarks>
-        [NoFilter]
-        public const string SearchKey = "search";
 
         #endregion
     }
