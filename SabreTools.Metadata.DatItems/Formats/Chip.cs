@@ -68,6 +68,16 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         #endregion
 
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
+
+        #endregion
+
         #region Cloning Methods
 
         /// <inheritdoc/>

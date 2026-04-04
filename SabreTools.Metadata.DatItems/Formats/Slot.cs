@@ -38,7 +38,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             // Handle subitems
             if (item.SlotOption is not null)
-                SlotOption = Array.ConvertAll(item.SlotOption, slotOption => new SlotOption(slotOption));;
+                SlotOption = Array.ConvertAll(item.SlotOption, slotOption => new SlotOption(slotOption)); ;
         }
 
         public Slot(Data.Models.Metadata.Slot item, Machine machine, Source source) : this(item)
@@ -46,6 +46,16 @@ namespace SabreTools.Metadata.DatItems.Formats
             Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 

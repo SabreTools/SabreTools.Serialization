@@ -7,6 +7,7 @@ using SabreTools.IO.Extensions;
 using SabreTools.Text.Extensions;
 
 // TODO: Add item mappings for all fields
+// TODO: Investigate whether this is the "File" from NIDB
 namespace SabreTools.Metadata.DatItems.Formats
 {
     /// <summary>
@@ -101,6 +102,16 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// Create a default, empty File object
         /// </summary>
         public File() { }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 

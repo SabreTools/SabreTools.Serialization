@@ -1,7 +1,6 @@
 using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 using SabreTools.Hashing;
 using SabreTools.Logging;
 using SabreTools.Metadata.DatItems.Formats;
@@ -101,13 +100,13 @@ namespace SabreTools.Metadata.DatItems
         /// Gets the name to use for a DatItem
         /// </summary>
         /// <returns>Name if available, null otherwise</returns>
-        public virtual string? GetName() => _internal.GetName();
+        public abstract string? GetName();
 
         /// <summary>
         /// Sets the name to use for a DatItem
         /// </summary>
         /// <param name="name">Name to set for the item</param>
-        public virtual void SetName(string? name) => _internal.SetName(name);
+        public abstract void SetName(string? name);
 
         #endregion
 
