@@ -147,6 +147,8 @@ namespace SabreTools.Data.Extensions
                 return adjuster.Clone() as Adjuster;
             else if (self is Analog analog)
                 return analog.Clone() as Analog;
+            else if (self is Archive archive)
+                return archive.Clone() as Archive;
             else if (self is BiosSet biosSet)
                 return biosSet.Clone() as BiosSet;
             else if (self is Blank blank)
@@ -224,11 +226,7 @@ namespace SabreTools.Data.Extensions
                 return null;
 
             // Handle individual type properties
-            if (self is Archive selfArchive && clone is Archive cloneArchive)
-            {
-                cloneArchive.Description = selfArchive.Description;
-            }
-            else if (self is DataArea selfDataArea && clone is DataArea cloneDataArea)
+            if (self is DataArea selfDataArea && clone is DataArea cloneDataArea)
             {
                 cloneDataArea.Endianness = selfDataArea.Endianness;
                 cloneDataArea.Size = selfDataArea.Size;

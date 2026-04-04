@@ -356,8 +356,101 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Mask;
                     return true;
 
+                case Archive item when fieldName == "additional":
+                    checkValue = item.Additional;
+                    return true;
+                case Archive item when fieldName == "adult":
+                    checkValue = item.Adult is null ? null : (item.Adult == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "alt":
+                    checkValue = item.Alt is null ? null : (item.Alt == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "bios":
+                    checkValue = item.Bios is null ? null : (item.Bios == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "categories":
+                    checkValue = item.Categories;
+                    return true;
+                case Archive item when fieldName == "clone":
+                    checkValue = item.CloneTag;
+                    return true;
+                case Archive item when fieldName == "complete":
+                    checkValue = item.Complete is null ? null : (item.Complete == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "dat":
+                    checkValue = item.Dat is null ? null : (item.Dat == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "datternote":
+                    checkValue = item.DatterNote;
+                    return true;
                 case Archive item when fieldName == "description":
                     checkValue = item.Description;
+                    return true;
+                case Archive item when fieldName == "devstatus":
+                    checkValue = item.DevStatus;
+                    return true;
+                case Archive item when fieldName == "gameid1":
+                    checkValue = item.GameId1;
+                    return true;
+                case Archive item when fieldName == "gameid2":
+                    checkValue = item.GameId2;
+                    return true;
+                case Archive item when fieldName == "langchecked":
+                    checkValue = item.LangChecked;
+                    return true;
+                case Archive item when fieldName == "languages":
+                    checkValue = item.Languages;
+                    return true;
+                case Archive item when fieldName == "licensed":
+                    checkValue = item.Licensed is null ? null : (item.Licensed == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "listed":
+                    checkValue = item.Listed is null ? null : (item.Listed == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "mergeof":
+                    checkValue = item.MergeOf;
+                    return true;
+                case Archive item when fieldName == "mergename":
+                    checkValue = item.MergeName;
+                    return true;
+                case Archive item when fieldName == "namealt":
+                    checkValue = item.NameAlt;
+                    return true;
+                case Archive item when fieldName == "number":
+                    checkValue = item.Number;
+                    return true;
+                case Archive item when fieldName == "physical":
+                    checkValue = item.Physical is null ? null : (item.Physical == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "pirate":
+                    checkValue = item.Pirate is null ? null : (item.Pirate == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "private":
+                    checkValue = item.Private is null ? null : (item.Private == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "region":
+                    checkValue = item.Region;
+                    return true;
+                case Archive item when fieldName == "regparent":
+                    checkValue = item.RegParent;
+                    return true;
+                case Archive item when fieldName == "showlang":
+                    checkValue = item.ShowLang is null ? null : (item.ShowLang == true ? "1" : "0");
+                    return true;
+                case Archive item when fieldName == "special1":
+                    checkValue = item.Special1;
+                    return true;
+                case Archive item when fieldName == "special2":
+                    checkValue = item.Special2;
+                    return true;
+                case Archive item when fieldName == "stickynote":
+                    checkValue = item.StickyNote;
+                    return true;
+                case Archive item when fieldName == "version1":
+                    checkValue = item.Version1;
+                    return true;
+                case Archive item when fieldName == "version2":
+                    checkValue = item.Version2;
                     return true;
 
                 case BiosSet item when fieldName == "default":

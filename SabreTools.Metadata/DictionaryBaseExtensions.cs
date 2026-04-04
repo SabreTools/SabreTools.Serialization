@@ -74,7 +74,7 @@ namespace SabreTools.Metadata
             }
             else if (self is Archive selfArchive && other is Archive otherArchive)
             {
-                if (selfArchive.Description != otherArchive.Description)
+                if (!selfArchive.Equals(otherArchive))
                     return false;
             }
             else if (self is BiosSet selfBiosSet && other is BiosSet otherBiosSet)
