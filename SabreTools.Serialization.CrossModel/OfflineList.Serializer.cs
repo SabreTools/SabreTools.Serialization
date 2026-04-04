@@ -41,8 +41,8 @@ namespace SabreTools.Serialization.CrossModel
                 header[Data.Models.Metadata.Header.ImFolderKey] = item.Configuration.ImFolder;
                 header.DatVersion = item.Configuration.DatVersion;
                 header.System = item.Configuration.System;
-                header[Data.Models.Metadata.Header.ScreenshotsWidthKey] = item.Configuration.ScreenshotsWidth;
-                header[Data.Models.Metadata.Header.ScreenshotsHeightKey] = item.Configuration.ScreenshotsHeight;
+                header.ScreenshotsHeight = item.Configuration.ScreenshotsWidth;
+                header.ScreenshotsWidth = item.Configuration.ScreenshotsHeight;
                 header[Data.Models.Metadata.Header.InfosKey] = item.Configuration.Infos;
                 header[Data.Models.Metadata.Header.CanOpenKey] = item.Configuration.CanOpen;
                 header[Data.Models.Metadata.Header.NewDatKey] = item.Configuration.NewDat;

@@ -232,6 +232,10 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfHeader.SampleMode != otherHeader.SampleMode)
                     return false;
+                if (selfHeader.ScreenshotsHeight != otherHeader.ScreenshotsHeight)
+                    return false;
+                if (selfHeader.ScreenshotsWidth != otherHeader.ScreenshotsWidth)
+                    return false;
                 if (selfHeader.System != otherHeader.System)
                     return false;
                 if (selfHeader.Timestamp != otherHeader.Timestamp)

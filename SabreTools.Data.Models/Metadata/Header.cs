@@ -77,6 +77,10 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
         public MergingFlag SampleMode { get; set; }
 
+        public string? ScreenshotsHeight { get; set; }
+
+        public string? ScreenshotsWidth { get; set; }
+
         public string? System { get; set; }
 
         public string? Timestamp { get; set; }
@@ -119,12 +123,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string SchemaLocationKey = "schemaLocation";
-
-        /// <remarks>string</remarks>
-        public const string ScreenshotsHeightKey = "screenshotsHeight";
-
-        /// <remarks>string</remarks>
-        public const string ScreenshotsWidthKey = "screenshotsWidth";
 
         /// TODO: This needs an internal model OR mapping to fields
         /// <remarks>Search</remarks>

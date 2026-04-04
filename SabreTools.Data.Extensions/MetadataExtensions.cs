@@ -146,6 +146,8 @@ namespace SabreTools.Data.Extensions
                 cloneHeader.RomTitle = selfHeader.RomTitle;
                 cloneHeader.RootDir = selfHeader.RootDir;
                 cloneHeader.SampleMode = selfHeader.SampleMode;
+                cloneHeader.ScreenshotsHeight = selfHeader.ScreenshotsHeight;
+                cloneHeader.ScreenshotsWidth = selfHeader.ScreenshotsWidth;
                 cloneHeader.System = selfHeader.System;
                 cloneHeader.Timestamp = selfHeader.Timestamp;
                 cloneHeader.Type = selfHeader.Type;

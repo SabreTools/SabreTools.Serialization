@@ -38,15 +38,15 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.Name is not null
                 || item.ContainsKey(Data.Models.Metadata.Header.ImFolderKey)
-                || item.DatVersion != null
-                || item.System != null
-                || item.ContainsKey(Data.Models.Metadata.Header.ScreenshotsWidthKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.ScreenshotsHeightKey)
+                || item.DatVersion is not null
+                || item.System is not null
+                || item.ScreenshotsHeight is not null
+                || item.ScreenshotsWidth is not null
                 || item.ContainsKey(Data.Models.Metadata.Header.InfosKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.CanOpenKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.NewDatKey)
                 || item.ContainsKey(Data.Models.Metadata.Header.SearchKey)
-                || item.RomTitle != null)
+                || item.RomTitle is not null)
             {
                 dat.Configuration = new Configuration
                 {
@@ -54,8 +54,8 @@ namespace SabreTools.Serialization.CrossModel
                     ImFolder = item.ReadString(Data.Models.Metadata.Header.ImFolderKey),
                     DatVersion = item.DatVersion,
                     System = item.System,
-                    ScreenshotsWidth = item.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey),
-                    ScreenshotsHeight = item.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey),
+                    ScreenshotsWidth = item.ScreenshotsHeight,
+                    ScreenshotsHeight = item.ScreenshotsWidth,
                     Infos = item.Read<Infos>(Data.Models.Metadata.Header.InfosKey),
                     CanOpen = item.Read<CanOpen>(Data.Models.Metadata.Header.CanOpenKey),
                     NewDat = item.Read<NewDat>(Data.Models.Metadata.Header.NewDatKey),

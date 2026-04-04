@@ -235,8 +235,8 @@ namespace SabreTools.Metadata.DatFiles.Test
                 RootDir = "rootdir",
                 SampleMode = Data.Models.Metadata.MergingFlag.Merged,
                 [Data.Models.Metadata.Header.SchemaLocationKey] = "schemalocation",
-                [Data.Models.Metadata.Header.ScreenshotsHeightKey] = "screenshotsheight",
-                [Data.Models.Metadata.Header.ScreenshotsWidthKey] = "screenshotsWidth",
+                ScreenshotsHeight = "screenshotsheight",
+                ScreenshotsWidth = "screenshotsWidth",
                 [Data.Models.Metadata.Header.SearchKey] = search,
                 System = "system",
                 Timestamp = "timestamp",
@@ -1042,8 +1042,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("rootdir", datHeader.RootDir);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.SampleMode);
             Assert.Equal("schemalocation", datHeader.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
-            Assert.Equal("screenshotsheight", datHeader.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey));
-            Assert.Equal("screenshotsWidth", datHeader.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey));
+            Assert.Equal("screenshotsheight", datHeader.ScreenshotsHeight);
+            Assert.Equal("screenshotsWidth", datHeader.ScreenshotsWidth);
             Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.SearchKey));
             Assert.Equal("system", datHeader.System);
             Assert.Equal("timestamp", datHeader.Timestamp);

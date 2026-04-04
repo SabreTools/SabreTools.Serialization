@@ -387,8 +387,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("rootdir", header.RootDir);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, header.SampleMode);
             Assert.Equal("schemalocation", header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
-            Assert.Equal("screenshotsheight", header.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey));
-            Assert.Equal("screenshotsWidth", header.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey));
+            Assert.Equal("screenshotsheight", header.ScreenshotsHeight);
+            Assert.Equal("screenshotsWidth", header.ScreenshotsWidth);
             Assert.NotNull(header.Read<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey));
             Assert.Equal("system", header.System);
             Assert.Equal("timestamp", header.Timestamp);

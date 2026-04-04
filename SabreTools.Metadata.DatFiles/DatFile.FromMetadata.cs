@@ -154,10 +154,10 @@ namespace SabreTools.Metadata.DatFiles
                 Header.SampleMode = header.SampleMode;
             if (Header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey) is null)
                 Header.Write<string?>(Data.Models.Metadata.Header.SchemaLocationKey, header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.ScreenshotsHeightKey, header.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey));
-            if (Header.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.ScreenshotsWidthKey, header.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey));
+            if (Header.ScreenshotsHeight is null)
+                Header.ScreenshotsHeight = header.ScreenshotsHeight;
+            if (Header.ScreenshotsWidth is null)
+                Header.ScreenshotsWidth = header.ScreenshotsWidth;
             if (Header.System is null)
                 Header.System = header.System;
             if (Header.Timestamp is null)

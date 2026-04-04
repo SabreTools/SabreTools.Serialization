@@ -238,6 +238,18 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.SampleMode = value;
         }
 
+        public string? ScreenshotsHeight
+        {
+            get => _internal.ScreenshotsHeight;
+            set => _internal.ScreenshotsHeight = value;
+        }
+
+        public string? ScreenshotsWidth
+        {
+            get => _internal.ScreenshotsWidth;
+            set => _internal.ScreenshotsWidth = value;
+        }
+
         [JsonIgnore]
         public bool SearchSpecified
         {
