@@ -135,5 +135,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.Serials)?.Clone() as Data.Models.Metadata.Serials ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.Serials>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Serials otherSerials)
+                return _internal.Equals(otherSerials._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

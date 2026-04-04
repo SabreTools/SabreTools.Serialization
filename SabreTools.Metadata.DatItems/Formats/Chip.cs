@@ -87,5 +87,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.Chip)?.Clone() as Data.Models.Metadata.Chip ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.Chip>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Chip otherChip)
+                return _internal.Equals(otherChip._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

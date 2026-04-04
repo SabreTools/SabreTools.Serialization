@@ -69,5 +69,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.ConfLocation)?.Clone() as Data.Models.Metadata.ConfLocation ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.ConfLocation>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is ConfLocation otherConfLocation)
+                return _internal.Equals(otherConfLocation._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

@@ -118,6 +118,21 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         #region Comparision Methods
 
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.Media>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Media otherMedia)
+                return _internal.Equals(otherMedia._internal);
+
+            // Everything else fails
+            return false;
+        }
+
         /// <summary>
         /// Fill any missing size and hash information from another Media
         /// </summary>

@@ -123,5 +123,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.Control)?.Clone() as Data.Models.Metadata.Control ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.Control>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Control otherControl)
+                return _internal.Equals(otherControl._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

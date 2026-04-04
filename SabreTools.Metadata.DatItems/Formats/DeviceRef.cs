@@ -57,5 +57,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.DeviceRef)?.Clone() as Data.Models.Metadata.DeviceRef ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.DeviceRef>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is DeviceRef otherDeviceRef)
+                return _internal.Equals(otherDeviceRef._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

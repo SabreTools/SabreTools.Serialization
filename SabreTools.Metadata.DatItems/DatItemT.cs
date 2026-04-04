@@ -68,23 +68,7 @@ namespace SabreTools.Metadata.DatItems
         /// </summary>
         /// <param name="other">DatItem to use as a baseline</param>
         /// <returns>True if the items are duplicates, false otherwise</returns>
-        public virtual bool Equals(DatItem<T>? other)
-        {
-            // If the other value is null
-            if (other is null)
-                return false;
-
-            // Get the types for comparison
-            Data.Models.Metadata.ItemType selfType = ItemType;
-            Data.Models.Metadata.ItemType otherType = other.ItemType;
-
-            // If we don't have a matched type, return false
-            if (selfType != otherType)
-                return false;
-
-            // Compare the internal models
-            return _internal.EqualTo(other._internal);
-        }
+        public abstract bool Equals(DatItem<T>? other);
 
         #endregion
     }

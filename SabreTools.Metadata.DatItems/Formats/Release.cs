@@ -81,5 +81,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.Release)?.Clone() as Data.Models.Metadata.Release ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.Release>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Release otherRelease)
+                return _internal.Equals(otherRelease._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

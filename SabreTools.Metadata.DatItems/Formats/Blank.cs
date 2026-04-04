@@ -51,5 +51,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.Blank)?.Clone() as Data.Models.Metadata.Blank ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.Blank>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Blank otherBlank)
+                return _internal.Equals(otherBlank._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

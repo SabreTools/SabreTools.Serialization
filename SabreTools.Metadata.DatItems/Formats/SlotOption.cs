@@ -69,5 +69,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.SlotOption)?.Clone() as Data.Models.Metadata.SlotOption ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.SlotOption>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is SlotOption otherSlotOption)
+                return _internal.Equals(otherSlotOption._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

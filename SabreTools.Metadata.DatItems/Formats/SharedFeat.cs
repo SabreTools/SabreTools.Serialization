@@ -63,5 +63,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.SharedFeat)?.Clone() as Data.Models.Metadata.SharedFeat ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.SharedFeat>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is SharedFeat otherSharedFeat)
+                return _internal.Equals(otherSharedFeat._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

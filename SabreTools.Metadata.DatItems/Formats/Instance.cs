@@ -63,5 +63,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.Instance)?.Clone() as Data.Models.Metadata.Instance ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.Instance>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Instance otherInstance)
+                return _internal.Equals(otherInstance._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

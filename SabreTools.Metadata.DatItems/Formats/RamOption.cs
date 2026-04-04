@@ -69,5 +69,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.RamOption)?.Clone() as Data.Models.Metadata.RamOption ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.RamOption>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is RamOption otherRamOption)
+                return _internal.Equals(otherRamOption._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

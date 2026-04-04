@@ -164,5 +164,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.Display)?.Clone() as Data.Models.Metadata.Display ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.Display>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Display otherDisplay)
+                return _internal.Equals(otherDisplay._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

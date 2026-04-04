@@ -75,5 +75,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.Condition)?.Clone() as Data.Models.Metadata.Condition ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.Condition>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Condition otherCondition)
+                return _internal.Equals(otherCondition._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }

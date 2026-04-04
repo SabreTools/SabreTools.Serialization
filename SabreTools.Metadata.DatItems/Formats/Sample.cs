@@ -57,5 +57,24 @@ namespace SabreTools.Metadata.DatItems.Formats
             => (_internal as Data.Models.Metadata.Sample)?.Clone() as Data.Models.Metadata.Sample ?? [];
 
         #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem<Data.Models.Metadata.Sample>? other)
+        {
+            // If the other value is invalid
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Sample otherSample)
+                return _internal.Equals(otherSample._internal);
+
+            // Everything else fails
+            return false;
+        }
+
+        #endregion
     }
 }
