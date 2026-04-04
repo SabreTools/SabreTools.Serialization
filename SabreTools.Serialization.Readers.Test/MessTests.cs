@@ -236,7 +236,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Service = true,
                 Tilt = true,
                 Players = 12345,
-                //ControlAttr = "XXXXXX", // Mututally exclusive with input.Control
+                ControlAttr = "controlattr",
                 Buttons = 12345,
                 Coins = 12345,
                 Control = [control],
@@ -662,7 +662,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal(true, input.Service);
             Assert.Equal(true, input.Tilt);
             Assert.Equal(12345, input.Players);
-            //Assert.Equal("XXXXXX", input.ControlAttr); // Mututally exclusive with input.Control
+            Assert.Equal("controlattr", input.ControlAttr);
             Assert.Equal(12345, input.Buttons);
             Assert.Equal(12345, input.Coins);
 

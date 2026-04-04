@@ -260,6 +260,8 @@ namespace SabreTools.Metadata
                     return false;
                 if (selfInput.Coins != otherInput.Coins)
                     return false;
+                if (selfInput.ControlAttr != otherInput.ControlAttr)
+                    return false;
                 if (selfInput.Players != otherInput.Players)
                     return false;
                 if (selfInput.Service != otherInput.Service)

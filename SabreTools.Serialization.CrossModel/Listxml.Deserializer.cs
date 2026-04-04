@@ -499,13 +499,10 @@ namespace SabreTools.Serialization.CrossModel
                 Service = item.Service,
                 Tilt = item.Tilt,
                 Players = item.Players,
+                ControlAttr = item.ControlAttr,
                 Buttons = item.Buttons,
                 Coins = item.Coins,
             };
-
-            var controlAttr = item.ReadString(Data.Models.Metadata.Input.ControlKey);
-            if (controlAttr is not null)
-                input.ControlAttr = controlAttr;
 
             var controls = item.Read<Data.Models.Metadata.Control[]>(Data.Models.Metadata.Input.ControlKey);
             if (controls is not null && controls.Length > 0)

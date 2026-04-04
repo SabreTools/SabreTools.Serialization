@@ -665,6 +665,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Buttons = 12345,
                 Coins = 12345,
                 [Data.Models.Metadata.Input.ControlKey] = new Data.Models.Metadata.Control[] { CreateMetadataControl() },
+                ControlAttr = "controlattr",
                 Players = 12345,
                 Service = true,
                 Tilt = true,
@@ -1395,6 +1396,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(input);
             Assert.Equal(12345, input.Buttons);
             Assert.Equal(12345, input.Coins);
+            Assert.Equal("controlattr", input.ControlAttr);
             Assert.Equal(12345, input.Players);
             Assert.True(input.Service);
             Assert.True(input.Tilt);

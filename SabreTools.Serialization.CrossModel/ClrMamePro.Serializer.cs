@@ -243,7 +243,7 @@ namespace SabreTools.Serialization.CrossModel
             var input = new Data.Models.Metadata.Input
             {
                 Players = item.Players,
-                [Data.Models.Metadata.Input.ControlKey] = item.Control,
+                ControlAttr = item.Control,
                 Buttons = item.Buttons,
                 Coins = item.Coins,
                 Tilt = item.Tilt,

@@ -930,6 +930,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(input);
             Assert.Equal(12345, input.Buttons);
             Assert.Equal(12345, input.Coins);
+            Assert.Equal("controlattr", input.ControlAttr);
             Assert.Equal(12345, input.Players);
             Assert.True(input.Service);
             Assert.True(input.Tilt);

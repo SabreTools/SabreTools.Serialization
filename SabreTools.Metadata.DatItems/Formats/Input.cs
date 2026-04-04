@@ -25,6 +25,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Input)?.Coins = value;
         }
 
+        public string? ControlAttr
+        {
+            get => (_internal as Data.Models.Metadata.Input)?.ControlAttr;
+            set => (_internal as Data.Models.Metadata.Input)?.ControlAttr = value;
+        }
+
         [JsonIgnore]
         public bool ControlsSpecified
         {

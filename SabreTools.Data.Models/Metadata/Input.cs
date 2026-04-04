@@ -12,6 +12,9 @@ namespace SabreTools.Data.Models.Metadata
 
         public long? Coins { get; set; }
 
+        /// <remarks>Attribute also named Control</remarks>
+        public string? ControlAttr { get; set; }
+
         public long? Players { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
@@ -24,7 +27,7 @@ namespace SabreTools.Data.Models.Metadata
 
         #region Keys
 
-        /// <remarks>string / Control[]</remarks>
+        /// <remarks>Control[]</remarks>
         public const string ControlKey = "control";
 
         #endregion

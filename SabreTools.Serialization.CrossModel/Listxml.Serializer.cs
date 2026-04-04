@@ -537,7 +537,7 @@ namespace SabreTools.Serialization.CrossModel
                 Service = item.Service,
                 Tilt = item.Tilt,
                 Players = item.Players,
-                [Data.Models.Metadata.Input.ControlKey] = item.ControlAttr,
+                ControlAttr = item.ControlAttr,
                 Buttons = item.Buttons,
                 Coins = item.Coins,
             };

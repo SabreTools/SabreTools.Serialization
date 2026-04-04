@@ -301,6 +301,7 @@ namespace SabreTools.Data.Extensions
             {
                 cloneInput.Buttons = selfInput.Buttons;
                 cloneInput.Coins = selfInput.Coins;
+                cloneInput.ControlAttr = selfInput.ControlAttr;
                 cloneInput.Players = selfInput.Players;
                 cloneInput.Service = selfInput.Service;
                 cloneInput.Tilt = selfInput.Tilt;
