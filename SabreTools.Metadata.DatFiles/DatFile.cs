@@ -503,7 +503,7 @@ namespace SabreTools.Metadata.DatFiles
                 if (item is Disk disk)
                 {
                     // We can only write out if there's a SHA-1
-                    string? sha1 = disk.ReadString(Data.Models.Metadata.Disk.SHA1Key);
+                    string? sha1 = disk.SHA1;
                     if (!string.IsNullOrEmpty(sha1))
                     {
                         name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
@@ -606,8 +606,8 @@ namespace SabreTools.Metadata.DatFiles
             // Ensure we have the proper values for replacement
             if (item is Disk disk)
             {
-                md5 = disk.ReadString(Data.Models.Metadata.Disk.MD5Key) ?? string.Empty;
-                sha1 = disk.ReadString(Data.Models.Metadata.Disk.SHA1Key) ?? string.Empty;
+                md5 = disk.MD5 ?? string.Empty;
+                sha1 = disk.SHA1 ?? string.Empty;
             }
             else if (item is DatItems.Formats.File file)
             {
@@ -1038,11 +1038,11 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         private static string GetDuplicateSuffix(Disk datItem)
         {
-            string? md5 = datItem.ReadString(Data.Models.Metadata.Disk.MD5Key);
+            string? md5 = datItem.MD5;
             if (!string.IsNullOrEmpty(md5))
                 return $"_{md5}";
 
-            string? sha1 = datItem.ReadString(Data.Models.Metadata.Disk.SHA1Key);
+            string? sha1 = datItem.SHA1;
             if (!string.IsNullOrEmpty(sha1))
                 return $"_{sha1}";
 

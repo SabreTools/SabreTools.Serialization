@@ -330,8 +330,8 @@ namespace SabreTools.Metadata.DatFiles
             ItemStatus? status = disk.Status;
             if (status != ItemStatus.Nodump)
             {
-                AddHashCount(HashType.MD5, string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key)) ? 0 : 1);
-                AddHashCount(HashType.SHA1, string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)) ? 0 : 1);
+                AddHashCount(HashType.MD5, string.IsNullOrEmpty(disk.MD5) ? 0 : 1);
+                AddHashCount(HashType.SHA1, string.IsNullOrEmpty(disk.SHA1) ? 0 : 1);
             }
 
             AddStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);
@@ -459,8 +459,8 @@ namespace SabreTools.Metadata.DatFiles
             ItemStatus? status = disk.Status;
             if (status != ItemStatus.Nodump)
             {
-                RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key)) ? 0 : 1);
-                RemoveHashCount(HashType.SHA1, string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)) ? 0 : 1);
+                RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(disk.MD5) ? 0 : 1);
+                RemoveHashCount(HashType.SHA1, string.IsNullOrEmpty(disk.SHA1) ? 0 : 1);
             }
 
             RemoveStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);

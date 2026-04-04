@@ -372,7 +372,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("sha1", obj.SHA1);
             writer.WriteOptionalAttributeString("merge", obj.Merge);
             writer.WriteOptionalAttributeString("region", obj.Region);
-            writer.WriteOptionalAttributeString("index", obj.Index);
+            writer.WriteOptionalAttributeString("index", obj.Index?.ToString());
             writer.WriteOptionalAttributeString("writable", obj.Writable.FromYesNo());
             writer.WriteOptionalAttributeString("status", obj.Status?.AsStringValue());
             writer.WriteOptionalAttributeString("optional", obj.Optional.FromYesNo());

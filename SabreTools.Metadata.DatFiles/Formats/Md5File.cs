@@ -40,8 +40,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Disk disk:
-                    if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key)))
-                        missingFields.Add(Data.Models.Metadata.Disk.MD5Key);
+                    if (string.IsNullOrEmpty(disk.MD5))
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.MD5));
                     break;
 
                 case Media medium:

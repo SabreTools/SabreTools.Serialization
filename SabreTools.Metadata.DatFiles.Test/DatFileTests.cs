@@ -1404,9 +1404,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
             machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
-            DatItem item = new Disk { Name = "name" };
-            item.Write(Data.Models.Metadata.Disk.MD5Key, "md5");
-            item.Write(Data.Models.Metadata.Disk.SHA1Key, "sha1");
+            DatItem item = new Disk
+            {
+                Name = "name",
+                MD5 = "md5",
+                SHA1 = "sha1",
+            };
 
             string actual = DatFile.FormatPrefixPostfix(item, machine, fix);
             Assert.Equal(expected, actual);
@@ -1670,8 +1673,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void GetDuplicateSuffix_Disk_MD5()
         {
             string hash = "XXXXXX";
-            DatItem datItem = new Disk();
-            datItem.Write(Data.Models.Metadata.Disk.MD5Key, hash);
+            DatItem datItem = new Disk { MD5 = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1681,8 +1683,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void GetDuplicateSuffix_Disk_SHA1()
         {
             string hash = "XXXXXX";
-            DatItem datItem = new Disk();
-            datItem.Write(Data.Models.Metadata.Disk.SHA1Key, hash);
+            DatItem datItem = new Disk { SHA1 = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);

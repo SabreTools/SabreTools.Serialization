@@ -24,9 +24,8 @@ namespace SabreTools.Data.Models.Listxml
         [XmlAttribute("region")]
         public string? Region { get; set; }
 
-        /// <remarks>Numeric?</remarks>
         [XmlAttribute("index")]
-        public string? Index { get; set; }
+        public long? Index { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("writable")]

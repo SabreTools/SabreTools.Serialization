@@ -16,8 +16,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
             Machine machine = new Machine();
 
-            DatItem disk = new Disk { Name = "item" };
-            disk.Write<string?>(Data.Models.Metadata.Disk.SHA1Key, "deadbeef");
+            DatItem disk = new Disk
+            {
+                Name = "item",
+                SHA1 = "deadbeef",
+            };
 
             var dict = new ItemDictionaryDB();
             long sourceIndex = dict.AddSource(source);

@@ -127,8 +127,8 @@ namespace SabreTools.Serialization.CrossModel
             var disk = new Disk
             {
                 Name = item.Name,
-                MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
                 Status = item.Status,
                 Writeable = item.Writable,
             };

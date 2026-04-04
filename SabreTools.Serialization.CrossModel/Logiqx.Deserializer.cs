@@ -233,11 +233,11 @@ namespace SabreTools.Serialization.CrossModel
             var disk = new Disk
             {
                 Name = item.Name,
-                MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
-                Merge = item.ReadString(Data.Models.Metadata.Disk.MergeKey),
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                Merge = item.Merge,
                 Status = item.Status,
-                Region = item.ReadString(Data.Models.Metadata.Disk.RegionKey),
+                Region = item.Region,
             };
             return disk;
         }

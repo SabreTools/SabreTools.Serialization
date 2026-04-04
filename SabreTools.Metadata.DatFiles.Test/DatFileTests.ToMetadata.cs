@@ -196,8 +196,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Disk item = new Disk(CreateMetadataDisk());
             item.CopyMachineInformation(machine);
-            item.Write(Disk.DiskAreaKey, CreateDiskArea(machine));
-            item.Write(Disk.PartKey, CreatePart(machine));
+            item.DiskArea = CreateDiskArea(machine);
+            item.Part = CreatePart(machine);
             return item;
         }
 
@@ -837,14 +837,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataDisk(Data.Models.Metadata.Disk? disk)
         {
             Assert.NotNull(disk);
-            Assert.Equal("flags", disk.ReadString(Data.Models.Metadata.Disk.FlagsKey));
-            Assert.Equal("index", disk.ReadString(Data.Models.Metadata.Disk.IndexKey));
-            Assert.Equal(HashType.MD5.ZeroString, disk.ReadString(Data.Models.Metadata.Disk.MD5Key));
-            Assert.Equal("merge", disk.ReadString(Data.Models.Metadata.Disk.MergeKey));
+            Assert.Equal("flags", disk.Flags);
+            Assert.Equal(12345, disk.Index);
+            Assert.Equal(HashType.MD5.ZeroString, disk.MD5);
+            Assert.Equal("merge", disk.Merge);
             Assert.Equal("name", disk.Name);
             Assert.True(disk.Optional);
-            Assert.Equal("region", disk.ReadString(Data.Models.Metadata.Disk.RegionKey));
-            Assert.Equal(HashType.SHA1.ZeroString, disk.ReadString(Data.Models.Metadata.Disk.SHA1Key));
+            Assert.Equal("region", disk.Region);
+            Assert.Equal(HashType.SHA1.ZeroString, disk.SHA1);
             Assert.True(disk.Writable);
         }
 

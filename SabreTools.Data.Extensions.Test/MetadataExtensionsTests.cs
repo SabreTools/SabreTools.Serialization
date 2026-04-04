@@ -40,12 +40,12 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase? self = new Disk
             {
                 Name = "name",
-                [Disk.MergeKey] = "XXXXXX",
-                [Disk.RegionKey] = "XXXXXX",
+                Merge = "merge",
+                Region = "region",
                 Status = ItemStatus.Good,
                 Optional = true,
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             Rom? actual = self.ConvertToRom();
@@ -54,12 +54,12 @@ namespace SabreTools.Data.Extensions.Test
             Assert.Equal(4, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
             Assert.Equal("name.chd", actual.Name);
-            Assert.Equal("XXXXXX", actual[Rom.MergeKey]);
-            Assert.Equal("XXXXXX", actual[Rom.RegionKey]);
+            Assert.Equal("merge", actual[Rom.MergeKey]);
+            Assert.Equal("region", actual[Rom.RegionKey]);
             Assert.Equal(ItemStatus.Good, actual.Status);
             Assert.Equal(true, actual.Optional);
-            Assert.Equal("XXXXXX", actual[Rom.MD5Key]);
-            Assert.Equal("XXXXXX", actual[Rom.SHA1Key]);
+            Assert.Equal("md5", actual[Rom.MD5Key]);
+            Assert.Equal("sha1", actual[Rom.SHA1Key]);
         }
 
         [Fact]
@@ -84,10 +84,10 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase? self = new Media
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             Rom? actual = self.ConvertToRom();
@@ -96,10 +96,10 @@ namespace SabreTools.Data.Extensions.Test
             Assert.Equal(4, actual.Count);
             Assert.Equal(ItemType.Rom, actual.ItemType);
             Assert.Equal("name.aaruf", actual.Name);
-            Assert.Equal("XXXXXX", actual[Rom.MD5Key]);
-            Assert.Equal("XXXXXX", actual[Rom.SHA1Key]);
-            Assert.Equal("XXXXXX", actual[Rom.SHA256Key]);
-            Assert.Equal("XXXXXX", actual[Rom.SpamSumKey]);
+            Assert.Equal("md5", actual[Rom.MD5Key]);
+            Assert.Equal("sha1", actual[Rom.SHA1Key]);
+            Assert.Equal("sha256", actual[Rom.SHA256Key]);
+            Assert.Equal("spamsum", actual[Rom.SpamSumKey]);
         }
 
         [Fact]
@@ -153,13 +153,13 @@ namespace SabreTools.Data.Extensions.Test
         {
             Disk self = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = string.Empty,
+                MD5 = "md5",
+                SHA1 = string.Empty,
             };
             Disk other = new Disk
             {
-                [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = "sha1",
             };
 
             bool actual = self.HashMatch(other);
@@ -171,13 +171,13 @@ namespace SabreTools.Data.Extensions.Test
         {
             Disk self = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = string.Empty,
+                MD5 = "md5",
+                SHA1 = string.Empty,
             };
             Disk other = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             bool actual = self.HashMatch(other);
@@ -189,13 +189,13 @@ namespace SabreTools.Data.Extensions.Test
         {
             Disk self = new Disk
             {
-                [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = "sha1",
             };
             Disk other = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             bool actual = self.HashMatch(other);
@@ -207,13 +207,13 @@ namespace SabreTools.Data.Extensions.Test
         {
             Disk self = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
             Disk other = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             bool actual = self.HashMatch(other);
@@ -225,17 +225,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 SHA1 = string.Empty,
-                SHA256 = "XXXXXX",
+                SHA256 = "sha256",
                 SpamSum = string.Empty,
             };
             Media other = new Media
             {
                 MD5 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
                 SHA256 = string.Empty,
-                SpamSum = "XXXXXX",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -969,8 +969,8 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
             };
 
             bool actual = self.HasZeroHash();
@@ -982,8 +982,8 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Disk
             {
-                [Disk.MD5Key] = HashType.MD5.ZeroString,
-                [Disk.SHA1Key] = string.Empty,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -995,8 +995,8 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Disk
             {
-                [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = HashType.SHA1.ZeroString,
+                MD5 = string.Empty,
+                SHA1 = HashType.SHA1.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1008,8 +1008,8 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Disk
             {
-                [Disk.MD5Key] = HashType.MD5.ZeroString,
-                [Disk.SHA1Key] = HashType.SHA1.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1510,8 +1510,8 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase self = new Disk();
             DictionaryBase other = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
             };
 
             self.FillMissingHashes(other);

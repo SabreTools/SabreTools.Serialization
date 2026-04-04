@@ -557,7 +557,7 @@ namespace SabreTools.Serialization.Readers
             obj.SHA1 = reader.GetAttribute("sha1");
             obj.Merge = reader.GetAttribute("merge");
             obj.Region = reader.GetAttribute("region");
-            obj.Index = reader.GetAttribute("index");
+            obj.Index = NumberHelper.ConvertToInt64(reader.GetAttribute("index"));
             obj.Writable = reader.GetAttribute("writable").AsYesNo();
             obj.Status = reader.GetAttribute("status").AsItemStatus();
             obj.Optional = reader.GetAttribute("optional").AsYesNo();

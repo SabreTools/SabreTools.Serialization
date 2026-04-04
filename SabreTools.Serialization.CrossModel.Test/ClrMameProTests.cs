@@ -128,11 +128,11 @@ namespace SabreTools.Serialization.CrossModel.Test
             var disk = new Data.Models.ClrMamePro.Disk
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                Merge = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                Merge = "merge",
                 Status = Data.Models.Metadata.ItemStatus.Good,
-                Flags = "XXXXXX",
+                Flags = "flags",
             };
 
             var sample = new Data.Models.ClrMamePro.Sample
@@ -395,11 +395,11 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(disk);
             Assert.Equal("name", disk.Name);
-            Assert.Equal("XXXXXX", disk.MD5);
-            Assert.Equal("XXXXXX", disk.SHA1);
-            Assert.Equal("XXXXXX", disk.Merge);
+            Assert.Equal("md5", disk.MD5);
+            Assert.Equal("sha1", disk.SHA1);
+            Assert.Equal("merge", disk.Merge);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, disk.Status);
-            Assert.Equal("XXXXXX", disk.Flags);
+            Assert.Equal("flags", disk.Flags);
         }
 
         /// <summary>

@@ -173,6 +173,8 @@ namespace SabreTools.Data.Extensions
                 return dipSwitch.Clone() as DipSwitch;
             else if (self is DipValue dipValue)
                 return dipValue.Clone() as DipValue;
+            else if (self is Disk disk)
+                return disk.Clone() as Disk;
             else if (self is Display display)
                 return display.Clone() as Display;
             else if (self is Driver driver)
@@ -223,12 +225,6 @@ namespace SabreTools.Data.Extensions
                 cloneDataArea.Endianness = selfDataArea.Endianness;
                 cloneDataArea.Size = selfDataArea.Size;
                 cloneDataArea.Width = selfDataArea.Width;
-            }
-            else if (self is Disk selfDisk && clone is Disk cloneDisk)
-            {
-                cloneDisk.Optional = selfDisk.Optional;
-                cloneDisk.Status = selfDisk.Status;
-                cloneDisk.Writable = selfDisk.Writable;
             }
             else if (self is Feature selfFeature && clone is Feature cloneFeature)
             {
@@ -434,12 +430,12 @@ namespace SabreTools.Data.Extensions
             return new Rom
             {
                 Name = name,
-                [Rom.MergeKey] = disk.ReadString(Disk.MergeKey),
-                [Rom.RegionKey] = disk.ReadString(Disk.RegionKey),
+                [Rom.MergeKey] = disk.Merge,
+                [Rom.RegionKey] = disk.Region,
                 Status = disk.Status,
                 Optional = disk.Optional,
-                [Rom.MD5Key] = disk.ReadString(Disk.MD5Key),
-                [Rom.SHA1Key] = disk.ReadString(Disk.SHA1Key),
+                [Rom.MD5Key] = disk.MD5,
+                [Rom.SHA1Key] = disk.SHA1,
             };
         }
 
@@ -519,13 +515,8 @@ namespace SabreTools.Data.Extensions
                 return false;
 
             // Return if all hashes match according to merge rules
-            string? selfMd5 = self.ReadString(Disk.MD5Key);
-            string? otherMd5 = other.ReadString(Disk.MD5Key);
-            bool conditionalMd5 = ConditionalHashEquals(selfMd5, otherMd5);
-
-            string? selfSha1 = self.ReadString(Disk.SHA1Key);
-            string? otherSha1 = other.ReadString(Disk.SHA1Key);
-            bool conditionalSha1 = ConditionalHashEquals(selfSha1, otherSha1);
+            bool conditionalMd5 = ConditionalHashEquals(self.MD5, other.MD5);
+            bool conditionalSha1 = ConditionalHashEquals(self.SHA1, other.SHA1);
 
             return conditionalMd5
                 && conditionalSha1;
@@ -670,11 +661,11 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         private static bool HasCommonHash(this Disk self, Disk other)
         {
-            bool md5Null = string.IsNullOrEmpty(self.ReadString(Disk.MD5Key));
-            md5Null ^= string.IsNullOrEmpty(other.ReadString(Disk.MD5Key));
+            bool md5Null = string.IsNullOrEmpty(self.MD5);
+            md5Null ^= string.IsNullOrEmpty(other.MD5);
 
-            bool sha1Null = string.IsNullOrEmpty(self.ReadString(Disk.SHA1Key));
-            sha1Null ^= string.IsNullOrEmpty(other.ReadString(Disk.SHA1Key));
+            bool sha1Null = string.IsNullOrEmpty(self.SHA1);
+            sha1Null ^= string.IsNullOrEmpty(other.SHA1);
 
             return !md5Null
                 || !sha1Null;
@@ -767,8 +758,8 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         private static bool HasHashes(this Disk disk)
         {
-            bool md5Null = string.IsNullOrEmpty(disk.ReadString(Disk.MD5Key));
-            bool sha1Null = string.IsNullOrEmpty(disk.ReadString(Disk.SHA1Key));
+            bool md5Null = string.IsNullOrEmpty(disk.MD5);
+            bool sha1Null = string.IsNullOrEmpty(disk.SHA1);
 
             return !md5Null
                 || !sha1Null;
@@ -829,10 +820,10 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         private static bool HasZeroHash(this Disk disk)
         {
-            string? md5 = disk.ReadString(Disk.MD5Key);
+            string? md5 = disk.MD5;
             bool md5Null = string.IsNullOrEmpty(md5) || string.Equals(md5, HashType.MD5.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? sha1 = disk.ReadString(Disk.SHA1Key);
+            string? sha1 = disk.SHA1;
             bool sha1Null = string.IsNullOrEmpty(sha1) || string.Equals(sha1, HashType.SHA1.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             return md5Null
@@ -967,15 +958,15 @@ namespace SabreTools.Data.Extensions
             if (self is null || other is null)
                 return;
 
-            string? selfMd5 = self.ReadString(Disk.MD5Key);
-            string? otherMd5 = other.ReadString(Disk.MD5Key);
+            string? selfMd5 = self.MD5;
+            string? otherMd5 = other.MD5;
             if (string.IsNullOrEmpty(selfMd5) && !string.IsNullOrEmpty(otherMd5))
-                self[Disk.MD5Key] = otherMd5;
+                self.MD5 = otherMd5;
 
-            string? selfSha1 = self.ReadString(Disk.SHA1Key);
-            string? otherSha1 = other.ReadString(Disk.SHA1Key);
+            string? selfSha1 = self.SHA1;
+            string? otherSha1 = other.SHA1;
             if (string.IsNullOrEmpty(selfSha1) && !string.IsNullOrEmpty(otherSha1))
-                self[Disk.SHA1Key] = otherSha1;
+                self.SHA1 = otherSha1;
         }
 
         /// <summary>

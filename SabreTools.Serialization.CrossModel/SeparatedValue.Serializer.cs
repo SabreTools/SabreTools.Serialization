@@ -90,8 +90,8 @@ namespace SabreTools.Serialization.CrossModel
                 "disk" => new Data.Models.Metadata.Disk
                 {
                     Name = item.DiskName,
-                    [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
-                    [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
+                    MD5 = item.MD5,
+                    SHA1 = item.SHA1,
                     Status = item.Status,
                 },
                 "media" => new Data.Models.Metadata.Media

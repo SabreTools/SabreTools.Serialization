@@ -188,8 +188,8 @@ namespace SabreTools.Metadata.DatFiles
             {
                 // If the file has aboslutely no hashes, skip and log
                 if (disk.Status != ItemStatus.Nodump
-                    && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
-                    && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
+                    && string.IsNullOrEmpty(disk.MD5)
+                    && string.IsNullOrEmpty(disk.SHA1))
                 {
                     _logger.Verbose($"Incomplete entry for '{disk.Name}' will be output as nodump");
                     disk.Status = ItemStatus.Nodump;

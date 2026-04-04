@@ -145,9 +145,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(disk.Read<Part?>(Disk.PartKey)!.Name))
+                        if (string.IsNullOrEmpty(disk.Part!.Name))
                             missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        if (string.IsNullOrEmpty(disk.Read<Part?>(Disk.PartKey)!.Interface))
+                        if (string.IsNullOrEmpty(disk.Part.Interface))
                             missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
                     }
 
@@ -157,7 +157,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(disk.Read<DiskArea?>(Disk.DiskAreaKey)!.Name))
+                        if (string.IsNullOrEmpty(disk.DiskArea!.Name))
                             missingFields.Add(nameof(Data.Models.Metadata.DiskArea.Name));
                     }
 

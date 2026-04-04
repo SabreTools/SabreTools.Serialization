@@ -251,9 +251,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         /// </summary>
         private static Disk CreateDisk()
         {
-            var disk = new Disk { Status = ItemStatus.Good };
-            disk.Write<string?>(Data.Models.Metadata.Disk.MD5Key, HashType.MD5.ZeroString);
-            disk.Write<string?>(Data.Models.Metadata.Disk.SHA1Key, HashType.SHA1.ZeroString);
+            var disk = new Disk
+            {
+                Status = ItemStatus.Good,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+            };
 
             return disk;
         }

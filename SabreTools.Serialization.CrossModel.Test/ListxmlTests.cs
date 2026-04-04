@@ -89,11 +89,11 @@ namespace SabreTools.Serialization.CrossModel.Test
             var disk = new Data.Models.Listxml.Disk
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                Merge = "XXXXXX",
-                Region = "XXXXXX",
-                Index = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                Merge = "merge",
+                Region = "region",
+                Index = 12345,
                 Writable = true,
                 Status = Data.Models.Metadata.ItemStatus.Good,
                 Optional = true,
@@ -505,11 +505,11 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(disk);
             Assert.Equal("name", disk.Name);
-            Assert.Equal("XXXXXX", disk.MD5);
-            Assert.Equal("XXXXXX", disk.SHA1);
-            Assert.Equal("XXXXXX", disk.Merge);
-            Assert.Equal("XXXXXX", disk.Region);
-            Assert.Equal("XXXXXX", disk.Index);
+            Assert.Equal("md5", disk.MD5);
+            Assert.Equal("sha1", disk.SHA1);
+            Assert.Equal("merge", disk.Merge);
+            Assert.Equal("region", disk.Region);
+            Assert.Equal(12345, disk.Index);
             Assert.Equal(true, disk.Writable);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, disk.Status);
             Assert.Equal(true, disk.Optional);

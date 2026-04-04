@@ -504,8 +504,26 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Value;
                     return true;
 
+                case Disk item when fieldName == "flags":
+                    checkValue = item.Flags;
+                    return true;
+                case Disk item when fieldName == "index":
+                    checkValue = item.Index?.ToString();
+                    return true;
+                case Disk item when fieldName == "md5":
+                    checkValue = item.MD5;
+                    return true;
+                case Disk item when fieldName == "merge":
+                    checkValue = item.Merge;
+                    return true;
                 case Disk item when fieldName == "optional":
                     checkValue = item.Optional.FromYesNo();
+                    return true;
+                case Disk item when fieldName == "region":
+                    checkValue = item.Region;
+                    return true;
+                case Disk item when fieldName == "sha1":
+                    checkValue = item.SHA1;
                     return true;
                 case Disk item when fieldName == "status":
                     checkValue = item.Status?.AsStringValue();

@@ -297,7 +297,7 @@ namespace SabreTools.Metadata.DatFiles
                     // Special disk handling
                     if (item is Disk disk)
                     {
-                        string? mergeTag = disk.ReadString(Data.Models.Metadata.Disk.MergeKey);
+                        string? mergeTag = disk.Merge;
 
                         // If the merge tag exists and the parent already contains it, skip
                         if (mergeTag is not null && GetItemsForBucket(cloneOf)
@@ -433,7 +433,7 @@ namespace SabreTools.Metadata.DatFiles
                     // Special disk handling
                     if (item.Value is Disk disk)
                     {
-                        string? mergeTag = disk.ReadString(Data.Models.Metadata.Disk.MergeKey);
+                        string? mergeTag = disk.Merge;
 
                         // If the merge tag exists and the parent already contains it, skip
                         if (mergeTag is not null && GetItemsForBucketDB(cloneOf).Values
@@ -722,8 +722,7 @@ namespace SabreTools.Metadata.DatFiles
                             continue;
 
                         deviceReferences.Add(deviceReference);
-                        var deviceRef = new DeviceRef();
-                        deviceRef.Name = deviceReference;
+                        var deviceRef = new DeviceRef { Name = deviceReference };
                         deviceRef.CopyMachineInformation(copyFrom);
                         Items.AddItem(deviceRef, statsOnly: false);
                     }
@@ -772,8 +771,7 @@ namespace SabreTools.Metadata.DatFiles
                             continue;
 
                         slotOptions.Add(slotOption);
-                        var slotOptionItem = new SlotOption();
-                        slotOptionItem.DevName = slotOption;
+                        var slotOptionItem = new SlotOption { DevName = slotOption };
                         slotOptionItem.CopyMachineInformation(copyFrom);
 
                         var slotItem = new Slot();
@@ -887,8 +885,7 @@ namespace SabreTools.Metadata.DatFiles
                     {
                         if (!deviceReferences.Contains(deviceReference))
                         {
-                            var deviceRef = new DeviceRef();
-                            deviceRef.Name = deviceReference;
+                            var deviceRef = new DeviceRef { Name = deviceReference };
                             ItemsDB.AddItem(deviceRef, machine.Key, source.Key);
                         }
                     }
@@ -943,8 +940,7 @@ namespace SabreTools.Metadata.DatFiles
                     {
                         if (!slotOptions.Contains(slotOption))
                         {
-                            var slotOptionItem = new SlotOption();
-                            slotOptionItem.DevName = slotOption;
+                            var slotOptionItem = new SlotOption { DevName = slotOption };
 
                             var slotItem = new Slot();
                             slotItem.Write<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey, [slotOptionItem]);

@@ -12,34 +12,40 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("disk"), XmlRoot("disk")]
     public sealed class Disk : DatItem<Data.Models.Metadata.Disk>
     {
-        #region Constants
-
-        /// <summary>
-        /// Non-standard key for inverted logic
-        /// </summary>
-        public const string DiskAreaKey = "DISKAREA";
-
-        /// <summary>
-        /// Non-standard key for inverted logic
-        /// </summary>
-        public const string PartKey = "PART";
-
-        #endregion
-
         #region Fields
+
+        public DiskArea? DiskArea { get; set; }
 
         [JsonIgnore]
         public bool DiskAreaSpecified
+            => DiskArea is not null && !string.IsNullOrEmpty(DiskArea.Name);
+
+        public string? Flags
         {
-            get
-            {
-                var diskArea = Read<DiskArea?>(DiskAreaKey);
-                return diskArea is not null && !string.IsNullOrEmpty(diskArea.Name);
-            }
+            get => (_internal as Data.Models.Metadata.Disk)?.Flags;
+            set => (_internal as Data.Models.Metadata.Disk)?.Flags = value;
+        }
+
+        public long? Index
+        {
+            get => (_internal as Data.Models.Metadata.Disk)?.Index;
+            set => (_internal as Data.Models.Metadata.Disk)?.Index = value;
         }
 
         /// <inheritdoc>/>
         public override ItemType ItemType => ItemType.Disk;
+
+        public string? MD5
+        {
+            get => (_internal as Data.Models.Metadata.Disk)?.MD5;
+            set => (_internal as Data.Models.Metadata.Disk)?.MD5 = value;
+        }
+
+        public string? Merge
+        {
+            get => (_internal as Data.Models.Metadata.Disk)?.Merge;
+            set => (_internal as Data.Models.Metadata.Disk)?.Merge = value;
+        }
 
         public string? Name
         {
@@ -53,16 +59,29 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => (_internal as Data.Models.Metadata.Disk)?.Optional = value;
         }
 
+        public Part? Part { get; set; }
+
         [JsonIgnore]
         public bool PartSpecified
         {
             get
             {
-                var part = Read<Part?>(PartKey);
-                return part is not null
-                    && (!string.IsNullOrEmpty(part.Name)
-                        || !string.IsNullOrEmpty(part.Interface));
+                return Part is not null
+                    && (!string.IsNullOrEmpty(Part.Name)
+                        || !string.IsNullOrEmpty(Part.Interface));
             }
+        }
+
+        public string? Region
+        {
+            get => (_internal as Data.Models.Metadata.Disk)?.Region;
+            set => (_internal as Data.Models.Metadata.Disk)?.Region = value;
+        }
+
+        public string? SHA1
+        {
+            get => (_internal as Data.Models.Metadata.Disk)?.SHA1;
+            set => (_internal as Data.Models.Metadata.Disk)?.SHA1 = value;
         }
 
         public ItemStatus? Status
@@ -92,13 +111,11 @@ namespace SabreTools.Metadata.DatItems.Formats
             DupeType = 0x00;
 
             // Process hash values
-            string? md5 = ReadString(Data.Models.Metadata.Disk.MD5Key);
-            if (md5 is not null)
-                Write<string?>(Data.Models.Metadata.Disk.MD5Key, TextHelper.NormalizeMD5(md5));
+            if (MD5 is not null)
+                MD5 = TextHelper.NormalizeMD5(MD5);
 
-            string? sha1 = ReadString(Data.Models.Metadata.Disk.SHA1Key);
-            if (sha1 is not null)
-                Write<string?>(Data.Models.Metadata.Disk.SHA1Key, TextHelper.NormalizeSHA1(sha1));
+            if (SHA1 is not null)
+                SHA1 = TextHelper.NormalizeSHA1(SHA1);
         }
 
         public Disk(Data.Models.Metadata.Disk item, Machine machine, Source source) : this(item)
@@ -123,18 +140,15 @@ namespace SabreTools.Metadata.DatItems.Formats
             var rom = new Rom(_internal.ConvertToRom()!);
 
             // Create a DataArea if there was an existing DiskArea
-            var diskArea = Read<DiskArea?>(DiskAreaKey);
-            if (diskArea is not null)
+            if (DiskArea is not null)
             {
-                var dataArea = new DataArea();
-                dataArea.Name = diskArea.Name;
-
+                var dataArea = new DataArea { Name = DiskArea.Name };
                 rom.Write<DataArea?>(Rom.DataAreaKey, dataArea);
             }
 
             rom.DupeType = DupeType;
             rom.Machine = Machine?.Clone() as Machine;
-            rom.Write(Rom.PartKey, Read<Part>(PartKey)?.Clone() as Part);
+            rom.Write(Rom.PartKey, Part?.Clone() as Part);
             rom.RemoveFlag = RemoveFlag;
             rom.Source = Source?.Clone() as Source;
 
@@ -179,11 +193,11 @@ namespace SabreTools.Metadata.DatItems.Formats
             switch (bucketedBy)
             {
                 case ItemKey.MD5:
-                    key = ReadString(Data.Models.Metadata.Disk.MD5Key);
+                    key = MD5;
                     break;
 
                 case ItemKey.SHA1:
-                    key = ReadString(Data.Models.Metadata.Disk.SHA1Key);
+                    key = SHA1;
                     break;
 
                 // Let the base handle generic stuff

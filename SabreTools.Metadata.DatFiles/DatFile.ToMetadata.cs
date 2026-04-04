@@ -164,17 +164,17 @@ namespace SabreTools.Metadata.DatFiles
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.DiskKey, diskItem);
 
                             // Add Part and DiskArea mappings
-                            bool diskContainsPart = diskItem.ContainsKey(DatItems.Formats.Disk.PartKey);
-                            bool diskContainsDiskArea = diskItem.ContainsKey(DatItems.Formats.Disk.DiskAreaKey);
+                            bool diskContainsPart = disk.Part is not null;
+                            bool diskContainsDiskArea = disk.DiskArea is not null;
                             if (diskContainsPart && diskContainsDiskArea)
                             {
-                                var partItem = diskItem.Read<DatItems.Formats.Part>(DatItems.Formats.Disk.PartKey);
+                                var partItem = disk.Part;
                                 if (partItem is not null)
                                 {
                                     var partItemInternal = partItem.GetInternalClone();
                                     partMappings[partItemInternal] = diskItem;
 
-                                    var diskAreaItem = diskItem.Read<DatItems.Formats.DiskArea>(DatItems.Formats.Disk.DiskAreaKey);
+                                    var diskAreaItem = disk.DiskArea;
                                     if (diskAreaItem is not null)
                                         diskAreaMappings[partItemInternal] = (diskAreaItem.GetInternalClone(), diskItem);
                                 }
@@ -585,17 +585,17 @@ namespace SabreTools.Metadata.DatFiles
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.DiskKey, diskItem);
 
                             // Add Part and DiskArea mappings
-                            bool diskContainsPart = diskItem.ContainsKey(DatItems.Formats.Disk.PartKey);
-                            bool diskContainsDiskArea = diskItem.ContainsKey(DatItems.Formats.Disk.DiskAreaKey);
+                            bool diskContainsPart = disk.Part is not null;
+                            bool diskContainsDiskArea = disk.DiskArea is not null;
                             if (diskContainsPart && diskContainsDiskArea)
                             {
-                                var partItem = diskItem.Read<DatItems.Formats.Part>(DatItems.Formats.Disk.PartKey);
+                                var partItem = disk.Part;
                                 if (partItem is not null)
                                 {
                                     var partItemInternal = partItem.GetInternalClone();
                                     partMappings[partItemInternal] = diskItem;
 
-                                    var diskAreaItem = diskItem.Read<DatItems.Formats.DiskArea>(DatItems.Formats.Disk.DiskAreaKey);
+                                    var diskAreaItem = disk.DiskArea;
                                     if (diskAreaItem is not null)
                                         diskAreaMappings[partItemInternal] = (diskAreaItem.GetInternalClone(), diskItem);
                                 }

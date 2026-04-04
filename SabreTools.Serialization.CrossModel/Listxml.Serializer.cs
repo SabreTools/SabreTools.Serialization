@@ -427,11 +427,11 @@ namespace SabreTools.Serialization.CrossModel
             var disk = new Data.Models.Metadata.Disk
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
-                [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
-                [Data.Models.Metadata.Disk.MergeKey] = item.Merge,
-                [Data.Models.Metadata.Disk.RegionKey] = item.Region,
-                [Data.Models.Metadata.Disk.IndexKey] = item.Index,
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                Merge = item.Merge,
+                Region = item.Region,
+                Index = item.Index,
                 Writable = item.Writable,
                 Status = item.Status,
                 Optional = item.Optional,

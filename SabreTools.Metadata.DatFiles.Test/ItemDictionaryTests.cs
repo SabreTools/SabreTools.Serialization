@@ -16,10 +16,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             Source source = new Source(0, source: null);
             Machine machine = new Machine();
 
-            DatItem disk = new Disk { Name = "item" };
-            disk.Write<string?>(Data.Models.Metadata.Disk.SHA1Key, "deadbeef");
-            disk.Source = source;
-            disk.Machine = machine;
+            DatItem disk = new Disk
+            {
+                Name = "item",
+                SHA1 = "deadbeef",
+                Source = source,
+                Machine = machine,
+            };
 
             var dict = new ItemDictionary();
             _ = dict.AddItem(disk, statsOnly: false);

@@ -654,9 +654,11 @@ namespace SabreTools.Metadata.DatFiles
                             if (filterRunner is not null && !filterRunner.Run(disk))
                                 continue;
 
-                            var diskItem = new Disk(disk, machine, source);
-                            diskItem.Write<DiskArea?>(Disk.DiskAreaKey, diskAreaitem);
-                            diskItem.Write<Part?>(Disk.PartKey, partItem);
+                            var diskItem = new Disk(disk, machine, source)
+                            {
+                                DiskArea = diskAreaitem,
+                                Part = partItem,
+                            };
 
                             AddItem(diskItem, statsOnly);
                             // AddItemDB(diskItem, machineIndex, sourceIndex, statsOnly);

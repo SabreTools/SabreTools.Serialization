@@ -24,15 +24,15 @@ namespace SabreTools.Metadata.Test
             {
                 Status = ItemStatus.Nodump,
                 Name = "name",
-                [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
             };
             DictionaryBase other = new Disk
             {
                 Status = ItemStatus.Nodump,
                 Name = "name",
-                [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
             };
 
             bool actual = self.EqualTo(other);
@@ -45,14 +45,14 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Disk
             {
                 Name = "name",
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = string.Empty,
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
             };
             DictionaryBase other = new Disk
             {
                 Name = "name",
-                [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
             };
 
             bool actual = self.EqualTo(other);
@@ -65,14 +65,14 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Disk
             {
                 Name = "XXXXXX1",
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = string.Empty,
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
             };
             DictionaryBase other = new Disk
             {
                 Name = "XXXXXX2",
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
             };
 
             bool actual = self.EqualTo(other);
@@ -85,14 +85,14 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Disk
             {
                 Name = "XXXXXX1",
-                [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
             };
             DictionaryBase other = new Disk
             {
                 Name = "XXXXXX2",
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
             };
 
             bool actual = self.EqualTo(other);
@@ -105,14 +105,14 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Disk
             {
                 Name = "XXXXXX1",
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
             };
             DictionaryBase other = new Disk
             {
                 Name = "XXXXXX2",
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
             };
 
             bool actual = self.EqualTo(other);

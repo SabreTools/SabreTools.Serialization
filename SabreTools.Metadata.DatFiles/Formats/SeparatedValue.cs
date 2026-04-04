@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
@@ -73,10 +73,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Disk disk:
-                    if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
-                        && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
+                    if (string.IsNullOrEmpty(disk.MD5)
+                        && string.IsNullOrEmpty(disk.SHA1))
                     {
-                        missingFields.Add(Data.Models.Metadata.Disk.SHA1Key);
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.SHA1));
                     }
 
                     break;
