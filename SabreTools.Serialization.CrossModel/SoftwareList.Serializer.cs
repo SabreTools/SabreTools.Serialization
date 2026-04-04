@@ -99,7 +99,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.DipValue is not null && item.DipValue.Length > 0)
-                dipSwitch[Data.Models.Metadata.DipSwitch.DipValueKey] = Array.ConvertAll(item.DipValue, ConvertToInternalModel);
+                dipSwitch.DipValue = Array.ConvertAll(item.DipValue, ConvertToInternalModel);
 
             return dipSwitch;
         }

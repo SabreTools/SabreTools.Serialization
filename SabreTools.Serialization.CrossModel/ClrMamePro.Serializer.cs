@@ -196,7 +196,7 @@ namespace SabreTools.Serialization.CrossModel
             var dipswitch = new Data.Models.Metadata.DipSwitch
             {
                 Name = item.Name,
-                [Data.Models.Metadata.DipSwitch.EntryKey] = item.Entry,
+                Entry = item.Entry,
                 Default = item.Default,
             };
             return dipswitch;

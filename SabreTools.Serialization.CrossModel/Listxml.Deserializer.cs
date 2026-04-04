@@ -232,11 +232,11 @@ namespace SabreTools.Serialization.CrossModel
             if (condition is not null)
                 configuration.Condition = ConvertFromInternalModel(condition);
 
-            var confLocations = item.Read<Data.Models.Metadata.ConfLocation[]>(Data.Models.Metadata.Configuration.ConfLocationKey);
+            var confLocations = item.ConfLocation;
             if (confLocations is not null && confLocations.Length > 0)
                 configuration.ConfLocation = Array.ConvertAll(confLocations, ConvertFromInternalModel);
 
-            var confSettings = item.Read<Data.Models.Metadata.ConfSetting[]>(Data.Models.Metadata.Configuration.ConfSettingKey);
+            var confSettings = item.ConfSetting;
             if (confSettings is not null && confSettings.Length > 0)
                 configuration.ConfSetting = Array.ConvertAll(confSettings, ConvertFromInternalModel);
 
@@ -366,11 +366,11 @@ namespace SabreTools.Serialization.CrossModel
             if (condition is not null)
                 dipSwitch.Condition = ConvertFromInternalModel(condition);
 
-            var dipLocations = item.Read<Data.Models.Metadata.DipLocation[]>(Data.Models.Metadata.DipSwitch.DipLocationKey);
+            var dipLocations = item.DipLocation;
             if (dipLocations is not null && dipLocations.Length > 0)
                 dipSwitch.DipLocation = Array.ConvertAll(dipLocations, ConvertFromInternalModel);
 
-            var dipValues = item.Read<Data.Models.Metadata.DipValue[]>(Data.Models.Metadata.DipSwitch.DipValueKey);
+            var dipValues = item.DipValue;
             if (dipValues is not null && dipValues.Length > 0)
                 dipSwitch.DipValue = Array.ConvertAll(dipValues, ConvertFromInternalModel);
 

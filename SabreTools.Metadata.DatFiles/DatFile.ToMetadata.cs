@@ -154,13 +154,8 @@ namespace SabreTools.Metadata.DatFiles
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.DipSwitchKey, dipSwitchItem);
 
                             // Add Part mapping
-                            bool dipSwitchContainsPart = dipSwitchItem.ContainsKey(DatItems.Formats.DipSwitch.PartKey);
-                            if (dipSwitchContainsPart)
-                            {
-                                var partItem = dipSwitchItem.Read<DatItems.Formats.Part>(DatItems.Formats.DipSwitch.PartKey);
-                                if (partItem is not null)
-                                    partMappings[partItem.GetInternalClone()] = dipSwitchItem;
-                            }
+                            if (dipSwitch.Part is not null)
+                                partMappings[dipSwitch.Part.GetInternalClone()] = dipSwitchItem;
 
                             break;
                         case DatItems.Formats.Disk disk:
@@ -580,13 +575,8 @@ namespace SabreTools.Metadata.DatFiles
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.DipSwitchKey, dipSwitchItem);
 
                             // Add Part mapping
-                            bool dipSwitchContainsPart = dipSwitchItem.ContainsKey(DatItems.Formats.DipSwitch.PartKey);
-                            if (dipSwitchContainsPart)
-                            {
-                                var partItem = dipSwitchItem.Read<DatItems.Formats.Part>(DatItems.Formats.DipSwitch.PartKey);
-                                if (partItem is not null)
-                                    partMappings[partItem.GetInternalClone()] = dipSwitchItem;
-                            }
+                            if (dipSwitch.Part is not null)
+                                partMappings[dipSwitch.Part.GetInternalClone()] = dipSwitchItem;
 
                             break;
                         case DatItems.Formats.Disk disk:

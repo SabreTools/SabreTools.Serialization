@@ -673,8 +673,7 @@ namespace SabreTools.Metadata.DatFiles
                         if (filterRunner is not null && !filterRunner.Run(dipSwitch))
                             continue;
 
-                        var dipSwitchItem = new DipSwitch(dipSwitch, machine, source);
-                        dipSwitchItem.Write<Part?>(DipSwitch.PartKey, partItem);
+                        var dipSwitchItem = new DipSwitch(dipSwitch, machine, source) { Part = partItem };
 
                         AddItem(dipSwitchItem, statsOnly);
                         // AddItemDB(dipSwitchItem, machineIndex, sourceIndex, statsOnly);
@@ -691,7 +690,7 @@ namespace SabreTools.Metadata.DatFiles
                             continue;
 
                         var partFeatureItem = new PartFeature(partFeature);
-                        partFeatureItem.Write<Part?>(DipSwitch.PartKey, partItem);
+                        partFeatureItem.Write<Part?>(PartFeature.PartKey, partItem);
                         partFeatureItem.Source = source;
                         partFeatureItem.CopyMachineInformation(machine);
 

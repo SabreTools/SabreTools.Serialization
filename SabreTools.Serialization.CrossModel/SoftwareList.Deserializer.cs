@@ -98,7 +98,7 @@ namespace SabreTools.Serialization.CrossModel
                 Mask = item.Mask,
             };
 
-            var dipValues = item.Read<Data.Models.Metadata.DipValue[]>(Data.Models.Metadata.DipSwitch.DipValueKey);
+            var dipValues = item.DipValue;
             if (dipValues is not null && dipValues.Length > 0)
                 dipSwitch.DipValue = Array.ConvertAll(dipValues, ConvertFromInternalModel);
 

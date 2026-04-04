@@ -94,21 +94,8 @@ namespace SabreTools.Metadata
             }
             else if (self is Configuration selfConfiguration && other is Configuration otherConfiguration)
             {
-                if (selfConfiguration.Mask != otherConfiguration.Mask)
+                if (!selfConfiguration.Equals(otherConfiguration))
                     return false;
-                if (selfConfiguration.Tag != otherConfiguration.Tag)
-                    return false;
-
-                if ((selfConfiguration.Condition is null) ^ (otherConfiguration.Condition is null))
-                {
-                    return false;
-                }
-                else if (selfConfiguration.Condition is not null
-                    && otherConfiguration.Condition is not null
-                    && selfConfiguration.Condition.EqualTo(otherConfiguration.Condition))
-                {
-                    return false;
-                }
             }
             else if (self is ConfLocation selfConfLocation && other is ConfLocation otherConfLocation)
             {

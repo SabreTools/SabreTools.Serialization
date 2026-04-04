@@ -265,16 +265,10 @@ namespace SabreTools.Serialization.CrossModel
                 configuration.Condition = ConvertToInternalModel(item.Condition);
 
             if (item.ConfLocation is not null && item.ConfLocation.Length > 0)
-            {
-                configuration[Data.Models.Metadata.Configuration.ConfLocationKey]
-                    = Array.ConvertAll(item.ConfLocation, ConvertToInternalModel);
-            }
+                configuration.ConfLocation = Array.ConvertAll(item.ConfLocation, ConvertToInternalModel);
 
             if (item.ConfSetting is not null && item.ConfSetting.Length > 0)
-            {
-                configuration[Data.Models.Metadata.Configuration.ConfSettingKey]
-                    = Array.ConvertAll(item.ConfSetting, ConvertToInternalModel);
-            }
+                configuration.ConfSetting = Array.ConvertAll(item.ConfSetting, ConvertToInternalModel);
 
             return configuration;
         }
@@ -402,16 +396,10 @@ namespace SabreTools.Serialization.CrossModel
                 dipSwitch.Condition = ConvertToInternalModel(item.Condition);
 
             if (item.DipLocation is not null && item.DipLocation.Length > 0)
-            {
-                dipSwitch[Data.Models.Metadata.DipSwitch.DipLocationKey]
-                    = Array.ConvertAll(item.DipLocation, ConvertToInternalModel);
-            }
+                dipSwitch.DipLocation = Array.ConvertAll(item.DipLocation, ConvertToInternalModel);
 
             if (item.DipValue is not null && item.DipValue.Length > 0)
-            {
-                dipSwitch[Data.Models.Metadata.DipSwitch.DipValueKey]
-                    = Array.ConvertAll(item.DipValue, ConvertToInternalModel);
-            }
+                dipSwitch.DipValue = Array.ConvertAll(item.DipValue, ConvertToInternalModel);
 
             return dipSwitch;
         }

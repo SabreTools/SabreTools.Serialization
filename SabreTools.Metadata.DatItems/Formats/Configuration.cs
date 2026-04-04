@@ -18,19 +18,19 @@ namespace SabreTools.Metadata.DatItems.Formats
         [JsonIgnore]
         public bool ConditionSpecified => Condition is not null;
 
+        public ConfLocation[]? ConfLocation { get; set; }
+
+        [JsonIgnore]
+        public bool ConfLocationSpecified => ConfLocation is not null && ConfLocation.Length > 0;
+
+        public ConfSetting[]? ConfSetting { get; set; }
+
+        [JsonIgnore]
+        public bool ConfSettingSpecified => ConfSetting is not null && ConfSetting.Length > 0;
+
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType
             => Data.Models.Metadata.ItemType.Configuration;
-
-        [JsonIgnore]
-        public bool LocationsSpecified
-        {
-            get
-            {
-                var locations = Read<ConfLocation[]?>(Data.Models.Metadata.Configuration.ConfLocationKey);
-                return locations is not null && locations.Length > 0;
-            }
-        }
 
         public string? Mask
         {
@@ -42,16 +42,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             get => (_internal as Data.Models.Metadata.Configuration)?.Name;
             set => (_internal as Data.Models.Metadata.Configuration)?.Name = value;
-        }
-
-        [JsonIgnore]
-        public bool SettingsSpecified
-        {
-            get
-            {
-                var settings = Read<ConfSetting[]?>(Data.Models.Metadata.Configuration.ConfSettingKey);
-                return settings is not null && settings.Length > 0;
-            }
         }
 
         public string? Tag
@@ -72,19 +62,11 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (item.Condition is not null)
                 Condition = new Condition(item.Condition);
 
-            var confLocations = item.ReadArray<Data.Models.Metadata.ConfLocation>(Data.Models.Metadata.Configuration.ConfLocationKey);
-            if (confLocations is not null)
-            {
-                ConfLocation[] confLocationItems = Array.ConvertAll(confLocations, confLocation => new ConfLocation(confLocation));
-                Write<ConfLocation[]?>(Data.Models.Metadata.Configuration.ConfLocationKey, confLocationItems);
-            }
+            if (item.ConfLocation is not null)
+                ConfLocation = Array.ConvertAll(item.ConfLocation, confLocation => new ConfLocation(confLocation));
 
-            var confSettings = item.ReadArray<Data.Models.Metadata.ConfSetting>(Data.Models.Metadata.Configuration.ConfSettingKey);
-            if (confSettings is not null)
-            {
-                ConfSetting[] confSettingItems = Array.ConvertAll(confSettings, confSetting => new ConfSetting(confSetting));
-                Write<ConfSetting[]?>(Data.Models.Metadata.Configuration.ConfSettingKey, confSettingItems);
-            }
+            if (item.ConfSetting is not null)
+                ConfSetting = Array.ConvertAll(item.ConfSetting, confSetting => new ConfSetting(confSetting));
         }
 
         public Configuration(Data.Models.Metadata.Configuration item, Machine machine, Source source) : this(item)
@@ -108,19 +90,11 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (Condition is not null)
                 configurationItem.Condition = Condition.GetInternalClone();
 
-            var confLocations = Read<ConfLocation[]?>(Data.Models.Metadata.Configuration.ConfLocationKey);
-            if (confLocations is not null)
-            {
-                Data.Models.Metadata.ConfLocation[] confLocationItems = Array.ConvertAll(confLocations, confLocation => confLocation.GetInternalClone());
-                configurationItem[Data.Models.Metadata.Configuration.ConfLocationKey] = confLocationItems;
-            }
+            if (ConfLocation is not null)
+                configurationItem.ConfLocation = Array.ConvertAll(ConfLocation, confLocation => confLocation.GetInternalClone());
 
-            var confSettings = Read<ConfSetting[]?>(Data.Models.Metadata.Configuration.ConfSettingKey);
-            if (confSettings is not null)
-            {
-                Data.Models.Metadata.ConfSetting[] confSettingItems = Array.ConvertAll(confSettings, confSetting => confSetting.GetInternalClone());
-                configurationItem[Data.Models.Metadata.Configuration.ConfSettingKey] = confSettingItems;
-            }
+            if (ConfSetting is not null)
+                configurationItem.ConfSetting = Array.ConvertAll(ConfSetting, confSetting => confSetting.GetInternalClone());
 
             return configurationItem;
         }

@@ -114,9 +114,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(dipSwitch.Read<Part?>(DipSwitch.PartKey)!.Name))
+                        if (string.IsNullOrEmpty(dipSwitch.Part!.Name))
                             missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        if (string.IsNullOrEmpty(dipSwitch.Read<Part?>(DipSwitch.PartKey)!.Interface))
+                        if (string.IsNullOrEmpty(dipSwitch.Part!.Interface))
                             missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
                     }
 
@@ -126,9 +126,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Tag));
                     if (string.IsNullOrEmpty(dipSwitch.Mask))
                         missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Mask));
-                    if (dipSwitch.ValuesSpecified)
+                    if (dipSwitch.DipValueSpecified)
                     {
-                        var dipValues = dipSwitch.Read<DipValue[]?>(Data.Models.Metadata.DipSwitch.DipValueKey);
+                        var dipValues = dipSwitch.DipValue;
                         if (Array.Find(dipValues!, dv => string.IsNullOrEmpty(dv.Name)) is not null)
                             missingFields.Add(nameof(Data.Models.Metadata.DipValue.Name));
                         if (Array.Find(dipValues!, dv => string.IsNullOrEmpty(dv.Value)) is not null)

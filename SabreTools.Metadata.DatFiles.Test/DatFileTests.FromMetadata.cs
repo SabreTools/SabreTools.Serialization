@@ -127,7 +127,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             // All other fields are tested separately
             DipSwitch? partDipSwitch = Array.Find(datItems, item => item is DipSwitch dipSwitch && dipSwitch.PartSpecified) as DipSwitch;
             Assert.NotNull(partDipSwitch);
-            Part? dipSwitchPart = partDipSwitch.Read<Part>(DipSwitch.PartKey);
+            Part? dipSwitchPart = partDipSwitch.Part;
             ValidatePart(dipSwitchPart);
 
             // All other fields are tested separately
@@ -418,8 +418,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Configuration
             {
                 Condition = CreateMetadataCondition(),
-                [Data.Models.Metadata.Configuration.ConfLocationKey] = new Data.Models.Metadata.ConfLocation[] { CreateMetadataConfLocation() },
-                [Data.Models.Metadata.Configuration.ConfSettingKey] = new Data.Models.Metadata.ConfSetting[] { CreateMetadataConfSetting() },
+                ConfLocation = [CreateMetadataConfLocation()],
+                ConfSetting = [CreateMetadataConfSetting()],
                 Mask = "mask",
                 Name = "name",
                 Tag = "tag",
@@ -515,9 +515,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Condition = CreateMetadataCondition(),
                 Default = true,
-                [Data.Models.Metadata.DipSwitch.DipLocationKey] = new Data.Models.Metadata.DipLocation[] { CreateMetadataDipLocation() },
-                [Data.Models.Metadata.DipSwitch.DipValueKey] = new Data.Models.Metadata.DipValue[] { CreateMetadataDipValue() },
-                [Data.Models.Metadata.DipSwitch.EntryKey] = new string[] { "entry" },
+                DipLocation = [CreateMetadataDipLocation()],
+                DipValue = [CreateMetadataDipValue()],
+                Entry = new string[] { "entry" },
                 Mask = "mask",
                 Name = "name",
                 Tag = "tag",
@@ -1182,12 +1182,12 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             ValidateCondition(configuration.Condition);
 
-            ConfLocation[]? confLocations = configuration.Read<ConfLocation[]>(Data.Models.Metadata.Configuration.ConfLocationKey);
+            ConfLocation[]? confLocations = configuration.ConfLocation;
             Assert.NotNull(confLocations);
             ConfLocation? confLocation = Assert.Single(confLocations);
             ValidateConfLocation(confLocation);
 
-            ConfSetting[]? confSettings = configuration.Read<ConfSetting[]>(Data.Models.Metadata.Configuration.ConfSettingKey);
+            ConfSetting[]? confSettings = configuration.ConfSetting;
             Assert.NotNull(confSettings);
             ConfSetting? confSetting = Assert.Single(confSettings);
             ValidateConfSetting(confSetting);
@@ -1279,17 +1279,17 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             ValidateCondition(dipSwitch.Condition);
 
-            DipLocation[]? dipLocations = dipSwitch.Read<DipLocation[]>(Data.Models.Metadata.DipSwitch.DipLocationKey);
+            DipLocation[]? dipLocations = dipSwitch.DipLocation;
             Assert.NotNull(dipLocations);
             DipLocation? dipLocation = Assert.Single(dipLocations);
             ValidateDipLocation(dipLocation);
 
-            DipValue[]? dipValues = dipSwitch.Read<DipValue[]>(Data.Models.Metadata.DipSwitch.DipValueKey);
+            DipValue[]? dipValues = dipSwitch.DipValue;
             Assert.NotNull(dipValues);
             DipValue? dipValue = Assert.Single(dipValues);
             ValidateDipValue(dipValue);
 
-            string[]? entries = dipSwitch.ReadStringArray(Data.Models.Metadata.DipSwitch.EntryKey);
+            string[]? entries = dipSwitch.Entry;
             Assert.NotNull(entries);
             string entry = Assert.Single(entries);
             Assert.Equal("entry", entry);

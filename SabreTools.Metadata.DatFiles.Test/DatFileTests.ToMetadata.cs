@@ -181,7 +181,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DipSwitch item = new DipSwitch(CreateMetadataDipSwitch());
             item.CopyMachineInformation(machine);
-            item.Write(DipSwitch.PartKey, CreatePart(machine));
+            item.Part = CreatePart(machine);
             return item;
         }
 
@@ -707,12 +707,12 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             ValidateMetadataCondition(configuration.Condition);
 
-            Data.Models.Metadata.ConfLocation[]? confLocations = configuration.ReadArray<Data.Models.Metadata.ConfLocation>(Data.Models.Metadata.Configuration.ConfLocationKey);
+            Data.Models.Metadata.ConfLocation[]? confLocations = configuration.ConfLocation;
             Assert.NotNull(confLocations);
             Data.Models.Metadata.ConfLocation? confLocation = Assert.Single(confLocations);
             ValidateMetadataConfLocation(confLocation);
 
-            Data.Models.Metadata.ConfSetting[]? confSettings = configuration.ReadArray<Data.Models.Metadata.ConfSetting>(Data.Models.Metadata.Configuration.ConfSettingKey);
+            Data.Models.Metadata.ConfSetting[]? confSettings = configuration.ConfSetting;
             Assert.NotNull(confSettings);
             Data.Models.Metadata.ConfSetting? confSetting = Assert.Single(confSettings);
             ValidateMetadataConfSetting(confSetting);
@@ -809,17 +809,17 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             ValidateMetadataCondition(dipSwitch.Condition);
 
-            Data.Models.Metadata.DipLocation[]? dipLocations = dipSwitch.ReadArray<Data.Models.Metadata.DipLocation>(Data.Models.Metadata.DipSwitch.DipLocationKey);
+            Data.Models.Metadata.DipLocation[]? dipLocations = dipSwitch.DipLocation;
             Assert.NotNull(dipLocations);
             Data.Models.Metadata.DipLocation? dipLocation = Assert.Single(dipLocations);
             ValidateMetadataDipLocation(dipLocation);
 
-            Data.Models.Metadata.DipValue[]? dipValues = dipSwitch.ReadArray<Data.Models.Metadata.DipValue>(Data.Models.Metadata.DipSwitch.DipValueKey);
+            Data.Models.Metadata.DipValue[]? dipValues = dipSwitch.DipValue;
             Assert.NotNull(dipValues);
             Data.Models.Metadata.DipValue? dipValue = Assert.Single(dipValues);
             ValidateMetadataDipValue(dipValue);
 
-            string[]? entries = dipSwitch.ReadStringArray(Data.Models.Metadata.DipSwitch.EntryKey);
+            string[]? entries = dipSwitch.Entry;
             Assert.NotNull(entries);
             string entry = Assert.Single(entries);
             Assert.Equal("entry", entry);

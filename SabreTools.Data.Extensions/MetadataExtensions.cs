@@ -155,6 +155,8 @@ namespace SabreTools.Data.Extensions
                 return chip.Clone() as Chip;
             else if (self is Condition condition)
                 return condition.Clone() as Condition;
+            else if (self is Configuration configuration)
+                return configuration.Clone() as Configuration;
             else if (self is ConfLocation confLocation)
                 return confLocation.Clone() as ConfLocation;
             else if (self is ConfSetting confSetting)
@@ -165,6 +167,8 @@ namespace SabreTools.Data.Extensions
                 return deviceRef.Clone() as DeviceRef;
             else if (self is DipLocation dipLocation)
                 return dipLocation.Clone() as DipLocation;
+            else if (self is DipSwitch dipSwitch)
+                return dipSwitch.Clone() as DipSwitch;
             else if (self is DipValue dipValue)
                 return dipValue.Clone() as DipValue;
             else if (self is Display display)
@@ -212,12 +216,6 @@ namespace SabreTools.Data.Extensions
             {
                 cloneArchive.Description = selfArchive.Description;
             }
-            else if (self is Configuration selfConfiguration && clone is Configuration cloneConfiguration)
-            {
-                cloneConfiguration.Condition = selfConfiguration.Condition?.DeepClone() as Condition;
-                cloneConfiguration.Mask = selfConfiguration.Mask;
-                cloneConfiguration.Tag = selfConfiguration.Tag;
-            }
             else if (self is DataArea selfDataArea && clone is DataArea cloneDataArea)
             {
                 cloneDataArea.Endianness = selfDataArea.Endianness;
@@ -231,13 +229,6 @@ namespace SabreTools.Data.Extensions
                 cloneDevice.Interface = selfDevice.Interface;
                 cloneDevice.Mandatory = selfDevice.Mandatory;
                 cloneDevice.Tag = selfDevice.Tag;
-            }
-            else if (self is DipSwitch selfDipSwitch && clone is DipSwitch cloneDipSwitch)
-            {
-                cloneDipSwitch.Condition = selfDipSwitch.Condition?.DeepClone() as Condition;
-                cloneDipSwitch.Default = selfDipSwitch.Default;
-                cloneDipSwitch.Mask = selfDipSwitch.Mask;
-                cloneDipSwitch.Tag = selfDipSwitch.Tag;
             }
             else if (self is Disk selfDisk && clone is Disk cloneDisk)
             {
