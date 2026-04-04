@@ -1,7 +1,6 @@
 using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 using SabreTools.Metadata.Filter;
 using SabreTools.Text.Extensions;
 
@@ -450,7 +449,7 @@ namespace SabreTools.Metadata.DatItems
         /// <summary>
         /// Get a clone of the current internal model
         /// </summary>
-        public Data.Models.Metadata.Machine GetInternalClone() => (_internal.DeepClone() as Data.Models.Metadata.Machine) ?? [];
+        public Data.Models.Metadata.Machine GetInternalClone() => (_internal.Clone() as Data.Models.Metadata.Machine) ?? [];
 
         #endregion
 

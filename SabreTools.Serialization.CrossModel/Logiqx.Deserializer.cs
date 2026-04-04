@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 datafile.Build = header.Build;
                 datafile.Debug = header.Debug;
-                datafile.SchemaLocation = header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey);
+                datafile.SchemaLocation = header.SchemaLocation;
                 datafile.Header = ConvertHeaderFromInternalModel(header);
             }
 

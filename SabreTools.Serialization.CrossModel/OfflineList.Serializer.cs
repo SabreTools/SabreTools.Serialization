@@ -32,12 +32,12 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.SchemaLocationKey] = item.NoNamespaceSchemaLocation,
+                SchemaLocation = item.NoNamespaceSchemaLocation,
             };
 
             if (item.Configuration is not null)
             {
-                header.Name =  item.Configuration.DatName;
+                header.Name = item.Configuration.DatName;
                 header.ImFolder = item.Configuration.ImFolder;
                 header.DatVersion = item.Configuration.DatVersion;
                 header.System = item.Configuration.System;

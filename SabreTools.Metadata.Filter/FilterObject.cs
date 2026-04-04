@@ -866,6 +866,9 @@ namespace SabreTools.Metadata.Filter
                 case Header item when fieldName == "samplemode":
                     checkValue = item.SampleMode.AsStringValue();
                     return true;
+                case Header item when fieldName == "schemalocation":
+                    checkValue = item.SchemaLocation;
+                    return true;
                 case Header item when fieldName == "screenshotsheight":
                     checkValue = item.ScreenshotsHeight;
                     return true;

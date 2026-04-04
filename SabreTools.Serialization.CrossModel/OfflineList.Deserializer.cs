@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dat = new Dat
             {
-                NoNamespaceSchemaLocation = item.ReadString(Data.Models.Metadata.Header.SchemaLocationKey),
+                NoNamespaceSchemaLocation = item.SchemaLocation,
             };
 
             if (item.Name is not null

@@ -235,7 +235,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 RomTitle = "romtitle",
                 RootDir = "rootdir",
                 SampleMode = Data.Models.Metadata.MergingFlag.Merged,
-                [Data.Models.Metadata.Header.SchemaLocationKey] = "schemalocation",
+                SchemaLocation = "schemalocation",
                 ScreenshotsHeight = "screenshotsheight",
                 ScreenshotsWidth = "screenshotsWidth",
                 Search = search,
@@ -1042,7 +1042,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("romtitle", datHeader.RomTitle);
             Assert.Equal("rootdir", datHeader.RootDir);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.SampleMode);
-            Assert.Equal("schemalocation", datHeader.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
+            Assert.Equal("schemalocation", datHeader.SchemaLocation);
             Assert.Equal("screenshotsheight", datHeader.ScreenshotsHeight);
             Assert.Equal("screenshotsWidth", datHeader.ScreenshotsWidth);
             Assert.NotNull(datHeader.Search);

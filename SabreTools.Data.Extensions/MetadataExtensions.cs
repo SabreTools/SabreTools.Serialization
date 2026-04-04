@@ -67,6 +67,8 @@ namespace SabreTools.Data.Extensions
                 return extension.Clone() as Extension;
             else if (self is Feature feature)
                 return feature.Clone() as Feature;
+            else if (self is Header header)
+                return header.Clone() as Header;
             else if (self is Info info)
                 return info.Clone() as Info;
             else if (self is Input input)
@@ -113,55 +115,6 @@ namespace SabreTools.Data.Extensions
             // If construction failed, we can't do anything
             if (Activator.CreateInstance(self.GetType()) is not DictionaryBase clone)
                 return null;
-
-            // Handle individual type properties
-            if (self is Header selfHeader && clone is Header cloneHeader)
-            {
-                cloneHeader.Author = selfHeader.Author;
-                cloneHeader.BiosMode = selfHeader.BiosMode;
-                cloneHeader.Build = selfHeader.Build;
-                cloneHeader.CanOpen = selfHeader.CanOpen;
-                cloneHeader.Category = selfHeader.Category;
-                cloneHeader.Comment = selfHeader.Comment;
-                cloneHeader.Date = selfHeader.Date;
-                cloneHeader.DatVersion = selfHeader.DatVersion;
-                cloneHeader.Debug = selfHeader.Debug;
-                cloneHeader.Description = selfHeader.Description;
-                cloneHeader.Email = selfHeader.Email;
-                cloneHeader.EmulatorVersion = selfHeader.EmulatorVersion;
-                cloneHeader.ForceMerging = selfHeader.ForceMerging;
-                cloneHeader.ForceNodump = selfHeader.ForceNodump;
-                cloneHeader.ForcePacking = selfHeader.ForcePacking;
-                cloneHeader.ForceZipping = selfHeader.ForceZipping;
-                cloneHeader.HeaderRow = selfHeader.HeaderRow;
-                cloneHeader.HeaderSkipper = selfHeader.HeaderSkipper;
-                cloneHeader.Homepage = selfHeader.Homepage;
-                cloneHeader.Id = selfHeader.Id;
-                cloneHeader.Images = selfHeader.Images;
-                cloneHeader.ImFolder = selfHeader.ImFolder;
-                cloneHeader.Infos = selfHeader.Infos;
-                cloneHeader.LockBiosMode = selfHeader.LockBiosMode;
-                cloneHeader.LockRomMode = selfHeader.LockRomMode;
-                cloneHeader.LockSampleMode = selfHeader.LockSampleMode;
-                cloneHeader.MameConfig = selfHeader.MameConfig;
-                cloneHeader.Name = selfHeader.Name;
-                cloneHeader.NewDat = selfHeader.NewDat;
-                cloneHeader.Notes = selfHeader.Notes;
-                cloneHeader.Plugin = selfHeader.Plugin;
-                cloneHeader.RefName = selfHeader.RefName;
-                cloneHeader.RomMode = selfHeader.RomMode;
-                cloneHeader.RomTitle = selfHeader.RomTitle;
-                cloneHeader.RootDir = selfHeader.RootDir;
-                cloneHeader.SampleMode = selfHeader.SampleMode;
-                cloneHeader.ScreenshotsHeight = selfHeader.ScreenshotsHeight;
-                cloneHeader.ScreenshotsWidth = selfHeader.ScreenshotsWidth;
-                cloneHeader.Search = selfHeader.Search;
-                cloneHeader.System = selfHeader.System;
-                cloneHeader.Timestamp = selfHeader.Timestamp;
-                cloneHeader.Type = selfHeader.Type;
-                cloneHeader.Url = selfHeader.Url;
-                cloneHeader.Version = selfHeader.Version;
-            }
 
             // Loop through and clone per type
             foreach (string key in self.Keys)

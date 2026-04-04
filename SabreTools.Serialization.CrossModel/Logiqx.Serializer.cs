@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.CrossModel
 
             header.Build = item.Build;
             header.Debug = item.Debug;
-            header[Data.Models.Metadata.Header.SchemaLocationKey] = item.SchemaLocation;
+            header.SchemaLocation = item.SchemaLocation;
 
             return header;
         }

@@ -383,7 +383,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("romtitle", header.RomTitle);
             Assert.Equal("rootdir", header.RootDir);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, header.SampleMode);
-            Assert.Equal("schemalocation", header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
+            Assert.Equal("schemalocation", header.SchemaLocation);
             Assert.Equal("screenshotsheight", header.ScreenshotsHeight);
             Assert.Equal("screenshotsWidth", header.ScreenshotsWidth);
             Assert.NotNull(header.Search);

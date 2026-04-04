@@ -39,24 +39,25 @@ namespace SabreTools.Metadata
                 (DipLocation selfDipLocation, DipLocation otherDipLocation) => selfDipLocation.Equals(otherDipLocation),
                 (DipSwitch selfDipSwitch, DipSwitch otherDipSwitch) => selfDipSwitch.Equals(otherDipSwitch),
                 (DipValue selfDipValue, DipValue otherDipValue) => selfDipValue.Equals(otherDipValue),
-                (Disk diskSelf, Disk diskOther) => EqualsImpl(diskSelf, diskOther),
+                (Disk selfDisk, Disk otherDisk) => EqualsImpl(selfDisk, otherDisk),
                 (DiskArea selfDiskArea, DiskArea otherDiskArea) => selfDiskArea.Equals(otherDiskArea),
                 (Display selfDisplay, Display otherDisplay) => selfDisplay.Equals(otherDisplay),
                 (Driver selfDriver, Driver otherDriver) => selfDriver.Equals(otherDriver),
                 (Dump selfDump, Dump otherDump) => selfDump.Equals(otherDump),
                 (Feature selfFeature, Feature otherFeature) => selfFeature.Equals(otherFeature),
+                (Header selfHeader, Header otherHeader) => selfHeader.Equals(otherHeader),
                 (Info selfInfo, Info otherInfo) => selfInfo.Equals(otherInfo),
                 (Input selfInput, Input otherInput) => selfInput.Equals(otherInput),
                 (Instance selfInstance, Instance otherInstance) => selfInstance.Equals(otherInstance),
-                (Machine machineSelf, Machine machineOther) => EqualsImpl(machineSelf, machineOther),
-                (Media mediaSelf, Media mediaOther) => EqualsImpl(mediaSelf, mediaOther),
+                (Machine selfMachine, Machine otherMachine) => EqualsImpl(selfMachine, otherMachine),
+                (Media selfMedia, Media otherMedia) => EqualsImpl(selfMedia, otherMedia),
                 (Original selfOriginal, Original otherOriginal) => selfOriginal.Equals(otherOriginal),
                 (Part selfPart, Part otherPart) => selfPart.Equals(otherPart),
                 (Port selfPort, Port otherPort) => selfPort.Equals(otherPort),
                 (RamOption selfRamOption, RamOption otherRamOption) => selfRamOption.Equals(otherRamOption),
                 (Release selfRelease, Release otherRelease) => selfRelease.Equals(otherRelease),
                 (ReleaseDetails selfReleaseDetails, ReleaseDetails otherReleaseDetails) => selfReleaseDetails.Equals(otherReleaseDetails),
-                (Rom romSelf, Rom romOther) => EqualsImpl(romSelf, romOther),
+                (Rom selfRom, Rom otherRom) => EqualsImpl(selfRom, otherRom),
                 (Serials selfSerials, Serials otherSerials) => selfSerials.Equals(otherSerials),
                 (SharedFeat selfSharedFeat, SharedFeat otherSharedFeat) => selfSharedFeat.Equals(otherSharedFeat),
                 (Slot selfSlot, Slot otherSlot) => selfSlot.Equals(otherSlot),
@@ -64,7 +65,7 @@ namespace SabreTools.Metadata
                 (SoftwareList selfSoftwareList, SoftwareList otherSoftwareList) => selfSoftwareList.Equals(otherSoftwareList),
                 (Sound selfSound, Sound otherSound) => selfSound.Equals(otherSound),
                 (SourceDetails selfSourceDetails, SourceDetails otherSourceDetails) => selfSourceDetails.Equals(otherSourceDetails),
-                (Video videoSelf, Video videoOther) => EqualsImpl(videoSelf, videoOther),
+                (Video selfVideo, Video otherVideo) => EqualsImpl(selfVideo, otherVideo),
                 _ => self.EqualsImpl(other),
             };
 #else
@@ -98,8 +99,8 @@ namespace SabreTools.Metadata
                 return selfDipSwitch.Equals(otherDipSwitch);
             else if (self is DipValue selfDipValue && other is DipValue otherDipValue)
                 return selfDipValue.Equals(otherDipValue);
-            else if (self is Disk diskSelf && other is Disk diskOther)
-                return EqualsImpl(diskSelf, diskOther);
+            else if (self is Disk selfDisk && other is Disk otherDisk)
+                return EqualsImpl(selfDisk, otherDisk);
             else if (self is DiskArea selfDiskArea && other is DiskArea otherDiskArea)
                 return selfDiskArea.Equals(otherDiskArea);
             else if (self is Display selfDisplay && other is Display otherDisplay)
@@ -110,16 +111,18 @@ namespace SabreTools.Metadata
                 return selfDump.Equals(otherDump);
             else if (self is Feature selfFeature && other is Feature otherFeature)
                 return selfFeature.Equals(otherFeature);
+            else if (self is Header selfHeader && other is Header otherHeader)
+                return selfHeader.Equals(otherHeader);
             else if (self is Info selfInfo && other is Info otherInfo)
                 return selfInfo.Equals(otherInfo);
             else if (self is Input selfInput && other is Input otherInput)
                 return selfInput.Equals(otherInput);
             else if (self is Instance selfInstance && other is Instance otherInstance)
                 return selfInstance.Equals(otherInstance);
-            else if (self is Machine machineSelf && other is Machine machineOther)
-                return EqualsImpl(machineSelf, machineOther);
-            else if (self is Media mediaSelf && other is Media mediaOther)
-                return EqualsImpl(mediaSelf, mediaOther);
+            else if (self is Machine selfMachine && other is Machine otherMachine)
+                return EqualsImpl(selfMachine, otherMachine);
+            else if (self is Media selfMedia && other is Media otherMedia)
+                return EqualsImpl(selfMedia, otherMedia);
             else if (self is Original selfOriginal && other is Original otherOriginal)
                 return selfOriginal.Equals(otherOriginal);
             else if (self is Part selfPart && other is Part otherPart)
@@ -132,8 +135,8 @@ namespace SabreTools.Metadata
                 return selfRelease.Equals(otherRelease);
             else if (self is ReleaseDetails selfReleaseDetails && other is ReleaseDetails otherReleaseDetails)
                 return selfReleaseDetails.Equals(otherReleaseDetails);
-            else if (self is Rom romSelf && other is Rom romOther)
-                return EqualsImpl(romSelf, romOther);
+            else if (self is Rom selfRom && other is Rom otherRom)
+                return EqualsImpl(selfRom, otherRom);
             else if (self is Serials selfSerials && other is Serials otherSerials)
                 return selfSerials.Equals(otherSerials);
             else if (self is SharedFeat selfSharedFeat && other is SharedFeat otherSharedFeat)
@@ -170,93 +173,6 @@ namespace SabreTools.Metadata
             var otherKeys = new HashSet<string>(other.Keys);
             if (!selfKeys.SetEquals(otherKeys))
                 return false;
-
-            // Handle individual type properties
-            if (self is Header selfHeader && other is Header otherHeader)
-            {
-                if (selfHeader.Author != otherHeader.Author)
-                    return false;
-                if (selfHeader.BiosMode != otherHeader.BiosMode)
-                    return false;
-                if (selfHeader.Build != otherHeader.Build)
-                    return false;
-                // Header.CanOpen is intentionally skipped
-                if (selfHeader.Category != otherHeader.Category)
-                    return false;
-                if (selfHeader.Comment != otherHeader.Comment)
-                    return false;
-                if (selfHeader.Date != otherHeader.Date)
-                    return false;
-                if (selfHeader.DatVersion != otherHeader.DatVersion)
-                    return false;
-                if (selfHeader.Debug != otherHeader.Debug)
-                    return false;
-                if (selfHeader.Description != otherHeader.Description)
-                    return false;
-                if (selfHeader.Email != otherHeader.Email)
-                    return false;
-                if (selfHeader.EmulatorVersion != otherHeader.EmulatorVersion)
-                    return false;
-                if (selfHeader.ForceMerging != otherHeader.ForceMerging)
-                    return false;
-                if (selfHeader.ForceNodump != otherHeader.ForceNodump)
-                    return false;
-                if (selfHeader.ForcePacking != otherHeader.ForcePacking)
-                    return false;
-                if (selfHeader.ForceZipping != otherHeader.ForceZipping)
-                    return false;
-                if (selfHeader.HeaderSkipper != otherHeader.HeaderSkipper)
-                    return false;
-                // Header.HeaderRow is intentionally skipped
-                if (selfHeader.Homepage != otherHeader.Homepage)
-                    return false;
-                if (selfHeader.Id != otherHeader.Id)
-                    return false;
-                // Header.Images is intentionally skipped
-                if (selfHeader.ImFolder != otherHeader.ImFolder)
-                    return false;
-                // Header.Infos is intentionally skipped
-                if (selfHeader.LockBiosMode != otherHeader.LockBiosMode)
-                    return false;
-                if (selfHeader.LockRomMode != otherHeader.LockRomMode)
-                    return false;
-                if (selfHeader.LockSampleMode != otherHeader.LockSampleMode)
-                    return false;
-                if (selfHeader.MameConfig != otherHeader.MameConfig)
-                    return false;
-                if (selfHeader.Name != otherHeader.Name)
-                    return false;
-                // Header.NewDat is intentionally skipped
-                if (selfHeader.Notes != otherHeader.Notes)
-                    return false;
-                if (selfHeader.Plugin != otherHeader.Plugin)
-                    return false;
-                if (selfHeader.RefName != otherHeader.RefName)
-                    return false;
-                if (selfHeader.RomMode != otherHeader.RomMode)
-                    return false;
-                if (selfHeader.RomTitle != otherHeader.RomTitle)
-                    return false;
-                if (selfHeader.RootDir != otherHeader.RootDir)
-                    return false;
-                if (selfHeader.SampleMode != otherHeader.SampleMode)
-                    return false;
-                if (selfHeader.ScreenshotsHeight != otherHeader.ScreenshotsHeight)
-                    return false;
-                if (selfHeader.ScreenshotsWidth != otherHeader.ScreenshotsWidth)
-                    return false;
-                // Header.Search is intentionally skipped
-                if (selfHeader.System != otherHeader.System)
-                    return false;
-                if (selfHeader.Timestamp != otherHeader.Timestamp)
-                    return false;
-                if (selfHeader.Type != otherHeader.Type)
-                    return false;
-                if (selfHeader.Url != otherHeader.Url)
-                    return false;
-                if (selfHeader.Version != otherHeader.Version)
-                    return false;
-            }
 
             // Check all pairs to see if they're equal
             foreach (var kvp in self)

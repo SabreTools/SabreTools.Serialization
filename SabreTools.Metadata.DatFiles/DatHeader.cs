@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 using SabreTools.Metadata.Filter;
 using MergingFlag = SabreTools.Data.Models.Metadata.MergingFlag;
 using NodumpFlag = SabreTools.Data.Models.Metadata.NodumpFlag;
@@ -255,6 +254,12 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.SampleMode = value;
         }
 
+        public string? SchemaLocation
+        {
+            get => _internal.SchemaLocation;
+            set => _internal.SchemaLocation = value;
+        }
+
         public string? ScreenshotsHeight
         {
             get => _internal.ScreenshotsHeight;
@@ -347,7 +352,7 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public Data.Models.Metadata.Header GetInternalClone()
         {
-            var header = (_internal.DeepClone() as Data.Models.Metadata.Header)!;
+            var header = (_internal.Clone() as Data.Models.Metadata.Header)!;
 
             // Convert subheader values
             if (CanOpenSpecified)

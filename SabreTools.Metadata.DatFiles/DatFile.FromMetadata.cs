@@ -61,7 +61,7 @@ namespace SabreTools.Metadata.DatFiles
         private void ConvertHeader(Data.Models.Metadata.Header? item, bool keep)
         {
             // If the header is invalid, we can't do anything
-            if (item is null || item.Count == 0)
+            if (item is null)
                 return;
 
             // Create an internal header
@@ -152,8 +152,8 @@ namespace SabreTools.Metadata.DatFiles
                 Header.RootDir = header.RootDir;
             if (Header.SampleMode == MergingFlag.None)
                 Header.SampleMode = header.SampleMode;
-            if (Header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey) is null)
-                Header.Write<string?>(Data.Models.Metadata.Header.SchemaLocationKey, header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
+            if (Header.SchemaLocation is null)
+                Header.SchemaLocation = header.SchemaLocation;
             if (Header.ScreenshotsHeight is null)
                 Header.ScreenshotsHeight = header.ScreenshotsHeight;
             if (Header.ScreenshotsWidth is null)
