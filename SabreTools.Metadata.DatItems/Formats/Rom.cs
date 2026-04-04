@@ -417,19 +417,19 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         /// <param name="other">Rom to fill information from</param>
         public void FillMissingInformation(Rom other)
-            => _internal.FillMissingHashes(other._internal);
+            => (_internal as Data.Models.Metadata.Rom).FillMissingHashes(other._internal as Data.Models.Metadata.Rom);
 
         /// <summary>
         /// Returns if the Rom contains any hashes
         /// </summary>
         /// <returns>True if any hash exists, false otherwise</returns>
-        public bool HasHashes() => _internal.HasHashes();
+        public bool HasHashes() => (_internal as Data.Models.Metadata.Rom)?.HasHashes() ?? false;
 
         /// <summary>
         /// Returns if all of the hashes are set to their 0-byte values
         /// </summary>
         /// <returns>True if any hash matches the 0-byte value, false otherwise</returns>
-        public bool HasZeroHash() => _internal.HasZeroHash();
+        public bool HasZeroHash() => (_internal as Data.Models.Metadata.Rom)?.HasZeroHash() ?? false;
 
         #endregion
 

@@ -104,7 +104,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <returns></returns>
         public Rom ConvertToRom()
         {
-            var rom = new Rom(_internal.ConvertToRom()!);
+            var rom = new Rom((_internal as Data.Models.Metadata.Media).ConvertToRom()!);
 
             rom.DupeType = DupeType;
             rom.Machine = Machine?.Clone() as Machine;
@@ -123,19 +123,19 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         /// <param name="other">Media to fill information from</param>
         public void FillMissingInformation(Media other)
-            => _internal.FillMissingHashes(other._internal);
+            => (_internal as Data.Models.Metadata.Media).FillMissingHashes(other._internal as Data.Models.Metadata.Media);
 
         /// <summary>
         /// Returns if the Rom contains any hashes
         /// </summary>
         /// <returns>True if any hash exists, false otherwise</returns>
-        public bool HasHashes() => _internal.HasHashes();
+        public bool HasHashes() => (_internal as Data.Models.Metadata.Media)?.HasHashes() ?? false;
 
         /// <summary>
         /// Returns if all of the hashes are set to their 0-byte values
         /// </summary>
         /// <returns>True if any hash matches the 0-byte value, false otherwise</returns>
-        public bool HasZeroHash() => _internal.HasZeroHash();
+        public bool HasZeroHash() => (_internal as Data.Models.Metadata.Media)?.HasZeroHash() ?? false;
 
         #endregion
 

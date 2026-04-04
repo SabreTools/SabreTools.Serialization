@@ -9,17 +9,9 @@ namespace SabreTools.Data.Extensions.Test
         #region ConvertToRom
 
         [Fact]
-        public void ConvertToRom_Null_Null()
-        {
-            DictionaryBase? self = null;
-            Rom? actual = self.ConvertToRom();
-            Assert.Null(actual);
-        }
-
-        [Fact]
         public void ConvertToRom_EmptyDisk_EmptyRom()
         {
-            DictionaryBase? self = new Disk();
+            var self = new Disk();
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
@@ -37,7 +29,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void ConvertToRom_FilledDisk_FilledRom()
         {
-            DictionaryBase? self = new Disk
+            var self = new Disk
             {
                 Name = "name",
                 Merge = "merge",
@@ -65,7 +57,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void ConvertToRom_EmptyMedia_EmptyRom()
         {
-            DictionaryBase? self = new Media();
+            var self = new Media();
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
@@ -81,7 +73,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void ConvertToRom_FilledMedia_FilledRom()
         {
-            DictionaryBase? self = new Media
+            var self = new Media
             {
                 Name = "name",
                 MD5 = "md5",
@@ -100,14 +92,6 @@ namespace SabreTools.Data.Extensions.Test
             Assert.Equal("sha1", actual[Rom.SHA1Key]);
             Assert.Equal("sha256", actual[Rom.SHA256Key]);
             Assert.Equal("spamsum", actual[Rom.SpamSumKey]);
-        }
-
-        [Fact]
-        public void ConvertToRom_Other_Null()
-        {
-            DictionaryBase? self = new Sample();
-            Rom? actual = self.ConvertToRom();
-            Assert.Null(actual);
         }
 
         #endregion
@@ -959,7 +943,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Disk_NoHash_True()
         {
-            DictionaryBase self = new Disk();
+            var self = new Disk();
             bool actual = self.HasZeroHash();
             Assert.True(actual);
         }
@@ -967,7 +951,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Disk_NonZeroHash_False()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -980,7 +964,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Disk_ZeroMD5_True()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
                 MD5 = HashType.MD5.ZeroString,
                 SHA1 = string.Empty,
@@ -993,7 +977,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Disk_ZeroSHA1_True()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
                 MD5 = string.Empty,
                 SHA1 = HashType.SHA1.ZeroString,
@@ -1006,7 +990,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Disk_ZeroAll_True()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
                 MD5 = HashType.MD5.ZeroString,
                 SHA1 = HashType.SHA1.ZeroString,
@@ -1019,7 +1003,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_NoHash_True()
         {
-            DictionaryBase self = new Media();
+            var self = new Media();
             bool actual = self.HasZeroHash();
             Assert.True(actual);
         }
@@ -1027,7 +1011,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_NonZeroHash_False()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -1042,7 +1026,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_ZeroMD5_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 MD5 = HashType.MD5.ZeroString,
                 SHA1 = string.Empty,
@@ -1057,7 +1041,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_ZeroSHA1_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 MD5 = string.Empty,
                 SHA1 = HashType.SHA1.ZeroString,
@@ -1072,7 +1056,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_ZeroSHA256_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 MD5 = string.Empty,
                 SHA1 = string.Empty,
@@ -1087,7 +1071,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_ZeroSpamSum_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 MD5 = string.Empty,
                 SHA1 = string.Empty,
@@ -1102,7 +1086,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_ZeroAll_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
                 MD5 = HashType.MD5.ZeroString,
                 SHA1 = HashType.SHA1.ZeroString,
@@ -1117,7 +1101,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_NoHash_True()
         {
-            DictionaryBase self = new Rom();
+            var self = new Rom();
             bool actual = self.HasZeroHash();
             Assert.True(actual);
         }
@@ -1125,7 +1109,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_NonZeroHash_False()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
@@ -1149,7 +1133,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroCRC16_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = HashType.CRC16.ZeroString,
                 [Rom.CRCKey] = string.Empty,
@@ -1173,7 +1157,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroCRC_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = HashType.CRC32.ZeroString,
@@ -1197,7 +1181,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroCRC64_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1221,7 +1205,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroMD2_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1245,7 +1229,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroMD4_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1269,7 +1253,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroMD5_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1293,7 +1277,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroRIPEMD128_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1317,7 +1301,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroRIPEMD160_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1341,7 +1325,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroSHA1_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1365,7 +1349,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroSHA256_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1389,7 +1373,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroSHA384_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1413,7 +1397,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroSHA512_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1437,7 +1421,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroSpamSum_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
@@ -1461,7 +1445,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroAll_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
                 [Rom.CRC16Key] = HashType.CRC16.ZeroString,
                 [Rom.CRCKey] = HashType.CRC32.ZeroString,
@@ -1482,14 +1466,6 @@ namespace SabreTools.Data.Extensions.Test
             Assert.True(actual);
         }
 
-        [Fact]
-        public void HasZeroHash_Other_False()
-        {
-            DictionaryBase self = new Sample();
-            bool actual = self.HasZeroHash();
-            Assert.False(actual);
-        }
-
         #endregion
 
         #region FillMissingHashes
@@ -1497,8 +1473,8 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void FillMissingHashes_Disk_BothEmpty()
         {
-            DictionaryBase self = new Disk();
-            DictionaryBase other = new Disk();
+            var self = new Disk();
+            var other = new Disk();
 
             self.FillMissingHashes(other);
             Assert.Empty(self);
@@ -1507,8 +1483,8 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void FillMissingHashes_Disk_AllMissing()
         {
-            DictionaryBase self = new Disk();
-            DictionaryBase other = new Disk
+            var self = new Disk();
+            var other = new Disk
             {
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -1520,8 +1496,8 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void FillMissingHashes_Media_BothEmpty()
         {
-            DictionaryBase self = new Media();
-            DictionaryBase other = new Media();
+            var self = new Media();
+            var other = new Media();
             self.FillMissingHashes(other);
             Assert.Empty(self);
         }
@@ -1529,8 +1505,8 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void FillMissingHashes_Media_AllMissing()
         {
-            DictionaryBase self = new Media();
-            DictionaryBase other = new Media
+            var self = new Media();
+            var other = new Media
             {
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -1544,8 +1520,8 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void FillMissingHashes_Rom_BothEmpty()
         {
-            DictionaryBase self = new Rom();
-            DictionaryBase other = new Rom();
+            var self = new Rom();
+            var other = new Rom();
             self.FillMissingHashes(other);
             Assert.Empty(self);
         }
@@ -1553,8 +1529,8 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void FillMissingHashes_Rom_AllMissing()
         {
-            DictionaryBase self = new Rom();
-            DictionaryBase other = new Rom
+            var self = new Rom();
+            var other = new Rom
             {
                 [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
