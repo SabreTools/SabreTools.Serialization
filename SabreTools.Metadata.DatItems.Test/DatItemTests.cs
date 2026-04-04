@@ -1,4 +1,4 @@
-using SabreTools.Data.Extensions;
+using System;
 using SabreTools.Metadata.DatItems.Formats;
 using Xunit;
 
@@ -11,9 +11,12 @@ namespace SabreTools.Metadata.DatItems.Test
         /// <summary>
         /// Testing implementation of Data.Models.Metadata.DatItem
         /// </summary>
-        private class TestDatItemModel : Data.Models.Metadata.DatItem
+        private class TestDatItemModel : Data.Models.Metadata.DatItem, ICloneable
         {
-            public const string NameKey = "__NAME__";
+            public string? Name { get; set; }
+
+            /// <inheritdoc/>
+            public object Clone() => new TestDatItemModel { Name = Name };
         }
 
         /// <summary>
@@ -21,13 +24,15 @@ namespace SabreTools.Metadata.DatItems.Test
         /// </summary>
         private class TestDatItem : DatItem<TestDatItemModel>
         {
-            private readonly string? _nameKey;
-
             public override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Blank;
 
-            public TestDatItem() => _nameKey = TestDatItemModel.NameKey;
+            public string? Name
+            {
+                get => (_internal as Data.Models.Metadata.Info)?.Name;
+                set => (_internal as Data.Models.Metadata.Info)?.Name = value;
+            }
 
-            public TestDatItem(string? nameKey) => _nameKey = nameKey;
+            public TestDatItem() { }
 
             /// <inheritdoc/>
             public override object Clone() => new TestDatItem()
@@ -38,18 +43,14 @@ namespace SabreTools.Metadata.DatItems.Test
             /// <inheritdoc/>
             public override TestDatItemModel GetInternalClone()
             {
-                return _internal.DeepClone() as TestDatItemModel ?? [];
+                return (_internal as TestDatItemModel)?.Clone() as TestDatItemModel ?? [];
             }
 
             /// <inheritdoc/>
-            public override string? GetName() => _nameKey is not null ? _internal.ReadString(_nameKey) : null;
+            public override string? GetName() => Name;
 
             /// <inheritdoc/>
-            public override void SetName(string? name)
-            {
-                if (_nameKey is not null)
-                    _internal[_nameKey] = name;
-            }
+            public override void SetName(string? name) => Name = name;
         }
 
         #endregion
@@ -432,84 +433,6 @@ namespace SabreTools.Metadata.DatItems.Test
 
         #endregion
 
-        #region GetName
-
-        [Fact]
-        public void GetName_NoNameKey_Null()
-        {
-            DatItem item = new TestDatItem(nameKey: null);
-            item.Write(TestDatItemModel.NameKey, "name");
-
-            string? actual = item.GetName();
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void GetName_EmptyNameKey_Null()
-        {
-            DatItem item = new TestDatItem(nameKey: string.Empty);
-            item.Write(TestDatItemModel.NameKey, "name");
-
-            string? actual = item.GetName();
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void GetName_NameKeyNotExists_Null()
-        {
-            DatItem item = new TestDatItem(nameKey: "INVALID");
-            item.Write(TestDatItemModel.NameKey, "name");
-
-            string? actual = item.GetName();
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void GetName_NameKeyExists_Filled()
-        {
-            DatItem item = new TestDatItem(nameKey: TestDatItemModel.NameKey);
-            item.Write(TestDatItemModel.NameKey, "name");
-
-            string? actual = item.GetName();
-            Assert.Equal("name", actual);
-        }
-
-        #endregion
-
-        #region SetName
-
-        [Fact]
-        public void SetName_NoNameKey_Null()
-        {
-            DatItem item = new TestDatItem(nameKey: null);
-            item.SetName("name");
-
-            string? actual = item.GetName();
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void SetName_EmptyNameKey_Null()
-        {
-            DatItem item = new TestDatItem(nameKey: string.Empty);
-            item.SetName("name");
-
-            string? actual = item.GetName();
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void SetName_NameKeyNonEmpty_Filled()
-        {
-            DatItem item = new TestDatItem(nameKey: TestDatItemModel.NameKey);
-            item.SetName("name");
-
-            string? actual = item.GetName();
-            Assert.Equal("name", actual);
-        }
-
-        #endregion
-
         #region Clone
 
         [Fact]
@@ -534,7 +457,7 @@ namespace SabreTools.Metadata.DatItems.Test
             item.SetName("name");
 
             TestDatItemModel actual = item.GetInternalClone();
-            Assert.Equal("name", actual[TestDatItemModel.NameKey]);
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion
