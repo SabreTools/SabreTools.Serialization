@@ -21,7 +21,11 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Cached item type names for filter selection
         /// </summary>
-        private static readonly string[] _datItemTypeNames = TypeHelper.GetDatItemTypeNames();
+#if NET5_0_OR_GREATER
+        private static readonly string[] _datItemTypeNames = Enum.GetNames<ItemType>();
+#else
+        private static readonly string[] _datItemTypeNames = Enum.GetNames(typeof(ItemType));
+#endif
 
         /// <summary>
         /// Validating combined key constructor

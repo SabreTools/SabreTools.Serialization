@@ -17,7 +17,11 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Cached item type names for filter selection
         /// </summary>
-        private static readonly string[] _datItemTypeNames = TypeHelper.GetDatItemTypeNames();
+#if NET5_0_OR_GREATER
+        private static readonly string[] _datItemTypeNames = Enum.GetNames<ItemType>();
+#else
+        private static readonly string[] _datItemTypeNames = Enum.GetNames(typeof(ItemType));
+#endif
 
         public FilterRunner(FilterObject[] filters)
         {
@@ -38,7 +42,7 @@ namespace SabreTools.Metadata.Filter
             {
                 Header => "header",
                 Machine => "machine",
-                DatItem => TypeHelper.GetXmlRootAttributeElementName(obj.GetType()),
+                DatItem datItem => datItem.ItemType.ToString(),
                 _ => null,
             };
 
@@ -52,7 +56,7 @@ namespace SabreTools.Metadata.Filter
                 // Skip filters not applicable to the item
                 if (filterKey.StartsWith("item.") && Array.IndexOf(_datItemTypeNames, itemName) == -1)
                     continue;
-                else if (!filterKey.StartsWith("item.") && !filterKey.StartsWith(itemName))
+                else if (!filterKey.StartsWith("item.") && !filterKey.StartsWith(itemName, StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 // If we don't get a match, it's a failure
