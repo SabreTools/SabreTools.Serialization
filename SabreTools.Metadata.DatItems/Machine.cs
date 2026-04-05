@@ -386,12 +386,12 @@ namespace SabreTools.Metadata.DatItems
 
         public Machine()
         {
-            _internal = [];
+            _internal = new();
         }
 
         public Machine(Data.Models.Metadata.Machine machine)
         {
-            _internal = machine.Clone() as Data.Models.Metadata.Machine ?? [];
+            _internal = machine.Clone() as Data.Models.Metadata.Machine ?? new();
 
             // Clear all lists
             _internal.Adjuster = null;
@@ -449,7 +449,7 @@ namespace SabreTools.Metadata.DatItems
         /// <summary>
         /// Get a clone of the current internal model
         /// </summary>
-        public Data.Models.Metadata.Machine GetInternalClone() => (_internal.Clone() as Data.Models.Metadata.Machine) ?? [];
+        public Data.Models.Metadata.Machine GetInternalClone() => (_internal.Clone() as Data.Models.Metadata.Machine) ?? new();
 
         #endregion
 

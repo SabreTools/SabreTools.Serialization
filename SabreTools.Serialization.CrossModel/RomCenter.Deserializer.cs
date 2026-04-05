@@ -66,8 +66,7 @@ namespace SabreTools.Serialization.CrossModel
                 };
             }
 
-            if (item.RefName != null
-                || item.EmulatorVersion != null)
+            if (item.RefName != null || item.EmulatorVersion != null)
             {
                 metadataFile.Emulator = new Emulator
                 {

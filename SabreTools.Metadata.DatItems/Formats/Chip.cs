@@ -84,7 +84,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Chip GetInternalClone()
-            => (_internal as Data.Models.Metadata.Chip)?.Clone() as Data.Models.Metadata.Chip ?? [];
+            => (_internal as Data.Models.Metadata.Chip)?.Clone() as Data.Models.Metadata.Chip ?? new();
 
         #endregion
 

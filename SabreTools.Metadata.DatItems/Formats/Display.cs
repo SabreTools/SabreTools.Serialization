@@ -161,7 +161,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Display GetInternalClone()
-            => (_internal as Data.Models.Metadata.Display)?.Clone() as Data.Models.Metadata.Display ?? [];
+            => (_internal as Data.Models.Metadata.Display)?.Clone() as Data.Models.Metadata.Display ?? new();
 
         #endregion
 

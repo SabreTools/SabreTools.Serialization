@@ -96,10 +96,11 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.EmulatorVersion = value;
         }
 
-        /// <summary>
-        /// External name of the DAT
-        /// </summary>
-        public string? FileName { get; set; }
+        public string? FileName
+        {
+            get => _internal.FileName;
+            set => _internal.FileName = value;
+        }
 
         public MergingFlag ForceMerging
         {
@@ -332,7 +333,6 @@ namespace SabreTools.Metadata.DatFiles
         public object Clone() => new DatHeader(GetInternalClone())
         {
             DatFormat = DatFormat,
-            FileName = FileName,
         };
 
         /// <summary>

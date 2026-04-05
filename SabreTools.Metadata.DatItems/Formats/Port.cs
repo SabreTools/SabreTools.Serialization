@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Port GetInternalClone()
         {
-            var portItem = (_internal as Data.Models.Metadata.Port)?.Clone() as Data.Models.Metadata.Port ?? [];
+            var portItem = (_internal as Data.Models.Metadata.Port)?.Clone() as Data.Models.Metadata.Port ?? new();
 
             if (Analog is not null)
                 portItem.Analog = Array.ConvertAll(Analog, analog => analog.GetInternalClone());

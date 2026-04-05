@@ -270,24 +270,18 @@ namespace SabreTools.Metadata.DatFiles
 
                         // Create the part in the dictionary, if needed
                         if (!partItems.ContainsKey(partName))
-                            partItems[partName] = [];
+                            partItems[partName] = new();
 
                         // Copy over string values
                         partItems[partName].Name = partName;
                         if (partItems[partName].Interface == null)
                             partItems[partName].Interface = partItem.Interface;
 
-                        // Clear any empty fields
-                        ClearEmptyKeys(partItems[partName]);
-
                         // If the item has a DataArea mapping
                         if (dataAreaMappings.TryGetValue(partItem, out (Data.Models.Metadata.DataArea, Data.Models.Metadata.Rom) dataAreaMap))
                         {
                             // Get the mapped items
                             var (dataArea, romItem) = dataAreaMap;
-
-                            // Clear any empty fields
-                            ClearEmptyKeys(romItem);
 
                             // Get the data area name and skip if there's none
                             string? dataAreaName = dataArea.Name;
@@ -306,15 +300,14 @@ namespace SabreTools.Metadata.DatFiles
                                 }
                                 else
                                 {
-                                    aggregateDataArea = [];
-                                    aggregateDataArea.Endianness = dataArea.Endianness;
-                                    aggregateDataArea.Name = dataArea.Name;
-                                    aggregateDataArea.Size = dataArea.Size;
-                                    aggregateDataArea.Width = dataArea.Width;
+                                    aggregateDataArea = new()
+                                    {
+                                        Endianness = dataArea.Endianness,
+                                        Name = dataArea.Name,
+                                        Size = dataArea.Size,
+                                        Width = dataArea.Width,
+                                    };
                                 }
-
-                                // Clear any empty fields
-                                ClearEmptyKeys(aggregateDataArea);
 
                                 // Get existing roms as a list
                                 var romsArr = aggregateDataArea.Rom ?? [];
@@ -343,9 +336,6 @@ namespace SabreTools.Metadata.DatFiles
                             // Get the mapped items
                             var (diskArea, diskItem) = diskAreaMap;
 
-                            // Clear any empty fields
-                            ClearEmptyKeys(diskItem);
-
                             // Get the disk area name and skip if there's none
                             string? diskAreaName = diskArea.Name;
                             if (diskAreaName is not null)
@@ -363,12 +353,9 @@ namespace SabreTools.Metadata.DatFiles
                                 }
                                 else
                                 {
-                                    aggregateDiskArea = [];
+                                    aggregateDiskArea = new();
                                     aggregateDiskArea.Name = diskArea.Name;
                                 }
-
-                                // Clear any empty fields
-                                ClearEmptyKeys(aggregateDiskArea);
 
                                 // Get existing disks as a list
                                 var disksArr = aggregateDiskArea.Disk ?? [];
@@ -398,9 +385,6 @@ namespace SabreTools.Metadata.DatFiles
                             var dipSwitchesArr = partItems[partName].DipSwitch ?? [];
                             List<Data.Models.Metadata.DipSwitch> dipSwitches = [.. dipSwitchesArr];
 
-                            // Clear any empty fields
-                            ClearEmptyKeys(dipSwitchItem);
-
                             // Add the dipswitch
                             dipSwitches.Add(dipSwitchItem);
 
@@ -414,9 +398,6 @@ namespace SabreTools.Metadata.DatFiles
                             // Get existing features as a list
                             var featuresArr = partItems[partName].Feature ?? [];
                             List<Data.Models.Metadata.Feature> features = [.. featuresArr];
-
-                            // Clear any empty fields
-                            ClearEmptyKeys(featureItem);
 
                             // Add the feature
                             features.Add(featureItem);
@@ -646,24 +627,18 @@ namespace SabreTools.Metadata.DatFiles
 
                         // Create the part in the dictionary, if needed
                         if (!partItems.ContainsKey(partName))
-                            partItems[partName] = [];
+                            partItems[partName] = new();
 
                         // Copy over string values
                         partItems[partName].Name = partName;
                         if (partItems[partName].Interface == null)
                             partItems[partName].Interface = partItem.Interface;
 
-                        // Clear any empty fields
-                        ClearEmptyKeys(partItems[partName]);
-
                         // If the item has a DataArea mapping
                         if (dataAreaMappings.TryGetValue(partItem, out (Data.Models.Metadata.DataArea, Data.Models.Metadata.Rom) dataAreaMap))
                         {
                             // Get the mapped items
                             var (dataArea, romItem) = dataAreaMap;
-
-                            // Clear any empty fields
-                            ClearEmptyKeys(romItem);
 
                             // Get the data area name and skip if there's none
                             string? dataAreaName = dataArea.Name;
@@ -682,15 +657,12 @@ namespace SabreTools.Metadata.DatFiles
                                 }
                                 else
                                 {
-                                    aggregateDataArea = [];
+                                    aggregateDataArea = new();
                                     aggregateDataArea.Endianness = dataArea.Endianness;
                                     aggregateDataArea.Name = dataArea.Name;
                                     aggregateDataArea.Size = dataArea.Size;
                                     aggregateDataArea.Width = dataArea.Width;
                                 }
-
-                                // Clear any empty fields
-                                ClearEmptyKeys(aggregateDataArea);
 
                                 // Get existing roms as a list
                                 var romsArr = aggregateDataArea.Rom ?? [];
@@ -719,9 +691,6 @@ namespace SabreTools.Metadata.DatFiles
                             // Get the mapped items
                             var (diskArea, diskItem) = diskAreaMap;
 
-                            // Clear any empty fields
-                            ClearEmptyKeys(diskItem);
-
                             // Get the disk area name and skip if there's none
                             string? diskAreaName = diskArea.Name;
                             if (diskAreaName is not null)
@@ -739,12 +708,9 @@ namespace SabreTools.Metadata.DatFiles
                                 }
                                 else
                                 {
-                                    aggregateDiskArea = [];
+                                    aggregateDiskArea = new();
                                     aggregateDiskArea.Name = diskArea.Name;
                                 }
-
-                                // Clear any empty fields
-                                ClearEmptyKeys(aggregateDiskArea);
 
                                 // Get existing disks as a list
                                 var disksArr = aggregateDiskArea.Disk ?? [];
@@ -774,9 +740,6 @@ namespace SabreTools.Metadata.DatFiles
                             var dipSwitchesArr = partItems[partName].DipSwitch ?? [];
                             List<Data.Models.Metadata.DipSwitch> dipSwitches = [.. dipSwitchesArr];
 
-                            // Clear any empty fields
-                            ClearEmptyKeys(dipSwitchItem);
-
                             // Add the dipswitch
                             dipSwitches.Add(dipSwitchItem);
 
@@ -790,9 +753,6 @@ namespace SabreTools.Metadata.DatFiles
                             // Get existing features as a list
                             var featuresArr = partItems[partName].Feature ?? [];
                             List<Data.Models.Metadata.Feature> features = [.. featuresArr];
-
-                            // Clear any empty fields
-                            ClearEmptyKeys(featureItem);
 
                             // Add the feature
                             features.Add(featureItem);
@@ -951,19 +911,6 @@ namespace SabreTools.Metadata.DatFiles
             }
 
             return romItem;
-        }
-
-        /// <summary>
-        /// Clear empty keys from a DictionaryBase object
-        /// </summary>
-        private static void ClearEmptyKeys(Data.Models.Metadata.DictionaryBase obj)
-        {
-            string[] fieldNames = [.. obj.Keys];
-            foreach (string fieldName in fieldNames)
-            {
-                if (obj[fieldName] is null)
-                    obj.Remove(fieldName);
-            }
         }
 
         #endregion

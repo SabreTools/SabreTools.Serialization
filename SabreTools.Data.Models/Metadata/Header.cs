@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.Metadata
     /// <summary>
     /// Format-agnostic representation of metadata header data
     /// </summary>
-    public class Header : DictionaryBase, ICloneable, IEquatable<Header>
+    public class Header : ICloneable, IEquatable<Header>
     {
         #region Properties
 
@@ -36,6 +36,8 @@ namespace SabreTools.Data.Models.Metadata
         public string? Email { get; set; }
 
         public string? EmulatorVersion { get; set; }
+
+        public string? FileName { get; set; }
 
         /// <remarks>(none|split|merged|nonmerged|fullmerged|device|full) "split"</remarks>
         public MergingFlag ForceMerging { get; set; }
@@ -135,6 +137,7 @@ namespace SabreTools.Data.Models.Metadata
             obj.Description = Description;
             obj.Email = Email;
             obj.EmulatorVersion = EmulatorVersion;
+            obj.FileName = FileName;
             obj.ForceMerging = ForceMerging;
             obj.ForceNodump = ForceNodump;
             obj.ForcePacking = ForcePacking;
@@ -229,6 +232,11 @@ namespace SabreTools.Data.Models.Metadata
             if ((EmulatorVersion is null) ^ (other.EmulatorVersion is null))
                 return false;
             else if (EmulatorVersion is not null && !EmulatorVersion.Equals(other.EmulatorVersion, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((FileName is null) ^ (other.FileName is null))
+                return false;
+            else if (FileName is not null && !FileName.Equals(other.FileName, StringComparison.OrdinalIgnoreCase))
                 return false;
 
             if (ForceMerging != other.ForceMerging)

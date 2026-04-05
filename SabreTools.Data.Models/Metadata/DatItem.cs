@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.Metadata
     /// <summary>
     /// Format-agnostic representation of item data
     /// </summary>
-    public class DatItem : DictionaryBase
+    public class DatItem
     {
         /// <summary>
         /// Quick accessor to item type, if it exists

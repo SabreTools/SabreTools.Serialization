@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Row is not null && item.Row.Length > 0)
             {
                 var first = item.Row[0];
-                header["FILENAME"] = first.FileName; // TODO: Make this an actual key to retrieve on an item -- OriginalFilename
+                header.FileName = first.FileName;
                 header.Name =  first.FileName;
                 header.Description = first.Description;
             }

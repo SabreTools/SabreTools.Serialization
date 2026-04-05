@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.SlotOption GetInternalClone()
-            => (_internal as Data.Models.Metadata.SlotOption)?.Clone() as Data.Models.Metadata.SlotOption ?? [];
+            => (_internal as Data.Models.Metadata.SlotOption)?.Clone() as Data.Models.Metadata.SlotOption ?? new();
 
         #endregion
 

@@ -352,7 +352,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var info = new Info();
 
-            var sources = item.Read<string[]>(Data.Models.Metadata.InfoSource.SourceKey);
+            var sources = item.Source;
             if (sources is not null && sources.Length > 0)
                 info.Source = [.. sources];
 

@@ -35,6 +35,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// Internal Original model
         /// </summary>
         [JsonIgnore]
-        private readonly Data.Models.Metadata.Original _internal = [];
+        private readonly Data.Models.Metadata.Original _internal = new();
     }
 }

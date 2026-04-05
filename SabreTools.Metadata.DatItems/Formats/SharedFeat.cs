@@ -60,7 +60,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.SharedFeat GetInternalClone()
-            => (_internal as Data.Models.Metadata.SharedFeat)?.Clone() as Data.Models.Metadata.SharedFeat ?? [];
+            => (_internal as Data.Models.Metadata.SharedFeat)?.Clone() as Data.Models.Metadata.SharedFeat ?? new();
 
         #endregion
 

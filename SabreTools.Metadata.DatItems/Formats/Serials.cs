@@ -132,7 +132,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Serials GetInternalClone()
-            => (_internal as Data.Models.Metadata.Serials)?.Clone() as Data.Models.Metadata.Serials ?? [];
+            => (_internal as Data.Models.Metadata.Serials)?.Clone() as Data.Models.Metadata.Serials ?? new();
 
         #endregion
 

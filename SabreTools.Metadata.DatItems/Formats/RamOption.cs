@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.RamOption GetInternalClone()
-            => (_internal as Data.Models.Metadata.RamOption)?.Clone() as Data.Models.Metadata.RamOption ?? [];
+            => (_internal as Data.Models.Metadata.RamOption)?.Clone() as Data.Models.Metadata.RamOption ?? new();
 
         #endregion
 

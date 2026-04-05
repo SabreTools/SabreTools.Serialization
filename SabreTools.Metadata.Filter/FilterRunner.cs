@@ -30,15 +30,15 @@ namespace SabreTools.Metadata.Filter
         }
 
         /// <summary>
-        /// Run filtering on a DictionaryBase item
+        /// Run filtering on an item
         /// </summary>
-        public bool Run(DictionaryBase dictionaryBase)
+        public bool Run(object obj)
         {
-            string? itemName = dictionaryBase switch
+            string? itemName = obj switch
             {
                 Header => "header",
                 Machine => "machine",
-                DatItem => TypeHelper.GetXmlRootAttributeElementName(dictionaryBase.GetType()),
+                DatItem => TypeHelper.GetXmlRootAttributeElementName(obj.GetType()),
                 _ => null,
             };
 
@@ -56,7 +56,7 @@ namespace SabreTools.Metadata.Filter
                     continue;
 
                 // If we don't get a match, it's a failure
-                bool matchOne = Filters[filterKey].Matches(dictionaryBase);
+                bool matchOne = Filters[filterKey].Matches(obj);
                 if (!matchOne)
                     return false;
             }

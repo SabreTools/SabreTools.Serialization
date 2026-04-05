@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
+                FileName = header?.FileName,
                 InternalName = header?.Name,
                 Description = header?.Description,
                 GameName = parent.Name,
@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve on an item -- OriginalFilename
+                FileName = header?.FileName,
                 InternalName = header?.Name,
                 Description = header?.Description,
                 GameName = parent.Name,
@@ -131,7 +131,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
+                FileName = header?.FileName,
                 InternalName = header?.Name,
                 Description = header?.Description,
                 GameName = parent.Name,

@@ -899,7 +899,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Rom GetInternalClone()
-            => (_internal as Data.Models.Metadata.Rom)?.Clone() as Data.Models.Metadata.Rom ?? [];
+            => (_internal as Data.Models.Metadata.Rom)?.Clone() as Data.Models.Metadata.Rom ?? new();
 
         #endregion
 

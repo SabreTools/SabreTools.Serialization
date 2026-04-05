@@ -52,7 +52,7 @@ namespace SabreTools.Metadata.DatItems.Test
             /// <inheritdoc/>
             public override TestDatItemModel GetInternalClone()
             {
-                return (_internal as TestDatItemModel)?.Clone() as TestDatItemModel ?? [];
+                return (_internal as TestDatItemModel)?.Clone() as TestDatItemModel ?? new();
             }
 
             /// <inheritdoc/>

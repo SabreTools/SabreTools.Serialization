@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ConvertFromMetadata_Empty()
         {
-            Data.Models.Metadata.MetadataFile? item = [];
+            Data.Models.Metadata.MetadataFile? item = new Data.Models.Metadata.MetadataFile();
 
             DatFile datFile = new Formats.Logiqx(null, useGame: false);
             datFile.ConvertFromMetadata(item, "filename", indexId: 0, keep: true, statsOnly: false, filterRunner: null);
@@ -211,6 +211,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Description = "description",
                 Email = "email",
                 EmulatorVersion = "emulatorversion",
+                FileName = "filename",
                 ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
                 ForceNodump = Data.Models.Metadata.NodumpFlag.Required,
                 ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
@@ -549,7 +550,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Endianness = Data.Models.Metadata.Endianness.Big,
                 Name = "name",
-                Rom = [[]],
+                Rom = [new Data.Models.Metadata.Rom()],
                 Size = 12345,
                 Width = Data.Models.Metadata.Width.Long,
             };
@@ -575,7 +576,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.DiskArea
             {
-                Disk = [[]],
+                Disk = [new Data.Models.Metadata.Disk()],
                 Name = "name",
             };
         }
@@ -716,7 +717,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 DataArea = [CreateMetadataDataArea()],
                 DiskArea = [CreateMetadataDiskArea()],
-                DipSwitch = [[]],
+                DipSwitch = [new Data.Models.Metadata.DipSwitch()],
                 Feature = [CreateMetadataFeature()],
                 Interface = "interface",
                 Name = "name",

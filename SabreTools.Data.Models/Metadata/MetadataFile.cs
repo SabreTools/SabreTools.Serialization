@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.Metadata
     /// </summary>
     /// TODO: ICloneable
     /// TODO: IComparable<MetadataFile>
-    public class MetadataFile : DictionaryBase
+    public class MetadataFile
     {
         public Header? Header { get; set; }
 

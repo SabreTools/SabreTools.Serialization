@@ -48,7 +48,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Blank GetInternalClone()
-            => (_internal as Data.Models.Metadata.Blank)?.Clone() as Data.Models.Metadata.Blank ?? [];
+            => (_internal as Data.Models.Metadata.Blank)?.Clone() as Data.Models.Metadata.Blank ?? new();
 
         #endregion
 

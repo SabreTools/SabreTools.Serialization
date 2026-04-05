@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Slot GetInternalClone()
         {
-            var slotItem = (_internal as Data.Models.Metadata.Slot)?.Clone() as Data.Models.Metadata.Slot ?? [];
+            var slotItem = (_internal as Data.Models.Metadata.Slot)?.Clone() as Data.Models.Metadata.Slot ?? new();
 
             if (SlotOption is not null)
                 slotItem.SlotOption = Array.ConvertAll(SlotOption, slotOption => slotOption.GetInternalClone());

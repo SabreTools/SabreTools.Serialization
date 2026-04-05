@@ -143,7 +143,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Disk GetInternalClone()
-            => (_internal as Data.Models.Metadata.Disk)?.Clone() as Data.Models.Metadata.Disk ?? [];
+            => (_internal as Data.Models.Metadata.Disk)?.Clone() as Data.Models.Metadata.Disk ?? new();
 
         /// <summary>
         /// Convert a disk to the closest Rom approximation

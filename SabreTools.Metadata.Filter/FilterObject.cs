@@ -54,18 +54,18 @@ namespace SabreTools.Metadata.Filter
         #region Matching
 
         /// <summary>
-        /// Determine if a DictionaryBase object matches the key and value
+        /// Determine if a object matches the key and value
         /// </summary>
-        public bool Matches(DictionaryBase dictionaryBase)
+        public bool Matches(object obj)
         {
             return Operation switch
             {
-                Operation.Equals => MatchesEqual(dictionaryBase),
-                Operation.NotEquals => MatchesNotEqual(dictionaryBase),
-                Operation.GreaterThan => MatchesGreaterThan(dictionaryBase),
-                Operation.GreaterThanOrEqual => MatchesGreaterThanOrEqual(dictionaryBase),
-                Operation.LessThan => MatchesLessThan(dictionaryBase),
-                Operation.LessThanOrEqual => MatchesLessThanOrEqual(dictionaryBase),
+                Operation.Equals => MatchesEqual(obj),
+                Operation.NotEquals => MatchesNotEqual(obj),
+                Operation.GreaterThan => MatchesGreaterThan(obj),
+                Operation.GreaterThanOrEqual => MatchesGreaterThanOrEqual(obj),
+                Operation.LessThan => MatchesLessThan(obj),
+                Operation.LessThanOrEqual => MatchesLessThanOrEqual(obj),
 
                 Operation.NONE => false,
                 _ => false,
@@ -75,10 +75,10 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Determines if a value matches exactly
         /// </summary>
-        private bool MatchesEqual(DictionaryBase dictionaryBase)
+        private bool MatchesEqual(object obj)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
+            if (!GetCheckValue(obj, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // If a null value is expected
@@ -117,10 +117,10 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Determines if a value does not match exactly
         /// </summary>
-        private bool MatchesNotEqual(DictionaryBase dictionaryBase)
+        private bool MatchesNotEqual(object obj)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
+            if (!GetCheckValue(obj, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // If a null value is expected
@@ -159,10 +159,10 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Determines if a value is strictly greater than
         /// </summary>
-        private bool MatchesGreaterThan(DictionaryBase dictionaryBase)
+        private bool MatchesGreaterThan(object obj)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
+            if (!GetCheckValue(obj, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // Null is always failure
@@ -191,10 +191,10 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Determines if a value is greater than or equal
         /// </summary>
-        private bool MatchesGreaterThanOrEqual(DictionaryBase dictionaryBase)
+        private bool MatchesGreaterThanOrEqual(object obj)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
+            if (!GetCheckValue(obj, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // Null is always failure
@@ -223,10 +223,10 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Determines if a value is strictly less than
         /// </summary>
-        private bool MatchesLessThan(DictionaryBase dictionaryBase)
+        private bool MatchesLessThan(object obj)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
+            if (!GetCheckValue(obj, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // Null is always failure
@@ -255,10 +255,10 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Determines if a value is less than or equal
         /// </summary>
-        private bool MatchesLessThanOrEqual(DictionaryBase dictionaryBase)
+        private bool MatchesLessThanOrEqual(object obj)
         {
             // Process the check value
-            if (!GetCheckValue(dictionaryBase, Key.FieldName, out string? checkValue))
+            if (!GetCheckValue(obj, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
 
             // Null is always failure
@@ -334,12 +334,13 @@ namespace SabreTools.Metadata.Filter
         }
 
         /// <summary>
-        /// Get the check value for a field from a DictionaryBase
+        /// Get the check value for a field
         /// </summary>
-        private static bool GetCheckValue(DictionaryBase dictionaryBase, string fieldName, out string? checkValue)
+        /// TODO: Figure out how to not have this hardcoded
+        private static bool GetCheckValue(object obj, string fieldName, out string? checkValue)
         {
             // Handle type-specific properties
-            switch (dictionaryBase)
+            switch (obj)
             {
                 case Adjuster item when fieldName == "default":
                     checkValue = item.Default.FromYesNo();
@@ -801,6 +802,9 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case Header item when fieldName == "emulatorversion":
                     checkValue = item.EmulatorVersion;
+                    return true;
+                case Header item when fieldName == "filename":
+                    checkValue = item.FileName;
                     return true;
                 case Header item when fieldName == "forcemerging":
                     checkValue = item.ForceMerging.AsStringValue();
@@ -1689,15 +1693,8 @@ namespace SabreTools.Metadata.Filter
             }
 
             // If the key doesn't exist, we count it as null
-            if (!dictionaryBase.ContainsKey(fieldName))
-            {
-                checkValue = null;
-                return false;
-            }
-
-            // If the value in the dictionary is null
-            checkValue = dictionaryBase.ReadString(fieldName);
-            return true;
+            checkValue = null;
+            return false;
         }
 
         /// <summary>

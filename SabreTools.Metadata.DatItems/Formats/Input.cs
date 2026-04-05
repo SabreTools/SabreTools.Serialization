@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Input GetInternalClone()
         {
-            var inputItem = (_internal as Data.Models.Metadata.Input)?.Clone() as Data.Models.Metadata.Input ?? [];
+            var inputItem = (_internal as Data.Models.Metadata.Input)?.Clone() as Data.Models.Metadata.Input ?? new();
 
             if (Control is not null)
                 inputItem.Control = Array.ConvertAll(Control, control => control.GetInternalClone());

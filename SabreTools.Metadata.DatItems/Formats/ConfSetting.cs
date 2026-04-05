@@ -77,7 +77,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.ConfSetting GetInternalClone()
         {
-            var confSettingItem = (_internal as Data.Models.Metadata.ConfSetting)?.Clone() as Data.Models.Metadata.ConfSetting ?? [];
+            var confSettingItem = (_internal as Data.Models.Metadata.ConfSetting)?.Clone() as Data.Models.Metadata.ConfSetting ?? new();
 
             if (Condition is not null)
                 confSettingItem.Condition = Condition.GetInternalClone();

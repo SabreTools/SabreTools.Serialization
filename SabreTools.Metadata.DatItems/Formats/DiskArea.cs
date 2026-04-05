@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public override Data.Models.Metadata.DiskArea GetInternalClone()
         {
-            var partItem = (_internal as Data.Models.Metadata.DiskArea)?.Clone() as Data.Models.Metadata.DiskArea ?? [];
+            var partItem = (_internal as Data.Models.Metadata.DiskArea)?.Clone() as Data.Models.Metadata.DiskArea ?? new();
 
             if (Disk is not null)
                 partItem.Disk = Array.ConvertAll(Disk, rom => rom.GetInternalClone());

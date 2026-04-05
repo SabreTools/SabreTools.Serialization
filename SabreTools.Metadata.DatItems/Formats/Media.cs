@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Media GetInternalClone()
-            => (_internal as Data.Models.Metadata.Media)?.Clone() as Data.Models.Metadata.Media ?? [];
+            => (_internal as Data.Models.Metadata.Media)?.Clone() as Data.Models.Metadata.Media ?? new();
 
         /// <summary>
         /// Convert a media to the closest Rom approximation

@@ -2515,7 +2515,7 @@ namespace SabreTools.Data.Extensions.Test
             var other = new Disk();
 
             self.FillMissingHashes(other);
-            Assert.Empty(self);
+            Assert.False(self.HasHashes());
         }
 
         [Fact]
@@ -2537,7 +2537,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Media();
             var other = new Media();
             self.FillMissingHashes(other);
-            Assert.Empty(self);
+            Assert.False(self.HasHashes());
         }
 
         [Fact]
@@ -2561,7 +2561,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom();
             var other = new Rom();
             self.FillMissingHashes(other);
-            Assert.Empty(self);
+            Assert.False(self.HasHashes());
         }
 
         [Fact]

@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Sound GetInternalClone()
-            => (_internal as Data.Models.Metadata.Sound)?.Clone() as Data.Models.Metadata.Sound ?? [];
+            => (_internal as Data.Models.Metadata.Sound)?.Clone() as Data.Models.Metadata.Sound ?? new();
 
         #endregion
 

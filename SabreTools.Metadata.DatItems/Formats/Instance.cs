@@ -60,7 +60,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Instance GetInternalClone()
-            => (_internal as Data.Models.Metadata.Instance)?.Clone() as Data.Models.Metadata.Instance ?? [];
+            => (_internal as Data.Models.Metadata.Instance)?.Clone() as Data.Models.Metadata.Instance ?? new();
 
         #endregion
 

@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.ConfLocation GetInternalClone()
-            => (_internal as Data.Models.Metadata.ConfLocation)?.Clone() as Data.Models.Metadata.ConfLocation ?? [];
+            => (_internal as Data.Models.Metadata.ConfLocation)?.Clone() as Data.Models.Metadata.ConfLocation ?? new();
 
         #endregion
 

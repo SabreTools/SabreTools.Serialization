@@ -78,7 +78,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Release GetInternalClone()
-            => (_internal as Data.Models.Metadata.Release)?.Clone() as Data.Models.Metadata.Release ?? [];
+            => (_internal as Data.Models.Metadata.Release)?.Clone() as Data.Models.Metadata.Release ?? new();
 
         #endregion
 

@@ -337,10 +337,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var sources = item.Source;
             if (sources is not null && sources.Length > 0)
-            {
-                string[] sourcesCopy = [.. sources];
-                infoSource[Data.Models.Metadata.InfoSource.SourceKey] = sourcesCopy;
-            }
+                infoSource.Source = [.. sources];
 
             return infoSource;
         }

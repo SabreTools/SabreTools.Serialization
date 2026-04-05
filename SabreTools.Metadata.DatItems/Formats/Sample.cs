@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Sample GetInternalClone()
-            => (_internal as Data.Models.Metadata.Sample)?.Clone() as Data.Models.Metadata.Sample ?? [];
+            => (_internal as Data.Models.Metadata.Sample)?.Clone() as Data.Models.Metadata.Sample ?? new();
 
         #endregion
 

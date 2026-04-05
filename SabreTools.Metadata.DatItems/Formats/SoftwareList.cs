@@ -72,7 +72,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.SoftwareList GetInternalClone()
-            => (_internal as Data.Models.Metadata.SoftwareList)?.Clone() as Data.Models.Metadata.SoftwareList ?? [];
+            => (_internal as Data.Models.Metadata.SoftwareList)?.Clone() as Data.Models.Metadata.SoftwareList ?? new();
 
         #endregion
 

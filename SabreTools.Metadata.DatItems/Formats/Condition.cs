@@ -72,7 +72,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Condition GetInternalClone()
-            => (_internal as Data.Models.Metadata.Condition)?.Clone() as Data.Models.Metadata.Condition ?? [];
+            => (_internal as Data.Models.Metadata.Condition)?.Clone() as Data.Models.Metadata.Condition ?? new();
 
         #endregion
 

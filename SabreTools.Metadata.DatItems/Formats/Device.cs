@@ -98,7 +98,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Device GetInternalClone()
         {
-            var deviceItem = (_internal as Data.Models.Metadata.Device)?.Clone() as Data.Models.Metadata.Device ?? [];
+            var deviceItem = (_internal as Data.Models.Metadata.Device)?.Clone() as Data.Models.Metadata.Device ?? new();
 
             deviceItem.DeviceType = DeviceType;
             deviceItem.FixedImage = FixedImage;

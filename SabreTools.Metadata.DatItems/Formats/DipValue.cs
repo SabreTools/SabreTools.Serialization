@@ -77,7 +77,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.DipValue GetInternalClone()
         {
-            var dipValueItem = (_internal as Data.Models.Metadata.DipValue)?.Clone() as Data.Models.Metadata.DipValue ?? [];
+            var dipValueItem = (_internal as Data.Models.Metadata.DipValue)?.Clone() as Data.Models.Metadata.DipValue ?? new();
 
             if (Condition is not null)
                 dipValueItem.Condition = Condition.GetInternalClone();

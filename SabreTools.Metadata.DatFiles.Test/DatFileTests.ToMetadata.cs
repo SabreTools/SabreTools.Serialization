@@ -360,6 +360,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("description", header.Description);
             Assert.Equal("email", header.Email);
             Assert.Equal("emulatorversion", header.EmulatorVersion);
+            Assert.Equal("filename", header.FileName);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, header.ForceMerging);
             Assert.Equal(Data.Models.Metadata.NodumpFlag.Required, header.ForceNodump);
             Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, header.ForcePacking);

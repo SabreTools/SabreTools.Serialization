@@ -71,7 +71,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Adjuster GetInternalClone()
         {
-            var adjusterItem = (_internal as Data.Models.Metadata.Adjuster)?.Clone() as Data.Models.Metadata.Adjuster ?? [];
+            var adjusterItem = (_internal as Data.Models.Metadata.Adjuster)?.Clone() as Data.Models.Metadata.Adjuster ?? new();
 
             if (Condition is not null)
                 adjusterItem.Condition = Condition.GetInternalClone();

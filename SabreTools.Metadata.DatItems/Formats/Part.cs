@@ -97,7 +97,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Part GetInternalClone()
         {
-            var partItem = (_internal as Data.Models.Metadata.Part)?.Clone() as Data.Models.Metadata.Part ?? [];
+            var partItem = (_internal as Data.Models.Metadata.Part)?.Clone() as Data.Models.Metadata.Part ?? new();
 
             if (DataArea is not null)
                 partItem.DataArea = Array.ConvertAll(DataArea, dataArea => dataArea.GetInternalClone());

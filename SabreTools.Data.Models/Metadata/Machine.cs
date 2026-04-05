@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.Metadata
     /// <summary>
     /// Format-agnostic representation of game, machine, and set data
     /// </summary>
-    public class Machine : DictionaryBase, ICloneable, IEquatable<Machine>
+    public class Machine : ICloneable, IEquatable<Machine>
     {
         #region Properties
 

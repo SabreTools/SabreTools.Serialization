@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.BiosSet GetInternalClone()
-            => (_internal as Data.Models.Metadata.BiosSet)?.Clone() as Data.Models.Metadata.BiosSet ?? [];
+            => (_internal as Data.Models.Metadata.BiosSet)?.Clone() as Data.Models.Metadata.BiosSet ?? new();
 
         #endregion
 

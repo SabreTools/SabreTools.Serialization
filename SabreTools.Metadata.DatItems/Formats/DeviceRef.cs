@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.DeviceRef GetInternalClone()
-            => (_internal as Data.Models.Metadata.DeviceRef)?.Clone() as Data.Models.Metadata.DeviceRef ?? [];
+            => (_internal as Data.Models.Metadata.DeviceRef)?.Clone() as Data.Models.Metadata.DeviceRef ?? new();
 
         #endregion
 

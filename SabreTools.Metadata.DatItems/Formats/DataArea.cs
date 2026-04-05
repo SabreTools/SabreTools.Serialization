@@ -84,7 +84,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public override Data.Models.Metadata.DataArea GetInternalClone()
         {
-            var partItem = (_internal as Data.Models.Metadata.DataArea)?.Clone() as Data.Models.Metadata.DataArea ?? [];
+            var partItem = (_internal as Data.Models.Metadata.DataArea)?.Clone() as Data.Models.Metadata.DataArea ?? new();
 
             if (Rom is not null)
                 partItem.Rom = Array.ConvertAll(Rom, rom => rom.GetInternalClone());

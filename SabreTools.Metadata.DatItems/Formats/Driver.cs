@@ -120,7 +120,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Driver GetInternalClone()
-            => (_internal as Data.Models.Metadata.Driver)?.Clone() as Data.Models.Metadata.Driver ?? [];
+            => (_internal as Data.Models.Metadata.Driver)?.Clone() as Data.Models.Metadata.Driver ?? new();
 
         #endregion
 

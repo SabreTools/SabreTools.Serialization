@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Analog GetInternalClone()
-            => (_internal as Data.Models.Metadata.Analog)?.Clone() as Data.Models.Metadata.Analog ?? [];
+            => (_internal as Data.Models.Metadata.Analog)?.Clone() as Data.Models.Metadata.Analog ?? new();
 
         #endregion
 

@@ -120,7 +120,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Control GetInternalClone()
-            => (_internal as Data.Models.Metadata.Control)?.Clone() as Data.Models.Metadata.Control ?? [];
+            => (_internal as Data.Models.Metadata.Control)?.Clone() as Data.Models.Metadata.Control ?? new();
 
         #endregion
 

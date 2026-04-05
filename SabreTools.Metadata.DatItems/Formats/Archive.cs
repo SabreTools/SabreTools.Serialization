@@ -245,7 +245,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Archive GetInternalClone()
-            => (_internal as Data.Models.Metadata.Archive)?.Clone() as Data.Models.Metadata.Archive ?? [];
+            => (_internal as Data.Models.Metadata.Archive)?.Clone() as Data.Models.Metadata.Archive ?? new();
 
         #endregion
 

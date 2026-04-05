@@ -121,7 +121,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.DipSwitch GetInternalClone()
         {
-            var dipSwitchItem = (_internal as Data.Models.Metadata.DipSwitch)?.Clone() as Data.Models.Metadata.DipSwitch ?? [];
+            var dipSwitchItem = (_internal as Data.Models.Metadata.DipSwitch)?.Clone() as Data.Models.Metadata.DipSwitch ?? new();
 
             if (Condition is not null)
                 dipSwitchItem.Condition = Condition.GetInternalClone();
