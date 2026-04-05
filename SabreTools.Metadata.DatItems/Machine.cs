@@ -456,36 +456,6 @@ namespace SabreTools.Metadata.DatItems
         #region Comparision Methods
 
         /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem? other)
-        {
-            // If other is null
-            if (other is null)
-                return false;
-
-            // If the type is mismatched
-            if (other is not Machine otherItem)
-                return false;
-
-            // Compare internal models
-            return _internal.Equals(otherItem._internal);
-        }
-
-        /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem<Data.Models.Metadata.Machine>? other)
-        {
-            // If other is null
-            if (other is null)
-                return false;
-
-            // If the type is mismatched
-            if (other is not Machine otherItem)
-                return false;
-
-            // Compare internal models
-            return _internal.Equals(otherItem._internal);
-        }
-
-        /// <inheritdoc/>
         public bool Equals(Machine? other)
         {
             // If other is null

@@ -168,12 +168,6 @@ namespace SabreTools.Metadata.DatItems
             return string.Compare(selfName, otherName, StringComparison.Ordinal);
         }
 
-        /// <inheritdoc/>
-        public abstract override bool Equals(ModelBackedItem? other);
-
-        /// <inheritdoc/>
-        public abstract override bool Equals(ModelBackedItem<Data.Models.Metadata.DatItem>? other);
-
         /// <summary>
         /// Determine if an item is a duplicate using partial matching logic
         /// </summary>

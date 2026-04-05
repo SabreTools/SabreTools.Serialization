@@ -167,20 +167,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Comparision Methods
 
         /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem? other)
-        {
-            // This isn't implemented, so always return false
-            return false;
-        }
-
-        /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem<Data.Models.Metadata.DatItem>? other)
-        {
-            // This isn't implemented, so always return false
-            return false;
-        }
-
-        /// <inheritdoc/>
         public override bool Equals(DatItem? other)
         {
             bool dupefound = false;

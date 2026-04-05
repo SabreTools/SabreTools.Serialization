@@ -12,7 +12,7 @@ namespace SabreTools.Metadata.DatFiles
     /// Represents all possible DAT header information
     /// </summary>
     [JsonObject("header"), XmlRoot("header")]
-    public sealed class DatHeader : ModelBackedItem<Data.Models.Metadata.Header>, ICloneable
+    public sealed class DatHeader : ModelBackedItem<Data.Models.Metadata.Header>, ICloneable, IEquatable<DatHeader>
     {
         #region Properties
 
@@ -374,33 +374,14 @@ namespace SabreTools.Metadata.DatFiles
         #region Comparision Methods
 
         /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem? other)
+        public bool Equals(DatHeader? other)
         {
             // If other is null
             if (other is null)
                 return false;
 
-            // If the type is mismatched
-            if (other is not DatHeader otherItem)
-                return false;
-
             // Compare internal models
-            return _internal.Equals(otherItem._internal);
-        }
-
-        /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem<Data.Models.Metadata.Header>? other)
-        {
-            // If other is null
-            if (other is null)
-                return false;
-
-            // If the type is mismatched
-            if (other is not DatHeader otherItem)
-                return false;
-
-            // Compare internal models
-            return _internal.Equals(otherItem._internal);
+            return _internal.Equals(other._internal);
         }
 
         #endregion
