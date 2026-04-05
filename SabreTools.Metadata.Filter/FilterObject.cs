@@ -339,1362 +339,2032 @@ namespace SabreTools.Metadata.Filter
         /// TODO: Figure out how to not have this hardcoded
         private static bool GetCheckValue(object obj, string fieldName, out string? checkValue)
         {
-            // Handle type-specific properties
             switch (obj)
             {
-                case Adjuster item when fieldName == "default":
-                    checkValue = item.Default.FromYesNo();
+                case Adjuster item: return GetCheckValue(item, fieldName, out checkValue);
+                case Analog item: return GetCheckValue(item, fieldName, out checkValue);
+                case Archive item: return GetCheckValue(item, fieldName, out checkValue);
+                case BiosSet item: return GetCheckValue(item, fieldName, out checkValue);
+                case Chip item: return GetCheckValue(item, fieldName, out checkValue);
+                case Condition item: return GetCheckValue(item, fieldName, out checkValue);
+                case Configuration item: return GetCheckValue(item, fieldName, out checkValue);
+                case ConfLocation item: return GetCheckValue(item, fieldName, out checkValue);
+                case ConfSetting item: return GetCheckValue(item, fieldName, out checkValue);
+                case Control item: return GetCheckValue(item, fieldName, out checkValue);
+                case DataArea item: return GetCheckValue(item, fieldName, out checkValue);
+                case Device item: return GetCheckValue(item, fieldName, out checkValue);
+                case DeviceRef item: return GetCheckValue(item, fieldName, out checkValue);
+                case DipLocation item: return GetCheckValue(item, fieldName, out checkValue);
+                case DipSwitch item: return GetCheckValue(item, fieldName, out checkValue);
+                case DipValue item: return GetCheckValue(item, fieldName, out checkValue);
+                case Disk item: return GetCheckValue(item, fieldName, out checkValue);
+                case DiskArea item: return GetCheckValue(item, fieldName, out checkValue);
+                case Display item: return GetCheckValue(item, fieldName, out checkValue);
+                case Driver item: return GetCheckValue(item, fieldName, out checkValue);
+                case Extension item: return GetCheckValue(item, fieldName, out checkValue);
+                case Feature item: return GetCheckValue(item, fieldName, out checkValue);
+                case Header item: return GetCheckValue(item, fieldName, out checkValue);
+                case Info item: return GetCheckValue(item, fieldName, out checkValue);
+                case Input item: return GetCheckValue(item, fieldName, out checkValue);
+                case Instance item: return GetCheckValue(item, fieldName, out checkValue);
+                case Machine item: return GetCheckValue(item, fieldName, out checkValue);
+                case Media item: return GetCheckValue(item, fieldName, out checkValue);
+                case Original item: return GetCheckValue(item, fieldName, out checkValue);
+                case Part item: return GetCheckValue(item, fieldName, out checkValue);
+                case Port item: return GetCheckValue(item, fieldName, out checkValue);
+                case RamOption item: return GetCheckValue(item, fieldName, out checkValue);
+                case Release item: return GetCheckValue(item, fieldName, out checkValue);
+                case ReleaseDetails item: return GetCheckValue(item, fieldName, out checkValue);
+                case Rom item: return GetCheckValue(item, fieldName, out checkValue);
+                case Sample item: return GetCheckValue(item, fieldName, out checkValue);
+                case Serials item: return GetCheckValue(item, fieldName, out checkValue);
+                case SharedFeat item: return GetCheckValue(item, fieldName, out checkValue);
+                case Slot item: return GetCheckValue(item, fieldName, out checkValue);
+                case SlotOption item: return GetCheckValue(item, fieldName, out checkValue);
+                case SoftwareList item: return GetCheckValue(item, fieldName, out checkValue);
+                case Sound item: return GetCheckValue(item, fieldName, out checkValue);
+                case SourceDetails item: return GetCheckValue(item, fieldName, out checkValue);
+                case Video item: return GetCheckValue(item, fieldName, out checkValue);
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Adjuster obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "default":
+                    checkValue = obj.Default.FromYesNo();
                     return true;
-                case Adjuster item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
 
-                case Analog item when fieldName == "mask":
-                    checkValue = item.Mask;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Analog obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "mask":
+                    checkValue = obj.Mask;
                     return true;
 
-                case Archive item when fieldName == "additional":
-                    checkValue = item.Additional;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Archive obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "additional":
+                    checkValue = obj.Additional;
                     return true;
-                case Archive item when fieldName == "adult":
-                    checkValue = item.Adult is null ? null : (item.Adult == true ? "1" : "0");
+                case "adult":
+                    checkValue = obj.Adult is null ? null : (obj.Adult == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "alt":
-                    checkValue = item.Alt is null ? null : (item.Alt == true ? "1" : "0");
+                case "alt":
+                    checkValue = obj.Alt is null ? null : (obj.Alt == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "bios":
-                    checkValue = item.Bios is null ? null : (item.Bios == true ? "1" : "0");
+                case "bios":
+                    checkValue = obj.Bios is null ? null : (obj.Bios == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "categories":
-                    checkValue = item.Categories;
+                case "categories":
+                    checkValue = obj.Categories;
                     return true;
-                case Archive item when fieldName == "clone":
-                    checkValue = item.CloneTag;
+                case "clone":
+                    checkValue = obj.CloneTag;
                     return true;
-                case Archive item when fieldName == "complete":
-                    checkValue = item.Complete is null ? null : (item.Complete == true ? "1" : "0");
+                case "complete":
+                    checkValue = obj.Complete is null ? null : (obj.Complete == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "dat":
-                    checkValue = item.Dat is null ? null : (item.Dat == true ? "1" : "0");
+                case "dat":
+                    checkValue = obj.Dat is null ? null : (obj.Dat == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "datternote":
-                    checkValue = item.DatterNote;
+                case "datternote":
+                    checkValue = obj.DatterNote;
                     return true;
-                case Archive item when fieldName == "description":
-                    checkValue = item.Description;
+                case "description":
+                    checkValue = obj.Description;
                     return true;
-                case Archive item when fieldName == "devstatus":
-                    checkValue = item.DevStatus;
+                case "devstatus":
+                    checkValue = obj.DevStatus;
                     return true;
-                case Archive item when fieldName == "gameid1":
-                    checkValue = item.GameId1;
+                case "gameid1":
+                    checkValue = obj.GameId1;
                     return true;
-                case Archive item when fieldName == "gameid2":
-                    checkValue = item.GameId2;
+                case "gameid2":
+                    checkValue = obj.GameId2;
                     return true;
-                case Archive item when fieldName == "langchecked":
-                    checkValue = item.LangChecked;
+                case "langchecked":
+                    checkValue = obj.LangChecked;
                     return true;
-                case Archive item when fieldName == "languages":
-                    checkValue = item.Languages;
+                case "languages":
+                    checkValue = obj.Languages;
                     return true;
-                case Archive item when fieldName == "licensed":
-                    checkValue = item.Licensed is null ? null : (item.Licensed == true ? "1" : "0");
+                case "licensed":
+                    checkValue = obj.Licensed is null ? null : (obj.Licensed == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "listed":
-                    checkValue = item.Listed is null ? null : (item.Listed == true ? "1" : "0");
+                case "listed":
+                    checkValue = obj.Listed is null ? null : (obj.Listed == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "mergeof":
-                    checkValue = item.MergeOf;
+                case "mergeof":
+                    checkValue = obj.MergeOf;
                     return true;
-                case Archive item when fieldName == "mergename":
-                    checkValue = item.MergeName;
+                case "mergename":
+                    checkValue = obj.MergeName;
                     return true;
-                case Archive item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case Archive item when fieldName == "namealt":
-                    checkValue = item.NameAlt;
+                case "namealt":
+                    checkValue = obj.NameAlt;
                     return true;
-                case Archive item when fieldName == "number":
-                    checkValue = item.Number;
+                case "number":
+                    checkValue = obj.Number;
                     return true;
-                case Archive item when fieldName == "physical":
-                    checkValue = item.Physical is null ? null : (item.Physical == true ? "1" : "0");
+                case "physical":
+                    checkValue = obj.Physical is null ? null : (obj.Physical == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "pirate":
-                    checkValue = item.Pirate is null ? null : (item.Pirate == true ? "1" : "0");
+                case "pirate":
+                    checkValue = obj.Pirate is null ? null : (obj.Pirate == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "private":
-                    checkValue = item.Private is null ? null : (item.Private == true ? "1" : "0");
+                case "private":
+                    checkValue = obj.Private is null ? null : (obj.Private == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "region":
-                    checkValue = item.Region;
+                case "region":
+                    checkValue = obj.Region;
                     return true;
-                case Archive item when fieldName == "regparent":
-                    checkValue = item.RegParent;
+                case "regparent":
+                    checkValue = obj.RegParent;
                     return true;
-                case Archive item when fieldName == "showlang":
-                    checkValue = item.ShowLang is null ? null : (item.ShowLang == true ? "1" : "0");
+                case "showlang":
+                    checkValue = obj.ShowLang is null ? null : (obj.ShowLang == true ? "1" : "0");
                     return true;
-                case Archive item when fieldName == "special1":
-                    checkValue = item.Special1;
+                case "special1":
+                    checkValue = obj.Special1;
                     return true;
-                case Archive item when fieldName == "special2":
-                    checkValue = item.Special2;
+                case "special2":
+                    checkValue = obj.Special2;
                     return true;
-                case Archive item when fieldName == "stickynote":
-                    checkValue = item.StickyNote;
+                case "stickynote":
+                    checkValue = obj.StickyNote;
                     return true;
-                case Archive item when fieldName == "version1":
-                    checkValue = item.Version1;
+                case "version1":
+                    checkValue = obj.Version1;
                     return true;
-                case Archive item when fieldName == "version2":
-                    checkValue = item.Version2;
+                case "version2":
+                    checkValue = obj.Version2;
                     return true;
 
-                case BiosSet item when fieldName == "default":
-                    checkValue = item.Default.FromYesNo();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(BiosSet obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "default":
+                    checkValue = obj.Default.FromYesNo();
                     return true;
-                case BiosSet item when fieldName == "description":
-                    checkValue = item.Description;
+                case "description":
+                    checkValue = obj.Description;
                     return true;
-                case BiosSet item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
 
-                case Chip item when fieldName == "type":
-                    checkValue = item.ChipType?.AsStringValue();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Chip obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "type":
+                    checkValue = obj.ChipType?.AsStringValue();
                     return true;
-                case Chip item when fieldName == "clock":
-                    checkValue = item.Clock?.ToString();
+                case "clock":
+                    checkValue = obj.Clock?.ToString();
                     return true;
-                case Chip item when fieldName == "flags":
-                    checkValue = item.Flags;
+                case "flags":
+                    checkValue = obj.Flags;
                     return true;
-                case Chip item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case Chip item when fieldName == "soundonly":
-                    checkValue = item.SoundOnly.FromYesNo();
+                case "soundonly":
+                    checkValue = obj.SoundOnly.FromYesNo();
                     return true;
-                case Chip item when fieldName == "tag":
-                    checkValue = item.Tag;
+                case "tag":
+                    checkValue = obj.Tag;
                     return true;
 
-                case Condition item when fieldName == "mask":
-                    checkValue = item.Mask;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Condition obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "mask":
+                    checkValue = obj.Mask;
                     return true;
-                case Condition item when fieldName == "relation":
-                    checkValue = item.Relation?.AsStringValue();
+                case "relation":
+                    checkValue = obj.Relation?.AsStringValue();
                     return true;
-                case Condition item when fieldName == "tag":
-                    checkValue = item.Tag;
+                case "tag":
+                    checkValue = obj.Tag;
                     return true;
-                case Condition item when fieldName == "value":
-                    checkValue = item.Value;
+                case "value":
+                    checkValue = obj.Value;
                     return true;
 
-                case Configuration item when fieldName == "mask":
-                    checkValue = item.Mask;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Configuration obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "mask":
+                    checkValue = obj.Mask;
                     return true;
-                case Configuration item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case Configuration item when fieldName == "tag":
-                    checkValue = item.Tag;
+                case "tag":
+                    checkValue = obj.Tag;
                     return true;
 
-                case ConfLocation item when fieldName == "inverted":
-                    checkValue = item.Inverted.FromYesNo();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(ConfLocation obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "inverted":
+                    checkValue = obj.Inverted.FromYesNo();
                     return true;
-                case ConfLocation item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case ConfLocation item when fieldName == "number":
-                    checkValue = item.Number?.ToString();
+                case "number":
+                    checkValue = obj.Number?.ToString();
                     return true;
 
-                case ConfSetting item when fieldName == "default":
-                    checkValue = item.Default.FromYesNo();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(ConfSetting obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "default":
+                    checkValue = obj.Default.FromYesNo();
                     return true;
-                case ConfSetting item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case ConfSetting item when fieldName == "value":
-                    checkValue = item.Value;
+                case "value":
+                    checkValue = obj.Value;
                     return true;
 
-                case Control item when fieldName == "buttons":
-                    checkValue = item.Buttons?.ToString();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Control obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "buttons":
+                    checkValue = obj.Buttons?.ToString();
                     return true;
-                case Control item when fieldName == "type":
-                    checkValue = item.ControlType?.AsStringValue();
+                case "type":
+                    checkValue = obj.ControlType?.AsStringValue();
                     return true;
-                case Control item when fieldName == "keydelta":
-                    checkValue = item.KeyDelta?.ToString();
+                case "keydelta":
+                    checkValue = obj.KeyDelta?.ToString();
                     return true;
-                case Control item when fieldName == "maximum":
-                    checkValue = item.Maximum?.ToString();
+                case "maximum":
+                    checkValue = obj.Maximum?.ToString();
                     return true;
-                case Control item when fieldName == "minimum":
-                    checkValue = item.Minimum?.ToString();
+                case "minimum":
+                    checkValue = obj.Minimum?.ToString();
                     return true;
-                case Control item when fieldName == "player":
-                    checkValue = item.Player?.ToString();
+                case "player":
+                    checkValue = obj.Player?.ToString();
                     return true;
-                case Control item when fieldName == "reqbuttons":
-                    checkValue = item.ReqButtons?.ToString();
+                case "reqbuttons":
+                    checkValue = obj.ReqButtons?.ToString();
                     return true;
-                case Control item when fieldName == "reverse":
-                    checkValue = item.Reverse.FromYesNo();
+                case "reverse":
+                    checkValue = obj.Reverse.FromYesNo();
                     return true;
-                case Control item when fieldName == "sensitivity":
-                    checkValue = item.Sensitivity?.ToString();
+                case "sensitivity":
+                    checkValue = obj.Sensitivity?.ToString();
                     return true;
-                case Control item when fieldName == "ways":
-                    checkValue = item.Ways;
+                case "ways":
+                    checkValue = obj.Ways;
                     return true;
-                case Control item when fieldName == "ways2":
-                    checkValue = item.Ways2;
+                case "ways2":
+                    checkValue = obj.Ways2;
                     return true;
-                case Control item when fieldName == "ways3":
-                    checkValue = item.Ways3;
+                case "ways3":
+                    checkValue = obj.Ways3;
                     return true;
 
-                case DataArea item when fieldName == "endianness":
-                    checkValue = item.Endianness?.AsStringValue();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(DataArea obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "endianness":
+                    checkValue = obj.Endianness?.AsStringValue();
                     return true;
-                case DataArea item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case DataArea item when fieldName == "size":
-                    checkValue = item.Size?.ToString();
+                case "size":
+                    checkValue = obj.Size?.ToString();
                     return true;
-                case DataArea item when fieldName == "width":
-                    checkValue = item.Width?.AsStringValue();
+                case "width":
+                    checkValue = obj.Width?.AsStringValue();
                     return true;
 
-                case Device item when fieldName == "type":
-                    checkValue = item.DeviceType?.AsStringValue();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Device obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "type":
+                    checkValue = obj.DeviceType?.AsStringValue();
                     return true;
-                case Device item when fieldName == "fixedimage":
-                    checkValue = item.FixedImage;
+                case "fixedimage":
+                    checkValue = obj.FixedImage;
                     return true;
-                case Device item when fieldName == "interface":
-                    checkValue = item.Interface;
+                case "interface":
+                    checkValue = obj.Interface;
                     return true;
-                case Device item when fieldName == "mandatory":
-                    checkValue = item.Mandatory.FromYesNo();
+                case "mandatory":
+                    checkValue = obj.Mandatory.FromYesNo();
                     return true;
-                case Device item when fieldName == "tag":
-                    checkValue = item.Tag;
+                case "tag":
+                    checkValue = obj.Tag;
                     return true;
 
-                case DeviceRef item when fieldName == "name":
-                    checkValue = item.Name;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(DeviceRef obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "name":
+                    checkValue = obj.Name;
                     return true;
 
-                case DipLocation item when fieldName == "inverted":
-                    checkValue = item.Inverted.FromYesNo();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(DipLocation obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "inverted":
+                    checkValue = obj.Inverted.FromYesNo();
                     return true;
-                case DipLocation item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case DipLocation item when fieldName == "number":
-                    checkValue = item.Number?.ToString();
+                case "number":
+                    checkValue = obj.Number?.ToString();
                     return true;
 
-                case DipSwitch item when fieldName == "default":
-                    checkValue = item.Default.FromYesNo();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(DipSwitch obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "default":
+                    checkValue = obj.Default.FromYesNo();
                     return true;
-                case DipSwitch item when fieldName == "mask":
-                    checkValue = item.Mask;
+                case "mask":
+                    checkValue = obj.Mask;
                     return true;
-                case DipSwitch item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case DipSwitch item when fieldName == "tag":
-                    checkValue = item.Tag;
+                case "tag":
+                    checkValue = obj.Tag;
                     return true;
 
-                case DipValue item when fieldName == "default":
-                    checkValue = item.Default.FromYesNo();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(DipValue obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "default":
+                    checkValue = obj.Default.FromYesNo();
                     return true;
-                case DipValue item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case DipValue item when fieldName == "value":
-                    checkValue = item.Value;
+                case "value":
+                    checkValue = obj.Value;
                     return true;
 
-                case Disk item when fieldName == "flags":
-                    checkValue = item.Flags;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Disk obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "flags":
+                    checkValue = obj.Flags;
                     return true;
-                case Disk item when fieldName == "index":
-                    checkValue = item.Index?.ToString();
+                case "index":
+                    checkValue = obj.Index?.ToString();
                     return true;
-                case Disk item when fieldName == "md5":
-                    checkValue = item.MD5;
+                case "md5":
+                    checkValue = obj.MD5;
                     return true;
-                case Disk item when fieldName == "merge":
-                    checkValue = item.Merge;
+                case "merge":
+                    checkValue = obj.Merge;
                     return true;
-                case Disk item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case Disk item when fieldName == "optional":
-                    checkValue = item.Optional.FromYesNo();
+                case "optional":
+                    checkValue = obj.Optional.FromYesNo();
                     return true;
-                case Disk item when fieldName == "region":
-                    checkValue = item.Region;
+                case "region":
+                    checkValue = obj.Region;
                     return true;
-                case Disk item when fieldName == "sha1":
-                    checkValue = item.SHA1;
+                case "sha1":
+                    checkValue = obj.SHA1;
                     return true;
-                case Disk item when fieldName == "status":
-                    checkValue = item.Status?.AsStringValue();
+                case "status":
+                    checkValue = obj.Status?.AsStringValue();
                     return true;
-                case Disk item when fieldName == "writable":
-                    checkValue = item.Writable.FromYesNo();
+                case "writable":
+                    checkValue = obj.Writable.FromYesNo();
                     return true;
 
-                case DiskArea item when fieldName == "name":
-                    checkValue = item.Name;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(DiskArea obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "name":
+                    checkValue = obj.Name;
                     return true;
 
-                case Display item when fieldName == "aspectx":
-                    checkValue = item.AspectX?.ToString();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Display obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "aspectx":
+                    checkValue = obj.AspectX?.ToString();
                     return true;
-                case Display item when fieldName == "aspecty":
-                    checkValue = item.AspectY?.ToString();
+                case "aspecty":
+                    checkValue = obj.AspectY?.ToString();
                     return true;
-                case Display item when fieldName == "flipx":
-                    checkValue = item.FlipX.FromYesNo();
+                case "flipx":
+                    checkValue = obj.FlipX.FromYesNo();
                     return true;
-                case Display item when fieldName == "hbend":
-                    checkValue = item.HBEnd?.ToString();
+                case "hbend":
+                    checkValue = obj.HBEnd?.ToString();
                     return true;
-                case Display item when fieldName == "hbstart":
-                    checkValue = item.HBStart?.ToString();
+                case "hbstart":
+                    checkValue = obj.HBStart?.ToString();
                     return true;
-                case Display item when fieldName == "height" || fieldName == "y":
-                    checkValue = item.Height?.ToString();
+                case "height":
+                case "y":
+                    checkValue = obj.Height?.ToString();
                     return true;
-                case Display item when fieldName == "htotal":
-                    checkValue = item.HTotal?.ToString();
+                case "htotal":
+                    checkValue = obj.HTotal?.ToString();
                     return true;
-                case Display item when fieldName == "pixclock":
-                    checkValue = item.PixClock?.ToString();
+                case "pixclock":
+                    checkValue = obj.PixClock?.ToString();
                     return true;
-                case Display item when fieldName == "refresh" || fieldName == "freq":
-                    checkValue = item.Refresh?.ToString();
+                case "refresh":
+                case "freq":
+                    checkValue = obj.Refresh?.ToString();
                     return true;
-                case Display item when fieldName == "rotate" || fieldName == "orientation":
-                    checkValue = item.Rotate?.AsStringValue();
+                case "rotate":
+                case "orientation":
+                    checkValue = obj.Rotate?.AsStringValue();
                     return true;
-                case Display item when fieldName == "type" || fieldName == "screen":
-                    checkValue = item.DisplayType?.AsStringValue();
+                case "type":
+                case "screen":
+                    checkValue = obj.DisplayType?.AsStringValue();
                     return true;
-                case Display item when fieldName == "tag":
-                    checkValue = item.Tag;
+                case "tag":
+                    checkValue = obj.Tag;
                     return true;
-                case Display item when fieldName == "vbend":
-                    checkValue = item.VBEnd?.ToString();
+                case "vbend":
+                    checkValue = obj.VBEnd?.ToString();
                     return true;
-                case Display item when fieldName == "vbstart":
-                    checkValue = item.VBStart?.ToString();
+                case "vbstart":
+                    checkValue = obj.VBStart?.ToString();
                     return true;
-                case Display item when fieldName == "vtotal":
-                    checkValue = item.VTotal?.ToString();
+                case "vtotal":
+                    checkValue = obj.VTotal?.ToString();
                     return true;
-                case Display item when fieldName == "width" || fieldName == "x":
-                    checkValue = item.Width?.ToString();
+                case "width":
+                case "x":
+                    checkValue = obj.Width?.ToString();
                     return true;
 
-                case Driver item when fieldName == "blit":
-                    checkValue = item.Blit?.AsStringValue();
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Driver obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "blit":
+                    checkValue = obj.Blit?.AsStringValue();
                     return true;
-                case Driver item when fieldName == "cocktail":
-                    checkValue = item.Cocktail?.AsStringValue();
+                case "cocktail":
+                    checkValue = obj.Cocktail?.AsStringValue();
                     return true;
-                case Driver item when fieldName == "color":
-                    checkValue = item.Color?.AsStringValue();
+                case "color":
+                    checkValue = obj.Color?.AsStringValue();
                     return true;
-                case Driver item when fieldName == "emulation":
-                    checkValue = item.Emulation?.AsStringValue();
+                case "emulation":
+                    checkValue = obj.Emulation?.AsStringValue();
                     return true;
-                case Driver item when fieldName == "incomplete":
-                    checkValue = item.Incomplete.FromYesNo();
+                case "incomplete":
+                    checkValue = obj.Incomplete.FromYesNo();
                     return true;
-                case Driver item when fieldName == "nosoundhardware":
-                    checkValue = item.NoSoundHardware.FromYesNo();
+                case "nosoundhardware":
+                    checkValue = obj.NoSoundHardware.FromYesNo();
                     return true;
-                case Driver item when fieldName == "palettesize":
-                    checkValue = item.PaletteSize;
+                case "palettesize":
+                    checkValue = obj.PaletteSize;
                     return true;
-                case Driver item when fieldName == "requiresartwork":
-                    checkValue = item.RequiresArtwork.FromYesNo();
+                case "requiresartwork":
+                    checkValue = obj.RequiresArtwork.FromYesNo();
                     return true;
-                case Driver item when fieldName == "savestate":
-                    checkValue = item.SaveState?.AsStringValue();
+                case "savestate":
+                    checkValue = obj.SaveState?.AsStringValue();
                     return true;
-                case Driver item when fieldName == "sound":
-                    checkValue = item.Sound?.AsStringValue();
+                case "sound":
+                    checkValue = obj.Sound?.AsStringValue();
                     return true;
-                case Driver item when fieldName == "status":
-                    checkValue = item.Status?.AsStringValue();
+                case "status":
+                    checkValue = obj.Status?.AsStringValue();
                     return true;
-                case Driver item when fieldName == "unofficial":
-                    checkValue = item.Unofficial.FromYesNo();
+                case "unofficial":
+                    checkValue = obj.Unofficial.FromYesNo();
                     return true;
 
-                case Extension item when fieldName == "name":
-                    checkValue = item.Name;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Extension obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "name":
+                    checkValue = obj.Name;
                     return true;
 
-                case Feature item when fieldName == "name":
-                    checkValue = item.Name;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Feature obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "name":
+                    checkValue = obj.Name;
                     return true;
-                case Feature item when fieldName == "overall":
-                    checkValue = item.Overall?.AsStringValue();
+                case "overall":
+                    checkValue = obj.Overall?.AsStringValue();
                     return true;
-                case Feature item when fieldName == "status":
-                    checkValue = item.Status?.AsStringValue();
+                case "status":
+                    checkValue = obj.Status?.AsStringValue();
                     return true;
-                case Feature item when fieldName == "type":
-                    checkValue = item.FeatureType?.AsStringValue();
+                case "type":
+                    checkValue = obj.FeatureType?.AsStringValue();
                     return true;
-                case Feature item when fieldName == "value":
-                    checkValue = item.Value;
+                case "value":
+                    checkValue = obj.Value;
                     return true;
 
-                case Header item when fieldName == "author":
-                    checkValue = item.Author;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Header obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "author":
+                    checkValue = obj.Author;
                     return true;
-                case Header item when fieldName == "biosmode":
-                    checkValue = item.BiosMode.AsStringValue();
+                case "biosmode":
+                    checkValue = obj.BiosMode.AsStringValue();
                     return true;
-                case Header item when fieldName == "build":
-                    checkValue = item.Build;
+                case "build":
+                    checkValue = obj.Build;
                     return true;
                 // Header.CanOpen is intentionally skipped
-                case Header item when fieldName == "category":
-                    checkValue = item.Category;
+                case "category":
+                    checkValue = obj.Category;
                     return true;
-                case Header item when fieldName == "comment":
-                    checkValue = item.Comment;
+                case "comment":
+                    checkValue = obj.Comment;
                     return true;
-                case Header item when fieldName == "date":
-                    checkValue = item.Date;
+                case "date":
+                    checkValue = obj.Date;
                     return true;
-                case Header item when fieldName == "datversion":
-                    checkValue = item.DatVersion;
+                case "datversion":
+                    checkValue = obj.DatVersion;
                     return true;
-                case Header item when fieldName == "debug":
-                    checkValue = item.Debug.FromYesNo();
+                case "debug":
+                    checkValue = obj.Debug.FromYesNo();
                     return true;
-                case Header item when fieldName == "description":
-                    checkValue = item.Description;
+                case "description":
+                    checkValue = obj.Description;
                     return true;
-                case Header item when fieldName == "email":
-                    checkValue = item.Email;
+                case "email":
+                    checkValue = obj.Email;
                     return true;
-                case Header item when fieldName == "emulatorversion":
-                    checkValue = item.EmulatorVersion;
+                case "emulatorversion":
+                    checkValue = obj.EmulatorVersion;
                     return true;
-                case Header item when fieldName == "filename":
-                    checkValue = item.FileName;
+                case "filename":
+                    checkValue = obj.FileName;
                     return true;
-                case Header item when fieldName == "forcemerging":
-                    checkValue = item.ForceMerging.AsStringValue();
+                case "forcemerging":
+                    checkValue = obj.ForceMerging.AsStringValue();
                     return true;
-                case Header item when fieldName == "forcenodump":
-                    checkValue = item.ForceNodump.AsStringValue();
+                case "forcenodump":
+                    checkValue = obj.ForceNodump.AsStringValue();
                     return true;
-                case Header item when fieldName == "forcepacking":
-                    checkValue = item.ForcePacking.AsStringValue();
+                case "forcepacking":
+                    checkValue = obj.ForcePacking.AsStringValue();
                     return true;
-                case Header item when fieldName == "forcezipping":
-                    checkValue = item.ForceZipping.FromYesNo();
+                case "forcezipping":
+                    checkValue = obj.ForceZipping.FromYesNo();
                     return true;
                 // Header.HeaderRow is intentionally skipped
-                case Header item when fieldName == "header" || fieldName == "headerskipper" || fieldName == "skipper":
-                    checkValue = item.HeaderSkipper;
+                case "header":
+                case "headerskipper":
+                case "skipper":
+                    checkValue = obj.HeaderSkipper;
                     return true;
-                case Header item when fieldName == "homepage":
-                    checkValue = item.Homepage;
+                case "homepage":
+                    checkValue = obj.Homepage;
                     return true;
-                case Header item when fieldName == "id":
-                    checkValue = item.Id;
+                case "id":
+                    checkValue = obj.Id;
                     return true;
                 // Header.Images is intentionally skipped
-                case Header item when fieldName == "imfolder":
-                    checkValue = item.ImFolder;
+                case "imfolder":
+                    checkValue = obj.ImFolder;
                     return true;
                 // Header.Infos is intentionally skipped
-                case Header item when fieldName == "lockbiosmode":
-                    checkValue = item.LockBiosMode.FromYesNo();
+                case "lockbiosmode":
+                    checkValue = obj.LockBiosMode.FromYesNo();
                     return true;
-                case Header item when fieldName == "lockrommode":
-                    checkValue = item.LockRomMode.FromYesNo();
+                case "lockrommode":
+                    checkValue = obj.LockRomMode.FromYesNo();
                     return true;
-                case Header item when fieldName == "locksamplemode":
-                    checkValue = item.LockSampleMode.FromYesNo();
+                case "locksamplemode":
+                    checkValue = obj.LockSampleMode.FromYesNo();
                     return true;
-                case Header item when fieldName == "mameconfig":
-                    checkValue = item.MameConfig;
+                case "mameconfig":
+                    checkValue = obj.MameConfig;
                     return true;
-                case Header item when fieldName == "name":
-                    checkValue = item.Name;
+                case "name":
+                    checkValue = obj.Name;
                     return true;
                 // Header.NewDat is intentionally skipped
-                case Header item when fieldName == "notes":
-                    checkValue = item.Notes;
+                case "notes":
+                    checkValue = obj.Notes;
                     return true;
-                case Header item when fieldName == "plugin":
-                    checkValue = item.Plugin;
+                case "plugin":
+                    checkValue = obj.Plugin;
                     return true;
-                case Header item when fieldName == "refname":
-                    checkValue = item.RefName;
+                case "refname":
+                    checkValue = obj.RefName;
                     return true;
-                case Header item when fieldName == "rommode":
-                    checkValue = item.RomMode.AsStringValue();
+                case "rommode":
+                    checkValue = obj.RomMode.AsStringValue();
                     return true;
-                case Header item when fieldName == "romtitle":
-                    checkValue = item.RomTitle;
+                case "romtitle":
+                    checkValue = obj.RomTitle;
                     return true;
-                case Header item when fieldName == "rootdir":
-                    checkValue = item.RootDir;
+                case "rootdir":
+                    checkValue = obj.RootDir;
                     return true;
-                case Header item when fieldName == "samplemode":
-                    checkValue = item.SampleMode.AsStringValue();
+                case "samplemode":
+                    checkValue = obj.SampleMode.AsStringValue();
                     return true;
-                case Header item when fieldName == "schemalocation":
-                    checkValue = item.SchemaLocation;
+                case "schemalocation":
+                    checkValue = obj.SchemaLocation;
                     return true;
-                case Header item when fieldName == "screenshotsheight":
-                    checkValue = item.ScreenshotsHeight;
+                case "screenshotsheight":
+                    checkValue = obj.ScreenshotsHeight;
                     return true;
-                case Header item when fieldName == "screenshotswidth":
-                    checkValue = item.ScreenshotsWidth;
+                case "screenshotswidth":
+                    checkValue = obj.ScreenshotsWidth;
                     return true;
                 // Header.Search is intentionally skipped
-                case Header item when fieldName == "system":
-                    checkValue = item.System;
+                case "system":
+                    checkValue = obj.System;
                     return true;
-                case Header item when fieldName == "timestamp":
-                    checkValue = item.Timestamp;
+                case "timestamp":
+                    checkValue = obj.Timestamp;
                     return true;
-                case Header item when fieldName == "type":
-                    checkValue = item.Timestamp;
+                case "type":
+                    checkValue = obj.Timestamp;
                     return true;
-                case Header item when fieldName == "url":
-                    checkValue = item.Url;
+                case "url":
+                    checkValue = obj.Url;
                     return true;
-                case Header item when fieldName == "version":
-                    checkValue = item.Version;
-                    return true;
-
-                case Info item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-                case Info item when fieldName == "value":
-                    checkValue = item.Value;
+                case "version":
+                    checkValue = obj.Version;
                     return true;
 
-                case Input item when fieldName == "buttons":
-                    checkValue = item.Buttons?.ToString();
-                    return true;
-                case Input item when fieldName == "coins":
-                    checkValue = item.Coins?.ToString();
-                    return true;
-                case Input item when fieldName == "controlattr":
-                    checkValue = item.ControlAttr;
-                    return true;
-                case Input item when fieldName == "players":
-                    checkValue = item.Players?.ToString();
-                    return true;
-                case Input item when fieldName == "service":
-                    checkValue = item.Service.FromYesNo();
-                    return true;
-                case Input item when fieldName == "tilt":
-                    checkValue = item.Tilt.FromYesNo();
-                    return true;
-
-                case Instance item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-
-                case Machine item when fieldName == "board":
-                    checkValue = item.Board;
-                    return true;
-                case Machine item when fieldName == "buttons":
-                    checkValue = item.Buttons;
-                    return true;
-                case Machine item when fieldName == "category":
-                    checkValue = item.Category is null ? null : string.Join(", ", item.Category);
-                    return true;
-                case Machine item when fieldName == "cloneof":
-                    checkValue = item.CloneOf;
-                    return true;
-                case Machine item when fieldName == "cloneofid":
-                    checkValue = item.CloneOfId;
-                    return true;
-                case Machine item when fieldName == "comment":
-                    checkValue = item.Comment is null ? null : string.Join(", ", item.Comment);
-                    return true;
-                case Machine item when fieldName == "company":
-                    checkValue = item.Company;
-                    return true;
-                case Machine item when fieldName == "control":
-                    checkValue = item.Control;
-                    return true;
-                case Machine item when fieldName == "crc":
-                    checkValue = item.CRC;
-                    return true;
-                case Machine item when fieldName == "country":
-                    checkValue = item.Country;
-                    return true;
-                case Machine item when fieldName == "description":
-                    checkValue = item.Description;
-                    return true;
-                case Machine item when fieldName == "developer":
-                    checkValue = item.Developer;
-                    return true;
-                case Machine item when fieldName == "dirname":
-                    checkValue = item.DirName;
-                    return true;
-                case Machine item when fieldName == "displaycount":
-                    checkValue = item.DisplayCount;
-                    return true;
-                case Machine item when fieldName == "displaytype":
-                    checkValue = item.DisplayType;
-                    return true;
-                case Machine item when fieldName == "duplicateid":
-                    checkValue = item.DuplicateID;
-                    return true;
-                case Machine item when fieldName == "emulator":
-                    checkValue = item.Emulator;
-                    return true;
-                case Machine item when fieldName == "enabled":
-                    checkValue = item.Enabled;
-                    return true;
-                case Machine item when fieldName == "extra":
-                    checkValue = item.Extra;
-                    return true;
-                case Machine item when fieldName == "favorite":
-                    checkValue = item.Favorite;
-                    return true;
-                case Machine item when fieldName == "genmsxid":
-                    checkValue = item.GenMSXID;
-                    return true;
-                case Machine item when fieldName == "genre":
-                    checkValue = item.Genre;
-                    return true;
-                case Machine item when fieldName == "hash":
-                    checkValue = item.Hash;
-                    return true;
-                case Machine item when fieldName == "history":
-                    checkValue = item.History;
-                    return true;
-                case Machine item when fieldName == "id":
-                    checkValue = item.Id;
-                    return true;
-                case Machine item when fieldName == "im1crc":
-                    checkValue = item.Im1CRC;
-                    return true;
-                case Machine item when fieldName == "im2crc":
-                    checkValue = item.Im2CRC;
-                    return true;
-                case Machine item when fieldName == "imagenumber":
-                    checkValue = item.ImageNumber;
-                    return true;
-                case Machine item when fieldName == "isbios":
-                    checkValue = item.IsBios.FromYesNo();
-                    return true;
-                case Machine item when fieldName == "isdevice":
-                    checkValue = item.IsDevice.FromYesNo();
-                    return true;
-                case Machine item when fieldName == "ismechanical":
-                    checkValue = item.IsMechanical.FromYesNo();
-                    return true;
-                case Machine item when fieldName == "language":
-                    checkValue = item.Language;
-                    return true;
-                case Machine item when fieldName == "location":
-                    checkValue = item.Location;
-                    return true;
-                case Machine item when fieldName == "manufacturer":
-                    checkValue = item.Manufacturer;
-                    return true;
-                case Machine item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-                case Machine item when fieldName == "notes":
-                    checkValue = item.Notes;
-                    return true;
-                case Machine item when fieldName == "playedcount":
-                    checkValue = item.PlayedCount;
-                    return true;
-                case Machine item when fieldName == "playedtime":
-                    checkValue = item.PlayedTime;
-                    return true;
-                case Machine item when fieldName == "players":
-                    checkValue = item.Players;
-                    return true;
-                case Machine item when fieldName == "publisher":
-                    checkValue = item.Publisher;
-                    return true;
-                case Machine item when fieldName == "ratings":
-                    checkValue = item.Ratings;
-                    return true;
-                case Machine item when fieldName == "rebuildto":
-                    checkValue = item.RebuildTo;
-                    return true;
-                case Machine item when fieldName == "relatedto":
-                    checkValue = item.RelatedTo;
-                    return true;
-                case Machine item when fieldName == "releasenumber":
-                    checkValue = item.ReleaseNumber;
-                    return true;
-                case Machine item when fieldName == "romof":
-                    checkValue = item.RomOf;
-                    return true;
-                case Machine item when fieldName == "rotation":
-                    checkValue = item.Rotation;
-                    return true;
-                case Machine item when fieldName == "runnable":
-                    checkValue = item.Runnable?.AsStringValue();
-                    return true;
-                case Machine item when fieldName == "sampleof":
-                    checkValue = item.SampleOf;
-                    return true;
-                case Machine item when fieldName == "savetype":
-                    checkValue = item.SaveType;
-                    return true;
-                case Machine item when fieldName == "score":
-                    checkValue = item.Score;
-                    return true;
-                case Machine item when fieldName == "source":
-                    checkValue = item.Source;
-                    return true;
-                case Machine item when fieldName == "sourcefile":
-                    checkValue = item.SourceFile;
-                    return true;
-                case Machine item when fieldName == "sourcerom":
-                    checkValue = item.SourceRom;
-                    return true;
-                case Machine item when fieldName == "status":
-                    checkValue = item.Status;
-                    return true;
-                case Machine item when fieldName == "subgenre":
-                    checkValue = item.Subgenre;
-                    return true;
-                case Machine item when fieldName == "supported":
-                    checkValue = item.Supported?.AsStringValue();
-                    return true;
-                case Machine item when fieldName == "system":
-                    checkValue = item.System;
-                    return true;
-                case Machine item when fieldName == "tags":
-                    checkValue = item.Tags;
-                    return true;
-                case Machine item when fieldName == "titleid":
-                    checkValue = item.TitleID;
-                    return true;
-                case Machine item when fieldName == "url":
-                    checkValue = item.Url;
-                    return true;
-                case Machine item when fieldName == "year":
-                    checkValue = item.Year;
-                    return true;
-
-                case Media item when fieldName == "md5":
-                    checkValue = item.MD5;
-                    return true;
-                case Media item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-                case Media item when fieldName == "sha1":
-                    checkValue = item.SHA1;
-                    return true;
-                case Media item when fieldName == "sha256":
-                    checkValue = item.SHA256;
-                    return true;
-                case Media item when fieldName == "spamsum":
-                    checkValue = item.SpamSum;
-                    return true;
-
-                case Original item when fieldName == "content":
-                    checkValue = item.Content;
-                    return true;
-                case Original item when fieldName == "value":
-                    checkValue = item.Value.FromYesNo();
-                    return true;
-
-                case Part item when fieldName == "interface":
-                    checkValue = item.Interface;
-                    return true;
-                case Part item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-
-                case Port item when fieldName == "tag":
-                    checkValue = item.Tag;
-                    return true;
-
-                case RamOption item when fieldName == "content":
-                    checkValue = item.Content;
-                    return true;
-                case RamOption item when fieldName == "default":
-                    checkValue = item.Default.FromYesNo();
-                    return true;
-                case RamOption item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-
-                case Release item when fieldName == "date":
-                    checkValue = item.Date;
-                    return true;
-                case Release item when fieldName == "default":
-                    checkValue = item.Default.FromYesNo();
-                    return true;
-                case Release item when fieldName == "language":
-                    checkValue = item.Language;
-                    return true;
-                case Release item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-                case Release item when fieldName == "region":
-                    checkValue = item.Region;
-                    return true;
-
-                case ReleaseDetails item when fieldName == "appendtonumber":
-                    checkValue = item.AppendToNumber;
-                    return true;
-                case ReleaseDetails item when fieldName == "archivename":
-                    checkValue = item.ArchiveName;
-                    return true;
-                case ReleaseDetails item when fieldName == "category":
-                    checkValue = item.Category;
-                    return true;
-                case ReleaseDetails item when fieldName == "comment":
-                    checkValue = item.Comment;
-                    return true;
-                case ReleaseDetails item when fieldName == "date":
-                    checkValue = item.Date;
-                    return true;
-                case ReleaseDetails item when fieldName == "dirname":
-                    checkValue = item.DirName;
-                    return true;
-                case ReleaseDetails item when fieldName == "group":
-                    checkValue = item.Group;
-                    return true;
-                case ReleaseDetails item when fieldName == "id":
-                    checkValue = item.Id;
-                    return true;
-                case ReleaseDetails item when fieldName == "nfocrc":
-                    checkValue = item.NfoCRC;
-                    return true;
-                case ReleaseDetails item when fieldName == "nfoname":
-                    checkValue = item.NfoName;
-                    return true;
-                case ReleaseDetails item when fieldName == "nfosize":
-                    checkValue = item.NfoSize;
-                    return true;
-                case ReleaseDetails item when fieldName == "origin":
-                    checkValue = item.Origin;
-                    return true;
-                case ReleaseDetails item when fieldName == "originalformat":
-                    checkValue = item.OriginalFormat;
-                    return true;
-                case ReleaseDetails item when fieldName == "region":
-                    checkValue = item.Region;
-                    return true;
-                case ReleaseDetails item when fieldName == "rominfo":
-                    checkValue = item.RomInfo;
-                    return true;
-                case ReleaseDetails item when fieldName == "tool":
-                    checkValue = item.Tool;
-                    return true;
-
-                case Rom item when fieldName == "album":
-                    checkValue = item.Album;
-                    return true;
-                case Rom item when fieldName == "altromname":
-                    checkValue = item.AltRomname;
-                    return true;
-                case Rom item when fieldName == "alttitle":
-                    checkValue = item.AltTitle;
-                    return true;
-                case Rom item when fieldName == "artist":
-                    checkValue = item.Artist;
-                    return true;
-                case Rom item when fieldName == "asrdetectedlang":
-                    checkValue = item.ASRDetectedLang;
-                    return true;
-                case Rom item when fieldName == "asrdetectedlangconf":
-                    checkValue = item.ASRDetectedLangConf;
-                    return true;
-                case Rom item when fieldName == "asrtranscribedlang":
-                    checkValue = item.ASRTranscribedLang;
-                    return true;
-                case Rom item when fieldName == "bios":
-                    checkValue = item.Bios;
-                    return true;
-                case Rom item when fieldName == "bitrate":
-                    checkValue = item.Bitrate;
-                    return true;
-                case Rom item when fieldName == "bittorrentmagnethash":
-                    checkValue = item.BitTorrentMagnetHash;
-                    return true;
-                case Rom item when fieldName == "clothcoverdetectionmoduleversion":
-                    checkValue = item.ClothCoverDetectionModuleVersion;
-                    return true;
-                case Rom item when fieldName == "collectioncatalognumber":
-                    checkValue = item.CollectionCatalogNumber;
-                    return true;
-                case Rom item when fieldName == "comment":
-                    checkValue = item.Comment;
-                    return true;
-                case Rom item when fieldName == "crc":
-                    checkValue = item.CRC;
-                    return true;
-                case Rom item when fieldName == "crc16":
-                    checkValue = item.CRC16;
-                    return true;
-                case Rom item when fieldName == "crc64":
-                    checkValue = item.CRC64;
-                    return true;
-                case Rom item when fieldName == "creator":
-                    checkValue = item.Creator;
-                    return true;
-                case Rom item when fieldName == "date":
-                    checkValue = item.Date;
-                    return true;
-                case Rom item when fieldName == "dispose":
-                    checkValue = item.Dispose.FromYesNo();
-                    return true;
-                case Rom item when fieldName == "extension":
-                    checkValue = item.Extension;
-                    return true;
-                case Rom item when fieldName == "filecount":
-                    checkValue = item.FileCount?.ToString();
-                    return true;
-                case Rom item when fieldName == "fileisavailable":
-                    checkValue = item.FileIsAvailable.FromYesNo();
-                    return true;
-                case Rom item when fieldName == "flags":
-                    checkValue = item.Flags;
-                    return true;
-                case Rom item when fieldName == "format":
-                    checkValue = item.Format;
-                    return true;
-                case Rom item when fieldName == "header":
-                    checkValue = item.Header;
-                    return true;
-                case Rom item when fieldName == "height":
-                    checkValue = item.Height;
-                    return true;
-                case Rom item when fieldName == "hocrchartowordhocrversion":
-                    checkValue = item.hOCRCharToWordhOCRVersion;
-                    return true;
-                case Rom item when fieldName == "hocrchartowordmoduleversion":
-                    checkValue = item.hOCRCharToWordModuleVersion;
-                    return true;
-                case Rom item when fieldName == "hocrftstexthocrversion":
-                    checkValue = item.hOCRFtsTexthOCRVersion;
-                    return true;
-                case Rom item when fieldName == "hocrftstextmoduleversion":
-                    checkValue = item.hOCRFtsTextModuleVersion;
-                    return true;
-                case Rom item when fieldName == "hocrpageindexhocrversion":
-                    checkValue = item.hOCRPageIndexhOCRVersion;
-                    return true;
-                case Rom item when fieldName == "hocrpageindexmoduleversion":
-                    checkValue = item.hOCRPageIndexModuleVersion;
-                    return true;
-                case Rom item when fieldName == "inverted":
-                    checkValue = item.Inverted.FromYesNo();
-                    return true;
-                case Rom item when fieldName == "lastmodifiedtime":
-                    checkValue = item.LastModifiedTime;
-                    return true;
-                case Rom item when fieldName == "length":
-                    checkValue = item.Length;
-                    return true;
-                case Rom item when fieldName == "loadflag":
-                    checkValue = item.LoadFlag?.AsStringValue();
-                    return true;
-                case Rom item when fieldName == "matrixnumber":
-                    checkValue = item.MatrixNumber;
-                    return true;
-                case Rom item when fieldName == "md2":
-                    checkValue = item.MD2;
-                    return true;
-                case Rom item when fieldName == "md4":
-                    checkValue = item.MD4;
-                    return true;
-                case Rom item when fieldName == "md5":
-                    checkValue = item.MD5;
-                    return true;
-                case Rom item when fieldName == "mediatype":
-                    checkValue = item.OpenMSXMediaType?.AsStringValue();
-                    return true;
-                case Rom item when fieldName == "merge":
-                    checkValue = item.Merge;
-                    return true;
-                case Rom item when fieldName == "mia":
-                    checkValue = item.MIA.FromYesNo();
-                    return true;
-                case Rom item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-                case Rom item when fieldName == "offset":
-                    checkValue = item.Offset;
-                    return true;
-                case Rom item when fieldName == "optional":
-                    checkValue = item.Optional.FromYesNo();
-                    return true;
-                case Rom item when fieldName == "original":
-                    checkValue = item.Original;
-                    return true;
-                case Rom item when fieldName == "pdfmoduleversion":
-                    checkValue = item.PDFModuleVersion;
-                    return true;
-                case Rom item when fieldName == "previewimage":
-                    checkValue = item.PreviewImage;
-                    return true;
-                case Rom item when fieldName == "publisher":
-                    checkValue = item.Publisher;
-                    return true;
-                case Rom item when fieldName == "region":
-                    checkValue = item.Region;
-                    return true;
-                case Rom item when fieldName == "remark":
-                    checkValue = item.Remark;
-                    return true;
-                case Rom item when fieldName == "ripemd128":
-                    checkValue = item.RIPEMD128;
-                    return true;
-                case Rom item when fieldName == "ripemd160":
-                    checkValue = item.RIPEMD160;
-                    return true;
-                case Rom item when fieldName == "rotation":
-                    checkValue = item.Rotation;
-                    return true;
-                case Rom item when fieldName == "serial":
-                    checkValue = item.Serial;
-                    return true;
-                case Rom item when fieldName == "sha1":
-                    checkValue = item.SHA1;
-                    return true;
-                case Rom item when fieldName == "sha256":
-                    checkValue = item.SHA256;
-                    return true;
-                case Rom item when fieldName == "sha384":
-                    checkValue = item.SHA384;
-                    return true;
-                case Rom item when fieldName == "sha512":
-                    checkValue = item.SHA512;
-                    return true;
-                case Rom item when fieldName == "size":
-                    checkValue = item.Size?.ToString();
-                    return true;
-                case Rom item when fieldName == "soundonly":
-                    checkValue = item.SoundOnly.FromYesNo();
-                    return true;
-                case Rom item when fieldName == "source":
-                    checkValue = item.Source;
-                    return true;
-                case Rom item when fieldName == "spamsum":
-                    checkValue = item.SpamSum;
-                    return true;
-                case Rom item when fieldName == "start":
-                    checkValue = item.Start;
-                    return true;
-                case Rom item when fieldName == "status":
-                    checkValue = item.Status?.AsStringValue();
-                    return true;
-                case Rom item when fieldName == "summation":
-                    checkValue = item.Summation;
-                    return true;
-                case Rom item when fieldName == "tesseractocr":
-                    checkValue = item.TesseractOCR;
-                    return true;
-                case Rom item when fieldName == "tesseractocrconverted":
-                    checkValue = item.TesseractOCRConverted;
-                    return true;
-                case Rom item when fieldName == "tesseractocrdetectedlang":
-                    checkValue = item.TesseractOCRDetectedLang;
-                    return true;
-                case Rom item when fieldName == "tesseractocrdetectedlangconf":
-                    checkValue = item.TesseractOCRDetectedLangConf;
-                    return true;
-                case Rom item when fieldName == "tesseractocrdetectedscript":
-                    checkValue = item.TesseractOCRDetectedScript;
-                    return true;
-                case Rom item when fieldName == "tesseractocrdetectedscriptconf":
-                    checkValue = item.TesseractOCRDetectedScriptConf;
-                    return true;
-                case Rom item when fieldName == "tesseractocrmoduleversion":
-                    checkValue = item.TesseractOCRModuleVersion;
-                    return true;
-                case Rom item when fieldName == "tesseractocrparameters":
-                    checkValue = item.TesseractOCRParameters;
-                    return true;
-                case Rom item when fieldName == "title":
-                    checkValue = item.Title;
-                    return true;
-                case Rom item when fieldName == "track":
-                    checkValue = item.Track;
-                    return true;
-                case Rom item when fieldName == "openmsxtype":
-                    checkValue = item.OpenMSXType;
-                    return true;
-                case Rom item when fieldName == "value":
-                    checkValue = item.Value;
-                    return true;
-                case Rom item when fieldName == "whisperasrmoduleversion":
-                    checkValue = item.WhisperASRModuleVersion;
-                    return true;
-                case Rom item when fieldName == "whispermodelhash":
-                    checkValue = item.WhisperModelHash;
-                    return true;
-                case Rom item when fieldName == "whispermodelname":
-                    checkValue = item.WhisperModelName;
-                    return true;
-                case Rom item when fieldName == "whisperversion":
-                    checkValue = item.WhisperVersion;
-                    return true;
-                case Rom item when fieldName == "width":
-                    checkValue = item.Width;
-                    return true;
-                case Rom item when fieldName == "wordconfidenceinterval0to10":
-                    checkValue = item.WordConfidenceInterval0To10;
-                    return true;
-                case Rom item when fieldName == "wordconfidenceinterval11to20":
-                    checkValue = item.WordConfidenceInterval11To20;
-                    return true;
-                case Rom item when fieldName == "wordconfidenceinterval21to30":
-                    checkValue = item.WordConfidenceInterval21To30;
-                    return true;
-                case Rom item when fieldName == "wordconfidenceinterval31to40":
-                    checkValue = item.WordConfidenceInterval31To40;
-                    return true;
-                case Rom item when fieldName == "wordconfidenceinterval41to50":
-                    checkValue = item.WordConfidenceInterval41To50;
-                    return true;
-                case Rom item when fieldName == "wordconfidenceinterval51to60":
-                    checkValue = item.WordConfidenceInterval51To60;
-                    return true;
-                case Rom item when fieldName == "wordconfidenceinterval61to70":
-                    checkValue = item.WordConfidenceInterval61To70;
-                    return true;
-                case Rom item when fieldName == "wordconfidenceinterval71to80":
-                    checkValue = item.WordConfidenceInterval71To80;
-                    return true;
-                case Rom item when fieldName == "wordconfidenceinterval81to90":
-                    checkValue = item.WordConfidenceInterval81To90;
-                    return true;
-                case Rom item when fieldName == "wordconfidenceinterval91to100":
-                    checkValue = item.WordConfidenceInterval91To100;
-                    return true;
-                case Rom item when fieldName == "xxhash364":
-                    checkValue = item.xxHash364;
-                    return true;
-                case Rom item when fieldName == "xxhash3128":
-                    checkValue = item.xxHash3128;
-                    return true;
-
-                case Sample item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-
-                case Serials item when fieldName == "boxbarcode":
-                    checkValue = item.BoxBarcode;
-                    return true;
-                case Serials item when fieldName == "boxserial":
-                    checkValue = item.BoxSerial;
-                    return true;
-                case Serials item when fieldName == "chipserial":
-                    checkValue = item.ChipSerial;
-                    return true;
-                case Serials item when fieldName == "digitalserial1":
-                    checkValue = item.DigitalSerial1;
-                    return true;
-                case Serials item when fieldName == "digitalserial2":
-                    checkValue = item.DigitalSerial2;
-                    return true;
-                case Serials item when fieldName == "lockoutserial":
-                    checkValue = item.LockoutSerial;
-                    return true;
-                case Serials item when fieldName == "mediaserial1":
-                    checkValue = item.MediaSerial1;
-                    return true;
-                case Serials item when fieldName == "mediaserial2":
-                    checkValue = item.MediaSerial2;
-                    return true;
-                case Serials item when fieldName == "mediaserial3":
-                    checkValue = item.MediaSerial3;
-                    return true;
-                case Serials item when fieldName == "mediastamp":
-                    checkValue = item.MediaStamp;
-                    return true;
-                case Serials item when fieldName == "pcbserial":
-                    checkValue = item.PCBSerial;
-                    return true;
-                case Serials item when fieldName == "romchipserial1":
-                    checkValue = item.RomChipSerial1;
-                    return true;
-                case Serials item when fieldName == "romchipserial2":
-                    checkValue = item.RomChipSerial2;
-                    return true;
-                case Serials item when fieldName == "savechipserial":
-                    checkValue = item.SaveChipSerial;
-                    return true;
-
-                case SharedFeat item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-                case SharedFeat item when fieldName == "value":
-                    checkValue = item.Value;
-                    return true;
-
-                case Slot item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-
-                case SlotOption item when fieldName == "default":
-                    checkValue = item.Default.FromYesNo();
-                    return true;
-                case SlotOption item when fieldName == "devname":
-                    checkValue = item.DevName;
-                    return true;
-                case SlotOption item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-
-                case SoftwareList item when fieldName == "filter":
-                    checkValue = item.Filter;
-                    return true;
-                case SoftwareList item when fieldName == "name":
-                    checkValue = item.Name;
-                    return true;
-                case SoftwareList item when fieldName == "status":
-                    checkValue = item.Status?.AsStringValue();
-                    return true;
-                case SoftwareList item when fieldName == "tag":
-                    checkValue = item.Tag;
-                    return true;
-
-                case Sound item when fieldName == "channels":
-                    checkValue = item.Channels?.ToString();
-                    return true;
-
-                case SourceDetails item when fieldName == "appendtonumber":
-                    checkValue = item.AppendToNumber;
-                    return true;
-                case SourceDetails item when fieldName == "comment1":
-                    checkValue = item.Comment1;
-                    return true;
-                case SourceDetails item when fieldName == "comment2":
-                    checkValue = item.Comment2;
-                    return true;
-                case SourceDetails item when fieldName == "dumpdate":
-                    checkValue = item.DumpDate;
-                    return true;
-                case SourceDetails item when fieldName == "dumpdateinfo":
-                    checkValue = item.DumpDateInfo is null ? null : (item.DumpDateInfo == true ? "1" : "0");
-                    return true;
-                case SourceDetails item when fieldName == "dumper":
-                    checkValue = item.Dumper;
-                    return true;
-                case SourceDetails item when fieldName == "id":
-                    checkValue = item.Id;
-                    return true;
-                case SourceDetails item when fieldName == "link1":
-                    checkValue = item.Link1;
-                    return true;
-                case SourceDetails item when fieldName == "link1public":
-                    checkValue = item.Link1Public is null ? null : (item.Link1Public == true ? "1" : "0");
-                    return true;
-                case SourceDetails item when fieldName == "link2":
-                    checkValue = item.Link2;
-                    return true;
-                case SourceDetails item when fieldName == "link2public":
-                    checkValue = item.Link2Public is null ? null : (item.Link2Public == true ? "1" : "0");
-                    return true;
-                case SourceDetails item when fieldName == "link3":
-                    checkValue = item.Link3;
-                    return true;
-                case SourceDetails item when fieldName == "link3public":
-                    checkValue = item.Link3Public is null ? null : (item.Link3Public == true ? "1" : "0");
-                    return true;
-                case SourceDetails item when fieldName == "mediatitle":
-                    checkValue = item.MediaTitle;
-                    return true;
-                case SourceDetails item when fieldName == "nodump":
-                    checkValue = item.Nodump is null ? null : (item.Nodump == true ? "1" : "0");
-                    return true;
-                case SourceDetails item when fieldName == "origin":
-                    checkValue = item.Origin;
-                    return true;
-                case SourceDetails item when fieldName == "originalformat":
-                    checkValue = item.OriginalFormat;
-                    return true;
-                case SourceDetails item when fieldName == "project":
-                    checkValue = item.Project;
-                    return true;
-                case SourceDetails item when fieldName == "region":
-                    checkValue = item.Region;
-                    return true;
-                case SourceDetails item when fieldName == "releasedate":
-                    checkValue = item.ReleaseDate;
-                    return true;
-                case SourceDetails item when fieldName == "releasedateinfo":
-                    checkValue = item.ReleaseDateInfo is null ? null : (item.ReleaseDateInfo == true ? "1" : "0");
-                    return true;
-                case SourceDetails item when fieldName == "rominfo":
-                    checkValue = item.RomInfo;
-                    return true;
-                case SourceDetails item when fieldName == "section":
-                    checkValue = item.Section;
-                    return true;
-                case SourceDetails item when fieldName == "tool":
-                    checkValue = item.Tool;
-                    return true;
-
-                case Video item when fieldName == "aspectx":
-                    checkValue = item.AspectX?.ToString();
-                    return true;
-                case Video item when fieldName == "aspecty":
-                    checkValue = item.AspectY?.ToString();
-                    return true;
-                case Video item when fieldName == "height" || fieldName == "y":
-                    checkValue = item.Height?.ToString();
-                    return true;
-                case Video item when fieldName == "orientation" || fieldName == "rotate":
-                    checkValue = item.Orientation?.AsStringValue();
-                    return true;
-                case Video item when fieldName == "refresh" || fieldName == "freq":
-                    checkValue = item.Refresh?.ToString();
-                    return true;
-                case Video item when fieldName == "screen" || fieldName == "type":
-                    checkValue = item.Screen?.AsStringValue();
-                    return true;
-                case Video item when fieldName == "width" || fieldName == "x":
-                    checkValue = item.Width?.ToString();
-                    return true;
-
-                // Fallthrough to Dictionary-based checking
-                default: break;
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
             }
+        }
 
-            // If the key doesn't exist, we count it as null
-            checkValue = null;
-            return false;
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Info obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+                case "value":
+                    checkValue = obj.Value;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Input obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "buttons":
+                    checkValue = obj.Buttons?.ToString();
+                    return true;
+                case "coins":
+                    checkValue = obj.Coins?.ToString();
+                    return true;
+                case "controlattr":
+                    checkValue = obj.ControlAttr;
+                    return true;
+                case "players":
+                    checkValue = obj.Players?.ToString();
+                    return true;
+                case "service":
+                    checkValue = obj.Service.FromYesNo();
+                    return true;
+                case "tilt":
+                    checkValue = obj.Tilt.FromYesNo();
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Instance obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Machine obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "board":
+                    checkValue = obj.Board;
+                    return true;
+                case "buttons":
+                    checkValue = obj.Buttons;
+                    return true;
+                case "category":
+                    checkValue = obj.Category is null ? null : string.Join(", ", obj.Category);
+                    return true;
+                case "cloneof":
+                    checkValue = obj.CloneOf;
+                    return true;
+                case "cloneofid":
+                    checkValue = obj.CloneOfId;
+                    return true;
+                case "comment":
+                    checkValue = obj.Comment is null ? null : string.Join(", ", obj.Comment);
+                    return true;
+                case "company":
+                    checkValue = obj.Company;
+                    return true;
+                case "control":
+                    checkValue = obj.Control;
+                    return true;
+                case "crc":
+                    checkValue = obj.CRC;
+                    return true;
+                case "country":
+                    checkValue = obj.Country;
+                    return true;
+                case "description":
+                    checkValue = obj.Description;
+                    return true;
+                case "developer":
+                    checkValue = obj.Developer;
+                    return true;
+                case "dirname":
+                    checkValue = obj.DirName;
+                    return true;
+                case "displaycount":
+                    checkValue = obj.DisplayCount;
+                    return true;
+                case "displaytype":
+                    checkValue = obj.DisplayType;
+                    return true;
+                case "duplicateid":
+                    checkValue = obj.DuplicateID;
+                    return true;
+                case "emulator":
+                    checkValue = obj.Emulator;
+                    return true;
+                case "enabled":
+                    checkValue = obj.Enabled;
+                    return true;
+                case "extra":
+                    checkValue = obj.Extra;
+                    return true;
+                case "favorite":
+                    checkValue = obj.Favorite;
+                    return true;
+                case "genmsxid":
+                    checkValue = obj.GenMSXID;
+                    return true;
+                case "genre":
+                    checkValue = obj.Genre;
+                    return true;
+                case "hash":
+                    checkValue = obj.Hash;
+                    return true;
+                case "history":
+                    checkValue = obj.History;
+                    return true;
+                case "id":
+                    checkValue = obj.Id;
+                    return true;
+                case "im1crc":
+                    checkValue = obj.Im1CRC;
+                    return true;
+                case "im2crc":
+                    checkValue = obj.Im2CRC;
+                    return true;
+                case "imagenumber":
+                    checkValue = obj.ImageNumber;
+                    return true;
+                case "isbios":
+                    checkValue = obj.IsBios.FromYesNo();
+                    return true;
+                case "isdevice":
+                    checkValue = obj.IsDevice.FromYesNo();
+                    return true;
+                case "ismechanical":
+                    checkValue = obj.IsMechanical.FromYesNo();
+                    return true;
+                case "language":
+                    checkValue = obj.Language;
+                    return true;
+                case "location":
+                    checkValue = obj.Location;
+                    return true;
+                case "manufacturer":
+                    checkValue = obj.Manufacturer;
+                    return true;
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+                case "notes":
+                    checkValue = obj.Notes;
+                    return true;
+                case "playedcount":
+                    checkValue = obj.PlayedCount;
+                    return true;
+                case "playedtime":
+                    checkValue = obj.PlayedTime;
+                    return true;
+                case "players":
+                    checkValue = obj.Players;
+                    return true;
+                case "publisher":
+                    checkValue = obj.Publisher;
+                    return true;
+                case "ratings":
+                    checkValue = obj.Ratings;
+                    return true;
+                case "rebuildto":
+                    checkValue = obj.RebuildTo;
+                    return true;
+                case "relatedto":
+                    checkValue = obj.RelatedTo;
+                    return true;
+                case "releasenumber":
+                    checkValue = obj.ReleaseNumber;
+                    return true;
+                case "romof":
+                    checkValue = obj.RomOf;
+                    return true;
+                case "rotation":
+                    checkValue = obj.Rotation;
+                    return true;
+                case "runnable":
+                    checkValue = obj.Runnable?.AsStringValue();
+                    return true;
+                case "sampleof":
+                    checkValue = obj.SampleOf;
+                    return true;
+                case "savetype":
+                    checkValue = obj.SaveType;
+                    return true;
+                case "score":
+                    checkValue = obj.Score;
+                    return true;
+                case "source":
+                    checkValue = obj.Source;
+                    return true;
+                case "sourcefile":
+                    checkValue = obj.SourceFile;
+                    return true;
+                case "sourcerom":
+                    checkValue = obj.SourceRom;
+                    return true;
+                case "status":
+                    checkValue = obj.Status;
+                    return true;
+                case "subgenre":
+                    checkValue = obj.Subgenre;
+                    return true;
+                case "supported":
+                    checkValue = obj.Supported?.AsStringValue();
+                    return true;
+                case "system":
+                    checkValue = obj.System;
+                    return true;
+                case "tags":
+                    checkValue = obj.Tags;
+                    return true;
+                case "titleid":
+                    checkValue = obj.TitleID;
+                    return true;
+                case "url":
+                    checkValue = obj.Url;
+                    return true;
+                case "year":
+                    checkValue = obj.Year;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Media obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "md5":
+                    checkValue = obj.MD5;
+                    return true;
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+                case "sha1":
+                    checkValue = obj.SHA1;
+                    return true;
+                case "sha256":
+                    checkValue = obj.SHA256;
+                    return true;
+                case "spamsum":
+                    checkValue = obj.SpamSum;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Original obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "content":
+                    checkValue = obj.Content;
+                    return true;
+                case "value":
+                    checkValue = obj.Value.FromYesNo();
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Part obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "interface":
+                    checkValue = obj.Interface;
+                    return true;
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Port obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "tag":
+                    checkValue = obj.Tag;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(RamOption obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "content":
+                    checkValue = obj.Content;
+                    return true;
+                case "default":
+                    checkValue = obj.Default.FromYesNo();
+                    return true;
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Release obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "date":
+                    checkValue = obj.Date;
+                    return true;
+                case "default":
+                    checkValue = obj.Default.FromYesNo();
+                    return true;
+                case "language":
+                    checkValue = obj.Language;
+                    return true;
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+                case "region":
+                    checkValue = obj.Region;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(ReleaseDetails obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "appendtonumber":
+                    checkValue = obj.AppendToNumber;
+                    return true;
+                case "archivename":
+                    checkValue = obj.ArchiveName;
+                    return true;
+                case "category":
+                    checkValue = obj.Category;
+                    return true;
+                case "comment":
+                    checkValue = obj.Comment;
+                    return true;
+                case "date":
+                    checkValue = obj.Date;
+                    return true;
+                case "dirname":
+                    checkValue = obj.DirName;
+                    return true;
+                case "group":
+                    checkValue = obj.Group;
+                    return true;
+                case "id":
+                    checkValue = obj.Id;
+                    return true;
+                case "nfocrc":
+                    checkValue = obj.NfoCRC;
+                    return true;
+                case "nfoname":
+                    checkValue = obj.NfoName;
+                    return true;
+                case "nfosize":
+                    checkValue = obj.NfoSize;
+                    return true;
+                case "origin":
+                    checkValue = obj.Origin;
+                    return true;
+                case "originalformat":
+                    checkValue = obj.OriginalFormat;
+                    return true;
+                case "region":
+                    checkValue = obj.Region;
+                    return true;
+                case "rominfo":
+                    checkValue = obj.RomInfo;
+                    return true;
+                case "tool":
+                    checkValue = obj.Tool;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Rom obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "album":
+                    checkValue = obj.Album;
+                    return true;
+                case "altromname":
+                    checkValue = obj.AltRomname;
+                    return true;
+                case "alttitle":
+                    checkValue = obj.AltTitle;
+                    return true;
+                case "artist":
+                    checkValue = obj.Artist;
+                    return true;
+                case "asrdetectedlang":
+                    checkValue = obj.ASRDetectedLang;
+                    return true;
+                case "asrdetectedlangconf":
+                    checkValue = obj.ASRDetectedLangConf;
+                    return true;
+                case "asrtranscribedlang":
+                    checkValue = obj.ASRTranscribedLang;
+                    return true;
+                case "bios":
+                    checkValue = obj.Bios;
+                    return true;
+                case "bitrate":
+                    checkValue = obj.Bitrate;
+                    return true;
+                case "bittorrentmagnethash":
+                    checkValue = obj.BitTorrentMagnetHash;
+                    return true;
+                case "clothcoverdetectionmoduleversion":
+                    checkValue = obj.ClothCoverDetectionModuleVersion;
+                    return true;
+                case "collectioncatalognumber":
+                    checkValue = obj.CollectionCatalogNumber;
+                    return true;
+                case "comment":
+                    checkValue = obj.Comment;
+                    return true;
+                case "crc":
+                    checkValue = obj.CRC;
+                    return true;
+                case "crc16":
+                    checkValue = obj.CRC16;
+                    return true;
+                case "crc64":
+                    checkValue = obj.CRC64;
+                    return true;
+                case "creator":
+                    checkValue = obj.Creator;
+                    return true;
+                case "date":
+                    checkValue = obj.Date;
+                    return true;
+                case "dispose":
+                    checkValue = obj.Dispose.FromYesNo();
+                    return true;
+                case "extension":
+                    checkValue = obj.Extension;
+                    return true;
+                case "filecount":
+                    checkValue = obj.FileCount?.ToString();
+                    return true;
+                case "fileisavailable":
+                    checkValue = obj.FileIsAvailable.FromYesNo();
+                    return true;
+                case "flags":
+                    checkValue = obj.Flags;
+                    return true;
+                case "format":
+                    checkValue = obj.Format;
+                    return true;
+                case "header":
+                    checkValue = obj.Header;
+                    return true;
+                case "height":
+                    checkValue = obj.Height;
+                    return true;
+                case "hocrchartowordhocrversion":
+                    checkValue = obj.hOCRCharToWordhOCRVersion;
+                    return true;
+                case "hocrchartowordmoduleversion":
+                    checkValue = obj.hOCRCharToWordModuleVersion;
+                    return true;
+                case "hocrftstexthocrversion":
+                    checkValue = obj.hOCRFtsTexthOCRVersion;
+                    return true;
+                case "hocrftstextmoduleversion":
+                    checkValue = obj.hOCRFtsTextModuleVersion;
+                    return true;
+                case "hocrpageindexhocrversion":
+                    checkValue = obj.hOCRPageIndexhOCRVersion;
+                    return true;
+                case "hocrpageindexmoduleversion":
+                    checkValue = obj.hOCRPageIndexModuleVersion;
+                    return true;
+                case "inverted":
+                    checkValue = obj.Inverted.FromYesNo();
+                    return true;
+                case "lastmodifiedtime":
+                    checkValue = obj.LastModifiedTime;
+                    return true;
+                case "length":
+                    checkValue = obj.Length;
+                    return true;
+                case "loadflag":
+                    checkValue = obj.LoadFlag?.AsStringValue();
+                    return true;
+                case "matrixnumber":
+                    checkValue = obj.MatrixNumber;
+                    return true;
+                case "md2":
+                    checkValue = obj.MD2;
+                    return true;
+                case "md4":
+                    checkValue = obj.MD4;
+                    return true;
+                case "md5":
+                    checkValue = obj.MD5;
+                    return true;
+                case "mediatype":
+                    checkValue = obj.OpenMSXMediaType?.AsStringValue();
+                    return true;
+                case "merge":
+                    checkValue = obj.Merge;
+                    return true;
+                case "mia":
+                    checkValue = obj.MIA.FromYesNo();
+                    return true;
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+                case "offset":
+                    checkValue = obj.Offset;
+                    return true;
+                case "optional":
+                    checkValue = obj.Optional.FromYesNo();
+                    return true;
+                case "original":
+                    checkValue = obj.Original;
+                    return true;
+                case "pdfmoduleversion":
+                    checkValue = obj.PDFModuleVersion;
+                    return true;
+                case "previewimage":
+                    checkValue = obj.PreviewImage;
+                    return true;
+                case "publisher":
+                    checkValue = obj.Publisher;
+                    return true;
+                case "region":
+                    checkValue = obj.Region;
+                    return true;
+                case "remark":
+                    checkValue = obj.Remark;
+                    return true;
+                case "ripemd128":
+                    checkValue = obj.RIPEMD128;
+                    return true;
+                case "ripemd160":
+                    checkValue = obj.RIPEMD160;
+                    return true;
+                case "rotation":
+                    checkValue = obj.Rotation;
+                    return true;
+                case "serial":
+                    checkValue = obj.Serial;
+                    return true;
+                case "sha1":
+                    checkValue = obj.SHA1;
+                    return true;
+                case "sha256":
+                    checkValue = obj.SHA256;
+                    return true;
+                case "sha384":
+                    checkValue = obj.SHA384;
+                    return true;
+                case "sha512":
+                    checkValue = obj.SHA512;
+                    return true;
+                case "size":
+                    checkValue = obj.Size?.ToString();
+                    return true;
+                case "soundonly":
+                    checkValue = obj.SoundOnly.FromYesNo();
+                    return true;
+                case "source":
+                    checkValue = obj.Source;
+                    return true;
+                case "spamsum":
+                    checkValue = obj.SpamSum;
+                    return true;
+                case "start":
+                    checkValue = obj.Start;
+                    return true;
+                case "status":
+                    checkValue = obj.Status?.AsStringValue();
+                    return true;
+                case "summation":
+                    checkValue = obj.Summation;
+                    return true;
+                case "tesseractocr":
+                    checkValue = obj.TesseractOCR;
+                    return true;
+                case "tesseractocrconverted":
+                    checkValue = obj.TesseractOCRConverted;
+                    return true;
+                case "tesseractocrdetectedlang":
+                    checkValue = obj.TesseractOCRDetectedLang;
+                    return true;
+                case "tesseractocrdetectedlangconf":
+                    checkValue = obj.TesseractOCRDetectedLangConf;
+                    return true;
+                case "tesseractocrdetectedscript":
+                    checkValue = obj.TesseractOCRDetectedScript;
+                    return true;
+                case "tesseractocrdetectedscriptconf":
+                    checkValue = obj.TesseractOCRDetectedScriptConf;
+                    return true;
+                case "tesseractocrmoduleversion":
+                    checkValue = obj.TesseractOCRModuleVersion;
+                    return true;
+                case "tesseractocrparameters":
+                    checkValue = obj.TesseractOCRParameters;
+                    return true;
+                case "title":
+                    checkValue = obj.Title;
+                    return true;
+                case "track":
+                    checkValue = obj.Track;
+                    return true;
+                case "openmsxtype":
+                    checkValue = obj.OpenMSXType;
+                    return true;
+                case "value":
+                    checkValue = obj.Value;
+                    return true;
+                case "whisperasrmoduleversion":
+                    checkValue = obj.WhisperASRModuleVersion;
+                    return true;
+                case "whispermodelhash":
+                    checkValue = obj.WhisperModelHash;
+                    return true;
+                case "whispermodelname":
+                    checkValue = obj.WhisperModelName;
+                    return true;
+                case "whisperversion":
+                    checkValue = obj.WhisperVersion;
+                    return true;
+                case "width":
+                    checkValue = obj.Width;
+                    return true;
+                case "wordconfidenceinterval0to10":
+                    checkValue = obj.WordConfidenceInterval0To10;
+                    return true;
+                case "wordconfidenceinterval11to20":
+                    checkValue = obj.WordConfidenceInterval11To20;
+                    return true;
+                case "wordconfidenceinterval21to30":
+                    checkValue = obj.WordConfidenceInterval21To30;
+                    return true;
+                case "wordconfidenceinterval31to40":
+                    checkValue = obj.WordConfidenceInterval31To40;
+                    return true;
+                case "wordconfidenceinterval41to50":
+                    checkValue = obj.WordConfidenceInterval41To50;
+                    return true;
+                case "wordconfidenceinterval51to60":
+                    checkValue = obj.WordConfidenceInterval51To60;
+                    return true;
+                case "wordconfidenceinterval61to70":
+                    checkValue = obj.WordConfidenceInterval61To70;
+                    return true;
+                case "wordconfidenceinterval71to80":
+                    checkValue = obj.WordConfidenceInterval71To80;
+                    return true;
+                case "wordconfidenceinterval81to90":
+                    checkValue = obj.WordConfidenceInterval81To90;
+                    return true;
+                case "wordconfidenceinterval91to100":
+                    checkValue = obj.WordConfidenceInterval91To100;
+                    return true;
+                case "xxhash364":
+                    checkValue = obj.xxHash364;
+                    return true;
+                case "xxhash3128":
+                    checkValue = obj.xxHash3128;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Sample obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Serials obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "boxbarcode":
+                    checkValue = obj.BoxBarcode;
+                    return true;
+                case "boxserial":
+                    checkValue = obj.BoxSerial;
+                    return true;
+                case "chipserial":
+                    checkValue = obj.ChipSerial;
+                    return true;
+                case "digitalserial1":
+                    checkValue = obj.DigitalSerial1;
+                    return true;
+                case "digitalserial2":
+                    checkValue = obj.DigitalSerial2;
+                    return true;
+                case "lockoutserial":
+                    checkValue = obj.LockoutSerial;
+                    return true;
+                case "mediaserial1":
+                    checkValue = obj.MediaSerial1;
+                    return true;
+                case "mediaserial2":
+                    checkValue = obj.MediaSerial2;
+                    return true;
+                case "mediaserial3":
+                    checkValue = obj.MediaSerial3;
+                    return true;
+                case "mediastamp":
+                    checkValue = obj.MediaStamp;
+                    return true;
+                case "pcbserial":
+                    checkValue = obj.PCBSerial;
+                    return true;
+                case "romchipserial1":
+                    checkValue = obj.RomChipSerial1;
+                    return true;
+                case "romchipserial2":
+                    checkValue = obj.RomChipSerial2;
+                    return true;
+                case "savechipserial":
+                    checkValue = obj.SaveChipSerial;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(SharedFeat obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+                case "value":
+                    checkValue = obj.Value;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Slot obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(SlotOption obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "default":
+                    checkValue = obj.Default.FromYesNo();
+                    return true;
+                case "devname":
+                    checkValue = obj.DevName;
+                    return true;
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(SoftwareList obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "filter":
+                    checkValue = obj.Filter;
+                    return true;
+                case "name":
+                    checkValue = obj.Name;
+                    return true;
+                case "status":
+                    checkValue = obj.Status?.AsStringValue();
+                    return true;
+                case "tag":
+                    checkValue = obj.Tag;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Sound obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "channels":
+                    checkValue = obj.Channels?.ToString();
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(SourceDetails obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "appendtonumber":
+                    checkValue = obj.AppendToNumber;
+                    return true;
+                case "comment1":
+                    checkValue = obj.Comment1;
+                    return true;
+                case "comment2":
+                    checkValue = obj.Comment2;
+                    return true;
+                case "dumpdate":
+                    checkValue = obj.DumpDate;
+                    return true;
+                case "dumpdateinfo":
+                    checkValue = obj.DumpDateInfo is null ? null : (obj.DumpDateInfo == true ? "1" : "0");
+                    return true;
+                case "dumper":
+                    checkValue = obj.Dumper;
+                    return true;
+                case "id":
+                    checkValue = obj.Id;
+                    return true;
+                case "link1":
+                    checkValue = obj.Link1;
+                    return true;
+                case "link1public":
+                    checkValue = obj.Link1Public is null ? null : (obj.Link1Public == true ? "1" : "0");
+                    return true;
+                case "link2":
+                    checkValue = obj.Link2;
+                    return true;
+                case "link2public":
+                    checkValue = obj.Link2Public is null ? null : (obj.Link2Public == true ? "1" : "0");
+                    return true;
+                case "link3":
+                    checkValue = obj.Link3;
+                    return true;
+                case "link3public":
+                    checkValue = obj.Link3Public is null ? null : (obj.Link3Public == true ? "1" : "0");
+                    return true;
+                case "mediatitle":
+                    checkValue = obj.MediaTitle;
+                    return true;
+                case "nodump":
+                    checkValue = obj.Nodump is null ? null : (obj.Nodump == true ? "1" : "0");
+                    return true;
+                case "origin":
+                    checkValue = obj.Origin;
+                    return true;
+                case "originalformat":
+                    checkValue = obj.OriginalFormat;
+                    return true;
+                case "project":
+                    checkValue = obj.Project;
+                    return true;
+                case "region":
+                    checkValue = obj.Region;
+                    return true;
+                case "releasedate":
+                    checkValue = obj.ReleaseDate;
+                    return true;
+                case "releasedateinfo":
+                    checkValue = obj.ReleaseDateInfo is null ? null : (obj.ReleaseDateInfo == true ? "1" : "0");
+                    return true;
+                case "rominfo":
+                    checkValue = obj.RomInfo;
+                    return true;
+                case "section":
+                    checkValue = obj.Section;
+                    return true;
+                case "tool":
+                    checkValue = obj.Tool;
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the check value for a field
+        /// </summary>
+        private static bool GetCheckValue(Video obj, string fieldName, out string? checkValue)
+        {
+            switch (fieldName)
+            {
+                case "aspectx":
+                    checkValue = obj.AspectX?.ToString();
+                    return true;
+                case "aspecty":
+                    checkValue = obj.AspectY?.ToString();
+                    return true;
+                case "height":
+                case "y":
+                    checkValue = obj.Height?.ToString();
+                    return true;
+                case "orientation":
+                case "rotate":
+                    checkValue = obj.Orientation?.AsStringValue();
+                    return true;
+                case "refresh":
+                case "freq":
+                    checkValue = obj.Refresh?.ToString();
+                    return true;
+                case "screen":
+                case "type":
+                    checkValue = obj.Screen?.AsStringValue();
+                    return true;
+                case "width":
+                case "x":
+                    checkValue = obj.Width?.ToString();
+                    return true;
+
+                // If the key doesn't exist, we count it as null
+                default:
+                    checkValue = null;
+                    return false;
+            }
         }
 
         /// <summary>
