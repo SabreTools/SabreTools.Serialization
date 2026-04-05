@@ -17,7 +17,7 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Cached item type names for filter selection
         /// </summary>
-        private readonly string[] _datItemTypeNames = TypeHelper.GetDatItemTypeNames();
+        private static readonly string[] _datItemTypeNames = TypeHelper.GetDatItemTypeNames();
 
         public FilterRunner(FilterObject[] filters)
         {

@@ -19,6 +19,11 @@ namespace SabreTools.Metadata.Filter
         public readonly string FieldName;
 
         /// <summary>
+        /// Cached item type names for filter selection
+        /// </summary>
+        private static readonly string[] _datItemTypeNames = TypeHelper.GetDatItemTypeNames();
+
+        /// <summary>
         /// Validating combined key constructor
         /// </summary>
         public FilterKey(string? key)
@@ -149,12 +154,9 @@ namespace SabreTools.Metadata.Filter
             if (string.Equals(itemName, "datitem", StringComparison.OrdinalIgnoreCase)
                 || string.Equals(itemName, "item", StringComparison.OrdinalIgnoreCase))
             {
-                // Get all item types
-                var itemTypes = TypeHelper.GetDatItemTypeNames();
-
                 // If we get any matches
                 string localFieldName = fieldName;
-                string? matchedType = Array.Find(itemTypes, t => DatItemContainsField(t, localFieldName));
+                string? matchedType = Array.Find(_datItemTypeNames, t => DatItemContainsField(t, localFieldName));
                 if (matchedType is not null)
                 {
                     // Check for a matching field
