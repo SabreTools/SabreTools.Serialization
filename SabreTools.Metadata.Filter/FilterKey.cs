@@ -103,21 +103,19 @@ namespace SabreTools.Metadata.Filter
         {
             // Get the set of properties
             var properties = TypeHelper.GetProperties(typeof(Header));
-            if (properties is not null)
-            {
-                // Get if there's a match to a property
-                string localFieldName = fieldName;
-                string? propertyMatch = Array.Find(properties, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
-                if (propertyMatch is not null)
-                {
-                    // Return the sanitized ID
-                    itemName = "header";
-                    fieldName = propertyMatch.ToLowerInvariant();
-                    return true;
-                }
-            }
+            if (properties is null)
+                return false;
 
-            return false;
+            // Get if there's a match to a property
+            string localFieldName = fieldName;
+            string? propertyMatch = Array.Find(properties, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
+            if (propertyMatch is null)
+                return false;
+
+            // Return the sanitized ID
+            itemName = "header";
+            fieldName = propertyMatch.ToLowerInvariant();
+            return true;
         }
 
         /// <summary>
@@ -127,21 +125,19 @@ namespace SabreTools.Metadata.Filter
         {
             // Get the set of properties
             var properties = TypeHelper.GetProperties(typeof(Machine));
-            if (properties is not null)
-            {
-                // Get if there's a match to a property
-                string localFieldName = fieldName;
-                string? propertyMatch = Array.Find(properties, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
-                if (propertyMatch is not null)
-                {
-                    // Return the sanitized ID
-                    itemName = "machine";
-                    fieldName = propertyMatch.ToLowerInvariant();
-                    return true;
-                }
-            }
+            if (properties is null)
+                return false;
 
-            return false;
+            // Get if there's a match to a property
+            string localFieldName = fieldName;
+            string? propertyMatch = Array.Find(properties, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
+            if (propertyMatch is null)
+                return false;
+
+            // Return the sanitized ID
+            itemName = "machine";
+            fieldName = propertyMatch.ToLowerInvariant();
+            return true;
         }
 
         /// <summary>
@@ -205,15 +201,12 @@ namespace SabreTools.Metadata.Filter
 
             // Get the set of properties
             var properties = TypeHelper.GetProperties(itemType);
-            if (properties is not null)
-            {
-                // Get if there's a match to a property
-                string? propertyMatch = Array.Find(properties, c => string.Equals(c, fieldName, StringComparison.OrdinalIgnoreCase));
-                if (propertyMatch is not null)
-                    return propertyMatch.ToLowerInvariant();
-            }
+            if (properties is null)
+                return null;
 
-            return null;
+            // Get if there's a match to a property
+            string? propertyMatch = Array.Find(properties, c => string.Equals(c, fieldName, StringComparison.OrdinalIgnoreCase));
+            return propertyMatch?.ToLowerInvariant();
         }
     }
 }
