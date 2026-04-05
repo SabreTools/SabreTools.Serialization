@@ -116,7 +116,7 @@ namespace SabreTools.Metadata.DatFiles
             {
                 string[] splitpath = path.TrimEnd(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
 #if NETFRAMEWORK || NETSTANDARD
-                name = splitpath[splitpath.Length - 1];
+                name = splitpath[splitpath.Length - 1] + (bare ? string.Empty : $" ({date})");
                 description = splitpath[splitpath.Length - 1] + (bare ? string.Empty : $" ({date})");
 #else
                 name = splitpath[^1] + (bare ? string.Empty : $" ({date})");
