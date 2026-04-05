@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Metadata.Filter
@@ -111,7 +112,7 @@ namespace SabreTools.Metadata.Filter
         private static bool ParseHeaderFilterId(ref string itemName, ref string fieldName)
         {
             // Get the set of properties
-            var properties = TypeHelper.GetProperties(typeof(Header));
+            var properties = GetProperties(typeof(Header));
             if (properties is null)
                 return false;
 
@@ -133,7 +134,7 @@ namespace SabreTools.Metadata.Filter
         private static bool ParseMachineFilterId(ref string itemName, ref string fieldName)
         {
             // Get the set of properties
-            var properties = TypeHelper.GetProperties(typeof(Machine));
+            var properties = GetProperties(typeof(Machine));
             if (properties is null)
                 return false;
 
@@ -206,13 +207,29 @@ namespace SabreTools.Metadata.Filter
                 return null;
 
             // Get the set of properties
-            var properties = TypeHelper.GetProperties(itemType);
+            var properties = GetProperties(itemType);
             if (properties is null)
                 return null;
 
             // Get if there's a match to a property
             string? propertyMatch = Array.Find(properties, c => string.Equals(c, fieldName, StringComparison.OrdinalIgnoreCase));
             return propertyMatch?.ToLowerInvariant();
+        }
+
+        /// <summary>
+        /// Get property names for the given type, if possible
+        /// </summary>
+        private static string[]? GetProperties(Type? type)
+        {
+            if (type is null)
+                return null;
+
+            var properties = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+            if (properties is null)
+                return null;
+
+            string[] propertyNames = Array.ConvertAll(properties, f => f.Name);
+            return Array.FindAll(propertyNames, s => s.Length > 0);
         }
     }
 }
