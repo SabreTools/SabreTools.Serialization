@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Serialization;
-using SabreTools.Data.Models;
 using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Metadata
@@ -10,30 +9,6 @@ namespace SabreTools.Metadata
     // TODO: Investigate ways of either caching or speeding up these methods
     public static class TypeHelper
     {
-        /// <summary>
-        /// Get constant values for the given type, if possible
-        /// </summary>
-        /// <remarks>Does not return any values marked with the <see cref="NoFilterAttribute"/></remarks>
-        public static string[]? GetConstants(Type? type)
-        {
-            if (type is null)
-                return null;
-
-            var fields = type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
-            if (fields is null)
-                return null;
-
-            FieldInfo[] noFilterFields = Array.FindAll(fields,
-                f => f.IsLiteral
-                && !f.IsInitOnly
-                && Attribute.GetCustomAttributes(f, typeof(NoFilterAttribute)).Length == 0);
-
-            string[] constantValues = Array.ConvertAll(noFilterFields,
-                f => (f.GetRawConstantValue() as string) ?? string.Empty);
-
-            return Array.FindAll(constantValues, s => s.Length > 0);
-        }
-
         /// <summary>
         /// Attempt to get all DatItem types
         /// </summary>

@@ -101,22 +101,6 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static bool ParseHeaderFilterId(ref string itemName, ref string fieldName)
         {
-            // Get the set of constants
-            var constants = TypeHelper.GetConstants(typeof(Header));
-            if (constants is not null)
-            {
-                // Get if there's a match to a constant
-                string localFieldName = fieldName;
-                string? constantMatch = Array.Find(constants, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
-                if (constantMatch is not null)
-                {
-                    // Return the sanitized ID
-                    itemName = "header";
-                    fieldName = constantMatch;
-                    return true;
-                }
-            }
-
             // Get the set of properties
             var properties = TypeHelper.GetProperties(typeof(Header));
             if (properties is not null)
@@ -141,22 +125,6 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static bool ParseMachineFilterId(ref string itemName, ref string fieldName)
         {
-            // Get the set of constants
-            var constants = TypeHelper.GetConstants(typeof(Machine));
-            if (constants is not null)
-            {
-                // Get if there's a match to a constant
-                string localFieldName = fieldName;
-                string? constantMatch = Array.Find(constants, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
-                if (constantMatch is not null)
-                {
-                    // Return the sanitized ID
-                    itemName = "machine";
-                    fieldName = constantMatch;
-                    return true;
-                }
-            }
-
             // Get the set of properties
             var properties = TypeHelper.GetProperties(typeof(Machine));
             if (properties is not null)
@@ -234,16 +202,6 @@ namespace SabreTools.Metadata.Filter
             var itemType = TypeHelper.GetDatItemType(itemName.ToLowerInvariant());
             if (itemType is null)
                 return null;
-
-            // Get the set of constants
-            var constants = TypeHelper.GetConstants(itemType);
-            if (constants is not null)
-            {
-                // Get if there's a match to a constant
-                string? constantMatch = Array.Find(constants, c => string.Equals(c, fieldName, StringComparison.OrdinalIgnoreCase));
-                if (constantMatch is not null)
-                    return constantMatch;
-            }
 
             // Get the set of properties
             var properties = TypeHelper.GetProperties(itemType);
