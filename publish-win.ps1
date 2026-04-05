@@ -72,7 +72,6 @@ if (!$NO_BUILD.IsPresent) {
     if ($INCLUDE_UNPUBLISHED.IsPresent) {
         dotnet pack SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj --output $BUILD_FOLDER
         dotnet pack SabreTools.Data.Models\SabreTools.Data.Models.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.Metadata\SabreTools.Metadata.csproj --output $BUILD_FOLDER
         dotnet pack SabreTools.Metadata.DatFiles\SabreTools.Metadata.DatFiles.csproj --output $BUILD_FOLDER
         dotnet pack SabreTools.Metadata.DatItems\SabreTools.Metadata.DatItems.csproj --output $BUILD_FOLDER
         dotnet pack SabreTools.Metadata.Filter\SabreTools.Metadata.Filter.csproj --output $BUILD_FOLDER

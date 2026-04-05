@@ -31,7 +31,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SabreTools.Metadata\SabreTools.Metadata.csproj" />
+        <ProjectReference Include="..\SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj" />
+        <ProjectReference Include="..\SabreTools.Data.Models\SabreTools.Data.Models.csproj" />
     </ItemGroup>
 
     <ItemGroup>

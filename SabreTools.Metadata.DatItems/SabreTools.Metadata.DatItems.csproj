@@ -38,7 +38,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj" />
-    <ProjectReference Include="..\SabreTools.Metadata\SabreTools.Metadata.csproj" />
     <ProjectReference Include="..\SabreTools.Metadata.Filter\SabreTools.Metadata.Filter.csproj" />
   </ItemGroup>
 

@@ -16,7 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SabreTools.Metadata\SabreTools.Metadata.csproj" />
         <ProjectReference Include="..\SabreTools.Metadata.DatFiles\SabreTools.Metadata.DatFiles.csproj" />
         <ProjectReference Include="..\SabreTools.Metadata.DatItems\SabreTools.Metadata.DatItems.csproj" />
     </ItemGroup>
