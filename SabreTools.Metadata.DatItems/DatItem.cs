@@ -192,8 +192,7 @@ namespace SabreTools.Metadata.DatItems
         /// <returns>True if the item and its machine passes the filter, false otherwise</returns>
         public bool PassesFilter(FilterRunner filterRunner)
         {
-            var machine = Machine;
-            if (machine is not null && !machine.PassesFilter(filterRunner))
+            if (Machine is not null && !Machine.PassesFilter(filterRunner))
                 return false;
 
             return filterRunner.Run(_internal);
