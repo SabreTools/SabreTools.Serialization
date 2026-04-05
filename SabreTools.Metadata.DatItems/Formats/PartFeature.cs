@@ -13,8 +13,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Data.Models.Metadata.FeatureType? FeatureType
         {
-            get => (_internal as Data.Models.Metadata.Feature)?.FeatureType;
-            set => (_internal as Data.Models.Metadata.Feature)?.FeatureType = value;
+            get => _internal.FeatureType;
+            set => _internal.FeatureType = value;
         }
 
         /// <inheritdoc>/>
@@ -23,14 +23,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Feature)?.Name;
-            set => (_internal as Data.Models.Metadata.Feature)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public Data.Models.Metadata.FeatureStatus? Overall
         {
-            get => (_internal as Data.Models.Metadata.Feature)?.Overall;
-            set => (_internal as Data.Models.Metadata.Feature)?.Overall = value;
+            get => _internal.Overall;
+            set => _internal.Overall = value;
         }
 
         public Part? Part { get; set; }
@@ -40,14 +40,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Data.Models.Metadata.FeatureStatus? Status
         {
-            get => (_internal as Data.Models.Metadata.Feature)?.Status;
-            set => (_internal as Data.Models.Metadata.Feature)?.Status = value;
+            get => _internal.Status;
+            set => _internal.Status = value;
         }
 
         public string? Value
         {
-            get => (_internal as Data.Models.Metadata.Feature)?.Value;
-            set => (_internal as Data.Models.Metadata.Feature)?.Value = value;
+            get => _internal.Value;
+            set => _internal.Value = value;
         }
 
         #endregion
@@ -83,7 +83,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Feature GetInternalClone()
-            => (_internal as Data.Models.Metadata.Feature)?.Clone() as Data.Models.Metadata.Feature ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Feature ?? new();
 
         #endregion
 
@@ -98,7 +98,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is PartFeature otherPartFeature)
-                return ((Data.Models.Metadata.Feature)_internal).Equals((Data.Models.Metadata.Feature)otherPartFeature._internal);
+                return _internal.Equals(otherPartFeature._internal);
 
             // Everything else fails
             return false;
@@ -113,7 +113,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is PartFeature otherPartFeature)
-                return ((Data.Models.Metadata.Feature)_internal).Equals((Data.Models.Metadata.Feature)otherPartFeature._internal);
+                return _internal.Equals(otherPartFeature._internal);
 
             // Everything else fails
             return false;

@@ -18,8 +18,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? Default
         {
-            get => (_internal as Data.Models.Metadata.ConfSetting)?.Default;
-            set => (_internal as Data.Models.Metadata.ConfSetting)?.Default = value;
+            get => _internal.Default;
+            set => _internal.Default = value;
         }
 
         /// <inheritdoc>/>
@@ -28,14 +28,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.ConfSetting)?.Name;
-            set => (_internal as Data.Models.Metadata.ConfSetting)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public string? Value
         {
-            get => (_internal as Data.Models.Metadata.ConfSetting)?.Value;
-            set => (_internal as Data.Models.Metadata.ConfSetting)?.Value = value;
+            get => _internal.Value;
+            set => _internal.Value = value;
         }
 
         #endregion
@@ -77,7 +77,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.ConfSetting GetInternalClone()
         {
-            var confSettingItem = (_internal as Data.Models.Metadata.ConfSetting)?.Clone() as Data.Models.Metadata.ConfSetting ?? new();
+            var confSettingItem = _internal.Clone() as Data.Models.Metadata.ConfSetting ?? new();
 
             if (Condition is not null)
                 confSettingItem.Condition = Condition.GetInternalClone();
@@ -98,7 +98,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is ConfSetting otherConfSetting)
-                return ((Data.Models.Metadata.ConfSetting)_internal).Equals((Data.Models.Metadata.ConfSetting)otherConfSetting._internal);
+                return _internal.Equals(otherConfSetting._internal);
 
             // Everything else fails
             return false;
@@ -113,7 +113,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is ConfSetting otherConfSetting)
-                return ((Data.Models.Metadata.ConfSetting)_internal).Equals((Data.Models.Metadata.ConfSetting)otherConfSetting._internal);
+                return _internal.Equals(otherConfSetting._internal);
 
             // Everything else fails
             return false;

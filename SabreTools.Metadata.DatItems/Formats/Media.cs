@@ -15,8 +15,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? MD5
         {
-            get => (_internal as Data.Models.Metadata.Media)?.MD5;
-            set => (_internal as Data.Models.Metadata.Media)?.MD5 = value;
+            get => _internal.MD5;
+            set => _internal.MD5 = value;
         }
 
         /// <inheritdoc>/>
@@ -25,26 +25,26 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Media)?.Name;
-            set => (_internal as Data.Models.Metadata.Media)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public string? SHA1
         {
-            get => (_internal as Data.Models.Metadata.Media)?.SHA1;
-            set => (_internal as Data.Models.Metadata.Media)?.SHA1 = value;
+            get => _internal.SHA1;
+            set => _internal.SHA1 = value;
         }
 
         public string? SHA256
         {
-            get => (_internal as Data.Models.Metadata.Media)?.SHA256;
-            set => (_internal as Data.Models.Metadata.Media)?.SHA256 = value;
+            get => _internal.SHA256;
+            set => _internal.SHA256 = value;
         }
 
         public string? SpamSum
         {
-            get => (_internal as Data.Models.Metadata.Media)?.SpamSum;
-            set => (_internal as Data.Models.Metadata.Media)?.SpamSum = value;
+            get => _internal.SpamSum;
+            set => _internal.SpamSum = value;
         }
 
         #endregion
@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Media GetInternalClone()
-            => (_internal as Data.Models.Metadata.Media)?.Clone() as Data.Models.Metadata.Media ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Media ?? new();
 
         /// <summary>
         /// Convert a media to the closest Rom approximation
@@ -104,7 +104,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <returns></returns>
         public Rom ConvertToRom()
         {
-            var rom = new Rom((_internal as Data.Models.Metadata.Media).ConvertToRom()!);
+            var rom = new Rom(_internal.ConvertToRom()!);
 
             rom.DupeType = DupeType;
             rom.Machine = Machine?.Clone() as Machine;
@@ -127,7 +127,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Media otherMedia)
-                return ((Data.Models.Metadata.Media)_internal).PartialEquals((Data.Models.Metadata.Media)otherMedia._internal);
+                return _internal.PartialEquals(otherMedia._internal);
 
             // Everything else fails
             return false;
@@ -142,7 +142,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Media otherMedia)
-                return ((Data.Models.Metadata.Media)_internal).PartialEquals((Data.Models.Metadata.Media)otherMedia._internal);
+                return _internal.PartialEquals(otherMedia._internal);
 
             // Everything else fails
             return false;
@@ -153,19 +153,19 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         /// <param name="other">Media to fill information from</param>
         public void FillMissingInformation(Media other)
-            => (_internal as Data.Models.Metadata.Media).FillMissingHashes(other._internal as Data.Models.Metadata.Media);
+            => _internal.FillMissingHashes(other._internal);
 
         /// <summary>
         /// Returns if the Rom contains any hashes
         /// </summary>
         /// <returns>True if any hash exists, false otherwise</returns>
-        public bool HasHashes() => (_internal as Data.Models.Metadata.Media)?.HasHashes() ?? false;
+        public bool HasHashes() => _internal.HasHashes();
 
         /// <summary>
         /// Returns if all of the hashes are set to their 0-byte values
         /// </summary>
         /// <returns>True if any hash matches the 0-byte value, false otherwise</returns>
-        public bool HasZeroHash() => (_internal as Data.Models.Metadata.Media)?.HasZeroHash() ?? false;
+        public bool HasZeroHash() => _internal.HasZeroHash();
 
         #endregion
 

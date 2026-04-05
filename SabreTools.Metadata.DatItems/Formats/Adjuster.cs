@@ -18,8 +18,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? Default
         {
-            get => (_internal as Data.Models.Metadata.Adjuster)?.Default;
-            set => (_internal as Data.Models.Metadata.Adjuster)?.Default = value;
+            get => _internal.Default;
+            set => _internal.Default = value;
         }
 
         /// <inheritdoc>/>
@@ -28,8 +28,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Adjuster)?.Name;
-            set => (_internal as Data.Models.Metadata.Adjuster)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -71,7 +71,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Adjuster GetInternalClone()
         {
-            var adjusterItem = (_internal as Data.Models.Metadata.Adjuster)?.Clone() as Data.Models.Metadata.Adjuster ?? new();
+            var adjusterItem = _internal.Clone() as Data.Models.Metadata.Adjuster ?? new();
 
             if (Condition is not null)
                 adjusterItem.Condition = Condition.GetInternalClone();
@@ -92,7 +92,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Adjuster otherAdjuster)
-                return ((Data.Models.Metadata.Adjuster)_internal).Equals((Data.Models.Metadata.Adjuster)otherAdjuster._internal);
+                return _internal.Equals(otherAdjuster._internal);
 
             // Everything else fails
             return false;
@@ -107,7 +107,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Adjuster otherAdjuster)
-                return ((Data.Models.Metadata.Adjuster)_internal).Equals((Data.Models.Metadata.Adjuster)otherAdjuster._internal);
+                return _internal.Equals(otherAdjuster._internal);
 
             // Everything else fails
             return false;

@@ -13,14 +13,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? Default
         {
-            get => (_internal as Data.Models.Metadata.SlotOption)?.Default;
-            set => (_internal as Data.Models.Metadata.SlotOption)?.Default = value;
+            get => _internal.Default;
+            set => _internal.Default = value;
         }
 
         public string? DevName
         {
-            get => (_internal as Data.Models.Metadata.SlotOption)?.DevName;
-            set => (_internal as Data.Models.Metadata.SlotOption)?.DevName = value;
+            get => _internal.DevName;
+            set => _internal.DevName = value;
         }
 
         /// <inheritdoc>/>
@@ -29,8 +29,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.SlotOption)?.Name;
-            set => (_internal as Data.Models.Metadata.SlotOption)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.SlotOption GetInternalClone()
-            => (_internal as Data.Models.Metadata.SlotOption)?.Clone() as Data.Models.Metadata.SlotOption ?? new();
+            => _internal.Clone() as Data.Models.Metadata.SlotOption ?? new();
 
         #endregion
 
@@ -81,7 +81,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is SlotOption otherSlotOption)
-                return ((Data.Models.Metadata.SlotOption)_internal).Equals((Data.Models.Metadata.SlotOption)otherSlotOption._internal);
+                return _internal.Equals(otherSlotOption._internal);
 
             // Everything else fails
             return false;
@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is SlotOption otherSlotOption)
-                return ((Data.Models.Metadata.SlotOption)_internal).Equals((Data.Models.Metadata.SlotOption)otherSlotOption._internal);
+                return _internal.Equals(otherSlotOption._internal);
 
             // Everything else fails
             return false;

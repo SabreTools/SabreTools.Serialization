@@ -13,14 +13,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Content
         {
-            get => (_internal as Data.Models.Metadata.RamOption)?.Content;
-            set => (_internal as Data.Models.Metadata.RamOption)?.Content = value;
+            get => _internal.Content;
+            set => _internal.Content = value;
         }
 
         public bool? Default
         {
-            get => (_internal as Data.Models.Metadata.RamOption)?.Default;
-            set => (_internal as Data.Models.Metadata.RamOption)?.Default = value;
+            get => _internal.Default;
+            set => _internal.Default = value;
         }
 
         /// <inheritdoc>/>
@@ -29,8 +29,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.RamOption)?.Name;
-            set => (_internal as Data.Models.Metadata.RamOption)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.RamOption GetInternalClone()
-            => (_internal as Data.Models.Metadata.RamOption)?.Clone() as Data.Models.Metadata.RamOption ?? new();
+            => _internal.Clone() as Data.Models.Metadata.RamOption ?? new();
 
         #endregion
 
@@ -81,7 +81,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is RamOption otherRamOption)
-                return ((Data.Models.Metadata.RamOption)_internal).Equals((Data.Models.Metadata.RamOption)otherRamOption._internal);
+                return _internal.Equals(otherRamOption._internal);
 
             // Everything else fails
             return false;
@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is RamOption otherRamOption)
-                return ((Data.Models.Metadata.RamOption)_internal).Equals((Data.Models.Metadata.RamOption)otherRamOption._internal);
+                return _internal.Equals(otherRamOption._internal);
 
             // Everything else fails
             return false;

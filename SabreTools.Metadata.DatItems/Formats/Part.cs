@@ -35,8 +35,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Interface
         {
-            get => (_internal as Data.Models.Metadata.Part)?.Interface;
-            set => (_internal as Data.Models.Metadata.Part)?.Interface = value;
+            get => _internal.Interface;
+            set => _internal.Interface = value;
         }
 
         /// <inheritdoc>/>
@@ -45,8 +45,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Part)?.Name;
-            set => (_internal as Data.Models.Metadata.Part)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -97,7 +97,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Part GetInternalClone()
         {
-            var partItem = (_internal as Data.Models.Metadata.Part)?.Clone() as Data.Models.Metadata.Part ?? new();
+            var partItem = _internal.Clone() as Data.Models.Metadata.Part ?? new();
 
             if (DataArea is not null)
                 partItem.DataArea = Array.ConvertAll(DataArea, dataArea => dataArea.GetInternalClone());
@@ -127,7 +127,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Part otherPart)
-                return ((Data.Models.Metadata.Part)_internal).Equals((Data.Models.Metadata.Part)otherPart._internal);
+                return _internal.Equals(otherPart._internal);
 
             // Everything else fails
             return false;
@@ -142,7 +142,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Part otherPart)
-                return ((Data.Models.Metadata.Part)_internal).Equals((Data.Models.Metadata.Part)otherPart._internal);
+                return _internal.Equals(otherPart._internal);
 
             // Everything else fails
             return false;

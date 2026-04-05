@@ -13,8 +13,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Filter
         {
-            get => (_internal as Data.Models.Metadata.SoftwareList)?.Filter;
-            set => (_internal as Data.Models.Metadata.SoftwareList)?.Filter = value;
+            get => _internal.Filter;
+            set => _internal.Filter = value;
         }
 
         /// <inheritdoc>/>
@@ -23,20 +23,20 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.SoftwareList)?.Name;
-            set => (_internal as Data.Models.Metadata.SoftwareList)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public Data.Models.Metadata.SoftwareListStatus? Status
         {
-            get => (_internal as Data.Models.Metadata.SoftwareList)?.Status;
-            set => (_internal as Data.Models.Metadata.SoftwareList)?.Status = value;
+            get => _internal.Status;
+            set => _internal.Status = value;
         }
 
         public string? Tag
         {
-            get => (_internal as Data.Models.Metadata.SoftwareList)?.Tag;
-            set => (_internal as Data.Models.Metadata.SoftwareList)?.Tag = value;
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         #endregion
@@ -72,7 +72,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.SoftwareList GetInternalClone()
-            => (_internal as Data.Models.Metadata.SoftwareList)?.Clone() as Data.Models.Metadata.SoftwareList ?? new();
+            => _internal.Clone() as Data.Models.Metadata.SoftwareList ?? new();
 
         #endregion
 
@@ -87,7 +87,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is SoftwareList otherSoftwareList)
-                return ((Data.Models.Metadata.SoftwareList)_internal).Equals((Data.Models.Metadata.SoftwareList)otherSoftwareList._internal);
+                return _internal.Equals(otherSoftwareList._internal);
 
             // Everything else fails
             return false;
@@ -102,7 +102,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is SoftwareList otherSoftwareList)
-                return ((Data.Models.Metadata.SoftwareList)_internal).Equals((Data.Models.Metadata.SoftwareList)otherSoftwareList._internal);
+                return _internal.Equals(otherSoftwareList._internal);
 
             // Everything else fails
             return false;

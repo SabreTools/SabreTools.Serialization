@@ -19,8 +19,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? Default
         {
-            get => (_internal as Data.Models.Metadata.DipSwitch)?.Default;
-            set => (_internal as Data.Models.Metadata.DipSwitch)?.Default = value;
+            get => _internal.Default;
+            set => _internal.Default = value;
         }
 
         public DipLocation[]? DipLocation { get; set; }
@@ -44,14 +44,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Mask
         {
-            get => (_internal as Data.Models.Metadata.DipSwitch)?.Mask;
-            set => (_internal as Data.Models.Metadata.DipSwitch)?.Mask = value;
+            get => _internal.Mask;
+            set => _internal.Mask = value;
         }
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.DipSwitch)?.Name;
-            set => (_internal as Data.Models.Metadata.DipSwitch)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public Part? Part { get; set; }
@@ -69,8 +69,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Tag
         {
-            get => (_internal as Data.Models.Metadata.DipSwitch)?.Tag;
-            set => (_internal as Data.Models.Metadata.DipSwitch)?.Tag = value;
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         #endregion
@@ -121,7 +121,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.DipSwitch GetInternalClone()
         {
-            var dipSwitchItem = (_internal as Data.Models.Metadata.DipSwitch)?.Clone() as Data.Models.Metadata.DipSwitch ?? new();
+            var dipSwitchItem = _internal.Clone() as Data.Models.Metadata.DipSwitch ?? new();
 
             if (Condition is not null)
                 dipSwitchItem.Condition = Condition.GetInternalClone();
@@ -151,7 +151,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DipSwitch otherDipSwitch)
-                return ((Data.Models.Metadata.DipSwitch)_internal).Equals((Data.Models.Metadata.DipSwitch)otherDipSwitch._internal);
+                return _internal.Equals(otherDipSwitch._internal);
 
             // Everything else fails
             return false;
@@ -166,7 +166,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DipSwitch otherDipSwitch)
-                return ((Data.Models.Metadata.DipSwitch)_internal).Equals((Data.Models.Metadata.DipSwitch)otherDipSwitch._internal);
+                return _internal.Equals(otherDipSwitch._internal);
 
             // Everything else fails
             return false;

@@ -13,32 +13,32 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Data.Models.Metadata.Blit? Blit
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.Blit;
-            set => (_internal as Data.Models.Metadata.Driver)?.Blit = value;
+            get => _internal.Blit;
+            set => _internal.Blit = value;
         }
 
         public Data.Models.Metadata.SupportStatus? Cocktail
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.Cocktail;
-            set => (_internal as Data.Models.Metadata.Driver)?.Cocktail = value;
+            get => _internal.Cocktail;
+            set => _internal.Cocktail = value;
         }
 
         public Data.Models.Metadata.SupportStatus? Color
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.Color;
-            set => (_internal as Data.Models.Metadata.Driver)?.Color = value;
+            get => _internal.Color;
+            set => _internal.Color = value;
         }
 
         public Data.Models.Metadata.SupportStatus? Emulation
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.Emulation;
-            set => (_internal as Data.Models.Metadata.Driver)?.Emulation = value;
+            get => _internal.Emulation;
+            set => _internal.Emulation = value;
         }
 
         public bool? Incomplete
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.Incomplete;
-            set => (_internal as Data.Models.Metadata.Driver)?.Incomplete = value;
+            get => _internal.Incomplete;
+            set => _internal.Incomplete = value;
         }
 
         /// <inheritdoc>/>
@@ -47,44 +47,44 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? NoSoundHardware
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.NoSoundHardware;
-            set => (_internal as Data.Models.Metadata.Driver)?.NoSoundHardware = value;
+            get => _internal.NoSoundHardware;
+            set => _internal.NoSoundHardware = value;
         }
 
         public string? PaletteSize
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.PaletteSize;
-            set => (_internal as Data.Models.Metadata.Driver)?.PaletteSize = value;
+            get => _internal.PaletteSize;
+            set => _internal.PaletteSize = value;
         }
 
         public bool? RequiresArtwork
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.RequiresArtwork;
-            set => (_internal as Data.Models.Metadata.Driver)?.RequiresArtwork = value;
+            get => _internal.RequiresArtwork;
+            set => _internal.RequiresArtwork = value;
         }
 
         public Data.Models.Metadata.Supported? SaveState
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.SaveState;
-            set => (_internal as Data.Models.Metadata.Driver)?.SaveState = value;
+            get => _internal.SaveState;
+            set => _internal.SaveState = value;
         }
 
         public Data.Models.Metadata.SupportStatus? Sound
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.Sound;
-            set => (_internal as Data.Models.Metadata.Driver)?.Sound = value;
+            get => _internal.Sound;
+            set => _internal.Sound = value;
         }
 
         public Data.Models.Metadata.SupportStatus? Status
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.Status;
-            set => (_internal as Data.Models.Metadata.Driver)?.Status = value;
+            get => _internal.Status;
+            set => _internal.Status = value;
         }
 
         public bool? Unofficial
         {
-            get => (_internal as Data.Models.Metadata.Driver)?.Unofficial;
-            set => (_internal as Data.Models.Metadata.Driver)?.Unofficial = value;
+            get => _internal.Unofficial;
+            set => _internal.Unofficial = value;
         }
 
         #endregion
@@ -120,7 +120,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Driver GetInternalClone()
-            => (_internal as Data.Models.Metadata.Driver)?.Clone() as Data.Models.Metadata.Driver ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Driver ?? new();
 
         #endregion
 
@@ -135,7 +135,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Driver otherDriver)
-                return ((Data.Models.Metadata.Driver)_internal).Equals((Data.Models.Metadata.Driver)otherDriver._internal);
+                return _internal.Equals(otherDriver._internal);
 
             // Everything else fails
             return false;
@@ -150,7 +150,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Driver otherDriver)
-                return ((Data.Models.Metadata.Driver)_internal).Equals((Data.Models.Metadata.Driver)otherDriver._internal);
+                return _internal.Equals(otherDriver._internal);
 
             // Everything else fails
             return false;

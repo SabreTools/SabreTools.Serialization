@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
+using SabreTools.Metadata.Filter;
 using SabreTools.Text.Extensions;
 
 // TODO: Add item mappings for all fields
@@ -325,6 +326,18 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             return key;
         }
+
+        #endregion
+
+        #region Manipulation
+
+        /// <inheritdoc/>
+        /// <remarks>Not implemented</remarks>
+        public override bool PassesFilter(FilterRunner filterRunner) => false;
+
+        /// <inheritdoc/>
+        /// <remarks>Not implemented</remarks>
+        public override bool PassesFilterDB(FilterRunner filterRunner) => false;
 
         #endregion
     }

@@ -13,8 +13,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Data.Models.Metadata.ChipType? ChipType
         {
-            get => (_internal as Data.Models.Metadata.Chip)?.ChipType;
-            set => (_internal as Data.Models.Metadata.Chip)?.ChipType = value;
+            get => _internal.ChipType;
+            set => _internal.ChipType = value;
         }
 
         /// <inheritdoc>/>
@@ -23,32 +23,32 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public long? Clock
         {
-            get => (_internal as Data.Models.Metadata.Chip)?.Clock;
-            set => (_internal as Data.Models.Metadata.Chip)?.Clock = value;
+            get => _internal.Clock;
+            set => _internal.Clock = value;
         }
 
         public string? Flags
         {
-            get => (_internal as Data.Models.Metadata.Chip)?.Flags;
-            set => (_internal as Data.Models.Metadata.Chip)?.Flags = value;
+            get => _internal.Flags;
+            set => _internal.Flags = value;
         }
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Chip)?.Name;
-            set => (_internal as Data.Models.Metadata.Chip)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public bool? SoundOnly
         {
-            get => (_internal as Data.Models.Metadata.Chip)?.SoundOnly;
-            set => (_internal as Data.Models.Metadata.Chip)?.SoundOnly = value;
+            get => _internal.SoundOnly;
+            set => _internal.SoundOnly = value;
         }
 
         public string? Tag
         {
-            get => (_internal as Data.Models.Metadata.Chip)?.Tag;
-            set => (_internal as Data.Models.Metadata.Chip)?.Tag = value;
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         #endregion
@@ -84,7 +84,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Chip GetInternalClone()
-            => (_internal as Data.Models.Metadata.Chip)?.Clone() as Data.Models.Metadata.Chip ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Chip ?? new();
 
         #endregion
 
@@ -99,7 +99,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Chip otherChip)
-                return ((Data.Models.Metadata.Chip)_internal).Equals((Data.Models.Metadata.Chip)otherChip._internal);
+                return _internal.Equals(otherChip._internal);
 
             // Everything else fails
             return false;
@@ -114,7 +114,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Chip otherChip)
-                return ((Data.Models.Metadata.Chip)_internal).Equals((Data.Models.Metadata.Chip)otherChip._internal);
+                return _internal.Equals(otherChip._internal);
 
             // Everything else fails
             return false;

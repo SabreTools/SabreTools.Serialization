@@ -17,14 +17,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Info)?.Name;
-            set => (_internal as Data.Models.Metadata.Info)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public string? Value
         {
-            get => (_internal as Data.Models.Metadata.Info)?.Value;
-            set => (_internal as Data.Models.Metadata.Info)?.Value = value;
+            get => _internal.Value;
+            set => _internal.Value = value;
         }
 
         #endregion
@@ -60,7 +60,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Info GetInternalClone()
-            => (_internal as Data.Models.Metadata.Info)?.Clone() as Data.Models.Metadata.Info ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Info ?? new();
 
         #endregion
 
@@ -75,7 +75,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Info otherInfo)
-                return ((Data.Models.Metadata.Info)_internal).Equals((Data.Models.Metadata.Info)otherInfo._internal);
+                return _internal.Equals(otherInfo._internal);
 
             // Everything else fails
             return false;
@@ -90,7 +90,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Info otherInfo)
-                return ((Data.Models.Metadata.Info)_internal).Equals((Data.Models.Metadata.Info)otherInfo._internal);
+                return _internal.Equals(otherInfo._internal);
 
             // Everything else fails
             return false;

@@ -33,20 +33,20 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Mask
         {
-            get => (_internal as Data.Models.Metadata.Configuration)?.Mask;
-            set => (_internal as Data.Models.Metadata.Configuration)?.Mask = value;
+            get => _internal.Mask;
+            set => _internal.Mask = value;
         }
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Configuration)?.Name;
-            set => (_internal as Data.Models.Metadata.Configuration)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public string? Tag
         {
-            get => (_internal as Data.Models.Metadata.Configuration)?.Tag;
-            set => (_internal as Data.Models.Metadata.Configuration)?.Tag = value;
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         #endregion
@@ -94,7 +94,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Configuration GetInternalClone()
         {
-            var configurationItem = (_internal as Data.Models.Metadata.Configuration)?.Clone() as Data.Models.Metadata.Configuration ?? new();
+            var configurationItem = _internal.Clone() as Data.Models.Metadata.Configuration ?? new();
 
             if (Condition is not null)
                 configurationItem.Condition = Condition.GetInternalClone();
@@ -121,7 +121,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Configuration otherConfiguration)
-                return ((Data.Models.Metadata.Configuration)_internal).Equals((Data.Models.Metadata.Configuration)otherConfiguration._internal);
+                return _internal.Equals(otherConfiguration._internal);
 
             // Everything else fails
             return false;
@@ -136,7 +136,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Configuration otherConfiguration)
-                return ((Data.Models.Metadata.Configuration)_internal).Equals((Data.Models.Metadata.Configuration)otherConfiguration._internal);
+                return _internal.Equals(otherConfiguration._internal);
 
             // Everything else fails
             return false;

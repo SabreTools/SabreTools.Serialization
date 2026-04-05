@@ -13,50 +13,50 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public long? AspectX
         {
-            get => (_internal as Data.Models.Metadata.Display)?.AspectX;
-            set => (_internal as Data.Models.Metadata.Display)?.AspectX = value;
+            get => _internal.AspectX;
+            set => _internal.AspectX = value;
         }
 
         public long? AspectY
         {
-            get => (_internal as Data.Models.Metadata.Display)?.AspectY;
-            set => (_internal as Data.Models.Metadata.Display)?.AspectY = value;
+            get => _internal.AspectY;
+            set => _internal.AspectY = value;
         }
 
         public Data.Models.Metadata.DisplayType? DisplayType
         {
-            get => (_internal as Data.Models.Metadata.Display)?.DisplayType;
-            set => (_internal as Data.Models.Metadata.Display)?.DisplayType = value;
+            get => _internal.DisplayType;
+            set => _internal.DisplayType = value;
         }
 
         public bool? FlipX
         {
-            get => (_internal as Data.Models.Metadata.Display)?.FlipX;
-            set => (_internal as Data.Models.Metadata.Display)?.FlipX = value;
+            get => _internal.FlipX;
+            set => _internal.FlipX = value;
         }
 
         public long? HBEnd
         {
-            get => (_internal as Data.Models.Metadata.Display)?.HBEnd;
-            set => (_internal as Data.Models.Metadata.Display)?.HBEnd = value;
+            get => _internal.HBEnd;
+            set => _internal.HBEnd = value;
         }
 
         public long? HBStart
         {
-            get => (_internal as Data.Models.Metadata.Display)?.HBStart;
-            set => (_internal as Data.Models.Metadata.Display)?.HBStart = value;
+            get => _internal.HBStart;
+            set => _internal.HBStart = value;
         }
 
         public long? Height
         {
-            get => (_internal as Data.Models.Metadata.Display)?.Height;
-            set => (_internal as Data.Models.Metadata.Display)?.Height = value;
+            get => _internal.Height;
+            set => _internal.Height = value;
         }
 
         public long? HTotal
         {
-            get => (_internal as Data.Models.Metadata.Display)?.HTotal;
-            set => (_internal as Data.Models.Metadata.Display)?.HTotal = value;
+            get => _internal.HTotal;
+            set => _internal.HTotal = value;
         }
 
         /// <inheritdoc>/>
@@ -65,50 +65,50 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public long? PixClock
         {
-            get => (_internal as Data.Models.Metadata.Display)?.PixClock;
-            set => (_internal as Data.Models.Metadata.Display)?.PixClock = value;
+            get => _internal.PixClock;
+            set => _internal.PixClock = value;
         }
 
         public double? Refresh
         {
-            get => (_internal as Data.Models.Metadata.Display)?.Refresh;
-            set => (_internal as Data.Models.Metadata.Display)?.Refresh = value;
+            get => _internal.Refresh;
+            set => _internal.Refresh = value;
         }
 
         public Data.Models.Metadata.Rotation? Rotate
         {
-            get => (_internal as Data.Models.Metadata.Display)?.Rotate;
-            set => (_internal as Data.Models.Metadata.Display)?.Rotate = value;
+            get => _internal.Rotate;
+            set => _internal.Rotate = value;
         }
 
         public string? Tag
         {
-            get => (_internal as Data.Models.Metadata.Display)?.Tag;
-            set => (_internal as Data.Models.Metadata.Display)?.Tag = value;
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         public long? VBEnd
         {
-            get => (_internal as Data.Models.Metadata.Display)?.VBEnd;
-            set => (_internal as Data.Models.Metadata.Display)?.VBEnd = value;
+            get => _internal.VBEnd;
+            set => _internal.VBEnd = value;
         }
 
         public long? VBStart
         {
-            get => (_internal as Data.Models.Metadata.Display)?.VBStart;
-            set => (_internal as Data.Models.Metadata.Display)?.VBStart = value;
+            get => _internal.VBStart;
+            set => _internal.VBStart = value;
         }
 
         public long? VTotal
         {
-            get => (_internal as Data.Models.Metadata.Display)?.VTotal;
-            set => (_internal as Data.Models.Metadata.Display)?.VTotal = value;
+            get => _internal.VTotal;
+            set => _internal.VTotal = value;
         }
 
         public long? Width
         {
-            get => (_internal as Data.Models.Metadata.Display)?.Width;
-            set => (_internal as Data.Models.Metadata.Display)?.Width = value;
+            get => _internal.Width;
+            set => _internal.Width = value;
         }
 
         #endregion
@@ -161,7 +161,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Display GetInternalClone()
-            => (_internal as Data.Models.Metadata.Display)?.Clone() as Data.Models.Metadata.Display ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Display ?? new();
 
         #endregion
 
@@ -176,7 +176,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Display otherDisplay)
-                return ((Data.Models.Metadata.Display)_internal).Equals((Data.Models.Metadata.Display)otherDisplay._internal);
+                return _internal.Equals(otherDisplay._internal);
 
             // Everything else fails
             return false;
@@ -191,7 +191,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Display otherDisplay)
-                return ((Data.Models.Metadata.Display)_internal).Equals((Data.Models.Metadata.Display)otherDisplay._internal);
+                return _internal.Equals(otherDisplay._internal);
 
             // Everything else fails
             return false;

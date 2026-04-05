@@ -2,7 +2,6 @@ using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Hashing;
-using SabreTools.Logging;
 using SabreTools.Metadata.DatItems.Formats;
 using SabreTools.Metadata.Filter;
 
@@ -81,25 +80,6 @@ namespace SabreTools.Metadata.DatItems
         /// Source information
         /// </summary>
         public Source? Source { get; set; }
-
-        #endregion
-
-        #region Private Fields
-
-        /// <summary>
-        /// Internal model
-        /// </summary>
-        protected Data.Models.Metadata.DatItem _internal = new();
-
-        #endregion
-
-        #region Logging
-
-        /// <summary>
-        /// Static logger for static methods
-        /// </summary>
-        [JsonIgnore, XmlIgnore]
-        protected static readonly Logger _staticLogger = new();
 
         #endregion
 
@@ -193,21 +173,14 @@ namespace SabreTools.Metadata.DatItems
         /// </summary>
         /// <param name="filterRunner">Filter runner to use for checking</param>
         /// <returns>True if the item and its machine passes the filter, false otherwise</returns>
-        public bool PassesFilter(FilterRunner filterRunner)
-        {
-            if (Machine is not null && !Machine.PassesFilter(filterRunner))
-                return false;
-
-            return filterRunner.Run(_internal);
-        }
+        public abstract bool PassesFilter(FilterRunner filterRunner);
 
         /// <summary>
         /// Runs a filter and determines if it passes or not
         /// </summary>
         /// <param name="filterRunner">Filter runner to use for checking</param>
         /// <returns>True if the item passes the filter, false otherwise</returns>
-        public bool PassesFilterDB(FilterRunner filterRunner)
-            => filterRunner.Run(_internal);
+        public abstract bool PassesFilterDB(FilterRunner filterRunner);
 
         #endregion
 

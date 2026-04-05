@@ -13,8 +13,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public long? Channels
         {
-            get => (_internal as Data.Models.Metadata.Sound)?.Channels;
-            set => (_internal as Data.Models.Metadata.Sound)?.Channels = value;
+            get => _internal.Channels;
+            set => _internal.Channels = value;
         }
 
         /// <inheritdoc>/>
@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Sound GetInternalClone()
-            => (_internal as Data.Models.Metadata.Sound)?.Clone() as Data.Models.Metadata.Sound ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Sound ?? new();
 
         #endregion
 
@@ -69,7 +69,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Sound otherSound)
-                return ((Data.Models.Metadata.Sound)_internal).Equals((Data.Models.Metadata.Sound)otherSound._internal);
+                return _internal.Equals(otherSound._internal);
 
             // Everything else fails
             return false;
@@ -84,7 +84,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Sound otherSound)
-                return ((Data.Models.Metadata.Sound)_internal).Equals((Data.Models.Metadata.Sound)otherSound._internal);
+                return _internal.Equals(otherSound._internal);
 
             // Everything else fails
             return false;

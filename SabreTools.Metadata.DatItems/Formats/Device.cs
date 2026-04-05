@@ -14,8 +14,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Data.Models.Metadata.DeviceType? DeviceType
         {
-            get => (_internal as Data.Models.Metadata.Device)?.DeviceType;
-            set => (_internal as Data.Models.Metadata.Device)?.DeviceType = value;
+            get => _internal.DeviceType;
+            set => _internal.DeviceType = value;
         }
 
         public Extension[]? Extension { get; set; }
@@ -25,8 +25,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? FixedImage
         {
-            get => (_internal as Data.Models.Metadata.Device)?.FixedImage;
-            set => (_internal as Data.Models.Metadata.Device)?.FixedImage = value;
+            get => _internal.FixedImage;
+            set => _internal.FixedImage = value;
         }
 
         public Instance? Instance { get; set; }
@@ -36,8 +36,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Interface
         {
-            get => (_internal as Data.Models.Metadata.Device)?.Interface;
-            set => (_internal as Data.Models.Metadata.Device)?.Interface = value;
+            get => _internal.Interface;
+            set => _internal.Interface = value;
         }
 
         /// <inheritdoc>/>
@@ -46,14 +46,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? Mandatory
         {
-            get => (_internal as Data.Models.Metadata.Device)?.Mandatory;
-            set => (_internal as Data.Models.Metadata.Device)?.Mandatory = value;
+            get => _internal.Mandatory;
+            set => _internal.Mandatory = value;
         }
 
         public string? Tag
         {
-            get => (_internal as Data.Models.Metadata.Device)?.Tag;
-            set => (_internal as Data.Models.Metadata.Device)?.Tag = value;
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         #endregion
@@ -98,7 +98,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Device GetInternalClone()
         {
-            var deviceItem = (_internal as Data.Models.Metadata.Device)?.Clone() as Data.Models.Metadata.Device ?? new();
+            var deviceItem = _internal.Clone() as Data.Models.Metadata.Device ?? new();
 
             deviceItem.DeviceType = DeviceType;
             deviceItem.FixedImage = FixedImage;
@@ -128,7 +128,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Device otherDevice)
-                return ((Data.Models.Metadata.Device)_internal).Equals((Data.Models.Metadata.Device)otherDevice._internal);
+                return _internal.Equals(otherDevice._internal);
 
             // Everything else fails
             return false;
@@ -143,7 +143,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Device otherDevice)
-                return ((Data.Models.Metadata.Device)_internal).Equals((Data.Models.Metadata.Device)otherDevice._internal);
+                return _internal.Equals(otherDevice._internal);
 
             // Everything else fails
             return false;

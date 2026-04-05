@@ -23,8 +23,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Tag
         {
-            get => (_internal as Data.Models.Metadata.Port)?.Tag;
-            set => (_internal as Data.Models.Metadata.Port)?.Tag = value;
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Port GetInternalClone()
         {
-            var portItem = (_internal as Data.Models.Metadata.Port)?.Clone() as Data.Models.Metadata.Port ?? new();
+            var portItem = _internal.Clone() as Data.Models.Metadata.Port ?? new();
 
             if (Analog is not null)
                 portItem.Analog = Array.ConvertAll(Analog, analog => analog.GetInternalClone());
@@ -87,7 +87,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Port otherPort)
-                return ((Data.Models.Metadata.Port)_internal).Equals((Data.Models.Metadata.Port)otherPort._internal);
+                return _internal.Equals(otherPort._internal);
 
             // Everything else fails
             return false;
@@ -102,7 +102,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Port otherPort)
-                return ((Data.Models.Metadata.Port)_internal).Equals((Data.Models.Metadata.Port)otherPort._internal);
+                return _internal.Equals(otherPort._internal);
 
             // Everything else fails
             return false;

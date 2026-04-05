@@ -22,14 +22,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Flags
         {
-            get => (_internal as Data.Models.Metadata.Disk)?.Flags;
-            set => (_internal as Data.Models.Metadata.Disk)?.Flags = value;
+            get => _internal.Flags;
+            set => _internal.Flags = value;
         }
 
         public long? Index
         {
-            get => (_internal as Data.Models.Metadata.Disk)?.Index;
-            set => (_internal as Data.Models.Metadata.Disk)?.Index = value;
+            get => _internal.Index;
+            set => _internal.Index = value;
         }
 
         /// <inheritdoc>/>
@@ -37,26 +37,26 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? MD5
         {
-            get => (_internal as Data.Models.Metadata.Disk)?.MD5;
-            set => (_internal as Data.Models.Metadata.Disk)?.MD5 = value;
+            get => _internal.MD5;
+            set => _internal.MD5 = value;
         }
 
         public string? Merge
         {
-            get => (_internal as Data.Models.Metadata.Disk)?.Merge;
-            set => (_internal as Data.Models.Metadata.Disk)?.Merge = value;
+            get => _internal.Merge;
+            set => _internal.Merge = value;
         }
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Disk)?.Name;
-            set => (_internal as Data.Models.Metadata.Disk)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public bool? Optional
         {
-            get => (_internal as Data.Models.Metadata.Disk)?.Optional;
-            set => (_internal as Data.Models.Metadata.Disk)?.Optional = value;
+            get => _internal.Optional;
+            set => _internal.Optional = value;
         }
 
         public Part? Part { get; set; }
@@ -74,26 +74,26 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Region
         {
-            get => (_internal as Data.Models.Metadata.Disk)?.Region;
-            set => (_internal as Data.Models.Metadata.Disk)?.Region = value;
+            get => _internal.Region;
+            set => _internal.Region = value;
         }
 
         public string? SHA1
         {
-            get => (_internal as Data.Models.Metadata.Disk)?.SHA1;
-            set => (_internal as Data.Models.Metadata.Disk)?.SHA1 = value;
+            get => _internal.SHA1;
+            set => _internal.SHA1 = value;
         }
 
         public ItemStatus? Status
         {
-            get => (_internal as Data.Models.Metadata.Disk)?.Status;
-            set => (_internal as Data.Models.Metadata.Disk)?.Status = value;
+            get => _internal.Status;
+            set => _internal.Status = value;
         }
 
         public bool? Writable
         {
-            get => (_internal as Data.Models.Metadata.Disk)?.Writable;
-            set => (_internal as Data.Models.Metadata.Disk)?.Writable = value;
+            get => _internal.Writable;
+            set => _internal.Writable = value;
         }
 
         #endregion
@@ -143,7 +143,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Disk GetInternalClone()
-            => (_internal as Data.Models.Metadata.Disk)?.Clone() as Data.Models.Metadata.Disk ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Disk ?? new();
 
         /// <summary>
         /// Convert a disk to the closest Rom approximation
@@ -151,7 +151,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <returns></returns>
         public Rom ConvertToRom()
         {
-            var rom = new Rom((_internal as Data.Models.Metadata.Disk).ConvertToRom()!);
+            var rom = new Rom(_internal.ConvertToRom()!);
 
             // Create a DataArea if there was an existing DiskArea
             if (DiskArea is not null)
@@ -182,7 +182,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Disk otherDisk)
-                return ((Data.Models.Metadata.Disk)_internal).PartialEquals((Data.Models.Metadata.Disk)otherDisk._internal);
+                return _internal.PartialEquals(otherDisk._internal);
 
             // Everything else fails
             return false;
@@ -197,7 +197,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Disk otherDisk)
-                return ((Data.Models.Metadata.Disk)_internal).PartialEquals((Data.Models.Metadata.Disk)otherDisk._internal);
+                return _internal.PartialEquals(otherDisk._internal);
 
             // Everything else fails
             return false;
@@ -208,19 +208,19 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         /// <param name="other">Disk to fill information from</param>
         public void FillMissingInformation(Disk other)
-            => (_internal as Data.Models.Metadata.Disk).FillMissingHashes(other._internal as Data.Models.Metadata.Disk);
+            => _internal.FillMissingHashes(other._internal);
 
         /// <summary>
         /// Returns if the Rom contains any hashes
         /// </summary>
         /// <returns>True if any hash exists, false otherwise</returns>
-        public bool HasHashes() => (_internal as Data.Models.Metadata.Disk)?.HasHashes() ?? false;
+        public bool HasHashes() => _internal.HasHashes();
 
         /// <summary>
         /// Returns if all of the hashes are set to their 0-byte values
         /// </summary>
         /// <returns>True if any hash matches the 0-byte value, false otherwise</returns>
-        public bool HasZeroHash() => (_internal as Data.Models.Metadata.Disk)?.HasZeroHash() ?? false;
+        public bool HasZeroHash() => _internal.HasZeroHash();
 
         #endregion
 

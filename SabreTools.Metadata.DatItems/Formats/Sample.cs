@@ -17,8 +17,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Sample)?.Name;
-            set => (_internal as Data.Models.Metadata.Sample)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Sample GetInternalClone()
-            => (_internal as Data.Models.Metadata.Sample)?.Clone() as Data.Models.Metadata.Sample ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Sample ?? new();
 
         #endregion
 
@@ -69,7 +69,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Sample otherSample)
-                return ((Data.Models.Metadata.Sample)_internal).Equals((Data.Models.Metadata.Sample)otherSample._internal);
+                return _internal.Equals(otherSample._internal);
 
             // Everything else fails
             return false;
@@ -84,7 +84,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Sample otherSample)
-                return ((Data.Models.Metadata.Sample)_internal).Equals((Data.Models.Metadata.Sample)otherSample._internal);
+                return _internal.Equals(otherSample._internal);
 
             // Everything else fails
             return false;

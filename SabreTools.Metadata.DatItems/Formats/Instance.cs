@@ -13,8 +13,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? BriefName
         {
-            get => (_internal as Data.Models.Metadata.Instance)?.BriefName;
-            set => (_internal as Data.Models.Metadata.Instance)?.BriefName = value;
+            get => _internal.BriefName;
+            set => _internal.BriefName = value;
         }
 
         /// <inheritdoc>/>
@@ -23,8 +23,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Instance)?.Name;
-            set => (_internal as Data.Models.Metadata.Instance)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -60,7 +60,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Instance GetInternalClone()
-            => (_internal as Data.Models.Metadata.Instance)?.Clone() as Data.Models.Metadata.Instance ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Instance ?? new();
 
         #endregion
 
@@ -75,7 +75,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Instance otherInstance)
-                return ((Data.Models.Metadata.Instance)_internal).Equals((Data.Models.Metadata.Instance)otherInstance._internal);
+                return _internal.Equals(otherInstance._internal);
 
             // Everything else fails
             return false;
@@ -90,7 +90,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Instance otherInstance)
-                return ((Data.Models.Metadata.Instance)_internal).Equals((Data.Models.Metadata.Instance)otherInstance._internal);
+                return _internal.Equals(otherInstance._internal);
 
             // Everything else fails
             return false;

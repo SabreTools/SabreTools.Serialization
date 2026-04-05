@@ -48,7 +48,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Blank GetInternalClone()
-            => (_internal as Data.Models.Metadata.Blank)?.Clone() as Data.Models.Metadata.Blank ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Blank ?? new();
 
         #endregion
 
@@ -63,7 +63,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Blank otherBlank)
-                return ((Data.Models.Metadata.Blank)_internal).Equals((Data.Models.Metadata.Blank)otherBlank._internal);
+                return _internal.Equals(otherBlank._internal);
 
             // Everything else fails
             return false;
@@ -78,7 +78,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Blank otherBlank)
-                return ((Data.Models.Metadata.Blank)_internal).Equals((Data.Models.Metadata.Blank)otherBlank._internal);
+                return _internal.Equals(otherBlank._internal);
 
             // Everything else fails
             return false;

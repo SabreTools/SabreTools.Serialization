@@ -18,8 +18,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Slot)?.Name;
-            set => (_internal as Data.Models.Metadata.Slot)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public SlotOption[]? SlotOption { get; set; }
@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Slot GetInternalClone()
         {
-            var slotItem = (_internal as Data.Models.Metadata.Slot)?.Clone() as Data.Models.Metadata.Slot ?? new();
+            var slotItem = _internal.Clone() as Data.Models.Metadata.Slot ?? new();
 
             if (SlotOption is not null)
                 slotItem.SlotOption = Array.ConvertAll(SlotOption, slotOption => slotOption.GetInternalClone());
@@ -87,7 +87,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Slot otherSlot)
-                return ((Data.Models.Metadata.Slot)_internal).Equals((Data.Models.Metadata.Slot)otherSlot._internal);
+                return _internal.Equals(otherSlot._internal);
 
             // Everything else fails
             return false;
@@ -102,7 +102,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Slot otherSlot)
-                return ((Data.Models.Metadata.Slot)_internal).Equals((Data.Models.Metadata.Slot)otherSlot._internal);
+                return _internal.Equals(otherSlot._internal);
 
             // Everything else fails
             return false;

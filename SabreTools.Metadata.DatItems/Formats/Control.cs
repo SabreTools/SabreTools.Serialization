@@ -13,14 +13,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public long? Buttons
         {
-            get => (_internal as Data.Models.Metadata.Control)?.Buttons;
-            set => (_internal as Data.Models.Metadata.Control)?.Buttons = value;
+            get => _internal.Buttons;
+            set => _internal.Buttons = value;
         }
 
         public Data.Models.Metadata.ControlType? ControlType
         {
-            get => (_internal as Data.Models.Metadata.Control)?.ControlType;
-            set => (_internal as Data.Models.Metadata.Control)?.ControlType = value;
+            get => _internal.ControlType;
+            set => _internal.ControlType = value;
         }
 
         /// <inheritdoc>/>
@@ -29,62 +29,62 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public long? KeyDelta
         {
-            get => (_internal as Data.Models.Metadata.Control)?.KeyDelta;
-            set => (_internal as Data.Models.Metadata.Control)?.KeyDelta = value;
+            get => _internal.KeyDelta;
+            set => _internal.KeyDelta = value;
         }
 
         public long? Maximum
         {
-            get => (_internal as Data.Models.Metadata.Control)?.Maximum;
-            set => (_internal as Data.Models.Metadata.Control)?.Maximum = value;
+            get => _internal.Maximum;
+            set => _internal.Maximum = value;
         }
 
         public long? Minimum
         {
-            get => (_internal as Data.Models.Metadata.Control)?.Minimum;
-            set => (_internal as Data.Models.Metadata.Control)?.Minimum = value;
+            get => _internal.Minimum;
+            set => _internal.Minimum = value;
         }
 
         public long? Player
         {
-            get => (_internal as Data.Models.Metadata.Control)?.Player;
-            set => (_internal as Data.Models.Metadata.Control)?.Player = value;
+            get => _internal.Player;
+            set => _internal.Player = value;
         }
 
         public long? ReqButtons
         {
-            get => (_internal as Data.Models.Metadata.Control)?.ReqButtons;
-            set => (_internal as Data.Models.Metadata.Control)?.ReqButtons = value;
+            get => _internal.ReqButtons;
+            set => _internal.ReqButtons = value;
         }
 
         public bool? Reverse
         {
-            get => (_internal as Data.Models.Metadata.Control)?.Reverse;
-            set => (_internal as Data.Models.Metadata.Control)?.Reverse = value;
+            get => _internal.Reverse;
+            set => _internal.Reverse = value;
         }
 
         public long? Sensitivity
         {
-            get => (_internal as Data.Models.Metadata.Control)?.Sensitivity;
-            set => (_internal as Data.Models.Metadata.Control)?.Sensitivity = value;
+            get => _internal.Sensitivity;
+            set => _internal.Sensitivity = value;
         }
 
         public string? Ways
         {
-            get => (_internal as Data.Models.Metadata.Control)?.Ways;
-            set => (_internal as Data.Models.Metadata.Control)?.Ways = value;
+            get => _internal.Ways;
+            set => _internal.Ways = value;
         }
 
         public string? Ways2
         {
-            get => (_internal as Data.Models.Metadata.Control)?.Ways2;
-            set => (_internal as Data.Models.Metadata.Control)?.Ways2 = value;
+            get => _internal.Ways2;
+            set => _internal.Ways2 = value;
         }
 
         public string? Ways3
         {
-            get => (_internal as Data.Models.Metadata.Control)?.Ways3;
-            set => (_internal as Data.Models.Metadata.Control)?.Ways3 = value;
+            get => _internal.Ways3;
+            set => _internal.Ways3 = value;
         }
 
         #endregion
@@ -120,7 +120,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Control GetInternalClone()
-            => (_internal as Data.Models.Metadata.Control)?.Clone() as Data.Models.Metadata.Control ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Control ?? new();
 
         #endregion
 
@@ -135,7 +135,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Control otherControl)
-                return ((Data.Models.Metadata.Control)_internal).Equals((Data.Models.Metadata.Control)otherControl._internal);
+                return _internal.Equals(otherControl._internal);
 
             // Everything else fails
             return false;
@@ -150,7 +150,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Control otherControl)
-                return ((Data.Models.Metadata.Control)_internal).Equals((Data.Models.Metadata.Control)otherControl._internal);
+                return _internal.Equals(otherControl._internal);
 
             // Everything else fails
             return false;

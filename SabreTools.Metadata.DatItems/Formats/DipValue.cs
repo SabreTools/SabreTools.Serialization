@@ -18,8 +18,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? Default
         {
-            get => (_internal as Data.Models.Metadata.DipValue)?.Default;
-            set => (_internal as Data.Models.Metadata.DipValue)?.Default = value;
+            get => _internal.Default;
+            set => _internal.Default = value;
         }
 
         /// <inheritdoc>/>
@@ -28,14 +28,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.DipValue)?.Name;
-            set => (_internal as Data.Models.Metadata.DipValue)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public string? Value
         {
-            get => (_internal as Data.Models.Metadata.DipValue)?.Value;
-            set => (_internal as Data.Models.Metadata.DipValue)?.Value = value;
+            get => _internal.Value;
+            set => _internal.Value = value;
         }
 
         #endregion
@@ -77,7 +77,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.DipValue GetInternalClone()
         {
-            var dipValueItem = (_internal as Data.Models.Metadata.DipValue)?.Clone() as Data.Models.Metadata.DipValue ?? new();
+            var dipValueItem = _internal.Clone() as Data.Models.Metadata.DipValue ?? new();
 
             if (Condition is not null)
                 dipValueItem.Condition = Condition.GetInternalClone();
@@ -98,7 +98,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DipValue otherDipValue)
-                return ((Data.Models.Metadata.DipValue)_internal).Equals((Data.Models.Metadata.DipValue)otherDipValue._internal);
+                return _internal.Equals(otherDipValue._internal);
 
             // Everything else fails
             return false;
@@ -113,7 +113,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DipValue otherDipValue)
-                return ((Data.Models.Metadata.DipValue)_internal).Equals((Data.Models.Metadata.DipValue)otherDipValue._internal);
+                return _internal.Equals(otherDipValue._internal);
 
             // Everything else fails
             return false;

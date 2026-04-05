@@ -13,8 +13,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? Inverted
         {
-            get => (_internal as Data.Models.Metadata.DipLocation)?.Inverted;
-            set => (_internal as Data.Models.Metadata.DipLocation)?.Inverted = value;
+            get => _internal.Inverted;
+            set => _internal.Inverted = value;
         }
 
         /// <inheritdoc>/>
@@ -23,14 +23,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.DipLocation)?.Name;
-            set => (_internal as Data.Models.Metadata.DipLocation)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public long? Number
         {
-            get => (_internal as Data.Models.Metadata.DipLocation)?.Number;
-            set => (_internal as Data.Models.Metadata.DipLocation)?.Number = value;
+            get => _internal.Number;
+            set => _internal.Number = value;
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.DipLocation GetInternalClone()
-            => (_internal as Data.Models.Metadata.DipLocation)?.Clone() as Data.Models.Metadata.DipLocation ?? new();
+            => _internal.Clone() as Data.Models.Metadata.DipLocation ?? new();
 
         #endregion
 
@@ -81,7 +81,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DipLocation otherDipLocation)
-                return ((Data.Models.Metadata.DipLocation)_internal).Equals((Data.Models.Metadata.DipLocation)otherDipLocation._internal);
+                return _internal.Equals(otherDipLocation._internal);
 
             // Everything else fails
             return false;
@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DipLocation otherDipLocation)
-                return ((Data.Models.Metadata.DipLocation)_internal).Equals((Data.Models.Metadata.DipLocation)otherDipLocation._internal);
+                return _internal.Equals(otherDipLocation._internal);
 
             // Everything else fails
             return false;

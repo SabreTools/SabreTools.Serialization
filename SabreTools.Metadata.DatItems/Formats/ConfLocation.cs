@@ -17,20 +17,20 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? Inverted
         {
-            get => (_internal as Data.Models.Metadata.ConfLocation)?.Inverted;
-            set => (_internal as Data.Models.Metadata.ConfLocation)?.Inverted = value;
+            get => _internal.Inverted;
+            set => _internal.Inverted = value;
         }
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.ConfLocation)?.Name;
-            set => (_internal as Data.Models.Metadata.ConfLocation)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public long? Number
         {
-            get => (_internal as Data.Models.Metadata.ConfLocation)?.Number;
-            set => (_internal as Data.Models.Metadata.ConfLocation)?.Number = value;
+            get => _internal.Number;
+            set => _internal.Number = value;
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.ConfLocation GetInternalClone()
-            => (_internal as Data.Models.Metadata.ConfLocation)?.Clone() as Data.Models.Metadata.ConfLocation ?? new();
+            => _internal.Clone() as Data.Models.Metadata.ConfLocation ?? new();
 
         #endregion
 
@@ -81,7 +81,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is ConfLocation otherConfLocation)
-                return ((Data.Models.Metadata.ConfLocation)_internal).Equals((Data.Models.Metadata.ConfLocation)otherConfLocation._internal);
+                return _internal.Equals(otherConfLocation._internal);
 
             // Everything else fails
             return false;
@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is ConfLocation otherConfLocation)
-                return ((Data.Models.Metadata.ConfLocation)_internal).Equals((Data.Models.Metadata.ConfLocation)otherConfLocation._internal);
+                return _internal.Equals(otherConfLocation._internal);
 
             // Everything else fails
             return false;

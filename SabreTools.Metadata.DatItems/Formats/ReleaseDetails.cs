@@ -13,50 +13,50 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? AppendToNumber
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.AppendToNumber;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.AppendToNumber = value;
+            get => _internal.AppendToNumber;
+            set => _internal.AppendToNumber = value;
         }
 
         public string? ArchiveName
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.ArchiveName;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.ArchiveName = value;
+            get => _internal.ArchiveName;
+            set => _internal.ArchiveName = value;
         }
 
         public string? Category
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Category;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Category = value;
+            get => _internal.Category;
+            set => _internal.Category = value;
         }
 
         public string? Comment
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Comment;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Comment = value;
+            get => _internal.Comment;
+            set => _internal.Comment = value;
         }
 
         public string? Date
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Date;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Date = value;
+            get => _internal.Date;
+            set => _internal.Date = value;
         }
 
         public string? DirName
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.DirName;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.DirName = value;
+            get => _internal.DirName;
+            set => _internal.DirName = value;
         }
 
         public string? Group
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Group;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Group = value;
+            get => _internal.Group;
+            set => _internal.Group = value;
         }
 
         public string? Id
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Id;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Id = value;
+            get => _internal.Id;
+            set => _internal.Id = value;
         }
 
         /// <inheritdoc>/>
@@ -65,50 +65,50 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? NfoCRC
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoCRC;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoCRC = value;
+            get => _internal.NfoCRC;
+            set => _internal.NfoCRC = value;
         }
 
         public string? NfoName
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoName;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoName = value;
+            get => _internal.NfoName;
+            set => _internal.NfoName = value;
         }
 
         public string? NfoSize
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoSize;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.NfoSize = value;
+            get => _internal.NfoSize;
+            set => _internal.NfoSize = value;
         }
 
         public string? Origin
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Origin;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Origin = value;
+            get => _internal.Origin;
+            set => _internal.Origin = value;
         }
 
         public string? OriginalFormat
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.OriginalFormat;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.OriginalFormat = value;
+            get => _internal.OriginalFormat;
+            set => _internal.OriginalFormat = value;
         }
 
         public string? Region
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Region;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Region = value;
+            get => _internal.Region;
+            set => _internal.Region = value;
         }
 
         public string? RomInfo
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.RomInfo;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.RomInfo = value;
+            get => _internal.RomInfo;
+            set => _internal.RomInfo = value;
         }
 
         public string? Tool
         {
-            get => (_internal as Data.Models.Metadata.ReleaseDetails)?.Tool;
-            set => (_internal as Data.Models.Metadata.ReleaseDetails)?.Tool = value;
+            get => _internal.Tool;
+            set => _internal.Tool = value;
         }
 
         #endregion
@@ -143,7 +143,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.ReleaseDetails GetInternalClone()
-            => (_internal as Data.Models.Metadata.ReleaseDetails)?.Clone() as Data.Models.Metadata.ReleaseDetails ?? new();
+            => _internal.Clone() as Data.Models.Metadata.ReleaseDetails ?? new();
 
         #endregion
 
@@ -158,7 +158,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is ReleaseDetails otherReleaseDetails)
-                return ((Data.Models.Metadata.ReleaseDetails)_internal).Equals((Data.Models.Metadata.ReleaseDetails)otherReleaseDetails._internal);
+                return _internal.Equals(otherReleaseDetails._internal);
 
             // Everything else fails
             return false;
@@ -173,7 +173,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is ReleaseDetails otherReleaseDetails)
-                return ((Data.Models.Metadata.ReleaseDetails)_internal).Equals((Data.Models.Metadata.ReleaseDetails)otherReleaseDetails._internal);
+                return _internal.Equals(otherReleaseDetails._internal);
 
             // Everything else fails
             return false;

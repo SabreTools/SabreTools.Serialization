@@ -17,26 +17,26 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Mask
         {
-            get => (_internal as Data.Models.Metadata.Condition)?.Mask;
-            set => (_internal as Data.Models.Metadata.Condition)?.Mask = value;
+            get => _internal.Mask;
+            set => _internal.Mask = value;
         }
 
         public Data.Models.Metadata.Relation? Relation
         {
-            get => (_internal as Data.Models.Metadata.Condition)?.Relation;
-            set => (_internal as Data.Models.Metadata.Condition)?.Relation = value;
+            get => _internal.Relation;
+            set => _internal.Relation = value;
         }
 
         public string? Tag
         {
-            get => (_internal as Data.Models.Metadata.Condition)?.Tag;
-            set => (_internal as Data.Models.Metadata.Condition)?.Tag = value;
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         public string? Value
         {
-            get => (_internal as Data.Models.Metadata.Condition)?.Value;
-            set => (_internal as Data.Models.Metadata.Condition)?.Value = value;
+            get => _internal.Value;
+            set => _internal.Value = value;
         }
 
         #endregion
@@ -72,7 +72,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Condition GetInternalClone()
-            => (_internal as Data.Models.Metadata.Condition)?.Clone() as Data.Models.Metadata.Condition ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Condition ?? new();
 
         #endregion
 
@@ -87,7 +87,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Condition otherCondition)
-                return ((Data.Models.Metadata.Condition)_internal).Equals((Data.Models.Metadata.Condition)otherCondition._internal);
+                return _internal.Equals(otherCondition._internal);
 
             // Everything else fails
             return false;
@@ -102,7 +102,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Condition otherCondition)
-                return ((Data.Models.Metadata.Condition)_internal).Equals((Data.Models.Metadata.Condition)otherCondition._internal);
+                return _internal.Equals(otherCondition._internal);
 
             // Everything else fails
             return false;

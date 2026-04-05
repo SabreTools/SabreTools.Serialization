@@ -14,14 +14,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public long? Buttons
         {
-            get => (_internal as Data.Models.Metadata.Input)?.Buttons;
-            set => (_internal as Data.Models.Metadata.Input)?.Buttons = value;
+            get => _internal.Buttons;
+            set => _internal.Buttons = value;
         }
 
         public long? Coins
         {
-            get => (_internal as Data.Models.Metadata.Input)?.Coins;
-            set => (_internal as Data.Models.Metadata.Input)?.Coins = value;
+            get => _internal.Coins;
+            set => _internal.Coins = value;
         }
 
         public Control[]? Control { get; set; }
@@ -31,8 +31,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? ControlAttr
         {
-            get => (_internal as Data.Models.Metadata.Input)?.ControlAttr;
-            set => (_internal as Data.Models.Metadata.Input)?.ControlAttr = value;
+            get => _internal.ControlAttr;
+            set => _internal.ControlAttr = value;
         }
 
         /// <inheritdoc>/>
@@ -41,20 +41,20 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public long? Players
         {
-            get => (_internal as Data.Models.Metadata.Input)?.Players;
-            set => (_internal as Data.Models.Metadata.Input)?.Players = value;
+            get => _internal.Players;
+            set => _internal.Players = value;
         }
 
         public bool? Service
         {
-            get => (_internal as Data.Models.Metadata.Input)?.Service;
-            set => (_internal as Data.Models.Metadata.Input)?.Service = value;
+            get => _internal.Service;
+            set => _internal.Service = value;
         }
 
         public bool? Tilt
         {
-            get => (_internal as Data.Models.Metadata.Input)?.Tilt;
-            set => (_internal as Data.Models.Metadata.Input)?.Tilt = value;
+            get => _internal.Tilt;
+            set => _internal.Tilt = value;
         }
 
         #endregion
@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override Data.Models.Metadata.Input GetInternalClone()
         {
-            var inputItem = (_internal as Data.Models.Metadata.Input)?.Clone() as Data.Models.Metadata.Input ?? new();
+            var inputItem = _internal.Clone() as Data.Models.Metadata.Input ?? new();
 
             if (Control is not null)
                 inputItem.Control = Array.ConvertAll(Control, control => control.GetInternalClone());
@@ -117,7 +117,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Input otherInput)
-                return ((Data.Models.Metadata.Input)_internal).Equals((Data.Models.Metadata.Input)otherInput._internal);
+                return _internal.Equals(otherInput._internal);
 
             // Everything else fails
             return false;
@@ -132,7 +132,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Input otherInput)
-                return ((Data.Models.Metadata.Input)_internal).Equals((Data.Models.Metadata.Input)otherInput._internal);
+                return _internal.Equals(otherInput._internal);
 
             // Everything else fails
             return false;

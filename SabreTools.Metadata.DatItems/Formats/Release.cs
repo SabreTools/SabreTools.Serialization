@@ -13,14 +13,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Date
         {
-            get => (_internal as Data.Models.Metadata.Release)?.Date;
-            set => (_internal as Data.Models.Metadata.Release)?.Date = value;
+            get => _internal.Date;
+            set => _internal.Date = value;
         }
 
         public bool? Default
         {
-            get => (_internal as Data.Models.Metadata.Release)?.Default;
-            set => (_internal as Data.Models.Metadata.Release)?.Default = value;
+            get => _internal.Default;
+            set => _internal.Default = value;
         }
 
         /// <inheritdoc>/>
@@ -29,20 +29,20 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Language
         {
-            get => (_internal as Data.Models.Metadata.Release)?.Language;
-            set => (_internal as Data.Models.Metadata.Release)?.Language = value;
+            get => _internal.Language;
+            set => _internal.Language = value;
         }
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Release)?.Name;
-            set => (_internal as Data.Models.Metadata.Release)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public string? Region
         {
-            get => (_internal as Data.Models.Metadata.Release)?.Region;
-            set => (_internal as Data.Models.Metadata.Release)?.Region = value;
+            get => _internal.Region;
+            set => _internal.Region = value;
         }
 
         #endregion
@@ -78,7 +78,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Release GetInternalClone()
-            => (_internal as Data.Models.Metadata.Release)?.Clone() as Data.Models.Metadata.Release ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Release ?? new();
 
         #endregion
 
@@ -93,7 +93,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Release otherRelease)
-                return ((Data.Models.Metadata.Release)_internal).Equals((Data.Models.Metadata.Release)otherRelease._internal);
+                return _internal.Equals(otherRelease._internal);
 
             // Everything else fails
             return false;
@@ -108,7 +108,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Release otherRelease)
-                return ((Data.Models.Metadata.Release)_internal).Equals((Data.Models.Metadata.Release)otherRelease._internal);
+                return _internal.Equals(otherRelease._internal);
 
             // Everything else fails
             return false;

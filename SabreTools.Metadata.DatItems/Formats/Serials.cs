@@ -13,32 +13,32 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? BoxBarcode
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.BoxBarcode;
-            set => (_internal as Data.Models.Metadata.Serials)?.BoxBarcode = value;
+            get => _internal.BoxBarcode;
+            set => _internal.BoxBarcode = value;
         }
 
         public string? BoxSerial
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.BoxSerial;
-            set => (_internal as Data.Models.Metadata.Serials)?.BoxSerial = value;
+            get => _internal.BoxSerial;
+            set => _internal.BoxSerial = value;
         }
 
         public string? ChipSerial
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.ChipSerial;
-            set => (_internal as Data.Models.Metadata.Serials)?.ChipSerial = value;
+            get => _internal.ChipSerial;
+            set => _internal.ChipSerial = value;
         }
 
         public string? DigitalSerial1
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.DigitalSerial1;
-            set => (_internal as Data.Models.Metadata.Serials)?.DigitalSerial1 = value;
+            get => _internal.DigitalSerial1;
+            set => _internal.DigitalSerial1 = value;
         }
 
         public string? DigitalSerial2
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.DigitalSerial2;
-            set => (_internal as Data.Models.Metadata.Serials)?.DigitalSerial2 = value;
+            get => _internal.DigitalSerial2;
+            set => _internal.DigitalSerial2 = value;
         }
 
         /// <inheritdoc>/>
@@ -47,56 +47,56 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? LockoutSerial
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.LockoutSerial;
-            set => (_internal as Data.Models.Metadata.Serials)?.LockoutSerial = value;
+            get => _internal.LockoutSerial;
+            set => _internal.LockoutSerial = value;
         }
 
         public string? MediaSerial1
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.MediaSerial1;
-            set => (_internal as Data.Models.Metadata.Serials)?.MediaSerial1 = value;
+            get => _internal.MediaSerial1;
+            set => _internal.MediaSerial1 = value;
         }
 
         public string? MediaSerial2
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.MediaSerial2;
-            set => (_internal as Data.Models.Metadata.Serials)?.MediaSerial2 = value;
+            get => _internal.MediaSerial2;
+            set => _internal.MediaSerial2 = value;
         }
 
         public string? MediaSerial3
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.MediaSerial3;
-            set => (_internal as Data.Models.Metadata.Serials)?.MediaSerial3 = value;
+            get => _internal.MediaSerial3;
+            set => _internal.MediaSerial3 = value;
         }
 
         public string? MediaStamp
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.MediaStamp;
-            set => (_internal as Data.Models.Metadata.Serials)?.MediaStamp = value;
+            get => _internal.MediaStamp;
+            set => _internal.MediaStamp = value;
         }
 
         public string? PCBSerial
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.PCBSerial;
-            set => (_internal as Data.Models.Metadata.Serials)?.PCBSerial = value;
+            get => _internal.PCBSerial;
+            set => _internal.PCBSerial = value;
         }
 
         public string? RomChipSerial1
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.RomChipSerial1;
-            set => (_internal as Data.Models.Metadata.Serials)?.RomChipSerial1 = value;
+            get => _internal.RomChipSerial1;
+            set => _internal.RomChipSerial1 = value;
         }
 
         public string? RomChipSerial2
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.RomChipSerial2;
-            set => (_internal as Data.Models.Metadata.Serials)?.RomChipSerial2 = value;
+            get => _internal.RomChipSerial2;
+            set => _internal.RomChipSerial2 = value;
         }
 
         public string? SaveChipSerial
         {
-            get => (_internal as Data.Models.Metadata.Serials)?.SaveChipSerial;
-            set => (_internal as Data.Models.Metadata.Serials)?.SaveChipSerial = value;
+            get => _internal.SaveChipSerial;
+            set => _internal.SaveChipSerial = value;
         }
 
         #endregion
@@ -132,7 +132,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Serials GetInternalClone()
-            => (_internal as Data.Models.Metadata.Serials)?.Clone() as Data.Models.Metadata.Serials ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Serials ?? new();
 
         #endregion
 
@@ -147,7 +147,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Serials otherSerials)
-                return ((Data.Models.Metadata.Serials)_internal).Equals((Data.Models.Metadata.Serials)otherSerials._internal);
+                return _internal.Equals(otherSerials._internal);
 
             // Everything else fails
             return false;
@@ -162,7 +162,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Serials otherSerials)
-                return ((Data.Models.Metadata.Serials)_internal).Equals((Data.Models.Metadata.Serials)otherSerials._internal);
+                return _internal.Equals(otherSerials._internal);
 
             // Everything else fails
             return false;

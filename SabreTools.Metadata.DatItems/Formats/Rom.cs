@@ -16,104 +16,104 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Album
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Album;
-            set => (_internal as Data.Models.Metadata.Rom)?.Album = value;
+            get => _internal.Album;
+            set => _internal.Album = value;
         }
 
         public string? AltRomname
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.AltRomname;
-            set => (_internal as Data.Models.Metadata.Rom)?.AltRomname = value;
+            get => _internal.AltRomname;
+            set => _internal.AltRomname = value;
         }
 
         public string? AltTitle
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.AltTitle;
-            set => (_internal as Data.Models.Metadata.Rom)?.AltTitle = value;
+            get => _internal.AltTitle;
+            set => _internal.AltTitle = value;
         }
 
         public string? Artist
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Artist;
-            set => (_internal as Data.Models.Metadata.Rom)?.Artist = value;
+            get => _internal.Artist;
+            set => _internal.Artist = value;
         }
 
         public string? ASRDetectedLang
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.ASRDetectedLang;
-            set => (_internal as Data.Models.Metadata.Rom)?.ASRDetectedLang = value;
+            get => _internal.ASRDetectedLang;
+            set => _internal.ASRDetectedLang = value;
         }
 
         public string? ASRDetectedLangConf
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.ASRDetectedLangConf;
-            set => (_internal as Data.Models.Metadata.Rom)?.ASRDetectedLangConf = value;
+            get => _internal.ASRDetectedLangConf;
+            set => _internal.ASRDetectedLangConf = value;
         }
 
         public string? ASRTranscribedLang
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.ASRTranscribedLang;
-            set => (_internal as Data.Models.Metadata.Rom)?.ASRTranscribedLang = value;
+            get => _internal.ASRTranscribedLang;
+            set => _internal.ASRTranscribedLang = value;
         }
 
         public string? Bios
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Bios;
-            set => (_internal as Data.Models.Metadata.Rom)?.Bios = value;
+            get => _internal.Bios;
+            set => _internal.Bios = value;
         }
 
         public string? Bitrate
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Bitrate;
-            set => (_internal as Data.Models.Metadata.Rom)?.Bitrate = value;
+            get => _internal.Bitrate;
+            set => _internal.Bitrate = value;
         }
 
         public string? BitTorrentMagnetHash
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.BitTorrentMagnetHash;
-            set => (_internal as Data.Models.Metadata.Rom)?.BitTorrentMagnetHash = value;
+            get => _internal.BitTorrentMagnetHash;
+            set => _internal.BitTorrentMagnetHash = value;
         }
 
         public string? ClothCoverDetectionModuleVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.ClothCoverDetectionModuleVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.ClothCoverDetectionModuleVersion = value;
+            get => _internal.ClothCoverDetectionModuleVersion;
+            set => _internal.ClothCoverDetectionModuleVersion = value;
         }
 
         public string? CollectionCatalogNumber
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.CollectionCatalogNumber;
-            set => (_internal as Data.Models.Metadata.Rom)?.CollectionCatalogNumber = value;
+            get => _internal.CollectionCatalogNumber;
+            set => _internal.CollectionCatalogNumber = value;
         }
 
         public string? Comment
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Comment;
-            set => (_internal as Data.Models.Metadata.Rom)?.Comment = value;
+            get => _internal.Comment;
+            set => _internal.Comment = value;
         }
 
         public string? CRC
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.CRC;
-            set => (_internal as Data.Models.Metadata.Rom)?.CRC = value;
+            get => _internal.CRC;
+            set => _internal.CRC = value;
         }
 
         public string? CRC16
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.CRC16;
-            set => (_internal as Data.Models.Metadata.Rom)?.CRC16 = value;
+            get => _internal.CRC16;
+            set => _internal.CRC16 = value;
         }
 
         public string? CRC64
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.CRC64;
-            set => (_internal as Data.Models.Metadata.Rom)?.CRC64 = value;
+            get => _internal.CRC64;
+            set => _internal.CRC64 = value;
         }
 
         public string? Creator
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Creator;
-            set => (_internal as Data.Models.Metadata.Rom)?.Creator = value;
+            get => _internal.Creator;
+            set => _internal.Creator = value;
         }
 
         public DataArea? DataArea { get; set; }
@@ -133,104 +133,104 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Date
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Date;
-            set => (_internal as Data.Models.Metadata.Rom)?.Date = value;
+            get => _internal.Date;
+            set => _internal.Date = value;
         }
 
         public bool? Dispose
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Dispose;
-            set => (_internal as Data.Models.Metadata.Rom)?.Dispose = value;
+            get => _internal.Dispose;
+            set => _internal.Dispose = value;
         }
 
         public string? Extension
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Extension;
-            set => (_internal as Data.Models.Metadata.Rom)?.Extension = value;
+            get => _internal.Extension;
+            set => _internal.Extension = value;
         }
 
         public long? FileCount
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.FileCount;
-            set => (_internal as Data.Models.Metadata.Rom)?.FileCount = value;
+            get => _internal.FileCount;
+            set => _internal.FileCount = value;
         }
 
         public bool? FileIsAvailable
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.FileIsAvailable;
-            set => (_internal as Data.Models.Metadata.Rom)?.FileIsAvailable = value;
+            get => _internal.FileIsAvailable;
+            set => _internal.FileIsAvailable = value;
         }
 
         public string? Flags
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Flags;
-            set => (_internal as Data.Models.Metadata.Rom)?.Flags = value;
+            get => _internal.Flags;
+            set => _internal.Flags = value;
         }
 
         public string? Format
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Format;
-            set => (_internal as Data.Models.Metadata.Rom)?.Format = value;
+            get => _internal.Format;
+            set => _internal.Format = value;
         }
 
         public string? Header
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Header;
-            set => (_internal as Data.Models.Metadata.Rom)?.Header = value;
+            get => _internal.Header;
+            set => _internal.Header = value;
         }
 
         public string? Height
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Height;
-            set => (_internal as Data.Models.Metadata.Rom)?.Height = value;
+            get => _internal.Height;
+            set => _internal.Height = value;
         }
 
         public string? hOCRCharToWordhOCRVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.hOCRCharToWordhOCRVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.hOCRCharToWordhOCRVersion = value;
+            get => _internal.hOCRCharToWordhOCRVersion;
+            set => _internal.hOCRCharToWordhOCRVersion = value;
         }
 
         public string? hOCRCharToWordModuleVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.hOCRCharToWordModuleVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.hOCRCharToWordModuleVersion = value;
+            get => _internal.hOCRCharToWordModuleVersion;
+            set => _internal.hOCRCharToWordModuleVersion = value;
         }
 
         public string? hOCRFtsTexthOCRVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.hOCRFtsTexthOCRVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.hOCRFtsTexthOCRVersion = value;
+            get => _internal.hOCRFtsTexthOCRVersion;
+            set => _internal.hOCRFtsTexthOCRVersion = value;
         }
 
         public string? hOCRFtsTextModuleVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.hOCRFtsTextModuleVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.hOCRFtsTextModuleVersion = value;
+            get => _internal.hOCRFtsTextModuleVersion;
+            set => _internal.hOCRFtsTextModuleVersion = value;
         }
 
         public string? hOCRPageIndexhOCRVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.hOCRPageIndexhOCRVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.hOCRPageIndexhOCRVersion = value;
+            get => _internal.hOCRPageIndexhOCRVersion;
+            set => _internal.hOCRPageIndexhOCRVersion = value;
         }
 
         public string? hOCRPageIndexModuleVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.hOCRPageIndexModuleVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.hOCRPageIndexModuleVersion = value;
+            get => _internal.hOCRPageIndexModuleVersion;
+            set => _internal.hOCRPageIndexModuleVersion = value;
         }
 
         public bool? Inverted
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Inverted;
-            set => (_internal as Data.Models.Metadata.Rom)?.Inverted = value;
+            get => _internal.Inverted;
+            set => _internal.Inverted = value;
         }
 
         public string? LastModifiedTime
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.LastModifiedTime;
-            set => (_internal as Data.Models.Metadata.Rom)?.LastModifiedTime = value;
+            get => _internal.LastModifiedTime;
+            set => _internal.LastModifiedTime = value;
         }
 
         /// <inheritdoc>/>
@@ -238,82 +238,82 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Length
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Length;
-            set => (_internal as Data.Models.Metadata.Rom)?.Length = value;
+            get => _internal.Length;
+            set => _internal.Length = value;
         }
 
         public LoadFlag? LoadFlag
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.LoadFlag;
-            set => (_internal as Data.Models.Metadata.Rom)?.LoadFlag = value;
+            get => _internal.LoadFlag;
+            set => _internal.LoadFlag = value;
         }
 
         public string? MatrixNumber
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.MatrixNumber;
-            set => (_internal as Data.Models.Metadata.Rom)?.MatrixNumber = value;
+            get => _internal.MatrixNumber;
+            set => _internal.MatrixNumber = value;
         }
 
         public string? MD2
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.MD2;
-            set => (_internal as Data.Models.Metadata.Rom)?.MD2 = value;
+            get => _internal.MD2;
+            set => _internal.MD2 = value;
         }
 
         public string? MD4
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.MD4;
-            set => (_internal as Data.Models.Metadata.Rom)?.MD4 = value;
+            get => _internal.MD4;
+            set => _internal.MD4 = value;
         }
 
         public string? MD5
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.MD5;
-            set => (_internal as Data.Models.Metadata.Rom)?.MD5 = value;
+            get => _internal.MD5;
+            set => _internal.MD5 = value;
         }
 
         public string? Merge
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Merge;
-            set => (_internal as Data.Models.Metadata.Rom)?.Merge = value;
+            get => _internal.Merge;
+            set => _internal.Merge = value;
         }
 
         public bool? MIA
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.MIA;
-            set => (_internal as Data.Models.Metadata.Rom)?.MIA = value;
+            get => _internal.MIA;
+            set => _internal.MIA = value;
         }
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Name;
-            set => (_internal as Data.Models.Metadata.Rom)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public string? Offset
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Offset;
-            set => (_internal as Data.Models.Metadata.Rom)?.Offset = value;
+            get => _internal.Offset;
+            set => _internal.Offset = value;
         }
 
         public string? OpenMSXType
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.OpenMSXType;
-            set => (_internal as Data.Models.Metadata.Rom)?.OpenMSXType = value;
+            get => _internal.OpenMSXType;
+            set => _internal.OpenMSXType = value;
         }
 
         public OpenMSXSubType? OpenMSXMediaType
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.OpenMSXMediaType;
-            set => (_internal as Data.Models.Metadata.Rom)?.OpenMSXMediaType = value;
+            get => _internal.OpenMSXMediaType;
+            set => _internal.OpenMSXMediaType = value;
         }
 
         public Original? Original { get; set; }
 
         public string? OriginalProperty
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Original;
-            set => (_internal as Data.Models.Metadata.Rom)?.Original = value;
+            get => _internal.Original;
+            set => _internal.Original = value;
         }
 
         [JsonIgnore]
@@ -321,8 +321,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? Optional
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Optional;
-            set => (_internal as Data.Models.Metadata.Rom)?.Optional = value;
+            get => _internal.Optional;
+            set => _internal.Optional = value;
         }
 
         public Part? Part { get; set; }
@@ -340,290 +340,290 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? PDFModuleVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.PDFModuleVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.PDFModuleVersion = value;
+            get => _internal.PDFModuleVersion;
+            set => _internal.PDFModuleVersion = value;
         }
 
         public string? PreviewImage
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.PreviewImage;
-            set => (_internal as Data.Models.Metadata.Rom)?.PreviewImage = value;
+            get => _internal.PreviewImage;
+            set => _internal.PreviewImage = value;
         }
 
         public string? Publisher
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Publisher;
-            set => (_internal as Data.Models.Metadata.Rom)?.Publisher = value;
+            get => _internal.Publisher;
+            set => _internal.Publisher = value;
         }
 
         public string? Region
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Region;
-            set => (_internal as Data.Models.Metadata.Rom)?.Region = value;
+            get => _internal.Region;
+            set => _internal.Region = value;
         }
 
         public string? Remark
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Remark;
-            set => (_internal as Data.Models.Metadata.Rom)?.Remark = value;
+            get => _internal.Remark;
+            set => _internal.Remark = value;
         }
 
         public string? RIPEMD128
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.RIPEMD128;
-            set => (_internal as Data.Models.Metadata.Rom)?.RIPEMD128 = value;
+            get => _internal.RIPEMD128;
+            set => _internal.RIPEMD128 = value;
         }
 
         public string? RIPEMD160
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.RIPEMD160;
-            set => (_internal as Data.Models.Metadata.Rom)?.RIPEMD160 = value;
+            get => _internal.RIPEMD160;
+            set => _internal.RIPEMD160 = value;
         }
 
         public string? Rotation
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Rotation;
-            set => (_internal as Data.Models.Metadata.Rom)?.Rotation = value;
+            get => _internal.Rotation;
+            set => _internal.Rotation = value;
         }
 
         public string? Serial
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Serial;
-            set => (_internal as Data.Models.Metadata.Rom)?.Serial = value;
+            get => _internal.Serial;
+            set => _internal.Serial = value;
         }
 
         public string? SHA1
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.SHA1;
-            set => (_internal as Data.Models.Metadata.Rom)?.SHA1 = value;
+            get => _internal.SHA1;
+            set => _internal.SHA1 = value;
         }
 
         public string? SHA256
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.SHA256;
-            set => (_internal as Data.Models.Metadata.Rom)?.SHA256 = value;
+            get => _internal.SHA256;
+            set => _internal.SHA256 = value;
         }
 
         public string? SHA384
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.SHA384;
-            set => (_internal as Data.Models.Metadata.Rom)?.SHA384 = value;
+            get => _internal.SHA384;
+            set => _internal.SHA384 = value;
         }
 
         public string? SHA512
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.SHA512;
-            set => (_internal as Data.Models.Metadata.Rom)?.SHA512 = value;
+            get => _internal.SHA512;
+            set => _internal.SHA512 = value;
         }
 
         public long? Size
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Size;
-            set => (_internal as Data.Models.Metadata.Rom)?.Size = value;
+            get => _internal.Size;
+            set => _internal.Size = value;
         }
 
         public bool? SoundOnly
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.SoundOnly;
-            set => (_internal as Data.Models.Metadata.Rom)?.SoundOnly = value;
+            get => _internal.SoundOnly;
+            set => _internal.SoundOnly = value;
         }
 
         public string? SourceProperty
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Source;
-            set => (_internal as Data.Models.Metadata.Rom)?.Source = value;
+            get => _internal.Source;
+            set => _internal.Source = value;
         }
 
         public string? SpamSum
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.SpamSum;
-            set => (_internal as Data.Models.Metadata.Rom)?.SpamSum = value;
+            get => _internal.SpamSum;
+            set => _internal.SpamSum = value;
         }
 
         public string? Start
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Start;
-            set => (_internal as Data.Models.Metadata.Rom)?.Start = value;
+            get => _internal.Start;
+            set => _internal.Start = value;
         }
 
         public ItemStatus? Status
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Status;
-            set => (_internal as Data.Models.Metadata.Rom)?.Status = value;
+            get => _internal.Status;
+            set => _internal.Status = value;
         }
 
         public string? Summation
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Summation;
-            set => (_internal as Data.Models.Metadata.Rom)?.Summation = value;
+            get => _internal.Summation;
+            set => _internal.Summation = value;
         }
 
         public string? TesseractOCR
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.TesseractOCR;
-            set => (_internal as Data.Models.Metadata.Rom)?.TesseractOCR = value;
+            get => _internal.TesseractOCR;
+            set => _internal.TesseractOCR = value;
         }
 
         public string? TesseractOCRConverted
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRConverted;
-            set => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRConverted = value;
+            get => _internal.TesseractOCRConverted;
+            set => _internal.TesseractOCRConverted = value;
         }
 
         public string? TesseractOCRDetectedLang
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRDetectedLang;
-            set => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRDetectedLang = value;
+            get => _internal.TesseractOCRDetectedLang;
+            set => _internal.TesseractOCRDetectedLang = value;
         }
 
         public string? TesseractOCRDetectedLangConf
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRDetectedLangConf;
-            set => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRDetectedLangConf = value;
+            get => _internal.TesseractOCRDetectedLangConf;
+            set => _internal.TesseractOCRDetectedLangConf = value;
         }
 
         public string? TesseractOCRDetectedScript
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRDetectedScript;
-            set => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRDetectedScript = value;
+            get => _internal.TesseractOCRDetectedScript;
+            set => _internal.TesseractOCRDetectedScript = value;
         }
 
         public string? TesseractOCRDetectedScriptConf
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRDetectedScriptConf;
-            set => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRDetectedScriptConf = value;
+            get => _internal.TesseractOCRDetectedScriptConf;
+            set => _internal.TesseractOCRDetectedScriptConf = value;
         }
 
         public string? TesseractOCRModuleVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRModuleVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRModuleVersion = value;
+            get => _internal.TesseractOCRModuleVersion;
+            set => _internal.TesseractOCRModuleVersion = value;
         }
 
         public string? TesseractOCRParameters
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRParameters;
-            set => (_internal as Data.Models.Metadata.Rom)?.TesseractOCRParameters = value;
+            get => _internal.TesseractOCRParameters;
+            set => _internal.TesseractOCRParameters = value;
         }
 
         public string? Title
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Title;
-            set => (_internal as Data.Models.Metadata.Rom)?.Title = value;
+            get => _internal.Title;
+            set => _internal.Title = value;
         }
 
         public string? Track
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Track;
-            set => (_internal as Data.Models.Metadata.Rom)?.Track = value;
+            get => _internal.Track;
+            set => _internal.Track = value;
         }
 
         public string? Value
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Value;
-            set => (_internal as Data.Models.Metadata.Rom)?.Value = value;
+            get => _internal.Value;
+            set => _internal.Value = value;
         }
 
         public string? WhisperASRModuleVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WhisperASRModuleVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.WhisperASRModuleVersion = value;
+            get => _internal.WhisperASRModuleVersion;
+            set => _internal.WhisperASRModuleVersion = value;
         }
 
         public string? WhisperModelHash
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WhisperModelHash;
-            set => (_internal as Data.Models.Metadata.Rom)?.WhisperModelHash = value;
+            get => _internal.WhisperModelHash;
+            set => _internal.WhisperModelHash = value;
         }
 
         public string? WhisperModelName
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WhisperModelName;
-            set => (_internal as Data.Models.Metadata.Rom)?.WhisperModelName = value;
+            get => _internal.WhisperModelName;
+            set => _internal.WhisperModelName = value;
         }
 
         public string? WhisperVersion
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WhisperVersion;
-            set => (_internal as Data.Models.Metadata.Rom)?.WhisperVersion = value;
+            get => _internal.WhisperVersion;
+            set => _internal.WhisperVersion = value;
         }
 
         public string? Width
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.Width;
-            set => (_internal as Data.Models.Metadata.Rom)?.Width = value;
+            get => _internal.Width;
+            set => _internal.Width = value;
         }
 
         public string? WordConfidenceInterval0To10
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval0To10;
-            set => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval0To10 = value;
+            get => _internal.WordConfidenceInterval0To10;
+            set => _internal.WordConfidenceInterval0To10 = value;
         }
 
         public string? WordConfidenceInterval11To20
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval11To20;
-            set => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval11To20 = value;
+            get => _internal.WordConfidenceInterval11To20;
+            set => _internal.WordConfidenceInterval11To20 = value;
         }
 
         public string? WordConfidenceInterval21To30
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval21To30;
-            set => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval21To30 = value;
+            get => _internal.WordConfidenceInterval21To30;
+            set => _internal.WordConfidenceInterval21To30 = value;
         }
 
         public string? WordConfidenceInterval31To40
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval31To40;
-            set => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval31To40 = value;
+            get => _internal.WordConfidenceInterval31To40;
+            set => _internal.WordConfidenceInterval31To40 = value;
         }
 
         public string? WordConfidenceInterval41To50
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval41To50;
-            set => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval41To50 = value;
+            get => _internal.WordConfidenceInterval41To50;
+            set => _internal.WordConfidenceInterval41To50 = value;
         }
 
         public string? WordConfidenceInterval51To60
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval51To60;
-            set => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval51To60 = value;
+            get => _internal.WordConfidenceInterval51To60;
+            set => _internal.WordConfidenceInterval51To60 = value;
         }
 
         public string? WordConfidenceInterval61To70
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval61To70;
-            set => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval61To70 = value;
+            get => _internal.WordConfidenceInterval61To70;
+            set => _internal.WordConfidenceInterval61To70 = value;
         }
 
         public string? WordConfidenceInterval71To80
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval71To80;
-            set => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval71To80 = value;
+            get => _internal.WordConfidenceInterval71To80;
+            set => _internal.WordConfidenceInterval71To80 = value;
         }
 
         public string? WordConfidenceInterval81To90
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval81To90;
-            set => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval81To90 = value;
+            get => _internal.WordConfidenceInterval81To90;
+            set => _internal.WordConfidenceInterval81To90 = value;
         }
 
         public string? WordConfidenceInterval91To100
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval91To100;
-            set => (_internal as Data.Models.Metadata.Rom)?.WordConfidenceInterval91To100 = value;
+            get => _internal.WordConfidenceInterval91To100;
+            set => _internal.WordConfidenceInterval91To100 = value;
         }
 
         public string? xxHash364
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.xxHash364;
-            set => (_internal as Data.Models.Metadata.Rom)?.xxHash364 = value;
+            get => _internal.xxHash364;
+            set => _internal.xxHash364 = value;
         }
 
         public string? xxHash3128
         {
-            get => (_internal as Data.Models.Metadata.Rom)?.xxHash3128;
-            set => (_internal as Data.Models.Metadata.Rom)?.xxHash3128 = value;
+            get => _internal.xxHash3128;
+            set => _internal.xxHash3128 = value;
         }
 
         #endregion
@@ -899,7 +899,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Rom GetInternalClone()
-            => (_internal as Data.Models.Metadata.Rom)?.Clone() as Data.Models.Metadata.Rom ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Rom ?? new();
 
         #endregion
 
@@ -914,7 +914,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Rom otherRom)
-                return ((Data.Models.Metadata.Rom)_internal).PartialEquals((Data.Models.Metadata.Rom)otherRom._internal);
+                return _internal.PartialEquals(otherRom._internal);
 
             // Everything else fails
             return false;
@@ -929,7 +929,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Rom otherRom)
-                return ((Data.Models.Metadata.Rom)_internal).PartialEquals((Data.Models.Metadata.Rom)otherRom._internal);
+                return _internal.PartialEquals(otherRom._internal);
 
             // Everything else fails
             return false;
@@ -940,19 +940,19 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         /// <param name="other">Rom to fill information from</param>
         public void FillMissingInformation(Rom other)
-            => (_internal as Data.Models.Metadata.Rom).FillMissingHashes(other._internal as Data.Models.Metadata.Rom);
+            => _internal.FillMissingHashes(other._internal);
 
         /// <summary>
         /// Returns if the Rom contains any hashes
         /// </summary>
         /// <returns>True if any hash exists, false otherwise</returns>
-        public bool HasHashes() => (_internal as Data.Models.Metadata.Rom)?.HasHashes() ?? false;
+        public bool HasHashes() => _internal.HasHashes();
 
         /// <summary>
         /// Returns if all of the hashes are set to their 0-byte values
         /// </summary>
         /// <returns>True if any hash matches the 0-byte value, false otherwise</returns>
-        public bool HasZeroHash() => (_internal as Data.Models.Metadata.Rom)?.HasZeroHash() ?? false;
+        public bool HasZeroHash() => _internal.HasZeroHash();
 
         #endregion
 

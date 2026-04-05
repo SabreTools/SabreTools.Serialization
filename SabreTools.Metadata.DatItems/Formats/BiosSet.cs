@@ -13,14 +13,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public bool? Default
         {
-            get => (_internal as Data.Models.Metadata.BiosSet)?.Default;
-            set => (_internal as Data.Models.Metadata.BiosSet)?.Default = value;
+            get => _internal.Default;
+            set => _internal.Default = value;
         }
 
         public string? Description
         {
-            get => (_internal as Data.Models.Metadata.BiosSet)?.Description;
-            set => (_internal as Data.Models.Metadata.BiosSet)?.Description = value;
+            get => _internal.Description;
+            set => _internal.Description = value;
         }
 
         /// <inheritdoc>/>
@@ -29,8 +29,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.BiosSet)?.Name;
-            set => (_internal as Data.Models.Metadata.BiosSet)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.BiosSet GetInternalClone()
-            => (_internal as Data.Models.Metadata.BiosSet)?.Clone() as Data.Models.Metadata.BiosSet ?? new();
+            => _internal.Clone() as Data.Models.Metadata.BiosSet ?? new();
 
         #endregion
 
@@ -81,7 +81,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is BiosSet otherBiosSet)
-                return ((Data.Models.Metadata.BiosSet)_internal).Equals((Data.Models.Metadata.BiosSet)otherBiosSet._internal);
+                return _internal.Equals(otherBiosSet._internal);
 
             // Everything else fails
             return false;
@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is BiosSet otherBiosSet)
-                return ((Data.Models.Metadata.BiosSet)_internal).Equals((Data.Models.Metadata.BiosSet)otherBiosSet._internal);
+                return _internal.Equals(otherBiosSet._internal);
 
             // Everything else fails
             return false;

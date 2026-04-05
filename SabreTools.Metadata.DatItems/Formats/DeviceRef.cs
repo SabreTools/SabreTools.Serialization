@@ -17,8 +17,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.DeviceRef)?.Name;
-            set => (_internal as Data.Models.Metadata.DeviceRef)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.DeviceRef GetInternalClone()
-            => (_internal as Data.Models.Metadata.DeviceRef)?.Clone() as Data.Models.Metadata.DeviceRef ?? new();
+            => _internal.Clone() as Data.Models.Metadata.DeviceRef ?? new();
 
         #endregion
 
@@ -69,7 +69,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DeviceRef otherDeviceRef)
-                return ((Data.Models.Metadata.DeviceRef)_internal).Equals((Data.Models.Metadata.DeviceRef)otherDeviceRef._internal);
+                return _internal.Equals(otherDeviceRef._internal);
 
             // Everything else fails
             return false;
@@ -84,7 +84,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DeviceRef otherDeviceRef)
-                return ((Data.Models.Metadata.DeviceRef)_internal).Equals((Data.Models.Metadata.DeviceRef)otherDeviceRef._internal);
+                return _internal.Equals(otherDeviceRef._internal);
 
             // Everything else fails
             return false;

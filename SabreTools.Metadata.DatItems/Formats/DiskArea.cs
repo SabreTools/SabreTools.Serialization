@@ -24,8 +24,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.DiskArea)?.Name;
-            set => (_internal as Data.Models.Metadata.DiskArea)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public override Data.Models.Metadata.DiskArea GetInternalClone()
         {
-            var partItem = (_internal as Data.Models.Metadata.DiskArea)?.Clone() as Data.Models.Metadata.DiskArea ?? new();
+            var partItem = _internal.Clone() as Data.Models.Metadata.DiskArea ?? new();
 
             if (Disk is not null)
                 partItem.Disk = Array.ConvertAll(Disk, rom => rom.GetInternalClone());
@@ -87,7 +87,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DiskArea otherDiskArea)
-                return ((Data.Models.Metadata.DiskArea)_internal).Equals((Data.Models.Metadata.DiskArea)otherDiskArea._internal);
+                return _internal.Equals(otherDiskArea._internal);
 
             // Everything else fails
             return false;
@@ -102,7 +102,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DiskArea otherDiskArea)
-                return ((Data.Models.Metadata.DiskArea)_internal).Equals((Data.Models.Metadata.DiskArea)otherDiskArea._internal);
+                return _internal.Equals(otherDiskArea._internal);
 
             // Everything else fails
             return false;

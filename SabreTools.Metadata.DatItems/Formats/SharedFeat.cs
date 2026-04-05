@@ -17,14 +17,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.SharedFeat)?.Name;
-            set => (_internal as Data.Models.Metadata.SharedFeat)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public string? Value
         {
-            get => (_internal as Data.Models.Metadata.SharedFeat)?.Value;
-            set => (_internal as Data.Models.Metadata.SharedFeat)?.Value = value;
+            get => _internal.Value;
+            set => _internal.Value = value;
         }
 
         #endregion
@@ -60,7 +60,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.SharedFeat GetInternalClone()
-            => (_internal as Data.Models.Metadata.SharedFeat)?.Clone() as Data.Models.Metadata.SharedFeat ?? new();
+            => _internal.Clone() as Data.Models.Metadata.SharedFeat ?? new();
 
         #endregion
 
@@ -75,7 +75,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is SharedFeat otherSharedFeat)
-                return ((Data.Models.Metadata.SharedFeat)_internal).Equals((Data.Models.Metadata.SharedFeat)otherSharedFeat._internal);
+                return _internal.Equals(otherSharedFeat._internal);
 
             // Everything else fails
             return false;
@@ -90,7 +90,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is SharedFeat otherSharedFeat)
-                return ((Data.Models.Metadata.SharedFeat)_internal).Equals((Data.Models.Metadata.SharedFeat)otherSharedFeat._internal);
+                return _internal.Equals(otherSharedFeat._internal);
 
             // Everything else fails
             return false;

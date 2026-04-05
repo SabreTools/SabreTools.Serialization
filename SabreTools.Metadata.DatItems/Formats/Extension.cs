@@ -17,8 +17,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.Extension)?.Name;
-            set => (_internal as Data.Models.Metadata.Extension)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Extension GetInternalClone()
-            => (_internal as Data.Models.Metadata.Extension)?.Clone() as Data.Models.Metadata.Extension ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Extension ?? new();
 
         #endregion
 
@@ -69,7 +69,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Extension otherExtension)
-                return ((Data.Models.Metadata.Extension)_internal).Equals((Data.Models.Metadata.Extension)otherExtension._internal);
+                return _internal.Equals(otherExtension._internal);
 
             // Everything else fails
             return false;
@@ -84,7 +84,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Extension otherExtension)
-                return ((Data.Models.Metadata.Extension)_internal).Equals((Data.Models.Metadata.Extension)otherExtension._internal);
+                return _internal.Equals(otherExtension._internal);
 
             // Everything else fails
             return false;

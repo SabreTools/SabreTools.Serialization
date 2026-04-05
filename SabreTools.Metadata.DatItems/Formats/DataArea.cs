@@ -15,8 +15,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Data.Models.Metadata.Endianness? Endianness
         {
-            get => (_internal as Data.Models.Metadata.DataArea)?.Endianness;
-            set => (_internal as Data.Models.Metadata.DataArea)?.Endianness = value;
+            get => _internal.Endianness;
+            set => _internal.Endianness = value;
         }
 
         /// <inheritdoc>/>
@@ -25,8 +25,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Name
         {
-            get => (_internal as Data.Models.Metadata.DataArea)?.Name;
-            set => (_internal as Data.Models.Metadata.DataArea)?.Name = value;
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         public Rom[]? Rom { get; set; }
@@ -36,14 +36,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public long? Size
         {
-            get => (_internal as Data.Models.Metadata.DataArea)?.Size;
-            set => (_internal as Data.Models.Metadata.DataArea)?.Size = value;
+            get => _internal.Size;
+            set => _internal.Size = value;
         }
 
         public Data.Models.Metadata.Width? Width
         {
-            get => (_internal as Data.Models.Metadata.DataArea)?.Width;
-            set => (_internal as Data.Models.Metadata.DataArea)?.Width = value;
+            get => _internal.Width;
+            set => _internal.Width = value;
         }
 
         #endregion
@@ -84,7 +84,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public override Data.Models.Metadata.DataArea GetInternalClone()
         {
-            var partItem = (_internal as Data.Models.Metadata.DataArea)?.Clone() as Data.Models.Metadata.DataArea ?? new();
+            var partItem = _internal.Clone() as Data.Models.Metadata.DataArea ?? new();
 
             if (Rom is not null)
                 partItem.Rom = Array.ConvertAll(Rom, rom => rom.GetInternalClone());
@@ -105,7 +105,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DataArea otherDataArea)
-                return ((Data.Models.Metadata.DataArea)_internal).Equals((Data.Models.Metadata.DataArea)otherDataArea._internal);
+                return _internal.Equals(otherDataArea._internal);
 
             // Everything else fails
             return false;
@@ -120,7 +120,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is DataArea otherDataArea)
-                return ((Data.Models.Metadata.DataArea)_internal).Equals((Data.Models.Metadata.DataArea)otherDataArea._internal);
+                return _internal.Equals(otherDataArea._internal);
 
             // Everything else fails
             return false;

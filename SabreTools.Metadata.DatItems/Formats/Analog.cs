@@ -17,8 +17,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Mask
         {
-            get => (_internal as Data.Models.Metadata.Analog)?.Mask;
-            set => (_internal as Data.Models.Metadata.Analog)?.Mask = value;
+            get => _internal.Mask;
+            set => _internal.Mask = value;
         }
 
         #endregion
@@ -54,7 +54,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Analog GetInternalClone()
-            => (_internal as Data.Models.Metadata.Analog)?.Clone() as Data.Models.Metadata.Analog ?? new();
+            => _internal.Clone() as Data.Models.Metadata.Analog ?? new();
 
         #endregion
 
@@ -69,7 +69,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Analog otherAnalog)
-                return ((Data.Models.Metadata.Analog)_internal).Equals((Data.Models.Metadata.Analog)otherAnalog._internal);
+                return _internal.Equals(otherAnalog._internal);
 
             // Everything else fails
             return false;
@@ -84,7 +84,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is Analog otherAnalog)
-                return ((Data.Models.Metadata.Analog)_internal).Equals((Data.Models.Metadata.Analog)otherAnalog._internal);
+                return _internal.Equals(otherAnalog._internal);
 
             // Everything else fails
             return false;

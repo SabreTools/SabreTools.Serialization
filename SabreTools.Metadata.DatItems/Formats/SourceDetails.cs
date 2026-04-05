@@ -13,44 +13,44 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? AppendToNumber
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.AppendToNumber;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.AppendToNumber = value;
+            get => _internal.AppendToNumber;
+            set => _internal.AppendToNumber = value;
         }
 
         public string? Comment1
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Comment1;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Comment1 = value;
+            get => _internal.Comment1;
+            set => _internal.Comment1 = value;
         }
 
         public string? Comment2
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Comment2;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Comment2 = value;
+            get => _internal.Comment2;
+            set => _internal.Comment2 = value;
         }
 
         public string? DumpDate
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.DumpDate;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.DumpDate = value;
+            get => _internal.DumpDate;
+            set => _internal.DumpDate = value;
         }
 
         public bool? DumpDateInfo
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.DumpDateInfo;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.DumpDateInfo = value;
+            get => _internal.DumpDateInfo;
+            set => _internal.DumpDateInfo = value;
         }
 
         public string? Dumper
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Dumper;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Dumper = value;
+            get => _internal.Dumper;
+            set => _internal.Dumper = value;
         }
 
         public string? Id
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Id;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Id = value;
+            get => _internal.Id;
+            set => _internal.Id = value;
         }
 
         /// <inheritdoc>/>
@@ -59,104 +59,104 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public string? Link1
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Link1;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Link1 = value;
+            get => _internal.Link1;
+            set => _internal.Link1 = value;
         }
 
         public bool? Link1Public
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Link1Public;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Link1Public = value;
+            get => _internal.Link1Public;
+            set => _internal.Link1Public = value;
         }
 
         public string? Link2
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Link2;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Link2 = value;
+            get => _internal.Link2;
+            set => _internal.Link2 = value;
         }
 
         public bool? Link2Public
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Link2Public;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Link2Public = value;
+            get => _internal.Link2Public;
+            set => _internal.Link2Public = value;
         }
 
         public string? Link3
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Link3;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Link3 = value;
+            get => _internal.Link3;
+            set => _internal.Link3 = value;
         }
 
         public bool? Link3Public
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Link3Public;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Link3Public = value;
+            get => _internal.Link3Public;
+            set => _internal.Link3Public = value;
         }
 
         public string? MediaTitle
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.MediaTitle;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.MediaTitle = value;
+            get => _internal.MediaTitle;
+            set => _internal.MediaTitle = value;
         }
 
         public bool? Nodump
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Nodump;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Nodump = value;
+            get => _internal.Nodump;
+            set => _internal.Nodump = value;
         }
 
         public string? Origin
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Origin;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Origin = value;
+            get => _internal.Origin;
+            set => _internal.Origin = value;
         }
 
         public string? OriginalFormat
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.OriginalFormat;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.OriginalFormat = value;
+            get => _internal.OriginalFormat;
+            set => _internal.OriginalFormat = value;
         }
 
         public string? Project
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Project;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Project = value;
+            get => _internal.Project;
+            set => _internal.Project = value;
         }
 
         public string? Region
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Region;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Region = value;
+            get => _internal.Region;
+            set => _internal.Region = value;
         }
 
         public string? ReleaseDate
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.ReleaseDate;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.ReleaseDate = value;
+            get => _internal.ReleaseDate;
+            set => _internal.ReleaseDate = value;
         }
 
         public bool? ReleaseDateInfo
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.ReleaseDateInfo;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.ReleaseDateInfo = value;
+            get => _internal.ReleaseDateInfo;
+            set => _internal.ReleaseDateInfo = value;
         }
 
         public string? RomInfo
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.RomInfo;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.RomInfo = value;
+            get => _internal.RomInfo;
+            set => _internal.RomInfo = value;
         }
 
         public string? Section
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Section;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Section = value;
+            get => _internal.Section;
+            set => _internal.Section = value;
         }
 
         public string? Tool
         {
-            get => (_internal as Data.Models.Metadata.SourceDetails)?.Tool;
-            set => (_internal as Data.Models.Metadata.SourceDetails)?.Tool = value;
+            get => _internal.Tool;
+            set => _internal.Tool = value;
         }
 
         #endregion
@@ -192,7 +192,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.SourceDetails GetInternalClone()
-            => (_internal as Data.Models.Metadata.SourceDetails)?.Clone() as Data.Models.Metadata.SourceDetails ?? new();
+            => _internal.Clone() as Data.Models.Metadata.SourceDetails ?? new();
 
         #endregion
 
@@ -207,7 +207,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is SourceDetails otherSourceDetails)
-                return ((Data.Models.Metadata.SourceDetails)_internal).Equals((Data.Models.Metadata.SourceDetails)otherSourceDetails._internal);
+                return _internal.Equals(otherSourceDetails._internal);
 
             // Everything else fails
             return false;
@@ -222,7 +222,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // If the type matches
             if (other is SourceDetails otherSourceDetails)
-                return ((Data.Models.Metadata.SourceDetails)_internal).Equals((Data.Models.Metadata.SourceDetails)otherSourceDetails._internal);
+                return _internal.Equals(otherSourceDetails._internal);
 
             // Everything else fails
             return false;
