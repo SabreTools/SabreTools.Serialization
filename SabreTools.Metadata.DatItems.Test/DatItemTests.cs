@@ -37,8 +37,8 @@ namespace SabreTools.Metadata.DatItems.Test
 
             public string? Name
             {
-                get => (_internal as TestDatItemModel)?.Name;
-                set => (_internal as TestDatItemModel)?.Name = value;
+                get => _internal?.Name;
+                set => _internal?.Name = value;
             }
 
             public TestDatItem() { }
@@ -52,7 +52,7 @@ namespace SabreTools.Metadata.DatItems.Test
             /// <inheritdoc/>
             public override TestDatItemModel GetInternalClone()
             {
-                return (_internal as TestDatItemModel)?.Clone() as TestDatItemModel ?? new();
+                return _internal?.Clone() as TestDatItemModel ?? new();
             }
 
             /// <inheritdoc/>
@@ -70,7 +70,7 @@ namespace SabreTools.Metadata.DatItems.Test
 
                 // If the type matches
                 if (other is TestDatItem otherTestDatItem)
-                    return ((TestDatItemModel)_internal).Equals((TestDatItemModel)otherTestDatItem._internal);
+                    return _internal.Equals(otherTestDatItem._internal);
 
                 // Everything else fails
                 return false;
@@ -85,7 +85,7 @@ namespace SabreTools.Metadata.DatItems.Test
 
                 // If the type matches
                 if (other is TestDatItem otherTestDatItem)
-                    return ((TestDatItemModel)_internal).Equals((TestDatItemModel)otherTestDatItem._internal);
+                    return _internal.Equals(otherTestDatItem._internal);
 
                 // Everything else fails
                 return false;
