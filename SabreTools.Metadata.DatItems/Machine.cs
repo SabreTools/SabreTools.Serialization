@@ -10,7 +10,7 @@ namespace SabreTools.Metadata.DatItems
     /// Represents the information specific to a set/game/machine
     /// </summary>
     [JsonObject("machine"), XmlRoot("machine")]
-    public sealed class Machine : ModelBackedItem<Data.Models.Metadata.Machine>, ICloneable, IEquatable<Machine>
+    public sealed class Machine : ICloneable, IEquatable<Machine>
     {
         #region Properties
 
@@ -379,6 +379,15 @@ namespace SabreTools.Metadata.DatItems
             get => _internal.Year;
             set => _internal.Year = value;
         }
+
+        #endregion
+
+        #region Private Fields
+
+        /// <summary>
+        /// Internal model
+        /// </summary>
+        private Data.Models.Metadata.Machine _internal;
 
         #endregion
 

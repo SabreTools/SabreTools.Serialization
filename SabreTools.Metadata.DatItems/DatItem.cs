@@ -53,7 +53,7 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(SoftwareList))]
     [XmlInclude(typeof(Sound))]
     [XmlInclude(typeof(SourceDetails))]
-    public abstract class DatItem : ModelBackedItem<Data.Models.Metadata.DatItem>, IEquatable<DatItem>, IComparable<DatItem>, ICloneable
+    public abstract class DatItem : ICloneable, IComparable<DatItem>, IEquatable<DatItem>
     {
         #region Properties
 
@@ -81,6 +81,15 @@ namespace SabreTools.Metadata.DatItems
         /// Source information
         /// </summary>
         public Source? Source { get; set; }
+
+        #endregion
+
+        #region Private Fields
+
+        /// <summary>
+        /// Internal model
+        /// </summary>
+        protected Data.Models.Metadata.DatItem _internal = new();
 
         #endregion
 

@@ -12,7 +12,7 @@ namespace SabreTools.Metadata.DatFiles
     /// Represents all possible DAT header information
     /// </summary>
     [JsonObject("header"), XmlRoot("header")]
-    public sealed class DatHeader : ModelBackedItem<Data.Models.Metadata.Header>, ICloneable, IEquatable<DatHeader>
+    public sealed class DatHeader : ICloneable, IEquatable<DatHeader>
     {
         #region Properties
 
@@ -314,9 +314,21 @@ namespace SabreTools.Metadata.DatFiles
 
         #endregion
 
+        #region Private Fields
+
+        /// <summary>
+        /// Internal model
+        /// </summary>
+        private readonly Data.Models.Metadata.Header _internal;
+
+        #endregion
+
         #region Constructors
 
-        public DatHeader() { }
+        public DatHeader()
+        {
+            _internal = new();
+        }
 
         public DatHeader(Data.Models.Metadata.Header header)
         {
