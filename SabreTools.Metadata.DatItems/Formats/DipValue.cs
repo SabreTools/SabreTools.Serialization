@@ -104,21 +104,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             return false;
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(DatItem<Data.Models.Metadata.DipValue>? other)
-        {
-            // If the other value is invalid
-            if (other is null)
-                return false;
-
-            // If the type matches
-            if (other is DipValue otherDipValue)
-                return _internal.Equals(otherDipValue._internal);
-
-            // Everything else fails
-            return false;
-        }
-
         #endregion
     }
 }

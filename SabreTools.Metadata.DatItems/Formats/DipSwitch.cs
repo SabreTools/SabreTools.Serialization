@@ -157,21 +157,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             return false;
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(DatItem<Data.Models.Metadata.DipSwitch>? other)
-        {
-            // If the other value is invalid
-            if (other is null)
-                return false;
-
-            // If the type matches
-            if (other is DipSwitch otherDipSwitch)
-                return _internal.Equals(otherDipSwitch._internal);
-
-            // Everything else fails
-            return false;
-        }
-
         #endregion
     }
 }

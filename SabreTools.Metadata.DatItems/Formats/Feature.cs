@@ -99,21 +99,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             return false;
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(DatItem<Data.Models.Metadata.Feature>? other)
-        {
-            // If the other value is invalid
-            if (other is null)
-                return false;
-
-            // If the type matches
-            if (other is Feature otherFeature)
-                return _internal.Equals(otherFeature._internal);
-
-            // Everything else fails
-            return false;
-        }
-
         #endregion
     }
 }

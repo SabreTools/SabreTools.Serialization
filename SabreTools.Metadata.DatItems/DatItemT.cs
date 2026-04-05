@@ -6,7 +6,7 @@ namespace SabreTools.Metadata.DatItems
     /// <summary>
     /// Base class for all items included in a set that are backed by an internal model
     /// </summary>
-    public abstract class DatItem<T> : DatItem, ICloneable, IEquatable<DatItem<T>>
+    public abstract class DatItem<T> : DatItem, ICloneable
         where T : Data.Models.Metadata.DatItem, new()
     {
         #region Private Fields
@@ -49,17 +49,6 @@ namespace SabreTools.Metadata.DatItems
         /// Get a clone of the current internal model
         /// </summary>
         public abstract T GetInternalClone();
-
-        #endregion
-
-        #region Comparision Methods
-
-        /// <summary>
-        /// Determine if an item is a duplicate using partial matching logic
-        /// </summary>
-        /// <param name="other">DatItem to use as a baseline</param>
-        /// <returns>True if the items are duplicates, false otherwise</returns>
-        public abstract bool Equals(DatItem<T>? other);
 
         #endregion
 

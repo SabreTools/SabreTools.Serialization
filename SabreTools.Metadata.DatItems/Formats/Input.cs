@@ -123,21 +123,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             return false;
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(DatItem<Data.Models.Metadata.Input>? other)
-        {
-            // If the other value is invalid
-            if (other is null)
-                return false;
-
-            // If the type matches
-            if (other is Input otherInput)
-                return _internal.Equals(otherInput._internal);
-
-            // Everything else fails
-            return false;
-        }
-
         #endregion
     }
 }

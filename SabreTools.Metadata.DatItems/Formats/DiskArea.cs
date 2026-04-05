@@ -93,21 +93,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             return false;
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(DatItem<Data.Models.Metadata.DiskArea>? other)
-        {
-            // If the other value is invalid
-            if (other is null)
-                return false;
-
-            // If the type matches
-            if (other is DiskArea otherDiskArea)
-                return _internal.Equals(otherDiskArea._internal);
-
-            // Everything else fails
-            return false;
-        }
-
         #endregion
     }
 }

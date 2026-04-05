@@ -134,21 +134,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             return false;
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(DatItem<Data.Models.Metadata.Device>? other)
-        {
-            // If the other value is invalid
-            if (other is null)
-                return false;
-
-            // If the type matches
-            if (other is Device otherDevice)
-                return _internal.Equals(otherDevice._internal);
-
-            // Everything else fails
-            return false;
-        }
-
         #endregion
     }
 }

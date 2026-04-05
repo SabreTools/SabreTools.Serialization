@@ -81,21 +81,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             return false;
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(DatItem<Data.Models.Metadata.Instance>? other)
-        {
-            // If the other value is invalid
-            if (other is null)
-                return false;
-
-            // If the type matches
-            if (other is Instance otherInstance)
-                return _internal.Equals(otherInstance._internal);
-
-            // Everything else fails
-            return false;
-        }
-
         #endregion
     }
 }
