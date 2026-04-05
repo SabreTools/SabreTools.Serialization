@@ -62,6 +62,36 @@ namespace SabreTools.Metadata.DatItems.Test
             public override void SetName(string? name) => Name = name;
 
             /// <inheritdoc/>
+            public override bool Equals(ModelBackedItem? other)
+            {
+                // If the other item is null
+                if (other is null)
+                    return false;
+
+                // If the type matches
+                if (other is TestDatItem otherTestDatItem)
+                    return ((TestDatItemModel)_internal).Equals((TestDatItemModel)otherTestDatItem._internal);
+
+                // Everything else fails
+                return false;
+            }
+
+            /// <inheritdoc/>
+            public override bool Equals(ModelBackedItem<Data.Models.Metadata.DatItem>? other)
+            {
+                // If the other item is null
+                if (other is null)
+                    return false;
+
+                // If the type matches
+                if (other is TestDatItem otherTestDatItem)
+                    return ((TestDatItemModel)_internal).Equals((TestDatItemModel)otherTestDatItem._internal);
+
+                // Everything else fails
+                return false;
+            }
+
+            /// <inheritdoc/>
             public override bool Equals(DatItem? other)
             {
                 // If the other value is invalid

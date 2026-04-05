@@ -169,34 +169,10 @@ namespace SabreTools.Metadata.DatItems
         }
 
         /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem? other)
-        {
-            // If other is null
-            if (other is null)
-                return false;
-
-            // If the type is mismatched
-            if (other is not DatItem otherItem)
-                return false;
-
-            // Compare internal models
-            return _internal.Equals(otherItem);
-        }
+        public abstract override bool Equals(ModelBackedItem? other);
 
         /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem<Data.Models.Metadata.DatItem>? other)
-        {
-            // If other is null
-            if (other is null)
-                return false;
-
-            // If the type is mismatched
-            if (other is not DatItem otherItem)
-                return false;
-
-            // Compare internal models
-            return _internal.Equals(otherItem);
-        }
+        public abstract override bool Equals(ModelBackedItem<Data.Models.Metadata.DatItem>? other);
 
         /// <summary>
         /// Determine if an item is a duplicate using partial matching logic
