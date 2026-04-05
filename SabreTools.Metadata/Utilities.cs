@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using SabreTools.Hashing;
-using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata
 {
@@ -9,53 +7,7 @@ namespace SabreTools.Metadata
     /// </summary>
     public static class Utilities
     {
-        /// <summary>
-        /// Get a proper romba sub path
-        /// </summary>
-        /// <param name="hash">SHA-1 hash to get the path for</param>
-        /// <param name="depth">Positive value representing the depth of the depot</param>
-        /// <returns>Subfolder path for the given hash</returns>
-        public static string? GetDepotPath(byte[]? hash, int depth)
-        {
-            string? sha1 = hash.ToHexString();
-            return GetDepotPath(sha1, depth);
-        }
-
-        /// <summary>
-        /// Get a proper romba sub path
-        /// </summary>
-        /// <param name="hash">SHA-1 hash to get the path for</param>
-        /// <param name="depth">Positive value representing the depth of the depot</param>
-        /// <returns>Subfolder path for the given hash</returns>
-        public static string? GetDepotPath(string? hash, int depth)
-        {
-            // If the hash is null, then we return null
-            if (hash is null)
-                return null;
-
-            // If the hash isn't the right size, then we return null
-            if (hash.Length != HashType.SHA1.ZeroString.Length)
-                return null;
-
-            // Cap the depth between 0 and 20, for now
-            if (depth < 0)
-                depth = 0;
-            else if (depth > HashType.SHA1.ZeroBytes.Length)
-                depth = HashType.SHA1.ZeroBytes.Length;
-
-            // Loop through and generate the subdirectory
-            string path = string.Empty;
-            for (int i = 0; i < depth; i++)
-            {
-                path += hash.Substring(i * 2, 2) + Path.DirectorySeparatorChar;
-            }
-
-            // Now append the filename
-            path += $"{hash}.gz";
-            return path;
-        }
-
-        /// <summary>
+       /// <summary>
         /// Get if the given path has a valid DAT extension
         /// </summary>
         /// <param name="path">Path to check</param>

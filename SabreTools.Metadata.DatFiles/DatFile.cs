@@ -506,7 +506,7 @@ namespace SabreTools.Metadata.DatFiles
                     string? sha1 = disk.SHA1;
                     if (!string.IsNullOrEmpty(sha1))
                     {
-                        name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
+                        name = Modifiers.OutputDepot.GetDepotPath(sha1)?.Replace('\\', '/');
                         disk.Name = $"{pre}{name}{post}";
                     }
                 }
@@ -516,7 +516,7 @@ namespace SabreTools.Metadata.DatFiles
                     string? sha1 = media.SHA1;
                     if (!string.IsNullOrEmpty(sha1))
                     {
-                        name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
+                        name = Modifiers.OutputDepot.GetDepotPath(sha1)?.Replace('\\', '/');
                         media.Name = $"{pre}{name}{post}";
                     }
                 }
@@ -526,7 +526,7 @@ namespace SabreTools.Metadata.DatFiles
                     string? sha1 = rom.SHA1;
                     if (!string.IsNullOrEmpty(sha1))
                     {
-                        name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
+                        name = Modifiers.OutputDepot.GetDepotPath(sha1)?.Replace('\\', '/');
                         rom.Name = $"{pre}{name}{post}";
                     }
                 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using SabreTools.Hashing;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata.DatFiles
 {
@@ -22,6 +24,11 @@ namespace SabreTools.Metadata.DatFiles
         /// Depot byte-depth
         /// </summary>
         public int Depth { get; }
+
+        /// <summary>
+        /// Maximum depth allowed for path generation
+        /// </summary>
+        private static readonly int MaximumDepth = HashType.SHA1.ZeroBytes.Length;
 
         /// <summary>
         /// Constructor
@@ -50,8 +57,8 @@ namespace SabreTools.Metadata.DatFiles
                 Depth = 4;
             else if (Depth < 0)
                 Depth = 0;
-            else if (Depth > HashType.SHA1.ZeroBytes.Length)
-                Depth = HashType.SHA1.ZeroBytes.Length;
+            else if (Depth > MaximumDepth)
+                Depth = MaximumDepth;
         }
 
         #region Cloning
@@ -60,6 +67,56 @@ namespace SabreTools.Metadata.DatFiles
         /// Clone the current object
         /// </summary>
         public object Clone() => new DepotInformation(Name, IsActive, Depth);
+
+        #endregion
+
+        #region Path Generation
+
+        /// <summary>
+        /// Get a proper romba subpath
+        /// </summary>
+        /// <param name="hash">SHA-1 hash to get the path for</param>
+        /// <param name="depth">Positive value representing the depth of the depot</param>
+        /// <returns>Subfolder path for the given hash, including the filename and .gz extension</returns>
+        public string? GetDepotPath(byte[]? hash)
+        {
+            string? sha1 = hash.ToHexString();
+            return GetDepotPath(sha1);
+        }
+
+        /// <summary>
+        /// Get a proper romba subpath
+        /// </summary>
+        /// <param name="hash">SHA-1 hash to get the path for</param>
+        /// <returns>Subfolder path for the given hash, including the filename and .gz extension</returns>
+        public string? GetDepotPath(string? hash)
+        {
+            // If the hash is null, then we return null
+            if (hash is null)
+                return null;
+
+            // If the hash isn't the right size, then we return null
+            if (hash.Length != HashType.SHA1.ZeroString.Length)
+                return null;
+
+            // Cap the depth between 0 and 20, for now
+            int depth = Depth;
+            if (depth < 0)
+                depth = 0;
+            else if (depth > MaximumDepth)
+                depth = MaximumDepth;
+
+            // Loop through and generate the subdirectory
+            string path = string.Empty;
+            for (int i = 0; i < depth; i++)
+            {
+                path += hash.Substring(i * 2, 2) + Path.DirectorySeparatorChar;
+            }
+
+            // Now append the filename
+            path += $"{hash}.gz";
+            return path;
+        }
 
         #endregion
     }
