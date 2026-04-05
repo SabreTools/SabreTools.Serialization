@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var datafile = new Datafile();
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             if (header is not null)
             {
                 datafile.Build = header.Build;
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
                 datafile.Header = ConvertHeaderFromInternalModel(header);
             }
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
                 datafile.Game = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, game));
 

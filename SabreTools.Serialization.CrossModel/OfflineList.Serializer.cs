@@ -13,14 +13,11 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
+                Header = ConvertHeaderToInternalModel(item),
             };
 
             if (item?.Games?.Game is not null && item.Games.Game.Length > 0)
-            {
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
-                    = Array.ConvertAll(item.Games.Game, ConvertMachineToInternalModel);
-            }
+                metadataFile.Machine = Array.ConvertAll(item.Games.Game, ConvertMachineToInternalModel);
 
             return metadataFile;
         }

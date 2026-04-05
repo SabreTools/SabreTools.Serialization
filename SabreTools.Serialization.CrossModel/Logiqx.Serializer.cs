@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
+                Header = ConvertHeaderToInternalModel(item),
             };
 
             var machines = new List<Data.Models.Metadata.Machine>();
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             if (machines.Count > 0)
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey] = machines.ToArray();
+                metadataFile.Machine = [.. machines];
 
             return metadataFile;
         }

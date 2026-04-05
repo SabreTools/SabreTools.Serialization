@@ -41,8 +41,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.Machine[]? machines = null;
             Data.Models.Metadata.MetadataFile? item = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = header,
-                [Data.Models.Metadata.MetadataFile.MachineKey] = machines,
+                Header = header,
+                Machine = machines,
             };
 
             DatFile datFile = new Formats.Logiqx(null, useGame: false);
@@ -59,8 +59,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.Machine[]? machines = [machine];
             Data.Models.Metadata.MetadataFile? item = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = header,
-                [Data.Models.Metadata.MetadataFile.MachineKey] = machines,
+                Header = header,
+                Machine = machines,
             };
 
             DatFile datFile = new Formats.Logiqx(null, useGame: false);

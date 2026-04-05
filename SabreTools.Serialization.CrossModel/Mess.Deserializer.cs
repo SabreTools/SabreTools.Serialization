@@ -10,10 +10,10 @@ namespace SabreTools.Serialization.CrossModel
             if (obj is null)
                 return null;
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             var m1 = header is not null ? ConvertMessFromInternalModel(header) : new Data.Models.Listxml.Mess();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
                 m1.Game = Array.ConvertAll(machines, Listxml.ConvertMachineFromInternalModel);
 

@@ -14,16 +14,13 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = new Data.Models.Metadata.MetadataFile();
 
             if (obj?.ClrMamePro is not null)
-                metadataFile[Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj.ClrMamePro);
+                metadataFile.Header = ConvertHeaderToInternalModel(obj.ClrMamePro);
 
             if (obj?.Game is not null && obj.Game.Length > 0)
-            {
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
-                    = Array.ConvertAll(obj.Game, ConvertMachineToInternalModel);
-            }
+                metadataFile.Machine = Array.ConvertAll(obj.Game, ConvertMachineToInternalModel);
 
             if (obj?.Info is not null)
-                metadataFile[Data.Models.Metadata.MetadataFile.InfoSourceKey] = ConvertInfoSourceToInternalModel(obj.Info);
+                metadataFile.InfoSource = ConvertInfoSourceToInternalModel(obj.Info);
 
             return metadataFile;
         }
@@ -57,11 +54,8 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="GameBase"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
-        private static Data.Models.Metadata.Machine? ConvertMachineToInternalModel(GameBase? item)
+        private static Data.Models.Metadata.Machine ConvertMachineToInternalModel(GameBase item)
         {
-            if (item is null)
-                return null;
-
             var machine = new Data.Models.Metadata.Machine
             {
                 Name = item.Name,

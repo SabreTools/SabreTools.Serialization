@@ -18,18 +18,15 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new MetadataFile();
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             if (header is not null)
                 metadataFile.ClrMamePro = ConvertHeaderFromInternalModel(header);
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
-            {
-                metadataFile.Game
-                    = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, game));
-            }
+                metadataFile.Game = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, game));
 
-            var info = obj.Read<Data.Models.Metadata.InfoSource>(Data.Models.Metadata.MetadataFile.InfoSourceKey);
+            var info = obj.InfoSource;
             if (info is not null)
                 metadataFile.Info = ConvertInfoSourceFromInternalModel(info);
 

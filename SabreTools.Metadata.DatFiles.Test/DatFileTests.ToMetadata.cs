@@ -32,7 +32,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.MetadataFile? actual = datFile.ConvertToMetadata();
             Assert.NotNull(actual);
 
-            Data.Models.Metadata.Header? actualHeader = actual.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            Data.Models.Metadata.Header? actualHeader = actual.Header;
             ValidateMetadataHeader(actualHeader);
         }
 
@@ -80,7 +80,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.MetadataFile? actual = datFile.ConvertToMetadata();
             Assert.NotNull(actual);
 
-            Data.Models.Metadata.Machine[]? machines = actual.ReadArray<Data.Models.Metadata.Machine>(Data.Models.Metadata.MetadataFile.MachineKey);
+            Data.Models.Metadata.Machine[]? machines = actual.Machine;
             Assert.NotNull(machines);
             Data.Models.Metadata.Machine actualMachine = Assert.Single(machines);
             ValidateMetadataMachine(actualMachine);

@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.CrossModel
             if (obj is null)
                 return null;
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is null || machines.Length == 0)
                 return null;
 

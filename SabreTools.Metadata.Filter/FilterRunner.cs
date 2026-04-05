@@ -36,8 +36,8 @@ namespace SabreTools.Metadata.Filter
         {
             string? itemName = dictionaryBase switch
             {
-                Header => MetadataFile.HeaderKey,
-                Machine => MetadataFile.MachineKey,
+                Header => "header",
+                Machine => "machine",
                 DatItem => TypeHelper.GetXmlRootAttributeElementName(dictionaryBase.GetType()),
                 _ => null,
             };
@@ -73,12 +73,12 @@ namespace SabreTools.Metadata.Filter
             string key = filter.Key.ToString();
 
             // Special case for machine types
-            if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == "isbios")
-                key = $"{MetadataFile.MachineKey}.COMBINEDTYPE";
-            else if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == "isdevice")
-                key = $"{MetadataFile.MachineKey}.COMBINEDTYPE";
-            else if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == "ismechanical")
-                key = $"{MetadataFile.MachineKey}.COMBINEDTYPE";
+            if (filter.Key.ItemName == "machine" && filter.Key.FieldName == "isbios")
+                key = $"{"machine"}.COMBINEDTYPE";
+            else if (filter.Key.ItemName == "machine" && filter.Key.FieldName == "isdevice")
+                key = $"{"machine"}.COMBINEDTYPE";
+            else if (filter.Key.ItemName == "machine" && filter.Key.FieldName == "ismechanical")
+                key = $"{"machine"}.COMBINEDTYPE";
 
             // Set the expected group type
             GroupType groupType = GroupType.OR;

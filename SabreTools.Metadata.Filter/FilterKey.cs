@@ -111,7 +111,7 @@ namespace SabreTools.Metadata.Filter
                 if (constantMatch is not null)
                 {
                     // Return the sanitized ID
-                    itemName = MetadataFile.HeaderKey;
+                    itemName = "header";
                     fieldName = constantMatch;
                     return true;
                 }
@@ -127,7 +127,7 @@ namespace SabreTools.Metadata.Filter
                 if (propertyMatch is not null)
                 {
                     // Return the sanitized ID
-                    itemName = MetadataFile.HeaderKey;
+                    itemName = "header";
                     fieldName = propertyMatch.ToLowerInvariant();
                     return true;
                 }
@@ -151,7 +151,7 @@ namespace SabreTools.Metadata.Filter
                 if (constantMatch is not null)
                 {
                     // Return the sanitized ID
-                    itemName = MetadataFile.MachineKey;
+                    itemName = "machine";
                     fieldName = constantMatch;
                     return true;
                 }
@@ -167,7 +167,7 @@ namespace SabreTools.Metadata.Filter
                 if (propertyMatch is not null)
                 {
                     // Return the sanitized ID
-                    itemName = MetadataFile.MachineKey;
+                    itemName = "machine";
                     fieldName = propertyMatch.ToLowerInvariant();
                     return true;
                 }

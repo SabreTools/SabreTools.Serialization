@@ -35,7 +35,7 @@ namespace SabreTools.Metadata.DatFiles
             FilterRunner? filterRunner)
         {
             // If the metadata file is invalid, we can't do anything
-            if (item is null || item.Count == 0)
+            if (item is null)
                 return;
 
             // Create an internal source and add to the dictionary
@@ -43,12 +43,12 @@ namespace SabreTools.Metadata.DatFiles
             // long sourceIndex = AddSourceDB(source);
 
             // Get the header from the metadata
-            var header = item.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = item.Header;
             if (header is not null)
                 ConvertHeader(header, keep);
 
             // Get the machines from the metadata
-            var machines = item.ReadArray<Data.Models.Metadata.Machine>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = item.Machine;
             if (machines is not null)
                 ConvertMachines(machines, source, sourceIndex: 0, statsOnly, filterRunner);
         }

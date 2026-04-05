@@ -11,10 +11,10 @@ namespace SabreTools.Serialization.CrossModel
             if (obj is null)
                 return null;
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             var metadataFile = header is not null ? ConvertHeaderFromInternalModel(header) : new Data.Models.SoftwareList.SoftwareList();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
                 metadataFile.Software = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 

@@ -24,12 +24,12 @@ namespace SabreTools.Metadata.DatFiles
             // Convert and assign the header
             var header = Header.GetInternalClone();
             if (header is not null)
-                metadataFile[Data.Models.Metadata.MetadataFile.HeaderKey] = header;
+                metadataFile.Header = header;
 
             // Convert and assign the machines
             var machines = ConvertMachines(ignoreblanks);
             if (machines is not null)
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey] = machines;
+                metadataFile.Machine = machines;
 
             return metadataFile;
         }
@@ -49,12 +49,12 @@ namespace SabreTools.Metadata.DatFiles
             // Convert and assign the header
             var header = Header.GetInternalClone();
             if (header is not null)
-                metadataFile[Data.Models.Metadata.MetadataFile.HeaderKey] = header;
+                metadataFile.Header = header;
 
             // Convert and assign the machines
             var machines = ConvertMachinesDB(ignoreblanks);
             if (machines is not null)
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey] = machines;
+                metadataFile.Machine = machines;
 
             return metadataFile;
         }

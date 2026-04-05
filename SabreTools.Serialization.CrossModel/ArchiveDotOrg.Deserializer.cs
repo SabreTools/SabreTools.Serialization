@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var files = new Files();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             var items = new List<File>();
             foreach (var machine in machines ?? [])
             {
