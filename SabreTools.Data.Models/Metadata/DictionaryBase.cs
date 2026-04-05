@@ -157,6 +157,7 @@ namespace SabreTools.Data.Models.Metadata
         /// <summary>
         /// Read a key as a string[], returning null on error
         /// </summary>
+        /// TODO: Determine if this can be removed
         public string[]? ReadStringArray(string key)
         {
             if (!ValidateReadKey(key))
