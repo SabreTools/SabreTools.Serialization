@@ -121,7 +121,7 @@ namespace SabreTools.Metadata.DatFiles
                     RemovedCount++;
 
                 // Increment the item count for the type
-                AddItemCount(item.ItemType);
+                ModifyItemCount(item.ItemType, 1);
 
                 // Some item types require special processing
                 switch (item)
@@ -155,7 +155,7 @@ namespace SabreTools.Metadata.DatFiles
             // Loop through and add stats for all items
             foreach (var itemCountKvp in stats._itemCounts)
             {
-                AddItemCount(itemCountKvp.Key, itemCountKvp.Value);
+                ModifyItemCount(itemCountKvp.Key, itemCountKvp.Value);
             }
 
             GameCount += stats.GameCount;
@@ -165,13 +165,13 @@ namespace SabreTools.Metadata.DatFiles
             // Individual hash counts
             foreach (var hashCountKvp in stats._hashCounts)
             {
-                AddHashCount(hashCountKvp.Key, hashCountKvp.Value);
+                ModifyHashCount(hashCountKvp.Key, hashCountKvp.Value);
             }
 
             // Individual status counts
             foreach (var statusCountKvp in stats._statusCounts)
             {
-                AddStatusCount(statusCountKvp.Key, statusCountKvp.Value);
+                ModifyStatusCount(statusCountKvp.Key, statusCountKvp.Value);
             }
 
             RemovedCount += stats.RemovedCount;
@@ -245,7 +245,7 @@ namespace SabreTools.Metadata.DatFiles
                     RemovedCount--;
 
                 // Decrement the item count for the type
-                RemoveItemCount(item.ItemType);
+                ModifyItemCount(item.ItemType, -1);
 
                 // Some item types require special processing
                 switch (item)
@@ -286,12 +286,166 @@ namespace SabreTools.Metadata.DatFiles
         }
 
         /// <summary>
-        /// Increment the hash count for a given hash type
+        /// Add to the statistics for a given Disk
         /// </summary>
-        /// <param name="hashType">Hash type to increment</param>
-        /// <param name="interval">Amount to increment by, defaults to 1</param>
-        private void AddHashCount(HashType hashType, long interval = 1)
+        /// <param name="disk">Item to add info from</param>
+        private void AddItemStatistics(Disk disk)
         {
+            ItemStatus? status = disk.Status;
+            if (status != ItemStatus.Nodump)
+            {
+                ModifyHashCount(HashType.MD5, string.IsNullOrEmpty(disk.MD5) ? 0 : 1);
+                ModifyHashCount(HashType.SHA1, string.IsNullOrEmpty(disk.SHA1) ? 0 : 1);
+            }
+
+            ModifyStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);
+            ModifyStatusCount(ItemStatus.Good, status == ItemStatus.Good ? 1 : 0);
+            ModifyStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? 1 : 0);
+            ModifyStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? 1 : 0);
+        }
+
+        /// <summary>
+        /// Add to the statistics for a given File
+        /// </summary>
+        /// <param name="file">Item to add info from</param>
+        private void AddItemStatistics(File file)
+        {
+            TotalSize += file.Size ?? 0;
+            ModifyHashCount(HashType.CRC32, string.IsNullOrEmpty(file.CRC) ? 0 : 1);
+            ModifyHashCount(HashType.MD5, string.IsNullOrEmpty(file.MD5) ? 0 : 1);
+            ModifyHashCount(HashType.SHA1, string.IsNullOrEmpty(file.SHA1) ? 0 : 1);
+            ModifyHashCount(HashType.SHA256, string.IsNullOrEmpty(file.SHA256) ? 0 : 1);
+        }
+
+        /// <summary>
+        /// Add to the statistics for a given Media
+        /// </summary>
+        /// <param name="media">Item to add info from</param>
+        private void AddItemStatistics(Media media)
+        {
+            ModifyHashCount(HashType.MD5, string.IsNullOrEmpty(media.MD5) ? 0 : 1);
+            ModifyHashCount(HashType.SHA1, string.IsNullOrEmpty(media.SHA1) ? 0 : 1);
+            ModifyHashCount(HashType.SHA256, string.IsNullOrEmpty(media.SHA256) ? 0 : 1);
+            ModifyHashCount(HashType.SpamSum, string.IsNullOrEmpty(media.SpamSum) ? 0 : 1);
+        }
+
+        /// <summary>
+        /// Add to the statistics for a given Rom
+        /// </summary>
+        /// <param name="rom">Item to add info from</param>
+        private void AddItemStatistics(Rom rom)
+        {
+            ItemStatus? status = rom.Status;
+            if (status != ItemStatus.Nodump)
+            {
+                TotalSize += rom.Size ?? 0;
+                ModifyHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.CRC16) ? 0 : 1);
+                ModifyHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.CRC) ? 0 : 1);
+                ModifyHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.CRC64) ? 0 : 1);
+                ModifyHashCount(HashType.MD2, string.IsNullOrEmpty(rom.MD2) ? 0 : 1);
+                ModifyHashCount(HashType.MD4, string.IsNullOrEmpty(rom.MD4) ? 0 : 1);
+                ModifyHashCount(HashType.MD5, string.IsNullOrEmpty(rom.MD5) ? 0 : 1);
+                ModifyHashCount(HashType.RIPEMD128, string.IsNullOrEmpty(rom.RIPEMD128) ? 0 : 1);
+                ModifyHashCount(HashType.RIPEMD160, string.IsNullOrEmpty(rom.RIPEMD160) ? 0 : 1);
+                ModifyHashCount(HashType.SHA1, string.IsNullOrEmpty(rom.SHA1) ? 0 : 1);
+                ModifyHashCount(HashType.SHA256, string.IsNullOrEmpty(rom.SHA256) ? 0 : 1);
+                ModifyHashCount(HashType.SHA384, string.IsNullOrEmpty(rom.SHA384) ? 0 : 1);
+                ModifyHashCount(HashType.SHA512, string.IsNullOrEmpty(rom.SHA512) ? 0 : 1);
+                ModifyHashCount(HashType.SpamSum, string.IsNullOrEmpty(rom.SpamSum) ? 0 : 1);
+            }
+
+            ModifyStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);
+            ModifyStatusCount(ItemStatus.Good, status == ItemStatus.Good ? 1 : 0);
+            ModifyStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? 1 : 0);
+            ModifyStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? 1 : 0);
+        }
+
+        /// <summary>
+        /// Remove from the statistics given a Disk
+        /// </summary>
+        /// <param name="disk">Item to remove info for</param>
+        private void RemoveItemStatistics(Disk disk)
+        {
+            ItemStatus? status = disk.Status;
+            if (status != ItemStatus.Nodump)
+            {
+                ModifyHashCount(HashType.MD5, string.IsNullOrEmpty(disk.MD5) ? 0 : -1);
+                ModifyHashCount(HashType.SHA1, string.IsNullOrEmpty(disk.SHA1) ? 0 : -1);
+            }
+
+            ModifyStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? -1 : 0);
+            ModifyStatusCount(ItemStatus.Good, status == ItemStatus.Good ? -1 : 0);
+            ModifyStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? -1 : 0);
+            ModifyStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? -1 : 0);
+        }
+
+        /// <summary>
+        /// Remove from the statistics given a File
+        /// </summary>
+        /// <param name="file">Item to remove info for</param>
+        private void RemoveItemStatistics(File file)
+        {
+            TotalSize -= file.Size ?? 0;
+            ModifyHashCount(HashType.CRC32, string.IsNullOrEmpty(file.CRC) ? 0 : -1);
+            ModifyHashCount(HashType.MD5, string.IsNullOrEmpty(file.MD5) ? 0 : -1);
+            ModifyHashCount(HashType.SHA1, string.IsNullOrEmpty(file.SHA1) ? 0 : -1);
+            ModifyHashCount(HashType.SHA256, string.IsNullOrEmpty(file.SHA256) ? 0 : -1);
+        }
+
+        /// <summary>
+        /// Remove from the statistics given a Media
+        /// </summary>
+        /// <param name="media">Item to remove info for</param>
+        private void RemoveItemStatistics(Media media)
+        {
+            ModifyHashCount(HashType.MD5, string.IsNullOrEmpty(media.MD5) ? 0 : -1);
+            ModifyHashCount(HashType.SHA1, string.IsNullOrEmpty(media.SHA1) ? 0 : -1);
+            ModifyHashCount(HashType.SHA256, string.IsNullOrEmpty(media.SHA256) ? 0 : -1);
+            ModifyHashCount(HashType.SpamSum, string.IsNullOrEmpty(media.SpamSum) ? 0 : -1);
+        }
+
+        /// <summary>
+        /// Remove from the statistics given a Rom
+        /// </summary>
+        /// <param name="rom">Item to remove info for</param>
+        private void RemoveItemStatistics(Rom rom)
+        {
+            ItemStatus? status = rom.Status;
+            if (status != ItemStatus.Nodump)
+            {
+                TotalSize -= rom.Size ?? 0;
+                ModifyHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.CRC16) ? 0 : -1);
+                ModifyHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.CRC) ? 0 : -1);
+                ModifyHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.CRC64) ? 0 : -1);
+                ModifyHashCount(HashType.MD2, string.IsNullOrEmpty(rom.MD2) ? 0 : -1);
+                ModifyHashCount(HashType.MD4, string.IsNullOrEmpty(rom.MD4) ? 0 : -1);
+                ModifyHashCount(HashType.MD5, string.IsNullOrEmpty(rom.MD5) ? 0 : -1);
+                ModifyHashCount(HashType.RIPEMD128, string.IsNullOrEmpty(rom.RIPEMD128) ? 0 : -1);
+                ModifyHashCount(HashType.RIPEMD160, string.IsNullOrEmpty(rom.RIPEMD160) ? 0 : -1);
+                ModifyHashCount(HashType.SHA1, string.IsNullOrEmpty(rom.SHA1) ? 0 : -1);
+                ModifyHashCount(HashType.SHA256, string.IsNullOrEmpty(rom.SHA256) ? 0 : -1);
+                ModifyHashCount(HashType.SHA384, string.IsNullOrEmpty(rom.SHA384) ? 0 : -1);
+                ModifyHashCount(HashType.SHA512, string.IsNullOrEmpty(rom.SHA512) ? 0 : -1);
+                ModifyHashCount(HashType.SpamSum, string.IsNullOrEmpty(rom.SpamSum) ? 0 : -1);
+            }
+
+            ModifyStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? -1 : 0);
+            ModifyStatusCount(ItemStatus.Good, status == ItemStatus.Good ? -1 : 0);
+            ModifyStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? -1 : 0);
+            ModifyStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? -1 : 0);
+        }
+
+        /// <summary>
+        /// Modify the hash count for a given hash type
+        /// </summary>
+        /// <param name="hashType">Hash type to change</param>
+        /// <param name="interval">Amount to change by</param>
+        private void ModifyHashCount(HashType hashType, long interval)
+        {
+            // Skip if the interval is 0
+            if (interval == 0)
+                return;
+
             lock (_hashCounts)
             {
                 if (!_hashCounts.ContainsKey(hashType))
@@ -306,10 +460,14 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Increment the item count for a given item type
         /// </summary>
-        /// <param name="itemType">Item type to increment</param>
-        /// <param name="interval">Amount to increment by, defaults to 1</param>
-        private void AddItemCount(Data.Models.Metadata.ItemType itemType, long interval = 1)
+        /// <param name="itemType">Item type to change</param>
+        /// <param name="interval">Amount to change by</param>
+        private void ModifyItemCount(Data.Models.Metadata.ItemType itemType, long interval)
         {
+            // Skip if the interval is 0
+            if (interval == 0)
+                return;
+
             lock (_itemCounts)
             {
                 if (!_itemCounts.ContainsKey(itemType))
@@ -322,222 +480,22 @@ namespace SabreTools.Metadata.DatFiles
         }
 
         /// <summary>
-        /// Add to the statistics for a given Disk
-        /// </summary>
-        /// <param name="disk">Item to add info from</param>
-        private void AddItemStatistics(Disk disk)
-        {
-            ItemStatus? status = disk.Status;
-            if (status != ItemStatus.Nodump)
-            {
-                AddHashCount(HashType.MD5, string.IsNullOrEmpty(disk.MD5) ? 0 : 1);
-                AddHashCount(HashType.SHA1, string.IsNullOrEmpty(disk.SHA1) ? 0 : 1);
-            }
-
-            AddStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);
-            AddStatusCount(ItemStatus.Good, status == ItemStatus.Good ? 1 : 0);
-            AddStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? 1 : 0);
-            AddStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? 1 : 0);
-        }
-
-        /// <summary>
-        /// Add to the statistics for a given File
-        /// </summary>
-        /// <param name="file">Item to add info from</param>
-        private void AddItemStatistics(File file)
-        {
-            TotalSize += file.Size ?? 0;
-            AddHashCount(HashType.CRC32, string.IsNullOrEmpty(file.CRC) ? 0 : 1);
-            AddHashCount(HashType.MD5, string.IsNullOrEmpty(file.MD5) ? 0 : 1);
-            AddHashCount(HashType.SHA1, string.IsNullOrEmpty(file.SHA1) ? 0 : 1);
-            AddHashCount(HashType.SHA256, string.IsNullOrEmpty(file.SHA256) ? 0 : 1);
-        }
-
-        /// <summary>
-        /// Add to the statistics for a given Media
-        /// </summary>
-        /// <param name="media">Item to add info from</param>
-        private void AddItemStatistics(Media media)
-        {
-            AddHashCount(HashType.MD5, string.IsNullOrEmpty(media.MD5) ? 0 : 1);
-            AddHashCount(HashType.SHA1, string.IsNullOrEmpty(media.SHA1) ? 0 : 1);
-            AddHashCount(HashType.SHA256, string.IsNullOrEmpty(media.SHA256) ? 0 : 1);
-            AddHashCount(HashType.SpamSum, string.IsNullOrEmpty(media.SpamSum) ? 0 : 1);
-        }
-
-        /// <summary>
-        /// Add to the statistics for a given Rom
-        /// </summary>
-        /// <param name="rom">Item to add info from</param>
-        private void AddItemStatistics(Rom rom)
-        {
-            ItemStatus? status = rom.Status;
-            if (status != ItemStatus.Nodump)
-            {
-                TotalSize += rom.Size ?? 0;
-                AddHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.CRC16) ? 0 : 1);
-                AddHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.CRC) ? 0 : 1);
-                AddHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.CRC64) ? 0 : 1);
-                AddHashCount(HashType.MD2, string.IsNullOrEmpty(rom.MD2) ? 0 : 1);
-                AddHashCount(HashType.MD4, string.IsNullOrEmpty(rom.MD4) ? 0 : 1);
-                AddHashCount(HashType.MD5, string.IsNullOrEmpty(rom.MD5) ? 0 : 1);
-                AddHashCount(HashType.RIPEMD128, string.IsNullOrEmpty(rom.RIPEMD128) ? 0 : 1);
-                AddHashCount(HashType.RIPEMD160, string.IsNullOrEmpty(rom.RIPEMD160) ? 0 : 1);
-                AddHashCount(HashType.SHA1, string.IsNullOrEmpty(rom.SHA1) ? 0 : 1);
-                AddHashCount(HashType.SHA256, string.IsNullOrEmpty(rom.SHA256) ? 0 : 1);
-                AddHashCount(HashType.SHA384, string.IsNullOrEmpty(rom.SHA384) ? 0 : 1);
-                AddHashCount(HashType.SHA512, string.IsNullOrEmpty(rom.SHA512) ? 0 : 1);
-                AddHashCount(HashType.SpamSum, string.IsNullOrEmpty(rom.SpamSum) ? 0 : 1);
-            }
-
-            AddStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);
-            AddStatusCount(ItemStatus.Good, status == ItemStatus.Good ? 1 : 0);
-            AddStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? 1 : 0);
-            AddStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? 1 : 0);
-        }
-
-        /// <summary>
         /// Increment the item count for a given item status
         /// </summary>
-        /// <param name="itemStatus">Item type to increment</param>
-        /// <param name="interval">Amount to increment by, defaults to 1</param>
-        private void AddStatusCount(ItemStatus itemStatus, long interval = 1)
+        /// <param name="itemStatus">Item type to change</param>
+        /// <param name="interval">Amount to change by</param>
+        private void ModifyStatusCount(ItemStatus itemStatus, long interval)
         {
+            // Skip if the interval is 0
+            if (interval == 0)
+                return;
+
             lock (_statusCounts)
             {
                 if (!_statusCounts.ContainsKey(itemStatus))
                     _statusCounts[itemStatus] = 0;
 
                 _statusCounts[itemStatus] += interval;
-                if (_statusCounts[itemStatus] < 0)
-                    _statusCounts[itemStatus] = 0;
-            }
-        }
-
-        /// <summary>
-        /// Decrement the hash count for a given hash type
-        /// </summary>
-        /// <param name="hashType">Hash type to increment</param>
-        /// <param name="interval">Amount to increment by, defaults to 1</param>
-        private void RemoveHashCount(HashType hashType, long interval = 1)
-        {
-            lock (_hashCounts)
-            {
-                if (!_hashCounts.ContainsKey(hashType))
-                    return;
-
-                _hashCounts[hashType] -= interval;
-                if (_hashCounts[hashType] < 0)
-                    _hashCounts[hashType] = 0;
-            }
-        }
-
-        /// <summary>
-        /// Decrement the item count for a given item type
-        /// </summary>
-        /// <param name="itemType">Item type to decrement</param>
-        /// <param name="interval">Amount to increment by, defaults to 1</param>
-        private void RemoveItemCount(Data.Models.Metadata.ItemType itemType, long interval = 1)
-        {
-            lock (_itemCounts)
-            {
-                if (!_itemCounts.ContainsKey(itemType))
-                    return;
-
-                _itemCounts[itemType] -= interval;
-                if (_itemCounts[itemType] < 0)
-                    _itemCounts[itemType] = 0;
-            }
-        }
-
-        /// <summary>
-        /// Remove from the statistics given a Disk
-        /// </summary>
-        /// <param name="disk">Item to remove info for</param>
-        private void RemoveItemStatistics(Disk disk)
-        {
-            ItemStatus? status = disk.Status;
-            if (status != ItemStatus.Nodump)
-            {
-                RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(disk.MD5) ? 0 : 1);
-                RemoveHashCount(HashType.SHA1, string.IsNullOrEmpty(disk.SHA1) ? 0 : 1);
-            }
-
-            RemoveStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);
-            RemoveStatusCount(ItemStatus.Good, status == ItemStatus.Good ? 1 : 0);
-            RemoveStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? 1 : 0);
-            RemoveStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? 1 : 0);
-        }
-
-        /// <summary>
-        /// Remove from the statistics given a File
-        /// </summary>
-        /// <param name="file">Item to remove info for</param>
-        private void RemoveItemStatistics(File file)
-        {
-            TotalSize -= file.Size ?? 0;
-            RemoveHashCount(HashType.CRC32, string.IsNullOrEmpty(file.CRC) ? 0 : 1);
-            RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(file.MD5) ? 0 : 1);
-            RemoveHashCount(HashType.SHA1, string.IsNullOrEmpty(file.SHA1) ? 0 : 1);
-            RemoveHashCount(HashType.SHA256, string.IsNullOrEmpty(file.SHA256) ? 0 : 1);
-        }
-
-        /// <summary>
-        /// Remove from the statistics given a Media
-        /// </summary>
-        /// <param name="media">Item to remove info for</param>
-        private void RemoveItemStatistics(Media media)
-        {
-            RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(media.MD5) ? 0 : 1);
-            RemoveHashCount(HashType.SHA1, string.IsNullOrEmpty(media.SHA1) ? 0 : 1);
-            RemoveHashCount(HashType.SHA256, string.IsNullOrEmpty(media.SHA256) ? 0 : 1);
-            RemoveHashCount(HashType.SpamSum, string.IsNullOrEmpty(media.SpamSum) ? 0 : 1);
-        }
-
-        /// <summary>
-        /// Remove from the statistics given a Rom
-        /// </summary>
-        /// <param name="rom">Item to remove info for</param>
-        private void RemoveItemStatistics(Rom rom)
-        {
-            ItemStatus? status = rom.Status;
-            if (status != ItemStatus.Nodump)
-            {
-                TotalSize -= rom.Size ?? 0;
-                RemoveHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.CRC16) ? 0 : 1);
-                RemoveHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.CRC) ? 0 : 1);
-                RemoveHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.CRC64) ? 0 : 1);
-                RemoveHashCount(HashType.MD2, string.IsNullOrEmpty(rom.MD2) ? 0 : 1);
-                RemoveHashCount(HashType.MD4, string.IsNullOrEmpty(rom.MD4) ? 0 : 1);
-                RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(rom.MD5) ? 0 : 1);
-                RemoveHashCount(HashType.RIPEMD128, string.IsNullOrEmpty(rom.RIPEMD128) ? 0 : 1);
-                RemoveHashCount(HashType.RIPEMD160, string.IsNullOrEmpty(rom.RIPEMD160) ? 0 : 1);
-                RemoveHashCount(HashType.SHA1, string.IsNullOrEmpty(rom.SHA1) ? 0 : 1);
-                RemoveHashCount(HashType.SHA256, string.IsNullOrEmpty(rom.SHA256) ? 0 : 1);
-                RemoveHashCount(HashType.SHA384, string.IsNullOrEmpty(rom.SHA384) ? 0 : 1);
-                RemoveHashCount(HashType.SHA512, string.IsNullOrEmpty(rom.SHA512) ? 0 : 1);
-                RemoveHashCount(HashType.SpamSum, string.IsNullOrEmpty(rom.SpamSum) ? 0 : 1);
-            }
-
-            RemoveStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);
-            RemoveStatusCount(ItemStatus.Good, status == ItemStatus.Good ? 1 : 0);
-            RemoveStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? 1 : 0);
-            RemoveStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? 1 : 0);
-        }
-
-        /// <summary>
-        /// Decrement the item count for a given item status
-        /// </summary>
-        /// <param name="itemStatus">Item type to decrement</param>
-        /// <param name="interval">Amount to increment by, defaults to 1</param>
-        private void RemoveStatusCount(ItemStatus itemStatus, long interval = 1)
-        {
-            lock (_statusCounts)
-            {
-                if (!_statusCounts.ContainsKey(itemStatus))
-                    return;
-
-                _statusCounts[itemStatus] -= interval;
                 if (_statusCounts[itemStatus] < 0)
                     _statusCounts[itemStatus] = 0;
             }
