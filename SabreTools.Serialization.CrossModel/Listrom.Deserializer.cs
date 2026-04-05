@@ -77,8 +77,8 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Size = item.Size,
-                CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
+                CRC = item.CRC,
+                SHA1 = item.SHA1,
             };
 
             if (item.Status == Data.Models.Metadata.ItemStatus.Nodump)

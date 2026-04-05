@@ -375,19 +375,19 @@ namespace SabreTools.Metadata.DatFiles
             if (status != ItemStatus.Nodump)
             {
                 TotalSize += rom.Size ?? 0;
-                AddHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key)) ? 0 : 1);
-                AddHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)) ? 0 : 1);
-                AddHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC64Key)) ? 0 : 1);
-                AddHashCount(HashType.MD2, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD2Key)) ? 0 : 1);
-                AddHashCount(HashType.MD4, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD4Key)) ? 0 : 1);
-                AddHashCount(HashType.MD5, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD5Key)) ? 0 : 1);
-                AddHashCount(HashType.RIPEMD128, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key)) ? 0 : 1);
-                AddHashCount(HashType.RIPEMD160, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key)) ? 0 : 1);
-                AddHashCount(HashType.SHA1, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)) ? 0 : 1);
-                AddHashCount(HashType.SHA256, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA256Key)) ? 0 : 1);
-                AddHashCount(HashType.SHA384, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA384Key)) ? 0 : 1);
-                AddHashCount(HashType.SHA512, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA512Key)) ? 0 : 1);
-                AddHashCount(HashType.SpamSum, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey)) ? 0 : 1);
+                AddHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.CRC16) ? 0 : 1);
+                AddHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.CRC) ? 0 : 1);
+                AddHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.CRC64) ? 0 : 1);
+                AddHashCount(HashType.MD2, string.IsNullOrEmpty(rom.MD2) ? 0 : 1);
+                AddHashCount(HashType.MD4, string.IsNullOrEmpty(rom.MD4) ? 0 : 1);
+                AddHashCount(HashType.MD5, string.IsNullOrEmpty(rom.MD5) ? 0 : 1);
+                AddHashCount(HashType.RIPEMD128, string.IsNullOrEmpty(rom.RIPEMD128) ? 0 : 1);
+                AddHashCount(HashType.RIPEMD160, string.IsNullOrEmpty(rom.RIPEMD160) ? 0 : 1);
+                AddHashCount(HashType.SHA1, string.IsNullOrEmpty(rom.SHA1) ? 0 : 1);
+                AddHashCount(HashType.SHA256, string.IsNullOrEmpty(rom.SHA256) ? 0 : 1);
+                AddHashCount(HashType.SHA384, string.IsNullOrEmpty(rom.SHA384) ? 0 : 1);
+                AddHashCount(HashType.SHA512, string.IsNullOrEmpty(rom.SHA512) ? 0 : 1);
+                AddHashCount(HashType.SpamSum, string.IsNullOrEmpty(rom.SpamSum) ? 0 : 1);
             }
 
             AddStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);
@@ -504,19 +504,19 @@ namespace SabreTools.Metadata.DatFiles
             if (status != ItemStatus.Nodump)
             {
                 TotalSize -= rom.Size ?? 0;
-                RemoveHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key)) ? 0 : 1);
-                RemoveHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)) ? 0 : 1);
-                RemoveHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC64Key)) ? 0 : 1);
-                RemoveHashCount(HashType.MD2, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD2Key)) ? 0 : 1);
-                RemoveHashCount(HashType.MD4, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD4Key)) ? 0 : 1);
-                RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD5Key)) ? 0 : 1);
-                RemoveHashCount(HashType.RIPEMD128, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key)) ? 0 : 1);
-                RemoveHashCount(HashType.RIPEMD160, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key)) ? 0 : 1);
-                RemoveHashCount(HashType.SHA1, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)) ? 0 : 1);
-                RemoveHashCount(HashType.SHA256, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA256Key)) ? 0 : 1);
-                RemoveHashCount(HashType.SHA384, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA384Key)) ? 0 : 1);
-                RemoveHashCount(HashType.SHA512, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA512Key)) ? 0 : 1);
-                RemoveHashCount(HashType.SpamSum, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey)) ? 0 : 1);
+                RemoveHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.CRC16) ? 0 : 1);
+                RemoveHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.CRC) ? 0 : 1);
+                RemoveHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.CRC64) ? 0 : 1);
+                RemoveHashCount(HashType.MD2, string.IsNullOrEmpty(rom.MD2) ? 0 : 1);
+                RemoveHashCount(HashType.MD4, string.IsNullOrEmpty(rom.MD4) ? 0 : 1);
+                RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(rom.MD5) ? 0 : 1);
+                RemoveHashCount(HashType.RIPEMD128, string.IsNullOrEmpty(rom.RIPEMD128) ? 0 : 1);
+                RemoveHashCount(HashType.RIPEMD160, string.IsNullOrEmpty(rom.RIPEMD160) ? 0 : 1);
+                RemoveHashCount(HashType.SHA1, string.IsNullOrEmpty(rom.SHA1) ? 0 : 1);
+                RemoveHashCount(HashType.SHA256, string.IsNullOrEmpty(rom.SHA256) ? 0 : 1);
+                RemoveHashCount(HashType.SHA384, string.IsNullOrEmpty(rom.SHA384) ? 0 : 1);
+                RemoveHashCount(HashType.SHA512, string.IsNullOrEmpty(rom.SHA512) ? 0 : 1);
+                RemoveHashCount(HashType.SpamSum, string.IsNullOrEmpty(rom.SpamSum) ? 0 : 1);
             }
 
             RemoveStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);

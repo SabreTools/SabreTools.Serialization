@@ -222,7 +222,7 @@ namespace SabreTools.Metadata.Test
         public void WriteWithValidation_MissingKey_False()
         {
             TestModelBackedItem? modelBackedItem = new TestModelBackedItem();
-            string? fieldName = Rom.SHA1Key;
+            string? fieldName = "sha1";
             object value = "value";
             bool actual = modelBackedItem.WriteWithValidation(fieldName, value);
             Assert.False(actual);

@@ -38,8 +38,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD2Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.MD2Key);
+                    if (string.IsNullOrEmpty(rom.MD2))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.MD2));
                     break;
 
                 default:

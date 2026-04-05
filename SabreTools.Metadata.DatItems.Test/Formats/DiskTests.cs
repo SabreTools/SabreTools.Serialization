@@ -38,12 +38,12 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom actual = disk.ConvertToRom();
 
             Assert.Equal("name.chd", actual.Name);
-            Assert.Equal("merge", actual.ReadString(Data.Models.Metadata.Rom.MergeKey));
-            Assert.Equal("region", actual.ReadString(Data.Models.Metadata.Rom.RegionKey));
+            Assert.Equal("merge", actual.Merge);
+            Assert.Equal("region", actual.Region);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, actual.Status);
             Assert.Equal(true, actual.Optional);
-            Assert.Equal(HashType.MD5.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Equal(HashType.SHA1.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
+            Assert.Equal(HashType.MD5.ZeroString, actual.MD5);
+            Assert.Equal(HashType.SHA1.ZeroString, actual.SHA1);
             Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
 
             DataArea? actualDataArea = actual.DataArea;

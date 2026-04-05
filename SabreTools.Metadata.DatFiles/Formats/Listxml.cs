@@ -271,10 +271,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (rom.Size is null || rom.Size < 0)
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
+                    if (string.IsNullOrEmpty(rom.CRC)
+                        && string.IsNullOrEmpty(rom.SHA1))
                     {
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     }
 
                     break;

@@ -98,8 +98,8 @@ namespace SabreTools.Serialization.CrossModel
                 {
                     Name = item.Name,
                     Size = item.Size,
-                    [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
-                    [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
+                    CRC = item.CRC,
+                    SHA1 = item.SHA1,
                 };
 
                 if (item.NoGoodDumpKnown)

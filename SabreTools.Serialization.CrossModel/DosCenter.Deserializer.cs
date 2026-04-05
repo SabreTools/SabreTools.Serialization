@@ -68,9 +68,9 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Size = item.Size,
-                CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                Date = item.ReadString(Data.Models.Metadata.Rom.DateKey),
+                CRC = item.CRC,
+                SHA1 = item.SHA1,
+                Date = item.Date,
             };
             return file;
         }

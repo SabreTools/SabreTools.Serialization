@@ -30,10 +30,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom actual = media.ConvertToRom();
 
             Assert.Equal("name.aaruf", actual.Name);
-            Assert.Equal(HashType.MD5.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Equal(HashType.SHA1.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal(HashType.SHA256.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Equal(HashType.SpamSum.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
+            Assert.Equal(HashType.MD5.ZeroString, actual.MD5);
+            Assert.Equal(HashType.SHA1.ZeroString, actual.SHA1);
+            Assert.Equal(HashType.SHA256.ZeroString, actual.SHA256);
+            Assert.Equal(HashType.SpamSum.ZeroString, actual.SpamSum);
             Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
 
             Machine? actualMachine = actual.Machine;

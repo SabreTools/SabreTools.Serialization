@@ -36,14 +36,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA256Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA256Key);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD5Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.MD5Key);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)))
-                        missingFields.Add(Data.Models.Metadata.Rom.CRCKey);
+                    if (string.IsNullOrEmpty(rom.SHA256))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA256));
+                    if (string.IsNullOrEmpty(rom.SHA1))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
+                    if (string.IsNullOrEmpty(rom.MD5))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.MD5));
+                    if (string.IsNullOrEmpty(rom.CRC))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC));
                     break;
 
                 default:

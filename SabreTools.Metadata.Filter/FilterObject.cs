@@ -1215,8 +1215,65 @@ namespace SabreTools.Metadata.Filter
                     checkValue = item.Tool;
                     return true;
 
+                case Rom item when fieldName == "album":
+                    checkValue = item.Album;
+                    return true;
+                case Rom item when fieldName == "altromname":
+                    checkValue = item.AltRomname;
+                    return true;
+                case Rom item when fieldName == "alttitle":
+                    checkValue = item.AltTitle;
+                    return true;
+                case Rom item when fieldName == "artist":
+                    checkValue = item.Artist;
+                    return true;
+                case Rom item when fieldName == "asrdetectedlang":
+                    checkValue = item.ASRDetectedLang;
+                    return true;
+                case Rom item when fieldName == "asrdetectedlangconf":
+                    checkValue = item.ASRDetectedLangConf;
+                    return true;
+                case Rom item when fieldName == "asrtranscribedlang":
+                    checkValue = item.ASRTranscribedLang;
+                    return true;
+                case Rom item when fieldName == "bios":
+                    checkValue = item.Bios;
+                    return true;
+                case Rom item when fieldName == "bitrate":
+                    checkValue = item.Bitrate;
+                    return true;
+                case Rom item when fieldName == "bittorrentmagnethash":
+                    checkValue = item.BitTorrentMagnetHash;
+                    return true;
+                case Rom item when fieldName == "clothcoverdetectionmoduleversion":
+                    checkValue = item.ClothCoverDetectionModuleVersion;
+                    return true;
+                case Rom item when fieldName == "collectioncatalognumber":
+                    checkValue = item.CollectionCatalogNumber;
+                    return true;
+                case Rom item when fieldName == "comment":
+                    checkValue = item.Comment;
+                    return true;
+                case Rom item when fieldName == "crc":
+                    checkValue = item.CRC;
+                    return true;
+                case Rom item when fieldName == "crc16":
+                    checkValue = item.CRC16;
+                    return true;
+                case Rom item when fieldName == "crc64":
+                    checkValue = item.CRC64;
+                    return true;
+                case Rom item when fieldName == "creator":
+                    checkValue = item.Creator;
+                    return true;
+                case Rom item when fieldName == "date":
+                    checkValue = item.Date;
+                    return true;
                 case Rom item when fieldName == "dispose":
                     checkValue = item.Dispose.FromYesNo();
+                    return true;
+                case Rom item when fieldName == "extension":
+                    checkValue = item.Extension;
                     return true;
                 case Rom item when fieldName == "filecount":
                     checkValue = item.FileCount?.ToString();
@@ -1224,14 +1281,65 @@ namespace SabreTools.Metadata.Filter
                 case Rom item when fieldName == "fileisavailable":
                     checkValue = item.FileIsAvailable.FromYesNo();
                     return true;
+                case Rom item when fieldName == "flags":
+                    checkValue = item.Flags;
+                    return true;
+                case Rom item when fieldName == "format":
+                    checkValue = item.Format;
+                    return true;
+                case Rom item when fieldName == "header":
+                    checkValue = item.Header;
+                    return true;
+                case Rom item when fieldName == "height":
+                    checkValue = item.Height;
+                    return true;
+                case Rom item when fieldName == "hocrchartowordhocrversion":
+                    checkValue = item.hOCRCharToWordhOCRVersion;
+                    return true;
+                case Rom item when fieldName == "hocrchartowordmoduleversion":
+                    checkValue = item.hOCRCharToWordModuleVersion;
+                    return true;
+                case Rom item when fieldName == "hocrftstexthocrversion":
+                    checkValue = item.hOCRFtsTexthOCRVersion;
+                    return true;
+                case Rom item when fieldName == "hocrftstextmoduleversion":
+                    checkValue = item.hOCRFtsTextModuleVersion;
+                    return true;
+                case Rom item when fieldName == "hocrpageindexhocrversion":
+                    checkValue = item.hOCRPageIndexhOCRVersion;
+                    return true;
+                case Rom item when fieldName == "hocrpageindexmoduleversion":
+                    checkValue = item.hOCRPageIndexModuleVersion;
+                    return true;
                 case Rom item when fieldName == "inverted":
                     checkValue = item.Inverted.FromYesNo();
+                    return true;
+                case Rom item when fieldName == "lastmodifiedtime":
+                    checkValue = item.LastModifiedTime;
+                    return true;
+                case Rom item when fieldName == "length":
+                    checkValue = item.Length;
                     return true;
                 case Rom item when fieldName == "loadflag":
                     checkValue = item.LoadFlag?.AsStringValue();
                     return true;
+                case Rom item when fieldName == "matrixnumber":
+                    checkValue = item.MatrixNumber;
+                    return true;
+                case Rom item when fieldName == "md2":
+                    checkValue = item.MD2;
+                    return true;
+                case Rom item when fieldName == "md4":
+                    checkValue = item.MD4;
+                    return true;
+                case Rom item when fieldName == "md5":
+                    checkValue = item.MD5;
+                    return true;
                 case Rom item when fieldName == "mediatype":
                     checkValue = item.OpenMSXMediaType?.AsStringValue();
+                    return true;
+                case Rom item when fieldName == "merge":
+                    checkValue = item.Merge;
                     return true;
                 case Rom item when fieldName == "mia":
                     checkValue = item.MIA.FromYesNo();
@@ -1239,8 +1347,53 @@ namespace SabreTools.Metadata.Filter
                 case Rom item when fieldName == "name":
                     checkValue = item.Name;
                     return true;
+                case Rom item when fieldName == "offset":
+                    checkValue = item.Offset;
+                    return true;
                 case Rom item when fieldName == "optional":
                     checkValue = item.Optional.FromYesNo();
+                    return true;
+                case Rom item when fieldName == "original":
+                    checkValue = item.Original;
+                    return true;
+                case Rom item when fieldName == "pdfmoduleversion":
+                    checkValue = item.PDFModuleVersion;
+                    return true;
+                case Rom item when fieldName == "previewimage":
+                    checkValue = item.PreviewImage;
+                    return true;
+                case Rom item when fieldName == "publisher":
+                    checkValue = item.Publisher;
+                    return true;
+                case Rom item when fieldName == "region":
+                    checkValue = item.Region;
+                    return true;
+                case Rom item when fieldName == "remark":
+                    checkValue = item.Remark;
+                    return true;
+                case Rom item when fieldName == "ripemd128":
+                    checkValue = item.RIPEMD128;
+                    return true;
+                case Rom item when fieldName == "ripemd160":
+                    checkValue = item.RIPEMD160;
+                    return true;
+                case Rom item when fieldName == "rotation":
+                    checkValue = item.Rotation;
+                    return true;
+                case Rom item when fieldName == "serial":
+                    checkValue = item.Serial;
+                    return true;
+                case Rom item when fieldName == "sha1":
+                    checkValue = item.SHA1;
+                    return true;
+                case Rom item when fieldName == "sha256":
+                    checkValue = item.SHA256;
+                    return true;
+                case Rom item when fieldName == "sha384":
+                    checkValue = item.SHA384;
+                    return true;
+                case Rom item when fieldName == "sha512":
+                    checkValue = item.SHA512;
                     return true;
                 case Rom item when fieldName == "size":
                     checkValue = item.Size?.ToString();
@@ -1248,11 +1401,107 @@ namespace SabreTools.Metadata.Filter
                 case Rom item when fieldName == "soundonly":
                     checkValue = item.SoundOnly.FromYesNo();
                     return true;
+                case Rom item when fieldName == "source":
+                    checkValue = item.Source;
+                    return true;
+                case Rom item when fieldName == "spamsum":
+                    checkValue = item.SpamSum;
+                    return true;
+                case Rom item when fieldName == "start":
+                    checkValue = item.Start;
+                    return true;
                 case Rom item when fieldName == "status":
                     checkValue = item.Status?.AsStringValue();
                     return true;
+                case Rom item when fieldName == "summation":
+                    checkValue = item.Summation;
+                    return true;
+                case Rom item when fieldName == "tesseractocr":
+                    checkValue = item.TesseractOCR;
+                    return true;
+                case Rom item when fieldName == "tesseractocrconverted":
+                    checkValue = item.TesseractOCRConverted;
+                    return true;
+                case Rom item when fieldName == "tesseractocrdetectedlang":
+                    checkValue = item.TesseractOCRDetectedLang;
+                    return true;
+                case Rom item when fieldName == "tesseractocrdetectedlangconf":
+                    checkValue = item.TesseractOCRDetectedLangConf;
+                    return true;
+                case Rom item when fieldName == "tesseractocrdetectedscript":
+                    checkValue = item.TesseractOCRDetectedScript;
+                    return true;
+                case Rom item when fieldName == "tesseractocrdetectedscriptconf":
+                    checkValue = item.TesseractOCRDetectedScriptConf;
+                    return true;
+                case Rom item when fieldName == "tesseractocrmoduleversion":
+                    checkValue = item.TesseractOCRModuleVersion;
+                    return true;
+                case Rom item when fieldName == "tesseractocrparameters":
+                    checkValue = item.TesseractOCRParameters;
+                    return true;
+                case Rom item when fieldName == "title":
+                    checkValue = item.Title;
+                    return true;
+                case Rom item when fieldName == "track":
+                    checkValue = item.Track;
+                    return true;
+                case Rom item when fieldName == "openmsxtype":
+                    checkValue = item.OpenMSXType;
+                    return true;
                 case Rom item when fieldName == "value":
                     checkValue = item.Value;
+                    return true;
+                case Rom item when fieldName == "whisperasrmoduleversion":
+                    checkValue = item.WhisperASRModuleVersion;
+                    return true;
+                case Rom item when fieldName == "whispermodelhash":
+                    checkValue = item.WhisperModelHash;
+                    return true;
+                case Rom item when fieldName == "whispermodelname":
+                    checkValue = item.WhisperModelName;
+                    return true;
+                case Rom item when fieldName == "whisperversion":
+                    checkValue = item.WhisperVersion;
+                    return true;
+                case Rom item when fieldName == "width":
+                    checkValue = item.Width;
+                    return true;
+                case Rom item when fieldName == "wordconfidenceinterval0to10":
+                    checkValue = item.WordConfidenceInterval0To10;
+                    return true;
+                case Rom item when fieldName == "wordconfidenceinterval11to20":
+                    checkValue = item.WordConfidenceInterval11To20;
+                    return true;
+                case Rom item when fieldName == "wordconfidenceinterval21to30":
+                    checkValue = item.WordConfidenceInterval21To30;
+                    return true;
+                case Rom item when fieldName == "wordconfidenceinterval31to40":
+                    checkValue = item.WordConfidenceInterval31To40;
+                    return true;
+                case Rom item when fieldName == "wordconfidenceinterval41to50":
+                    checkValue = item.WordConfidenceInterval41To50;
+                    return true;
+                case Rom item when fieldName == "wordconfidenceinterval51to60":
+                    checkValue = item.WordConfidenceInterval51To60;
+                    return true;
+                case Rom item when fieldName == "wordconfidenceinterval61to70":
+                    checkValue = item.WordConfidenceInterval61To70;
+                    return true;
+                case Rom item when fieldName == "wordconfidenceinterval71to80":
+                    checkValue = item.WordConfidenceInterval71To80;
+                    return true;
+                case Rom item when fieldName == "wordconfidenceinterval81to90":
+                    checkValue = item.WordConfidenceInterval81To90;
+                    return true;
+                case Rom item when fieldName == "wordconfidenceinterval91to100":
+                    checkValue = item.WordConfidenceInterval91To100;
+                    return true;
+                case Rom item when fieldName == "xxhash364":
+                    checkValue = item.xxHash364;
+                    return true;
+                case Rom item when fieldName == "xxhash3128":
+                    checkValue = item.xxHash3128;
                     return true;
 
                 case Sample item when fieldName == "name":

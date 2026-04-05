@@ -27,28 +27,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(parentItem, statsOnly: false);
@@ -79,28 +79,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(parentItem, statsOnly: false);
@@ -131,28 +131,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             long biosMachineIndex = datFile.AddMachineDB(parentMachine);
@@ -186,28 +186,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             long biosMachineIndex = datFile.AddMachineDB(parentMachine);
@@ -245,28 +245,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(parentItem, statsOnly: false);
@@ -297,28 +297,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             long biosMachineIndex = datFile.AddMachineDB(parentMachine);
@@ -375,10 +375,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = itemMachine,
+                Source = source
             };
-            datItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            datItem.Machine = itemMachine;
-            datItem.Source = source;
 
             DatItem deviceRef = new DeviceRef
             {
@@ -434,8 +434,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
+                CRC = "deadbeef"
             };
-            datItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
 
             DatItem deviceRef = new DeviceRef
             {
@@ -486,28 +486,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(parentItem, statsOnly: false);
@@ -538,28 +538,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             long biosMachineIndex = datFile.AddMachineDB(parentMachine);
@@ -677,28 +677,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(parentItem, statsOnly: false);
@@ -737,28 +737,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             long biosMachineIndex = datFile.AddMachineDB(parentMachine);
@@ -801,28 +801,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(parentItem, statsOnly: false);
@@ -857,28 +857,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = parentMachine,
+                Source = source
             };
-            parentItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            parentItem.Machine = parentMachine;
-            parentItem.Source = source;
 
             DatItem matchChildItem = new Rom
             {
                 Name = "match_child_rom",
                 Size = 12345,
+                CRC = "deadbeef",
+                Machine = childMachine,
+                Source = source
             };
-            matchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            matchChildItem.Machine = childMachine;
-            matchChildItem.Source = source;
 
             DatItem noMatchChildItem = new Rom
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
+                CRC = "beefdead",
+                Machine = childMachine,
+                Source = source
             };
-            noMatchChildItem.Write<string?>(Data.Models.Metadata.Rom.CRCKey, "beefdead");
-            noMatchChildItem.Machine = childMachine;
-            noMatchChildItem.Source = source;
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             long biosMachineIndex = datFile.AddMachineDB(parentMachine);

@@ -266,11 +266,17 @@ namespace SabreTools.Metadata.DatItems.Test
         [InlineData("name", "name", 0)]
         public void CompareTo_NamesOnly(string? selfName, string? otherName, int expected)
         {
-            DatItem self = new Rom { Name = selfName };
-            self.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
+            DatItem self = new Rom
+            {
+                Name = selfName,
+                CRC = "DEADBEEF"
+            };
 
-            DatItem? other = new Rom { Name = otherName };
-            other.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
+            DatItem? other = new Rom
+            {
+                Name = otherName,
+                CRC = "DEADBEEF"
+            };
 
             int actual = self.CompareTo(other);
             Assert.Equal(expected, actual);
@@ -468,20 +474,22 @@ namespace SabreTools.Metadata.DatItems.Test
 
             Machine machine = new Machine { Name = "Machine" };
 
-            DatItem datItem = new Rom();
-            datItem.Write(Data.Models.Metadata.Rom.CRC16Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.CRC64Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.MD2Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.MD4Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.MD5Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA1Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA256Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA384Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA512Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SpamSumKey, "BASE64");
+            DatItem datItem = new Rom
+            {
+                CRC16 = "DEADBEEF",
+                CRC = "DEADBEEF",
+                CRC64 = "DEADBEEF",
+                MD2 = "DEADBEEF",
+                MD4 = "DEADBEEF",
+                MD5 = "DEADBEEF",
+                RIPEMD128 = "DEADBEEF",
+                RIPEMD160 = "DEADBEEF",
+                SHA1 = "DEADBEEF",
+                SHA256 = "DEADBEEF",
+                SHA384 = "DEADBEEF",
+                SHA512 = "DEADBEEF",
+                SpamSum = "BASE64"
+            };
 
             string actual = datItem.GetKey(bucketedBy, machine, source, lower, norename);
             Assert.Equal(expected, actual);

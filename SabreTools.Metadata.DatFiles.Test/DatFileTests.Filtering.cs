@@ -21,10 +21,13 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine machine = new Machine { Name = "machine" };
 
-            DatItem datItem = new Rom { Name = "rom.bin", };
-            datItem.Write(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            datItem.Machine = machine;
-            datItem.Source = source;
+            DatItem datItem = new Rom
+            {
+                Name = "rom.bin",
+                CRC = "deadbeef",
+                Machine = machine,
+                Source = source
+            };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(datItem, statsOnly: false);
@@ -47,10 +50,13 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine machine = new Machine { Name = "machine" };
 
-            DatItem datItem = new Rom { Name = "rom.bin" };
-            datItem.Write(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            datItem.Machine = machine;
-            datItem.Source = source;
+            DatItem datItem = new Rom
+            {
+                Name = "rom.bin",
+                CRC = "deadbeef",
+                Machine = machine,
+                Source = source
+            };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             long sourceIndex = datFile.AddSourceDB(source);

@@ -72,8 +72,8 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 Name = item.Title,
-                [Data.Models.Metadata.Rom.AltRomnameKey] = item.AltRomname,
-                [Data.Models.Metadata.Rom.AltTitleKey] = item.AltTitle,
+                AltRomname = item.AltRomname,
+                AltTitle = item.AltTitle,
                 FileIsAvailable = item.FileIsAvailable,
             };
             return rom;

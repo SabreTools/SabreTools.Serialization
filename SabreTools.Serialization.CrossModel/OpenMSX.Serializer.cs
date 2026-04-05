@@ -110,10 +110,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.StartKey] = item.Start,
-                [Data.Models.Metadata.Rom.OpenMSXType] = item.Type,
-                [Data.Models.Metadata.Rom.SHA1Key] = item.Hash,
-                [Data.Models.Metadata.Rom.RemarkKey] = item.Remark,
+                Start = item.Start,
+                OpenMSXType = item.Type,
+                SHA1 = item.Hash,
+                Remark = item.Remark,
             };
             return rom;
         }

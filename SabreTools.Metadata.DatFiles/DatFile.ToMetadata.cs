@@ -208,7 +208,7 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Release = [.. machine.Release, releaseItem];
                             break;
                         case DatItems.Formats.Rom rom:
-                            var romItem = ProcessItem(rom, machine);
+                            var romItem = ProcessItem(rom, machine, rom.Original);
                             machine.Rom ??= [];
                             machine.Rom = [.. machine.Rom, romItem];
 
@@ -584,7 +584,7 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Release = [.. machine.Release, releaseItem];
                             break;
                         case DatItems.Formats.Rom rom:
-                            var romItem = ProcessItem(rom, machine);
+                            var romItem = ProcessItem(rom, machine, rom.Original);
                             machine.Rom ??= [];
                             machine.Rom = [.. machine.Rom, romItem];
 
@@ -853,11 +853,12 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         /// <param name="item">Item to convert</param>
         /// <param name="machine">Machine to use for Part and DataArea</param>
+        /// <param name="original">Original for OpenMSX</param>
         /// <remarks>
         /// This method is required because both a Rom and a Dump
         /// item might be created and added for a given Rom input.
         /// </remarks>
-        private static Data.Models.Metadata.Rom ProcessItem(DatItems.Formats.Rom item, Data.Models.Metadata.Machine machine)
+        private static Data.Models.Metadata.Rom ProcessItem(DatItems.Formats.Rom item, Data.Models.Metadata.Machine machine, DatItems.Formats.Original? original)
         {
             var romItem = item.GetInternalClone();
 
@@ -869,21 +870,20 @@ namespace SabreTools.Metadata.DatFiles
                     var rom = new Data.Models.Metadata.Rom();
 
                     rom.Name = romItem.Name;
-                    rom[Data.Models.Metadata.Rom.OffsetKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
-                    rom[Data.Models.Metadata.Rom.OpenMSXType] = romItem.ReadString(Data.Models.Metadata.Rom.OpenMSXType);
-                    rom[Data.Models.Metadata.Rom.RemarkKey] = romItem.ReadString(Data.Models.Metadata.Rom.RemarkKey);
-                    rom[Data.Models.Metadata.Rom.SHA1Key] = romItem.ReadString(Data.Models.Metadata.Rom.SHA1Key);
-                    rom[Data.Models.Metadata.Rom.StartKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
+                    rom.Offset = romItem.Start ?? romItem.Offset;
+                    rom.OpenMSXType = romItem.OpenMSXType;
+                    rom.Remark = romItem.Remark;
+                    rom.SHA1 = romItem.SHA1;
+                    rom.Start = romItem.Start ?? romItem.Offset;
 
                     dumpRom.Rom = rom;
 
-                    var romOriginal = romItem.Read<DatItems.Formats.Original>("ORIGINAL");
-                    if (romOriginal is not null)
+                    if (original is not null)
                     {
                         var newOriginal = new Data.Models.Metadata.Original
                         {
-                            Value = romOriginal.Value,
-                            Content = romOriginal.Content,
+                            Value = original.Value,
+                            Content = original.Content,
                         };
                         dumpRom.Original = newOriginal;
                     }
@@ -897,21 +897,20 @@ namespace SabreTools.Metadata.DatFiles
                     var megaRom = new Data.Models.Metadata.Rom();
 
                     megaRom.Name = romItem.Name;
-                    megaRom[Data.Models.Metadata.Rom.OffsetKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
-                    megaRom[Data.Models.Metadata.Rom.OpenMSXType] = romItem.ReadString(Data.Models.Metadata.Rom.OpenMSXType);
-                    megaRom[Data.Models.Metadata.Rom.RemarkKey] = romItem.ReadString(Data.Models.Metadata.Rom.RemarkKey);
-                    megaRom[Data.Models.Metadata.Rom.SHA1Key] = romItem.ReadString(Data.Models.Metadata.Rom.SHA1Key);
-                    megaRom[Data.Models.Metadata.Rom.StartKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
+                    megaRom.Offset = romItem.Start ?? romItem.Offset;
+                    megaRom.OpenMSXType = romItem.OpenMSXType;
+                    megaRom.Remark = romItem.Remark;
+                    megaRom.SHA1 = romItem.SHA1;
+                    megaRom.Start = romItem.Start ?? romItem.Offset;
 
                     dumpMegaRom.MegaRom = megaRom;
 
-                    var megaRomOriginal = romItem.Read<DatItems.Formats.Original>("ORIGINAL");
-                    if (megaRomOriginal is not null)
+                    if (original is not null)
                     {
                         var newOriginal = new Data.Models.Metadata.Original
                         {
-                            Value = megaRomOriginal.Value,
-                            Content = megaRomOriginal.Content,
+                            Value = original.Value,
+                            Content = original.Content,
                         };
                         dumpMegaRom.Original = newOriginal;
                     }
@@ -925,21 +924,20 @@ namespace SabreTools.Metadata.DatFiles
                     var sccPlusCart = new Data.Models.Metadata.Rom();
 
                     sccPlusCart.Name = romItem.Name;
-                    sccPlusCart[Data.Models.Metadata.Rom.OffsetKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
-                    sccPlusCart[Data.Models.Metadata.Rom.OpenMSXType] = romItem.ReadString(Data.Models.Metadata.Rom.OpenMSXType);
-                    sccPlusCart[Data.Models.Metadata.Rom.RemarkKey] = romItem.ReadString(Data.Models.Metadata.Rom.RemarkKey);
-                    sccPlusCart[Data.Models.Metadata.Rom.SHA1Key] = romItem.ReadString(Data.Models.Metadata.Rom.SHA1Key);
-                    sccPlusCart[Data.Models.Metadata.Rom.StartKey] = romItem.ReadString(Data.Models.Metadata.Rom.StartKey) ?? romItem.ReadString(Data.Models.Metadata.Rom.OffsetKey);
+                    sccPlusCart.Offset = romItem.Start ?? romItem.Offset;
+                    sccPlusCart.OpenMSXType = romItem.OpenMSXType;
+                    sccPlusCart.Remark = romItem.Remark;
+                    sccPlusCart.SHA1 = romItem.SHA1;
+                    sccPlusCart.Start = romItem.Start ?? romItem.Offset;
 
                     dumpSccPlusCart.SCCPlusCart = sccPlusCart;
 
-                    var sccPlusCartOriginal = romItem.Read<DatItems.Formats.Original>("ORIGINAL");
-                    if (sccPlusCartOriginal is not null)
+                    if (original is not null)
                     {
                         var newOriginal = new Data.Models.Metadata.Original
                         {
-                            Value = sccPlusCartOriginal.Value,
-                            Content = sccPlusCartOriginal.Content,
+                            Value = original.Value,
+                            Content = original.Content,
                         };
                         dumpSccPlusCart.Original = newOriginal;
                     }

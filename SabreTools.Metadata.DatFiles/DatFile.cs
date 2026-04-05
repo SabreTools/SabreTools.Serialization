@@ -523,7 +523,7 @@ namespace SabreTools.Metadata.DatFiles
                 else if (item is Rom rom)
                 {
                     // We can only write out if there's a SHA-1
-                    string? sha1 = rom.ReadString(Data.Models.Metadata.Rom.SHA1Key);
+                    string? sha1 = rom.SHA1;
                     if (!string.IsNullOrEmpty(sha1))
                     {
                         name = Utilities.GetDepotPath(sha1, Modifiers.OutputDepot.Depth)?.Replace('\\', '/');
@@ -617,20 +617,20 @@ namespace SabreTools.Metadata.DatFiles
             }
             else if (item is Rom rom)
             {
-                crc16 = rom.ReadString(Data.Models.Metadata.Rom.CRC16Key) ?? string.Empty;
-                crc = rom.ReadString(Data.Models.Metadata.Rom.CRCKey) ?? string.Empty;
-                crc64 = rom.ReadString(Data.Models.Metadata.Rom.CRC64Key) ?? string.Empty;
-                md2 = rom.ReadString(Data.Models.Metadata.Rom.MD2Key) ?? string.Empty;
-                md4 = rom.ReadString(Data.Models.Metadata.Rom.MD4Key) ?? string.Empty;
-                md5 = rom.ReadString(Data.Models.Metadata.Rom.MD5Key) ?? string.Empty;
-                ripemd128 = rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key) ?? string.Empty;
-                ripemd160 = rom.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key) ?? string.Empty;
-                sha1 = rom.ReadString(Data.Models.Metadata.Rom.SHA1Key) ?? string.Empty;
-                sha256 = rom.ReadString(Data.Models.Metadata.Rom.SHA256Key) ?? string.Empty;
-                sha384 = rom.ReadString(Data.Models.Metadata.Rom.SHA384Key) ?? string.Empty;
-                sha512 = rom.ReadString(Data.Models.Metadata.Rom.SHA512Key) ?? string.Empty;
+                crc16 = rom.CRC16 ?? string.Empty;
+                crc = rom.CRC ?? string.Empty;
+                crc64 = rom.CRC64 ?? string.Empty;
+                md2 = rom.MD2 ?? string.Empty;
+                md4 = rom.MD4 ?? string.Empty;
+                md5 = rom.MD5 ?? string.Empty;
+                ripemd128 = rom.RIPEMD128 ?? string.Empty;
+                ripemd160 = rom.RIPEMD160 ?? string.Empty;
+                sha1 = rom.SHA1 ?? string.Empty;
+                sha256 = rom.SHA256 ?? string.Empty;
+                sha384 = rom.SHA384 ?? string.Empty;
+                sha512 = rom.SHA512 ?? string.Empty;
                 size = rom.Size.ToString() ?? string.Empty;
-                spamsum = rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey) ?? string.Empty;
+                spamsum = rom.SpamSum ?? string.Empty;
             }
 
             // Now do bulk replacement where possible
@@ -675,38 +675,25 @@ namespace SabreTools.Metadata.DatFiles
                 return rom;
 
             // If the item CRC isn't "null"
-            if (rom.ReadString(Data.Models.Metadata.Rom.CRCKey) != "null")
+            if (rom.CRC != "null")
                 return rom;
 
             // If the Rom has "null" characteristics, ensure all fields
             rom.Name = rom.Name == "null" ? "-" : rom.Name;
             rom.Size = 0;
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key,
-                rom.ReadString(Data.Models.Metadata.Rom.CRC16Key) == "null" ? HashType.CRC16.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey,
-                rom.ReadString(Data.Models.Metadata.Rom.CRCKey) == "null" ? HashType.CRC32.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRC64Key,
-                rom.ReadString(Data.Models.Metadata.Rom.CRC64Key) == "null" ? HashType.CRC64.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD2Key,
-                rom.ReadString(Data.Models.Metadata.Rom.MD2Key) == "null" ? HashType.MD2.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD4Key,
-                rom.ReadString(Data.Models.Metadata.Rom.MD4Key) == "null" ? HashType.MD4.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD5Key,
-                rom.ReadString(Data.Models.Metadata.Rom.MD5Key) == "null" ? HashType.MD5.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.RIPEMD128Key,
-                rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key) == "null" ? HashType.RIPEMD128.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.RIPEMD160Key,
-                rom.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key) == "null" ? HashType.RIPEMD160.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key,
-                rom.ReadString(Data.Models.Metadata.Rom.SHA1Key) == "null" ? HashType.SHA1.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA256Key,
-                rom.ReadString(Data.Models.Metadata.Rom.SHA256Key) == "null" ? HashType.SHA256.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA384Key,
-                rom.ReadString(Data.Models.Metadata.Rom.SHA384Key) == "null" ? HashType.SHA384.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA512Key,
-                rom.ReadString(Data.Models.Metadata.Rom.SHA512Key) == "null" ? HashType.SHA512.ZeroString : null);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SpamSumKey,
-                rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey) == "null" ? HashType.SpamSum.ZeroString : null);
+            rom.CRC16 = rom.CRC16 == "null" ? HashType.CRC16.ZeroString : null;
+            rom.CRC = rom.CRC == "null" ? HashType.CRC32.ZeroString : null;
+            rom.CRC64 = rom.CRC64 == "null" ? HashType.CRC64.ZeroString : null;
+            rom.MD2 = rom.MD2 == "null" ? HashType.MD2.ZeroString : null;
+            rom.MD4 = rom.MD4 == "null" ? HashType.MD4.ZeroString : null;
+            rom.MD5 = rom.MD5 == "null" ? HashType.MD5.ZeroString : null;
+            rom.RIPEMD128 = rom.RIPEMD128 == "null" ? HashType.RIPEMD128.ZeroString : null;
+            rom.RIPEMD160 = rom.RIPEMD160 == "null" ? HashType.RIPEMD160.ZeroString : null;
+            rom.SHA1 = rom.SHA1 == "null" ? HashType.SHA1.ZeroString : null;
+            rom.SHA256 = rom.SHA256 == "null" ? HashType.SHA256.ZeroString : null;
+            rom.SHA384 = rom.SHA384 == "null" ? HashType.SHA384.ZeroString : null;
+            rom.SHA512 = rom.SHA512 == "null" ? HashType.SHA512.ZeroString : null;
+            rom.SpamSum = rom.SpamSum == "null" ? HashType.SpamSum.ZeroString : null;
 
             return rom;
         }
@@ -1086,55 +1073,55 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         private static string GetDuplicateSuffix(Rom datItem)
         {
-            string? crc16 = datItem.ReadString(Data.Models.Metadata.Rom.CRC16Key);
+            string? crc16 = datItem.CRC16;
             if (!string.IsNullOrEmpty(crc16))
                 return $"_{crc16}";
 
-            string? crc = datItem.ReadString(Data.Models.Metadata.Rom.CRCKey);
+            string? crc = datItem.CRC;
             if (!string.IsNullOrEmpty(crc))
                 return $"_{crc}";
 
-            string? crc64 = datItem.ReadString(Data.Models.Metadata.Rom.CRC64Key);
+            string? crc64 = datItem.CRC64;
             if (!string.IsNullOrEmpty(crc64))
                 return $"_{crc64}";
 
-            string? md2 = datItem.ReadString(Data.Models.Metadata.Rom.MD2Key);
+            string? md2 = datItem.MD2;
             if (!string.IsNullOrEmpty(md2))
                 return $"_{md2}";
 
-            string? md4 = datItem.ReadString(Data.Models.Metadata.Rom.MD4Key);
+            string? md4 = datItem.MD4;
             if (!string.IsNullOrEmpty(md4))
                 return $"_{md4}";
 
-            string? md5 = datItem.ReadString(Data.Models.Metadata.Rom.MD5Key);
+            string? md5 = datItem.MD5;
             if (!string.IsNullOrEmpty(md5))
                 return $"_{md5}";
 
-            string? ripemd128 = datItem.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key);
+            string? ripemd128 = datItem.RIPEMD128;
             if (!string.IsNullOrEmpty(ripemd128))
                 return $"_{ripemd128}";
 
-            string? ripemd160 = datItem.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key);
+            string? ripemd160 = datItem.RIPEMD160;
             if (!string.IsNullOrEmpty(ripemd160))
                 return $"_{ripemd160}";
 
-            string? sha1 = datItem.ReadString(Data.Models.Metadata.Rom.SHA1Key);
+            string? sha1 = datItem.SHA1;
             if (!string.IsNullOrEmpty(sha1))
                 return $"_{sha1}";
 
-            string? sha256 = datItem.ReadString(Data.Models.Metadata.Rom.SHA256Key);
+            string? sha256 = datItem.SHA256;
             if (!string.IsNullOrEmpty(sha256))
                 return $"_{sha256}";
 
-            string? sha384 = datItem.ReadString(Data.Models.Metadata.Rom.SHA384Key);
+            string? sha384 = datItem.SHA384;
             if (!string.IsNullOrEmpty(sha384))
                 return $"_{sha384}";
 
-            string? sha512 = datItem.ReadString(Data.Models.Metadata.Rom.SHA512Key);
+            string? sha512 = datItem.SHA512;
             if (!string.IsNullOrEmpty(sha512))
                 return $"_{sha512}";
 
-            string? spamSum = datItem.ReadString(Data.Models.Metadata.Rom.SpamSumKey);
+            string? spamSum = datItem.SpamSum;
             if (!string.IsNullOrEmpty(spamSum))
                 return $"_{spamSum}";
 

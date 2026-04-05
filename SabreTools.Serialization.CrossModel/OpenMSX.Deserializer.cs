@@ -88,10 +88,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var megaRom = new MegaRom
             {
-                Start = item.ReadString(Data.Models.Metadata.Rom.StartKey),
-                Type = item.ReadString(Data.Models.Metadata.Rom.OpenMSXType),
-                Hash = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                Remark = item.ReadString(Data.Models.Metadata.Rom.RemarkKey),
+                Start = item.Start,
+                Type = item.OpenMSXType,
+                Hash = item.SHA1,
+                Remark = item.Remark,
             };
             return megaRom;
         }
@@ -116,10 +116,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Rom
             {
-                Start = item.ReadString(Data.Models.Metadata.Rom.StartKey),
-                Type = item.ReadString(Data.Models.Metadata.Rom.OpenMSXType),
-                Hash = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                Remark = item.ReadString(Data.Models.Metadata.Rom.RemarkKey),
+                Start = item.Start,
+                Type = item.OpenMSXType,
+                Hash = item.SHA1,
+                Remark = item.Remark,
             };
             return rom;
         }
@@ -131,10 +131,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sccPlusCart = new SCCPlusCart
             {
-                Start = item.ReadString(Data.Models.Metadata.Rom.StartKey),
-                Type = item.ReadString(Data.Models.Metadata.Rom.OpenMSXType),
-                Hash = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                Remark = item.ReadString(Data.Models.Metadata.Rom.RemarkKey),
+                Start = item.Start,
+                Type = item.OpenMSXType,
+                Hash = item.SHA1,
+                Remark = item.Remark,
             };
             return sccPlusCart;
         }

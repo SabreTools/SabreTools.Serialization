@@ -168,7 +168,7 @@ namespace SabreTools.Metadata.Filter.Test
             DatItem datItem = new Rom
             {
                 Name = "name",
-                [Rom.CRCKey] = null,
+                CRC = null,
             };
 
             bool actual = _filterRunner.Run(datItem);
@@ -181,7 +181,7 @@ namespace SabreTools.Metadata.Filter.Test
             DatItem datItem = new Rom
             {
                 Name = "name",
-                [Rom.CRCKey] = "",
+                CRC = "",
             };
 
             bool actual = _filterRunner.Run(datItem);
@@ -194,7 +194,7 @@ namespace SabreTools.Metadata.Filter.Test
             DatItem datItem = new Rom
             {
                 Name = "name",
-                [Rom.CRCKey] = "NO_MATCH",
+                CRC = "NO_MATCH",
             };
 
             bool actual = _filterRunner.Run(datItem);
@@ -207,7 +207,7 @@ namespace SabreTools.Metadata.Filter.Test
             DatItem datItem = new Rom
             {
                 Name = "name",
-                [Rom.CRCKey] = "crc",
+                CRC = "crc",
             };
 
             bool actual = _filterRunner.Run(datItem);

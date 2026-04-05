@@ -304,19 +304,19 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Status = ItemStatus.Good,
                 Size = 1
             };
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key, HashType.CRC16.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRC64Key, HashType.CRC64.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD2Key, HashType.MD2.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD4Key, HashType.MD4.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD5Key, HashType.MD5.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.RIPEMD128Key, HashType.RIPEMD128.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.RIPEMD160Key, HashType.RIPEMD160.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA256Key, HashType.SHA256.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA384Key, HashType.SHA384.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA512Key, HashType.SHA512.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SpamSumKey, HashType.SpamSum.ZeroString);
+            rom.CRC16 = HashType.CRC16.ZeroString;
+            rom.CRC = HashType.CRC32.ZeroString;
+            rom.CRC64 = HashType.CRC64.ZeroString;
+            rom.MD2 = HashType.MD2.ZeroString;
+            rom.MD4 = HashType.MD4.ZeroString;
+            rom.MD5 = HashType.MD5.ZeroString;
+            rom.RIPEMD128 = HashType.RIPEMD128.ZeroString;
+            rom.RIPEMD160 = HashType.RIPEMD160.ZeroString;
+            rom.SHA1 = HashType.SHA1.ZeroString;
+            rom.SHA256 = HashType.SHA256.ZeroString;
+            rom.SHA384 = HashType.SHA384.ZeroString;
+            rom.SHA512 = HashType.SHA512.ZeroString;
+            rom.SpamSum = HashType.SpamSum.ZeroString;
 
             return rom;
         }

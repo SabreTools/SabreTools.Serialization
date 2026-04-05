@@ -29,12 +29,12 @@ namespace SabreTools.Data.Extensions
             return new Rom
             {
                 Name = name,
-                [Rom.MergeKey] = disk.Merge,
-                [Rom.RegionKey] = disk.Region,
+                Merge = disk.Merge,
+                Region = disk.Region,
                 Status = disk.Status,
                 Optional = disk.Optional,
-                [Rom.MD5Key] = disk.MD5,
-                [Rom.SHA1Key] = disk.SHA1,
+                MD5 = disk.MD5,
+                SHA1 = disk.SHA1,
             };
         }
 
@@ -55,10 +55,10 @@ namespace SabreTools.Data.Extensions
             return new Rom
             {
                 Name = name,
-                [Rom.MD5Key] = media.MD5,
-                [Rom.SHA1Key] = media.SHA1,
-                [Rom.SHA256Key] = media.SHA256,
-                [Rom.SpamSumKey] = media.SpamSum,
+                MD5 = media.MD5,
+                SHA1 = media.SHA1,
+                SHA256 = media.SHA256,
+                SpamSum = media.SpamSum,
             };
         }
 
@@ -244,56 +244,56 @@ namespace SabreTools.Data.Extensions
                 return false;
 
             // Return if all hashes match according to merge rules
-            string? selfCrc16 = self.ReadString(Rom.CRC16Key);
-            string? otherCrc16 = other.ReadString(Rom.CRC16Key);
+            string? selfCrc16 = self.CRC16;
+            string? otherCrc16 = other.CRC16;
             bool conditionalCrc16 = ConditionalHashEquals(selfCrc16, otherCrc16);
 
-            string? selfCrc = self.ReadString(Rom.CRCKey);
-            string? otherCrc = other.ReadString(Rom.CRCKey);
+            string? selfCrc = self.CRC;
+            string? otherCrc = other.CRC;
             bool conditionalCrc = ConditionalHashEquals(selfCrc, otherCrc);
 
-            string? selfCrc64 = self.ReadString(Rom.CRC64Key);
-            string? otherCrc64 = other.ReadString(Rom.CRC64Key);
+            string? selfCrc64 = self.CRC64;
+            string? otherCrc64 = other.CRC64;
             bool conditionalCrc64 = ConditionalHashEquals(selfCrc64, otherCrc64);
 
-            string? selfMd2 = self.ReadString(Rom.MD2Key);
-            string? otherMd2 = other.ReadString(Rom.MD2Key);
+            string? selfMd2 = self.MD2;
+            string? otherMd2 = other.MD2;
             bool conditionalMd2 = ConditionalHashEquals(selfMd2, otherMd2);
 
-            string? selfMd4 = self.ReadString(Rom.MD4Key);
-            string? otherMd4 = other.ReadString(Rom.MD4Key);
+            string? selfMd4 = self.MD4;
+            string? otherMd4 = other.MD4;
             bool conditionalMd4 = ConditionalHashEquals(selfMd4, otherMd4);
 
-            string? selfMd5 = self.ReadString(Rom.MD5Key);
-            string? otherMd5 = other.ReadString(Rom.MD5Key);
+            string? selfMd5 = self.MD5;
+            string? otherMd5 = other.MD5;
             bool conditionalMd5 = ConditionalHashEquals(selfMd5, otherMd5);
 
-            string? selfRipeMD128 = self.ReadString(Rom.RIPEMD128Key);
-            string? otherRipeMD128 = other.ReadString(Rom.RIPEMD128Key);
+            string? selfRipeMD128 = self.RIPEMD128;
+            string? otherRipeMD128 = other.RIPEMD128;
             bool conditionaRipeMD128 = ConditionalHashEquals(selfRipeMD128, otherRipeMD128);
 
-            string? selfRipeMD160 = self.ReadString(Rom.RIPEMD160Key);
-            string? otherRipeMD160 = other.ReadString(Rom.RIPEMD160Key);
+            string? selfRipeMD160 = self.RIPEMD160;
+            string? otherRipeMD160 = other.RIPEMD160;
             bool conditionaRipeMD160 = ConditionalHashEquals(selfRipeMD160, otherRipeMD160);
 
-            string? selfSha1 = self.ReadString(Rom.SHA1Key);
-            string? otherSha1 = other.ReadString(Rom.SHA1Key);
+            string? selfSha1 = self.SHA1;
+            string? otherSha1 = other.SHA1;
             bool conditionalSha1 = ConditionalHashEquals(selfSha1, otherSha1);
 
-            string? selfSha256 = self.ReadString(Rom.SHA256Key);
-            string? otherSha256 = other.ReadString(Rom.SHA256Key);
+            string? selfSha256 = self.SHA256;
+            string? otherSha256 = other.SHA256;
             bool conditionalSha256 = ConditionalHashEquals(selfSha256, otherSha256);
 
-            string? selfSha384 = self.ReadString(Rom.SHA384Key);
-            string? otherSha384 = other.ReadString(Rom.SHA384Key);
+            string? selfSha384 = self.SHA384;
+            string? otherSha384 = other.SHA384;
             bool conditionalSha384 = ConditionalHashEquals(selfSha384, otherSha384);
 
-            string? selfSha512 = self.ReadString(Rom.SHA512Key);
-            string? otherSha512 = other.ReadString(Rom.SHA512Key);
+            string? selfSha512 = self.SHA512;
+            string? otherSha512 = other.SHA512;
             bool conditionalSha512 = ConditionalHashEquals(selfSha512, otherSha512);
 
-            string? selfSpamSum = self.ReadString(Rom.SpamSumKey);
-            string? otherSpamSum = other.ReadString(Rom.SpamSumKey);
+            string? selfSpamSum = self.SpamSum;
+            string? otherSpamSum = other.SpamSum;
             bool conditionalSpamSum = ConditionalHashEquals(selfSpamSum, otherSpamSum);
 
             return conditionalCrc16
@@ -344,19 +344,19 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         public static bool HasHashes(this Rom rom)
         {
-            bool crc16Null = string.IsNullOrEmpty(rom.ReadString(Rom.CRC16Key));
-            bool crcNull = string.IsNullOrEmpty(rom.ReadString(Rom.CRCKey));
-            bool crc64Null = string.IsNullOrEmpty(rom.ReadString(Rom.CRC64Key));
-            bool md2Null = string.IsNullOrEmpty(rom.ReadString(Rom.MD2Key));
-            bool md4Null = string.IsNullOrEmpty(rom.ReadString(Rom.MD4Key));
-            bool md5Null = string.IsNullOrEmpty(rom.ReadString(Rom.MD5Key));
-            bool ripeMD128Null = string.IsNullOrEmpty(rom.ReadString(Rom.RIPEMD128Key));
-            bool ripeMD160Null = string.IsNullOrEmpty(rom.ReadString(Rom.RIPEMD160Key));
-            bool sha1Null = string.IsNullOrEmpty(rom.ReadString(Rom.SHA1Key));
-            bool sha256Null = string.IsNullOrEmpty(rom.ReadString(Rom.SHA256Key));
-            bool sha384Null = string.IsNullOrEmpty(rom.ReadString(Rom.SHA384Key));
-            bool sha512Null = string.IsNullOrEmpty(rom.ReadString(Rom.SHA512Key));
-            bool spamsumNull = string.IsNullOrEmpty(rom.ReadString(Rom.SpamSumKey));
+            bool crc16Null = string.IsNullOrEmpty(rom.CRC16);
+            bool crcNull = string.IsNullOrEmpty(rom.CRC);
+            bool crc64Null = string.IsNullOrEmpty(rom.CRC64);
+            bool md2Null = string.IsNullOrEmpty(rom.MD2);
+            bool md4Null = string.IsNullOrEmpty(rom.MD4);
+            bool md5Null = string.IsNullOrEmpty(rom.MD5);
+            bool ripeMD128Null = string.IsNullOrEmpty(rom.RIPEMD128);
+            bool ripeMD160Null = string.IsNullOrEmpty(rom.RIPEMD160);
+            bool sha1Null = string.IsNullOrEmpty(rom.SHA1);
+            bool sha256Null = string.IsNullOrEmpty(rom.SHA256);
+            bool sha384Null = string.IsNullOrEmpty(rom.SHA384);
+            bool sha512Null = string.IsNullOrEmpty(rom.SHA512);
+            bool spamsumNull = string.IsNullOrEmpty(rom.SpamSum);
 
             return !crc16Null
                 || !crcNull
@@ -416,43 +416,43 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         public static bool HasZeroHash(this Rom rom)
         {
-            string? crc16 = rom.ReadString(Rom.CRC16Key);
+            string? crc16 = rom.CRC16;
             bool crc16Null = string.IsNullOrEmpty(crc16) || string.Equals(crc16, HashType.CRC16.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? crc = rom.ReadString(Rom.CRCKey);
+            string? crc = rom.CRC;
             bool crcNull = string.IsNullOrEmpty(crc) || string.Equals(crc, HashType.CRC32.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? crc64 = rom.ReadString(Rom.CRC64Key);
+            string? crc64 = rom.CRC64;
             bool crc64Null = string.IsNullOrEmpty(crc64) || string.Equals(crc64, HashType.CRC64.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? md2 = rom.ReadString(Rom.MD2Key);
+            string? md2 = rom.MD2;
             bool md2Null = string.IsNullOrEmpty(md2) || string.Equals(md2, HashType.MD2.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? md4 = rom.ReadString(Rom.MD4Key);
+            string? md4 = rom.MD4;
             bool md4Null = string.IsNullOrEmpty(md4) || string.Equals(md4, HashType.MD4.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? md5 = rom.ReadString(Rom.MD5Key);
+            string? md5 = rom.MD5;
             bool md5Null = string.IsNullOrEmpty(md5) || string.Equals(md5, HashType.MD5.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? ripeMD128 = rom.ReadString(Rom.RIPEMD128Key);
+            string? ripeMD128 = rom.RIPEMD128;
             bool ripeMD128Null = string.IsNullOrEmpty(value: ripeMD128) || string.Equals(ripeMD128, HashType.RIPEMD128.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? ripeMD160 = rom.ReadString(Rom.RIPEMD160Key);
+            string? ripeMD160 = rom.RIPEMD160;
             bool ripeMD160Null = string.IsNullOrEmpty(ripeMD160) || string.Equals(ripeMD160, HashType.RIPEMD160.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? sha1 = rom.ReadString(Rom.SHA1Key);
+            string? sha1 = rom.SHA1;
             bool sha1Null = string.IsNullOrEmpty(sha1) || string.Equals(sha1, HashType.SHA1.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? sha256 = rom.ReadString(Rom.SHA256Key);
+            string? sha256 = rom.SHA256;
             bool sha256Null = string.IsNullOrEmpty(sha256) || string.Equals(sha256, HashType.SHA256.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? sha384 = rom.ReadString(Rom.SHA384Key);
+            string? sha384 = rom.SHA384;
             bool sha384Null = string.IsNullOrEmpty(sha384) || string.Equals(sha384, HashType.SHA384.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? sha512 = rom.ReadString(Rom.SHA512Key);
+            string? sha512 = rom.SHA512;
             bool sha512Null = string.IsNullOrEmpty(sha512) || string.Equals(sha512, HashType.SHA512.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? spamsum = rom.ReadString(Rom.SpamSumKey);
+            string? spamsum = rom.SpamSum;
             bool spamsumNull = string.IsNullOrEmpty(spamsum) || string.Equals(spamsum, HashType.SpamSum.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             return crc16Null
@@ -513,44 +513,44 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         private static bool HasCommonHash(this Rom self, Rom other)
         {
-            bool crc16Null = string.IsNullOrEmpty(self.ReadString(Rom.CRC16Key));
-            crc16Null ^= string.IsNullOrEmpty(other.ReadString(Rom.CRC16Key));
+            bool crc16Null = string.IsNullOrEmpty(self.CRC16);
+            crc16Null ^= string.IsNullOrEmpty(other.CRC16);
 
-            bool crcNull = string.IsNullOrEmpty(self.ReadString(Rom.CRCKey));
-            crcNull ^= string.IsNullOrEmpty(other.ReadString(Rom.CRCKey));
+            bool crcNull = string.IsNullOrEmpty(self.CRC);
+            crcNull ^= string.IsNullOrEmpty(other.CRC);
 
-            bool crc64Null = string.IsNullOrEmpty(self.ReadString(Rom.CRC64Key));
-            crc64Null ^= string.IsNullOrEmpty(other.ReadString(Rom.CRC64Key));
+            bool crc64Null = string.IsNullOrEmpty(self.CRC64);
+            crc64Null ^= string.IsNullOrEmpty(other.CRC64);
 
-            bool md2Null = string.IsNullOrEmpty(self.ReadString(Rom.MD2Key));
-            md2Null ^= string.IsNullOrEmpty(other.ReadString(Rom.MD2Key));
+            bool md2Null = string.IsNullOrEmpty(self.MD2);
+            md2Null ^= string.IsNullOrEmpty(other.MD2);
 
-            bool md4Null = string.IsNullOrEmpty(self.ReadString(Rom.MD4Key));
-            md4Null ^= string.IsNullOrEmpty(other.ReadString(Rom.MD4Key));
+            bool md4Null = string.IsNullOrEmpty(self.MD4);
+            md4Null ^= string.IsNullOrEmpty(other.MD4);
 
-            bool md5Null = string.IsNullOrEmpty(self.ReadString(Rom.MD5Key));
-            md5Null ^= string.IsNullOrEmpty(other.ReadString(Rom.MD5Key));
+            bool md5Null = string.IsNullOrEmpty(self.MD5);
+            md5Null ^= string.IsNullOrEmpty(other.MD5);
 
-            bool ripeMD128Null = string.IsNullOrEmpty(self.ReadString(Rom.RIPEMD128Key));
-            ripeMD128Null ^= string.IsNullOrEmpty(other.ReadString(Rom.RIPEMD128Key));
+            bool ripeMD128Null = string.IsNullOrEmpty(self.RIPEMD128);
+            ripeMD128Null ^= string.IsNullOrEmpty(other.RIPEMD128);
 
-            bool ripeMD160Null = string.IsNullOrEmpty(self.ReadString(Rom.RIPEMD160Key));
-            ripeMD160Null ^= string.IsNullOrEmpty(other.ReadString(Rom.RIPEMD160Key));
+            bool ripeMD160Null = string.IsNullOrEmpty(self.RIPEMD160);
+            ripeMD160Null ^= string.IsNullOrEmpty(other.RIPEMD160);
 
-            bool sha1Null = string.IsNullOrEmpty(self.ReadString(Rom.SHA1Key));
-            sha1Null ^= string.IsNullOrEmpty(other.ReadString(Rom.SHA1Key));
+            bool sha1Null = string.IsNullOrEmpty(self.SHA1);
+            sha1Null ^= string.IsNullOrEmpty(other.SHA1);
 
-            bool sha256Null = string.IsNullOrEmpty(self.ReadString(Rom.SHA256Key));
-            sha256Null ^= string.IsNullOrEmpty(other.ReadString(Rom.SHA256Key));
+            bool sha256Null = string.IsNullOrEmpty(self.SHA256);
+            sha256Null ^= string.IsNullOrEmpty(other.SHA256);
 
-            bool sha384Null = string.IsNullOrEmpty(self.ReadString(Rom.SHA384Key));
-            sha384Null ^= string.IsNullOrEmpty(other.ReadString(Rom.SHA384Key));
+            bool sha384Null = string.IsNullOrEmpty(self.SHA384);
+            sha384Null ^= string.IsNullOrEmpty(other.SHA384);
 
-            bool sha512Null = string.IsNullOrEmpty(self.ReadString(Rom.SHA512Key));
-            sha512Null ^= string.IsNullOrEmpty(other.ReadString(Rom.SHA512Key));
+            bool sha512Null = string.IsNullOrEmpty(self.SHA512);
+            sha512Null ^= string.IsNullOrEmpty(other.SHA512);
 
-            bool spamsumNull = string.IsNullOrEmpty(self.ReadString(Rom.SpamSumKey));
-            spamsumNull ^= string.IsNullOrEmpty(other.ReadString(Rom.SpamSumKey));
+            bool spamsumNull = string.IsNullOrEmpty(self.SpamSum);
+            spamsumNull ^= string.IsNullOrEmpty(other.SpamSum);
 
             return !crc16Null
                 || !crcNull
@@ -632,70 +632,70 @@ namespace SabreTools.Data.Extensions
             if (selfSize is null && otherSize is not null)
                 self.Size = otherSize;
 
-            string? selfCrc16 = self.ReadString(Rom.CRC16Key);
-            string? otherCrc16 = other.ReadString(Rom.CRC16Key);
+            string? selfCrc16 = self.CRC16;
+            string? otherCrc16 = other.CRC16;
             if (string.IsNullOrEmpty(selfCrc16) && !string.IsNullOrEmpty(otherCrc16))
-                self[Rom.CRC16Key] = otherCrc16;
+                self.CRC16 = otherCrc16;
 
-            string? selfCrc = self.ReadString(Rom.CRCKey);
-            string? otherCrc = other.ReadString(Rom.CRCKey);
+            string? selfCrc = self.CRC;
+            string? otherCrc = other.CRC;
             if (string.IsNullOrEmpty(selfCrc) && !string.IsNullOrEmpty(otherCrc))
-                self[Rom.CRCKey] = otherCrc;
+                self.CRC = otherCrc;
 
-            string? selfCrc64 = self.ReadString(Rom.CRC64Key);
-            string? otherCrc64 = other.ReadString(Rom.CRC64Key);
+            string? selfCrc64 = self.CRC64;
+            string? otherCrc64 = other.CRC64;
             if (string.IsNullOrEmpty(selfCrc64) && !string.IsNullOrEmpty(otherCrc64))
-                self[Rom.CRC64Key] = otherCrc64;
+                self.CRC64 = otherCrc64;
 
-            string? selfMd2 = self.ReadString(Rom.MD2Key);
-            string? otherMd2 = other.ReadString(Rom.MD2Key);
+            string? selfMd2 = self.MD2;
+            string? otherMd2 = other.MD2;
             if (string.IsNullOrEmpty(selfMd2) && !string.IsNullOrEmpty(otherMd2))
-                self[Rom.MD2Key] = otherMd2;
+                self.MD2 = otherMd2;
 
-            string? selfMd4 = self.ReadString(Rom.MD4Key);
-            string? otherMd4 = other.ReadString(Rom.MD4Key);
+            string? selfMd4 = self.MD4;
+            string? otherMd4 = other.MD4;
             if (string.IsNullOrEmpty(selfMd4) && !string.IsNullOrEmpty(otherMd4))
-                self[Rom.MD4Key] = otherMd4;
+                self.MD4 = otherMd4;
 
-            string? selfMd5 = self.ReadString(Rom.MD5Key);
-            string? otherMd5 = other.ReadString(Rom.MD5Key);
+            string? selfMd5 = self.MD5;
+            string? otherMd5 = other.MD5;
             if (string.IsNullOrEmpty(selfMd5) && !string.IsNullOrEmpty(otherMd5))
-                self[Rom.MD5Key] = otherMd5;
+                self.MD5 = otherMd5;
 
-            string? selfRipeMD128 = self.ReadString(Rom.RIPEMD128Key);
-            string? otherRipeMD128 = other.ReadString(Rom.RIPEMD128Key);
+            string? selfRipeMD128 = self.RIPEMD128;
+            string? otherRipeMD128 = other.RIPEMD128;
             if (string.IsNullOrEmpty(selfRipeMD128) && !string.IsNullOrEmpty(otherRipeMD128))
-                self[Rom.RIPEMD128Key] = otherRipeMD128;
+                self.RIPEMD128 = otherRipeMD128;
 
-            string? selfRipeMD160 = self.ReadString(Rom.RIPEMD160Key);
-            string? otherRipeMD160 = other.ReadString(Rom.RIPEMD160Key);
+            string? selfRipeMD160 = self.RIPEMD160;
+            string? otherRipeMD160 = other.RIPEMD160;
             if (string.IsNullOrEmpty(selfRipeMD160) && !string.IsNullOrEmpty(otherRipeMD160))
-                self[Rom.RIPEMD160Key] = otherRipeMD160;
+                self.RIPEMD160 = otherRipeMD160;
 
-            string? selfSha1 = self.ReadString(Rom.SHA1Key);
-            string? otherSha1 = other.ReadString(Rom.SHA1Key);
+            string? selfSha1 = self.SHA1;
+            string? otherSha1 = other.SHA1;
             if (string.IsNullOrEmpty(selfSha1) && !string.IsNullOrEmpty(otherSha1))
-                self[Rom.SHA1Key] = otherSha1;
+                self.SHA1 = otherSha1;
 
-            string? selfSha256 = self.ReadString(Rom.SHA256Key);
-            string? otherSha256 = other.ReadString(Rom.SHA256Key);
+            string? selfSha256 = self.SHA256;
+            string? otherSha256 = other.SHA256;
             if (string.IsNullOrEmpty(selfSha256) && !string.IsNullOrEmpty(otherSha256))
-                self[Rom.SHA256Key] = otherSha256;
+                self.SHA256 = otherSha256;
 
-            string? selfSha384 = self.ReadString(Rom.SHA384Key);
-            string? otherSha384 = other.ReadString(Rom.SHA384Key);
+            string? selfSha384 = self.SHA384;
+            string? otherSha384 = other.SHA384;
             if (string.IsNullOrEmpty(selfSha384) && !string.IsNullOrEmpty(otherSha384))
-                self[Rom.SHA384Key] = otherSha384;
+                self.SHA384 = otherSha384;
 
-            string? selfSha512 = self.ReadString(Rom.SHA512Key);
-            string? otherSha512 = other.ReadString(Rom.SHA512Key);
+            string? selfSha512 = self.SHA512;
+            string? otherSha512 = other.SHA512;
             if (string.IsNullOrEmpty(selfSha512) && !string.IsNullOrEmpty(otherSha512))
-                self[Rom.SHA512Key] = otherSha512;
+                self.SHA512 = otherSha512;
 
-            string? selfSpamSum = self.ReadString(Rom.SpamSumKey);
-            string? otherSpamSum = other.ReadString(Rom.SpamSumKey);
+            string? selfSpamSum = self.SpamSum;
+            string? otherSpamSum = other.SpamSum;
             if (string.IsNullOrEmpty(selfSpamSum) && !string.IsNullOrEmpty(otherSpamSum))
-                self[Rom.SpamSumKey] = otherSpamSum;
+                self.SpamSum = otherSpamSum;
         }
 
         #endregion

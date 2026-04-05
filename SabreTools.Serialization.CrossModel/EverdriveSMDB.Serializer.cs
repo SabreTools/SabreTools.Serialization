@@ -53,11 +53,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.SHA256Key] = item.SHA256,
+                SHA256 = item.SHA256,
                 Name = item.Name,
-                [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
-                [Data.Models.Metadata.Rom.MD5Key] = item.MD5,
-                [Data.Models.Metadata.Rom.CRCKey] = item.CRC32,
+                SHA1 = item.SHA1,
+                MD5 = item.MD5,
+                CRC = item.CRC32,
                 Size = item.Size,
             };
             return rom;

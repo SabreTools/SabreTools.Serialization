@@ -781,102 +781,102 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.AlbumKey] = "album",
-                [Data.Models.Metadata.Rom.AltRomnameKey] = "alt_romname",
-                [Data.Models.Metadata.Rom.AltTitleKey] = "alt_title",
-                [Data.Models.Metadata.Rom.ArtistKey] = "artist",
-                [Data.Models.Metadata.Rom.ASRDetectedLangKey] = "asr_detected_lang",
-                [Data.Models.Metadata.Rom.ASRDetectedLangConfKey] = "asr_detected_lang_conf",
-                [Data.Models.Metadata.Rom.ASRTranscribedLangKey] = "asr_transcribed_lang",
-                [Data.Models.Metadata.Rom.BiosKey] = "bios",
-                [Data.Models.Metadata.Rom.BitrateKey] = "bitrate",
-                [Data.Models.Metadata.Rom.BitTorrentMagnetHashKey] = "btih",
-                [Data.Models.Metadata.Rom.ClothCoverDetectionModuleVersionKey] = "cloth_cover_detection_module_version",
-                [Data.Models.Metadata.Rom.CollectionCatalogNumberKey] = "collection-catalog-number",
-                [Data.Models.Metadata.Rom.CommentKey] = "comment",
-                [Data.Models.Metadata.Rom.CRCKey] = HashType.CRC32.ZeroString,
-                [Data.Models.Metadata.Rom.CRC16Key] = HashType.CRC16.ZeroString,
-                [Data.Models.Metadata.Rom.CRC64Key] = HashType.CRC64.ZeroString,
-                [Data.Models.Metadata.Rom.CreatorKey] = "creator",
-                [Data.Models.Metadata.Rom.DateKey] = "date",
+                Album = "album",
+                AltRomname = "alt_romname",
+                AltTitle = "alt_title",
+                Artist = "artist",
+                ASRDetectedLang = "asr_detected_lang",
+                ASRDetectedLangConf = "asr_detected_lang_conf",
+                ASRTranscribedLang = "asr_transcribed_lang",
+                Bios = "bios",
+                Bitrate = "bitrate",
+                BitTorrentMagnetHash = "btih",
+                ClothCoverDetectionModuleVersion = "cloth_cover_detection_module_version",
+                CollectionCatalogNumber = "collection-catalog-number",
+                Comment = "comment",
+                CRC = HashType.CRC32.ZeroString,
+                CRC16 = HashType.CRC16.ZeroString,
+                CRC64 = HashType.CRC64.ZeroString,
+                Creator = "creator",
+                Date = "date",
                 Dispose = true,
-                [Data.Models.Metadata.Rom.ExtensionKey] = "extension",
+                Extension = "extension",
                 FileCount = 12345,
                 FileIsAvailable = true,
-                [Data.Models.Metadata.Rom.FlagsKey] = "flags",
-                [Data.Models.Metadata.Rom.FormatKey] = "format",
-                [Data.Models.Metadata.Rom.HeaderKey] = "header",
-                [Data.Models.Metadata.Rom.HeightKey] = "height",
-                [Data.Models.Metadata.Rom.hOCRCharToWordhOCRVersionKey] = "hocr_char_to_word_hocr_version",
-                [Data.Models.Metadata.Rom.hOCRCharToWordModuleVersionKey] = "hocr_char_to_word_module_version",
-                [Data.Models.Metadata.Rom.hOCRFtsTexthOCRVersionKey] = "hocr_fts_text_hocr_version",
-                [Data.Models.Metadata.Rom.hOCRFtsTextModuleVersionKey] = "hocr_fts_text_module_version",
-                [Data.Models.Metadata.Rom.hOCRPageIndexhOCRVersionKey] = "hocr_pageindex_hocr_version",
-                [Data.Models.Metadata.Rom.hOCRPageIndexModuleVersionKey] = "hocr_pageindex_module_version",
+                Flags = "flags",
+                Format = "format",
+                Header = "header",
+                Height = "height",
+                hOCRCharToWordhOCRVersion = "hocr_char_to_word_hocr_version",
+                hOCRCharToWordModuleVersion = "hocr_char_to_word_module_version",
+                hOCRFtsTexthOCRVersion = "hocr_fts_text_hocr_version",
+                hOCRFtsTextModuleVersion = "hocr_fts_text_module_version",
+                hOCRPageIndexhOCRVersion = "hocr_pageindex_hocr_version",
+                hOCRPageIndexModuleVersion = "hocr_pageindex_module_version",
                 Inverted = true,
-                [Data.Models.Metadata.Rom.LastModifiedTimeKey] = "mtime",
-                [Data.Models.Metadata.Rom.LengthKey] = "length",
+                LastModifiedTime = "mtime",
+                Length = "length",
                 LoadFlag = Data.Models.Metadata.LoadFlag.Load16Byte,
-                [Data.Models.Metadata.Rom.MatrixNumberKey] = "matrix_number",
-                [Data.Models.Metadata.Rom.MD2Key] = HashType.MD2.ZeroString,
-                [Data.Models.Metadata.Rom.MD4Key] = HashType.MD4.ZeroString,
-                [Data.Models.Metadata.Rom.MD5Key] = HashType.MD5.ZeroString,
+                MatrixNumber = "matrix_number",
+                MD2 = HashType.MD2.ZeroString,
+                MD4 = HashType.MD4.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
                 // [Data.Models.Metadata.Rom.OpenMSXMediaType] = null, // Omit due to other test
-                [Data.Models.Metadata.Rom.MergeKey] = "merge",
+                OpenMSXType = "type",
+                Merge = "merge",
                 MIA = true,
                 Name = "name",
-                [Data.Models.Metadata.Rom.TesseractOCRKey] = "ocr",
-                [Data.Models.Metadata.Rom.TesseractOCRConvertedKey] = "ocr_converted",
-                [Data.Models.Metadata.Rom.TesseractOCRDetectedLangKey] = "ocr_detected_lang",
-                [Data.Models.Metadata.Rom.TesseractOCRDetectedLangConfKey] = "ocr_detected_lang_conf",
-                [Data.Models.Metadata.Rom.TesseractOCRDetectedScriptKey] = "ocr_detected_script",
-                [Data.Models.Metadata.Rom.TesseractOCRDetectedScriptConfKey] = "ocr_detected_script_conf",
-                [Data.Models.Metadata.Rom.TesseractOCRModuleVersionKey] = "ocr_module_version",
-                [Data.Models.Metadata.Rom.TesseractOCRParametersKey] = "ocr_parameters",
-                [Data.Models.Metadata.Rom.OffsetKey] = "offset",
+                Offset = "offset",
                 Optional = true,
-                [Data.Models.Metadata.Rom.OriginalKey] = "original",
-                [Data.Models.Metadata.Rom.PDFModuleVersionKey] = "pdf_module_version",
-                [Data.Models.Metadata.Rom.PreviewImageKey] = "preview-image",
-                [Data.Models.Metadata.Rom.PublisherKey] = "publisher",
-                [Data.Models.Metadata.Rom.RegionKey] = "region",
-                [Data.Models.Metadata.Rom.RemarkKey] = "remark",
-                [Data.Models.Metadata.Rom.RIPEMD128Key] = HashType.RIPEMD128.ZeroString,
-                [Data.Models.Metadata.Rom.RIPEMD160Key] = HashType.RIPEMD160.ZeroString,
-                [Data.Models.Metadata.Rom.RotationKey] = "rotation",
-                [Data.Models.Metadata.Rom.SerialKey] = "serial",
-                [Data.Models.Metadata.Rom.SHA1Key] = HashType.SHA1.ZeroString,
-                [Data.Models.Metadata.Rom.SHA256Key] = HashType.SHA256.ZeroString,
-                [Data.Models.Metadata.Rom.SHA384Key] = HashType.SHA384.ZeroString,
-                [Data.Models.Metadata.Rom.SHA512Key] = HashType.SHA512.ZeroString,
+                Original = "original",
+                PDFModuleVersion = "pdf_module_version",
+                PreviewImage = "preview-image",
+                Publisher = "publisher",
+                Region = "region",
+                Remark = "remark",
+                RIPEMD128 = HashType.RIPEMD128.ZeroString,
+                RIPEMD160 = HashType.RIPEMD160.ZeroString,
+                Rotation = "rotation",
+                Serial = "serial",
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SHA384 = HashType.SHA384.ZeroString,
+                SHA512 = HashType.SHA512.ZeroString,
                 Size = 12345,
                 SoundOnly = true,
-                [Data.Models.Metadata.Rom.SourceKey] = "source",
-                [Data.Models.Metadata.Rom.SpamSumKey] = HashType.SpamSum.ZeroString,
-                [Data.Models.Metadata.Rom.StartKey] = "start",
+                Source = "source",
+                SpamSum = HashType.SpamSum.ZeroString,
+                Start = "start",
                 Status = Data.Models.Metadata.ItemStatus.Good,
-                [Data.Models.Metadata.Rom.SummationKey] = "summation",
-                [Data.Models.Metadata.Rom.TitleKey] = "title",
-                [Data.Models.Metadata.Rom.TrackKey] = "track",
-                [Data.Models.Metadata.Rom.OpenMSXType] = "type",
+                Summation = "summation",
+                TesseractOCR = "ocr",
+                TesseractOCRConverted = "ocr_converted",
+                TesseractOCRDetectedLang = "ocr_detected_lang",
+                TesseractOCRDetectedLangConf = "ocr_detected_lang_conf",
+                TesseractOCRDetectedScript = "ocr_detected_script",
+                TesseractOCRDetectedScriptConf = "ocr_detected_script_conf",
+                TesseractOCRModuleVersion = "ocr_module_version",
+                TesseractOCRParameters = "ocr_parameters",
+                Title = "title",
+                Track = "track",
                 Value = "value",
-                [Data.Models.Metadata.Rom.WhisperASRModuleVersionKey] = "whisper_asr_module_version",
-                [Data.Models.Metadata.Rom.WhisperModelHashKey] = "whisper_model_hash",
-                [Data.Models.Metadata.Rom.WhisperModelNameKey] = "whisper_model_name",
-                [Data.Models.Metadata.Rom.WhisperVersionKey] = "whisper_version",
-                [Data.Models.Metadata.Rom.WidthKey] = "width",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval0To10Key] = "word_conf_0_10",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval11To20Key] = "word_conf_11_20",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval21To30Key] = "word_conf_21_30",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval31To40Key] = "word_conf_31_40",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval41To50Key] = "word_conf_41_50",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval51To60Key] = "word_conf_51_60",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval61To70Key] = "word_conf_61_70",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval71To80Key] = "word_conf_71_80",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval81To90Key] = "word_conf_81_90",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval91To100Key] = "word_conf_91_100",
-                [Data.Models.Metadata.Rom.xxHash364Key] = HashType.XxHash3.ZeroString,
-                [Data.Models.Metadata.Rom.xxHash3128Key] = HashType.XxHash128.ZeroString,
+                WhisperASRModuleVersion = "whisper_asr_module_version",
+                WhisperModelHash = "whisper_model_hash",
+                WhisperModelName = "whisper_model_name",
+                WhisperVersion = "whisper_version",
+                Width = "width",
+                WordConfidenceInterval0To10 = "word_conf_0_10",
+                WordConfidenceInterval11To20 = "word_conf_11_20",
+                WordConfidenceInterval21To30 = "word_conf_21_30",
+                WordConfidenceInterval31To40 = "word_conf_31_40",
+                WordConfidenceInterval41To50 = "word_conf_41_50",
+                WordConfidenceInterval51To60 = "word_conf_51_60",
+                WordConfidenceInterval61To70 = "word_conf_61_70",
+                WordConfidenceInterval71To80 = "word_conf_71_80",
+                WordConfidenceInterval81To90 = "word_conf_81_90",
+                WordConfidenceInterval91To100 = "word_conf_91_100",
+                xxHash364 = HashType.XxHash3.ZeroString,
+                xxHash3128 = HashType.XxHash128.ZeroString,
             };
         }
 
@@ -1493,102 +1493,102 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateRom(Rom? rom)
         {
             Assert.NotNull(rom);
-            Assert.Equal("album", rom.ReadString(Data.Models.Metadata.Rom.AlbumKey));
-            Assert.Equal("alt_romname", rom.ReadString(Data.Models.Metadata.Rom.AltRomnameKey));
-            Assert.Equal("alt_title", rom.ReadString(Data.Models.Metadata.Rom.AltTitleKey));
-            Assert.Equal("artist", rom.ReadString(Data.Models.Metadata.Rom.ArtistKey));
-            Assert.Equal("asr_detected_lang", rom.ReadString(Data.Models.Metadata.Rom.ASRDetectedLangKey));
-            Assert.Equal("asr_detected_lang_conf", rom.ReadString(Data.Models.Metadata.Rom.ASRDetectedLangConfKey));
-            Assert.Equal("asr_transcribed_lang", rom.ReadString(Data.Models.Metadata.Rom.ASRTranscribedLangKey));
-            Assert.Equal("bios", rom.ReadString(Data.Models.Metadata.Rom.BiosKey));
-            Assert.Equal("bitrate", rom.ReadString(Data.Models.Metadata.Rom.BitrateKey));
-            Assert.Equal("btih", rom.ReadString(Data.Models.Metadata.Rom.BitTorrentMagnetHashKey));
-            Assert.Equal("cloth_cover_detection_module_version", rom.ReadString(Data.Models.Metadata.Rom.ClothCoverDetectionModuleVersionKey));
-            Assert.Equal("collection-catalog-number", rom.ReadString(Data.Models.Metadata.Rom.CollectionCatalogNumberKey));
-            Assert.Equal("comment", rom.ReadString(Data.Models.Metadata.Rom.CommentKey));
-            Assert.Equal(HashType.CRC32.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Equal(HashType.CRC16.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC16Key));
-            Assert.Equal(HashType.CRC64.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC64Key));
-            Assert.Equal("creator", rom.ReadString(Data.Models.Metadata.Rom.CreatorKey));
-            Assert.Equal("date", rom.ReadString(Data.Models.Metadata.Rom.DateKey));
+            Assert.Equal("album", rom.Album);
+            Assert.Equal("alt_romname", rom.AltRomname);
+            Assert.Equal("alt_title", rom.AltTitle);
+            Assert.Equal("artist", rom.Artist);
+            Assert.Equal("asr_detected_lang", rom.ASRDetectedLang);
+            Assert.Equal("asr_detected_lang_conf", rom.ASRDetectedLangConf);
+            Assert.Equal("asr_transcribed_lang", rom.ASRTranscribedLang);
+            Assert.Equal("bios", rom.Bios);
+            Assert.Equal("bitrate", rom.Bitrate);
+            Assert.Equal("btih", rom.BitTorrentMagnetHash);
+            Assert.Equal("cloth_cover_detection_module_version", rom.ClothCoverDetectionModuleVersion);
+            Assert.Equal("collection-catalog-number", rom.CollectionCatalogNumber);
+            Assert.Equal("comment", rom.Comment);
+            Assert.Equal(HashType.CRC32.ZeroString, rom.CRC);
+            Assert.Equal(HashType.CRC16.ZeroString, rom.CRC16);
+            Assert.Equal(HashType.CRC64.ZeroString, rom.CRC64);
+            Assert.Equal("creator", rom.Creator);
+            Assert.Equal("date", rom.Date);
             Assert.True(rom.Dispose);
-            Assert.Equal("extension", rom.ReadString(Data.Models.Metadata.Rom.ExtensionKey));
+            Assert.Equal("extension", rom.Extension);
             Assert.Equal(12345, rom.FileCount);
             Assert.True(rom.FileIsAvailable);
-            Assert.Equal("flags", rom.ReadString(Data.Models.Metadata.Rom.FlagsKey));
-            Assert.Equal("format", rom.ReadString(Data.Models.Metadata.Rom.FormatKey));
-            Assert.Equal("header", rom.ReadString(Data.Models.Metadata.Rom.HeaderKey));
-            Assert.Equal("height", rom.ReadString(Data.Models.Metadata.Rom.HeightKey));
-            Assert.Equal("hocr_char_to_word_hocr_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRCharToWordhOCRVersionKey));
-            Assert.Equal("hocr_char_to_word_module_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRCharToWordModuleVersionKey));
-            Assert.Equal("hocr_fts_text_hocr_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRFtsTexthOCRVersionKey));
-            Assert.Equal("hocr_fts_text_module_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRFtsTextModuleVersionKey));
-            Assert.Equal("hocr_pageindex_hocr_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRPageIndexhOCRVersionKey));
-            Assert.Equal("hocr_pageindex_module_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRPageIndexModuleVersionKey));
+            Assert.Equal("flags", rom.Flags);
+            Assert.Equal("format", rom.Format);
+            Assert.Equal("header", rom.Header);
+            Assert.Equal("height", rom.Height);
+            Assert.Equal("hocr_char_to_word_hocr_version", rom.hOCRCharToWordhOCRVersion);
+            Assert.Equal("hocr_char_to_word_module_version", rom.hOCRCharToWordModuleVersion);
+            Assert.Equal("hocr_fts_text_hocr_version", rom.hOCRFtsTexthOCRVersion);
+            Assert.Equal("hocr_fts_text_module_version", rom.hOCRFtsTextModuleVersion);
+            Assert.Equal("hocr_pageindex_hocr_version", rom.hOCRPageIndexhOCRVersion);
+            Assert.Equal("hocr_pageindex_module_version", rom.hOCRPageIndexModuleVersion);
             Assert.True(rom.Inverted);
-            Assert.Equal("mtime", rom.ReadString(Data.Models.Metadata.Rom.LastModifiedTimeKey));
-            Assert.Equal("length", rom.ReadString(Data.Models.Metadata.Rom.LengthKey));
+            Assert.Equal("mtime", rom.LastModifiedTime);
+            Assert.Equal("length", rom.Length);
             Assert.Equal(Data.Models.Metadata.LoadFlag.Load16Byte, rom.LoadFlag);
-            Assert.Equal("matrix_number", rom.ReadString(Data.Models.Metadata.Rom.MatrixNumberKey));
-            Assert.Equal(HashType.MD2.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.MD2Key));
-            Assert.Equal(HashType.MD4.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.MD4Key));
-            Assert.Equal(HashType.MD5.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.MD5Key));
+            Assert.Equal("matrix_number", rom.MatrixNumber);
+            Assert.Equal(HashType.MD2.ZeroString, rom.MD2);
+            Assert.Equal(HashType.MD4.ZeroString, rom.MD4);
+            Assert.Equal(HashType.MD5.ZeroString, rom.MD5);
             Assert.Null(rom.OpenMSXMediaType); // Omit due to other test
-            Assert.Equal("merge", rom.ReadString(Data.Models.Metadata.Rom.MergeKey));
+            Assert.Equal("type", rom.OpenMSXType);
+            Assert.Equal("merge", rom.Merge);
             Assert.True(rom.MIA);
             Assert.Equal("name", rom.Name);
-            Assert.Equal("ocr", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRKey));
-            Assert.Equal("ocr_converted", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRConvertedKey));
-            Assert.Equal("ocr_detected_lang", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRDetectedLangKey));
-            Assert.Equal("ocr_detected_lang_conf", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRDetectedLangConfKey));
-            Assert.Equal("ocr_detected_script", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRDetectedScriptKey));
-            Assert.Equal("ocr_detected_script_conf", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRDetectedScriptConfKey));
-            Assert.Equal("ocr_module_version", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRModuleVersionKey));
-            Assert.Equal("ocr_parameters", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRParametersKey));
-            Assert.Equal("offset", rom.ReadString(Data.Models.Metadata.Rom.OffsetKey));
+            Assert.Equal("offset", rom.Offset);
             Assert.True(rom.Optional);
-            Assert.Equal("original", rom.ReadString(Data.Models.Metadata.Rom.OriginalKey));
-            Assert.Equal("pdf_module_version", rom.ReadString(Data.Models.Metadata.Rom.PDFModuleVersionKey));
-            Assert.Equal("preview-image", rom.ReadString(Data.Models.Metadata.Rom.PreviewImageKey));
-            Assert.Equal("publisher", rom.ReadString(Data.Models.Metadata.Rom.PublisherKey));
-            Assert.Equal("region", rom.ReadString(Data.Models.Metadata.Rom.RegionKey));
-            Assert.Equal("remark", rom.ReadString(Data.Models.Metadata.Rom.RemarkKey));
-            Assert.Equal(HashType.RIPEMD128.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key));
-            Assert.Equal(HashType.RIPEMD160.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key));
-            Assert.Equal("rotation", rom.ReadString(Data.Models.Metadata.Rom.RotationKey));
-            Assert.Equal("serial", rom.ReadString(Data.Models.Metadata.Rom.SerialKey));
-            Assert.Equal(HashType.SHA1.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal(HashType.SHA256.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Equal(HashType.SHA384.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA384Key));
-            Assert.Equal(HashType.SHA512.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA512Key));
+            Assert.Equal("original", rom.OriginalProperty);
+            Assert.Equal("pdf_module_version", rom.PDFModuleVersion);
+            Assert.Equal("preview-image", rom.PreviewImage);
+            Assert.Equal("publisher", rom.Publisher);
+            Assert.Equal("region", rom.Region);
+            Assert.Equal("remark", rom.Remark);
+            Assert.Equal(HashType.RIPEMD128.ZeroString, rom.RIPEMD128);
+            Assert.Equal(HashType.RIPEMD160.ZeroString, rom.RIPEMD160);
+            Assert.Equal("rotation", rom.Rotation);
+            Assert.Equal("serial", rom.Serial);
+            Assert.Equal(HashType.SHA1.ZeroString, rom.SHA1);
+            Assert.Equal(HashType.SHA256.ZeroString, rom.SHA256);
+            Assert.Equal(HashType.SHA384.ZeroString, rom.SHA384);
+            Assert.Equal(HashType.SHA512.ZeroString, rom.SHA512);
             Assert.Equal(12345, rom.Size);
             Assert.True(rom.SoundOnly);
-            Assert.Equal("source", rom.ReadString(Data.Models.Metadata.Rom.SourceKey));
-            Assert.Equal(HashType.SpamSum.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
-            Assert.Equal("start", rom.ReadString(Data.Models.Metadata.Rom.StartKey));
+            Assert.Equal("source", rom.SourceProperty);
+            Assert.Equal(HashType.SpamSum.ZeroString, rom.SpamSum);
+            Assert.Equal("start", rom.Start);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
-            Assert.Equal("summation", rom.ReadString(Data.Models.Metadata.Rom.SummationKey));
-            Assert.Equal("title", rom.ReadString(Data.Models.Metadata.Rom.TitleKey));
-            Assert.Equal("track", rom.ReadString(Data.Models.Metadata.Rom.TrackKey));
-            Assert.Equal("type", rom.ReadString(Data.Models.Metadata.Rom.OpenMSXType));
+            Assert.Equal("summation", rom.Summation);
+            Assert.Equal("ocr", rom.TesseractOCR);
+            Assert.Equal("ocr_converted", rom.TesseractOCRConverted);
+            Assert.Equal("ocr_detected_lang", rom.TesseractOCRDetectedLang);
+            Assert.Equal("ocr_detected_lang_conf", rom.TesseractOCRDetectedLangConf);
+            Assert.Equal("ocr_detected_script", rom.TesseractOCRDetectedScript);
+            Assert.Equal("ocr_detected_script_conf", rom.TesseractOCRDetectedScriptConf);
+            Assert.Equal("ocr_module_version", rom.TesseractOCRModuleVersion);
+            Assert.Equal("ocr_parameters", rom.TesseractOCRParameters);
+            Assert.Equal("title", rom.Title);
+            Assert.Equal("track", rom.Track);
             Assert.Equal("value", rom.Value);
-            Assert.Equal("whisper_asr_module_version", rom.ReadString(Data.Models.Metadata.Rom.WhisperASRModuleVersionKey));
-            Assert.Equal("whisper_model_hash", rom.ReadString(Data.Models.Metadata.Rom.WhisperModelHashKey));
-            Assert.Equal("whisper_model_name", rom.ReadString(Data.Models.Metadata.Rom.WhisperModelNameKey));
-            Assert.Equal("whisper_version", rom.ReadString(Data.Models.Metadata.Rom.WhisperVersionKey));
-            Assert.Equal("width", rom.ReadString(Data.Models.Metadata.Rom.WidthKey));
-            Assert.Equal("word_conf_0_10", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval0To10Key));
-            Assert.Equal("word_conf_11_20", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval11To20Key));
-            Assert.Equal("word_conf_21_30", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval21To30Key));
-            Assert.Equal("word_conf_31_40", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval31To40Key));
-            Assert.Equal("word_conf_41_50", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval41To50Key));
-            Assert.Equal("word_conf_51_60", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval51To60Key));
-            Assert.Equal("word_conf_61_70", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval61To70Key));
-            Assert.Equal("word_conf_71_80", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval71To80Key));
-            Assert.Equal("word_conf_81_90", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval81To90Key));
-            Assert.Equal("word_conf_91_100", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval91To100Key));
-            Assert.Equal(HashType.XxHash3.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.xxHash364Key));
-            Assert.Equal(HashType.XxHash128.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.xxHash3128Key));
+            Assert.Equal("whisper_asr_module_version", rom.WhisperASRModuleVersion);
+            Assert.Equal("whisper_model_hash", rom.WhisperModelHash);
+            Assert.Equal("whisper_model_name", rom.WhisperModelName);
+            Assert.Equal("whisper_version", rom.WhisperVersion);
+            Assert.Equal("width", rom.Width);
+            Assert.Equal("word_conf_0_10", rom.WordConfidenceInterval0To10);
+            Assert.Equal("word_conf_11_20", rom.WordConfidenceInterval11To20);
+            Assert.Equal("word_conf_21_30", rom.WordConfidenceInterval21To30);
+            Assert.Equal("word_conf_31_40", rom.WordConfidenceInterval31To40);
+            Assert.Equal("word_conf_41_50", rom.WordConfidenceInterval41To50);
+            Assert.Equal("word_conf_51_60", rom.WordConfidenceInterval51To60);
+            Assert.Equal("word_conf_61_70", rom.WordConfidenceInterval61To70);
+            Assert.Equal("word_conf_71_80", rom.WordConfidenceInterval71To80);
+            Assert.Equal("word_conf_81_90", rom.WordConfidenceInterval81To90);
+            Assert.Equal("word_conf_91_100", rom.WordConfidenceInterval91To100);
+            Assert.Equal(HashType.XxHash3.ZeroString, rom.xxHash364);
+            Assert.Equal(HashType.XxHash128.ZeroString, rom.xxHash3128);
         }
 
         private static void ValidateSample(Sample? sample)

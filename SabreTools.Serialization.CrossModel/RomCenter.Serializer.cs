@@ -86,9 +86,9 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 Name = item.RomName,
-                [Data.Models.Metadata.Rom.CRCKey] = item.RomCRC,
+                CRC = item.RomCRC,
                 Size = item.RomSize,
-                [Data.Models.Metadata.Rom.MergeKey] = item.MergeName,
+                Merge = item.MergeName,
             };
             return rom;
         }

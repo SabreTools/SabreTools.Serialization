@@ -370,6 +370,17 @@ namespace SabreTools.Metadata.DatFiles
                 for (int i = 0; i < items.Length; i++)
                 {
                     var datItem = new Rom(items[i], machine, source, i);
+
+                    var original = items[i].Original;
+                    if (original is not null)
+                    {
+                        datItem.Original = new Original
+                        {
+                            Value = original.Value,
+                            Content = original.Content,
+                        };
+                    }
+
                     if (datItem.Name is not null)
                     {
                         AddItem(datItem, statsOnly);

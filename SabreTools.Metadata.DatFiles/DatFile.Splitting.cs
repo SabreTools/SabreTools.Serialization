@@ -332,7 +332,7 @@ namespace SabreTools.Metadata.DatFiles
                     // Special rom handling
                     else if (item is Rom rom)
                     {
-                        string? mergeTag = rom.ReadString(Data.Models.Metadata.Rom.MergeKey);
+                        string? mergeTag = rom.Merge;
 
                         // If the merge tag exists and the parent already contains it, skip
                         if (mergeTag is not null && GetItemsForBucket(cloneOf)
@@ -468,7 +468,7 @@ namespace SabreTools.Metadata.DatFiles
                     // Special rom handling
                     else if (item.Value is Rom rom)
                     {
-                        string? mergeTag = rom.ReadString(Data.Models.Metadata.Rom.MergeKey);
+                        string? mergeTag = rom.Merge;
 
                         // If the merge tag exists and the parent already contains it, skip
                         if (mergeTag is not null && GetItemsForBucketDB(cloneOf).Values
@@ -1357,7 +1357,10 @@ namespace SabreTools.Metadata.DatFiles
                 foreach (DatItem item in items)
                 {
                     // Remove the merge tag
-                    item.Remove(Data.Models.Metadata.Rom.MergeKey);
+                    if (item is Disk disk)
+                        disk.Merge = null;
+                    else if (item is Rom rom)
+                        rom.Merge = null;
 
                     // Get the machine
                     var machine = item.Machine;

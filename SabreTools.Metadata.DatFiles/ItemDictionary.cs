@@ -139,7 +139,7 @@ namespace SabreTools.Metadata.DatFiles
                 long? size = rom.Size;
 
                 // If we have the case where there is SHA-1 and nothing else, we don't fill in any other part of the data
-                if (size is null && !string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
+                if (size is null && !string.IsNullOrEmpty(rom.SHA1))
                 {
                     // No-op, just catch it so it doesn't go further
                     //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Entry with only SHA-1 found - '{rom.Name}'");
@@ -147,22 +147,22 @@ namespace SabreTools.Metadata.DatFiles
 
                 // If we have a rom and it's missing size AND the hashes match a 0-byte file, fill in the rest of the info
                 else if ((size == 0 || size is null)
-                    && (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)) || rom.HasZeroHash()))
+                    && (string.IsNullOrEmpty(rom.CRC) || rom.HasZeroHash()))
                 {
                     rom.Size = 0;
-                    rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key, null); // HashType.CRC16.ZeroString
-                    rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
-                    rom.Write<string?>(Data.Models.Metadata.Rom.CRC64Key, null); // HashType.CRC64.ZeroString
-                    rom.Write<string?>(Data.Models.Metadata.Rom.MD2Key, null); // HashType.MD2.ZeroString
-                    rom.Write<string?>(Data.Models.Metadata.Rom.MD4Key, null); // HashType.MD4.ZeroString
-                    rom.Write<string?>(Data.Models.Metadata.Rom.MD5Key, HashType.MD5.ZeroString);
-                    rom.Write<string?>(Data.Models.Metadata.Rom.RIPEMD128Key, null); // HashType.RIPEMD128.ZeroString
-                    rom.Write<string?>(Data.Models.Metadata.Rom.RIPEMD160Key, null); // HashType.RIPEMD160.ZeroString
-                    rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
-                    rom.Write<string?>(Data.Models.Metadata.Rom.SHA256Key, null); // HashType.SHA256.ZeroString;
-                    rom.Write<string?>(Data.Models.Metadata.Rom.SHA384Key, null); // HashType.SHA384.ZeroString;
-                    rom.Write<string?>(Data.Models.Metadata.Rom.SHA512Key, null); // HashType.SHA512.ZeroString;
-                    rom.Write<string?>(Data.Models.Metadata.Rom.SpamSumKey, null); // HashType.SpamSum.ZeroString;
+                    rom.CRC16 = null; // HashType.CRC16.ZeroString
+                    rom.CRC = HashType.CRC32.ZeroString;
+                    rom.CRC64 = null; // HashType.CRC64.ZeroString
+                    rom.MD2 = null; // HashType.MD2.ZeroString
+                    rom.MD4 = null; // HashType.MD4.ZeroString
+                    rom.MD5 = HashType.MD5.ZeroString;
+                    rom.RIPEMD128 = null; // HashType.RIPEMD128.ZeroString
+                    rom.RIPEMD160 = null; // HashType.RIPEMD160.ZeroString
+                    rom.SHA1 = HashType.SHA1.ZeroString;
+                    rom.SHA256 = null; // HashType.SHA256.ZeroString;
+                    rom.SHA384 = null; // HashType.SHA384.ZeroString;
+                    rom.SHA512 = null; // HashType.SHA512.ZeroString;
+                    rom.SpamSum = null; // HashType.SpamSum.ZeroString;
                 }
 
                 // If the file has no size and it's not the above case, skip and log

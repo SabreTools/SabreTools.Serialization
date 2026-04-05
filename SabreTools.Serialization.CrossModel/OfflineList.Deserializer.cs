@@ -111,8 +111,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var fileRomCRC = new FileRomCRC
             {
-                Extension = item.ReadString(Data.Models.Metadata.Rom.ExtensionKey),
-                Content = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
+                Extension = item.Extension,
+                Content = item.CRC,
             };
             return fileRomCRC;
         }

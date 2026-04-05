@@ -45,11 +45,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                SHA256 = item.ReadString(Data.Models.Metadata.Rom.SHA256Key),
+                SHA256 = item.SHA256,
                 Name = item.Name,
-                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                MD5 = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
-                CRC32 = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
+                SHA1 = item.SHA1,
+                MD5 = item.MD5,
+                CRC32 = item.CRC,
                 Size = item.Size,
             };
             return row;

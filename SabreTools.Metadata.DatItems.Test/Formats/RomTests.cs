@@ -15,19 +15,19 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             self.FillMissingInformation(other);
 
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.CRC16Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.CRC64Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.MD2Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.MD4Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.SHA384Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.SHA512Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
+            Assert.Null(self.CRC16);
+            Assert.Null(self.CRC);
+            Assert.Null(self.CRC64);
+            Assert.Null(self.MD2);
+            Assert.Null(self.MD4);
+            Assert.Null(self.MD5);
+            Assert.Null(self.RIPEMD128);
+            Assert.Null(self.RIPEMD160);
+            Assert.Null(self.SHA1);
+            Assert.Null(self.SHA256);
+            Assert.Null(self.SHA384);
+            Assert.Null(self.SHA512);
+            Assert.Null(self.SpamSum);
         }
 
         [Fact]
@@ -35,36 +35,38 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Rom self = new Rom();
 
-            Rom other = new Rom();
-            other.Write(Data.Models.Metadata.Rom.CRC16Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.CRCKey, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.CRC64Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.MD2Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.MD4Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.MD5Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.SHA1Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.SHA256Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.SHA384Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.SHA512Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Rom.SpamSumKey, "XXXXXX");
+            Rom other = new Rom
+            {
+                CRC16 = "XXXXXX",
+                CRC = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX"
+            };
 
             self.FillMissingInformation(other);
 
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.CRC16Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.CRC64Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.MD2Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.MD4Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.SHA384Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.SHA512Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
+            Assert.Equal("XXXXXX", self.CRC16);
+            Assert.Equal("XXXXXX", self.CRC);
+            Assert.Equal("XXXXXX", self.CRC64);
+            Assert.Equal("XXXXXX", self.MD2);
+            Assert.Equal("XXXXXX", self.MD4);
+            Assert.Equal("XXXXXX", self.MD5);
+            Assert.Equal("XXXXXX", self.RIPEMD128);
+            Assert.Equal("XXXXXX", self.RIPEMD160);
+            Assert.Equal("XXXXXX", self.SHA1);
+            Assert.Equal("XXXXXX", self.SHA256);
+            Assert.Equal("XXXXXX", self.SHA384);
+            Assert.Equal("XXXXXX", self.SHA512);
+            Assert.Equal("XXXXXX", self.SpamSum);
         }
 
         #endregion
@@ -82,20 +84,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_CRC16_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = "XXXXXX",
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -104,20 +108,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_CRC_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = "XXXXXX",
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -126,20 +132,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_CRC64_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = "XXXXXX",
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -148,20 +156,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_MD2_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = "XXXXXX",
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -170,20 +180,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_MD4_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = "XXXXXX",
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -192,20 +204,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_MD5_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = "XXXXXX",
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -214,20 +228,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_RIPEMD128_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -236,20 +252,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_RIPEMD160_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -258,20 +276,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_SHA1_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -280,20 +300,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_SHA256_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -302,20 +324,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_SHA384_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = "XXXXXX",
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -324,20 +348,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_SHA512_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = "XXXXXX",
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -346,20 +372,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_SpamSum_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, "XXXXXX");
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = "XXXXXX"
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -368,20 +396,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_All_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.CRCKey, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.MD2Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.MD4Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.MD5Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, "XXXXXX");
+            Rom self = new Rom
+            {
+                CRC16 = "XXXXXX",
+                CRC = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX"
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -402,20 +432,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_NonZeroHash_False()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.CRCKey, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.MD2Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.MD4Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.MD5Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, "XXXXXX");
+            Rom self = new Rom
+            {
+                CRC16 = "XXXXXX",
+                CRC = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX"
+            };
 
             bool actual = self.HasZeroHash();
             Assert.False(actual);
@@ -424,20 +456,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroCRC16_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, HashType.CRC16.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = HashType.CRC16.ZeroString,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -446,20 +480,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroCRC_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = HashType.CRC32.ZeroString,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -468,20 +504,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroCRC64_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, HashType.CRC64.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = HashType.CRC64.ZeroString,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -490,20 +528,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroMD2_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, HashType.MD2.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = HashType.MD2.ZeroString,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -512,20 +552,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroMD4_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, HashType.MD4.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = HashType.MD4.ZeroString,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -534,20 +576,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroMD5_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, HashType.MD5.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = HashType.MD5.ZeroString,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -556,20 +600,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroRIPEMD128_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, HashType.RIPEMD128.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = HashType.RIPEMD128.ZeroString,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -578,20 +624,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroRIPEMD160_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, HashType.RIPEMD160.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = HashType.RIPEMD160.ZeroString,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -600,20 +648,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroSHA1_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -622,20 +672,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroSHA256_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, HashType.SHA256.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = HashType.SHA256.ZeroString,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -644,20 +696,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroSHA384_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, HashType.SHA384.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = HashType.SHA384.ZeroString,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -666,20 +720,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroSHA512_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, HashType.SHA512.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, string.Empty);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = HashType.SHA512.ZeroString,
+                SpamSum = string.Empty
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -688,20 +744,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroSpamSum_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, string.Empty);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, HashType.SpamSum.ZeroString);
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = HashType.SpamSum.ZeroString
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -710,20 +768,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroAll_True()
         {
-            Rom self = new Rom();
-            self.Write(Data.Models.Metadata.Rom.CRC16Key, HashType.CRC16.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.CRC64Key, HashType.CRC64.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.MD2Key, HashType.MD2.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.MD4Key, HashType.MD4.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.MD5Key, HashType.MD5.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD128Key, HashType.RIPEMD128.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.RIPEMD160Key, HashType.RIPEMD160.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.SHA256Key, HashType.SHA256.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.SHA384Key, HashType.SHA384.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.SHA512Key, HashType.SHA512.ZeroString);
-            self.Write(Data.Models.Metadata.Rom.SpamSumKey, HashType.SpamSum.ZeroString);
+            Rom self = new Rom
+            {
+                CRC16 = HashType.CRC16.ZeroString,
+                CRC = HashType.CRC32.ZeroString,
+                CRC64 = HashType.CRC64.ZeroString,
+                MD2 = HashType.MD2.ZeroString,
+                MD4 = HashType.MD4.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
+                RIPEMD128 = HashType.RIPEMD128.ZeroString,
+                RIPEMD160 = HashType.RIPEMD160.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SHA384 = HashType.SHA384.ZeroString,
+                SHA512 = HashType.SHA512.ZeroString,
+                SpamSum = HashType.SpamSum.ZeroString
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -801,20 +861,22 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Machine machine = new Machine { Name = "Machine" };
 
-            DatItem datItem = new Rom();
-            datItem.Write(Data.Models.Metadata.Rom.CRC16Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.CRC64Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.MD2Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.MD4Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.MD5Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA1Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA256Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA384Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA512Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SpamSumKey, "DEADBEEF");
+            DatItem datItem = new Rom
+            {
+                CRC16 = "DEADBEEF",
+                CRC = "DEADBEEF",
+                CRC64 = "DEADBEEF",
+                MD2 = "DEADBEEF",
+                MD4 = "DEADBEEF",
+                MD5 = "DEADBEEF",
+                RIPEMD128 = "DEADBEEF",
+                RIPEMD160 = "DEADBEEF",
+                SHA1 = "DEADBEEF",
+                SHA256 = "DEADBEEF",
+                SHA384 = "DEADBEEF",
+                SHA512 = "DEADBEEF",
+                SpamSum = "DEADBEEF"
+            };
 
             string actual = datItem.GetKey(bucketedBy, machine, source, lower, norename);
             Assert.Equal(expected, actual);

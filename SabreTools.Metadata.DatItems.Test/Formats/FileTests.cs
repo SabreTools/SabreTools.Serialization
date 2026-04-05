@@ -36,10 +36,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Assert.Equal("XXXXXX.XXXXXX", actual.Name);
             Assert.Equal(12345, actual.Size);
-            Assert.Equal("deadbeef", actual.ReadString(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Equal("000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Equal("00000000000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal("00000000000000000000000000000000000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA256Key));
+            Assert.Equal("deadbeef", actual.CRC);
+            Assert.Equal("000000000000000000000000deadbeef", actual.MD5);
+            Assert.Equal("00000000000000000000000000000000deadbeef", actual.SHA1);
+            Assert.Equal("00000000000000000000000000000000000000000000000000000000deadbeef", actual.SHA256);
             Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
 
             Machine? actualMachine = actual.Machine;

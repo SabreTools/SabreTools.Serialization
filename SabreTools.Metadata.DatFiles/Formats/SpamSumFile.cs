@@ -44,8 +44,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SpamSumKey);
+                    if (string.IsNullOrEmpty(rom.SpamSum))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SpamSum));
                     break;
 
                 default:

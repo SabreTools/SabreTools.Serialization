@@ -149,10 +149,10 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             rom.Name = $"{Id}.{Extension}";
             rom.Size = Size;
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, CRC);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD5Key, MD5);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, SHA1);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA256Key, SHA256);
+            rom.CRC = CRC;
+            rom.MD5 = MD5;
+            rom.SHA1 = SHA1;
+            rom.SHA256 = SHA256;
 
             rom.DupeType = DupeType;
             rom.Machine = Machine?.Clone() as Machine;
