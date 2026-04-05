@@ -29,13 +29,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
-
             switch (datItem)
             {
                 case Rom rom:
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (string.IsNullOrEmpty(rom.CRC))
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC));
                     if (rom.Size is null || rom.Size < 0)

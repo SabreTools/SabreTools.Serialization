@@ -32,18 +32,18 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
-
             switch (datItem)
             {
                 case Media medium:
+                    if (string.IsNullOrEmpty(medium.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.Name));
                     if (string.IsNullOrEmpty(medium.SHA256))
                         missingFields.Add(nameof(Data.Models.Metadata.Media.SHA256));
                     break;
 
                 case Rom rom:
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (string.IsNullOrEmpty(rom.SHA256))
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA256));
                     break;

@@ -68,13 +68,11 @@ The softwaredb.xml file contains information about rom mapper types
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
-
             switch (datItem)
             {
                 case Rom rom:
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (string.IsNullOrEmpty(rom.SHA1))
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     break;

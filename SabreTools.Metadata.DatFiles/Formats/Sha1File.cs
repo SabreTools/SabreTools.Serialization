@@ -33,23 +33,25 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
-
             switch (datItem)
             {
                 case Disk disk:
+                    if (string.IsNullOrEmpty(disk.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
                     if (string.IsNullOrEmpty(disk.SHA1))
                         missingFields.Add(nameof(Data.Models.Metadata.Disk.SHA1));
                     break;
 
                 case Media medium:
+                    if (string.IsNullOrEmpty(medium.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.Name));
                     if (string.IsNullOrEmpty(medium.SHA1))
                         missingFields.Add(nameof(Data.Models.Metadata.Media.SHA1));
                     break;
 
                 case Rom rom:
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (string.IsNullOrEmpty(rom.SHA1))
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     break;

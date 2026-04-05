@@ -66,13 +66,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
-
             switch (datItem)
             {
                 case Disk disk:
+                    if (string.IsNullOrEmpty(disk.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
                     if (string.IsNullOrEmpty(disk.MD5)
                         && string.IsNullOrEmpty(disk.SHA1))
                     {
@@ -81,11 +79,13 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
                     break;
 
-                case Media media:
-                    if (string.IsNullOrEmpty(media.MD5)
-                        && string.IsNullOrEmpty(media.SHA1)
-                        && string.IsNullOrEmpty(media.SHA256)
-                        && string.IsNullOrEmpty(media.SpamSum))
+                case Media medium:
+                    if (string.IsNullOrEmpty(medium.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.Name));
+                    if (string.IsNullOrEmpty(medium.MD5)
+                        && string.IsNullOrEmpty(medium.SHA1)
+                        && string.IsNullOrEmpty(medium.SHA256)
+                        && string.IsNullOrEmpty(medium.SpamSum))
                     {
                         missingFields.Add(nameof(Data.Models.Metadata.Media.SHA1));
                     }
@@ -93,6 +93,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Rom rom:
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (rom.Size is null || rom.Size < 0)
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
                     if (string.IsNullOrEmpty(rom.CRC)

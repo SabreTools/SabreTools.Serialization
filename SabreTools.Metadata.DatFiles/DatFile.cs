@@ -821,7 +821,6 @@ namespace SabreTools.Metadata.DatFiles
 
                     // Set the item name back to the datItem
                     datItem.SetName(datItemName);
-
                     output.Add(datItem);
                 }
 
