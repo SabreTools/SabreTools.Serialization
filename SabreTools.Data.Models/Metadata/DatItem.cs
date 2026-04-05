@@ -6,10 +6,10 @@ namespace SabreTools.Data.Models.Metadata
     /// <summary>
     /// Format-agnostic representation of item data
     /// </summary>
-    public class DatItem
+    public abstract class DatItem
     {
         /// <summary>
-        /// Quick accessor to item type, if it exists
+        /// Quick accessor to item type
         /// </summary>
         [JsonProperty("itemtype", DefaultValueHandling = DefaultValueHandling.Ignore), XmlElement("itemtype")]
         public ItemType ItemType { get; protected set; }
