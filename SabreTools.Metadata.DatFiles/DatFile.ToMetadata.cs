@@ -309,15 +309,9 @@ namespace SabreTools.Metadata.DatFiles
                                     };
                                 }
 
-                                // Get existing roms as a list
-                                var romsArr = aggregateDataArea.Rom ?? [];
-                                List<Data.Models.Metadata.Rom> roms = [.. romsArr];
-
                                 // Add the rom to the data area
-                                roms.Add(romItem);
-
-                                // Assign back the roms
-                                aggregateDataArea.Rom = roms.ToArray();
+                                aggregateDataArea.Rom ??= [];
+                                aggregateDataArea.Rom = [.. aggregateDataArea.Rom, romItem];
 
                                 // Assign back the data area
                                 if (dataAreaIndex > -1)
@@ -326,7 +320,7 @@ namespace SabreTools.Metadata.DatFiles
                                     dataAreas.Add(aggregateDataArea);
 
                                 // Assign back the data areas array
-                                partItems[partName].DataArea = dataAreas.ToArray();
+                                partItems[partName].DataArea = [.. dataAreas];
                             }
                         }
 
@@ -353,19 +347,12 @@ namespace SabreTools.Metadata.DatFiles
                                 }
                                 else
                                 {
-                                    aggregateDiskArea = new();
-                                    aggregateDiskArea.Name = diskArea.Name;
+                                    aggregateDiskArea = new Data.Models.Metadata.DiskArea { Name = diskArea.Name };
                                 }
 
-                                // Get existing disks as a list
-                                var disksArr = aggregateDiskArea.Disk ?? [];
-                                List<Data.Models.Metadata.Disk> disks = [.. disksArr];
-
-                                // Add the disk to the data area
-                                disks.Add(diskItem);
-
-                                // Assign back the disks
-                                aggregateDiskArea.Disk = disks.ToArray();
+                                // Add the disk to the disk area
+                                aggregateDiskArea.Disk ??= [];
+                                aggregateDiskArea.Disk = [.. aggregateDiskArea.Disk, diskItem];
 
                                 // Assign back the disk area
                                 if (diskAreaIndex > -1)
@@ -374,36 +361,22 @@ namespace SabreTools.Metadata.DatFiles
                                     diskAreas.Add(aggregateDiskArea);
 
                                 // Assign back the disk areas array
-                                partItems[partName].DiskArea = diskAreas.ToArray();
+                                partItems[partName].DiskArea = [.. diskAreas];
                             }
                         }
 
                         // If the item is a DipSwitch
                         if (datItem is Data.Models.Metadata.DipSwitch dipSwitchItem)
                         {
-                            // Get existing dipswitches as a list
-                            var dipSwitchesArr = partItems[partName].DipSwitch ?? [];
-                            List<Data.Models.Metadata.DipSwitch> dipSwitches = [.. dipSwitchesArr];
-
-                            // Add the dipswitch
-                            dipSwitches.Add(dipSwitchItem);
-
-                            // Assign back the dipswitches
-                            partItems[partName].DipSwitch = dipSwitches.ToArray();
+                            partItems[partName].DipSwitch ??= [];
+                            partItems[partName].DipSwitch = [.. partItems[partName].DipSwitch!, dipSwitchItem];
                         }
 
                         // If the item is a Feature
                         else if (datItem is Data.Models.Metadata.Feature featureItem)
                         {
-                            // Get existing features as a list
-                            var featuresArr = partItems[partName].Feature ?? [];
-                            List<Data.Models.Metadata.Feature> features = [.. featuresArr];
-
-                            // Add the feature
-                            features.Add(featureItem);
-
-                            // Assign back the features
-                            partItems[partName].Feature = features.ToArray();
+                            partItems[partName].Feature ??= [];
+                            partItems[partName].Feature = [.. partItems[partName].Feature!, featureItem];
                         }
                     }
 
@@ -657,22 +630,18 @@ namespace SabreTools.Metadata.DatFiles
                                 }
                                 else
                                 {
-                                    aggregateDataArea = new();
-                                    aggregateDataArea.Endianness = dataArea.Endianness;
-                                    aggregateDataArea.Name = dataArea.Name;
-                                    aggregateDataArea.Size = dataArea.Size;
-                                    aggregateDataArea.Width = dataArea.Width;
+                                    aggregateDataArea = new Data.Models.Metadata.DataArea
+                                    {
+                                        Endianness = dataArea.Endianness,
+                                        Name = dataArea.Name,
+                                        Size = dataArea.Size,
+                                        Width = dataArea.Width,
+                                    };
                                 }
 
-                                // Get existing roms as a list
-                                var romsArr = aggregateDataArea.Rom ?? [];
-                                List<Data.Models.Metadata.Rom> roms = [.. romsArr];
-
                                 // Add the rom to the data area
-                                roms.Add(romItem);
-
-                                // Assign back the roms
-                                aggregateDataArea.Rom = roms.ToArray();
+                                aggregateDataArea.Rom ??= [];
+                                aggregateDataArea.Rom = [.. aggregateDataArea.Rom, romItem];
 
                                 // Assign back the data area
                                 if (dataAreaIndex > -1)
@@ -681,7 +650,7 @@ namespace SabreTools.Metadata.DatFiles
                                     dataAreas.Add(aggregateDataArea);
 
                                 // Assign back the data areas array
-                                partItems[partName].DataArea = dataAreas.ToArray();
+                                partItems[partName].DataArea = [.. dataAreas];
                             }
                         }
 
@@ -708,19 +677,12 @@ namespace SabreTools.Metadata.DatFiles
                                 }
                                 else
                                 {
-                                    aggregateDiskArea = new();
-                                    aggregateDiskArea.Name = diskArea.Name;
+                                    aggregateDiskArea = new Data.Models.Metadata.DiskArea { Name = diskArea.Name };
                                 }
 
-                                // Get existing disks as a list
-                                var disksArr = aggregateDiskArea.Disk ?? [];
-                                List<Data.Models.Metadata.Disk> disks = [.. disksArr];
-
-                                // Add the disk to the data area
-                                disks.Add(diskItem);
-
-                                // Assign back the disks
-                                aggregateDiskArea.Disk = disks.ToArray();
+                                // Add the disk to the disk area
+                                aggregateDiskArea.Disk ??= [];
+                                aggregateDiskArea.Disk = [.. aggregateDiskArea.Disk, diskItem];
 
                                 // Assign back the disk area
                                 if (diskAreaIndex > -1)
@@ -729,36 +691,22 @@ namespace SabreTools.Metadata.DatFiles
                                     diskAreas.Add(aggregateDiskArea);
 
                                 // Assign back the disk areas array
-                                partItems[partName].DiskArea = diskAreas.ToArray();
+                                partItems[partName].DiskArea = [.. diskAreas];
                             }
                         }
 
                         // If the item is a DipSwitch
                         if (datItem is Data.Models.Metadata.DipSwitch dipSwitchItem)
                         {
-                            // Get existing dipswitches as a list
-                            var dipSwitchesArr = partItems[partName].DipSwitch ?? [];
-                            List<Data.Models.Metadata.DipSwitch> dipSwitches = [.. dipSwitchesArr];
-
-                            // Add the dipswitch
-                            dipSwitches.Add(dipSwitchItem);
-
-                            // Assign back the dipswitches
-                            partItems[partName].DipSwitch = dipSwitches.ToArray();
+                            partItems[partName].DipSwitch ??= [];
+                            partItems[partName].DipSwitch = [.. partItems[partName].DipSwitch!, dipSwitchItem];
                         }
 
                         // If the item is a Feature
                         else if (datItem is Data.Models.Metadata.Feature featureItem)
                         {
-                            // Get existing features as a list
-                            var featuresArr = partItems[partName].Feature ?? [];
-                            List<Data.Models.Metadata.Feature> features = [.. featuresArr];
-
-                            // Add the feature
-                            features.Add(featureItem);
-
-                            // Assign back the features
-                            partItems[partName].Feature = features.ToArray();
+                            partItems[partName].Feature ??= [];
+                            partItems[partName].Feature = [.. partItems[partName].Feature!, featureItem];
                         }
                     }
 
@@ -826,18 +774,17 @@ namespace SabreTools.Metadata.DatFiles
             switch (romItem.OpenMSXMediaType)
             {
                 case OpenMSXSubType.Rom:
-                    var dumpRom = new Data.Models.Metadata.Dump();
-                    var rom = new Data.Models.Metadata.Rom();
+                    var rom = new Data.Models.Metadata.Rom
+                    {
+                        Name = romItem.Name,
+                        Offset = romItem.Start ?? romItem.Offset,
+                        OpenMSXType = romItem.OpenMSXType,
+                        Remark = romItem.Remark,
+                        SHA1 = romItem.SHA1,
+                        Start = romItem.Start ?? romItem.Offset,
+                    };
 
-                    rom.Name = romItem.Name;
-                    rom.Offset = romItem.Start ?? romItem.Offset;
-                    rom.OpenMSXType = romItem.OpenMSXType;
-                    rom.Remark = romItem.Remark;
-                    rom.SHA1 = romItem.SHA1;
-                    rom.Start = romItem.Start ?? romItem.Offset;
-
-                    dumpRom.Rom = rom;
-
+                    var dumpRom = new Data.Models.Metadata.Dump { Rom = rom };
                     if (original is not null)
                     {
                         var newOriginal = new Data.Models.Metadata.Original
@@ -853,18 +800,17 @@ namespace SabreTools.Metadata.DatFiles
                     break;
 
                 case OpenMSXSubType.MegaRom:
-                    var dumpMegaRom = new Data.Models.Metadata.Dump();
-                    var megaRom = new Data.Models.Metadata.Rom();
+                    var megaRom = new Data.Models.Metadata.Rom
+                    {
+                        Name = romItem.Name,
+                        Offset = romItem.Start ?? romItem.Offset,
+                        OpenMSXType = romItem.OpenMSXType,
+                        Remark = romItem.Remark,
+                        SHA1 = romItem.SHA1,
+                        Start = romItem.Start ?? romItem.Offset,
+                    };
 
-                    megaRom.Name = romItem.Name;
-                    megaRom.Offset = romItem.Start ?? romItem.Offset;
-                    megaRom.OpenMSXType = romItem.OpenMSXType;
-                    megaRom.Remark = romItem.Remark;
-                    megaRom.SHA1 = romItem.SHA1;
-                    megaRom.Start = romItem.Start ?? romItem.Offset;
-
-                    dumpMegaRom.MegaRom = megaRom;
-
+                    var dumpMegaRom = new Data.Models.Metadata.Dump { MegaRom = megaRom };
                     if (original is not null)
                     {
                         var newOriginal = new Data.Models.Metadata.Original
@@ -880,18 +826,17 @@ namespace SabreTools.Metadata.DatFiles
                     break;
 
                 case OpenMSXSubType.SCCPlusCart:
-                    var dumpSccPlusCart = new Data.Models.Metadata.Dump();
-                    var sccPlusCart = new Data.Models.Metadata.Rom();
+                    var sccPlusCart = new Data.Models.Metadata.Rom
+                    {
+                        Name = romItem.Name,
+                        Offset = romItem.Start ?? romItem.Offset,
+                        OpenMSXType = romItem.OpenMSXType,
+                        Remark = romItem.Remark,
+                        SHA1 = romItem.SHA1,
+                        Start = romItem.Start ?? romItem.Offset,
+                    };
 
-                    sccPlusCart.Name = romItem.Name;
-                    sccPlusCart.Offset = romItem.Start ?? romItem.Offset;
-                    sccPlusCart.OpenMSXType = romItem.OpenMSXType;
-                    sccPlusCart.Remark = romItem.Remark;
-                    sccPlusCart.SHA1 = romItem.SHA1;
-                    sccPlusCart.Start = romItem.Start ?? romItem.Offset;
-
-                    dumpSccPlusCart.SCCPlusCart = sccPlusCart;
-
+                    var dumpSccPlusCart = new Data.Models.Metadata.Dump { SCCPlusCart = sccPlusCart };
                     if (original is not null)
                     {
                         var newOriginal = new Data.Models.Metadata.Original
