@@ -194,66 +194,6 @@ namespace SabreTools.Metadata.DatItems.Test
 
         #endregion
 
-        #region CompareTo
-
-        [Fact]
-        public void CompareTo_NullOther_Returns1()
-        {
-            DatItem self = new Rom();
-            DatItem? other = null;
-
-            int actual = self.CompareTo(other);
-            Assert.Equal(1, actual);
-        }
-
-        [Fact]
-        public void CompareTo_DifferentOther_Returns1()
-        {
-            DatItem self = new Rom { Name = "name" };
-
-            DatItem? other = new Disk { Name = "name" };
-
-            int actual = self.CompareTo(other);
-            Assert.Equal(1, actual);
-        }
-
-        [Fact]
-        public void CompareTo_Empty_Returns1()
-        {
-            DatItem self = new Rom();
-            DatItem? other = new Rom();
-
-            int actual = self.CompareTo(other);
-            Assert.Equal(1, actual);
-        }
-
-        [Theory]
-        [InlineData(null, null, 0)]
-        [InlineData("name", null, 1)]
-        [InlineData("name", "other", -1)]
-        [InlineData(null, "name", -1)]
-        [InlineData("other", "name", 1)]
-        [InlineData("name", "name", 0)]
-        public void CompareTo_NamesOnly(string? selfName, string? otherName, int expected)
-        {
-            DatItem self = new Rom
-            {
-                Name = selfName,
-                CRC = "DEADBEEF"
-            };
-
-            DatItem? other = new Rom
-            {
-                Name = otherName,
-                CRC = "DEADBEEF"
-            };
-
-            int actual = self.CompareTo(other);
-            Assert.Equal(expected, actual);
-        }
-
-        #endregion
-
         #region Equals
 
         [Fact]

@@ -52,7 +52,7 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(SoftwareList))]
     [XmlInclude(typeof(Sound))]
     [XmlInclude(typeof(SourceDetails))]
-    public abstract class DatItem : ICloneable, IComparable<DatItem>, IEquatable<DatItem>
+    public abstract class DatItem : ICloneable, IEquatable<DatItem>
     {
         #region Properties
 
@@ -136,26 +136,6 @@ namespace SabreTools.Metadata.DatItems
         #endregion
 
         #region Comparision Methods
-
-        /// <inheritdoc/>
-        public int CompareTo(DatItem? other)
-        {
-            // If the other item doesn't exist
-            if (other is null)
-                return 1;
-
-            // Get the names to avoid changing values
-            string? selfName = GetName();
-            string? otherName = other.GetName();
-
-            // If the names are equal
-            if (selfName == otherName)
-                return Equals(other) ? 0 : 1;
-
-            // If `otherName` is null, Compare will return > 0
-            // If `selfName` is null, Compare will return < 0
-            return string.Compare(selfName, otherName, StringComparison.Ordinal);
-        }
 
         /// <summary>
         /// Determine if an item is a duplicate using partial matching logic
