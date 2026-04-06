@@ -19,6 +19,9 @@ namespace SabreTools.Wrappers
         /// <inheritdoc cref="Header"/>
         public Header Header => Model.Header;
 
+        /// <inheritdoc cref="Certificate"/>
+        public Certificate Certificate => Model.Certificate;
+
         #endregion
 
         #region Constructors

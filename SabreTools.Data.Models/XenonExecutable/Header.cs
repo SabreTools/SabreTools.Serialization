@@ -8,19 +8,22 @@ namespace SabreTools.Data.Models.XenonExecutable
     public class Header
     {
         /// <summary>
-        /// "XEX2"
+        /// "XEX2" is the only supported magic identifier string
+        /// "XEX0", "XEX-", "XEX?", and "XEX1" files are not supported, and are only found in early pre-production builds
         /// </summary>
         public byte[] MagicNumber { get; set; } = new byte[4];
 
         /// <summary>
         /// Bit field with lowest 8 bits having known values: (lowest to highest)
         /// Title Module, Exports To Title, System Debugger, DLL Module, Module Patch, Patch Full, Patch Delta, User Mode
+        /// Upper 3 bytes should be zeroed
         /// </summary>
         /// <remarks>Big-endian</remarks>
         public uint ModuleFlags { get; set; }
 
         /// <summary>
         /// Address at which the PE data begins
+        /// The PE data is encrypted/compressed in retail XEX files
         /// </summary>
         /// <remarks>Big-endian</remarks>
         public uint PEDataOffset { get; set; }
@@ -32,7 +35,7 @@ namespace SabreTools.Data.Models.XenonExecutable
         public uint Reserved { get; set; }
 
         /// <summary>
-        /// Address at which the security info begins
+        /// Address at which the certificate structure begins
         /// </summary>
         /// <remarks>Big-endian</remarks>
         public uint CertificateOffset { get; set; }

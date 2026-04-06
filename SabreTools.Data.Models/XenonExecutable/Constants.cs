@@ -23,6 +23,7 @@ namespace SabreTools.Data.Models.XenonExecutable
             [0x0002FF] = "Resource Info",
             [0x0003FF] = "Base File Format",
             [0x000405] = "Base Reference",
+            [0x004304] = "Disc Profile ID",
             [0x0005FF] = "Delta Patch Descriptor",
             [0x0080FF] = "Bounding Path",
             [0x008105] = "Device ID",

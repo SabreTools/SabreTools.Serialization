@@ -21,6 +21,7 @@ namespace SabreTools.Wrappers
 
             Print(builder, Model.Header);
             Print(builder, Model.Header.OptionalHeaders);
+            Print(builder, Model.Certificate);
         }
 
         private static void Print(StringBuilder builder, Header? header)
@@ -40,8 +41,8 @@ namespace SabreTools.Wrappers
             builder.AppendLine(header.Reserved, "  Reserved");
             builder.AppendLine(header.CertificateOffset, "  Certificate Offset");
             builder.AppendLine(header.OptionalHeaderCount, "  Optional Header Count");
-            builder.AppendLine();
 
+            builder.AppendLine();
         }
 
         private static void Print(StringBuilder builder, OptionalHeader[]? optionalHeaders)
@@ -61,10 +62,60 @@ namespace SabreTools.Wrappers
                 if (Constants.OptionalHeaderTypes.TryGetValue(optionalHeader.HeaderID, out string? headerType))
                     builder.AppendLine(headerType, "  Header Type (Parsed)");
                 else
-                    builder.AppendLine("[Unknown]", "  Header Type (Parsed)");
+                    builder.AppendLine("[UNKNOWN]", "  Header Type (Parsed)");
 
-                builder.AppendLine(optionalHeader.HeaderData, "  Header Data");
+                if (optionalHeader.HeaderData is not null)
+                {
+                    builder.AppendLine(optionalHeader.HeaderOffset, "  Header Offset");
+                    builder.AppendLine(optionalHeader.HeaderData, "  Header Data");
+                }
+                else
+                {
+                    builder.AppendLine(optionalHeader.HeaderOffset, "  Header Data");
+                }
+
                 builder.AppendLine();
+            }
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, Certificate? certificate)
+        {
+            builder.AppendLine("  Certificate Information:");
+            builder.AppendLine("  -------------------------");
+            if (certificate is null)
+            {
+                builder.AppendLine("  No certificate");
+                builder.AppendLine();
+                return;
+            }
+
+            builder.AppendLine(certificate.Length, "  Length");
+            builder.AppendLine(certificate.Signature, "  Signature");
+            builder.AppendLine(certificate.Unknown0108, "  Unknown0108");
+            builder.AppendLine(certificate.Unknown010C, "  Unknown010C");
+            builder.AppendLine(certificate.ImageBaseAddress, "  Image Base Address");
+            builder.AppendLine(certificate.UnknownHash1, "  Unknown Hash 1");
+            builder.AppendLine(certificate.Unknown0128, "  Unknown0128");
+            builder.AppendLine(certificate.UnknownHash2, "  Unknown Hash 2");
+            builder.AppendLine(certificate.MediaID, "  Media ID");
+            builder.AppendLine(certificate.Unknown0150, "  Unknown0150");
+            builder.AppendLine(certificate.Unknown0160, "  Unknown0160");
+            builder.AppendLine(certificate.UnknownHash3, "  Unknown Hash 3");
+            builder.AppendLine(certificate.RegionFlags, "  Region Flags");
+            builder.AppendLine(certificate.Unknown0164, "  Unknown0164");
+            builder.AppendLine(certificate.TableCount, "  Certificate Table Count");
+
+            if (certificate.Table.Length == 0)
+                builder.AppendLine("  Empty Certificate Table");
+            else
+                builder.AppendLine("  Certificate Table:");
+
+            for (int i = 0; i < certificate.Table.Length; i++)
+            {
+                builder.AppendLine(certificate.Table[i].ID, $"    Entry {i} ID");
+                builder.AppendLine(certificate.Table[i].Data, $"    Entry {i} Data");
             }
 
             builder.AppendLine();
