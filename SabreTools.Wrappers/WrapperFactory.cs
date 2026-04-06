@@ -69,6 +69,7 @@ namespace SabreTools.Wrappers
                 WrapperType.WiseScript => WiseScript.Create(data),
                 WrapperType.XboxExecutable => XboxExecutable.Create(data),
                 WrapperType.XDVDFS => XDVDFS.Create(data),
+                WrapperType.XenonExecutable => XenonExecutable.Create(data),
                 WrapperType.XZ => XZ.Create(data),
                 WrapperType.XZP => XZP.Create(data),
                 WrapperType.ZArchive => ZArchive.Create(data),
@@ -936,6 +937,16 @@ namespace SabreTools.Wrappers
 
             if (extension.Equals("xdvdfs", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.XDVDFS;
+
+            #endregion
+
+            #region XenonExecutable
+
+            if (magic.StartsWith(Data.Models.XenonExecutable.Constants.MagicBytes))
+                return WrapperType.XenonExecutable;
+
+            if (extension.Equals("xex", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.XenonExecutable;
 
             #endregion
 
