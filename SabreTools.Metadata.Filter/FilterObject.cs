@@ -455,6 +455,7 @@ namespace SabreTools.Metadata.Filter
                     checkValue = obj.Categories;
                     return true;
                 case "clone":
+                case "clonetag":
                     checkValue = obj.CloneTag;
                     return true;
                 case "complete":
@@ -577,6 +578,7 @@ namespace SabreTools.Metadata.Filter
         {
             switch (fieldName)
             {
+                case "chiptype":
                 case "type":
                     checkValue = obj.ChipType?.AsStringValue();
                     return true;

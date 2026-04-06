@@ -10,6 +10,8 @@ namespace SabreTools.Metadata.Filter
     /// </summary>
     public class FilterKey
     {
+        #region Properties
+
         /// <summary>
         /// Item name associated with the filter
         /// </summary>
@@ -20,6 +22,10 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         public readonly string FieldName;
 
+        #endregion
+
+        #region Constants
+
         /// <summary>
         /// Cached item type names for filter selection
         /// </summary>
@@ -28,6 +34,111 @@ namespace SabreTools.Metadata.Filter
 #else
         private static readonly string[] _datItemTypeNames = Enum.GetNames(typeof(ItemType));
 #endif
+
+        /// <summary>
+        /// Known keys for Adjuster
+        /// </summary>
+        private static readonly string[] _adjusterKeys =
+        [
+            "default",
+            "name"
+        ];
+
+        /// <summary>
+        /// Known keys for Analog
+        /// </summary>
+        private static readonly string[] _analogKeys =
+        [
+            "mask"
+        ];
+
+        /// <summary>
+        /// Known keys for Archive
+        /// </summary>
+        private static readonly string[] _archiveKeys =
+        [
+            "additional",
+            "adult",
+            "alt",
+            "bios",
+            "categories",
+            "clone",
+            "clonetag",
+            "complete",
+            "dat",
+            "datternote",
+            "description",
+            "devstatus",
+            "gameid1",
+            "gameid2",
+            "langchecked",
+            "languages",
+            "licensed",
+            "listed",
+            "mergeof",
+            "mergename",
+            "name",
+            "namealt",
+            "number",
+            "physical",
+            "pirate",
+            "private",
+            "region",
+            "regparent",
+            "showlang",
+            "special1",
+            "special2",
+            "stickynote",
+            "version1",
+            "version2",
+        ];
+
+        /// <summary>
+        /// Known keys for BiosSet
+        /// </summary>
+        private static readonly string[] _biossetKeys =
+        [
+            "default",
+            "description",
+            "name",
+        ];
+
+        /// <summary>
+        /// Known keys for Chip
+        /// </summary>
+        private static readonly string[] _chipKeys =
+        [
+            "chiptype",
+            "clock",
+            "flags",
+            "name",
+            "soundonly",
+            "tag",
+            "type",
+        ];
+
+        /// <summary>
+        /// Known keys for Condition
+        /// </summary>
+        private static readonly string[] _conditionKeys =
+        [
+            "mask",
+            "relation",
+            "tag",
+            "value",
+        ];
+
+        /// <summary>
+        /// Known keys for Configuration
+        /// </summary>
+        private static readonly string[] _configurationKeys =
+        [
+            "mask",
+            "name",
+            "tag",
+        ];
+
+        #endregion
 
         /// <summary>
         /// Validating combined key constructor
@@ -202,13 +313,34 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static string? GetMatchingField(string itemName, string fieldName)
         {
-            // Get the correct item type
-            var itemType = GetDatItemType(itemName.ToLowerInvariant());
-            if (itemType is null)
-                return null;
-
             // Get the set of properties
-            var properties = GetProperties(itemType);
+            string[]? properties = itemName.ToLowerInvariant() switch
+            {
+                "adjuster" => _adjusterKeys,
+                "analog" => _analogKeys,
+                "archive" => _archiveKeys,
+                "biosset" => _biossetKeys,
+                "chip" => _chipKeys,
+                "condition" => _conditionKeys,
+                "configuration" => _configurationKeys,
+                _ => null,
+            };
+
+            // TODO: Remove this fallback path
+            if (properties is null)
+            {
+                // Get the correct item type
+                var itemType = GetDatItemType(itemName.ToLowerInvariant());
+                if (itemType is null)
+                    return null;
+
+                properties = GetProperties(itemType);
+
+                // Special cases for mismatched names
+                if (properties is not null && itemType == typeof(Rom))
+                    properties = [.. properties, "crc"];
+            }
+
             if (properties is null)
                 return null;
 
