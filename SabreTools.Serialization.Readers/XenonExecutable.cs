@@ -165,18 +165,18 @@ namespace SabreTools.Serialization.Readers
             obj.Length = data.ReadUInt32BigEndian();
             obj.ImageSize = data.ReadUInt32BigEndian();
             obj.Signature = data.ReadBytes(256);
-            obj.Unknown0108 = data.ReadUInt32BigEndian();
-            obj.Unknown010C = data.ReadUInt32BigEndian();
+            obj.BaseFileLoadAddress = data.ReadUInt32BigEndian();
+            obj.ImageFlags = data.ReadUInt32BigEndian();
             obj.ImageBaseAddress = data.ReadUInt32BigEndian();
             obj.UnknownHash1 = data.ReadBytes(20);
             obj.Unknown0128 = data.ReadUInt32BigEndian();
             obj.UnknownHash2 = data.ReadBytes(20);
             obj.MediaID = data.ReadBytes(16);
-            obj.Unknown0150 = data.ReadBytes(16);
+            obj.XEXFileKey = data.ReadBytes(16);
             obj.Unknown0160 = data.ReadUInt32BigEndian();
             obj.UnknownHash3 = data.ReadBytes(20);
             obj.RegionFlags = data.ReadUInt32BigEndian();
-            obj.Unknown0164 = data.ReadUInt32BigEndian();
+            obj.AllowedMediaTypeFlags = data.ReadUInt32BigEndian();
             obj.TableCount = data.ReadUInt32BigEndian();
 
             // Ensure table fits within stream
