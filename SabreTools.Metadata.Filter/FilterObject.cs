@@ -336,9 +336,16 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Get the check value for a field
         /// </summary>
-        /// TODO: Figure out how to not have this hardcoded
         private static bool GetCheckValue(object obj, string fieldName, out string? checkValue)
         {
+            // Special case for item type
+            if (obj is DatItem datItem
+                && string.Equals(fieldName, "type", StringComparison.OrdinalIgnoreCase))
+            {
+                checkValue = datItem.ItemType.AsStringValue();
+                return true;
+            }
+
             switch (obj)
             {
                 case Adjuster item: return GetCheckValue(item, fieldName, out checkValue);
@@ -579,7 +586,6 @@ namespace SabreTools.Metadata.Filter
             switch (fieldName)
             {
                 case "chiptype":
-                case "type":
                     checkValue = obj.ChipType?.AsStringValue();
                     return true;
                 case "clock":
@@ -715,7 +721,6 @@ namespace SabreTools.Metadata.Filter
                     checkValue = obj.Buttons?.ToString();
                     return true;
                 case "controltype":
-                case "type":
                     checkValue = obj.ControlType?.AsStringValue();
                     return true;
                 case "keydelta":
@@ -791,7 +796,6 @@ namespace SabreTools.Metadata.Filter
             switch (fieldName)
             {
                 case "devicetype":
-                case "type":
                     checkValue = obj.DeviceType?.AsStringValue();
                     return true;
                 case "fixedimage":
@@ -1010,7 +1014,6 @@ namespace SabreTools.Metadata.Filter
                 case "orientation":
                     checkValue = obj.Rotate?.AsStringValue();
                     return true;
-                case "type":
                 case "screen":
                     checkValue = obj.DisplayType?.AsStringValue();
                     return true;
@@ -1114,6 +1117,9 @@ namespace SabreTools.Metadata.Filter
         {
             switch (fieldName)
             {
+                case "featuretype":
+                    checkValue = obj.FeatureType?.AsStringValue();
+                    return true;
                 case "name":
                     checkValue = obj.Name;
                     return true;
@@ -1122,9 +1128,6 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case "status":
                     checkValue = obj.Status?.AsStringValue();
-                    return true;
-                case "type":
-                    checkValue = obj.FeatureType?.AsStringValue();
                     return true;
                 case "value":
                     checkValue = obj.Value;
@@ -1264,7 +1267,7 @@ namespace SabreTools.Metadata.Filter
                     checkValue = obj.Timestamp;
                     return true;
                 case "type":
-                    checkValue = obj.Timestamp;
+                    checkValue = obj.Type;
                     return true;
                 case "url":
                     checkValue = obj.Url;
@@ -2357,7 +2360,6 @@ namespace SabreTools.Metadata.Filter
                     checkValue = obj.Refresh?.ToString();
                     return true;
                 case "screen":
-                case "type":
                     checkValue = obj.Screen?.AsStringValue();
                     return true;
                 case "width":

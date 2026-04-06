@@ -114,7 +114,6 @@ namespace SabreTools.Metadata.Filter
             "name",
             "soundonly",
             "tag",
-            "type",
         ];
 
         /// <summary>
@@ -172,7 +171,6 @@ namespace SabreTools.Metadata.Filter
             "reqbuttons",
             "reverse",
             "sensitivity",
-            "type",
             "ways",
             "ways2",
             "ways3",
@@ -199,7 +197,6 @@ namespace SabreTools.Metadata.Filter
             "interface",
             "mandatory",
             "tag",
-            "type",
         ];
 
         /// <summary>
@@ -364,6 +361,14 @@ namespace SabreTools.Metadata.Filter
             if (string.Equals(itemName, "datitem", StringComparison.OrdinalIgnoreCase)
                 || string.Equals(itemName, "item", StringComparison.OrdinalIgnoreCase))
             {
+                // Handle item type
+                if (string.Equals(fieldName, "type", StringComparison.OrdinalIgnoreCase))
+                {
+                    itemName = "item";
+                    fieldName = "type";
+                    return true;
+                }
+
                 // If we get any matches
                 string localFieldName = fieldName;
                 string? matchedType = Array.Find(_datItemTypeNames, t => DatItemContainsField(t, localFieldName));
