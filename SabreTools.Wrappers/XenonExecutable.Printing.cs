@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using SabreTools.Data.Models.XenonExecutable;
 using SabreTools.Text.Extensions;

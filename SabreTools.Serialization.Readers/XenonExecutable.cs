@@ -3,7 +3,6 @@ using SabreTools.Data.Models.XenonExecutable;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
-using static SabreTools.Data.Models.XenonExecutable.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -87,7 +86,7 @@ namespace SabreTools.Serialization.Readers
             obj.OptionalHeaderCount = data.ReadUInt32BigEndian();
 
             // Ensure optional headers fit within stream
-            if (data.Position + 8 * obj.OptionalHeaderCount > data.Length)
+            if (data.Position + (8 * obj.OptionalHeaderCount) > data.Length)
                 return null;
 
             var optionalHeaders = new OptionalHeader[obj.OptionalHeaderCount];
@@ -104,7 +103,7 @@ namespace SabreTools.Serialization.Readers
                     continue;
                 }
 
-                uint optionalHeaderLength = (optionalHeader.HeaderID & 0xFF);
+                uint optionalHeaderLength = optionalHeader.HeaderID & 0xFF;
                 if (optionalHeaderLength == 0xFF)
                     optionalHeaderLength = 4;
                 else
@@ -180,7 +179,7 @@ namespace SabreTools.Serialization.Readers
             obj.TableCount = data.ReadUInt32BigEndian();
 
             // Ensure table fits within stream
-            if (data.Position + 24 * obj.TableCount > data.Length)
+            if (data.Position + (24 * obj.TableCount) > data.Length)
                 return obj;
 
             var table = new TableEntry[obj.TableCount];
