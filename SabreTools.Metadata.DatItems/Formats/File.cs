@@ -150,7 +150,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             rom.Name = $"{Id}.{Extension}";
             rom.Size = Size;
-            rom.CRC = CRC;
+            rom.CRC32 = CRC;
             rom.MD5 = MD5;
             rom.SHA1 = SHA1;
             rom.SHA256 = SHA256;
@@ -297,7 +297,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Now determine what the key should be based on the bucketedBy value
             switch (bucketedBy)
             {
-                case ItemKey.CRC:
+                case ItemKey.CRC32:
                     key = CRC;
                     break;
 

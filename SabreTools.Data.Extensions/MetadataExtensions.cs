@@ -248,8 +248,8 @@ namespace SabreTools.Data.Extensions
             string? otherCrc16 = other.CRC16;
             bool conditionalCrc16 = ConditionalHashEquals(selfCrc16, otherCrc16);
 
-            string? selfCrc = self.CRC;
-            string? otherCrc = other.CRC;
+            string? selfCrc = self.CRC32;
+            string? otherCrc = other.CRC32;
             bool conditionalCrc = ConditionalHashEquals(selfCrc, otherCrc);
 
             string? selfCrc64 = self.CRC64;
@@ -345,7 +345,7 @@ namespace SabreTools.Data.Extensions
         public static bool HasHashes(this Rom rom)
         {
             bool crc16Null = string.IsNullOrEmpty(rom.CRC16);
-            bool crcNull = string.IsNullOrEmpty(rom.CRC);
+            bool crc32Null = string.IsNullOrEmpty(rom.CRC32);
             bool crc64Null = string.IsNullOrEmpty(rom.CRC64);
             bool md2Null = string.IsNullOrEmpty(rom.MD2);
             bool md4Null = string.IsNullOrEmpty(rom.MD4);
@@ -359,7 +359,7 @@ namespace SabreTools.Data.Extensions
             bool spamsumNull = string.IsNullOrEmpty(rom.SpamSum);
 
             return !crc16Null
-                || !crcNull
+                || !crc32Null
                 || !crc64Null
                 || !md2Null
                 || !md4Null
@@ -419,8 +419,8 @@ namespace SabreTools.Data.Extensions
             string? crc16 = rom.CRC16;
             bool crc16Null = string.IsNullOrEmpty(crc16) || string.Equals(crc16, HashType.CRC16.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            string? crc = rom.CRC;
-            bool crcNull = string.IsNullOrEmpty(crc) || string.Equals(crc, HashType.CRC32.ZeroString, StringComparison.OrdinalIgnoreCase);
+            string? crc32 = rom.CRC32;
+            bool crc32Null = string.IsNullOrEmpty(crc32) || string.Equals(crc32, HashType.CRC32.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? crc64 = rom.CRC64;
             bool crc64Null = string.IsNullOrEmpty(crc64) || string.Equals(crc64, HashType.CRC64.ZeroString, StringComparison.OrdinalIgnoreCase);
@@ -456,7 +456,7 @@ namespace SabreTools.Data.Extensions
             bool spamsumNull = string.IsNullOrEmpty(spamsum) || string.Equals(spamsum, HashType.SpamSum.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             return crc16Null
-                && crcNull
+                && crc32Null
                 && crc64Null
                 && md2Null
                 && md4Null
@@ -516,8 +516,8 @@ namespace SabreTools.Data.Extensions
             bool crc16Null = string.IsNullOrEmpty(self.CRC16);
             crc16Null ^= string.IsNullOrEmpty(other.CRC16);
 
-            bool crcNull = string.IsNullOrEmpty(self.CRC);
-            crcNull ^= string.IsNullOrEmpty(other.CRC);
+            bool crc32Null = string.IsNullOrEmpty(self.CRC32);
+            crc32Null ^= string.IsNullOrEmpty(other.CRC32);
 
             bool crc64Null = string.IsNullOrEmpty(self.CRC64);
             crc64Null ^= string.IsNullOrEmpty(other.CRC64);
@@ -553,7 +553,7 @@ namespace SabreTools.Data.Extensions
             spamsumNull ^= string.IsNullOrEmpty(other.SpamSum);
 
             return !crc16Null
-                || !crcNull
+                || !crc32Null
                 || !crc64Null
                 || !md2Null
                 || !md4Null
@@ -637,10 +637,10 @@ namespace SabreTools.Data.Extensions
             if (string.IsNullOrEmpty(selfCrc16) && !string.IsNullOrEmpty(otherCrc16))
                 self.CRC16 = otherCrc16;
 
-            string? selfCrc = self.CRC;
-            string? otherCrc = other.CRC;
+            string? selfCrc = self.CRC32;
+            string? otherCrc = other.CRC32;
             if (string.IsNullOrEmpty(selfCrc) && !string.IsNullOrEmpty(otherCrc))
-                self.CRC = otherCrc;
+                self.CRC32 = otherCrc;
 
             string? selfCrc64 = self.CRC64;
             string? otherCrc64 = other.CRC64;

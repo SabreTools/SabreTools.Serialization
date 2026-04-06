@@ -242,10 +242,10 @@ namespace SabreTools.Metadata.DatItems.Test
         [InlineData(ItemKey.CRC16, false, true, "0000")]
         [InlineData(ItemKey.CRC16, true, false, "0000")]
         [InlineData(ItemKey.CRC16, true, true, "0000")]
-        [InlineData(ItemKey.CRC, false, false, "00000000")]
-        [InlineData(ItemKey.CRC, false, true, "00000000")]
-        [InlineData(ItemKey.CRC, true, false, "00000000")]
-        [InlineData(ItemKey.CRC, true, true, "00000000")]
+        [InlineData(ItemKey.CRC32, false, false, "00000000")]
+        [InlineData(ItemKey.CRC32, false, true, "00000000")]
+        [InlineData(ItemKey.CRC32, true, false, "00000000")]
+        [InlineData(ItemKey.CRC32, true, true, "00000000")]
         [InlineData(ItemKey.CRC64, false, false, "0000000000000000")]
         [InlineData(ItemKey.CRC64, false, true, "0000000000000000")]
         [InlineData(ItemKey.CRC64, true, false, "0000000000000000")]
@@ -315,10 +315,10 @@ namespace SabreTools.Metadata.DatItems.Test
         [InlineData(ItemKey.CRC16, false, true, "DEADBEEF")]
         [InlineData(ItemKey.CRC16, true, false, "deadbeef")]
         [InlineData(ItemKey.CRC16, true, true, "deadbeef")]
-        [InlineData(ItemKey.CRC, false, false, "DEADBEEF")]
-        [InlineData(ItemKey.CRC, false, true, "DEADBEEF")]
-        [InlineData(ItemKey.CRC, true, false, "deadbeef")]
-        [InlineData(ItemKey.CRC, true, true, "deadbeef")]
+        [InlineData(ItemKey.CRC32, false, false, "DEADBEEF")]
+        [InlineData(ItemKey.CRC32, false, true, "DEADBEEF")]
+        [InlineData(ItemKey.CRC32, true, false, "deadbeef")]
+        [InlineData(ItemKey.CRC32, true, true, "deadbeef")]
         [InlineData(ItemKey.CRC64, false, false, "DEADBEEF")]
         [InlineData(ItemKey.CRC64, false, true, "DEADBEEF")]
         [InlineData(ItemKey.CRC64, true, false, "deadbeef")]
@@ -372,7 +372,7 @@ namespace SabreTools.Metadata.DatItems.Test
             DatItem datItem = new Rom
             {
                 CRC16 = "DEADBEEF",
-                CRC = "DEADBEEF",
+                CRC32 = "DEADBEEF",
                 CRC64 = "DEADBEEF",
                 MD2 = "DEADBEEF",
                 MD4 = "DEADBEEF",

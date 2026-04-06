@@ -285,7 +285,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (rom.Size is null || rom.Size < 0)
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
                     if (string.IsNullOrEmpty(rom.CRC16)
-                        && string.IsNullOrEmpty(rom.CRC)
+                        && string.IsNullOrEmpty(rom.CRC32)
                         && string.IsNullOrEmpty(rom.CRC64)
                         && string.IsNullOrEmpty(rom.MD2)
                         && string.IsNullOrEmpty(rom.MD4)

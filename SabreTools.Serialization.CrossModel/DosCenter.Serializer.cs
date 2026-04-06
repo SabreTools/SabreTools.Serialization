@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Size = item.Size,
-                CRC = item.CRC,
+                CRC32 = item.CRC,
                 SHA1 = item.SHA1,
                 Date = item.Date,
             };

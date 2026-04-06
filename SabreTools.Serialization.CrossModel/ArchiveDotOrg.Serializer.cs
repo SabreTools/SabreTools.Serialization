@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.CrossModel
                 LastModifiedTime = item.LastModifiedTime,
                 Size = NumberHelper.ConvertToInt64(item.Size),
                 MD5 = item.MD5,
-                CRC = item.CRC32,
+                CRC32 = item.CRC32,
                 SHA1 = item.SHA1,
                 FileCount = item.FileCount,
                 Format = item.Format,

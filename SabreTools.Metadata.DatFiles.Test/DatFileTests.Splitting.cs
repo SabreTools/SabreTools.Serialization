@@ -27,7 +27,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -36,7 +36,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -45,7 +45,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -79,7 +79,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -88,7 +88,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -97,7 +97,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -131,7 +131,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -140,7 +140,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -149,7 +149,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -186,7 +186,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -195,7 +195,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -204,7 +204,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -245,7 +245,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -254,7 +254,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -263,7 +263,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -297,7 +297,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -306,7 +306,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -315,7 +315,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -375,7 +375,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = itemMachine,
                 Source = source
             };
@@ -434,7 +434,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
-                CRC = "deadbeef"
+                CRC32 = "deadbeef"
             };
 
             DatItem deviceRef = new DeviceRef
@@ -486,7 +486,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -495,7 +495,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -504,7 +504,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -538,7 +538,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -547,7 +547,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -556,7 +556,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -677,7 +677,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -686,7 +686,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -695,7 +695,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -737,7 +737,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -746,7 +746,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -755,7 +755,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -801,7 +801,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -810,7 +810,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -819,7 +819,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };
@@ -857,7 +857,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "parent_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = parentMachine,
                 Source = source
             };
@@ -866,7 +866,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "match_child_rom",
                 Size = 12345,
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = childMachine,
                 Source = source
             };
@@ -875,7 +875,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "no_match_child_rom",
                 Size = 12345,
-                CRC = "beefdead",
+                CRC32 = "beefdead",
                 Machine = childMachine,
                 Source = source
             };

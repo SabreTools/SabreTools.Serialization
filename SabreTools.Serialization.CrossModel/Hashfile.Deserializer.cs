@@ -211,7 +211,7 @@ namespace SabreTools.Serialization.CrossModel
             var sfv = new SFV
             {
                 File = item.Name,
-                Hash = item.CRC,
+                Hash = item.CRC32,
             };
             return sfv;
         }

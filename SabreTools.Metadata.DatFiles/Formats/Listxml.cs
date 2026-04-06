@@ -271,7 +271,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
                     if (rom.Size is null || rom.Size < 0)
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
-                    if (string.IsNullOrEmpty(rom.CRC)
+                    if (string.IsNullOrEmpty(rom.CRC32)
                         && string.IsNullOrEmpty(rom.SHA1))
                     {
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));

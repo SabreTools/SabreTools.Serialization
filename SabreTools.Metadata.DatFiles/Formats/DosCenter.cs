@@ -38,8 +38,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
                     // if (string.IsNullOrEmpty(rom.Date))
                     //     missingFields.Add(nameof(Data.Models.Metadata.Rom.Date));
-                    if (string.IsNullOrEmpty(rom.CRC))
-                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC));
+                    if (string.IsNullOrEmpty(rom.CRC32))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC32));
                     // if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key)))
                     //     missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     break;

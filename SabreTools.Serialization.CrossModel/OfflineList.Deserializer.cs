@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.CrossModel
             var fileRomCRC = new FileRomCRC
             {
                 Extension = item.Extension,
-                Content = item.CRC,
+                Content = item.CRC32,
             };
             return fileRomCRC;
         }

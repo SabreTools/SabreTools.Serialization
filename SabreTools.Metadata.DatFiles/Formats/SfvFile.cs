@@ -36,8 +36,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case Rom rom:
                     if (string.IsNullOrEmpty(rom.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
-                    if (string.IsNullOrEmpty(rom.CRC))
-                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC));
+                    if (string.IsNullOrEmpty(rom.CRC32))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC32));
                     break;
 
                 default:

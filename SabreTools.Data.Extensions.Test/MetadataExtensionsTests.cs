@@ -349,7 +349,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "name",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -368,7 +368,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "name",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -394,7 +394,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "name",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = "XXXXXX",
                 MD2 = string.Empty,
                 MD4 = "XXXXXX",
@@ -412,7 +412,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "name",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = string.Empty,
                 MD2 = "XXXXXX",
                 MD4 = string.Empty,
@@ -437,7 +437,7 @@ namespace SabreTools.Data.Extensions.Test
             {
                 Name = "XXXXXX1",
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -455,7 +455,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -481,7 +481,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -498,7 +498,7 @@ namespace SabreTools.Data.Extensions.Test
             {
                 Name = "XXXXXX2",
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -524,7 +524,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -542,7 +542,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -568,7 +568,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -586,7 +586,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -612,7 +612,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = "XXXXXX",
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -630,7 +630,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -656,7 +656,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = "XXXXXX",
                 MD4 = string.Empty,
@@ -674,7 +674,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -700,7 +700,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = "XXXXXX",
@@ -718,7 +718,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -744,7 +744,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -762,7 +762,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -788,7 +788,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -806,7 +806,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -832,7 +832,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -850,7 +850,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -876,7 +876,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -894,7 +894,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -920,7 +920,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -938,7 +938,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -964,7 +964,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -982,7 +982,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1008,7 +1008,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1026,7 +1026,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1052,7 +1052,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1070,7 +1070,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1096,7 +1096,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX1",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1114,7 +1114,7 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "XXXXXX2",
                 Size = 12345,
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1380,7 +1380,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = "XXXXXX",
                 MD2 = string.Empty,
                 MD4 = "XXXXXX",
@@ -1396,7 +1396,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = string.Empty,
                 MD2 = "XXXXXX",
                 MD4 = string.Empty,
@@ -1420,7 +1420,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1436,7 +1436,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1460,7 +1460,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1476,7 +1476,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1500,7 +1500,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = "XXXXXX",
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1516,7 +1516,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1540,7 +1540,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = "XXXXXX",
                 MD4 = string.Empty,
@@ -1556,7 +1556,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1580,7 +1580,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = "XXXXXX",
@@ -1596,7 +1596,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1620,7 +1620,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1636,7 +1636,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1660,7 +1660,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1676,7 +1676,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1700,7 +1700,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1716,7 +1716,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1740,7 +1740,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1756,7 +1756,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1780,7 +1780,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1796,7 +1796,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1820,7 +1820,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1836,7 +1836,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1860,7 +1860,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1876,7 +1876,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1900,7 +1900,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1916,7 +1916,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1940,7 +1940,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -1956,7 +1956,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -2150,7 +2150,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -2174,7 +2174,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = HashType.CRC16.ZeroString,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2198,7 +2198,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = HashType.CRC32.ZeroString,
+                CRC32 = HashType.CRC32.ZeroString,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2222,7 +2222,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = HashType.CRC64.ZeroString,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2246,7 +2246,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = HashType.MD2.ZeroString,
                 MD4 = string.Empty,
@@ -2270,7 +2270,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = HashType.MD4.ZeroString,
@@ -2294,7 +2294,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2318,7 +2318,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2342,7 +2342,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2366,7 +2366,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2390,7 +2390,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2414,7 +2414,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2438,7 +2438,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2462,7 +2462,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -2486,7 +2486,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom
             {
                 CRC16 = HashType.CRC16.ZeroString,
-                CRC = HashType.CRC32.ZeroString,
+                CRC32 = HashType.CRC32.ZeroString,
                 CRC64 = HashType.CRC64.ZeroString,
                 MD2 = HashType.MD2.ZeroString,
                 MD4 = HashType.MD4.ZeroString,
@@ -2571,7 +2571,7 @@ namespace SabreTools.Data.Extensions.Test
             var other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",

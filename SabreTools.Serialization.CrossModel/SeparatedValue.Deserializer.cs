@@ -140,7 +140,7 @@ namespace SabreTools.Serialization.CrossModel
                 RomName = item.Name,
                 DiskName = null,
                 Size = item.Size,
-                CRC = item.CRC,
+                CRC = item.CRC32,
                 MD5 = item.MD5,
                 SHA1 = item.SHA1,
                 SHA256 = item.SHA256,

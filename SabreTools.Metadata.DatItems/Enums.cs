@@ -27,7 +27,7 @@ namespace SabreTools.Metadata.DatItems
         Machine,
 
         CRC16,
-        CRC,
+        CRC32,
         CRC64,
         MD2,
         MD4,

@@ -236,11 +236,11 @@ namespace SabreTools.Metadata.DatFiles
 
                 // If we have a rom and it's missing size AND the hashes match a 0-byte file, fill in the rest of the info
                 else if ((size == 0 || size is null)
-                    && (string.IsNullOrEmpty(rom.CRC) || rom.HasZeroHash()))
+                    && (string.IsNullOrEmpty(rom.CRC32) || rom.HasZeroHash()))
                 {
                     rom.Size = 0;
                     rom.CRC16 = null; // HashType.CRC16.ZeroString
-                    rom.CRC = HashType.CRC32.ZeroString;
+                    rom.CRC32 = HashType.CRC32.ZeroString;
                     rom.CRC64 = null; // HashType.CRC64.ZeroString
                     rom.MD2 = null; // HashType.MD2.ZeroString
                     rom.MD4 = null; // HashType.MD4.ZeroString
@@ -1025,9 +1025,9 @@ namespace SabreTools.Metadata.DatFiles
             else if (diskCount + mediaCount + romCount - nodumpCount == DatStatistics.GetHashCount(HashType.CRC16))
                 return ItemKey.CRC16;
 
-            // Otherwise, we bucket by CRC
+            // Otherwise, we bucket by CRC32
             else
-                return ItemKey.CRC;
+                return ItemKey.CRC32;
         }
 
         /// <summary>

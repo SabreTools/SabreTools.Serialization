@@ -92,16 +92,16 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => _internal.Comment = value;
         }
 
-        public string? CRC
-        {
-            get => _internal.CRC;
-            set => _internal.CRC = value;
-        }
-
         public string? CRC16
         {
             get => _internal.CRC16;
             set => _internal.CRC16 = value;
+        }
+
+        public string? CRC32
+        {
+            get => _internal.CRC32;
+            set => _internal.CRC32 = value;
         }
 
         public string? CRC64
@@ -691,9 +691,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (crc16 is not null)
                 CRC16 = NormalizeHashData(crc16, 4);
 
-            string? crc = CRC;
-            if (crc is not null)
-                CRC = TextHelper.NormalizeCRC32(crc);
+            string? crc32 = CRC32;
+            if (crc32 is not null)
+                CRC32 = TextHelper.NormalizeCRC32(crc32);
 
             // TODO: This should be normalized to CRC-64
             string? crc64 = CRC64;
@@ -747,9 +747,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (crc16 is not null)
                 CRC16 = NormalizeHashData(crc16, 4);
 
-            string? crc = CRC;
-            if (crc is not null)
-                CRC = TextHelper.NormalizeCRC32(crc);
+            string? crc32 = CRC32;
+            if (crc32 is not null)
+                CRC32 = TextHelper.NormalizeCRC32(crc32);
 
             // TODO: This should be normalized to CRC-64
             string? crc64 = CRC64;
@@ -957,8 +957,8 @@ namespace SabreTools.Metadata.DatItems.Formats
                     key = CRC16;
                     break;
 
-                case ItemKey.CRC:
-                    key = CRC;
+                case ItemKey.CRC32:
+                    key = CRC32;
                     break;
 
                 case ItemKey.CRC64:

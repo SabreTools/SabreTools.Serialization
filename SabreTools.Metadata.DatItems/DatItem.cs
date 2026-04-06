@@ -190,7 +190,7 @@ namespace SabreTools.Metadata.DatItems
                     key = HashType.CRC16.ZeroString;
                     break;
 
-                case ItemKey.CRC:
+                case ItemKey.CRC32:
                     key = HashType.CRC32.ZeroString;
                     break;
 

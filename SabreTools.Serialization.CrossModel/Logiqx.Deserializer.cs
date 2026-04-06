@@ -328,7 +328,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 Size = item.Size,
                 CRC16 = item.CRC16,
-                CRC = item.CRC,
+                CRC = item.CRC32,
                 CRC64 = item.CRC64,
                 MD2 = item.MD2,
                 MD4 = item.MD4,

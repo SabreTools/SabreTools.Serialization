@@ -289,7 +289,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
                 nameof(Data.Models.Metadata.Rom.Size),
-                nameof(Data.Models.Metadata.Rom.CRC),
+                nameof(Data.Models.Metadata.Rom.CRC32),
             ]));
         }
 
@@ -321,7 +321,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 nameof(Data.Models.Metadata.Rom.SHA256),
                 nameof(Data.Models.Metadata.Rom.SHA1),
                 nameof(Data.Models.Metadata.Rom.MD5),
-                nameof(Data.Models.Metadata.Rom.CRC),
+                nameof(Data.Models.Metadata.Rom.CRC32),
             ]));
         }
 
@@ -350,7 +350,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
-                nameof(Data.Models.Metadata.Rom.CRC),
+                nameof(Data.Models.Metadata.Rom.CRC32),
             ]));
         }
 
@@ -742,7 +742,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
                 nameof(Data.Models.Metadata.Rom.Size),
-                nameof(Data.Models.Metadata.Rom.CRC),
+                nameof(Data.Models.Metadata.Rom.CRC32),
                 nameof(Data.Models.Metadata.Rom.SHA1),
             ]));
         }
@@ -1277,7 +1277,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Size),
-                nameof(Data.Models.Metadata.Rom.CRC),
+                nameof(Data.Models.Metadata.Rom.CRC32),
             ]));
         }
 
@@ -1335,7 +1335,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
                 nameof(Data.Models.Metadata.Rom.Name),
-                nameof(Data.Models.Metadata.Rom.CRC),
+                nameof(Data.Models.Metadata.Rom.CRC32),
                 nameof(Data.Models.Metadata.Rom.Size),
             ]));
         }

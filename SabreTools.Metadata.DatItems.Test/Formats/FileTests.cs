@@ -36,7 +36,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Assert.Equal("XXXXXX.XXXXXX", actual.Name);
             Assert.Equal(12345, actual.Size);
-            Assert.Equal("deadbeef", actual.CRC);
+            Assert.Equal("deadbeef", actual.CRC32);
             Assert.Equal("000000000000000000000000deadbeef", actual.MD5);
             Assert.Equal("00000000000000000000000000000000deadbeef", actual.SHA1);
             Assert.Equal("00000000000000000000000000000000000000000000000000000000deadbeef", actual.SHA256);
@@ -299,10 +299,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [InlineData(ItemKey.Machine, false, true, "Machine")]
         [InlineData(ItemKey.Machine, true, false, "0000000000-machine")]
         [InlineData(ItemKey.Machine, true, true, "machine")]
-        [InlineData(ItemKey.CRC, false, false, "deadbeef")]
-        [InlineData(ItemKey.CRC, false, true, "deadbeef")]
-        [InlineData(ItemKey.CRC, true, false, "deadbeef")]
-        [InlineData(ItemKey.CRC, true, true, "deadbeef")]
+        [InlineData(ItemKey.CRC32, false, false, "deadbeef")]
+        [InlineData(ItemKey.CRC32, false, true, "deadbeef")]
+        [InlineData(ItemKey.CRC32, true, false, "deadbeef")]
+        [InlineData(ItemKey.CRC32, true, true, "deadbeef")]
         [InlineData(ItemKey.MD2, false, false, "8350e5a3e24c153df2275c9f80692773")]
         [InlineData(ItemKey.MD2, false, true, "8350e5a3e24c153df2275c9f80692773")]
         [InlineData(ItemKey.MD2, true, false, "8350e5a3e24c153df2275c9f80692773")]

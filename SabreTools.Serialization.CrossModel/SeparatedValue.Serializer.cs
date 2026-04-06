@@ -103,7 +103,7 @@ namespace SabreTools.Serialization.CrossModel
                 {
                     Name = item.RomName,
                     Size = item.Size,
-                    CRC = item.CRC,
+                    CRC32 = item.CRC,
                     MD5 = item.MD5,
                     SHA1 = item.SHA1,
                     SHA256 = item.SHA256,

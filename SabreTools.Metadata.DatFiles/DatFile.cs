@@ -579,7 +579,7 @@ namespace SabreTools.Metadata.DatFiles
                 category = machine?.Category is null ? string.Empty : string.Join(", ", machine.Category),
                 name = item.GetName() ?? type.AsStringValue() ?? string.Empty,
                 crc16 = string.Empty,
-                crc = string.Empty,
+                crc32 = string.Empty,
                 crc64 = string.Empty,
                 md2 = string.Empty,
                 md4 = string.Empty,
@@ -603,7 +603,7 @@ namespace SabreTools.Metadata.DatFiles
             {
                 name = $"{file.Id}.{file.Extension}";
                 size = file.Size.ToString() ?? string.Empty;
-                crc = file.CRC ?? string.Empty;
+                crc32 = file.CRC ?? string.Empty;
                 md5 = file.MD5 ?? string.Empty;
                 sha1 = file.SHA1 ?? string.Empty;
                 sha256 = file.SHA256 ?? string.Empty;
@@ -618,7 +618,7 @@ namespace SabreTools.Metadata.DatFiles
             else if (item is Rom rom)
             {
                 crc16 = rom.CRC16 ?? string.Empty;
-                crc = rom.CRC ?? string.Empty;
+                crc32 = rom.CRC32 ?? string.Empty;
                 crc64 = rom.CRC64 ?? string.Empty;
                 md2 = rom.MD2 ?? string.Empty;
                 md4 = rom.MD4 ?? string.Empty;
@@ -642,7 +642,8 @@ namespace SabreTools.Metadata.DatFiles
                 .Replace("%publisher%", publisher)
                 .Replace("%category%", category)
                 .Replace("%crc16%", crc16)
-                .Replace("%crc%", crc)
+                .Replace("%crc%", crc32)
+                .Replace("%crc32%", crc32)
                 .Replace("%crc64%", crc64)
                 .Replace("%md2%", md2)
                 .Replace("%md4%", md4)
@@ -675,14 +676,14 @@ namespace SabreTools.Metadata.DatFiles
                 return rom;
 
             // If the item CRC isn't "null"
-            if (rom.CRC != "null")
+            if (rom.CRC32 != "null")
                 return rom;
 
             // If the Rom has "null" characteristics, ensure all fields
             rom.Name = rom.Name == "null" ? "-" : rom.Name;
             rom.Size = 0;
             rom.CRC16 = rom.CRC16 == "null" ? HashType.CRC16.ZeroString : null;
-            rom.CRC = rom.CRC == "null" ? HashType.CRC32.ZeroString : null;
+            rom.CRC32 = rom.CRC32 == "null" ? HashType.CRC32.ZeroString : null;
             rom.CRC64 = rom.CRC64 == "null" ? HashType.CRC64.ZeroString : null;
             rom.MD2 = rom.MD2 == "null" ? HashType.MD2.ZeroString : null;
             rom.MD4 = rom.MD4 == "null" ? HashType.MD4.ZeroString : null;
@@ -1076,9 +1077,9 @@ namespace SabreTools.Metadata.DatFiles
             if (!string.IsNullOrEmpty(crc16))
                 return $"_{crc16}";
 
-            string? crc = datItem.CRC;
-            if (!string.IsNullOrEmpty(crc))
-                return $"_{crc}";
+            string? crc32 = datItem.CRC32;
+            if (!string.IsNullOrEmpty(crc32))
+                return $"_{crc32}";
 
             string? crc64 = datItem.CRC64;
             if (!string.IsNullOrEmpty(crc64))

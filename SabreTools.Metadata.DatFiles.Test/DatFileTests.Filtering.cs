@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem datItem = new Rom
             {
                 Name = "rom.bin",
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = machine,
                 Source = source
             };
@@ -53,7 +53,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem datItem = new Rom
             {
                 Name = "rom.bin",
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Machine = machine,
                 Source = source
             };

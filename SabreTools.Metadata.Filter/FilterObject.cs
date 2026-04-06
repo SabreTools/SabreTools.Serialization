@@ -1799,11 +1799,12 @@ namespace SabreTools.Metadata.Filter
                 case "comment":
                     checkValue = obj.Comment;
                     return true;
-                case "crc":
-                    checkValue = obj.CRC;
-                    return true;
                 case "crc16":
                     checkValue = obj.CRC16;
+                    return true;
+                case "crc":
+                case "crc32":
+                    checkValue = obj.CRC32;
                     return true;
                 case "crc64":
                     checkValue = obj.CRC64;

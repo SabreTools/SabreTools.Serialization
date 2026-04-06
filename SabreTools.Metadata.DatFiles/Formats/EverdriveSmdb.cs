@@ -40,8 +40,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     if (string.IsNullOrEmpty(rom.MD5))
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.MD5));
-                    if (string.IsNullOrEmpty(rom.CRC))
-                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC));
+                    if (string.IsNullOrEmpty(rom.CRC32))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC32));
                     break;
 
                 default:

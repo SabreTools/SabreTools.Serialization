@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 SHA1 = item.SHA1,
                 MD5 = item.MD5,
-                CRC32 = item.CRC,
+                CRC32 = item.CRC32,
                 Size = item.Size,
             };
             return row;

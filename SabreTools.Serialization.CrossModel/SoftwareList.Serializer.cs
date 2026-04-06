@@ -209,7 +209,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 Size = item.Size,
                 Length = item.Length,
-                CRC = item.CRC,
+                CRC32 = item.CRC,
                 SHA1 = item.SHA1,
                 Offset = item.Offset,
                 Value = item.Value,

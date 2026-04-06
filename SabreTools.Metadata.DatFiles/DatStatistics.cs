@@ -340,7 +340,7 @@ namespace SabreTools.Metadata.DatFiles
             {
                 TotalSize += rom.Size ?? 0;
                 ModifyHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.CRC16) ? 0 : 1);
-                ModifyHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.CRC) ? 0 : 1);
+                ModifyHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.CRC32) ? 0 : 1);
                 ModifyHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.CRC64) ? 0 : 1);
                 ModifyHashCount(HashType.MD2, string.IsNullOrEmpty(rom.MD2) ? 0 : 1);
                 ModifyHashCount(HashType.MD4, string.IsNullOrEmpty(rom.MD4) ? 0 : 1);
@@ -415,7 +415,7 @@ namespace SabreTools.Metadata.DatFiles
             {
                 TotalSize -= rom.Size ?? 0;
                 ModifyHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.CRC16) ? 0 : -1);
-                ModifyHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.CRC) ? 0 : -1);
+                ModifyHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.CRC32) ? 0 : -1);
                 ModifyHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.CRC64) ? 0 : -1);
                 ModifyHashCount(HashType.MD2, string.IsNullOrEmpty(rom.MD2) ? 0 : -1);
                 ModifyHashCount(HashType.MD4, string.IsNullOrEmpty(rom.MD4) ? 0 : -1);

@@ -35,7 +35,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem rom = new Rom
             {
                 Name = "rom",
-                CRC = "deadbeef",
+                CRC32 = "deadbeef",
                 Source = source,
                 Machine = machine
             };
@@ -1378,7 +1378,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "name",
                 Size = 12345,
                 CRC16 = "crc16",
-                CRC = "crc",
+                CRC32 = "crc32",
                 CRC64 = "crc64",
                 MD2 = "md2",
                 MD4 = "md4",
@@ -1481,7 +1481,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void FormatPrefixPostfix_Rom()
         {
             string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc16%_%crc%_%crc64%_%md2%_%md4%_%md5%_%ripemd128%_%ripemd160%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
-            string expected = "machine_machine_name_manufacturer_publisher_category_crc16_crc_crc64_md2_md4_md5_ripemd128_ripemd160_sha1_sha256_sha384_sha512_12345_spamsum";
+            string expected = "machine_machine_name_manufacturer_publisher_category_crc16_crc32_crc64_md2_md4_md5_ripemd128_ripemd160_sha1_sha256_sha384_sha512_12345_spamsum";
 
             Machine machine = new Machine
             {
@@ -1496,7 +1496,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "name",
                 Size = 12345,
                 CRC16 = "crc16",
-                CRC = "crc",
+                CRC32 = "crc32",
                 CRC64 = "crc64",
                 MD2 = "md2",
                 MD4 = "md4",
@@ -1531,7 +1531,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(rom);
             Assert.Equal(12345, rom.Size);
             Assert.Null(rom.CRC16);
-            Assert.Null(rom.CRC);
+            Assert.Null(rom.CRC32);
             Assert.Null(rom.CRC64);
             Assert.Null(rom.MD2);
             Assert.Null(rom.MD4);
@@ -1550,14 +1550,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatItem item = new Rom
             {
-                CRC = HashType.CRC32.ZeroString
+                CRC32 = HashType.CRC32.ZeroString
             };
 
             DatItem actual = DatFile.ProcessNullifiedItem(item);
             Rom? rom = actual as Rom;
             Assert.NotNull(rom);
             Assert.Null(rom.Size);
-            Assert.Equal(HashType.CRC32.ZeroString, rom.CRC);
+            Assert.Equal(HashType.CRC32.ZeroString, rom.CRC32);
             Assert.Null(rom.MD2);
             Assert.Null(rom.MD4);
             Assert.Null(rom.MD5);
@@ -1576,7 +1576,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem item = new Rom
             {
                 CRC16 = "null",
-                CRC = "null",
+                CRC32 = "null",
                 CRC64 = "null",
                 MD2 = "null",
                 MD4 = "null",
@@ -1595,7 +1595,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(rom);
             Assert.Equal(0, rom.Size);
             Assert.Equal(HashType.CRC16.ZeroString, rom.CRC16);
-            Assert.Equal(HashType.CRC32.ZeroString, rom.CRC);
+            Assert.Equal(HashType.CRC32.ZeroString, rom.CRC32);
             Assert.Equal(HashType.CRC64.ZeroString, rom.CRC64);
             Assert.Equal(HashType.MD2.ZeroString, rom.MD2);
             Assert.Equal(HashType.MD4.ZeroString, rom.MD4);
@@ -1793,12 +1793,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         }
 
         [Fact]
-        public void GetDuplicateSuffix_Rom_CRC()
+        public void GetDuplicateSuffix_Rom_CRC32()
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom
             {
-                CRC = hash
+                CRC32 = hash
             };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
@@ -1982,7 +1982,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "name",
                 Size = 12345,
-                CRC = "crc",
+                CRC32 = "crc",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -1997,7 +1997,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actualRomA);
             Assert.Equal("name", actualRomA.Name);
             Assert.Equal(12345, actualRomA.Size);
-            Assert.Equal("crc", actualRomA.CRC);
+            Assert.Equal("crc", actualRomA.CRC32);
         }
 
         [Fact]
@@ -2011,7 +2011,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "romA",
                 Size = 12345,
-                CRC = "crc",
+                CRC32 = "crc",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2020,7 +2020,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "romB",
                 Size = 23456,
-                CRC = "crc2",
+                CRC32 = "crc2",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2036,13 +2036,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actualRomA);
             Assert.Equal("romA", actualRomA.Name);
             Assert.Equal(12345, actualRomA.Size);
-            Assert.Equal("crc", actualRomA.CRC);
+            Assert.Equal("crc", actualRomA.CRC32);
 
             Rom? actualRomB = actual[1] as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("romB", actualRomB.Name);
             Assert.Equal(23456, actualRomB.Size);
-            Assert.Equal("crc2", actualRomB.CRC);
+            Assert.Equal("crc2", actualRomB.CRC32);
         }
 
         [Fact]
@@ -2056,7 +2056,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
-                CRC = "crc",
+                CRC32 = "crc",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2065,7 +2065,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
-                CRC = "crc",
+                CRC32 = "crc",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2080,7 +2080,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.Name);
             Assert.Equal(12345, actualRomA.Size);
-            Assert.Equal("crc", actualRomA.CRC);
+            Assert.Equal("crc", actualRomA.CRC32);
         }
 
         [Fact]
@@ -2094,7 +2094,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
-                CRC = "crc",
+                CRC32 = "crc",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2103,7 +2103,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 23456,
-                CRC = "crc2",
+                CRC32 = "crc2",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2119,13 +2119,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.Name);
             Assert.Equal(12345, actualRomA.Size);
-            Assert.Equal("crc", actualRomA.CRC);
+            Assert.Equal("crc", actualRomA.CRC32);
 
             Rom? actualRomB = actual[1] as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("rom_crc2", actualRomB.Name);
             Assert.Equal(23456, actualRomB.Size);
-            Assert.Equal("crc2", actualRomB.CRC);
+            Assert.Equal("crc2", actualRomB.CRC32);
         }
 
         #endregion
@@ -2154,7 +2154,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "name",
                 Size = 12345,
-                CRC = "crc",
+                CRC32 = "crc",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2171,7 +2171,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actualRomA);
             Assert.Equal("name", actualRomA.Name);
             Assert.Equal(12345, actualRomA.Size);
-            Assert.Equal("crc", actualRomA.CRC);
+            Assert.Equal("crc", actualRomA.CRC32);
         }
 
         [Fact]
@@ -2185,7 +2185,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "romA",
                 Size = 12345,
-                CRC = "crc",
+                CRC32 = "crc",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2194,7 +2194,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "romB",
                 Size = 23456,
-                CRC = "crc2",
+                CRC32 = "crc2",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2213,13 +2213,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actualRomA);
             Assert.Equal("romA", actualRomA.Name);
             Assert.Equal(12345, actualRomA.Size);
-            Assert.Equal("crc", actualRomA.CRC);
+            Assert.Equal("crc", actualRomA.CRC32);
 
             Rom? actualRomB = actual[1].Value as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("romB", actualRomB.Name);
             Assert.Equal(23456, actualRomB.Size);
-            Assert.Equal("crc2", actualRomB.CRC);
+            Assert.Equal("crc2", actualRomB.CRC32);
         }
 
         [Fact]
@@ -2237,7 +2237,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
-                CRC = "crc"
+                CRC32 = "crc"
             };
             long romAIndex = datFile.AddItemDB(romA, machineIndex, sourceIndex, statsOnly: false);
 
@@ -2245,7 +2245,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
-                CRC = "crc"
+                CRC32 = "crc"
             };
             long romBIndex = datFile.AddItemDB(romB, machineIndex, sourceIndex, statsOnly: false);
 
@@ -2261,7 +2261,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.Name);
             Assert.Equal(12345, actualRomA.Size);
-            Assert.Equal("crc", actualRomA.CRC);
+            Assert.Equal("crc", actualRomA.CRC32);
         }
 
         [Fact]
@@ -2275,7 +2275,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
-                CRC = "crc",
+                CRC32 = "crc",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2284,7 +2284,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 23456,
-                CRC = "crc2",
+                CRC32 = "crc2",
                 Machine = (Machine)machine.Clone(),
                 Source = (Source)source.Clone()
             };
@@ -2303,13 +2303,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.Name);
             Assert.Equal(12345, actualRomA.Size);
-            Assert.Equal("crc", actualRomA.CRC);
+            Assert.Equal("crc", actualRomA.CRC32);
 
             Rom? actualRomB = actual[1].Value as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("rom_crc2", actualRomB.Name);
             Assert.Equal(23456, actualRomB.Size);
-            Assert.Equal("crc2", actualRomB.CRC);
+            Assert.Equal("crc2", actualRomB.CRC32);
         }
 
         #endregion
@@ -2363,7 +2363,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "name",
                 Size = 12345,
-                CRC = "crc"
+                CRC32 = "crc"
             };
             DatFile datFile = new Logiqx(null, useGame: false);
 
@@ -2402,7 +2402,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "name",
                 Size = 12345,
-                CRC = "crc",
+                CRC32 = "crc",
                 MD2 = "crc",
                 MD4 = "crc",
                 MD5 = "crc",

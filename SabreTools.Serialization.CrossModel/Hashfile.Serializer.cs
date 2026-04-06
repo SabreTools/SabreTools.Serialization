@@ -140,7 +140,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 Name = item.File,
-                CRC = item.Hash,
+                CRC32 = item.Hash,
             };
             return rom;
         }

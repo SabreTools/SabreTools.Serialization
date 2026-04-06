@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.CrossModel
                 GameName = parent.Name,
                 GameDescription = parent.Description,
                 RomName = item.Name,
-                RomCRC = item.CRC,
+                RomCRC = item.CRC32,
                 RomSize = item.Size,
                 RomOf = parent.RomOf,
                 MergeName = item.Merge,

@@ -795,8 +795,8 @@ namespace SabreTools.Metadata.DatFiles.Test
                 ClothCoverDetectionModuleVersion = "cloth_cover_detection_module_version",
                 CollectionCatalogNumber = "collection-catalog-number",
                 Comment = "comment",
-                CRC = HashType.CRC32.ZeroString,
                 CRC16 = HashType.CRC16.ZeroString,
+                CRC32 = HashType.CRC32.ZeroString,
                 CRC64 = HashType.CRC64.ZeroString,
                 Creator = "creator",
                 Date = "date",
@@ -1507,8 +1507,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("cloth_cover_detection_module_version", rom.ClothCoverDetectionModuleVersion);
             Assert.Equal("collection-catalog-number", rom.CollectionCatalogNumber);
             Assert.Equal("comment", rom.Comment);
-            Assert.Equal(HashType.CRC32.ZeroString, rom.CRC);
             Assert.Equal(HashType.CRC16.ZeroString, rom.CRC16);
+            Assert.Equal(HashType.CRC32.ZeroString, rom.CRC32);
             Assert.Equal(HashType.CRC64.ZeroString, rom.CRC64);
             Assert.Equal("creator", rom.Creator);
             Assert.Equal("date", rom.Date);

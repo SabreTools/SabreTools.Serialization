@@ -88,10 +88,10 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? Comment { get; set; }
 
-        /// <remarks>Also "crc32" in ArchiveDotOrg.File</remarks>
-        public string? CRC { get; set; }
-
         public string? CRC16 { get; set; }
+
+        /// <remarks>Mainly "crc", named here for clarity</remarks>
+        public string? CRC32 { get; set; }
 
         public string? CRC64 { get; set; }
 
@@ -300,8 +300,8 @@ namespace SabreTools.Data.Models.Metadata
             obj.ClothCoverDetectionModuleVersion = ClothCoverDetectionModuleVersion;
             obj.CollectionCatalogNumber = CollectionCatalogNumber;
             obj.Comment = Comment;
-            obj.CRC = CRC;
             obj.CRC16 = CRC16;
+            obj.CRC32 = CRC32;
             obj.CRC64 = CRC64;
             obj.Creator = Creator;
             obj.Date = Date;

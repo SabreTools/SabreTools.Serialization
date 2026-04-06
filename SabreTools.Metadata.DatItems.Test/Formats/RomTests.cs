@@ -16,7 +16,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             self.FillMissingInformation(other);
 
             Assert.Null(self.CRC16);
-            Assert.Null(self.CRC);
+            Assert.Null(self.CRC32);
             Assert.Null(self.CRC64);
             Assert.Null(self.MD2);
             Assert.Null(self.MD4);
@@ -38,7 +38,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom other = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -55,7 +55,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             self.FillMissingInformation(other);
 
             Assert.Equal("XXXXXX", self.CRC16);
-            Assert.Equal("XXXXXX", self.CRC);
+            Assert.Equal("XXXXXX", self.CRC32);
             Assert.Equal("XXXXXX", self.CRC64);
             Assert.Equal("XXXXXX", self.MD2);
             Assert.Equal("XXXXXX", self.MD4);
@@ -87,7 +87,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -106,12 +106,12 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         }
 
         [Fact]
-        public void HasHashes_CRC_True()
+        public void HasHashes_CRC32_True()
         {
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -135,7 +135,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = "XXXXXX",
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -159,7 +159,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = "XXXXXX",
                 MD4 = string.Empty,
@@ -183,7 +183,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = "XXXXXX",
@@ -207,7 +207,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -231,7 +231,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -255,7 +255,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -279,7 +279,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -303,7 +303,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -327,7 +327,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -351,7 +351,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -375,7 +375,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -399,7 +399,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -435,7 +435,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
+                CRC32 = "XXXXXX",
                 CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
@@ -459,7 +459,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = HashType.CRC16.ZeroString,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -478,12 +478,12 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         }
 
         [Fact]
-        public void HasZeroHash_ZeroCRC_True()
+        public void HasZeroHash_ZeroCRC32_True()
         {
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = HashType.CRC32.ZeroString,
+                CRC32 = HashType.CRC32.ZeroString,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -507,7 +507,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = HashType.CRC64.ZeroString,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -531,7 +531,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = HashType.MD2.ZeroString,
                 MD4 = string.Empty,
@@ -555,7 +555,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = HashType.MD4.ZeroString,
@@ -579,7 +579,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -603,7 +603,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -627,7 +627,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -651,7 +651,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -675,7 +675,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -699,7 +699,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -723,7 +723,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -747,7 +747,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC = string.Empty,
+                CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -771,7 +771,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = HashType.CRC16.ZeroString,
-                CRC = HashType.CRC32.ZeroString,
+                CRC32 = HashType.CRC32.ZeroString,
                 CRC64 = HashType.CRC64.ZeroString,
                 MD2 = HashType.MD2.ZeroString,
                 MD4 = HashType.MD4.ZeroString,
@@ -807,10 +807,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [InlineData(ItemKey.CRC16, false, true, "DEADBEEF")]
         [InlineData(ItemKey.CRC16, true, false, "deadbeef")]
         [InlineData(ItemKey.CRC16, true, true, "deadbeef")]
-        [InlineData(ItemKey.CRC, false, false, "DEADBEEF")]
-        [InlineData(ItemKey.CRC, false, true, "DEADBEEF")]
-        [InlineData(ItemKey.CRC, true, false, "deadbeef")]
-        [InlineData(ItemKey.CRC, true, true, "deadbeef")]
+        [InlineData(ItemKey.CRC32, false, false, "DEADBEEF")]
+        [InlineData(ItemKey.CRC32, false, true, "DEADBEEF")]
+        [InlineData(ItemKey.CRC32, true, false, "deadbeef")]
+        [InlineData(ItemKey.CRC32, true, true, "deadbeef")]
         [InlineData(ItemKey.CRC64, false, false, "DEADBEEF")]
         [InlineData(ItemKey.CRC64, false, true, "DEADBEEF")]
         [InlineData(ItemKey.CRC64, true, false, "deadbeef")]
@@ -864,7 +864,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             DatItem datItem = new Rom
             {
                 CRC16 = "DEADBEEF",
-                CRC = "DEADBEEF",
+                CRC32 = "DEADBEEF",
                 CRC64 = "DEADBEEF",
                 MD2 = "DEADBEEF",
                 MD4 = "DEADBEEF",

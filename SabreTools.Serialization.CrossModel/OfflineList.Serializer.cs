@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 Extension = item.Extension,
-                CRC = item.Content,
+                CRC32 = item.Content,
             };
             return rom;
         }

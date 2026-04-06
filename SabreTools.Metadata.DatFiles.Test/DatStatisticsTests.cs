@@ -305,7 +305,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Size = 1
             };
             rom.CRC16 = HashType.CRC16.ZeroString;
-            rom.CRC = HashType.CRC32.ZeroString;
+            rom.CRC32 = HashType.CRC32.ZeroString;
             rom.CRC64 = HashType.CRC64.ZeroString;
             rom.MD2 = HashType.MD2.ZeroString;
             rom.MD4 = HashType.MD4.ZeroString;

@@ -306,7 +306,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom-1",
                 Size = 1024,
-                CRC = "DEADBEEF",
+                CRC32 = "DEADBEEF",
                 SHA1 = "0000000fbbb37f8488100b1b4697012de631a5e6"
             };
 
@@ -314,7 +314,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom-2",
                 Size = 1024,
-                CRC = "DEADBEEF",
+                CRC32 = "DEADBEEF",
                 RemoveFlag = true,
                 SHA1 = "000000e948edcb4f7704b8af85a77a3339ecce44"
             };
@@ -550,7 +550,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom-1",
                 Size = 1024,
-                CRC = "DEADBEEF",
+                CRC32 = "DEADBEEF",
                 SHA1 = "0000000fbbb37f8488100b1b4697012de631a5e6"
             };
 
@@ -579,7 +579,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom-1",
                 Size = 1024,
-                CRC = "DEADBEEF",
+                CRC32 = "DEADBEEF",
                 SHA1 = "0000000fbbb37f8488100b1b4697012de631a5e6"
             };
 
@@ -616,7 +616,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Theory]
         [InlineData(ItemKey.NULL, 2)]
         [InlineData(ItemKey.Machine, 2)]
-        [InlineData(ItemKey.CRC, 1)]
+        [InlineData(ItemKey.CRC32, 1)]
         [InlineData(ItemKey.SHA1, 4)]
         public void BucketByTest(ItemKey itemKey, int expected)
         {
@@ -631,7 +631,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom-1",
                 Size = 1024,
-                CRC = "DEADBEEF",
+                CRC32 = "DEADBEEF",
                 SHA1 = "0000000fbbb37f8488100b1b4697012de631a5e6"
             };
 
@@ -639,7 +639,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom-2",
                 Size = 1024,
-                CRC = "DEADBEEF",
+                CRC32 = "DEADBEEF",
                 SHA1 = "000000e948edcb4f7704b8af85a77a3339ecce44"
             };
 
@@ -647,7 +647,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom-3",
                 Size = 1024,
-                CRC = "DEADBEEF",
+                CRC32 = "DEADBEEF",
                 SHA1 = "00000ea4014ce66679e7e17d56ac510f67e39e26"
             };
 
@@ -655,7 +655,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom-4",
                 Size = 1024,
-                CRC = "DEADBEEF",
+                CRC32 = "DEADBEEF",
                 SHA1 = "00000151d437442e74e5134023fab8bf694a2487"
             };
 
@@ -762,7 +762,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romA = new Rom
             {
                 Name = "same-name",
-                CRC = "BEEFDEAD"
+                CRC32 = "BEEFDEAD"
             };
             long romAIndex = dict.AddItem(romA, machineAIndex, sourceAIndex);
             KeyValuePair<long, DatItem>? romAPair = new KeyValuePair<long, DatItem>(romAIndex, romA);
@@ -770,7 +770,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romB = new Rom
             {
                 Name = "same-name",
-                CRC = "DEADBEEF"
+                CRC32 = "DEADBEEF"
             };
             long romBIndex = dict.AddItem(romB, machineBIndex, sourceBIndex);
             KeyValuePair<long, DatItem>? romBPair = new KeyValuePair<long, DatItem>(romBIndex, romB);
@@ -798,7 +798,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romA = new Rom
             {
                 Name = "same-name",
-                CRC = "DEADBEEF"
+                CRC32 = "DEADBEEF"
             };
             long romAIndex = dict.AddItem(romA, machineAIndex, sourceAIndex);
             KeyValuePair<long, DatItem>? romAPair = new KeyValuePair<long, DatItem>(romAIndex, romA);
@@ -806,7 +806,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romB = new Rom
             {
                 Name = "same-name",
-                CRC = "DEADBEEF"
+                CRC32 = "DEADBEEF"
             };
             long romBIndex = dict.AddItem(romB, machineBIndex, sourceBIndex);
             KeyValuePair<long, DatItem>? romBPair = new KeyValuePair<long, DatItem>(romBIndex, romB);
@@ -834,7 +834,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romA = new Rom
             {
                 Name = "same-name",
-                CRC = "DEADBEEF"
+                CRC32 = "DEADBEEF"
             };
             long romAIndex = dict.AddItem(romA, machineAIndex, sourceAIndex);
             KeyValuePair<long, DatItem>? romAPair = new KeyValuePair<long, DatItem>(romAIndex, romA);
@@ -842,7 +842,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romB = new Rom
             {
                 Name = "same-name",
-                CRC = "DEADBEEF"
+                CRC32 = "DEADBEEF"
             };
             long romBIndex = dict.AddItem(romB, machineBIndex, sourceBIndex);
             KeyValuePair<long, DatItem>? romBPair = new KeyValuePair<long, DatItem>(romBIndex, romB);
@@ -870,7 +870,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romA = new Rom
             {
                 Name = "same-name",
-                CRC = "DEADBEEF"
+                CRC32 = "DEADBEEF"
             };
             long romAIndex = dict.AddItem(romA, machineAIndex, sourceAIndex);
             KeyValuePair<long, DatItem>? romAPair = new KeyValuePair<long, DatItem>(romAIndex, romA);
@@ -878,7 +878,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romB = new Rom
             {
                 Name = "same-name",
-                CRC = "DEADBEEF"
+                CRC32 = "DEADBEEF"
             };
             long romBIndex = dict.AddItem(romB, machineBIndex, sourceBIndex);
             KeyValuePair<long, DatItem>? romBPair = new KeyValuePair<long, DatItem>(romBIndex, romB);
@@ -906,7 +906,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romA = new Rom
             {
                 Name = "same-name",
-                CRC = "DEADBEEF"
+                CRC32 = "DEADBEEF"
             };
             long romAIndex = dict.AddItem(romA, machineAIndex, sourceAIndex);
             KeyValuePair<long, DatItem>? romAPair = new KeyValuePair<long, DatItem>(romAIndex, romA);
@@ -914,7 +914,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var romB = new Rom
             {
                 Name = "same-name",
-                CRC = "DEADBEEF"
+                CRC32 = "DEADBEEF"
             };
             long romBIndex = dict.AddItem(romB, machineBIndex, sourceBIndex);
             KeyValuePair<long, DatItem>? romBPair = new KeyValuePair<long, DatItem>(romBIndex, romB);
@@ -1032,7 +1032,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom",
                 Size = 12345,
-                CRC = "deadbeef"
+                CRC32 = "deadbeef"
             };
 
             var dict = new ItemDictionaryDB();

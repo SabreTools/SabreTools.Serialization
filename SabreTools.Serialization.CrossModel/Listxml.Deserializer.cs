@@ -565,7 +565,7 @@ namespace SabreTools.Serialization.CrossModel
                 Name = item.Name,
                 Bios = item.Bios,
                 Size = item.Size,
-                CRC = item.CRC,
+                CRC = item.CRC32,
                 SHA1 = item.SHA1,
                 Merge = item.Merge,
                 Region = item.Region,
