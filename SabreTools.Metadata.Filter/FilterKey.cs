@@ -217,7 +217,7 @@ namespace SabreTools.Metadata.Filter
             "number",
         ];
 
-         /// <summary>
+        /// <summary>
         /// Known keys for DipSwitch
         /// </summary>
         private static readonly string[] _dipSwitchKeys =
@@ -226,6 +226,69 @@ namespace SabreTools.Metadata.Filter
             "mask",
             "name",
             "tag",
+        ];
+
+        /// <summary>
+        /// Known keys for DipSwitch
+        /// </summary>
+        private static readonly string[] _dipValueKeys =
+        [
+            "default",
+            "name",
+            "value",
+        ];
+
+        /// <summary>
+        /// Known keys for Disk
+        /// </summary>
+        private static readonly string[] _diskKeys =
+        [
+            "flags",
+            "index",
+            "md5",
+            "merge",
+            "name",
+            "optional",
+            "region",
+            "sha1",
+            "status",
+            "writable",
+        ];
+
+        /// <summary>
+        /// Known keys for DiskArea
+        /// </summary>
+        private static readonly string[] _diskAreaKeys =
+        [
+            "name",
+        ];
+
+        /// <summary>
+        /// Known keys for Display
+        /// </summary>
+        private static readonly string[] _displayKeys =
+        [
+            "aspectx",
+            "aspecty",
+            "displaytype",
+            "flipx",
+            "freq",
+            "hbend",
+            "hbstart",
+            "height",
+            "htotal",
+            "orientation",
+            "pixclock",
+            "refresh",
+            "rotate",
+            "screen",
+            "tag",
+            "vbend",
+            "vbstart",
+            "vtotal",
+            "width",
+            "x",
+            "y",
         ];
 
         #endregion
@@ -437,6 +500,10 @@ namespace SabreTools.Metadata.Filter
                 "deviceref" => _deviceRefKeys,
                 "diplocation" => _dipLocationKeys,
                 "dipswitch" => _dipSwitchKeys,
+                "dipvalue" => _dipValueKeys,
+                "disk" => _diskKeys,
+                "diskarea" => _diskAreaKeys,
+                "display" => _displayKeys,
                 _ => null,
             };
 

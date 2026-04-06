@@ -1017,6 +1017,10 @@ namespace SabreTools.Metadata.Filter
                 case "aspecty":
                     checkValue = obj.AspectY?.ToString();
                     return true;
+                case "displaytype":
+                case "screen":
+                    checkValue = obj.DisplayType?.AsStringValue();
+                    return true;
                 case "flipx":
                     checkValue = obj.FlipX.FromYesNo();
                     return true;
@@ -1043,9 +1047,6 @@ namespace SabreTools.Metadata.Filter
                 case "rotate":
                 case "orientation":
                     checkValue = obj.Rotate?.AsStringValue();
-                    return true;
-                case "screen":
-                    checkValue = obj.DisplayType?.AsStringValue();
                     return true;
                 case "tag":
                     checkValue = obj.Tag;

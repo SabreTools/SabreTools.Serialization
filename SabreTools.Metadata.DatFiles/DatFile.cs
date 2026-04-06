@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Data.Extensions;
 using SabreTools.Hashing;
 using SabreTools.Logging;
 using SabreTools.Metadata.DatItems;

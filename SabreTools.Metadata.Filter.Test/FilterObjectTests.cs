@@ -619,7 +619,6 @@ namespace SabreTools.Metadata.Filter.Test
         #region Chip
 
         [Theory]
-        [InlineData("chip.type", "audio")]
         [InlineData("chip.chiptype", "audio")]
         [InlineData("chip.clock", "12345")]
         [InlineData("chip.flags", "flags")]
@@ -739,7 +738,6 @@ namespace SabreTools.Metadata.Filter.Test
 
         [Theory]
         [InlineData("control.buttons", "12345")]
-        [InlineData("control.type", "lightgun")]
         [InlineData("control.controltype", "lightgun")]
         [InlineData("control.keydelta", "12345")]
         [InlineData("control.maximum", "12345")]
@@ -804,7 +802,6 @@ namespace SabreTools.Metadata.Filter.Test
 
         [Theory]
         [InlineData("device.devicetype", "punchcard")]
-        [InlineData("device.type", "punchcard")]
         [InlineData("device.fixedimage", "fixedimage")]
         [InlineData("device.interface", "interface")]
         [InlineData("device.mandatory", "yes")]
@@ -883,6 +880,135 @@ namespace SabreTools.Metadata.Filter.Test
                 Mask = "mask",
                 Name = "name",
                 Tag = "tag",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region DipValue
+
+        [Theory]
+        [InlineData("dipvalue.default", "yes")]
+        [InlineData("dipvalue.name", "name")]
+        [InlineData("dipvalue.value", "value")]
+        public void Matches_DipValue(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            DipValue obj = new DipValue
+            {
+                Default = true,
+                Name = "name",
+                Value = "value",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Disk
+
+        [Theory]
+        [InlineData("disk.flags", "flags")]
+        [InlineData("disk.index", "12345")]
+        [InlineData("disk.md5", "md5")]
+        [InlineData("disk.merge", "merge")]
+        [InlineData("disk.name", "name")]
+        [InlineData("disk.optional", "yes")]
+        [InlineData("disk.region", "region")]
+        [InlineData("disk.sha1", "sha1")]
+        [InlineData("disk.status", "nodump")]
+        [InlineData("disk.writable", "yes")]
+        public void Matches_Disk(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Disk obj = new Disk
+            {
+                Flags = "flags",
+                Index = 12345,
+                MD5 = "md5",
+                Merge = "merge",
+                Name = "name",
+                Optional = true,
+                Region = "region",
+                SHA1 = "sha1",
+                Status = ItemStatus.Nodump,
+                Writable = true,
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region DiskArea
+
+        [Theory]
+        [InlineData("diskarea.name", "name")]
+        public void Matches_DiskArea(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            DiskArea obj = new DiskArea
+            {
+                Name = "name",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Display
+
+        [Theory]
+        [InlineData("display.aspectx", "12345")]
+        [InlineData("display.aspecty", "12345")]
+        [InlineData("display.displaytype", "vector")]
+        [InlineData("display.screen", "vector")]
+        [InlineData("display.flipx", "yes")]
+        [InlineData("display.hbend", "12345")]
+        [InlineData("display.hbstart", "12345")]
+        [InlineData("display.height", "12345")]
+        [InlineData("display.y", "12345")]
+        [InlineData("display.htotal", "12345")]
+        [InlineData("display.pixclock", "12345")]
+        [InlineData("display.refresh", "123.45")]
+        [InlineData("display.freq", "123.45")]
+        [InlineData("display.rotate", "90")]
+        [InlineData("display.orientation", "90")]
+        [InlineData("display.tag", "tag")]
+        [InlineData("display.vbend", "12345")]
+        [InlineData("display.vbstart", "12345")]
+        [InlineData("display.vtotal", "12345")]
+        [InlineData("display.width", "12345")]
+        [InlineData("display.x", "12345")]
+        public void Matches_Display(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Display obj = new Display
+            {
+                AspectX = 12345,
+                AspectY = 12345,
+                DisplayType = DisplayType.Vector,
+                FlipX = true,
+                HBEnd = 12345,
+                HBStart = 12345,
+                Height = 12345,
+                HTotal = 12345,
+                PixClock = 12345,
+                Refresh = 123.45,
+                Rotate = Rotation.East,
+                Tag = "tag",
+                VBEnd = 12345,
+                VBStart = 12345,
+                VTotal = 12345,
+                Width = 12345,
             };
 
             bool actual = filter.Matches(obj);
