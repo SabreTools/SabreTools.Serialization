@@ -93,18 +93,18 @@ namespace SabreTools.Wrappers
 
             builder.AppendLine(certificate.Length, "  Length");
             builder.AppendLine(certificate.Signature, "  Signature");
-            builder.AppendLine(certificate.Unknown0108, "  Unknown0108");
-            builder.AppendLine(certificate.Unknown010C, "  Unknown010C");
+            builder.AppendLine(certificate.BaseFileLoadAddress, "  Base File Load Address");
+            builder.AppendLine(certificate.ImageFlags, "  Image Flags");
             builder.AppendLine(certificate.ImageBaseAddress, "  Image Base Address");
             builder.AppendLine(certificate.UnknownHash1, "  Unknown Hash 1");
             builder.AppendLine(certificate.Unknown0128, "  Unknown0128");
             builder.AppendLine(certificate.UnknownHash2, "  Unknown Hash 2");
             builder.AppendLine(certificate.MediaID, "  Media ID");
-            builder.AppendLine(certificate.Unknown0150, "  Unknown0150");
+            builder.AppendLine(certificate.XEXFileKey, "  XEX File Key");
             builder.AppendLine(certificate.Unknown0160, "  Unknown0160");
             builder.AppendLine(certificate.UnknownHash3, "  Unknown Hash 3");
             builder.AppendLine(certificate.RegionFlags, "  Region Flags");
-            builder.AppendLine(certificate.Unknown0164, "  Unknown0164");
+            builder.AppendLine(certificate.AllowedMediaTypeFlags, "  Allowed Media Type Flags");
             builder.AppendLine(certificate.TableCount, "  Certificate Table Count");
 
             if (certificate.Table.Length == 0)

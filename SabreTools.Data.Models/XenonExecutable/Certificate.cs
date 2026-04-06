@@ -27,17 +27,16 @@ namespace SabreTools.Data.Models.XenonExecutable
         public byte[] Signature { get; set; } = new byte[256];
 
         /// <summary>
-        /// Unknown field, always(?) 0x00000174
+        /// Base File Load Address, retail discs always(?) 0x00000174
         /// </summary>
         /// <remarks>Big-endian</remarks>
-        public uint Unknown0108 { get; set; }
+        public uint BaseFileLoadAddress { get; set; }
 
         /// <summary>
-        /// Unknown field
-        /// Known values: 0x00000008 (retail games), 0x10000000 (applications)
+        /// Image flags, see Constants.ImageFlags
         /// </summary>
         /// <remarks>Big-endian</remarks>
-        public uint Unknown010C { get; set; }
+        public uint ImageFlags { get; set; }
 
         /// <summary>
         /// Base address for the image to be placed in memory
@@ -70,9 +69,9 @@ namespace SabreTools.Data.Models.XenonExecutable
         public byte[] MediaID { get; set; } = new byte[16];
 
         /// <summary>
-        /// Unknown 16 bytes, probably a GUID
+        /// XEX File Key
         /// </summary>
-        public byte[] Unknown0150 { get; set; } = new byte[16];
+        public byte[] XEXFileKey { get; set; } = new byte[16];
 
         /// <summary>
         /// Unknown field, often zeroed
@@ -92,11 +91,10 @@ namespace SabreTools.Data.Models.XenonExecutable
         public uint RegionFlags { get; set; }
 
         /// <summary>
-        /// Unknown field
-        /// Known values: 0x00000004, 0x00000400, 0x00000401
+        /// Allowed media type flags, see Constants.AllowedMediaTypeFlags
         /// </summary>
         /// <remarks>Big-endian</remarks>
-        public uint Unknown0164 { get; set; }
+        public uint AllowedMediaTypeFlags { get; set; }
 
         /// <summary>
         /// Number of entries in the following table

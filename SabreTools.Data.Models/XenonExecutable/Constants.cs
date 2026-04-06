@@ -21,7 +21,7 @@ namespace SabreTools.Data.Models.XenonExecutable
         public static readonly Dictionary<uint, string> OptionalHeaderTypes = new()
         {
             [0x0002FF] = "Resource Info",
-            [0x0003FF] = "Base File Format",
+            [0x0003FF] = "Base File Format", // Compression and Encryption details
             [0x000405] = "Base Reference",
             [0x004304] = "Disc Profile ID",
             [0x0005FF] = "Delta Patch Descriptor",
@@ -31,7 +31,7 @@ namespace SabreTools.Data.Models.XenonExecutable
             [0x010100] = "Entry Point",
             [0x010201] = "Image Base Address",
             [0x0103FF] = "Import Libraries",
-            [0x018002] = "Checksum Timestamp",
+            [0x018002] = "Checksum/Timestamp", // Last 4 bytes are XEX Timestamp
             [0x018102] = "Enabled For Callcap",
             [0x018200] = "Enabled For Fastcap",
             [0x0183FF] = "Original PE Name",
@@ -41,7 +41,7 @@ namespace SabreTools.Data.Models.XenonExecutable
             [0x020301] = "Default Filesystem Cache Size",
             [0x020401] = "Default Heap Size",
             [0x028002] = "Page Heap Size and Flags",
-            [0x030000] = "System Flags",
+            [0x030000] = "System Flags", // Constants.SystemFlags
             [0x040006] = "Execution ID",
             [0x0401FF] = "Service ID List",
             [0x040201] = "Title Workspace Size",
