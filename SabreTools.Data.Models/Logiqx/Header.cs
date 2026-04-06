@@ -52,6 +52,9 @@ namespace SabreTools.Data.Models.Logiqx
         [XmlElement("type")]
         public string? Type { get; set; }
 
+        [XmlElement("romvault")]
+        public RomVault? RomVault { get; set; }
+
         [XmlElement("clrmamepro")]
         public ClrMamePro? ClrMamePro { get; set; }
 

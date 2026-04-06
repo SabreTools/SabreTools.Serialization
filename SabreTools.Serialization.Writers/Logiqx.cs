@@ -159,6 +159,9 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalElementString("comment", obj.Comment);
             writer.WriteOptionalElementString("type", obj.Type);
 
+            if (obj.RomVault is not null)
+                WriteRomVault(obj.RomVault, writer);
+
             if (obj.ClrMamePro is not null)
                 WriteClrMamePro(obj.ClrMamePro, writer);
 
@@ -188,6 +191,26 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("lockrommode", obj.LockRomMode.FromYesNo());
             writer.WriteOptionalAttributeString("lockbiosmode", obj.LockBiosMode.FromYesNo());
             writer.WriteOptionalAttributeString("locksamplemode", obj.LockSampleMode.FromYesNo());
+
+            writer.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Write a RomVault to an XmlTextWriter
+        /// </summary>
+        /// <param name="obj">RomVault to write</param>
+        /// <param name="writer">XmlTextReader to write to</param>
+        private static void WriteRomVault(RomVault obj, XmlTextWriter writer)
+        {
+            writer.WriteStartElement("romvault");
+
+            writer.WriteOptionalAttributeString("header", obj.Header);
+            if (obj.ForceMerging != Data.Models.Metadata.MergingFlag.None)
+                writer.WriteOptionalAttributeString("forcemerging", obj.ForceMerging.AsStringValue());
+            if (obj.ForceNodump != Data.Models.Metadata.NodumpFlag.None)
+                writer.WriteOptionalAttributeString("forcenodump", obj.ForceNodump.AsStringValue());
+            if (obj.ForcePacking != Data.Models.Metadata.PackingFlag.None)
+                writer.WriteOptionalAttributeString("forcepacking", obj.ForcePacking.AsStringValue());
 
             writer.WriteEndElement();
         }

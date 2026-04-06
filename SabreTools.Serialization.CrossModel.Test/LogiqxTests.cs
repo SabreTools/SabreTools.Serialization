@@ -73,6 +73,14 @@ namespace SabreTools.Serialization.CrossModel.Test
         /// </summary>
         private static Data.Models.Logiqx.Datafile Build(bool game)
         {
+            var romvault = new Data.Models.Logiqx.RomVault
+            {
+                Header = "XXXXXX",
+                ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
+                ForceNodump = Data.Models.Metadata.NodumpFlag.Required,
+                ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
+            };
+
             var clrmamepro = new Data.Models.Logiqx.ClrMamePro
             {
                 Header = "XXXXXX",
@@ -107,6 +115,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Url = "XXXXXX",
                 Comment = "XXXXXX",
                 Type = "XXXXXX",
+                RomVault = romvault,
                 ClrMamePro = clrmamepro,
                 RomCenter = romcenter,
             };
@@ -303,8 +312,21 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", header.Url);
             Assert.Equal("XXXXXX", header.Comment);
             Assert.Equal("XXXXXX", header.Type);
+            Validate(header.RomVault);
             Validate(header.ClrMamePro);
             Validate(header.RomCenter);
+        }
+
+        /// <summary>
+        /// Validate a RomVault
+        /// </summary>
+        private static void Validate(Data.Models.Logiqx.RomVault? rv)
+        {
+            Assert.NotNull(rv);
+            Assert.Equal("XXXXXX", rv.Header);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, rv.ForceMerging);
+            Assert.Equal(Data.Models.Metadata.NodumpFlag.Required, rv.ForceNodump);
+            Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, rv.ForcePacking);
         }
 
         /// <summary>

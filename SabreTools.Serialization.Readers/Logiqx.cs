@@ -244,6 +244,13 @@ namespace SabreTools.Serialization.Readers
 
                         obj.Type = reader.ReadElementContentAsString();
                         break;
+                    case "romvault":
+                        if (obj.RomVault is not null && Debug)
+                            Console.WriteLine($"'{reader.Name}' element already found, overwriting");
+
+                        obj.RomVault = ParseRomVault(reader);
+                        reader.Skip();
+                        break;
                     case "clrmamepro":
                         if (obj.ClrMamePro is not null && Debug)
                             Console.WriteLine($"'{reader.Name}' element already found, overwriting");
@@ -285,6 +292,23 @@ namespace SabreTools.Serialization.Readers
             obj.LockRomMode = reader.GetAttribute("lockrommode").AsYesNo();
             obj.LockBiosMode = reader.GetAttribute("lockbiosmode").AsYesNo();
             obj.LockSampleMode = reader.GetAttribute("locksamplemode").AsYesNo();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse from an XmlTextReader into a RomVault
+        /// </summary>
+        /// <param name="reader">XmlTextReader to read from</param>
+        /// <returns>Filled RomVault on success, null on error</returns>
+        public RomVault ParseRomVault(XmlTextReader reader)
+        {
+            var obj = new RomVault();
+
+            obj.Header = reader.GetAttribute("header");
+            obj.ForceMerging = reader.GetAttribute("forcemerging").AsMergingFlag();
+            obj.ForceNodump = reader.GetAttribute("forcenodump").AsNodumpFlag();
+            obj.ForcePacking = reader.GetAttribute("forcepacking").AsPackingFlag();
 
             return obj;
         }

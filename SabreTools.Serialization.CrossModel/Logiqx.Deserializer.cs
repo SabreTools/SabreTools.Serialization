@@ -61,6 +61,16 @@ namespace SabreTools.Serialization.CrossModel
                 || item.ForceNodump is not Data.Models.Metadata.NodumpFlag.None
                 || item.ForcePacking is not Data.Models.Metadata.PackingFlag.None)
             {
+                header.RomVault = new RomVault();
+                if (item.HeaderSkipper is not null)
+                    header.RomVault.Header = item.HeaderSkipper;
+                if (item.ForceMerging is not Data.Models.Metadata.MergingFlag.None)
+                    header.RomVault.ForceMerging = item.ForceMerging;
+                if (item.ForceNodump is not Data.Models.Metadata.NodumpFlag.None)
+                    header.RomVault.ForceNodump = item.ForceNodump;
+                if (item.ForcePacking is not Data.Models.Metadata.PackingFlag.None)
+                    header.RomVault.ForcePacking = item.ForcePacking;
+
                 header.ClrMamePro = new Data.Models.Logiqx.ClrMamePro();
                 if (item.HeaderSkipper is not null)
                     header.ClrMamePro.Header = item.HeaderSkipper;
