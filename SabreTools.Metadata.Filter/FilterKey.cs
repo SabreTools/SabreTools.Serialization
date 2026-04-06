@@ -335,6 +335,14 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static bool ParseMachineFilterId(ref string itemName, ref string fieldName)
         {
+            // Special case for machine type
+            if (string.Equals(fieldName, "type", StringComparison.OrdinalIgnoreCase))
+            {
+                itemName = "machine";
+                fieldName = "type";
+                return true;
+            }
+
             // Get the set of properties
             var properties = GetProperties(typeof(Machine));
             if (properties is null)

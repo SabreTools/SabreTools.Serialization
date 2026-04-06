@@ -77,6 +77,21 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesEqual(object obj)
         {
+            // Special case for machine type
+            if (obj is Machine machine
+                && string.Equals(Key.ItemName, "machine", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(Key.FieldName, "type", StringComparison.OrdinalIgnoreCase))
+            {
+                return Value?.ToLowerInvariant() switch
+                {
+                    "none" => machine.IsBios != true && machine.IsDevice != true && machine.IsMechanical != true,
+                    "bios" => machine.IsBios == true,
+                    "device" or "dev" => machine.IsDevice == true,
+                    "mechanical" or "mech" => machine.IsMechanical == true,
+                    _ => false,
+                };
+            }
+
             // Process the check value
             if (!GetCheckValue(obj, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);
@@ -119,6 +134,21 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesNotEqual(object obj)
         {
+            // Special case for machine type
+            if (obj is Machine machine
+                && string.Equals(Key.ItemName, "machine", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(Key.FieldName, "type", StringComparison.OrdinalIgnoreCase))
+            {
+                return Value?.ToLowerInvariant() switch
+                {
+                    "none" => machine.IsBios == true || machine.IsDevice == true || machine.IsMechanical == true,
+                    "bios" => machine.IsBios != true,
+                    "device" or "dev" => machine.IsDevice != true,
+                    "mechanical" or "mech" => machine.IsMechanical != true,
+                    _ => true,
+                };
+            }
+
             // Process the check value
             if (!GetCheckValue(obj, Key.FieldName, out string? checkValue))
                 return string.IsNullOrEmpty(Value);

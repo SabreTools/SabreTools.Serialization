@@ -76,14 +76,6 @@ namespace SabreTools.Metadata.Filter
             // Get the key as a string
             string key = filter.Key.ToString();
 
-            // Special case for machine types
-            if (filter.Key.ItemName == "machine" && filter.Key.FieldName == "isbios")
-                key = $"{"machine"}.COMBINEDTYPE";
-            else if (filter.Key.ItemName == "machine" && filter.Key.FieldName == "isdevice")
-                key = $"{"machine"}.COMBINEDTYPE";
-            else if (filter.Key.ItemName == "machine" && filter.Key.FieldName == "ismechanical")
-                key = $"{"machine"}.COMBINEDTYPE";
-
             // Set the expected group type
             GroupType groupType = GroupType.OR;
 
