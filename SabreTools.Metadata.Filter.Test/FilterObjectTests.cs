@@ -690,5 +690,205 @@ namespace SabreTools.Metadata.Filter.Test
         }
 
         #endregion
+
+        #region ConfLocation
+
+        [Theory]
+        [InlineData("conflocation.inverted", "yes")]
+        [InlineData("conflocation.name", "name")]
+        [InlineData("conflocation.number", "12345")]
+        public void Matches_ConfLocation(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            ConfLocation obj = new ConfLocation
+            {
+                Inverted = true,
+                Name = "name",
+                Number = 12345,
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region ConfSetting
+
+        [Theory]
+        [InlineData("confsetting.default", "yes")]
+        [InlineData("confsetting.name", "name")]
+        [InlineData("confsetting.value", "value")]
+        public void Matches_ConfSetting(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            ConfSetting obj = new ConfSetting
+            {
+                Default = true,
+                Name = "name",
+                Value = "value",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Control
+
+        [Theory]
+        [InlineData("control.buttons", "12345")]
+        [InlineData("control.type", "lightgun")]
+        [InlineData("control.controltype", "lightgun")]
+        [InlineData("control.keydelta", "12345")]
+        [InlineData("control.maximum", "12345")]
+        [InlineData("control.minimum", "12345")]
+        [InlineData("control.player", "12345")]
+        [InlineData("control.reqbuttons", "12345")]
+        [InlineData("control.reverse", "yes")]
+        [InlineData("control.sensitivity", "12345")]
+        [InlineData("control.ways", "ways")]
+        [InlineData("control.ways2", "ways2")]
+        [InlineData("control.ways3", "ways3")]
+        public void Matches_Control(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Control obj = new Control
+            {
+                Buttons = 12345,
+                ControlType = ControlType.Lightgun,
+                KeyDelta = 12345,
+                Maximum = 12345,
+                Minimum = 12345,
+                Player = 12345,
+                ReqButtons = 12345,
+                Reverse = true,
+                Sensitivity = 12345,
+                Ways = "ways",
+                Ways2 = "ways2",
+                Ways3 = "ways3",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region DataArea
+
+        [Theory]
+        [InlineData("dataarea.endianness", "big")]
+        [InlineData("dataarea.name", "name")]
+        [InlineData("dataarea.size", "12345")]
+        [InlineData("dataarea.width", "16")]
+        public void Matches_DataArea(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            DataArea obj = new DataArea
+            {
+                Endianness = Endianness.Big,
+                Name = "name",
+                Size = 12345,
+                Width = Width.Short,
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Device
+
+        [Theory]
+        [InlineData("device.devicetype", "punchcard")]
+        [InlineData("device.type", "punchcard")]
+        [InlineData("device.fixedimage", "fixedimage")]
+        [InlineData("device.interface", "interface")]
+        [InlineData("device.mandatory", "yes")]
+        [InlineData("device.tag", "tag")]
+        public void Matches_Device(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Device obj = new Device
+            {
+                DeviceType = DeviceType.PunchCard,
+                FixedImage = "fixedimage",
+                Interface = "interface",
+                Mandatory = true,
+                Tag = "tag",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Device
+
+        [Theory]
+        [InlineData("deviceref.name", "name")]
+        public void Matches_DeviceRef(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            DeviceRef obj = new DeviceRef
+            {
+                Name = "name",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region DipLocation
+
+        [Theory]
+        [InlineData("diplocation.inverted", "yes")]
+        [InlineData("diplocation.name", "name")]
+        [InlineData("diplocation.number", "12345")]
+        public void Matches_DipLocation(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            DipLocation obj = new DipLocation
+            {
+                Inverted = true,
+                Name = "name",
+                Number = 12345,
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region DipSwitch
+
+        [Theory]
+        [InlineData("dipswitch.default", "yes")]
+        [InlineData("dipswitch.mask", "mask")]
+        [InlineData("dipswitch.name", "name")]
+        [InlineData("dipswitch.tag", "tag")]
+        public void Matches_DipSwitch(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            DipSwitch obj = new DipSwitch
+            {
+                Default = true,
+                Mask = "mask",
+                Name = "name",
+                Tag = "tag",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
     }
 }

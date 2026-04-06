@@ -138,6 +138,99 @@ namespace SabreTools.Metadata.Filter
             "tag",
         ];
 
+        /// <summary>
+        /// Known keys for ConfLocation
+        /// </summary>
+        private static readonly string[] _confLocationKeys =
+        [
+            "inverted",
+            "name",
+            "number",
+        ];
+
+        /// <summary>
+        /// Known keys for ConfSetting
+        /// </summary>
+        private static readonly string[] _confSettingKeys =
+        [
+            "default",
+            "name",
+            "value",
+        ];
+
+        /// <summary>
+        /// Known keys for Control
+        /// </summary>
+        private static readonly string[] _controlKeys =
+        [
+            "buttons",
+            "controltype",
+            "keydelta",
+            "maximum",
+            "minimum",
+            "player",
+            "reqbuttons",
+            "reverse",
+            "sensitivity",
+            "type",
+            "ways",
+            "ways2",
+            "ways3",
+        ];
+
+        /// <summary>
+        /// Known keys for DataArea
+        /// </summary>
+        private static readonly string[] _dataAreaKeys =
+        [
+            "endianness",
+            "name",
+            "size",
+            "width",
+        ];
+
+        /// <summary>
+        /// Known keys for Device
+        /// </summary>
+        private static readonly string[] _deviceKeys =
+        [
+            "devicetype",
+            "fixedimage",
+            "interface",
+            "mandatory",
+            "tag",
+            "type",
+        ];
+
+        /// <summary>
+        /// Known keys for DeviceRef
+        /// </summary>
+        private static readonly string[] _deviceRefKeys =
+        [
+            "name",
+        ];
+
+        /// <summary>
+        /// Known keys for DipLocation
+        /// </summary>
+        private static readonly string[] _dipLocationKeys =
+        [
+            "inverted",
+            "name",
+            "number",
+        ];
+
+         /// <summary>
+        /// Known keys for DipSwitch
+        /// </summary>
+        private static readonly string[] _dipSwitchKeys =
+        [
+            "default",
+            "mask",
+            "name",
+            "tag",
+        ];
+
         #endregion
 
         /// <summary>
@@ -323,6 +416,14 @@ namespace SabreTools.Metadata.Filter
                 "chip" => _chipKeys,
                 "condition" => _conditionKeys,
                 "configuration" => _configurationKeys,
+                "conflocation" => _confLocationKeys,
+                "confsetting" => _confSettingKeys,
+                "control" => _controlKeys,
+                "dataarea" => _dataAreaKeys,
+                "device" => _deviceKeys,
+                "deviceref" => _deviceRefKeys,
+                "diplocation" => _dipLocationKeys,
+                "dipswitch" => _dipSwitchKeys,
                 _ => null,
             };
 

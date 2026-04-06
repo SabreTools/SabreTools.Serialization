@@ -714,6 +714,7 @@ namespace SabreTools.Metadata.Filter
                 case "buttons":
                     checkValue = obj.Buttons?.ToString();
                     return true;
+                case "controltype":
                 case "type":
                     checkValue = obj.ControlType?.AsStringValue();
                     return true;
@@ -789,6 +790,7 @@ namespace SabreTools.Metadata.Filter
         {
             switch (fieldName)
             {
+                case "devicetype":
                 case "type":
                     checkValue = obj.DeviceType?.AsStringValue();
                     return true;
