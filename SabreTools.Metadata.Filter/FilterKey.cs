@@ -291,6 +291,103 @@ namespace SabreTools.Metadata.Filter
             "y",
         ];
 
+        /// <summary>
+        /// Known keys for Driver
+        /// </summary>
+        private static readonly string[] _driverKeys =
+        [
+            "blit",
+            "cocktail",
+            "color",
+            "emulation",
+            "incomplete",
+            "nosoundhardware",
+            "palettesize",
+            "requiresartwork",
+            "savestate",
+            "sound",
+            "status",
+            "unofficial",
+        ];
+
+        /// <summary>
+        /// Known keys for Extension
+        /// </summary>
+        private static readonly string[] _extensionKeys =
+        [
+            "name",
+        ];
+
+        /// <summary>
+        /// Known keys for Feature/PartFeature
+        /// </summary>
+        private static readonly string[] _featureKeys =
+        [
+            "featuretype",
+            "name",
+            "overall",
+            "status",
+            "value",
+        ];
+
+        /// <summary>
+        /// Known keys for Header
+        /// </summary>
+        private static readonly string[] _headerKeys =
+        [
+            "author",
+            "biosmode",
+            "build",
+            "category",
+            "comment",
+            "date",
+            "datversion",
+            "debug",
+            "description",
+            "email",
+            "emulatorversion",
+            "filename",
+            "forcemerging",
+            "forcenodump",
+            "forcepacking",
+            "forcezipping",
+            "header",
+            "headerskipper",
+            "homepage",
+            "id",
+            "imfolder",
+            "lockbiosmode",
+            "lockrommode",
+            "locksamplemode",
+            "mameconfig",
+            "name",
+            "notes",
+            "plugin",
+            "refname",
+            "rommode",
+            "romtitle",
+            "rootdir",
+            "samplemode",
+            "schemalocation",
+            "screenshotsheight",
+            "screenshotswidth",
+            "skipper",
+            "system",
+            "timestamp",
+            "type",
+            "url",
+            "version",
+        ];
+
+        /// <summary>
+        /// Known keys for Info
+        /// </summary>
+        private static readonly string[] _infoKeys =
+        [
+            "name",
+            "value",
+        ];
+
         #endregion
 
         /// <summary>
@@ -376,14 +473,9 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static bool ParseHeaderFilterId(ref string itemName, ref string fieldName)
         {
-            // Get the set of properties
-            var properties = GetProperties(typeof(Header));
-            if (properties is null)
-                return false;
-
             // Get if there's a match to a property
             string localFieldName = fieldName;
-            string? propertyMatch = Array.Find(properties, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
+            string? propertyMatch = Array.Find(_headerKeys, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
             if (propertyMatch is null)
                 return false;
 
@@ -504,6 +596,10 @@ namespace SabreTools.Metadata.Filter
                 "disk" => _diskKeys,
                 "diskarea" => _diskAreaKeys,
                 "display" => _displayKeys,
+                "driver" => _driverKeys,
+                "extension" => _extensionKeys,
+                "feature" or "partfeature" => _featureKeys,
+                "info" => _infoKeys,
                 _ => null,
             };
 

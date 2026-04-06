@@ -1016,5 +1016,207 @@ namespace SabreTools.Metadata.Filter.Test
         }
 
         #endregion
+
+        #region Driver
+
+        [Theory]
+        [InlineData("driver.blit", "dirty")]
+        [InlineData("driver.cocktail", "test")]
+        [InlineData("driver.color", "test")]
+        [InlineData("driver.emulation", "test")]
+        [InlineData("driver.incomplete", "yes")]
+        [InlineData("driver.nosoundhardware", "yes")]
+        [InlineData("driver.palettesize", "palettesize")]
+        [InlineData("driver.requiresartwork", "yes")]
+        [InlineData("driver.savestate", "partial")]
+        [InlineData("driver.sound", "test")]
+        [InlineData("driver.status", "test")]
+        [InlineData("driver.unofficial", "yes")]
+        public void Matches_Driver(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Driver obj = new Driver
+            {
+                Blit = Blit.Dirty,
+                Cocktail = SupportStatus.Test,
+                Color = SupportStatus.Test,
+                Emulation = SupportStatus.Test,
+                Incomplete = true,
+                NoSoundHardware = true,
+                PaletteSize = "palettesize",
+                RequiresArtwork = true,
+                SaveState = Supported.Partial,
+                Sound = SupportStatus.Test,
+                Status = SupportStatus.Test,
+                Unofficial = true,
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Extension
+
+        [Theory]
+        [InlineData("extension.name", "name")]
+        public void Matches_Extension(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Extension obj = new Extension
+            {
+                Name = "name",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Feature
+
+        [Theory]
+        [InlineData("feature.featuretype", "printer")]
+        [InlineData("feature.name", "name")]
+        [InlineData("feature.overall", "imperfect")]
+        [InlineData("feature.status", "imperfect")]
+        [InlineData("feature.value", "value")]
+        public void Matches_Feature(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Feature obj = new Feature
+            {
+                FeatureType = FeatureType.Printer,
+                Name = "name",
+                Overall = FeatureStatus.Imperfect,
+                Status = FeatureStatus.Imperfect,
+                Value = "value",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Header
+
+        [Theory]
+        [InlineData("header.author", "author")]
+        [InlineData("header.biosmode", "merged")]
+        [InlineData("header.build", "build")]
+        [InlineData("header.category", "category")]
+        [InlineData("header.comment", "comment")]
+        [InlineData("header.date", "date")]
+        [InlineData("header.datversion", "datversion")]
+        [InlineData("header.debug", "yes")]
+        [InlineData("header.description", "description")]
+        [InlineData("header.email", "email")]
+        [InlineData("header.emulatorversion", "emulatorversion")]
+        [InlineData("header.filename", "filename")]
+        [InlineData("header.forcemerging", "merged")]
+        [InlineData("header.forcenodump", "required")]
+        [InlineData("header.forcepacking", "zip")]
+        [InlineData("header.forcezipping", "yes")]
+        [InlineData("header.header", "header")]
+        [InlineData("header.headerskipper", "header")]
+        [InlineData("header.skipper", "header")]
+        [InlineData("header.homepage", "homepage")]
+        [InlineData("header.id", "id")]
+        [InlineData("header.imfolder", "imfolder")]
+        [InlineData("header.lockbiosmode", "yes")]
+        [InlineData("header.lockrommode", "yes")]
+        [InlineData("header.locksamplemode", "yes")]
+        [InlineData("header.mameconfig", "mameconfig")]
+        [InlineData("header.name", "name")]
+        [InlineData("header.notes", "notes")]
+        [InlineData("header.plugin", "plugin")]
+        [InlineData("header.refname", "refname")]
+        [InlineData("header.rommode", "merged")]
+        [InlineData("header.romtitle", "romtitle")]
+        [InlineData("header.rootdir", "rootdir")]
+        [InlineData("header.samplemode", "merged")]
+        [InlineData("header.schemalocation", "schemalocation")]
+        [InlineData("header.screenshotsheight", "screenshotsheight")]
+        [InlineData("header.screenshotswidth", "screenshotswidth")]
+        [InlineData("header.system", "system")]
+        [InlineData("header.timestamp", "timestamp")]
+        [InlineData("header.type", "type")]
+        [InlineData("header.url", "url")]
+        [InlineData("header.version", "version")]
+        public void Matches_Header(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Header obj = new Header
+            {
+                Author = "author",
+                BiosMode = MergingFlag.Merged,
+                Build = "build",
+                Category = "category",
+                Comment = "comment",
+                Date = "date",
+                DatVersion = "datversion",
+                Debug = true,
+                Description = "description",
+                Email = "email",
+                EmulatorVersion = "emulatorversion",
+                FileName = "filename",
+                ForceMerging = MergingFlag.Merged,
+                ForceNodump = NodumpFlag.Required,
+                ForcePacking = PackingFlag.Zip,
+                ForceZipping = true,
+                HeaderSkipper = "header",
+                Homepage = "homepage",
+                Id = "id",
+                ImFolder = "imfolder",
+                LockBiosMode = true,
+                LockRomMode = true,
+                LockSampleMode = true,
+                MameConfig = "mameconfig",
+                Name = "name",
+                Notes = "notes",
+                Plugin = "plugin",
+                RefName = "refname",
+                RomMode = MergingFlag.Merged,
+                RomTitle = "romtitle",
+                RootDir = "rootdir",
+                SampleMode = MergingFlag.Merged,
+                SchemaLocation = "schemalocation",
+                ScreenshotsHeight = "screenshotsheight",
+                ScreenshotsWidth = "screenshotswidth",
+                System = "system",
+                Timestamp = "timestamp",
+                Type = "type",
+                Url = "url",
+                Version = "version",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Info
+
+        [Theory]
+        [InlineData("info.name", "name")]
+        [InlineData("info.value", "value")]
+        public void Matches_Info(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Info obj = new Info
+            {
+                Name = "name",
+                Value = "value",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
     }
 }
