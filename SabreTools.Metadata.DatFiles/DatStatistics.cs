@@ -302,6 +302,7 @@ namespace SabreTools.Metadata.DatFiles
             ModifyStatusCount(ItemStatus.Good, status == ItemStatus.Good ? 1 : 0);
             ModifyStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? 1 : 0);
             ModifyStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? 1 : 0);
+            ModifyStatusCount(ItemStatus.Deduped, status == ItemStatus.Deduped ? 1 : 0);
         }
 
         /// <summary>
@@ -358,6 +359,7 @@ namespace SabreTools.Metadata.DatFiles
             ModifyStatusCount(ItemStatus.Good, status == ItemStatus.Good ? 1 : 0);
             ModifyStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? 1 : 0);
             ModifyStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? 1 : 0);
+            ModifyStatusCount(ItemStatus.Deduped, status == ItemStatus.Deduped ? 1 : 0);
         }
 
         /// <summary>
@@ -377,6 +379,7 @@ namespace SabreTools.Metadata.DatFiles
             ModifyStatusCount(ItemStatus.Good, status == ItemStatus.Good ? -1 : 0);
             ModifyStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? -1 : 0);
             ModifyStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? -1 : 0);
+            ModifyStatusCount(ItemStatus.Deduped, status == ItemStatus.Deduped ? -1 : 0);
         }
 
         /// <summary>
@@ -433,6 +436,7 @@ namespace SabreTools.Metadata.DatFiles
             ModifyStatusCount(ItemStatus.Good, status == ItemStatus.Good ? -1 : 0);
             ModifyStatusCount(ItemStatus.Nodump, status == ItemStatus.Nodump ? -1 : 0);
             ModifyStatusCount(ItemStatus.Verified, status == ItemStatus.Verified ? -1 : 0);
+            ModifyStatusCount(ItemStatus.Deduped, status == ItemStatus.Deduped ? -1 : 0);
         }
 
         /// <summary>

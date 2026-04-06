@@ -883,6 +883,7 @@ namespace SabreTools.Data.Extensions
                 "baddump" => ItemStatus.BadDump,
                 "nodump" or "yes" => ItemStatus.Nodump,
                 "verified" => ItemStatus.Verified,
+                "deduped" => ItemStatus.Deduped,
                 _ => null,
             };
         }
@@ -1366,6 +1367,7 @@ namespace SabreTools.Data.Extensions
                 ItemStatus.BadDump => "baddump",
                 ItemStatus.Nodump => useSecond ? "yes" : "nodump",
                 ItemStatus.Verified => "verified",
+                ItemStatus.Deduped => "deduped",
                 _ => null,
             };
         }

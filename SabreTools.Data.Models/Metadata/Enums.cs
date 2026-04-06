@@ -256,6 +256,9 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <summary>"verified"</summary>
         Verified,
+
+        /// <summary>"deduped", RomVault extensions</summary>
+        Deduped,
     }
 
     /// <summary>

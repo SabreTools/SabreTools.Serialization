@@ -2728,6 +2728,7 @@ namespace SabreTools.Data.Extensions.Test
         [InlineData("nodump", ItemStatus.Nodump)]
         [InlineData("yes", ItemStatus.Nodump)]
         [InlineData("verified", ItemStatus.Verified)]
+        [InlineData("deduped", ItemStatus.Deduped)]
         public void AsItemStatusTest(string? field, ItemStatus? expected)
         {
             ItemStatus? actual = field.AsItemStatus();
@@ -3129,6 +3130,8 @@ namespace SabreTools.Data.Extensions.Test
         [InlineData(ItemStatus.Nodump, false, "nodump")]
         [InlineData(ItemStatus.Verified, true, "verified")]
         [InlineData(ItemStatus.Verified, false, "verified")]
+        [InlineData(ItemStatus.Deduped, true, "deduped")]
+        [InlineData(ItemStatus.Deduped, false, "deduped")]
         public void FromItemStatusTest(ItemStatus field, bool useSecond, string? expected)
         {
             string? actual = field.AsStringValue(useSecond);
