@@ -24,7 +24,7 @@ namespace SabreTools.Data.Models.STFS
         /// i.e. First hash block is at 0x0B000 then next is at 0xB7000
         /// </summary>
         /// <remarks>Reader does not fill this in yet</remarks>
-        public HashTables[]? HashTables { get; set; }
+        public HashTable[]? HashTables { get; set; }
 
         /// <summary>
         /// Data in the STFS, arranged in blocks of 4096-bytes

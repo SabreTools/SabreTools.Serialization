@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using SabreTools.IO.Numerics;
+using SabreTools.Numerics;
 
 namespace SabreTools.Data.Models.STFS
 {
@@ -28,6 +28,6 @@ namespace SabreTools.Data.Models.STFS
         /// FFFFFF = Block 1 (starting 0xB000)
         /// </summary>
         /// <remarks>Big-endian, 3-byte uint24</remarks>
-        public UInt24 BlockNumber { get; set; }
+        public UInt24 BlockNumber { get; set; } = new();
     }
 }

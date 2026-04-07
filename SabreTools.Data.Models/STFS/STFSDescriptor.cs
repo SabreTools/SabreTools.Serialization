@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using SabreTools.IO.Numerics;
+using SabreTools.Numerics;
 
 namespace SabreTools.Data.Models.STFS
 {
@@ -7,7 +7,7 @@ namespace SabreTools.Data.Models.STFS
     /// STFS Volume Descriptor, for STFS packages
     /// </summary>
     /// <see href="https://free60.org/System-Software/Formats/STFS/"/>
-    public class SFTSDescriptor : VolumeDescriptor
+    public class STSSDescriptor : VolumeDescriptor
     {
         /// <summary>
         /// Volume descriptor size (Should be 0x24)
@@ -34,7 +34,7 @@ namespace SabreTools.Data.Models.STFS
         /// File Table Block Number
         /// </summary>
         /// <remarks>Big-endian, 3-byte int24</remarks>
-        public Int24 FileTableBlockNumber { get; set; }
+        public Int24 FileTableBlockNumber { get; set; } = new();
 
         /// <summary>
         /// Top Hash Table Hash

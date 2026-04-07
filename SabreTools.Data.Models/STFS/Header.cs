@@ -17,9 +17,10 @@ namespace SabreTools.Data.Models.STFS
 
         /// <summary>
         /// Signature Block
+        /// Not optional, but abstract class
         /// </summary>
         /// <remarks>552 bytes</remarks>
-        public Signature Signature { get; set; } = new();
+        public Signature? Signature { get; set; }
 
         /// <summary>
         /// Used to check package owner
@@ -132,8 +133,9 @@ namespace SabreTools.Data.Models.STFS
 
         /// <summary>
         /// STFS Volume Descriptor
+        /// Not optional, but abstract class
         /// </summary>
-        public VolumeDescriptor VolumeDescriptor { get; set; } = new();
+        public VolumeDescriptor? VolumeDescriptor { get; set; } = new();
 
         /// <summary>
         /// Data File Count
@@ -194,7 +196,7 @@ namespace SabreTools.Data.Models.STFS
         /// Otherwise, there are 76 bytes
         /// </summary>
         /// <remarks>40 bytes</remarks>
-        public byte[] Padding { get; set; } = new byte[];
+        public byte[] Padding { get; set; } = [];
 
         /// <summary>
         /// Device ID
@@ -250,7 +252,7 @@ namespace SabreTools.Data.Models.STFS
         /// If Metadata version = 1, 0x4000 bytes allocated, padded with zeroes
         /// If Metadata version = 2, 0x3D00 bytes allocated, padded with zeroes
         /// </summary>
-        public byte[] ThumbnailImage { get; set; } = new byte[];
+        public byte[] ThumbnailImage { get; set; } = [];
 
         /// <summary>
         /// Additional Display Names, UTF-8 string
@@ -265,7 +267,7 @@ namespace SabreTools.Data.Models.STFS
         /// If Metadata version = 1, 0x4000 bytes allocated, padded with zeroes
         /// If Metadata version = 2, 0x3D00 bytes allocated, padded with zeroes
         /// </summary>
-        public byte[] TitleThumbnailImage { get; set; } = new byte[];
+        public byte[] TitleThumbnailImage { get; set; } = [];
 
         /// <summary>
         /// Additional Display Descriptions, UTF-8 string

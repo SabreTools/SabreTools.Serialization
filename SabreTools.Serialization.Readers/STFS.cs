@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.STFS;
 using SabreTools.IO.Extensions;
-using SabreTools.IO.Numerics;
+using SabreTools.Numerics;
 using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Serialization.Readers
@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new Header();
 
             obj.MagicBytes = data.ReadBytes(4);
-            var signature = System.Text.Encoding.ASCII.GetString(obj.StartSignature);
+            var signature = System.Text.Encoding.ASCII.GetString(obj.MagicBytes);
             bool remoteSigned = signature.Equals(Constants.MagicStringLIVE) | signature.Equals(Constants.MagicStringPIRS);
             if (!remoteSigned && !signature.Equals(Constants.MagicStringCON))
                 return null;
@@ -114,7 +114,7 @@ namespace SabreTools.Serialization.Readers
             obj.TitleName = data.ReadBytes(128);
             obj.TransferFlags = data.ReadByteValue();
             obj.ThumbnailImageSize = data.ReadInt32BigEndian();
-            obj.ThumbnailImageSize = data.TitleThumbnailImageSize();
+            obj.TitleThumbnailImageSize = data.ReadInt32BigEndian();
 
             if (obj.MetadataVersion == 2)
             {
@@ -201,8 +201,8 @@ namespace SabreTools.Serialization.Readers
                 obj.WorkerThreadProcessor = data.ReadByteValue();
                 obj.WorkerThreadPriority = data.ReadByteValue();
                 obj.Hash = data.ReadBytes(20);
-                obj.DataBlockCount = data.ReadUIn24BigEndian();
-                obj.DataBlockOffset = data.ReadUIn24BigEndian();
+                obj.DataBlockCount = data.ReadUInt24BigEndian();
+                obj.DataBlockOffset = data.ReadUInt24BigEndian();
                 obj.Hash = data.ReadBytes(5);
 
                 return obj;

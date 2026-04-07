@@ -11,6 +11,6 @@ namespace SabreTools.Data.Models.STFS
         /// <summary>
         /// 170 hash table entries in a single table/block
         /// </summary>
-        public HashTableEntry[] HashTable { get; set; } = new HashTableEntry[170];
+        public HashTableEntry[] HashTableEntries { get; set; } = new HashTableEntry[170];
     }
 }

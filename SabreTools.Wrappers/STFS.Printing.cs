@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 using SabreTools.Data.Models.STFS;
-using SabreTools.IO.Numerics;
+using SabreTools.Numerics;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
@@ -29,11 +29,11 @@ namespace SabreTools.Wrappers
         {
             builder.AppendLine(header.MagicBytes, "  Magic Bytes");
 
-            Print(builder, header.Signature)
+            Print(builder, header.Signature);
 
-            for (var le in header.LicensingData)
+            foreach (var le in header.LicensingData)
             {
-                Print(builder, le)
+                Print(builder, le);
             }
 
             builder.AppendLine(header.HeaderHash, "  Header Hash");
@@ -53,7 +53,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine(header.ConsoleID, "  Console ID");
             builder.AppendLine(header.ProfileID, "  Profile ID");
 
-            Print(builder, header.VolumeDescriptor)
+            Print(builder, header.VolumeDescriptor);
 
             builder.AppendLine(header.DataFileCount, "  Data File Count");
             builder.AppendLine(header.DataFileCombinedSize, "  Data File Combined Size");
@@ -98,25 +98,25 @@ namespace SabreTools.Wrappers
             builder.AppendLine();
         }
 
-        protected static void Print(StringBuilder builder, Signature signature)
+        protected static void Print(StringBuilder builder, Signature? signature)
         {
             if (signature is MicrosoftSignature ms)
             {
-                builder.AppendLine(header.PackageSignature, "  Package Signature");
+                builder.AppendLine(ms.PackageSignature, "  Package Signature");
                 // TODO: Print "Zeroed" if padding is all zeroes
-                builder.AppendLine(header.Padding, "  Padding");
+                builder.AppendLine(ms.Padding, "  Padding");
             }
             else if (signature is ConsoleSignature cs)
             {
-                builder.AppendLine(header.CertificateSize, "  Certificate Size");
-                builder.AppendLine(header.ConsoleID, "  Console ID");
-                builder.AppendLine(header.PartNumber, "  Part Number");
-                builder.AppendLine(header.ConsoleType, "  Console Type");
-                builder.AppendLine(header.CertificateDate, "  Certificate Date");
-                builder.AppendLine(header.PublicExponent, "  Public Exponent");
-                builder.AppendLine(header.PublicModulus, "  Public Modulus");
-                builder.AppendLine(header.CertificateSignature, "  Certificate Signature");
-                builder.AppendLine(header.Signature, "  Signature");
+                builder.AppendLine(cs.CertificateSize, "  Certificate Size");
+                builder.AppendLine(cs.ConsoleID, "  Console ID");
+                builder.AppendLine(cs.PartNumber, "  Part Number");
+                builder.AppendLine(cs.ConsoleType, "  Console Type");
+                builder.AppendLine(cs.CertificateDate, "  Certificate Date");
+                builder.AppendLine(cs.PublicExponent, "  Public Exponent");
+                builder.AppendLine(cs.PublicModulus, "  Public Modulus");
+                builder.AppendLine(cs.CertificateSignature, "  Certificate Signature");
+                builder.AppendLine(cs.Signature, "  Signature");
             }
             else
             {
@@ -135,29 +135,29 @@ namespace SabreTools.Wrappers
             builder.AppendLine();
         }
 
-        protected static void Print(StringBuilder builder, VolumeDescriptor vd)
+        protected static void Print(StringBuilder builder, VolumeDescriptor? vd)
         {
             if (vd is SFTSDescriptor stfs)
             {
-                builder.AppendLine(header.VolumeDescriptorSize, "  Volume Descriptor Size");
-                builder.AppendLine(header.Reserved, "  Reserved");
-                builder.AppendLine(header.BlockSeparation, "  Block Separation");
-                builder.AppendLine(header.FileTableBlockCount, "  File Table Block Count");
-                builder.AppendLine(header.FileTableBlockNumber, "File Table Block Number");
-                builder.AppendLine(header.TopHashTableHash, "  Top Hash Table Hash");
-                builder.AppendLine(header.TotalAllocatedBlockCount, "  Total Allocated Block Count");
-                builder.AppendLine(header.TotalUnallocatedBlockCount, "  Total Unallocated Block Count");
+                builder.AppendLine(stfs.VolumeDescriptorSize, "  Volume Descriptor Size");
+                builder.AppendLine(stfs.Reserved, "  Reserved");
+                builder.AppendLine(stfs.BlockSeparation, "  Block Separation");
+                builder.AppendLine(stfs.FileTableBlockCount, "  File Table Block Count");
+                builder.AppendLine(stfs.FileTableBlockNumber, "File Table Block Number");
+                builder.AppendLine(stfs.TopHashTableHash, "  Top Hash Table Hash");
+                builder.AppendLine(stfs.TotalAllocatedBlockCount, "  Total Allocated Block Count");
+                builder.AppendLine(stfs.TotalUnallocatedBlockCount, "  Total Unallocated Block Count");
             }
             else if (vd is SVODDescriptor svod)
             {
-                builder.AppendLine(header.VolumeDescriptorSize, "  Volume Descriptor Size");
-                builder.AppendLine(header.BlockCacheElementCount, "  Block Cache Element Count");
-                builder.AppendLine(header.WorkerThreadProcessor, "  Worker Thread Processor");
-                builder.AppendLine(header.WorkerThreadPriority, "  Worker Thread Priority");
-                builder.AppendLine(header.Hash, "  Hash");
-                builder.AppendLine(header.DataBlockCount, "  Data Block Count");
-                builder.AppendLine(header.DataBlockOffset, "  Data Block Offset");
-                builder.AppendLine(header.Padding, "  Padding");
+                builder.AppendLine(svod.VolumeDescriptorSize, "  Volume Descriptor Size");
+                builder.AppendLine(svod.BlockCacheElementCount, "  Block Cache Element Count");
+                builder.AppendLine(svod.WorkerThreadProcessor, "  Worker Thread Processor");
+                builder.AppendLine(svod.WorkerThreadPriority, "  Worker Thread Priority");
+                builder.AppendLine(svod.Hash, "  Hash");
+                builder.AppendLine(svod.DataBlockCount, "  Data Block Count");
+                builder.AppendLine(svod.DataBlockOffset, "  Data Block Offset");
+                builder.AppendLine(svod.Padding, "  Padding");
             }
             else
             {

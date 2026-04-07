@@ -16,7 +16,7 @@ namespace SabreTools.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Volume.Header"/>
-        public byte[] Header => Model.Header;
+        public Header Header => Model.Header;
 
         #endregion
 
