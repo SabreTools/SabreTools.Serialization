@@ -2426,12 +2426,13 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case "orientation":
                 case "rotate":
-                    checkValue = obj.Orientation?.AsStringValue();
+                    checkValue = obj.Orientation?.AsStringValue(useSecond: true);
                     return true;
                 case "refresh":
                 case "freq":
                     checkValue = obj.Refresh?.ToString();
                     return true;
+                case "displaytype":
                 case "screen":
                     checkValue = obj.Screen?.AsStringValue();
                     return true;

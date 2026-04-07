@@ -1982,5 +1982,122 @@ namespace SabreTools.Metadata.Filter.Test
         }
 
         #endregion
+
+        #region Sound
+
+        [Theory]
+        [InlineData("sound.channels", "12345")]
+        public void Matches_Sound(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Sound obj = new Sound
+            {
+                Channels = 12345,
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region SourceDetails
+
+        [Theory]
+        [InlineData("sourcedetails.appendtonumber", "appendtonumber")]
+        [InlineData("sourcedetails.comment1", "comment1")]
+        [InlineData("sourcedetails.comment2", "comment2")]
+        [InlineData("sourcedetails.dumpdate", "dumpdate")]
+        [InlineData("sourcedetails.dumpdateinfo", "1")]
+        [InlineData("sourcedetails.dumper", "dumper")]
+        [InlineData("sourcedetails.id", "id")]
+        [InlineData("sourcedetails.link1", "link1")]
+        [InlineData("sourcedetails.link1public", "1")]
+        [InlineData("sourcedetails.link2", "link2")]
+        [InlineData("sourcedetails.link2public", "1")]
+        [InlineData("sourcedetails.link3", "link3")]
+        [InlineData("sourcedetails.link3public", "1")]
+        [InlineData("sourcedetails.mediatitle", "mediatitle")]
+        [InlineData("sourcedetails.nodump", "1")]
+        [InlineData("sourcedetails.origin", "origin")]
+        [InlineData("sourcedetails.originalformat", "originalformat")]
+        [InlineData("sourcedetails.project", "project")]
+        [InlineData("sourcedetails.region", "region")]
+        [InlineData("sourcedetails.releasedate", "releasedate")]
+        [InlineData("sourcedetails.releasedateinfo", "1")]
+        [InlineData("sourcedetails.rominfo", "rominfo")]
+        [InlineData("sourcedetails.section", "section")]
+        [InlineData("sourcedetails.tool", "tool")]
+        public void Matches_SourceDetails(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            SourceDetails obj = new SourceDetails
+            {
+                AppendToNumber = "appendtonumber",
+                Comment1 = "comment1",
+                Comment2 = "comment2",
+                DumpDate = "dumpdate",
+                DumpDateInfo = true,
+                Dumper = "dumper",
+                Id = "id",
+                Link1 = "link1",
+                Link1Public = true,
+                Link2 = "link2",
+                Link2Public = true,
+                Link3 = "link3",
+                Link3Public = true,
+                MediaTitle = "mediatitle",
+                Nodump = true,
+                Origin = "origin",
+                OriginalFormat = "originalformat",
+                Project = "project",
+                Region = "region",
+                ReleaseDate = "releasedate",
+                ReleaseDateInfo = true,
+                RomInfo = "rominfo",
+                Section = "section",
+                Tool = "tool",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Video
+
+        [Theory]
+        [InlineData("video.aspectx", "12345")]
+        [InlineData("video.aspecty", "12345")]
+        [InlineData("video.height", "12345")]
+        [InlineData("video.y", "12345")]
+        [InlineData("video.orientation", "horizontal")]
+        [InlineData("video.rotate", "horizontal")]
+        [InlineData("video.refresh", "123.45")]
+        [InlineData("video.freq", "123.45")]
+        [InlineData("video.displaytype", "vector")]
+        [InlineData("video.screen", "vector")]
+        [InlineData("video.width", "12345")]
+        [InlineData("video.x", "12345")]
+        public void Matches_Video(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Video obj = new Video
+            {
+                AspectX = 12345,
+                AspectY = 12345,
+                Height = 12345,
+                Orientation = Rotation.East,
+                Refresh = 123.45,
+                Screen = DisplayType.Vector,
+                Width = 12345,
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
     }
 }

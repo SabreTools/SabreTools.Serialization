@@ -771,6 +771,64 @@ namespace SabreTools.Metadata.Filter
             "tag",
         ];
 
+        /// <summary>
+        /// Known keys for Sound
+        /// </summary>
+        private static readonly string[] _soundKeys =
+        [
+            "channels",
+        ];
+
+        /// <summary>
+        /// Known keys for SourceDetails
+        /// </summary>
+        private static readonly string[] _sourceDetailsKeys =
+        [
+            "appendtonumber",
+            "comment1",
+            "comment2",
+            "dumpdate",
+            "dumpdateinfo",
+            "dumper",
+            "id",
+            "link1",
+            "link1public",
+            "link2",
+            "link2public",
+            "link3",
+            "link3public",
+            "mediatitle",
+            "nodump",
+            "origin",
+            "originalformat",
+            "project",
+            "region",
+            "releasedate",
+            "releasedateinfo",
+            "rominfo",
+            "section",
+            "tool",
+        ];
+
+        /// <summary>
+        /// Known keys for Video
+        /// </summary>
+        private static readonly string[] _videoKeys =
+        [
+            "aspectx",
+            "aspecty",
+            "displaytype",
+            "freq",
+            "height",
+            "orientation",
+            "refresh",
+            "rotate",
+            "screen",
+            "width",
+            "x",
+            "y",
+        ];
+
         #endregion
 
         /// <summary>
@@ -988,6 +1046,9 @@ namespace SabreTools.Metadata.Filter
                 "slot" => _slotKeys,
                 "slotoption" => _slotOptionKeys,
                 "softwarelist" => _softwareListKeys,
+                "sound" => _soundKeys,
+                "sourcedetails" => _sourceDetailsKeys,
+                "video" => _videoKeys,
                 _ => null,
             };
             if (properties is null)
