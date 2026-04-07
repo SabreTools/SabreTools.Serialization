@@ -1,5 +1,6 @@
 using System;
 using SabreTools.Data.Models.Metadata;
+using SabreTools.Hashing;
 using Xunit;
 
 namespace SabreTools.Metadata.Filter.Test
@@ -1211,6 +1212,193 @@ namespace SabreTools.Metadata.Filter.Test
             {
                 Name = "name",
                 Value = "value",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Input
+
+        [Theory]
+        [InlineData("input.buttons", "12345")]
+        [InlineData("input.coins", "12345")]
+        [InlineData("input.control", "control")]
+        [InlineData("input.controlattr", "control")]
+        [InlineData("input.players", "12345")]
+        [InlineData("input.service", "yes")]
+        [InlineData("input.tilt", "yes")]
+        public void Matches_Input(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Input obj = new Input
+            {
+                Buttons = 12345,
+                Coins = 12345,
+                ControlAttr = "control",
+                Players = 12345,
+                Service = true,
+                Tilt = true,
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Instance
+
+        [Theory]
+        [InlineData("instance.name", "name")]
+        public void Matches_Instance(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Instance obj = new Instance
+            {
+                Name = "name",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Machine
+
+        [Theory]
+        [InlineData("machine.board", "board")]
+        [InlineData("machine.buttons", "buttons")]
+        [InlineData("machine.category", "category")]
+        [InlineData("machine.cloneof", "cloneof")]
+        [InlineData("machine.comment", "comment")]
+        [InlineData("machine.company", "company")]
+        [InlineData("machine.control", "control")]
+        [InlineData("machine.crc", "crc")]
+        [InlineData("machine.country", "country")]
+        [InlineData("machine.description", "description")]
+        [InlineData("machine.developer", "developer")]
+        [InlineData("machine.dirname", "dirname")]
+        [InlineData("machine.displaycount", "displaycount")]
+        [InlineData("machine.displaytype", "displaytype")]
+        [InlineData("machine.duplicateid", "duplicateid")]
+        [InlineData("machine.emulator", "emulator")]
+        [InlineData("machine.enabled", "enabled")]
+        [InlineData("machine.extra", "extra")]
+        [InlineData("machine.favorite", "favorite")]
+        [InlineData("machine.genmsxid", "genmsxid")]
+        [InlineData("machine.genre", "genre")]
+        [InlineData("machine.hash", "hash")]
+        [InlineData("machine.history", "history")]
+        [InlineData("machine.id", "id")]
+        [InlineData("machine.im1crc", "00000000")]
+        [InlineData("machine.im2crc", "00000000")]
+        [InlineData("machine.imagenumber", "imagenumber")]
+        [InlineData("machine.isbios", "yes")]
+        [InlineData("machine.isdevice", "yes")]
+        [InlineData("machine.ismechanical", "yes")]
+        [InlineData("machine.language", "language")]
+        [InlineData("machine.location", "location")]
+        [InlineData("machine.manufacturer", "manufacturer")]
+        [InlineData("machine.name", "name")]
+        [InlineData("machine.notes", "notes")]
+        [InlineData("machine.playedcount", "playedcount")]
+        [InlineData("machine.playedtime", "playedtime")]
+        [InlineData("machine.players", "players")]
+        [InlineData("machine.publisher", "publisher")]
+        [InlineData("machine.ratings", "ratings")]
+        [InlineData("machine.rebuildto", "rebuildto")]
+        [InlineData("machine.relatedto", "relatedto")]
+        [InlineData("machine.releasenumber", "releasenumber")]
+        [InlineData("machine.romof", "romof")]
+        [InlineData("machine.rotation", "rotation")]
+        [InlineData("machine.runnable", "yes")]
+        [InlineData("machine.sampleof", "sampleof")]
+        [InlineData("machine.savetype", "savetype")]
+        [InlineData("machine.score", "score")]
+        [InlineData("machine.source", "source")]
+        [InlineData("machine.sourcefile", "sourcefile")]
+        [InlineData("machine.sourcerom", "sourcerom")]
+        [InlineData("machine.status", "status")]
+        [InlineData("machine.subgenre", "subgenre")]
+        [InlineData("machine.supported", "yes")]
+        [InlineData("machine.system", "system")]
+        [InlineData("machine.tags", "tags")]
+        [InlineData("machine.type", "bios")]
+        [InlineData("machine.type", "device")]
+        [InlineData("machine.type", "mechanical")]
+        [InlineData("machine.titleid", "titleid")]
+        [InlineData("machine.url", "url")]
+        [InlineData("machine.year", "year")]
+        public void Matches_Machine(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Machine obj = new Machine
+            {
+                Board = "board",
+                Buttons = "buttons",
+                Category = ["category"],
+                CloneOf = "cloneof",
+                CloneOfId = "cloneofid",
+                Comment = ["comment"],
+                Company = "company",
+                Control = "control",
+                CRC = "crc",
+                Country = "country",
+                Description = "description",
+                Developer = "developer",
+                DirName = "dirname",
+                DisplayCount = "displaycount",
+                DisplayType = "displaytype",
+                DuplicateID = "duplicateid",
+                Emulator = "emulator",
+                Enabled = "enabled",
+                Extra = "extra",
+                Favorite = "favorite",
+                GenMSXID = "genmsxid",
+                Genre = "genre",
+                Hash = "hash",
+                History = "history",
+                Id = "id",
+                Im1CRC = HashType.CRC32.ZeroString,
+                Im2CRC = HashType.CRC32.ZeroString,
+                ImageNumber = "imagenumber",
+                IsBios = true,
+                IsDevice = true,
+                IsMechanical = true,
+                Language = "language",
+                Location = "location",
+                Manufacturer = "manufacturer",
+                Name = "name",
+                Notes = "notes",
+                PlayedCount = "playedcount",
+                PlayedTime = "playedtime",
+                Players = "players",
+                Publisher = "publisher",
+                Ratings = "ratings",
+                RebuildTo = "rebuildto",
+                RelatedTo = "relatedto",
+                ReleaseNumber = "releasenumber",
+                RomOf = "romof",
+                Rotation = "rotation",
+                Runnable = Runnable.Yes,
+                SampleOf = "sampleof",
+                SaveType = "savetype",
+                Score = "score",
+                Source = "source",
+                SourceFile = "sourcefile",
+                SourceRom = "sourcerom",
+                Status = "status",
+                Subgenre = "subgenre",
+                Supported = Supported.Yes,
+                System = "system",
+                Tags = "tags",
+                TitleID = "titleid",
+                Url = "url",
+                Year = "year",
             };
 
             bool actual = filter.Matches(obj);

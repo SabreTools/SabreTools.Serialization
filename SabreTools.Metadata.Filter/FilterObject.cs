@@ -1348,6 +1348,7 @@ namespace SabreTools.Metadata.Filter
                 case "coins":
                     checkValue = obj.Coins?.ToString();
                     return true;
+                case "control":
                 case "controlattr":
                     checkValue = obj.ControlAttr;
                     return true;

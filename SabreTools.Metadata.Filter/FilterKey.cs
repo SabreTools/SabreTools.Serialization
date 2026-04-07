@@ -388,6 +388,96 @@ namespace SabreTools.Metadata.Filter
             "value",
         ];
 
+        /// <summary>
+        /// Known keys for Input
+        /// </summary>
+        private static readonly string[] _inputKeys =
+        [
+            "buttons",
+            "coins",
+            "control",
+            "controlattr",
+            "players",
+            "service",
+            "tilt",
+        ];
+
+        /// <summary>
+        /// Known keys for Instance
+        /// </summary>
+        private static readonly string[] _instanceKeys =
+        [
+            "name",
+        ];
+
+        /// <summary>
+        /// Known keys for Machine
+        /// </summary>
+        private static readonly string[] _machineKeys =
+        [
+            "board",
+            "buttons",
+            "category",
+            "cloneof",
+            "comment",
+            "company",
+            "control",
+            "crc",
+            "country",
+            "description",
+            "developer",
+            "dirname",
+            "displaycount",
+            "displaytype",
+            "duplicateid",
+            "emulator",
+            "enabled",
+            "extra",
+            "favorite",
+            "genmsxid",
+            "genre",
+            "hash",
+            "history",
+            "id",
+            "im1crc",
+            "im2crc",
+            "imagenumber",
+            "isbios",
+            "isdevice",
+            "ismechanical",
+            "language",
+            "location",
+            "manufacturer",
+            "name",
+            "notes",
+            "playedcount",
+            "playedtime",
+            "players",
+            "publisher",
+            "ratings",
+            "rebuildto",
+            "relatedto",
+            "releasenumber",
+            "romof",
+            "rotation",
+            "runnable",
+            "sampleof",
+            "savetype",
+            "score",
+            "source",
+            "sourcefile",
+            "sourcerom",
+            "status",
+            "subgenre",
+            "supported",
+            "system",
+            "tags",
+            "titleid",
+            "type",
+            "url",
+            "year",
+        ];
+
         #endregion
 
         /// <summary>
@@ -490,22 +580,9 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static bool ParseMachineFilterId(ref string itemName, ref string fieldName)
         {
-            // Special case for machine type
-            if (string.Equals(fieldName, "type", StringComparison.OrdinalIgnoreCase))
-            {
-                itemName = "machine";
-                fieldName = "type";
-                return true;
-            }
-
-            // Get the set of properties
-            var properties = GetProperties(typeof(Machine));
-            if (properties is null)
-                return false;
-
             // Get if there's a match to a property
             string localFieldName = fieldName;
-            string? propertyMatch = Array.Find(properties, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
+            string? propertyMatch = Array.Find(_machineKeys, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
             if (propertyMatch is null)
                 return false;
 
@@ -600,6 +677,8 @@ namespace SabreTools.Metadata.Filter
                 "extension" => _extensionKeys,
                 "feature" or "partfeature" => _featureKeys,
                 "info" => _infoKeys,
+                "input" => _inputKeys,
+                "instance" => _instanceKeys,
                 _ => null,
             };
 

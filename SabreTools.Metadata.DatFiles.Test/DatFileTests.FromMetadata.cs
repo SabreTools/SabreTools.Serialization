@@ -336,6 +336,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 System = "system",
                 Tags = "tags",
                 TitleID = "titleid",
+                Url = "url",
                 Video = [CreateMetadataVideo()],
                 Year = "year",
             };
@@ -1113,6 +1114,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("system", machine.System);
             Assert.Equal("tags", machine.Tags);
             Assert.Equal("titleid", machine.TitleID);
+            Assert.Equal("url", machine.Url);
             Assert.Equal("year", machine.Year);
 
             string[]? categories = machine.Category;
