@@ -7,7 +7,7 @@ namespace SabreTools.Data.Models.STFS
     /// STFS Volume Descriptor, for STFS packages
     /// </summary>
     /// <see href="https://free60.org/System-Software/Formats/STFS/"/>
-    public class STSSDescriptor : VolumeDescriptor
+    public class STFSDescriptor : VolumeDescriptor
     {
         /// <summary>
         /// Volume descriptor size (Should be 0x24)

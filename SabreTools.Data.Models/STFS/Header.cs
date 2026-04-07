@@ -135,7 +135,7 @@ namespace SabreTools.Data.Models.STFS
         /// STFS Volume Descriptor
         /// Not optional, but abstract class
         /// </summary>
-        public VolumeDescriptor? VolumeDescriptor { get; set; } = new();
+        public VolumeDescriptor? VolumeDescriptor { get; set; }
 
         /// <summary>
         /// Data File Count

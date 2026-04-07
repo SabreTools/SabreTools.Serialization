@@ -137,13 +137,13 @@ namespace SabreTools.Wrappers
 
         protected static void Print(StringBuilder builder, VolumeDescriptor? vd)
         {
-            if (vd is SFTSDescriptor stfs)
+            if (vd is STFSDescriptor stfs)
             {
                 builder.AppendLine(stfs.VolumeDescriptorSize, "  Volume Descriptor Size");
                 builder.AppendLine(stfs.Reserved, "  Reserved");
                 builder.AppendLine(stfs.BlockSeparation, "  Block Separation");
                 builder.AppendLine(stfs.FileTableBlockCount, "  File Table Block Count");
-                builder.AppendLine(stfs.FileTableBlockNumber, "File Table Block Number");
+                builder.AppendLine((uint)stfs.FileTableBlockNumber, "File Table Block Number");
                 builder.AppendLine(stfs.TopHashTableHash, "  Top Hash Table Hash");
                 builder.AppendLine(stfs.TotalAllocatedBlockCount, "  Total Allocated Block Count");
                 builder.AppendLine(stfs.TotalUnallocatedBlockCount, "  Total Unallocated Block Count");
@@ -155,8 +155,8 @@ namespace SabreTools.Wrappers
                 builder.AppendLine(svod.WorkerThreadProcessor, "  Worker Thread Processor");
                 builder.AppendLine(svod.WorkerThreadPriority, "  Worker Thread Priority");
                 builder.AppendLine(svod.Hash, "  Hash");
-                builder.AppendLine(svod.DataBlockCount, "  Data Block Count");
-                builder.AppendLine(svod.DataBlockOffset, "  Data Block Offset");
+                builder.AppendLine((uint)svod.DataBlockCount, "  Data Block Count");
+                builder.AppendLine((uint)svod.DataBlockOffset, "  Data Block Offset");
                 builder.AppendLine(svod.Padding, "  Padding");
             }
             else
