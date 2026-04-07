@@ -516,6 +516,51 @@ namespace SabreTools.Metadata.Filter
             "tag",
         ];
 
+        /// <summary>
+        /// Known keys for RamOption
+        /// </summary>
+        private static readonly string[] _ramOptionKeys =
+        [
+            "content",
+            "default",
+            "name",
+        ];
+
+        /// <summary>
+        /// Known keys for Release
+        /// </summary>
+        private static readonly string[] _releaseKeys =
+        [
+            "date",
+            "default",
+            "language",
+            "name",
+            "region",
+        ];
+
+        /// <summary>
+        /// Known keys ReleaseDetails Release
+        /// </summary>
+        private static readonly string[] _releaseDetailsKeys =
+        [
+            "appendtonumber",
+            "archivename",
+            "category",
+            "comment",
+            "date",
+            "dirname",
+            "group",
+            "id",
+            "nfocrc",
+            "nfoname",
+            "nfosize",
+            "origin",
+            "originalformat",
+            "region",
+            "rominfo",
+            "tool",
+        ];
+
         #endregion
 
         /// <summary>
@@ -723,6 +768,9 @@ namespace SabreTools.Metadata.Filter
                 "original" => _originalKeys,
                 "part" => _partKeys,
                 "port" => _portKeys,
+                "ramoption" => _ramOptionKeys,
+                "release" => _releaseKeys,
+                "releasedetails" => _releaseDetailsKeys,
                 _ => null,
             };
 

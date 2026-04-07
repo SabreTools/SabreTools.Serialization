@@ -1490,5 +1490,101 @@ namespace SabreTools.Metadata.Filter.Test
         }
 
         #endregion
+
+        #region RamOption
+
+        [Theory]
+        [InlineData("ramoption.content", "content")]
+        [InlineData("ramoption.default", "yes")]
+        [InlineData("ramoption.name", "name")]
+        public void Matches_RamOption(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            RamOption obj = new RamOption
+            {
+                Content = "content",
+                Default = true,
+                Name = "name",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Release
+
+        [Theory]
+        [InlineData("release.date", "date")]
+        [InlineData("release.default", "yes")]
+        [InlineData("release.language", "language")]
+        [InlineData("release.name", "name")]
+        [InlineData("release.region", "region")]
+        public void Matches_Release(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Release obj = new Release
+            {
+                Date = "date",
+                Default = true,
+                Language = "language",
+                Name = "name",
+                Region = "region",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region ReleaseDetails
+
+        [Theory]
+        [InlineData("releasedetails.appendtonumber", "appendtonumber")]
+        [InlineData("releasedetails.archivename", "archivename")]
+        [InlineData("releasedetails.category", "category")]
+        [InlineData("releasedetails.comment", "comment")]
+        [InlineData("releasedetails.date", "date")]
+        [InlineData("releasedetails.dirname", "dirname")]
+        [InlineData("releasedetails.group", "group")]
+        [InlineData("releasedetails.id", "id")]
+        [InlineData("releasedetails.nfocrc", "nfocrc")]
+        [InlineData("releasedetails.nfoname", "nfoname")]
+        [InlineData("releasedetails.nfosize", "nfosize")]
+        [InlineData("releasedetails.origin", "origin")]
+        [InlineData("releasedetails.originalformat", "originalformat")]
+        [InlineData("releasedetails.region", "region")]
+        [InlineData("releasedetails.rominfo", "rominfo")]
+        [InlineData("releasedetails.tool", "tool")]
+        public void Matches_ReleaseDetails(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            ReleaseDetails obj = new ReleaseDetails
+            {
+                AppendToNumber = "appendtonumber",
+                ArchiveName = "archivename",
+                Category = "category",
+                Comment = "comment",
+                Date = "date",
+                DirName = "dirname",
+                Group = "group",
+                Id = "id",
+                NfoCRC = "nfocrc",
+                NfoName = "nfoname",
+                NfoSize = "nfosize",
+                Origin = "origin",
+                OriginalFormat = "originalformat",
+                Region = "region",
+                RomInfo = "rominfo",
+                Tool = "tool",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
     }
 }
