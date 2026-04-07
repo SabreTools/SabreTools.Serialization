@@ -177,6 +177,7 @@ namespace SabreTools.Serialization.Readers
 
             for (int i = 0; i < 16; i++)
             {
+                obj[i] = new LicenseEntry();
                 obj[i].LicenseID = data.ReadInt64BigEndian();
                 obj[i].LicenseBits = data.ReadInt32BigEndian();
                 obj[i].LicenseFlags = data.ReadInt32BigEndian();
