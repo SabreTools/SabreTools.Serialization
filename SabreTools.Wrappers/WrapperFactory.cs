@@ -61,6 +61,7 @@ namespace SabreTools.Wrappers
                 WrapperType.SkuSis => SkuSis.Create(data),
                 WrapperType.SFFS => SFFS.Create(data),
                 WrapperType.SGA => SGA.Create(data),
+                WrapperType.STFS => STFS.Create(data),
                 WrapperType.TapeArchive => TapeArchive.Create(data),
                 WrapperType.VBSP => VBSP.Create(data),
                 WrapperType.VPK => VPK.Create(data),
@@ -778,6 +779,22 @@ namespace SabreTools.Wrappers
 
             if (extension.Equals("skeleton", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.Skeleton;
+
+            #endregion
+
+            #region STFS
+
+            // LIVE
+            if (magic.StartsWith([0x4C, 0x49, 0x56, 0x45]))
+                return WrapperType.STFS;
+
+            // PIRS
+            if (magic.StartsWith([0x50, 0x49, 0x52, 0x53]))
+                return WrapperType.STFS;
+
+            // "CON "
+            if (magic.StartsWith([0x43, 0x4F, 0x4E, 0x20]))
+                return WrapperType.STFS;
 
             #endregion
 

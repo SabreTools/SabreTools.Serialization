@@ -248,6 +248,11 @@ namespace SabreTools.Wrappers
         SkuSis,
 
         /// <summary>
+        /// Secure Transacted File System
+        /// </summary>
+        STFS,
+
+        /// <summary>
         /// Tape archive
         /// </summary>
         TapeArchive,

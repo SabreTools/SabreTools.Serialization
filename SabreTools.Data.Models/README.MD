@@ -117,6 +117,7 @@ Not all of this information was able to be gathered directly from the files in q
 | [ECMA-119](https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf) | ISO9660 |
 | [EDM/2](https://www.edm2.com/index.php/Main_Page) | LinearExecutable |
 | [faydoc.tripod.com](https://faydoc.tripod.com/formats/) | LinearExecutable |
+| [free60.org](https://free60.org/) | STFS, XEX
 | [GuitarGame_ChartFormats](https://github.com/TheNathannator/GuitarGame_ChartFormats/) | Charts |
 | [HandWiki](https://handwiki.org/wiki/Start) | Quantum |
 | [Handy SDL](https://github.com/mozzwald/handy-sdl) | AtariLynxCart |
