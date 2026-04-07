@@ -1802,21 +1802,26 @@ namespace SabreTools.Metadata.Filter
                 case "album":
                     checkValue = obj.Album;
                     return true;
+                case "alt_romname":
                 case "altromname":
                     checkValue = obj.AltRomname;
                     return true;
+                case "alt_title":
                 case "alttitle":
                     checkValue = obj.AltTitle;
                     return true;
                 case "artist":
                     checkValue = obj.Artist;
                     return true;
+                case "asr_detected_lang":
                 case "asrdetectedlang":
                     checkValue = obj.ASRDetectedLang;
                     return true;
+                case "asr_detected_lang_conf":
                 case "asrdetectedlangconf":
                     checkValue = obj.ASRDetectedLangConf;
                     return true;
+                case "asr_transcribed_lang":
                 case "asrtranscribedlang":
                     checkValue = obj.ASRTranscribedLang;
                     return true;
@@ -1826,12 +1831,15 @@ namespace SabreTools.Metadata.Filter
                 case "bitrate":
                     checkValue = obj.Bitrate;
                     return true;
+                case "btih":
                 case "bittorrentmagnethash":
                     checkValue = obj.BitTorrentMagnetHash;
                     return true;
+                case "cloth_cover_detection_module_version":
                 case "clothcoverdetectionmoduleversion":
                     checkValue = obj.ClothCoverDetectionModuleVersion;
                     return true;
+                case "collection-catalog-number":
                 case "collectioncatalognumber":
                     checkValue = obj.CollectionCatalogNumber;
                     return true;
@@ -1878,27 +1886,34 @@ namespace SabreTools.Metadata.Filter
                 case "height":
                     checkValue = obj.Height;
                     return true;
+                case "hocr_char_to_word_hocr_version":
                 case "hocrchartowordhocrversion":
                     checkValue = obj.hOCRCharToWordhOCRVersion;
                     return true;
+                case "hocr_char_to_word_module_version":
                 case "hocrchartowordmoduleversion":
                     checkValue = obj.hOCRCharToWordModuleVersion;
                     return true;
+                case "hocr_fts_text_hocr_version":
                 case "hocrftstexthocrversion":
                     checkValue = obj.hOCRFtsTexthOCRVersion;
                     return true;
+                case "hocr_fts_text_module_version":
                 case "hocrftstextmoduleversion":
                     checkValue = obj.hOCRFtsTextModuleVersion;
                     return true;
+                case "hocr_pageindex_hocr_version":
                 case "hocrpageindexhocrversion":
                     checkValue = obj.hOCRPageIndexhOCRVersion;
                     return true;
+                case "hocr_pageindex_module_version":
                 case "hocrpageindexmoduleversion":
                     checkValue = obj.hOCRPageIndexModuleVersion;
                     return true;
                 case "inverted":
                     checkValue = obj.Inverted.FromYesNo();
                     return true;
+                case "mtime":
                 case "lastmodifiedtime":
                     checkValue = obj.LastModifiedTime;
                     return true;
@@ -1908,6 +1923,7 @@ namespace SabreTools.Metadata.Filter
                 case "loadflag":
                     checkValue = obj.LoadFlag?.AsStringValue();
                     return true;
+                case "matrix_number":
                 case "matrixnumber":
                     checkValue = obj.MatrixNumber;
                     return true;
@@ -1921,6 +1937,7 @@ namespace SabreTools.Metadata.Filter
                     checkValue = obj.MD5;
                     return true;
                 case "mediatype":
+                case "openmsxmediatype":
                     checkValue = obj.OpenMSXMediaType?.AsStringValue();
                     return true;
                 case "merge":
@@ -1935,15 +1952,20 @@ namespace SabreTools.Metadata.Filter
                 case "offset":
                     checkValue = obj.Offset;
                     return true;
+                case "openmsxtype":
+                    checkValue = obj.OpenMSXType;
+                    return true;
                 case "optional":
                     checkValue = obj.Optional.FromYesNo();
                     return true;
                 case "original":
                     checkValue = obj.Original;
                     return true;
+                case "pdf_module_version":
                 case "pdfmoduleversion":
                     checkValue = obj.PDFModuleVersion;
                     return true;
+                case "preview-image":
                 case "previewimage":
                     checkValue = obj.PreviewImage;
                     return true;
@@ -2001,27 +2023,35 @@ namespace SabreTools.Metadata.Filter
                 case "summation":
                     checkValue = obj.Summation;
                     return true;
+                case "ocr":
                 case "tesseractocr":
                     checkValue = obj.TesseractOCR;
                     return true;
+                case "ocr_converted":
                 case "tesseractocrconverted":
                     checkValue = obj.TesseractOCRConverted;
                     return true;
+                case "ocr_detected_lang":
                 case "tesseractocrdetectedlang":
                     checkValue = obj.TesseractOCRDetectedLang;
                     return true;
+                case "ocr_detected_lang_conf":
                 case "tesseractocrdetectedlangconf":
                     checkValue = obj.TesseractOCRDetectedLangConf;
                     return true;
+                case "ocr_detected_script":
                 case "tesseractocrdetectedscript":
                     checkValue = obj.TesseractOCRDetectedScript;
                     return true;
+                case "ocr_detected_script_conf":
                 case "tesseractocrdetectedscriptconf":
                     checkValue = obj.TesseractOCRDetectedScriptConf;
                     return true;
+                case "ocr_module_version":
                 case "tesseractocrmoduleversion":
                     checkValue = obj.TesseractOCRModuleVersion;
                     return true;
+                case "ocr_parameters":
                 case "tesseractocrparameters":
                     checkValue = obj.TesseractOCRParameters;
                     return true;
@@ -2031,54 +2061,65 @@ namespace SabreTools.Metadata.Filter
                 case "track":
                     checkValue = obj.Track;
                     return true;
-                case "openmsxtype":
-                    checkValue = obj.OpenMSXType;
-                    return true;
                 case "value":
                     checkValue = obj.Value;
                     return true;
+                case "whisper_asr_module_version":
                 case "whisperasrmoduleversion":
                     checkValue = obj.WhisperASRModuleVersion;
                     return true;
+                case "whisper_model_hash":
                 case "whispermodelhash":
                     checkValue = obj.WhisperModelHash;
                     return true;
+                case "whisper_model_name":
                 case "whispermodelname":
                     checkValue = obj.WhisperModelName;
                     return true;
+                case "whisper_version":
                 case "whisperversion":
                     checkValue = obj.WhisperVersion;
                     return true;
                 case "width":
                     checkValue = obj.Width;
                     return true;
+                case "word_conf_0_10":
                 case "wordconfidenceinterval0to10":
                     checkValue = obj.WordConfidenceInterval0To10;
                     return true;
+                case "word_conf_11_20":
                 case "wordconfidenceinterval11to20":
                     checkValue = obj.WordConfidenceInterval11To20;
                     return true;
+                case "word_conf_21_30":
                 case "wordconfidenceinterval21to30":
                     checkValue = obj.WordConfidenceInterval21To30;
                     return true;
+                case "word_conf_31_40":
                 case "wordconfidenceinterval31to40":
                     checkValue = obj.WordConfidenceInterval31To40;
                     return true;
+                case "word_conf_41_50":
                 case "wordconfidenceinterval41to50":
                     checkValue = obj.WordConfidenceInterval41To50;
                     return true;
+                case "word_conf_51_60":
                 case "wordconfidenceinterval51to60":
                     checkValue = obj.WordConfidenceInterval51To60;
                     return true;
+                case "word_conf_61_70":
                 case "wordconfidenceinterval61to70":
                     checkValue = obj.WordConfidenceInterval61To70;
                     return true;
+                case "word_conf_71_80":
                 case "wordconfidenceinterval71to80":
                     checkValue = obj.WordConfidenceInterval71To80;
                     return true;
+                case "word_conf_81_90":
                 case "wordconfidenceinterval81to90":
                     checkValue = obj.WordConfidenceInterval81To90;
                     return true;
+                case "word_conf_91_100":
                 case "wordconfidenceinterval91to100":
                     checkValue = obj.WordConfidenceInterval91To100;
                     return true;

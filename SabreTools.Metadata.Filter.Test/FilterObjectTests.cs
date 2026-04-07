@@ -1586,5 +1586,255 @@ namespace SabreTools.Metadata.Filter.Test
         }
 
         #endregion
+
+        #region Rom
+
+        [Theory]
+        [InlineData("rom.album", "album")]
+        [InlineData("rom.alt_romname", "alt_romname")]
+        [InlineData("rom.altromname", "alt_romname")]
+        [InlineData("rom.alt_title", "alt_title")]
+        [InlineData("rom.alttitle", "alt_title")]
+        [InlineData("rom.artist", "artist")]
+        [InlineData("rom.asr_detected_lang", "asr_detected_lang")]
+        [InlineData("rom.asrdetectedlang", "asr_detected_lang")]
+        [InlineData("rom.asr_detected_lang_conf", "asr_detected_lang_conf")]
+        [InlineData("rom.asrdetectedlangconf", "asr_detected_lang_conf")]
+        [InlineData("rom.asr_transcribed_lang", "asr_transcribed_lang")]
+        [InlineData("rom.asrtranscribedlang", "asr_transcribed_lang")]
+        [InlineData("rom.bios", "bios")]
+        [InlineData("rom.bitrate", "bitrate")]
+        [InlineData("rom.bittorrentmagnethash", "btih")]
+        [InlineData("rom.btih", "btih")]
+        [InlineData("rom.cloth_cover_detection_module_version", "cloth_cover_detection_module_version")]
+        [InlineData("rom.clothcoverdetectionmoduleversion", "cloth_cover_detection_module_version")]
+        [InlineData("rom.collection-catalog-number", "collection-catalog-number")]
+        [InlineData("rom.collectioncatalognumber", "collection-catalog-number")]
+        [InlineData("rom.comment", "comment")]
+        [InlineData("rom.crc16", "0000")]
+        [InlineData("rom.crc", "00000000")]
+        [InlineData("rom.crc32", "00000000")]
+        [InlineData("rom.crc64", "0000000000000000")]
+        [InlineData("rom.creator", "creator")]
+        [InlineData("rom.date", "date")]
+        [InlineData("rom.dispose", "yes")]
+        [InlineData("rom.extension", "extension")]
+        [InlineData("rom.filecount", "12345")]
+        [InlineData("rom.fileisavailable", "yes")]
+        [InlineData("rom.flags", "flags")]
+        [InlineData("rom.format", "format")]
+        [InlineData("rom.header", "header")]
+        [InlineData("rom.height", "height")]
+        [InlineData("rom.hocr_char_to_word_hocr_version", "hocr_char_to_word_hocr_version")]
+        [InlineData("rom.hocrchartowordhocrversion", "hocr_char_to_word_hocr_version")]
+        [InlineData("rom.hocr_char_to_word_module_version", "hocr_char_to_word_module_version")]
+        [InlineData("rom.hocrchartowordmoduleversion", "hocr_char_to_word_module_version")]
+        [InlineData("rom.hocr_fts_text_hocr_version", "hocr_fts_text_hocr_version")]
+        [InlineData("rom.hocrftstexthocrversion", "hocr_fts_text_hocr_version")]
+        [InlineData("rom.hocr_fts_text_module_version", "hocr_fts_text_module_version")]
+        [InlineData("rom.hocrftstextmoduleversion", "hocr_fts_text_module_version")]
+        [InlineData("rom.hocr_pageindex_hocr_version", "hocr_pageindex_hocr_version")]
+        [InlineData("rom.hocrpageindexhocrversion", "hocr_pageindex_hocr_version")]
+        [InlineData("rom.hocr_pageindex_module_version", "hocr_pageindex_module_version")]
+        [InlineData("rom.hocrpageindexmoduleversion", "hocr_pageindex_module_version")]
+        [InlineData("rom.inverted", "yes")]
+        [InlineData("rom.mtime", "mtime")]
+        [InlineData("rom.lastmodifiedtime", "mtime")]
+        [InlineData("rom.length", "length")]
+        [InlineData("rom.loadflag", "load16_byte")]
+        [InlineData("rom.matrix_number", "matrix_number")]
+        [InlineData("rom.matrixnumber", "matrix_number")]
+        [InlineData("rom.md2", "8350e5a3e24c153df2275c9f80692773")]
+        [InlineData("rom.md4", "31d6cfe0d16ae931b73c59d7e0c089c0")]
+        [InlineData("rom.md5", "d41d8cd98f00b204e9800998ecf8427e")]
+        [InlineData("rom.mediatype", "megarom")]
+        [InlineData("rom.openmsxmediatype", "megarom")]
+        [InlineData("rom.merge", "merge")]
+        [InlineData("rom.mia", "yes")]
+        [InlineData("rom.name", "name")]
+        [InlineData("rom.offset", "offset")]
+        [InlineData("rom.openmsxtype", "type")]
+        [InlineData("rom.optional", "yes")]
+        [InlineData("rom.original", "original")]
+        [InlineData("rom.pdf_module_version", "pdf_module_version")]
+        [InlineData("rom.pdfmoduleversion", "pdf_module_version")]
+        [InlineData("rom.preview-image", "preview-image")]
+        [InlineData("rom.previewimage", "preview-image")]
+        [InlineData("rom.publisher", "publisher")]
+        [InlineData("rom.region", "region")]
+        [InlineData("rom.remark", "remark")]
+        [InlineData("rom.ripemd128", "cdf26213a150dc3ecb610f18f6b38b46")]
+        [InlineData("rom.ripemd160", "9c1185a5c5e9fc54612808977ee8f548b2258d31")]
+        [InlineData("rom.rotation", "rotation")]
+        [InlineData("rom.serial", "serial")]
+        [InlineData("rom.sha1", "da39a3ee5e6b4b0d3255bfef95601890afd80709")]
+        [InlineData("rom.sha256", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")]
+        [InlineData("rom.sha384", "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b")]
+        [InlineData("rom.sha512", "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e")]
+        [InlineData("rom.size", "12345")]
+        [InlineData("rom.soundonly", "yes")]
+        [InlineData("rom.source", "source")]
+        [InlineData("rom.spamsum", "3::")]
+        [InlineData("rom.start", "start")]
+        [InlineData("rom.status", "good")]
+        [InlineData("rom.summation", "summation")]
+        [InlineData("rom.ocr", "ocr")]
+        [InlineData("rom.tesseractocr", "ocr")]
+        [InlineData("rom.ocr_converted", "ocr_converted")]
+        [InlineData("rom.tesseractocrconverted", "ocr_converted")]
+        [InlineData("rom.ocr_detected_lang", "ocr_detected_lang")]
+        [InlineData("rom.tesseractocrdetectedlang", "ocr_detected_lang")]
+        [InlineData("rom.ocr_detected_lang_conf", "ocr_detected_lang_conf")]
+        [InlineData("rom.tesseractocrdetectedlangconf", "ocr_detected_lang_conf")]
+        [InlineData("rom.ocr_detected_script", "ocr_detected_script")]
+        [InlineData("rom.tesseractocrdetectedscript", "ocr_detected_script")]
+        [InlineData("rom.ocr_detected_script_conf", "ocr_detected_script_conf")]
+        [InlineData("rom.tesseractocrdetectedscriptconf", "ocr_detected_script_conf")]
+        [InlineData("rom.ocr_module_version", "ocr_module_version")]
+        [InlineData("rom.tesseractocrmoduleversion", "ocr_module_version")]
+        [InlineData("rom.ocr_parameters", "ocr_parameters")]
+        [InlineData("rom.tesseractocrparameters", "ocr_parameters")]
+        [InlineData("rom.title", "title")]
+        [InlineData("rom.track", "track")]
+        [InlineData("rom.value", "value")]
+        [InlineData("rom.whisper_asr_module_version", "whisper_asr_module_version")]
+        [InlineData("rom.whisperasrmoduleversion", "whisper_asr_module_version")]
+        [InlineData("rom.whisper_model_hash", "whisper_model_hash")]
+        [InlineData("rom.whispermodelhash", "whisper_model_hash")]
+        [InlineData("rom.whisper_model_name", "whisper_model_name")]
+        [InlineData("rom.whispermodelname", "whisper_model_name")]
+        [InlineData("rom.whisper_version", "whisper_version")]
+        [InlineData("rom.whisperversion", "whisper_version")]
+        [InlineData("rom.width", "width")]
+        [InlineData("rom.word_conf_0_10", "word_conf_0_10")]
+        [InlineData("rom.wordconfidenceinterval0to10", "word_conf_0_10")]
+        [InlineData("rom.word_conf_11_20", "word_conf_11_20")]
+        [InlineData("rom.wordconfidenceinterval11to20", "word_conf_11_20")]
+        [InlineData("rom.word_conf_21_30", "word_conf_21_30")]
+        [InlineData("rom.wordconfidenceinterval21to30", "word_conf_21_30")]
+        [InlineData("rom.word_conf_31_40", "word_conf_31_40")]
+        [InlineData("rom.wordconfidenceinterval31to40", "word_conf_31_40")]
+        [InlineData("rom.word_conf_41_50", "word_conf_41_50")]
+        [InlineData("rom.wordconfidenceinterval41to50", "word_conf_41_50")]
+        [InlineData("rom.word_conf_51_60", "word_conf_51_60")]
+        [InlineData("rom.wordconfidenceinterval51to60", "word_conf_51_60")]
+        [InlineData("rom.word_conf_61_70", "word_conf_61_70")]
+        [InlineData("rom.wordconfidenceinterval61to70", "word_conf_61_70")]
+        [InlineData("rom.word_conf_71_80", "word_conf_71_80")]
+        [InlineData("rom.wordconfidenceinterval71to80", "word_conf_71_80")]
+        [InlineData("rom.word_conf_81_90", "word_conf_81_90")]
+        [InlineData("rom.wordconfidenceinterval81to90", "word_conf_81_90")]
+        [InlineData("rom.word_conf_91_100", "word_conf_91_100")]
+        [InlineData("rom.wordconfidenceinterval91to100", "word_conf_91_100")]
+        [InlineData("rom.xxhash364", "2d06800538d394c2")]
+        [InlineData("rom.xxhash3128", "99aa06d3014798d86001c324468d497f")]
+        public void Matches_Rom(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Rom obj = new Rom
+            {
+                Album = "album",
+                AltRomname = "alt_romname",
+                AltTitle = "alt_title",
+                Artist = "artist",
+                ASRDetectedLang = "asr_detected_lang",
+                ASRDetectedLangConf = "asr_detected_lang_conf",
+                ASRTranscribedLang = "asr_transcribed_lang",
+                Bios = "bios",
+                Bitrate = "bitrate",
+                BitTorrentMagnetHash = "btih",
+                ClothCoverDetectionModuleVersion = "cloth_cover_detection_module_version",
+                CollectionCatalogNumber = "collection-catalog-number",
+                Comment = "comment",
+                CRC16 = HashType.CRC16.ZeroString,
+                CRC32 = HashType.CRC32.ZeroString,
+                CRC64 = HashType.CRC64.ZeroString,
+                Creator = "creator",
+                Date = "date",
+                Dispose = true,
+                Extension = "extension",
+                FileCount = 12345,
+                FileIsAvailable = true,
+                Flags = "flags",
+                Format = "format",
+                Header = "header",
+                Height = "height",
+                hOCRCharToWordhOCRVersion = "hocr_char_to_word_hocr_version",
+                hOCRCharToWordModuleVersion = "hocr_char_to_word_module_version",
+                hOCRFtsTexthOCRVersion = "hocr_fts_text_hocr_version",
+                hOCRFtsTextModuleVersion = "hocr_fts_text_module_version",
+                hOCRPageIndexhOCRVersion = "hocr_pageindex_hocr_version",
+                hOCRPageIndexModuleVersion = "hocr_pageindex_module_version",
+                Inverted = true,
+                LastModifiedTime = "mtime",
+                Length = "length",
+                LoadFlag = LoadFlag.Load16Byte,
+                MatrixNumber = "matrix_number",
+                MD2 = HashType.MD2.ZeroString,
+                MD4 = HashType.MD4.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
+                Merge = "merge",
+                MIA = true,
+                Name = "name",
+                Offset = "offset",
+                OpenMSXMediaType = OpenMSXSubType.MegaRom,
+                OpenMSXType = "type",
+                Optional = true,
+                Original = "original",
+                PDFModuleVersion = "pdf_module_version",
+                PreviewImage = "preview-image",
+                Publisher = "publisher",
+                Region = "region",
+                Remark = "remark",
+                RIPEMD128 = HashType.RIPEMD128.ZeroString,
+                RIPEMD160 = HashType.RIPEMD160.ZeroString,
+                Rotation = "rotation",
+                Serial = "serial",
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SHA384 = HashType.SHA384.ZeroString,
+                SHA512 = HashType.SHA512.ZeroString,
+                Size = 12345,
+                SoundOnly = true,
+                Source = "source",
+                SpamSum = HashType.SpamSum.ZeroString,
+                Start = "start",
+                Status = ItemStatus.Good,
+                Summation = "summation",
+                TesseractOCR = "ocr",
+                TesseractOCRConverted = "ocr_converted",
+                TesseractOCRDetectedLang = "ocr_detected_lang",
+                TesseractOCRDetectedLangConf = "ocr_detected_lang_conf",
+                TesseractOCRDetectedScript = "ocr_detected_script",
+                TesseractOCRDetectedScriptConf = "ocr_detected_script_conf",
+                TesseractOCRModuleVersion = "ocr_module_version",
+                TesseractOCRParameters = "ocr_parameters",
+                Title = "title",
+                Track = "track",
+                Value = "value",
+                WhisperASRModuleVersion = "whisper_asr_module_version",
+                WhisperModelHash = "whisper_model_hash",
+                WhisperModelName = "whisper_model_name",
+                WhisperVersion = "whisper_version",
+                Width = "width",
+                WordConfidenceInterval0To10 = "word_conf_0_10",
+                WordConfidenceInterval11To20 = "word_conf_11_20",
+                WordConfidenceInterval21To30 = "word_conf_21_30",
+                WordConfidenceInterval31To40 = "word_conf_31_40",
+                WordConfidenceInterval41To50 = "word_conf_41_50",
+                WordConfidenceInterval51To60 = "word_conf_51_60",
+                WordConfidenceInterval61To70 = "word_conf_61_70",
+                WordConfidenceInterval71To80 = "word_conf_71_80",
+                WordConfidenceInterval81To90 = "word_conf_81_90",
+                WordConfidenceInterval91To100 = "word_conf_91_100",
+                xxHash364 = HashType.XxHash3.ZeroString,
+                xxHash3128 = HashType.XxHash128.ZeroString,
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
     }
 }
