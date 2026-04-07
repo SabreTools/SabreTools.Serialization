@@ -1898,5 +1898,89 @@ namespace SabreTools.Metadata.Filter.Test
         }
 
         #endregion
+
+        #region SharedFeat
+
+        [Theory]
+        [InlineData("sharedfeat.name", "name")]
+        [InlineData("sharedfeat.value", "value")]
+        public void Matches_SharedFeat(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            SharedFeat obj = new SharedFeat
+            {
+                Name = "name",
+                Value = "value",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Slot
+
+        [Theory]
+        [InlineData("slot.name", "name")]
+        public void Matches_Slot(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Slot obj = new Slot
+            {
+                Name = "name",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region SlotOption
+
+        [Theory]
+        [InlineData("slotoption.default", "yes")]
+        [InlineData("slotoption.devname", "devname")]
+        [InlineData("slotoption.name", "name")]
+        public void Matches_SlotOption(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            SlotOption obj = new SlotOption
+            {
+                Default = true,
+                DevName = "devname",
+                Name = "name",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region SoftwareList
+
+        [Theory]
+        [InlineData("softwarelist.filter", "filter")]
+        [InlineData("softwarelist.name", "name")]
+        [InlineData("softwarelist.status", "original")]
+        [InlineData("softwarelist.tag", "tag")]
+        public void Matches_SoftwareList(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            SoftwareList obj = new SoftwareList
+            {
+                Filter = "filter",
+                Name = "name",
+                Status = SoftwareListStatus.Original,
+                Tag = "tag",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
     }
 }

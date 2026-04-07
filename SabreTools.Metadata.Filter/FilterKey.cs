@@ -1,6 +1,4 @@
 using System;
-using System.Reflection;
-using System.Xml.Serialization;
 using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Metadata.Filter
@@ -735,6 +733,44 @@ namespace SabreTools.Metadata.Filter
             "savechipserial",
         ];
 
+        /// <summary>
+        /// Known keys for SharedFeat
+        /// </summary>
+        private static readonly string[] _sharedFeatKeys =
+        [
+            "name",
+            "value",
+        ];
+
+        /// <summary>
+        /// Known keys for Slot
+        /// </summary>
+        private static readonly string[] _slotKeys =
+        [
+            "name",
+        ];
+
+        /// <summary>
+        /// Known keys for SlotOption
+        /// </summary>
+        private static readonly string[] _slotOptionKeys =
+        [
+            "default",
+            "devname",
+            "name",
+        ];
+
+        /// <summary>
+        /// Known keys for SoftwareList
+        /// </summary>
+        private static readonly string[] _softwareListKeys =
+        [
+            "filter",
+            "name",
+            "status",
+            "tag",
+        ];
+
         #endregion
 
         /// <summary>
@@ -948,24 +984,12 @@ namespace SabreTools.Metadata.Filter
                 "rom" => _romKeys,
                 "sample" => _sampleKeys,
                 "serials" => _serialsKeys,
+                "sharedfeat" => _sharedFeatKeys,
+                "slot" => _slotKeys,
+                "slotoption" => _slotOptionKeys,
+                "softwarelist" => _softwareListKeys,
                 _ => null,
             };
-
-            // TODO: Remove this fallback path
-            if (properties is null)
-            {
-                // Get the correct item type
-                var itemType = GetDatItemType(itemName.ToLowerInvariant());
-                if (itemType is null)
-                    return null;
-
-                properties = GetProperties(itemType);
-
-                // Special cases for mismatched names
-                if (properties is not null && itemType == typeof(Rom))
-                    properties = [.. properties, "crc"];
-            }
-
             if (properties is null)
                 return null;
 
@@ -973,76 +997,5 @@ namespace SabreTools.Metadata.Filter
             string? propertyMatch = Array.Find(properties, c => string.Equals(c, fieldName, StringComparison.OrdinalIgnoreCase));
             return propertyMatch?.ToLowerInvariant();
         }
-
-        #region Reflection-based Helpers
-
-        /// <summary>
-        /// Attempt to get the DatItem type from the name
-        /// </summary>
-        private static Type? GetDatItemType(string? itemType)
-        {
-            if (string.IsNullOrEmpty(itemType))
-                return null;
-
-            // Loop through all loaded assemblies
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                // If not all types can be loaded, use the ones that could be
-                Type?[] assemblyTypes = [];
-                try
-                {
-                    assemblyTypes = assembly.GetTypes();
-                }
-                catch (ReflectionTypeLoadException rtle)
-                {
-                    assemblyTypes = Array.FindAll(rtle.Types ?? [], t => t is not null);
-                }
-
-                // Loop through all types
-                foreach (Type? type in assemblyTypes)
-                {
-                    // If the type is invalid
-                    if (type is null)
-                        continue;
-
-                    // If the type isn't a class or doesn't implement the interface
-                    if (!type.IsClass || !typeof(DatItem).IsAssignableFrom(type))
-                        continue;
-
-                    // Get the XML type name
-#if NET20 || NET35 || NET40
-                    string? elementName = (Attribute.GetCustomAttribute(type, typeof(XmlRootAttribute)) as XmlRootAttribute)!.ElementName;
-#else
-                    string? elementName = type.GetCustomAttribute<XmlRootAttribute>()?.ElementName;
-#endif
-                    if (elementName is null)
-                        continue;
-
-                    // If the name matches
-                    if (string.Equals(elementName, itemType, StringComparison.OrdinalIgnoreCase))
-                        return type;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Get property names for the given type, if possible
-        /// </summary>
-        private static string[]? GetProperties(Type? type)
-        {
-            if (type is null)
-                return null;
-
-            var properties = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
-            if (properties is null)
-                return null;
-
-            string[] propertyNames = Array.ConvertAll(properties, f => f.Name);
-            return Array.FindAll(propertyNames, s => s.Length > 0);
-        }
-
-        #endregion
     }
 }
