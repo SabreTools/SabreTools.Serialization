@@ -33,6 +33,8 @@ namespace SabreTools.Metadata.Filter
         private static readonly string[] _datItemTypeNames = Enum.GetNames(typeof(ItemType));
 #endif
 
+        #region Per-Type Accepted Keys
+
         /// <summary>
         /// Known keys for Adjuster
         /// </summary>
@@ -828,6 +830,8 @@ namespace SabreTools.Metadata.Filter
             "x",
             "y",
         ];
+
+        #endregion
 
         #endregion
 

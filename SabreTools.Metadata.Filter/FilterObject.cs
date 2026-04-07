@@ -431,6 +431,77 @@ namespace SabreTools.Metadata.Filter
         }
 
         /// <summary>
+        /// Derive an operation from the input string, if possible
+        /// </summary>
+        private static Operation GetOperation(string? operation)
+        {
+            return operation?.ToLowerInvariant() switch
+            {
+                "=" => Operation.Equals,
+                "=:" => Operation.Equals,
+                "==" => Operation.Equals,
+                ":" => Operation.Equals,
+                "::" => Operation.Equals,
+                ":=" => Operation.Equals,
+
+                "!" => Operation.NotEquals,
+                "!=" => Operation.NotEquals,
+                "!:" => Operation.NotEquals,
+
+                ">" => Operation.GreaterThan,
+                ">:" => Operation.GreaterThanOrEqual,
+                ">=" => Operation.GreaterThanOrEqual,
+                "!<" => Operation.GreaterThanOrEqual,
+
+                "<" => Operation.LessThan,
+                "<:" => Operation.LessThanOrEqual,
+                "<=" => Operation.LessThanOrEqual,
+                "!>" => Operation.LessThanOrEqual,
+
+                _ => Operation.NONE,
+            };
+        }
+
+        /// <summary>
+        /// Derive a key, operation, and value from the input string, if possible
+        /// </summary>
+        private static bool SplitFilterString(string? filterString, out string? key, out Operation operation, out string? value)
+        {
+            // Set default values
+            key = null; operation = Operation.NONE; value = null;
+
+            if (string.IsNullOrEmpty(filterString))
+                return false;
+
+            // Trim quotations, if necessary
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+            if (filterString!.StartsWith('\"'))
+                filterString = filterString[1..^1];
+#else
+            if (filterString!.StartsWith("\""))
+                filterString = filterString.Substring(1, filterString.Length - 2);
+#endif
+
+            // Split the string using regex
+            var match = Regex.Match(filterString, @"^(?<itemField>[a-zA-Z._]+)(?<operation>[=!:><]{1,2})(?<value>.*)$", RegexOptions.Compiled);
+            if (!match.Success)
+                return false;
+
+            key = match.Groups["itemField"].Value;
+            operation = GetOperation(match.Groups["operation"].Value);
+
+            // Only non-zero length values are counted as non-null
+            if (match.Groups["value"]?.Value?.Length > 0)
+                value = match.Groups["value"].Value;
+
+            return true;
+        }
+
+        #endregion
+
+        #region Per-Type Check Value Retrieval
+
+        /// <summary>
         /// Get the check value for a field
         /// </summary>
         private static bool GetCheckValue(Adjuster obj, string fieldName, out string? checkValue)
@@ -2446,73 +2517,6 @@ namespace SabreTools.Metadata.Filter
                     checkValue = null;
                     return false;
             }
-        }
-
-        /// <summary>
-        /// Derive an operation from the input string, if possible
-        /// </summary>
-        private static Operation GetOperation(string? operation)
-        {
-            return operation?.ToLowerInvariant() switch
-            {
-                "=" => Operation.Equals,
-                "=:" => Operation.Equals,
-                "==" => Operation.Equals,
-                ":" => Operation.Equals,
-                "::" => Operation.Equals,
-                ":=" => Operation.Equals,
-
-                "!" => Operation.NotEquals,
-                "!=" => Operation.NotEquals,
-                "!:" => Operation.NotEquals,
-
-                ">" => Operation.GreaterThan,
-                ">:" => Operation.GreaterThanOrEqual,
-                ">=" => Operation.GreaterThanOrEqual,
-                "!<" => Operation.GreaterThanOrEqual,
-
-                "<" => Operation.LessThan,
-                "<:" => Operation.LessThanOrEqual,
-                "<=" => Operation.LessThanOrEqual,
-                "!>" => Operation.LessThanOrEqual,
-
-                _ => Operation.NONE,
-            };
-        }
-
-        /// <summary>
-        /// Derive a key, operation, and value from the input string, if possible
-        /// </summary>
-        private static bool SplitFilterString(string? filterString, out string? key, out Operation operation, out string? value)
-        {
-            // Set default values
-            key = null; operation = Operation.NONE; value = null;
-
-            if (string.IsNullOrEmpty(filterString))
-                return false;
-
-            // Trim quotations, if necessary
-#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
-            if (filterString!.StartsWith('\"'))
-                filterString = filterString[1..^1];
-#else
-            if (filterString!.StartsWith("\""))
-                filterString = filterString.Substring(1, filterString.Length - 2);
-#endif
-
-            // Split the string using regex
-            var match = Regex.Match(filterString, @"^(?<itemField>[a-zA-Z._]+)(?<operation>[=!:><]{1,2})(?<value>.*)$", RegexOptions.Compiled);
-            if (!match.Success)
-                return false;
-
-            key = match.Groups["itemField"].Value;
-            operation = GetOperation(match.Groups["operation"].Value);
-
-            // Only non-zero length values are counted as non-null
-            if (match.Groups["value"]?.Value?.Length > 0)
-                value = match.Groups["value"].Value;
-
-            return true;
         }
 
         #endregion
