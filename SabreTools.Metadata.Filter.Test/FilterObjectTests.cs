@@ -1836,5 +1836,67 @@ namespace SabreTools.Metadata.Filter.Test
         }
 
         #endregion
+
+        #region Sample
+
+        [Theory]
+        [InlineData("sample.name", "name")]
+        public void Matches_Sample(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Sample obj = new Sample
+            {
+                Name = "name",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Serials
+
+        [Theory]
+        [InlineData("serials.boxbarcode", "boxbarcode")]
+        [InlineData("serials.boxserial", "boxserial")]
+        [InlineData("serials.chipserial", "chipserial")]
+        [InlineData("serials.digitalserial1", "digitalserial1")]
+        [InlineData("serials.digitalserial2", "digitalserial2")]
+        [InlineData("serials.lockoutserial", "lockoutserial")]
+        [InlineData("serials.mediaserial1", "mediaserial1")]
+        [InlineData("serials.mediaserial2", "mediaserial2")]
+        [InlineData("serials.mediaserial3", "mediaserial3")]
+        [InlineData("serials.mediastamp", "mediastamp")]
+        [InlineData("serials.pcbserial", "pcbserial")]
+        [InlineData("serials.romchipserial1", "romchipserial1")]
+        [InlineData("serials.romchipserial2", "romchipserial2")]
+        [InlineData("serials.savechipserial", "savechipserial")]
+        public void Matches_Serials(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Serials obj = new Serials
+            {
+                BoxBarcode = "boxbarcode",
+                BoxSerial = "boxserial",
+                ChipSerial = "chipserial",
+                DigitalSerial1 = "digitalserial1",
+                DigitalSerial2 = "digitalserial2",
+                LockoutSerial = "lockoutserial",
+                MediaSerial1 = "mediaserial1",
+                MediaSerial2 = "mediaserial2",
+                MediaSerial3 = "mediaserial3",
+                MediaStamp = "mediastamp",
+                PCBSerial = "pcbserial",
+                RomChipSerial1 = "romchipserial1",
+                RomChipSerial2 = "romchipserial2",
+                SaveChipSerial = "savechipserial",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
     }
 }

@@ -706,6 +706,35 @@ namespace SabreTools.Metadata.Filter
             "xxhash364",
         ];
 
+        /// <summary>
+        /// Known keys for Sample
+        /// </summary>
+        private static readonly string[] _sampleKeys =
+        [
+            "name",
+        ];
+
+        /// <summary>
+        /// Known keys for Serials
+        /// </summary>
+        private static readonly string[] _serialsKeys =
+        [
+            "boxbarcode",
+            "boxserial",
+            "chipserial",
+            "digitalserial1",
+            "digitalserial2",
+            "lockoutserial",
+            "mediaserial1",
+            "mediaserial2",
+            "mediaserial3",
+            "mediastamp",
+            "pcbserial",
+            "romchipserial1",
+            "romchipserial2",
+            "savechipserial",
+        ];
+
         #endregion
 
         /// <summary>
@@ -917,6 +946,8 @@ namespace SabreTools.Metadata.Filter
                 "release" => _releaseKeys,
                 "releasedetails" => _releaseDetailsKeys,
                 "rom" => _romKeys,
+                "sample" => _sampleKeys,
+                "serials" => _serialsKeys,
                 _ => null,
             };
 
