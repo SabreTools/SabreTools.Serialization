@@ -1406,5 +1406,89 @@ namespace SabreTools.Metadata.Filter.Test
         }
 
         #endregion
+
+        #region Media
+
+        [Theory]
+        [InlineData("media.md5", "md5")]
+        [InlineData("media.name", "name")]
+        [InlineData("media.sha1", "sha1")]
+        [InlineData("media.sha256", "sha256")]
+        [InlineData("media.spamsum", "spamsum")]
+        public void Matches_Media(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Media obj = new Media
+            {
+                MD5 = "md5",
+                Name = "name",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Original
+
+        [Theory]
+        [InlineData("original.content", "content")]
+        [InlineData("original.value", "yes")]
+        public void Matches_Original(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Original obj = new Original
+            {
+                Content = "content",
+                Value = true,
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Part
+
+        [Theory]
+        [InlineData("part.interface", "interface")]
+        [InlineData("part.name", "name")]
+        public void Matches_Part(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Part obj = new Part
+            {
+                Interface = "interface",
+                Name = "name",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
+
+        #region Port
+
+        [Theory]
+        [InlineData("port.tag", "tag")]
+        public void Matches_Port(string itemField, string value)
+        {
+            var filter = new FilterObject(itemField, value, Operation.Equals);
+            Port obj = new Port
+            {
+                Tag = "tag",
+            };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        #endregion
     }
 }

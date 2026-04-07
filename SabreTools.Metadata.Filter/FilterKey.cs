@@ -478,6 +478,44 @@ namespace SabreTools.Metadata.Filter
             "year",
         ];
 
+        /// <summary>
+        /// Known keys for Media
+        /// </summary>
+        private static readonly string[] _mediaKeys =
+        [
+            "md5",
+            "name",
+            "sha1",
+            "sha256",
+            "spamsum",
+        ];
+
+        /// <summary>
+        /// Known keys for Original
+        /// </summary>
+        private static readonly string[] _originalKeys =
+        [
+            "content",
+            "value",
+        ];
+
+        /// <summary>
+        /// Known keys for Part
+        /// </summary>
+        private static readonly string[] _partKeys =
+        [
+            "interface",
+            "name",
+        ];
+
+        /// <summary>
+        /// Known keys for Port
+        /// </summary>
+        private static readonly string[] _portKeys =
+        [
+            "tag",
+        ];
+
         #endregion
 
         /// <summary>
@@ -676,9 +714,15 @@ namespace SabreTools.Metadata.Filter
                 "driver" => _driverKeys,
                 "extension" => _extensionKeys,
                 "feature" or "partfeature" => _featureKeys,
+                "game" or "machine" or "resource" or "set" => _machineKeys,
+                "header" => _headerKeys,
                 "info" => _infoKeys,
                 "input" => _inputKeys,
                 "instance" => _instanceKeys,
+                "media" => _mediaKeys,
+                "original" => _originalKeys,
+                "part" => _partKeys,
+                "port" => _portKeys,
                 _ => null,
             };
 
