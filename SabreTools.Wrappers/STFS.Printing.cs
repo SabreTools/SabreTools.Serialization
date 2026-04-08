@@ -213,20 +213,20 @@ namespace SabreTools.Wrappers
                     break;
                 }
                 if (i == 0)
-                    builder.AppendLine("Zeroed", "  Licensing Data");
+                    builder.AppendLine("Zeroed", "    Licensing Data");
             }
 
             for (int i = 0; i < lastLicenseData; i++)
             {
                 if (ld[i].LicenseID == 0 && ld[i].LicenseBits == 0 && ld[i].LicenseFlags == 0)
                 {
-                    builder.AppendLine("Zeroed", $" License Entry {i}");
+                    builder.AppendLine("Zeroed", $"    License Entry {i}");
                 }
                 else
                 {
-                    builder.AppendLine(ld[i].LicenseID, $"  License Entry {i} ID");
-                    builder.AppendLine(ld[i].LicenseBits, $"  License Entry {i} Bits");
-                    builder.AppendLine(ld[i].LicenseFlags, $"  License Entry {i} Flags");
+                    builder.AppendLine(ld[i].LicenseID, $"    License Entry {i} ID");
+                    builder.AppendLine(ld[i].LicenseBits, $"    License Entry {i} Bits");
+                    builder.AppendLine(ld[i].LicenseFlags, $"    License Entry {i} Flags");
                 }
             }
 
