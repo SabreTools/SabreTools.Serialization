@@ -785,15 +785,15 @@ namespace SabreTools.Wrappers
             #region STFS
 
             // LIVE
-            if (magic.StartsWith([0x4C, 0x49, 0x56, 0x45]))
+            if (magic.StartsWith(Data.Models.STFS.Constants.MagicBytesLIVE))
                 return WrapperType.STFS;
 
             // PIRS
-            if (magic.StartsWith([0x50, 0x49, 0x52, 0x53]))
+            if (magic.StartsWith(Data.Models.STFS.Constants.MagicBytesPIRS))
                 return WrapperType.STFS;
 
             // "CON "
-            if (magic.StartsWith([0x43, 0x4F, 0x4E, 0x20]))
+            if (magic.StartsWith(Data.Models.STFS.Constants.MagicBytesCON))
                 return WrapperType.STFS;
 
             #endregion

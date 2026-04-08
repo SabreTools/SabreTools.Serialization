@@ -29,12 +29,11 @@ namespace SabreTools.Wrappers
         {
             builder.AppendLine(header.MagicBytes, "  Magic Bytes");
 
+            builder.AppendLine();
+
             Print(builder, header.Signature);
 
-            foreach (var le in header.LicensingData)
-            {
-                Print(builder, le);
-            }
+            Print(builder, header.LicensingData);
 
             builder.AppendLine(header.HeaderHash, "  Header Hash");
             builder.AppendLine(header.HeaderSize, "  Header Size");
@@ -53,6 +52,8 @@ namespace SabreTools.Wrappers
             builder.AppendLine(header.ConsoleID, "  Console ID");
             builder.AppendLine(header.ProfileID, "  Profile ID");
 
+            builder.AppendLine();
+
             Print(builder, header.VolumeDescriptor);
 
             builder.AppendLine(header.DataFileCount, "  Data File Count");
@@ -68,31 +69,98 @@ namespace SabreTools.Wrappers
                 builder.AppendLine(header.EpisodeNumber, "  Episode Number");
             }
 
-            // TODO: Print "Zeroed" if padding is all zeroes
-            builder.AppendLine(header.Padding, "  Padding");
-            builder.AppendLine(header.DeviceID, "  Device ID");
-            
-            // TODO: print as 18 different strings, 128 bytes each
-            builder.AppendLine(header.DisplayName, "  Display Name");
-            
-            // TODO: print as 18 different strings, 128 bytes each
-            builder.AppendLine(header.DisplayDescription, "  Display Description");
+            if (Array.TrueForAll(header.Padding, b => b == 0))
+                builder.AppendLine("Zeroed", "  Padding");
+            else
+                builder.AppendLine(header.Padding, "  Padding");
 
-            builder.AppendLine(header.PublisherName, "  Publisher Name");
-            builder.AppendLine(header.TitleName, "  Title Name");
+            builder.AppendLine(header.DeviceID, "  Device ID");
+
+            if (Array.TrueForAll(header.DisplayName, b => b == 0))
+            {
+                builder.AppendLine("Zeroed", "  Display Name");
+            }
+            else
+            {
+                for (int i = 0; i < 18; i++)
+                {
+                    byte[] localeString = new byte[128];
+                    Array.Copy(header.DisplayName, i * 128, localeString, 0, 128);
+                    if (!Array.TrueForAll(localeString, b => b == 0))
+                    {
+                        builder.AppendLine(localeString, $"  Display Name {i}");
+                        builder.AppendLine(Encoding.BigEndianUnicode.GetString(localeString), $"  Display Name {i} (Parsed)");
+                    }
+                }
+            }
+
+            if (Array.TrueForAll(header.DisplayDescription, b => b == 0))
+            {
+                builder.AppendLine("Zeroed", "  Display Description");
+            }
+            else
+            {
+                for (int i = 0; i < 18; i++)
+                {
+                    byte[] localeString = new byte[128];
+                    Array.Copy(header.DisplayDescription, i * 128, localeString, 0, 128);
+                    if (!Array.TrueForAll(localeString, b => b == 0))
+                    {
+                        builder.AppendLine(localeString, $"  Display Description {i}");
+                        builder.AppendLine(Encoding.BigEndianUnicode.GetString(localeString), $"  Display Description {i} (Parsed)");
+                    }
+                }
+            }
+
+            if (Array.TrueForAll(header.PublisherName, b => b == 0))
+            {
+                builder.AppendLine("Zeroed", "  Publisher Name");
+            }
+            else
+            {
+                builder.AppendLine(header.PublisherName, "  Publisher Name");
+                builder.AppendLine(Encoding.BigEndianUnicode.GetString(header.PublisherName), "  Publisher Name (Parsed)");
+            }
+
+            if (Array.TrueForAll(header.TitleName, b => b == 0))
+            {
+                builder.AppendLine("Zeroed", "  Title Name");
+            }
+            else
+            {
+                builder.AppendLine(header.TitleName, "  Title Name");
+                builder.AppendLine(Encoding.BigEndianUnicode.GetString(header.TitleName), "  Title Name (Parsed)");
+            }
+
             builder.AppendLine(header.TransferFlags, "  Transfer Flags"); // See Enums.TransferFlags
             builder.AppendLine(header.ThumbnailImageSize, "  Thumbnail Image Size");
             builder.AppendLine(header.TitleThumbnailImageSize, "  Title Thumbnail Image Size");
             
             if (header.AdditionalDisplayNames is not null)
             {
-                // TODO: print as 18 different strings, 128 bytes each
-                builder.AppendLine(header.AdditionalDisplayNames, "  Additional Display Names");
+                for (int i = 0; i < 18; i++)
+                {
+                    byte[] localeString = new byte[128];
+                    Array.Copy(header.AdditionalDisplayNames, i * 128, localeString, 0, 128);
+                    if (!Array.TrueForAll(localeString, b => b == 0))
+                    {
+                        builder.AppendLine(localeString, $"  Additional Display Name {i}");
+                        builder.AppendLine(Encoding.BigEndianUnicode.GetString(localeString), $"  Additional Display Name {i} (Parsed)");
+                    }
+                }
             }
             if (header.AdditionalDisplayDescriptions is not null)
             {
-                // TODO: print as 18 different strings, 128 bytes each
-                builder.AppendLine(header.AdditionalDisplayDescriptions, "  Additional Display Descriptions");                
+                for (int i = 0; i < 18; i++)
+                {
+                    byte[] localeString = new byte[128];
+                    Array.Copy(header.AdditionalDisplayDescriptions, i * 128, localeString, 0, 128);
+                    if (!Array.TrueForAll(localeString, b => b == 0))
+                    {
+                        builder.AppendLine(localeString, $"  Additional Display Description {i}");
+                        builder.AppendLine(Encoding.BigEndianUnicode.GetString(localeString), $"  Additional Display Description {i} (Parsed)");
+                    }
+                }     
             }
 
             builder.AppendLine();
@@ -100,68 +168,100 @@ namespace SabreTools.Wrappers
 
         protected static void Print(StringBuilder builder, Signature? signature)
         {
+            builder.AppendLine("  Signature Information");
+            builder.AppendLine("  -------------------------");
+
             if (signature is MicrosoftSignature ms)
             {
-                builder.AppendLine(ms.PackageSignature, "  Package Signature");
-                // TODO: Print "Zeroed" if padding is all zeroes
-                builder.AppendLine(ms.Padding, "  Padding");
+                builder.AppendLine(ms.PackageSignature, "    Package Signature");
+                if (Array.TrueForAll(ms.Padding, b => b == 0))
+                    builder.AppendLine("Zeroed", "    Padding");
+                else
+                    builder.AppendLine(ms.Padding, "    Padding");
             }
             else if (signature is ConsoleSignature cs)
             {
-                builder.AppendLine(cs.CertificateSize, "  Certificate Size");
-                builder.AppendLine(cs.ConsoleID, "  Console ID");
-                builder.AppendLine(cs.PartNumber, "  Part Number");
-                builder.AppendLine(cs.ConsoleType, "  Console Type");
-                builder.AppendLine(cs.CertificateDate, "  Certificate Date");
-                builder.AppendLine(cs.PublicExponent, "  Public Exponent");
-                builder.AppendLine(cs.PublicModulus, "  Public Modulus");
-                builder.AppendLine(cs.CertificateSignature, "  Certificate Signature");
-                builder.AppendLine(cs.Signature, "  Signature");
+                builder.AppendLine(cs.CertificateSize, "    Certificate Size");
+                builder.AppendLine(cs.ConsoleID, "    Console ID");
+                builder.AppendLine(cs.PartNumber, "    Part Number");
+                builder.AppendLine(cs.ConsoleType, "    Console Type");
+                builder.AppendLine(cs.CertificateDate, "    Certificate Date");
+                builder.AppendLine(cs.PublicExponent, "    Public Exponent");
+                builder.AppendLine(cs.PublicModulus, "    Public Modulus");
+                builder.AppendLine(cs.CertificateSignature, "    Certificate Signature");
+                builder.AppendLine(cs.Signature, "    Signature");
             }
             else
             {
-                builder.AppendLine("  Unknown Signature Type");
+                builder.AppendLine("    Unknown Signature Type");
             }
 
             builder.AppendLine();
         }
 
-        protected static void Print(StringBuilder builder, LicenseEntry le)
+        protected static void Print(StringBuilder builder, LicenseEntry[] ld)
         {
-            builder.AppendLine(le.LicenseID, "  License ID");
-            builder.AppendLine(le.LicenseBits, "  License Bits");
-            builder.AppendLine(le.LicenseFlags, "  License Flags");
+            builder.AppendLine("  Licensing Data Information");
+            builder.AppendLine("  -------------------------");
+
+            int lastLicenseData = 0;
+            for (int i = ld.Length - 1; i >= 0; i--)
+            {
+                if (ld[i].LicenseID != 0 || ld[i].LicenseBits != 0 || ld[i].LicenseFlags != 0)
+                {
+                    lastLicenseData = i + 1;
+                    break;
+                }
+                if (i == 0)
+                    builder.AppendLine("Zeroed", "  Licensing Data");
+            }
+
+            for (int i = 0; i < lastLicenseData; i++)
+            {
+                if (ld[i].LicenseID == 0 && ld[i].LicenseBits == 0 && ld[i].LicenseFlags == 0)
+                {
+                    builder.AppendLine("Zeroed", $" License Entry {i}");
+                }
+                else
+                {
+                    builder.AppendLine(ld[i].LicenseID, $"  License Entry {i} ID");
+                    builder.AppendLine(ld[i].LicenseBits, $"  License Entry {i} Bits");
+                    builder.AppendLine(ld[i].LicenseFlags, $"  License Entry {i} Flags");
+                }
+            }
 
             builder.AppendLine();
         }
 
         protected static void Print(StringBuilder builder, VolumeDescriptor? vd)
         {
+            builder.AppendLine("  Volume Descriptor Information");
+            builder.AppendLine("  -------------------------");
             if (vd is STFSDescriptor stfs)
             {
-                builder.AppendLine(stfs.VolumeDescriptorSize, "  Volume Descriptor Size");
-                builder.AppendLine(stfs.Reserved, "  Reserved");
-                builder.AppendLine(stfs.BlockSeparation, "  Block Separation");
-                builder.AppendLine(stfs.FileTableBlockCount, "  File Table Block Count");
-                builder.AppendLine((uint)stfs.FileTableBlockNumber, "File Table Block Number");
-                builder.AppendLine(stfs.TopHashTableHash, "  Top Hash Table Hash");
-                builder.AppendLine(stfs.TotalAllocatedBlockCount, "  Total Allocated Block Count");
-                builder.AppendLine(stfs.TotalUnallocatedBlockCount, "  Total Unallocated Block Count");
+                builder.AppendLine(stfs.VolumeDescriptorSize, "    Volume Descriptor Size");
+                builder.AppendLine(stfs.Reserved, "    Reserved");
+                builder.AppendLine(stfs.BlockSeparation, "    Block Separation");
+                builder.AppendLine(stfs.FileTableBlockCount, "    File Table Block Count");
+                builder.AppendLine((uint)stfs.FileTableBlockNumber, "    File Table Block Number");
+                builder.AppendLine(stfs.TopHashTableHash, "    Top Hash Table Hash");
+                builder.AppendLine(stfs.TotalAllocatedBlockCount, "    Total Allocated Block Count");
+                builder.AppendLine(stfs.TotalUnallocatedBlockCount, "    Total Unallocated Block Count");
             }
             else if (vd is SVODDescriptor svod)
             {
-                builder.AppendLine(svod.VolumeDescriptorSize, "  Volume Descriptor Size");
-                builder.AppendLine(svod.BlockCacheElementCount, "  Block Cache Element Count");
-                builder.AppendLine(svod.WorkerThreadProcessor, "  Worker Thread Processor");
-                builder.AppendLine(svod.WorkerThreadPriority, "  Worker Thread Priority");
-                builder.AppendLine(svod.Hash, "  Hash");
-                builder.AppendLine((uint)svod.DataBlockCount, "  Data Block Count");
-                builder.AppendLine((uint)svod.DataBlockOffset, "  Data Block Offset");
-                builder.AppendLine(svod.Padding, "  Padding");
+                builder.AppendLine(svod.VolumeDescriptorSize, "    Volume Descriptor Size");
+                builder.AppendLine(svod.BlockCacheElementCount, "    Block Cache Element Count");
+                builder.AppendLine(svod.WorkerThreadProcessor, "    Worker Thread Processor");
+                builder.AppendLine(svod.WorkerThreadPriority, "    Worker Thread Priority");
+                builder.AppendLine(svod.Hash, "    Hash");
+                builder.AppendLine((uint)svod.DataBlockCount, "    Data Block Count");
+                builder.AppendLine((uint)svod.DataBlockOffset, "    Data Block Offset");
+                builder.AppendLine(svod.Padding, "    Padding");
             }
             else
             {
-                builder.AppendLine("  Unknown Volume Descriptor Type");
+                builder.AppendLine("    Unknown Volume Descriptor Type");
             }
 
             builder.AppendLine();
