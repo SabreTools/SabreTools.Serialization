@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace SabreTools.Data.Models.STFS
 {
     /// <summary>
@@ -30,7 +28,7 @@ namespace SabreTools.Data.Models.STFS
         public LicenseEntry[] LicensingData { get; set; } = new LicenseEntry[16];
 
         /// <summary>
-        /// SHA-1 Integrity Hash of the header (from ContentType/0x344 to first hash table) 
+        /// SHA-1 Integrity Hash of the header (from ContentType/0x344 to first hash table)
         /// </summary>
         /// <remarks>20 bytes</remarks>
         public byte[] HeaderHash { get; set; } = new byte[20];

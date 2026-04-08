@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.STFS;
 using SabreTools.IO.Extensions;
-using SabreTools.Numerics;
 using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Serialization.Readers

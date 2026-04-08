@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using SabreTools.Data.Models.STFS;
-using SabreTools.Numerics;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
@@ -60,7 +59,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine(header.DataFileCombinedSize, "  Data File Combined Size");
             builder.AppendLine(header.DescriptorType, "  Descriptor Type");
             builder.AppendLine(header.Reserved, "  Reserved");
-            
+
             if (header.MetadataVersion == 2)
             {
                 builder.AppendLine(header.SeriesID, "  Series ID");
@@ -135,7 +134,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine(header.TransferFlags, "  Transfer Flags"); // See Enums.TransferFlags
             builder.AppendLine(header.ThumbnailImageSize, "  Thumbnail Image Size");
             builder.AppendLine(header.TitleThumbnailImageSize, "  Title Thumbnail Image Size");
-            
+
             if (header.AdditionalDisplayNames is not null)
             {
                 for (int i = 0; i < 18; i++)
@@ -149,6 +148,7 @@ namespace SabreTools.Wrappers
                     }
                 }
             }
+
             if (header.AdditionalDisplayDescriptions is not null)
             {
                 for (int i = 0; i < 18; i++)
@@ -160,7 +160,7 @@ namespace SabreTools.Wrappers
                         builder.AppendLine(localeString, $"  Additional Display Description {i}");
                         builder.AppendLine(Encoding.BigEndianUnicode.GetString(localeString), $"  Additional Display Description {i} (Parsed)");
                     }
-                }     
+                }
             }
 
             builder.AppendLine();
@@ -212,6 +212,7 @@ namespace SabreTools.Wrappers
                     lastLicenseData = i + 1;
                     break;
                 }
+
                 if (i == 0)
                     builder.AppendLine("Zeroed", "    Licensing Data");
             }

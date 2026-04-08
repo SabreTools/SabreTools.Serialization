@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using SabreTools.Numerics;
 
 namespace SabreTools.Data.Models.STFS

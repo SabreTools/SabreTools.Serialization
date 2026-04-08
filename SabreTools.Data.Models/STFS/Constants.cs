@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace SabreTools.Data.Models.STFS
 {
     /// <see href="https://free60.org/System-Software/Formats/STFS/"/>
