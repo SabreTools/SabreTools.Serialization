@@ -14,16 +14,13 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = new Data.Models.Metadata.MetadataFile();
 
             if (obj?.ClrMamePro is not null)
-                metadataFile[Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj.ClrMamePro);
+                metadataFile.Header = ConvertHeaderToInternalModel(obj.ClrMamePro);
 
             if (obj?.Game is not null && obj.Game.Length > 0)
-            {
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
-                    = Array.ConvertAll(obj.Game, ConvertMachineToInternalModel);
-            }
+                metadataFile.Machine = Array.ConvertAll(obj.Game, ConvertMachineToInternalModel);
 
             if (obj?.Info is not null)
-                metadataFile[Data.Models.Metadata.MetadataFile.InfoSourceKey] = ConvertInfoSourceToInternalModel(obj.Info);
+                metadataFile.InfoSource = ConvertInfoSourceToInternalModel(obj.Info);
 
             return metadataFile;
         }
@@ -35,21 +32,21 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.NameKey] = item.Name,
-                [Data.Models.Metadata.Header.DescriptionKey] = item.Description,
-                [Data.Models.Metadata.Header.RootDirKey] = item.RootDir,
-                [Data.Models.Metadata.Header.CategoryKey] = item.Category,
-                [Data.Models.Metadata.Header.VersionKey] = item.Version,
-                [Data.Models.Metadata.Header.DateKey] = item.Date,
-                [Data.Models.Metadata.Header.AuthorKey] = item.Author,
-                [Data.Models.Metadata.Header.HomepageKey] = item.Homepage,
-                [Data.Models.Metadata.Header.UrlKey] = item.Url,
-                [Data.Models.Metadata.Header.CommentKey] = item.Comment,
-                [Data.Models.Metadata.Header.HeaderKey] = item.Header,
-                [Data.Models.Metadata.Header.TypeKey] = item.Type,
-                [Data.Models.Metadata.Header.ForceMergingKey] = item.ForceMerging,
-                [Data.Models.Metadata.Header.ForceZippingKey] = item.ForceZipping,
-                [Data.Models.Metadata.Header.ForcePackingKey] = item.ForcePacking,
+                Name = item.Name,
+                Description = item.Description,
+                RootDir = item.RootDir,
+                Category = item.Category,
+                Version = item.Version,
+                Date = item.Date,
+                Author = item.Author,
+                Homepage = item.Homepage,
+                Url = item.Url,
+                Comment = item.Comment,
+                HeaderSkipper = item.Header,
+                Type = item.Type,
+                ForceMerging = item.ForceMerging,
+                ForceZipping = item.ForceZipping,
+                ForcePacking = item.ForcePacking,
             };
             return header;
         }
@@ -57,92 +54,59 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="GameBase"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
-        private static Data.Models.Metadata.Machine? ConvertMachineToInternalModel(GameBase? item)
+        private static Data.Models.Metadata.Machine ConvertMachineToInternalModel(GameBase item)
         {
-            if (item is null)
-                return null;
-
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.NameKey] = item.Name,
-                [Data.Models.Metadata.Machine.DescriptionKey] = item.Description,
-                // [Data.Models.Metadata.Machine.DriverKey] = item.DriverStatus, // TODO: Needs metadata mapping
-                [Data.Models.Metadata.Machine.YearKey] = item.Year,
-                [Data.Models.Metadata.Machine.ManufacturerKey] = item.Manufacturer,
-                [Data.Models.Metadata.Machine.CategoryKey] = item.Category,
-                [Data.Models.Metadata.Machine.CloneOfKey] = item.CloneOf,
-                [Data.Models.Metadata.Machine.RomOfKey] = item.RomOf,
-                [Data.Models.Metadata.Machine.SampleOfKey] = item.SampleOf,
+                Name = item.Name,
+                Description = item.Description,
+                // Driver = item.DriverStatus, // TODO: Needs metadata mapping
+                Year = item.Year,
+                Manufacturer = item.Manufacturer,
+                Category = item.Category is null ? null : [item.Category],
+                CloneOf = item.CloneOf,
+                RomOf = item.RomOf,
+                SampleOf = item.SampleOf,
             };
 
             if (item.Release is not null && item.Release.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.ReleaseKey]
-                    = Array.ConvertAll(item.Release, ConvertToInternalModel);
-            }
+                machine.Release = Array.ConvertAll(item.Release, ConvertToInternalModel);
 
             if (item.BiosSet is not null && item.BiosSet.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.BiosSetKey]
-                    = Array.ConvertAll(item.BiosSet, ConvertToInternalModel);
-            }
+                machine.BiosSet = Array.ConvertAll(item.BiosSet, ConvertToInternalModel);
 
             if (item.Rom is not null && item.Rom.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.RomKey]
-                    = Array.ConvertAll(item.Rom, ConvertToInternalModel);
-            }
+                machine.Rom = Array.ConvertAll(item.Rom, ConvertToInternalModel);
 
             if (item.Disk is not null && item.Disk.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.DiskKey]
-                    = Array.ConvertAll(item.Disk, ConvertToInternalModel);
-            }
+                machine.Disk = Array.ConvertAll(item.Disk, ConvertToInternalModel);
 
             if (item.Media is not null && item.Media.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.MediaKey]
-                    = Array.ConvertAll(item.Media, ConvertToInternalModel);
-            }
+                machine.Media = Array.ConvertAll(item.Media, ConvertToInternalModel);
 
             if (item.Sample is not null && item.Sample.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.SampleKey]
-                    = Array.ConvertAll(item.Sample, ConvertToInternalModel);
-            }
+                machine.Sample = Array.ConvertAll(item.Sample, ConvertToInternalModel);
 
             if (item.Archive is not null && item.Archive.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.ArchiveKey]
-                    = Array.ConvertAll(item.Archive, ConvertToInternalModel);
-            }
+                machine.Archive = Array.ConvertAll(item.Archive, ConvertToInternalModel);
 
             if (item.Chip is not null && item.Chip.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.ChipKey]
-                    = Array.ConvertAll(item.Chip, ConvertToInternalModel);
-            }
+                machine.Chip = Array.ConvertAll(item.Chip, ConvertToInternalModel);
 
             if (item.Video is not null)
-            {
-                machine[Data.Models.Metadata.Machine.VideoKey]
-                    = Array.ConvertAll(item.Video, ConvertToInternalModel);
-            }
+                machine.Video = Array.ConvertAll(item.Video, ConvertToInternalModel);
 
             if (item.Sound is not null)
-                machine[Data.Models.Metadata.Machine.SoundKey] = ConvertToInternalModel(item.Sound);
+                machine.Sound = ConvertToInternalModel(item.Sound);
 
             if (item.Input is not null)
-                machine[Data.Models.Metadata.Machine.InputKey] = ConvertToInternalModel(item.Input);
+                machine.Input = ConvertToInternalModel(item.Input);
 
             if (item.DipSwitch is not null && item.DipSwitch.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.DipSwitchKey]
-                    = Array.ConvertAll(item.DipSwitch, ConvertToInternalModel);
-            }
+                machine.DipSwitch = Array.ConvertAll(item.DipSwitch, ConvertToInternalModel);
 
             if (item.Driver is not null)
-                machine[Data.Models.Metadata.Machine.DriverKey] = ConvertToInternalModel(item.Driver);
+                machine.Driver = ConvertToInternalModel(item.Driver);
 
             return machine;
         }
@@ -154,7 +118,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var archive = new Data.Models.Metadata.Archive
             {
-                [Data.Models.Metadata.Archive.NameKey] = item.Name,
+                Name = item.Name,
             };
             return archive;
         }
@@ -166,9 +130,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var biosset = new Data.Models.Metadata.BiosSet
             {
-                [Data.Models.Metadata.BiosSet.NameKey] = item.Name,
-                [Data.Models.Metadata.BiosSet.DescriptionKey] = item.Description,
-                [Data.Models.Metadata.BiosSet.DefaultKey] = item.Default,
+                Name = item.Name,
+                Description = item.Description,
+                Default = item.Default,
             };
             return biosset;
         }
@@ -180,10 +144,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var chip = new Data.Models.Metadata.Chip
             {
-                [Data.Models.Metadata.Chip.ChipTypeKey] = item.Type,
-                [Data.Models.Metadata.Chip.NameKey] = item.Name,
-                [Data.Models.Metadata.Chip.FlagsKey] = item.Flags,
-                [Data.Models.Metadata.Chip.ClockKey] = item.Clock,
+                ChipType = item.Type,
+                Name = item.Name,
+                Flags = item.Flags,
+                Clock = item.Clock,
             };
             return chip;
         }
@@ -195,9 +159,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipswitch = new Data.Models.Metadata.DipSwitch
             {
-                [Data.Models.Metadata.DipSwitch.NameKey] = item.Name,
-                [Data.Models.Metadata.DipSwitch.EntryKey] = item.Entry,
-                [Data.Models.Metadata.DipSwitch.DefaultKey] = item.Default,
+                Name = item.Name,
+                Entry = item.Entry,
+                Default = item.Default,
             };
             return dipswitch;
         }
@@ -209,12 +173,12 @@ namespace SabreTools.Serialization.CrossModel
         {
             var disk = new Data.Models.Metadata.Disk
             {
-                [Data.Models.Metadata.Disk.NameKey] = item.Name,
-                [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
-                [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
-                [Data.Models.Metadata.Disk.MergeKey] = item.Merge,
-                [Data.Models.Metadata.Disk.StatusKey] = item.Status,
-                [Data.Models.Metadata.Disk.FlagsKey] = item.Flags,
+                Name = item.Name,
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                Merge = item.Merge,
+                Status = item.Status,
+                Flags = item.Flags,
             };
             return disk;
         }
@@ -226,11 +190,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var driver = new Data.Models.Metadata.Driver
             {
-                [Data.Models.Metadata.Driver.StatusKey] = item.Status,
-                [Data.Models.Metadata.Driver.ColorKey] = item.Color,
-                [Data.Models.Metadata.Driver.SoundKey] = item.Sound,
-                [Data.Models.Metadata.Driver.PaletteSizeKey] = item.PaletteSize,
-                [Data.Models.Metadata.Driver.BlitKey] = item.Blit,
+                Status = item.Status,
+                Color = item.Color,
+                Sound = item.Sound,
+                PaletteSize = item.PaletteSize,
+                Blit = item.Blit,
             };
             return driver;
         }
@@ -242,12 +206,12 @@ namespace SabreTools.Serialization.CrossModel
         {
             var input = new Data.Models.Metadata.Input
             {
-                [Data.Models.Metadata.Input.PlayersKey] = item.Players,
-                [Data.Models.Metadata.Input.ControlKey] = item.Control,
-                [Data.Models.Metadata.Input.ButtonsKey] = item.Buttons,
-                [Data.Models.Metadata.Input.CoinsKey] = item.Coins,
-                [Data.Models.Metadata.Input.TiltKey] = item.Tilt,
-                [Data.Models.Metadata.Input.ServiceKey] = item.Service,
+                Players = item.Players,
+                ControlAttr = item.Control,
+                Buttons = item.Buttons,
+                Coins = item.Coins,
+                Tilt = item.Tilt,
+                Service = item.Service,
             };
             return input;
         }
@@ -259,11 +223,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var media = new Data.Models.Metadata.Media
             {
-                [Data.Models.Metadata.Media.NameKey] = item.Name,
-                [Data.Models.Metadata.Media.MD5Key] = item.MD5,
-                [Data.Models.Metadata.Media.SHA1Key] = item.SHA1,
-                [Data.Models.Metadata.Media.SHA256Key] = item.SHA256,
-                [Data.Models.Metadata.Media.SpamSumKey] = item.SpamSum,
+                Name = item.Name,
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                SHA256 = item.SHA256,
+                SpamSum = item.SpamSum,
             };
             return media;
         }
@@ -275,11 +239,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var release = new Data.Models.Metadata.Release
             {
-                [Data.Models.Metadata.Release.NameKey] = item.Name,
-                [Data.Models.Metadata.Release.RegionKey] = item.Region,
-                [Data.Models.Metadata.Release.LanguageKey] = item.Language,
-                [Data.Models.Metadata.Release.DateKey] = item.Date,
-                [Data.Models.Metadata.Release.DefaultKey] = item.Default,
+                Name = item.Name,
+                Region = item.Region,
+                Language = item.Language,
+                Date = item.Date,
+                Default = item.Default,
             };
             return release;
         }
@@ -291,33 +255,33 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.NameKey] = item.Name,
-                [Data.Models.Metadata.Rom.SizeKey] = item.Size,
-                [Data.Models.Metadata.Rom.CRC16Key] = item.CRC16,
-                [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
-                [Data.Models.Metadata.Rom.CRC64Key] = item.CRC64,
-                [Data.Models.Metadata.Rom.MD2Key] = item.MD2,
-                [Data.Models.Metadata.Rom.MD4Key] = item.MD4,
-                [Data.Models.Metadata.Rom.MD5Key] = item.MD5,
-                [Data.Models.Metadata.Rom.RIPEMD128Key] = item.RIPEMD128,
-                [Data.Models.Metadata.Rom.RIPEMD160Key] = item.RIPEMD160,
-                [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
-                [Data.Models.Metadata.Rom.SHA256Key] = item.SHA256,
-                [Data.Models.Metadata.Rom.SHA384Key] = item.SHA384,
-                [Data.Models.Metadata.Rom.SHA512Key] = item.SHA512,
-                [Data.Models.Metadata.Rom.SpamSumKey] = item.SpamSum,
-                [Data.Models.Metadata.Rom.xxHash364Key] = item.xxHash364,
-                [Data.Models.Metadata.Rom.xxHash3128Key] = item.xxHash3128,
-                [Data.Models.Metadata.Rom.MergeKey] = item.Merge,
-                [Data.Models.Metadata.Rom.StatusKey] = item.Status,
-                [Data.Models.Metadata.Rom.RegionKey] = item.Region,
-                [Data.Models.Metadata.Rom.FlagsKey] = item.Flags,
-                [Data.Models.Metadata.Rom.OffsetKey] = item.Offs,
-                [Data.Models.Metadata.Rom.SerialKey] = item.Serial,
-                [Data.Models.Metadata.Rom.HeaderKey] = item.Header,
-                [Data.Models.Metadata.Rom.DateKey] = item.Date,
-                [Data.Models.Metadata.Rom.InvertedKey] = item.Inverted,
-                [Data.Models.Metadata.Rom.MIAKey] = item.MIA,
+                Name = item.Name,
+                Size = item.Size,
+                CRC16 = item.CRC16,
+                CRC32 = item.CRC,
+                CRC64 = item.CRC64,
+                MD2 = item.MD2,
+                MD4 = item.MD4,
+                MD5 = item.MD5,
+                RIPEMD128 = item.RIPEMD128,
+                RIPEMD160 = item.RIPEMD160,
+                SHA1 = item.SHA1,
+                SHA256 = item.SHA256,
+                SHA384 = item.SHA384,
+                SHA512 = item.SHA512,
+                SpamSum = item.SpamSum,
+                xxHash364 = item.xxHash364,
+                xxHash3128 = item.xxHash3128,
+                Merge = item.Merge,
+                Status = item.Status,
+                Region = item.Region,
+                Flags = item.Flags,
+                Offset = item.Offs,
+                Serial = item.Serial,
+                Header = item.Header,
+                Date = item.Date,
+                Inverted = item.Inverted,
+                MIA = item.MIA,
             };
             return rom;
         }
@@ -329,7 +293,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sample = new Data.Models.Metadata.Sample
             {
-                [Data.Models.Metadata.Sample.NameKey] = item.Name,
+                Name = item.Name,
             };
             return sample;
         }
@@ -341,7 +305,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sound = new Data.Models.Metadata.Sound
             {
-                [Data.Models.Metadata.Sound.ChannelsKey] = item.Channels,
+                Channels = item.Channels,
             };
             return sound;
         }
@@ -353,13 +317,13 @@ namespace SabreTools.Serialization.CrossModel
         {
             var video = new Data.Models.Metadata.Video
             {
-                [Data.Models.Metadata.Video.ScreenKey] = item.Screen,
-                [Data.Models.Metadata.Video.OrientationKey] = item.Orientation,
-                [Data.Models.Metadata.Video.WidthKey] = item.X,
-                [Data.Models.Metadata.Video.HeightKey] = item.Y,
-                [Data.Models.Metadata.Video.AspectXKey] = item.AspectX,
-                [Data.Models.Metadata.Video.AspectYKey] = item.AspectY,
-                [Data.Models.Metadata.Video.RefreshKey] = item.Freq,
+                Screen = item.Screen,
+                Orientation = item.Orientation,
+                Width = item.X,
+                Height = item.Y,
+                AspectX = item.AspectX,
+                AspectY = item.AspectY,
+                Refresh = item.Freq,
             };
             return video;
         }
@@ -373,10 +337,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var sources = item.Source;
             if (sources is not null && sources.Length > 0)
-            {
-                string[] sourcesCopy = [.. sources];
-                infoSource[Data.Models.Metadata.InfoSource.SourceKey] = sourcesCopy;
-            }
+                infoSource.Source = [.. sources];
 
             return infoSource;
         }

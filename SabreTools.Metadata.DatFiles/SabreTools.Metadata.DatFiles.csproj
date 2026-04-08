@@ -36,7 +36,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj" />
-        <ProjectReference Include="..\SabreTools.Metadata\SabreTools.Metadata.csproj" />
         <ProjectReference Include="..\SabreTools.Metadata.DatItems\SabreTools.Metadata.DatItems.csproj" />
         <ProjectReference Include="..\SabreTools.Metadata.Filter\SabreTools.Metadata.Filter.csproj" />
         <ProjectReference Include="..\SabreTools.Serialization.CrossModel\SabreTools.Serialization.CrossModel.csproj" />

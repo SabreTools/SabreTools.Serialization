@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 using SabreTools.Metadata.Filter;
 using MergingFlag = SabreTools.Data.Models.Metadata.MergingFlag;
 using NodumpFlag = SabreTools.Data.Models.Metadata.NodumpFlag;
@@ -13,75 +12,323 @@ namespace SabreTools.Metadata.DatFiles
     /// Represents all possible DAT header information
     /// </summary>
     [JsonObject("header"), XmlRoot("header")]
-    public sealed class DatHeader : ModelBackedItem<Data.Models.Metadata.Header>, ICloneable
+    public sealed class DatHeader : ICloneable, IEquatable<DatHeader>
     {
-        #region Constants
+        #region Properties
+
+        public string? Author
+        {
+            get => _internal.Author;
+            set => _internal.Author = value;
+        }
+
+        public MergingFlag BiosMode
+        {
+            get => _internal.BiosMode;
+            set => _internal.BiosMode = value;
+        }
+
+        public string? Build
+        {
+            get => _internal.Build;
+            set => _internal.Build = value;
+        }
+
+        public Data.Models.OfflineList.CanOpen? CanOpen
+        {
+            get => _internal.CanOpen;
+            set => _internal.CanOpen = value;
+        }
+
+        [JsonIgnore]
+        public bool CanOpenSpecified => CanOpen is not null;
+
+        public string? Category
+        {
+            get => _internal.Category;
+            set => _internal.Category = value;
+        }
+
+        public string? Comment
+        {
+            get => _internal.Comment;
+            set => _internal.Comment = value;
+        }
+
+        public string? Date
+        {
+            get => _internal.Date;
+            set => _internal.Date = value;
+        }
 
         /// <summary>
         /// Read or write format
         /// </summary>
-        public const string DatFormatKey = "DATFORMAT";
+        public DatFormat? DatFormat { get; set; }
 
-        /// <summary>
-        /// External name of the DAT
-        /// </summary>
-        public const string FileNameKey = "FILENAME";
+        public string? DatVersion
+        {
+            get => _internal.DatVersion;
+            set => _internal.DatVersion = value;
+        }
+
+        public bool? Debug
+        {
+            get => _internal.Debug;
+            set => _internal.Debug = value;
+        }
+
+        public string? Description
+        {
+            get => _internal.Description;
+            set => _internal.Description = value;
+        }
+
+        public string? Email
+        {
+            get => _internal.Email;
+            set => _internal.Email = value;
+        }
+
+        public string? EmulatorVersion
+        {
+            get => _internal.EmulatorVersion;
+            set => _internal.EmulatorVersion = value;
+        }
+
+        public string? FileName
+        {
+            get => _internal.FileName;
+            set => _internal.FileName = value;
+        }
+
+        public MergingFlag ForceMerging
+        {
+            get => _internal.ForceMerging;
+            set => _internal.ForceMerging = value;
+        }
+
+        public NodumpFlag ForceNodump
+        {
+            get => _internal.ForceNodump;
+            set => _internal.ForceNodump = value;
+        }
+
+        public PackingFlag ForcePacking
+        {
+            get => _internal.ForcePacking;
+            set => _internal.ForcePacking = value;
+        }
+
+        public bool? ForceZipping
+        {
+            get => _internal.ForceZipping;
+            set => _internal.ForceZipping = value;
+        }
+
+        public string[]? HeaderRow
+        {
+            get => _internal.HeaderRow;
+            set => _internal.HeaderRow = value;
+        }
+
+        public string? HeaderSkipper
+        {
+            get => _internal.HeaderSkipper;
+            set => _internal.HeaderSkipper = value;
+        }
+
+        public string? Homepage
+        {
+            get => _internal.Homepage;
+            set => _internal.Homepage = value;
+        }
+
+        public string? Id
+        {
+            get => _internal.Id;
+            set => _internal.Id = value;
+        }
+
+        public Data.Models.OfflineList.Images? Images
+        {
+            get => _internal.Images;
+            set => _internal.Images = value;
+        }
+
+        [JsonIgnore]
+        public bool ImagesSpecified => Images is not null;
+
+        public string? ImFolder
+        {
+            get => _internal.ImFolder;
+            set => _internal.ImFolder = value;
+        }
+
+        public Data.Models.OfflineList.Infos? Infos
+        {
+            get => _internal.Infos;
+            set => _internal.Infos = value;
+        }
+
+        [JsonIgnore]
+        public bool InfosSpecified => Infos is not null;
+
+        public bool? LockBiosMode
+        {
+            get => _internal.LockBiosMode;
+            set => _internal.LockBiosMode = value;
+        }
+
+        public bool? LockRomMode
+        {
+            get => _internal.LockRomMode;
+            set => _internal.LockRomMode = value;
+        }
+
+        public bool? LockSampleMode
+        {
+            get => _internal.LockSampleMode;
+            set => _internal.LockSampleMode = value;
+        }
+
+        public string? MameConfig
+        {
+            get => _internal.MameConfig;
+            set => _internal.MameConfig = value;
+        }
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public Data.Models.OfflineList.NewDat? NewDat
+        {
+            get => _internal.NewDat;
+            set => _internal.NewDat = value;
+        }
+
+        [JsonIgnore]
+        public bool NewDatSpecified => NewDat is not null;
+
+        public string? Notes
+        {
+            get => _internal.Notes;
+            set => _internal.Notes = value;
+        }
+
+        public string? Plugin
+        {
+            get => _internal.Plugin;
+            set => _internal.Plugin = value;
+        }
+
+        public string? RefName
+        {
+            get => _internal.RefName;
+            set => _internal.RefName = value;
+        }
+
+        public MergingFlag RomMode
+        {
+            get => _internal.RomMode;
+            set => _internal.RomMode = value;
+        }
+
+        public string? RomTitle
+        {
+            get => _internal.RomTitle;
+            set => _internal.RomTitle = value;
+        }
+
+        public string? RootDir
+        {
+            get => _internal.RootDir;
+            set => _internal.RootDir = value;
+        }
+
+        public MergingFlag SampleMode
+        {
+            get => _internal.SampleMode;
+            set => _internal.SampleMode = value;
+        }
+
+        public string? SchemaLocation
+        {
+            get => _internal.SchemaLocation;
+            set => _internal.SchemaLocation = value;
+        }
+
+        public string? ScreenshotsHeight
+        {
+            get => _internal.ScreenshotsHeight;
+            set => _internal.ScreenshotsHeight = value;
+        }
+
+        public string? ScreenshotsWidth
+        {
+            get => _internal.ScreenshotsWidth;
+            set => _internal.ScreenshotsWidth = value;
+        }
+
+        public Data.Models.OfflineList.Search? Search
+        {
+            get => _internal.Search;
+            set => _internal.Search = value;
+        }
+
+        [JsonIgnore]
+        public bool SearchSpecified => Search is not null;
+
+        public string? System
+        {
+            get => _internal.System;
+            set => _internal.System = value;
+        }
+
+        public string? Timestamp
+        {
+            get => _internal.Timestamp;
+            set => _internal.Timestamp = value;
+        }
+
+        public string? Type
+        {
+            get => _internal.Type;
+            set => _internal.Type = value;
+        }
+
+        public string? Url
+        {
+            get => _internal.Url;
+            set => _internal.Url = value;
+        }
+
+        public string? Version
+        {
+            get => _internal.Version;
+            set => _internal.Version = value;
+        }
 
         #endregion
 
-        #region Fields
+        #region Private Fields
 
-        [JsonIgnore]
-        public bool CanOpenSpecified
-        {
-            get
-            {
-                var canOpen = ReadStringArray(Data.Models.Metadata.Header.CanOpenKey);
-                return canOpen is not null && canOpen.Length > 0;
-            }
-        }
-
-        [JsonIgnore]
-        public bool ImagesSpecified
-        {
-            get
-            {
-                return Read<Data.Models.OfflineList.Images?>(Data.Models.Metadata.Header.ImagesKey) is not null;
-            }
-        }
-
-        [JsonIgnore]
-        public bool InfosSpecified
-        {
-            get
-            {
-                return Read<Data.Models.OfflineList.Infos?>(Data.Models.Metadata.Header.InfosKey) is not null;
-            }
-        }
-
-        [JsonIgnore]
-        public bool NewDatSpecified
-        {
-            get
-            {
-                return Read<Data.Models.OfflineList.NewDat?>(Data.Models.Metadata.Header.NewDatKey) is not null;
-            }
-        }
-
-        [JsonIgnore]
-        public bool SearchSpecified
-        {
-            get
-            {
-                return Read<Data.Models.OfflineList.Search?>(Data.Models.Metadata.Header.SearchKey) is not null;
-            }
-        }
+        /// <summary>
+        /// Internal model
+        /// </summary>
+        private readonly Data.Models.Metadata.Header _internal;
 
         #endregion
 
         #region Constructors
 
-        public DatHeader() { }
+        public DatHeader()
+        {
+            _internal = new();
+        }
 
         public DatHeader(Data.Models.Metadata.Header header)
         {
@@ -95,7 +342,10 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Clone the current header
         /// </summary>
-        public object Clone() => new DatHeader(GetInternalClone());
+        public object Clone() => new DatHeader(GetInternalClone())
+        {
+            DatFormat = DatFormat,
+        };
 
         /// <summary>
         /// Clone just the format from the current header
@@ -104,7 +354,7 @@ namespace SabreTools.Metadata.DatFiles
         {
             var header = new DatHeader();
 
-            header.Write(DatFormatKey, Read<DatFormat>(DatFormatKey));
+            header.DatFormat = DatFormat;
 
             return header;
         }
@@ -116,31 +366,17 @@ namespace SabreTools.Metadata.DatFiles
         {
             var header = (_internal.Clone() as Data.Models.Metadata.Header)!;
 
-            // Remove fields with default values
-            if (header.ReadString(Data.Models.Metadata.Header.ForceMergingKey).AsMergingFlag() == MergingFlag.None)
-                header.Remove(Data.Models.Metadata.Header.ForceMergingKey);
-            if (header.ReadString(Data.Models.Metadata.Header.ForceNodumpKey).AsNodumpFlag() == NodumpFlag.None)
-                header.Remove(Data.Models.Metadata.Header.ForceNodumpKey);
-            if (header.ReadString(Data.Models.Metadata.Header.ForcePackingKey).AsPackingFlag() == PackingFlag.None)
-                header.Remove(Data.Models.Metadata.Header.ForcePackingKey);
-            if (header.ReadString(Data.Models.Metadata.Header.BiosModeKey).AsMergingFlag() == MergingFlag.None)
-                header.Remove(Data.Models.Metadata.Header.BiosModeKey);
-            if (header.ReadString(Data.Models.Metadata.Header.RomModeKey).AsMergingFlag() == MergingFlag.None)
-                header.Remove(Data.Models.Metadata.Header.RomModeKey);
-            if (header.ReadString(Data.Models.Metadata.Header.SampleModeKey).AsMergingFlag() == MergingFlag.None)
-                header.Remove(Data.Models.Metadata.Header.SampleModeKey);
-
             // Convert subheader values
             if (CanOpenSpecified)
-                header[Data.Models.Metadata.Header.CanOpenKey] = new Data.Models.OfflineList.CanOpen { Extension = ReadStringArray(Data.Models.Metadata.Header.CanOpenKey) };
+                header.CanOpen = CanOpen;
             if (ImagesSpecified)
-                header[Data.Models.Metadata.Header.ImagesKey] = Read<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey);
+                header.Images = Images;
             if (InfosSpecified)
-                header[Data.Models.Metadata.Header.InfosKey] = Read<Data.Models.OfflineList.Infos>(Data.Models.Metadata.Header.InfosKey);
+                header.Infos = Infos;
             if (NewDatSpecified)
-                header[Data.Models.Metadata.Header.NewDatKey] = Read<Data.Models.OfflineList.NewDat>(Data.Models.Metadata.Header.NewDatKey);
+                header.NewDat = NewDat;
             if (SearchSpecified)
-                header[Data.Models.Metadata.Header.SearchKey] = Read<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey);
+                header.Search = Search;
 
             return header;
         }
@@ -150,33 +386,14 @@ namespace SabreTools.Metadata.DatFiles
         #region Comparision Methods
 
         /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem? other)
+        public bool Equals(DatHeader? other)
         {
             // If other is null
             if (other is null)
                 return false;
 
-            // If the type is mismatched
-            if (other is not DatHeader otherItem)
-                return false;
-
             // Compare internal models
-            return _internal.EqualTo(otherItem._internal);
-        }
-
-        /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem<Data.Models.Metadata.Header>? other)
-        {
-            // If other is null
-            if (other is null)
-                return false;
-
-            // If the type is mismatched
-            if (other is not DatHeader otherItem)
-                return false;
-
-            // Compare internal models
-            return _internal.EqualTo(otherItem._internal);
+            return _internal.Equals(other._internal);
         }
 
         #endregion

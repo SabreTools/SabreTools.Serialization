@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,35 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("condition"), XmlRoot("condition")]
     public sealed class Condition : DatItem<Data.Models.Metadata.Condition>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Condition;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Condition;
+
+        public string? Mask
+        {
+            get => _internal.Mask;
+            set => _internal.Mask = value;
+        }
+
+        public Data.Models.Metadata.Relation? Relation
+        {
+            get => _internal.Relation;
+            set => _internal.Relation = value;
+        }
+
+        public string? Tag
+        {
+            get => _internal.Tag;
+            set => _internal.Tag = value;
+        }
+
+        public string? Value
+        {
+            get => _internal.Value;
+            set => _internal.Value = value;
+        }
 
         #endregion
 
@@ -21,26 +45,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Condition() : base() { }
 
-        public Condition(Data.Models.Metadata.Condition item) : base(item)
-        {
-            // Process flag values
-            string? condition = ReadString(Data.Models.Metadata.Condition.RelationKey);
-            if (condition is not null)
-                Write<string?>(Data.Models.Metadata.Condition.RelationKey, condition.AsRelation()?.AsStringValue());
-        }
+        public Condition(Data.Models.Metadata.Condition item) : base(item) { }
 
         public Condition(Data.Models.Metadata.Condition item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Condition(_internal.Clone() as Data.Models.Metadata.Condition ?? []);
+        public override object Clone() => new Condition(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Condition GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Condition ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Condition otherCondition)
+                return _internal.Equals(otherCondition._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

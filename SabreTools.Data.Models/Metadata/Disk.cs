@@ -1,45 +1,59 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
+    // TODO: IEquatable<Disk>
     [JsonObject("disk"), XmlRoot(elementName: "disk")]
-    public class Disk : DatItem
+    public class Disk : DatItem, ICloneable
     {
-        #region Keys
+        #region Properties
 
-        /// <remarks>string</remarks>
-        public const string FlagsKey = "flags";
+        public string? Flags { get; set; }
 
-        /// <remarks>string, possibly long</remarks>
-        public const string IndexKey = "index";
+        public long? Index { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string MD5Key = "md5";
+        public string? MD5 { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string MergeKey = "merge";
+        public string? Merge { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
+        public string? Name { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
-        public const string OptionalKey = "optional";
+        public bool? Optional { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string RegionKey = "region";
+        public string? Region { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string SHA1Key = "sha1";
+        public string? SHA1 { get; set; }
 
         /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
-        public const string StatusKey = "status";
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
-        public const string WritableKey = "writable";
+        public bool? Writable { get; set; }
 
         #endregion
 
-        public Disk() => Type = ItemType.Disk;
+        public Disk() => ItemType = ItemType.Disk;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Disk();
+
+            obj.Flags = Flags;
+            obj.Index = Index;
+            obj.MD5 = MD5;
+            obj.Merge = Merge;
+            obj.Name = Name;
+            obj.Optional = Optional;
+            obj.Region = Region;
+            obj.SHA1 = SHA1;
+            obj.Status = Status;
+            obj.Writable = Writable;
+
+            return obj;
+        }
     }
 }

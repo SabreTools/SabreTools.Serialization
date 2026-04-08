@@ -11,10 +11,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class SpamSumFile : Hashfile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public SpamSumFile(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SpamSum;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSpamSum);
+            Header.DatFormat = DatFormat.RedumpSpamSum;
         }
 
         /// <inheritdoc/>
@@ -32,20 +32,20 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.SpamSumKey)))
-                        missingFields.Add(Data.Models.Metadata.Media.SpamSumKey);
+                    if (string.IsNullOrEmpty(medium.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.Name));
+                    if (string.IsNullOrEmpty(medium.SpamSum))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.SpamSum));
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SpamSumKey);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (string.IsNullOrEmpty(rom.SpamSum))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SpamSum));
                     break;
 
                 default:

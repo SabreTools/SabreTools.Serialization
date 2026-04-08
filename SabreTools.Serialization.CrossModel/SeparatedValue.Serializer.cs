@@ -13,14 +13,11 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj),
+                Header = ConvertHeaderToInternalModel(obj),
             };
 
             if (obj?.Row is not null && obj.Row.Length > 0)
-            {
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
-                    = Array.ConvertAll(obj.Row, ConvertMachineToInternalModel);
-            }
+                metadataFile.Machine = Array.ConvertAll(obj.Row, ConvertMachineToInternalModel);
 
             return metadataFile;
         }
@@ -32,15 +29,15 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.HeaderKey] = item.Header,
+                HeaderRow = item.Header,
             };
 
             if (item.Row is not null && item.Row.Length > 0)
             {
                 var first = item.Row[0];
-                header["FILENAME"] = first.FileName; // TODO: Make this an actual key to retrieve on an item -- OriginalFilename
-                header[Data.Models.Metadata.Header.NameKey] = first.FileName;
-                header[Data.Models.Metadata.Header.DescriptionKey] = first.Description;
+                header.FileName = first.FileName;
+                header.Name =  first.FileName;
+                header.Description = first.Description;
             }
 
             return header;
@@ -53,23 +50,23 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.NameKey] = item.GameName,
-                [Data.Models.Metadata.Machine.DescriptionKey] = item.GameDescription,
+                Name = item.GameName,
+                Description = item.GameDescription,
             };
 
             var datItem = ConvertToInternalModel(item);
             switch (datItem)
             {
                 case Data.Models.Metadata.Disk disk:
-                    machine[Data.Models.Metadata.Machine.DiskKey] = new Data.Models.Metadata.Disk[] { disk };
+                    machine.Disk = new Data.Models.Metadata.Disk[] { disk };
                     break;
 
                 case Data.Models.Metadata.Media media:
-                    machine[Data.Models.Metadata.Machine.MediaKey] = new Data.Models.Metadata.Media[] { media };
+                    machine.Media = new Data.Models.Metadata.Media[] { media };
                     break;
 
                 case Data.Models.Metadata.Rom rom:
-                    machine[Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { rom };
+                    machine.Rom = new Data.Models.Metadata.Rom[] { rom };
                     break;
 
                 default:
@@ -89,31 +86,31 @@ namespace SabreTools.Serialization.CrossModel
             {
                 "disk" => new Data.Models.Metadata.Disk
                 {
-                    [Data.Models.Metadata.Disk.NameKey] = item.DiskName,
-                    [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
-                    [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
-                    [Data.Models.Metadata.Disk.StatusKey] = item.Status,
+                    Name = item.DiskName,
+                    MD5 = item.MD5,
+                    SHA1 = item.SHA1,
+                    Status = item.Status,
                 },
                 "media" => new Data.Models.Metadata.Media
                 {
-                    [Data.Models.Metadata.Media.NameKey] = item.DiskName,
-                    [Data.Models.Metadata.Media.MD5Key] = item.MD5,
-                    [Data.Models.Metadata.Media.SHA1Key] = item.SHA1,
-                    [Data.Models.Metadata.Media.SHA256Key] = item.SHA256,
-                    [Data.Models.Metadata.Media.SpamSumKey] = item.SpamSum,
+                    Name = item.DiskName,
+                    MD5 = item.MD5,
+                    SHA1 = item.SHA1,
+                    SHA256 = item.SHA256,
+                    SpamSum = item.SpamSum,
                 },
                 "rom" => new Data.Models.Metadata.Rom
                 {
-                    [Data.Models.Metadata.Rom.NameKey] = item.RomName,
-                    [Data.Models.Metadata.Rom.SizeKey] = item.Size,
-                    [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
-                    [Data.Models.Metadata.Rom.MD5Key] = item.MD5,
-                    [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
-                    [Data.Models.Metadata.Rom.SHA256Key] = item.SHA256,
-                    [Data.Models.Metadata.Rom.SHA384Key] = item.SHA384,
-                    [Data.Models.Metadata.Rom.SHA512Key] = item.SHA512,
-                    [Data.Models.Metadata.Rom.SpamSumKey] = item.SpamSum,
-                    [Data.Models.Metadata.Rom.StatusKey] = item.Status,
+                    Name = item.RomName,
+                    Size = item.Size,
+                    CRC32 = item.CRC,
+                    MD5 = item.MD5,
+                    SHA1 = item.SHA1,
+                    SHA256 = item.SHA256,
+                    SHA384 = item.SHA384,
+                    SHA512 = item.SHA512,
+                    SpamSum = item.SpamSum,
+                    Status = item.Status,
                 },
                 _ => null,
             };

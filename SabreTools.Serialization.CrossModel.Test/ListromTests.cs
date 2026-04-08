@@ -36,8 +36,8 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             var rom = new Data.Models.Listrom.Row
             {
-                Name = "XXXXXX",
-                Size = "XXXXXX",
+                Name = "name",
+                Size = 12345,
                 Bad = true,
                 CRC = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var disk = new Data.Models.Listrom.Row
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Bad = false,
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -103,8 +103,8 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void ValidateRom(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
-            Assert.Equal("XXXXXX", row.Name);
-            Assert.Equal("XXXXXX", row.Size);
+            Assert.Equal("name", row.Name);
+            Assert.Equal(12345, row.Size);
             Assert.True(row.Bad);
             Assert.Equal("XXXXXX", row.CRC);
             Assert.Equal("XXXXXX", row.SHA1);
@@ -117,7 +117,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void ValidateDisk(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
-            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("name", row.Name);
             Assert.False(row.Bad);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.SHA1);

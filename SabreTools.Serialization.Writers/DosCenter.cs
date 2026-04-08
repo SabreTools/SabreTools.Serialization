@@ -115,7 +115,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteStartElement("file");
 
                 writer.WriteRequiredAttributeString("name", file.Name, throwOnError: true);
-                writer.WriteRequiredAttributeString("size", file.Size, throwOnError: true);
+                writer.WriteRequiredAttributeString("size", file.Size?.ToString(), throwOnError: true);
                 writer.WriteOptionalAttributeString("date", file.Date);
                 writer.WriteRequiredAttributeString("crc", file.CRC?.ToUpperInvariant(), throwOnError: true);
                 writer.WriteRequiredAttributeString("sha1", file.SHA1?.ToUpperInvariant());

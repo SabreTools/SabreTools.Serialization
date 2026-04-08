@@ -1,4 +1,6 @@
 
+using SabreTools.Data.Models.Metadata;
+
 namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>driver</remarks>
@@ -6,18 +8,18 @@ namespace SabreTools.Data.Models.ClrMamePro
     {
         /// <remarks>status, (good|imperfect|preliminary)</remarks>
         [Required]
-        public string? Status { get; set; }
+        public SupportStatus? Status { get; set; }
 
         /// <remarks>color, (good|imperfect|preliminary)</remarks>
-        public string? Color { get; set; }
+        public SupportStatus? Color { get; set; }
 
         /// <remarks>sound, (good|imperfect|preliminary)</remarks>
-        public string? Sound { get; set; }
+        public SupportStatus? Sound { get; set; }
 
         /// <remarks>palettesize, Numeric?</remarks>
         public string? PaletteSize { get; set; }
 
         /// <remarks>blit, (plain|dirty)</remarks>
-        public string? Blit { get; set; }
+        public Blit? Blit { get; set; }
     }
 }

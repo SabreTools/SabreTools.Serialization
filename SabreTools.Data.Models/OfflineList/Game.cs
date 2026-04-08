@@ -20,7 +20,7 @@ namespace SabreTools.Data.Models.OfflineList
 
         /// <remarks>Numeric</remarks>
         [XmlElement("romSize")]
-        public string? RomSize { get; set; }
+        public long? RomSize { get; set; }
 
         [XmlElement("publisher")]
         public string? Publisher { get; set; }

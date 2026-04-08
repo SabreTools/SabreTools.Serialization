@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ClrMamePro;
 using SabreTools.Text.ClrMamePro;
+using SabreTools.Text.Extensions;
 
 #pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Readers
@@ -244,13 +246,15 @@ namespace SabreTools.Serialization.Readers
                                 dat.ClrMamePro.Type = reader.Standalone?.Value;
                                 break;
                             case "forcemerging":
-                                dat.ClrMamePro.ForceMerging = reader.Standalone?.Value;
+                                dat.ClrMamePro.ForceMerging = reader.Standalone?.Value?.AsMergingFlag()
+                                    ?? Data.Models.Metadata.MergingFlag.None;
                                 break;
                             case "forcezipping":
-                                dat.ClrMamePro.ForceZipping = reader.Standalone?.Value;
+                                dat.ClrMamePro.ForceZipping = reader.Standalone?.Value?.AsYesNo();
                                 break;
                             case "forcepacking":
-                                dat.ClrMamePro.ForcePacking = reader.Standalone?.Value;
+                                dat.ClrMamePro.ForcePacking = reader.Standalone?.Value?.AsPackingFlag()
+                                    ?? Data.Models.Metadata.PackingFlag.None;
                                 break;
                             default:
                                 // TODO: Log invalid values
@@ -305,10 +309,7 @@ namespace SabreTools.Serialization.Readers
                                 game.SampleOf = reader.Standalone?.Value;
                                 break;
                             case "sample":
-                                var sample = new Sample
-                                {
-                                    Name = reader.Standalone?.Value ?? string.Empty,
-                                };
+                                var sample = new Sample { Name = reader.Standalone?.Value ?? string.Empty, };
                                 samples.Add(sample);
                                 break;
                             default:
@@ -463,7 +464,7 @@ namespace SabreTools.Serialization.Readers
                         release.Date = kvp.Value;
                         break;
                     case "default":
-                        release.Default = kvp.Value;
+                        release.Default = kvp.Value.AsYesNo();
                         break;
                     default:
                         itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
@@ -496,7 +497,7 @@ namespace SabreTools.Serialization.Readers
                         biosset.Description = kvp.Value;
                         break;
                     case "default":
-                        biosset.Default = kvp.Value;
+                        biosset.Default = kvp.Value.AsYesNo();
                         break;
                     default:
                         // TODO: Log invalid values
@@ -526,7 +527,7 @@ namespace SabreTools.Serialization.Readers
                         rom.Name = kvp.Value;
                         break;
                     case "size":
-                        rom.Size = kvp.Value;
+                        rom.Size = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "crc":
                         rom.CRC = kvp.Value;
@@ -577,7 +578,7 @@ namespace SabreTools.Serialization.Readers
                         rom.Merge = kvp.Value;
                         break;
                     case "status":
-                        rom.Status = kvp.Value;
+                        rom.Status = kvp.Value.AsItemStatus();
                         break;
                     case "region":
                         rom.Region = kvp.Value;
@@ -598,10 +599,10 @@ namespace SabreTools.Serialization.Readers
                         rom.Date = kvp.Value;
                         break;
                     case "inverted":
-                        rom.Inverted = kvp.Value;
+                        rom.Inverted = kvp.Value.AsYesNo();
                         break;
                     case "mia":
-                        rom.MIA = kvp.Value;
+                        rom.MIA = kvp.Value.AsYesNo();
                         break;
                     default:
                         // TODO: Log invalid values
@@ -640,7 +641,7 @@ namespace SabreTools.Serialization.Readers
                         disk.Merge = kvp.Value;
                         break;
                     case "status":
-                        disk.Status = kvp.Value;
+                        disk.Status = kvp.Value.AsItemStatus();
                         break;
                     case "flags":
                         disk.Flags = kvp.Value;
@@ -763,7 +764,7 @@ namespace SabreTools.Serialization.Readers
                 switch (kvp.Key?.ToLowerInvariant())
                 {
                     case "type":
-                        chip.Type = kvp.Value;
+                        chip.Type = kvp.Value.AsChipType();
                         break;
                     case "name":
                         chip.Name = kvp.Value;
@@ -772,7 +773,7 @@ namespace SabreTools.Serialization.Readers
                         chip.Flags = kvp.Value;
                         break;
                     case "clock":
-                        chip.Clock = kvp.Value;
+                        chip.Clock = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     default:
                         // TODO: Log invalid values
@@ -799,25 +800,25 @@ namespace SabreTools.Serialization.Readers
                 switch (kvp.Key?.ToLowerInvariant())
                 {
                     case "screen":
-                        video.Screen = kvp.Value;
+                        video.Screen = kvp.Value.AsDisplayType();
                         break;
                     case "orientation":
-                        video.Orientation = kvp.Value;
+                        video.Orientation = kvp.Value.AsRotation();
                         break;
                     case "x":
-                        video.X = kvp.Value;
+                        video.X = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "y":
-                        video.Y = kvp.Value;
+                        video.Y = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "aspectx":
-                        video.AspectX = kvp.Value;
+                        video.AspectX = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "aspecty":
-                        video.AspectY = kvp.Value;
+                        video.AspectY = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "freq":
-                        video.Freq = kvp.Value;
+                        video.Freq = NumberHelper.ConvertToDouble(kvp.Value);
                         break;
                     default:
                         // TODO: Log invalid values
@@ -844,7 +845,7 @@ namespace SabreTools.Serialization.Readers
                 switch (kvp.Key?.ToLowerInvariant())
                 {
                     case "channels":
-                        sound.Channels = kvp.Value;
+                        sound.Channels = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     default:
                         // TODO: Log invalid values
@@ -871,22 +872,22 @@ namespace SabreTools.Serialization.Readers
                 switch (kvp.Key?.ToLowerInvariant())
                 {
                     case "players":
-                        input.Players = kvp.Value;
+                        input.Players = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "control":
                         input.Control = kvp.Value;
                         break;
                     case "buttons":
-                        input.Buttons = kvp.Value;
+                        input.Buttons = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "coins":
-                        input.Coins = kvp.Value;
+                        input.Coins = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "tilt":
-                        input.Tilt = kvp.Value;
+                        input.Tilt = kvp.Value.AsYesNo();
                         break;
                     case "service":
-                        input.Service = kvp.Value;
+                        input.Service = kvp.Value.AsYesNo();
                         break;
                     default:
                         // TODO: Log invalid values
@@ -920,7 +921,7 @@ namespace SabreTools.Serialization.Readers
                         entries.Add(kvp.Value);
                         break;
                     case "default":
-                        dipswitch.Default = kvp.Value;
+                        dipswitch.Default = kvp.Value.AsYesNo();
                         break;
                     default:
                         // TODO: Log invalid values
@@ -948,19 +949,19 @@ namespace SabreTools.Serialization.Readers
                 switch (kvp.Key?.ToLowerInvariant())
                 {
                     case "status":
-                        driver.Status = kvp.Value;
+                        driver.Status = kvp.Value.AsSupportStatus();
                         break;
                     case "color":
-                        driver.Color = kvp.Value;
+                        driver.Color = kvp.Value.AsSupportStatus();
                         break;
                     case "sound":
-                        driver.Sound = kvp.Value;
+                        driver.Sound = kvp.Value.AsSupportStatus();
                         break;
                     case "palettesize":
                         driver.PaletteSize = kvp.Value;
                         break;
                     case "blit":
-                        driver.Blit = kvp.Value;
+                        driver.Blit = kvp.Value.AsBlit();
                         break;
                     default:
                         // TODO: Log invalid values

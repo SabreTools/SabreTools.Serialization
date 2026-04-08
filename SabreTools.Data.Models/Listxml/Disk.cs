@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -23,20 +24,19 @@ namespace SabreTools.Data.Models.Listxml
         [XmlAttribute("region")]
         public string? Region { get; set; }
 
-        /// <remarks>Numeric?</remarks>
         [XmlAttribute("index")]
-        public string? Index { get; set; }
+        public long? Index { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("writable")]
-        public string? Writable { get; set; }
+        public bool? Writable { get; set; }
 
         /// <remarks>(baddump|nodump|good) "good"</remarks>
         [XmlAttribute("status")]
-        public string? Status { get; set; }
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("optional")]
-        public string? Optional { get; set; }
+        public bool? Optional { get; set; }
     }
 }

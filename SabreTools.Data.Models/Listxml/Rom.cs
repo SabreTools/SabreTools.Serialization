@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -13,10 +14,9 @@ namespace SabreTools.Data.Models.Listxml
         [XmlAttribute("bios")]
         public string? Bios { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [Required]
         [XmlAttribute("size")]
-        public string? Size { get; set; }
+        public long? Size { get; set; }
 
         [XmlAttribute("crc")]
         public string? CRC { get; set; }
@@ -36,18 +36,18 @@ namespace SabreTools.Data.Models.Listxml
 
         /// <remarks>(baddump|nodump|good) "good"</remarks>
         [XmlAttribute("status")]
-        public string? Status { get; set; }
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("optional")]
-        public string? Optional { get; set; }
+        public bool? Optional { get; set; }
 
         /// <remarks>(yes|no) "no", Only present in older versions</remarks>
         [XmlAttribute("dispose")]
-        public string? Dispose { get; set; }
+        public bool? Dispose { get; set; }
 
         /// <remarks>(yes|no) "no", Only present in older versions</remarks>
         [XmlAttribute("soundonly")]
-        public string? SoundOnly { get; set; }
+        public bool? SoundOnly { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,29 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("conflocation"), XmlRoot("conflocation")]
     public sealed class ConfLocation : DatItem<Data.Models.Metadata.ConfLocation>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.ConfLocation;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.ConfLocation;
+
+        public bool? Inverted
+        {
+            get => _internal.Inverted;
+            set => _internal.Inverted = value;
+        }
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public long? Number
+        {
+            get => _internal.Number;
+            set => _internal.Number = value;
+        }
 
         #endregion
 
@@ -21,26 +39,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public ConfLocation() : base() { }
 
-        public ConfLocation(Data.Models.Metadata.ConfLocation item) : base(item)
-        {
-            // Process flag values
-            bool? inverted = ReadBool(Data.Models.Metadata.ConfLocation.InvertedKey);
-            if (inverted is not null)
-                Write<string?>(Data.Models.Metadata.ConfLocation.InvertedKey, inverted.FromYesNo());
-        }
+        public ConfLocation(Data.Models.Metadata.ConfLocation item) : base(item) { }
 
         public ConfLocation(Data.Models.Metadata.ConfLocation item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new ConfLocation(_internal.Clone() as Data.Models.Metadata.ConfLocation ?? []);
+        public override object Clone() => new ConfLocation(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.ConfLocation GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.ConfLocation ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is ConfLocation otherConfLocation)
+                return _internal.Equals(otherConfLocation._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

@@ -1,6 +1,4 @@
-using SabreTools.Data.Extensions;
 using SabreTools.Hashing;
-using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 using Xunit;
 using ItemStatus = SabreTools.Data.Models.Metadata.ItemStatus;
@@ -62,11 +60,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(0, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(0, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(0, stats.GetHashCount(HashType.SpamSum));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Disk));
-            Assert.Equal(0, stats.GetItemCount(ItemType.File));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Media));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Rom));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Sample));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Rom));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Sample));
             Assert.Equal(0, stats.GetStatusCount(ItemStatus.Good));
 
             // AddItemStatistics
@@ -90,11 +88,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(1, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(1, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(2, stats.GetHashCount(HashType.SpamSum));
-            Assert.Equal(1, stats.GetItemCount(ItemType.Disk));
-            Assert.Equal(1, stats.GetItemCount(ItemType.File));
-            Assert.Equal(1, stats.GetItemCount(ItemType.Media));
-            Assert.Equal(1, stats.GetItemCount(ItemType.Rom));
-            Assert.Equal(1, stats.GetItemCount(ItemType.Sample));
+            Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
+            Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
+            Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
+            Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Rom));
+            Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Sample));
             Assert.Equal(2, stats.GetStatusCount(ItemStatus.Good));
 
             // RemoveItemStatistics
@@ -118,11 +116,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(0, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(0, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(0, stats.GetHashCount(HashType.SpamSum));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Disk));
-            Assert.Equal(0, stats.GetItemCount(ItemType.File));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Media));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Rom));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Sample));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Rom));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Sample));
             Assert.Equal(0, stats.GetStatusCount(ItemStatus.Good));
         }
 
@@ -153,11 +151,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(0, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(0, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(0, stats.GetHashCount(HashType.SpamSum));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Disk));
-            Assert.Equal(0, stats.GetItemCount(ItemType.File));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Media));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Rom));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Sample));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Rom));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Sample));
             Assert.Equal(0, stats.GetStatusCount(ItemStatus.Good));
 
             // AddItemStatistics
@@ -181,11 +179,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(1, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(1, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(2, stats.GetHashCount(HashType.SpamSum));
-            Assert.Equal(1, stats.GetItemCount(ItemType.Disk));
-            Assert.Equal(1, stats.GetItemCount(ItemType.File));
-            Assert.Equal(1, stats.GetItemCount(ItemType.Media));
-            Assert.Equal(1, stats.GetItemCount(ItemType.Rom));
-            Assert.Equal(1, stats.GetItemCount(ItemType.Sample));
+            Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
+            Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
+            Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
+            Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Rom));
+            Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Sample));
             Assert.Equal(2, stats.GetStatusCount(ItemStatus.Good));
 
             // ResetStatistics
@@ -205,11 +203,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(0, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(0, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(0, stats.GetHashCount(HashType.SpamSum));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Disk));
-            Assert.Equal(0, stats.GetItemCount(ItemType.File));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Media));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Rom));
-            Assert.Equal(0, stats.GetItemCount(ItemType.Sample));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Rom));
+            Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Sample));
             Assert.Equal(0, stats.GetStatusCount(ItemStatus.Good));
         }
 
@@ -240,7 +238,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(1, newStats.GetHashCount(HashType.SHA384));
             Assert.Equal(1, newStats.GetHashCount(HashType.SHA512));
             Assert.Equal(1, newStats.GetHashCount(HashType.SpamSum));
-            Assert.Equal(1, newStats.GetItemCount(ItemType.Rom));
+            Assert.Equal(1, newStats.GetItemCount(Data.Models.Metadata.ItemType.Rom));
             Assert.Equal(1, newStats.GetStatusCount(ItemStatus.Good));
         }
 
@@ -253,11 +251,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         /// </summary>
         private static Disk CreateDisk()
         {
-            var disk = new Disk();
-
-            disk.Write<string?>(Data.Models.Metadata.Disk.StatusKey, ItemStatus.Good.AsStringValue());
-            disk.Write<string?>(Data.Models.Metadata.Disk.MD5Key, HashType.MD5.ZeroString);
-            disk.Write<string?>(Data.Models.Metadata.Disk.SHA1Key, HashType.SHA1.ZeroString);
+            var disk = new Disk
+            {
+                Status = ItemStatus.Good,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+            };
 
             return disk;
         }
@@ -284,12 +283,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         /// </summary>
         private static Media CreateMedia()
         {
-            var media = new Media();
-
-            media.Write<string?>(Data.Models.Metadata.Media.MD5Key, HashType.MD5.ZeroString);
-            media.Write<string?>(Data.Models.Metadata.Media.SHA1Key, HashType.SHA1.ZeroString);
-            media.Write<string?>(Data.Models.Metadata.Media.SHA256Key, HashType.SHA256.ZeroString);
-            media.Write<string?>(Data.Models.Metadata.Media.SpamSumKey, HashType.SpamSum.ZeroString);
+            var media = new Media
+            {
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SpamSum = HashType.SpamSum.ZeroString
+            };
 
             return media;
         }
@@ -299,23 +299,24 @@ namespace SabreTools.Metadata.DatFiles.Test
         /// </summary>
         private static Rom CreateRom()
         {
-            var rom = new Rom();
-
-            rom.Write<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.Good.AsStringValue());
-            rom.Write<long>(Data.Models.Metadata.Rom.SizeKey, 1);
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key, HashType.CRC16.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRC64Key, HashType.CRC64.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD2Key, HashType.MD2.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD4Key, HashType.MD4.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD5Key, HashType.MD5.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.RIPEMD128Key, HashType.RIPEMD128.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.RIPEMD160Key, HashType.RIPEMD160.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA256Key, HashType.SHA256.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA384Key, HashType.SHA384.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA512Key, HashType.SHA512.ZeroString);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SpamSumKey, HashType.SpamSum.ZeroString);
+            var rom = new Rom
+            {
+                Status = ItemStatus.Good,
+                Size = 1
+            };
+            rom.CRC16 = HashType.CRC16.ZeroString;
+            rom.CRC32 = HashType.CRC32.ZeroString;
+            rom.CRC64 = HashType.CRC64.ZeroString;
+            rom.MD2 = HashType.MD2.ZeroString;
+            rom.MD4 = HashType.MD4.ZeroString;
+            rom.MD5 = HashType.MD5.ZeroString;
+            rom.RIPEMD128 = HashType.RIPEMD128.ZeroString;
+            rom.RIPEMD160 = HashType.RIPEMD160.ZeroString;
+            rom.SHA1 = HashType.SHA1.ZeroString;
+            rom.SHA256 = HashType.SHA256.ZeroString;
+            rom.SHA384 = HashType.SHA384.ZeroString;
+            rom.SHA512 = HashType.SHA512.ZeroString;
+            rom.SpamSum = HashType.SpamSum.ZeroString;
 
             return rom;
         }

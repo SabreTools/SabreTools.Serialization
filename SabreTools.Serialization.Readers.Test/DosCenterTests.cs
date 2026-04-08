@@ -101,8 +101,8 @@ namespace SabreTools.Serialization.Readers.Test
         {
             var dc = new Data.Models.DosCenter.DosCenter
             {
-                Name = "XXXXXX",
-                Description = "XXXXXX",
+                Name = "name",
+                Description = "description",
                 Version = "XXXXXX",
                 Date = "XXXXXX",
                 Author = "XXXXXX",
@@ -112,8 +112,8 @@ namespace SabreTools.Serialization.Readers.Test
 
             var file = new Data.Models.DosCenter.File
             {
-                Name = "XXXXXX",
-                Size = "XXXXXX",
+                Name = "name",
+                Size = 12345,
                 CRC = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Date = "XXXXXX XXXXXX",
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var game = new Data.Models.DosCenter.Game
             {
-                Name = "XXXXXX",
+                Name = "name",
                 File = [file],
             };
 
@@ -138,8 +138,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.DosCenter.DosCenter? cmp)
         {
             Assert.NotNull(cmp);
-            Assert.Equal("XXXXXX", cmp.Name);
-            Assert.Equal("XXXXXX", cmp.Description);
+            Assert.Equal("name", cmp.Name);
+            Assert.Equal("description", cmp.Description);
             Assert.Equal("XXXXXX", cmp.Version);
             Assert.Equal("XXXXXX", cmp.Date);
             Assert.Equal("XXXXXX", cmp.Author);
@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.DosCenter.Game? game)
         {
             Assert.NotNull(game);
-            Assert.Equal("XXXXXX", game.Name);
+            Assert.Equal("name", game.Name);
 
             Assert.NotNull(game.File);
             var file = Assert.Single(game.File);
@@ -166,8 +166,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.DosCenter.File? rom)
         {
             Assert.NotNull(rom);
-            Assert.Equal("XXXXXX", rom.Name);
-            Assert.Equal("XXXXXX", rom.Size);
+            Assert.Equal("name", rom.Name);
+            Assert.Equal(12345, rom.Size);
             Assert.Equal("XXXXXX", rom.CRC);
             Assert.Equal("XXXXXX", rom.SHA1);
             Assert.Equal("XXXXXX XXXXXX", rom.Date);

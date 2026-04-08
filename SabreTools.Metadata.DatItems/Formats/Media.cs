@@ -11,10 +11,41 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("media"), XmlRoot("media")]
     public sealed class Media : DatItem<Data.Models.Metadata.Media>
     {
-        #region Fields
+        #region Properties
+
+        public string? MD5
+        {
+            get => _internal.MD5;
+            set => _internal.MD5 = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Media;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Media;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public string? SHA1
+        {
+            get => _internal.SHA1;
+            set => _internal.SHA1 = value;
+        }
+
+        public string? SHA256
+        {
+            get => _internal.SHA256;
+            set => _internal.SHA256 = value;
+        }
+
+        public string? SpamSum
+        {
+            get => _internal.SpamSum;
+            set => _internal.SpamSum = value;
+        }
 
         #endregion
 
@@ -22,39 +53,50 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Media() : base()
         {
-            Write<DupeType>(DupeTypeKey, 0x00);
+            DupeType = 0x00;
         }
 
         public Media(Data.Models.Metadata.Media item) : base(item)
         {
-            Write<DupeType>(DupeTypeKey, 0x00);
+            DupeType = 0x00;
 
             // Process hash values
-            string? md5 = ReadString(Data.Models.Metadata.Media.MD5Key);
-            if (md5 is not null)
-                Write<string?>(Data.Models.Metadata.Media.MD5Key, TextHelper.NormalizeMD5(md5));
+            if (MD5 is not null)
+                MD5 = TextHelper.NormalizeMD5(MD5);
 
-            string? sha1 = ReadString(Data.Models.Metadata.Media.SHA1Key);
-            if (sha1 is not null)
-                Write<string?>(Data.Models.Metadata.Media.SHA1Key, TextHelper.NormalizeSHA1(sha1));
+            if (SHA1 is not null)
+                SHA1 = TextHelper.NormalizeSHA1(SHA1);
 
-            string? sha256 = ReadString(Data.Models.Metadata.Media.SHA256Key);
-            if (sha256 is not null)
-                Write<string?>(Data.Models.Metadata.Media.SHA256Key, TextHelper.NormalizeSHA256(sha256));
+            if (SHA256 is not null)
+                SHA256 = TextHelper.NormalizeSHA256(SHA256);
         }
 
         public Media(Data.Models.Metadata.Media item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Media(_internal.Clone() as Data.Models.Metadata.Media ?? []);
+        public override object Clone() => new Media(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Media GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Media ?? new();
 
         /// <summary>
         /// Convert a media to the closest Rom approximation
@@ -64,10 +106,10 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var rom = new Rom(_internal.ConvertToRom()!);
 
-            rom.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
-            rom.Write(MachineKey, GetMachine());
-            rom.Write(RemoveKey, ReadBool(RemoveKey));
-            rom.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
+            rom.DupeType = DupeType;
+            rom.Machine = Machine?.Clone() as Machine;
+            rom.RemoveFlag = RemoveFlag;
+            rom.Source = Source?.Clone() as Source;
 
             return rom;
         }
@@ -75,6 +117,21 @@ namespace SabreTools.Metadata.DatItems.Formats
         #endregion
 
         #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Media otherMedia)
+                return _internal.PartialEquals(otherMedia._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         /// <summary>
         /// Fill any missing size and hash information from another Media
@@ -110,19 +167,19 @@ namespace SabreTools.Metadata.DatItems.Formats
             switch (bucketedBy)
             {
                 case ItemKey.MD5:
-                    key = ReadString(Data.Models.Metadata.Media.MD5Key);
+                    key = MD5;
                     break;
 
                 case ItemKey.SHA1:
-                    key = ReadString(Data.Models.Metadata.Media.SHA1Key);
+                    key = SHA1;
                     break;
 
                 case ItemKey.SHA256:
-                    key = ReadString(Data.Models.Metadata.Media.SHA256Key);
+                    key = SHA256;
                     break;
 
                 case ItemKey.SpamSum:
-                    key = ReadString(Data.Models.Metadata.Media.SpamSumKey);
+                    key = SpamSum;
                     break;
 
                 // Let the base handle generic stuff

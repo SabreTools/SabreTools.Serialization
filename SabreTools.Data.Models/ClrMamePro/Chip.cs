@@ -1,4 +1,6 @@
 
+using SabreTools.Data.Models.Metadata;
+
 namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>chip</remarks>
@@ -6,7 +8,7 @@ namespace SabreTools.Data.Models.ClrMamePro
     {
         /// <remarks>type, (cpu|audio)</remarks>
         [Required]
-        public string? Type { get; set; }
+        public ChipType? Type { get; set; }
 
         /// <remarks>name</remarks>
         [Required]
@@ -15,7 +17,7 @@ namespace SabreTools.Data.Models.ClrMamePro
         /// <remarks>flags</remarks>
         public string? Flags { get; set; }
 
-        /// <remarks>clock, Numeric?</remarks>
-        public string? Clock { get; set; }
+        /// <remarks>clock</remarks>
+        public long? Clock { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.SoftwareList;
 using SabreTools.IO.Extensions;
 using SabreTools.Text.Extensions;
@@ -103,9 +104,9 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("dataarea");
 
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteRequiredAttributeString("size", obj.Size);
-            writer.WriteOptionalAttributeString("width", obj.Width);
-            writer.WriteOptionalAttributeString("endianness", obj.Endianness);
+            writer.WriteRequiredAttributeString("size", obj.Size?.ToString());
+            writer.WriteOptionalAttributeString("width", obj.Width?.AsStringValue());
+            writer.WriteOptionalAttributeString("endianness", obj.Endianness?.AsStringValue());
 
             if (obj.Rom is not null && obj.Rom.Length > 0)
             {
@@ -153,7 +154,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteRequiredAttributeString("value", obj.Value);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.FromYesNo());
 
             writer.WriteEndElement();
         }
@@ -170,8 +171,8 @@ namespace SabreTools.Serialization.Writers
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteOptionalAttributeString("md5", obj.MD5);
             writer.WriteOptionalAttributeString("sha1", obj.SHA1);
-            writer.WriteOptionalAttributeString("status", obj.Status);
-            writer.WriteOptionalAttributeString("writable", obj.Writeable);
+            writer.WriteOptionalAttributeString("status", obj.Status?.AsStringValue());
+            writer.WriteOptionalAttributeString("writable", obj.Writeable.FromYesNo());
 
             writer.WriteEndElement();
         }
@@ -285,14 +286,14 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("rom");
 
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteOptionalAttributeString("size", obj.Size);
+            writer.WriteOptionalAttributeString("size", obj.Size?.ToString());
             writer.WriteOptionalAttributeString("length", obj.Length);
             writer.WriteOptionalAttributeString("crc", obj.CRC);
             writer.WriteOptionalAttributeString("sha1", obj.SHA1);
             writer.WriteOptionalAttributeString("offset", obj.Offset);
             writer.WriteOptionalAttributeString("value", obj.Value);
-            writer.WriteOptionalAttributeString("status", obj.Status);
-            writer.WriteOptionalAttributeString("loadflag", obj.LoadFlag);
+            writer.WriteOptionalAttributeString("status", obj.Status?.AsStringValue());
+            writer.WriteOptionalAttributeString("loadflag", obj.LoadFlag?.AsStringValue());
 
             writer.WriteEndElement();
         }
@@ -323,7 +324,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteOptionalAttributeString("cloneof", obj.CloneOf);
-            writer.WriteOptionalAttributeString("supported", obj.Supported);
+            writer.WriteOptionalAttributeString("supported", obj.Supported?.AsStringValue());
 
             writer.WriteRequiredElementString("description", obj.Description);
             writer.WriteRequiredElementString("year", obj.Year);

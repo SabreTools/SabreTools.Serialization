@@ -10,10 +10,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class Listrom : SerializableDatFile<Data.Models.Listrom.MetadataFile, Serialization.Readers.Listrom, Serialization.Writers.Listrom, Serialization.CrossModel.Listrom>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Disk,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public Listrom(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.Listrom);
+            Header.DatFormat = DatFormat.Listrom;
         }
 
         /// <inheritdoc/>
@@ -30,28 +30,28 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Disk disk:
-                    if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
-                        && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
+                    if (string.IsNullOrEmpty(disk.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
+                    if (string.IsNullOrEmpty(disk.MD5)
+                        && string.IsNullOrEmpty(disk.SHA1))
                     {
-                        missingFields.Add(Data.Models.Metadata.Disk.SHA1Key);
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.SHA1));
                     }
 
                     break;
 
                 case Rom rom:
-                    if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
-                        missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)))
-                        missingFields.Add(Data.Models.Metadata.Rom.CRCKey);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (rom.Size is null || rom.Size < 0)
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
+                    if (string.IsNullOrEmpty(rom.CRC32))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC32));
+                    if (string.IsNullOrEmpty(rom.SHA1))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     break;
 
                 default:

@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.ClrMamePro
     {
         /// <remarks>channels, Numeric?</remarks>
         [Required]
-        public string? Channels { get; set; }
+        public long? Channels { get; set; }
     }
 }

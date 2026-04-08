@@ -4,13 +4,8 @@ using Newtonsoft.Json;
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("infosource"), XmlRoot("infosource")]
-    public class InfoSource : DictionaryBase
+    public class InfoSource
     {
-        #region Keys
-
-        /// <remarks>string[]</remarks>
-        public const string SourceKey = "source";
-
-        #endregion
+        public string[]? Source { get; set; }
     }
 }

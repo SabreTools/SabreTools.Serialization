@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,23 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("info"), XmlRoot("info")]
     public sealed class Info : DatItem<Data.Models.Metadata.Info>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Info;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Info;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public string? Value
+        {
+            get => _internal.Value;
+            set => _internal.Value = value;
+        }
 
         #endregion
 
@@ -25,16 +37,49 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Info(Data.Models.Metadata.Info item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Info(_internal.Clone() as Data.Models.Metadata.Info ?? []);
+        public override object Clone() => new Info(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Info GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Info ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Info otherInfo)
+                return _internal.Equals(otherInfo._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

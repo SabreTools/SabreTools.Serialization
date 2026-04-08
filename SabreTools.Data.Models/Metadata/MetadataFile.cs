@@ -4,22 +4,14 @@ namespace SabreTools.Data.Models.Metadata
     /// <summary>
     /// Format-agnostic representation of a full metadata file
     /// </summary>
-    public class MetadataFile : DictionaryBase
+    /// TODO: ICloneable
+    /// TODO: IComparable<MetadataFile>
+    public class MetadataFile
     {
-        #region Keys
+        public Header? Header { get; set; }
 
-        /// <remarks>Machine[]</remarks>
-        [NoFilter]
-        public const string MachineKey = "machine";
+        public InfoSource? InfoSource { get; set; }
 
-        /// <remarks>Header</remarks>
-        [NoFilter]
-        public const string HeaderKey = "header";
-
-        /// <remarks>InfoSource</remarks>
-        [NoFilter]
-        public const string InfoSourceKey = "infosource";
-
-        #endregion
+        public Machine[]? Machine { get; set; }
     }
 }

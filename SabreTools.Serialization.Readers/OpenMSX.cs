@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.OpenMSX;
 
 namespace SabreTools.Serialization.Readers
@@ -163,7 +164,7 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Original();
 
-            obj.Value = reader.GetAttribute("value");
+            obj.Value = reader.GetAttribute("value").AsYesNo();
             obj.Content = reader.ReadElementContentAsString();
 
             return obj;

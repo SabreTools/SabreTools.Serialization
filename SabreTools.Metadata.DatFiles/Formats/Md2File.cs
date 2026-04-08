@@ -11,9 +11,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class Md2File : Hashfile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Md2File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.MD2;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpMD2);
+            Header.DatFormat = DatFormat.RedumpMD2;
         }
 
         /// <inheritdoc/>
@@ -31,15 +31,13 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD2Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.MD2Key);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (string.IsNullOrEmpty(rom.MD2))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.MD2));
                     break;
 
                 default:

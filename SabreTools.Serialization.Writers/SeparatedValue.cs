@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.SeparatedValue;
 using SabreTools.IO.Extensions;
 using SabreTools.Text.SeparatedValue;
@@ -169,7 +170,7 @@ namespace SabreTools.Serialization.Writers
                         row.Type,
                         row.RomName,
                         row.DiskName,
-                        row.Size,
+                        row.Size?.ToString(),
                         row.CRC,
                         row.MD5,
                         row.SHA1,
@@ -177,7 +178,7 @@ namespace SabreTools.Serialization.Writers
                         row.SHA384,
                         row.SHA512,
                         row.SpamSum,
-                        row.Status,
+                        row.Status?.AsStringValue(),
                     ];
                 }
                 else
@@ -192,12 +193,12 @@ namespace SabreTools.Serialization.Writers
                         row.Type,
                         row.RomName,
                         row.DiskName,
-                        row.Size,
+                        row.Size?.ToString(),
                         row.CRC,
                         row.MD5,
                         row.SHA1,
                         row.SHA256,
-                        row.Status,
+                        row.Status?.AsStringValue(),
                     ];
                 }
 

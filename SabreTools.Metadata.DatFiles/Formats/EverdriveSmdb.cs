@@ -10,9 +10,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class EverdriveSMDB : SerializableDatFile<Data.Models.EverdriveSMDB.MetadataFile, Serialization.Readers.EverdriveSMDB, Serialization.Writers.EverdriveSMDB, Serialization.CrossModel.EverdriveSMDB>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public EverdriveSMDB(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.EverdriveSMDB);
+            Header.DatFormat = DatFormat.EverdriveSMDB;
         }
 
         /// <inheritdoc/>
@@ -29,21 +29,19 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA256Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA256Key);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD5Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.MD5Key);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)))
-                        missingFields.Add(Data.Models.Metadata.Rom.CRCKey);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (string.IsNullOrEmpty(rom.SHA256))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA256));
+                    if (string.IsNullOrEmpty(rom.SHA1))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
+                    if (string.IsNullOrEmpty(rom.MD5))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.MD5));
+                    if (string.IsNullOrEmpty(rom.CRC32))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC32));
                     break;
 
                 default:

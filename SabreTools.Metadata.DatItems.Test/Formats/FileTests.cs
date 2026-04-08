@@ -10,8 +10,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void ConvertToRomTest()
         {
-            Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "XXXXXX");
+            Machine machine = new Machine { Name = "name" };
 
             Source source = new Source(0, "XXXXXX");
 
@@ -24,32 +23,32 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 MD5 = "DEADBEEF",
                 SHA1 = "DEADBEEF",
                 SHA256 = "DEADBEEF",
-                Format = "XXXXXX"
+                Format = "XXXXXX",
+                DupeType = DupeType.All | DupeType.External,
+                Machine = machine,
+                RemoveFlag = false,
+                Source = source
             };
-            file.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
-            file.Write(DatItem.MachineKey, machine);
-            file.Write(DatItem.RemoveKey, (bool?)false);
-            file.Write(DatItem.SourceKey, source);
-            file.Write(DatItem.MachineKey, machine);
-            file.Write(DatItem.SourceKey, source);
+            file.Machine = machine;
+            file.Source = source;
 
             Rom actual = file.ConvertToRom();
 
-            Assert.Equal("XXXXXX.XXXXXX", actual.GetName());
-            Assert.Equal(12345, actual.ReadLong(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("deadbeef", actual.ReadString(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Equal("000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Equal("00000000000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal("00000000000000000000000000000000000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Equal(DupeType.All | DupeType.External, actual.Read<DupeType>(DatItem.DupeTypeKey));
+            Assert.Equal("XXXXXX.XXXXXX", actual.Name);
+            Assert.Equal(12345, actual.Size);
+            Assert.Equal("deadbeef", actual.CRC32);
+            Assert.Equal("000000000000000000000000deadbeef", actual.MD5);
+            Assert.Equal("00000000000000000000000000000000deadbeef", actual.SHA1);
+            Assert.Equal("00000000000000000000000000000000000000000000000000000000deadbeef", actual.SHA256);
+            Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
 
-            Machine? actualMachine = actual.GetMachine();
+            Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);
-            Assert.Equal("XXXXXX", actualMachine.GetName());
+            Assert.Equal("name", actualMachine.Name);
 
-            Assert.Equal(false, actual.ReadBool(DatItem.RemoveKey));
+            Assert.False(actual.RemoveFlag);
 
-            Source? actualSource = actual.Read<Source?>(DatItem.SourceKey);
+            Source? actualSource = actual.Source;
             Assert.NotNull(actualSource);
             Assert.Equal(0, actualSource.Index);
             Assert.Equal("XXXXXX", actualSource.Name);
@@ -300,10 +299,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [InlineData(ItemKey.Machine, false, true, "Machine")]
         [InlineData(ItemKey.Machine, true, false, "0000000000-machine")]
         [InlineData(ItemKey.Machine, true, true, "machine")]
-        [InlineData(ItemKey.CRC, false, false, "deadbeef")]
-        [InlineData(ItemKey.CRC, false, true, "deadbeef")]
-        [InlineData(ItemKey.CRC, true, false, "deadbeef")]
-        [InlineData(ItemKey.CRC, true, true, "deadbeef")]
+        [InlineData(ItemKey.CRC32, false, false, "deadbeef")]
+        [InlineData(ItemKey.CRC32, false, true, "deadbeef")]
+        [InlineData(ItemKey.CRC32, true, false, "deadbeef")]
+        [InlineData(ItemKey.CRC32, true, true, "deadbeef")]
         [InlineData(ItemKey.MD2, false, false, "8350e5a3e24c153df2275c9f80692773")]
         [InlineData(ItemKey.MD2, false, true, "8350e5a3e24c153df2275c9f80692773")]
         [InlineData(ItemKey.MD2, true, false, "8350e5a3e24c153df2275c9f80692773")]
@@ -340,8 +339,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "Machine");
+            Machine machine = new Machine { Name = "Machine" };
 
             DatItem datItem = new File
             {

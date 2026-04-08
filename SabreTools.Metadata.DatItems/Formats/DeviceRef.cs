@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,17 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("device_ref"), XmlRoot("device_ref")]
     public sealed class DeviceRef : DatItem<Data.Models.Metadata.DeviceRef>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.DeviceRef;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.DeviceRef;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
 
         #endregion
 
@@ -25,16 +31,49 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DeviceRef(Data.Models.Metadata.DeviceRef item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new DeviceRef(_internal.Clone() as Data.Models.Metadata.DeviceRef ?? []);
+        public override object Clone() => new DeviceRef(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.DeviceRef GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.DeviceRef ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is DeviceRef otherDeviceRef)
+                return _internal.Equals(otherDeviceRef._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -11,19 +10,51 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("input"), XmlRoot("input")]
     public sealed class Input : DatItem<Data.Models.Metadata.Input>
     {
-        #region Fields
+        #region Properties
 
-        /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Input;
+        public long? Buttons
+        {
+            get => _internal.Buttons;
+            set => _internal.Buttons = value;
+        }
+
+        public long? Coins
+        {
+            get => _internal.Coins;
+            set => _internal.Coins = value;
+        }
+
+        public Control[]? Control { get; set; }
 
         [JsonIgnore]
-        public bool ControlsSpecified
+        public bool ControlSpecified => Control is not null && Control.Length > 0;
+
+        public string? ControlAttr
         {
-            get
-            {
-                var controls = Read<Control[]?>(Data.Models.Metadata.Input.ControlKey);
-                return controls is not null && controls.Length > 0;
-            }
+            get => _internal.ControlAttr;
+            set => _internal.ControlAttr = value;
+        }
+
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Input;
+
+        public long? Players
+        {
+            get => _internal.Players;
+            set => _internal.Players = value;
+        }
+
+        public bool? Service
+        {
+            get => _internal.Service;
+            set => _internal.Service = value;
+        }
+
+        public bool? Tilt
+        {
+            get => _internal.Tilt;
+            set => _internal.Tilt = value;
         }
 
         #endregion
@@ -34,62 +65,62 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Input(Data.Models.Metadata.Input item) : base(item)
         {
-            // Process flag values
-            long? buttons = ReadLong(Data.Models.Metadata.Input.ButtonsKey);
-            if (buttons is not null)
-                Write<string?>(Data.Models.Metadata.Input.ButtonsKey, buttons.ToString());
-
-            long? coins = ReadLong(Data.Models.Metadata.Input.CoinsKey);
-            if (coins is not null)
-                Write<string?>(Data.Models.Metadata.Input.CoinsKey, coins.ToString());
-
-            long? players = ReadLong(Data.Models.Metadata.Input.PlayersKey);
-            if (players is not null)
-                Write<string?>(Data.Models.Metadata.Input.PlayersKey, players.ToString());
-
-            bool? service = ReadBool(Data.Models.Metadata.Input.ServiceKey);
-            if (service is not null)
-                Write<string?>(Data.Models.Metadata.Input.ServiceKey, service.FromYesNo());
-
-            bool? tilt = ReadBool(Data.Models.Metadata.Input.TiltKey);
-            if (tilt is not null)
-                Write<string?>(Data.Models.Metadata.Input.TiltKey, tilt.FromYesNo());
-
             // Handle subitems
-            var controls = item.ReadArray<Data.Models.Metadata.Control>(Data.Models.Metadata.Input.ControlKey);
-            if (controls is not null)
-            {
-                Control[] controlItems = Array.ConvertAll(controls, control => new Control(control));
-                Write<Control[]?>(Data.Models.Metadata.Input.ControlKey, controlItems);
-            }
+            if (item.Control is not null)
+                Control = Array.ConvertAll(item.Control, control => new Control(control));
         }
 
         public Input(Data.Models.Metadata.Input item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Input(_internal.Clone() as Data.Models.Metadata.Input ?? []);
+        public override object Clone() => new Input(GetInternalClone());
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Input GetInternalClone()
         {
-            var inputItem = base.GetInternalClone();
+            var inputItem = _internal.Clone() as Data.Models.Metadata.Input ?? new();
 
-            var controls = Read<Control[]?>(Data.Models.Metadata.Input.ControlKey);
-            if (controls is not null)
-            {
-                Data.Models.Metadata.Control[] controlItems = Array.ConvertAll(controls, control => control.GetInternalClone());
-                inputItem[Data.Models.Metadata.Input.ControlKey] = controlItems;
-            }
+            if (Control is not null)
+                inputItem.Control = Array.ConvertAll(Control, control => control.GetInternalClone());
 
             return inputItem;
+        }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Input otherInput)
+                return _internal.Equals(otherInput._internal);
+
+            // Everything else fails
+            return false;
         }
 
         #endregion

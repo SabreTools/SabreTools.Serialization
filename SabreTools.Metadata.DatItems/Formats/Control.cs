@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,83 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("control"), XmlRoot("control")]
     public sealed class Control : DatItem<Data.Models.Metadata.Control>
     {
-        #region Fields
+        #region Properties
+
+        public long? Buttons
+        {
+            get => _internal.Buttons;
+            set => _internal.Buttons = value;
+        }
+
+        public Data.Models.Metadata.ControlType? ControlType
+        {
+            get => _internal.ControlType;
+            set => _internal.ControlType = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Control;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Control;
+
+        public long? KeyDelta
+        {
+            get => _internal.KeyDelta;
+            set => _internal.KeyDelta = value;
+        }
+
+        public long? Maximum
+        {
+            get => _internal.Maximum;
+            set => _internal.Maximum = value;
+        }
+
+        public long? Minimum
+        {
+            get => _internal.Minimum;
+            set => _internal.Minimum = value;
+        }
+
+        public long? Player
+        {
+            get => _internal.Player;
+            set => _internal.Player = value;
+        }
+
+        public long? ReqButtons
+        {
+            get => _internal.ReqButtons;
+            set => _internal.ReqButtons = value;
+        }
+
+        public bool? Reverse
+        {
+            get => _internal.Reverse;
+            set => _internal.Reverse = value;
+        }
+
+        public long? Sensitivity
+        {
+            get => _internal.Sensitivity;
+            set => _internal.Sensitivity = value;
+        }
+
+        public string? Ways
+        {
+            get => _internal.Ways;
+            set => _internal.Ways = value;
+        }
+
+        public string? Ways2
+        {
+            get => _internal.Ways2;
+            set => _internal.Ways2 = value;
+        }
+
+        public string? Ways3
+        {
+            get => _internal.Ways3;
+            set => _internal.Ways3 = value;
+        }
 
         #endregion
 
@@ -21,58 +93,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Control() : base() { }
 
-        public Control(Data.Models.Metadata.Control item) : base(item)
-        {
-            // Process flag values
-            long? buttons = ReadLong(Data.Models.Metadata.Control.ButtonsKey);
-            if (buttons is not null)
-                Write<string?>(Data.Models.Metadata.Control.ButtonsKey, buttons.ToString());
-
-            long? keyDelta = ReadLong(Data.Models.Metadata.Control.KeyDeltaKey);
-            if (keyDelta is not null)
-                Write<string?>(Data.Models.Metadata.Control.KeyDeltaKey, keyDelta.ToString());
-
-            long? maximum = ReadLong(Data.Models.Metadata.Control.MaximumKey);
-            if (maximum is not null)
-                Write<string?>(Data.Models.Metadata.Control.MaximumKey, maximum.ToString());
-
-            long? minimum = ReadLong(Data.Models.Metadata.Control.MinimumKey);
-            if (minimum is not null)
-                Write<string?>(Data.Models.Metadata.Control.MinimumKey, minimum.ToString());
-
-            long? player = ReadLong(Data.Models.Metadata.Control.PlayerKey);
-            if (player is not null)
-                Write<string?>(Data.Models.Metadata.Control.PlayerKey, player.ToString());
-
-            long? reqButtons = ReadLong(Data.Models.Metadata.Control.ReqButtonsKey);
-            if (reqButtons is not null)
-                Write<string?>(Data.Models.Metadata.Control.ReqButtonsKey, reqButtons.ToString());
-
-            bool? reverse = ReadBool(Data.Models.Metadata.Control.ReverseKey);
-            if (reverse is not null)
-                Write<string?>(Data.Models.Metadata.Control.ReverseKey, reverse.FromYesNo());
-
-            long? sensitivity = ReadLong(Data.Models.Metadata.Control.SensitivityKey);
-            if (sensitivity is not null)
-                Write<string?>(Data.Models.Metadata.Control.SensitivityKey, sensitivity.ToString());
-
-            string? controlType = ReadString(Data.Models.Metadata.Control.ControlTypeKey);
-            if (controlType is not null)
-                Write<string?>(Data.Models.Metadata.Control.ControlTypeKey, controlType.AsControlType()?.AsStringValue());
-        }
+        public Control(Data.Models.Metadata.Control item) : base(item) { }
 
         public Control(Data.Models.Metadata.Control item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Control(_internal.Clone() as Data.Models.Metadata.Control ?? []);
+        public override object Clone() => new Control(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Control GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Control ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Control otherControl)
+                return _internal.Equals(otherControl._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

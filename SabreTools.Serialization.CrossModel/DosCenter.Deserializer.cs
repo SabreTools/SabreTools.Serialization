@@ -13,11 +13,11 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new MetadataFile();
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             if (header is not null)
                 metadataFile.DosCenter = ConvertHeaderFromInternalModel(header);
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
                 metadataFile.Game = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
@@ -31,13 +31,13 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dosCenter = new Data.Models.DosCenter.DosCenter
             {
-                Name = item.ReadString(Data.Models.Metadata.Header.NameKey),
-                Description = item.ReadString(Data.Models.Metadata.Header.DescriptionKey),
-                Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
-                Date = item.ReadString(Data.Models.Metadata.Header.DateKey),
-                Author = item.ReadString(Data.Models.Metadata.Header.AuthorKey),
-                Homepage = item.ReadString(Data.Models.Metadata.Header.HomepageKey),
-                Comment = item.ReadString(Data.Models.Metadata.Header.CommentKey),
+                Name = item.Name,
+                Description = item.Description,
+                Version = item.Version,
+                Date = item.Date,
+                Author = item.Author,
+                Homepage = item.Homepage,
+                Comment = item.Comment,
             };
             return dosCenter;
         }
@@ -49,10 +49,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var game = new Game
             {
-                Name = item.ReadString(Data.Models.Metadata.Machine.NameKey),
+                Name = item.Name,
             };
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
                 game.File = Array.ConvertAll(roms, ConvertFromInternalModel);
 
@@ -66,11 +66,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var file = new File
             {
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
-                CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                Date = item.ReadString(Data.Models.Metadata.Rom.DateKey),
+                Name = item.Name,
+                Size = item.Size,
+                CRC = item.CRC32,
+                SHA1 = item.SHA1,
+                Date = item.Date,
             };
             return file;
         }

@@ -305,7 +305,7 @@ namespace SabreTools.Serialization.Writers
                 }
             }
 
-             writer.WriteEndElement();
+            writer.WriteEndElement();
         }
 
         /// <summary>
@@ -322,23 +322,29 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("section", obj.Section);
             writer.WriteOptionalAttributeString("rominfo", obj.RomInfo);
             writer.WriteOptionalAttributeString("d_date", obj.DumpDate);
-            writer.WriteOptionalAttributeString("d_date_info", obj.DumpDateInfo);
+            if (obj.DumpDateInfo is not null)
+                writer.WriteOptionalAttributeString("d_date_info", obj.DumpDateInfo.Value ? "1" : "0");
             writer.WriteOptionalAttributeString("r_date", obj.ReleaseDate);
-            writer.WriteOptionalAttributeString("r_date_info", obj.ReleaseDateInfo);
+            if (obj.ReleaseDateInfo is not null)
+                writer.WriteOptionalAttributeString("r_date_info", obj.ReleaseDateInfo.Value ? "1" : "0");
             writer.WriteOptionalAttributeString("dumper", obj.Dumper);
             writer.WriteOptionalAttributeString("project", obj.Project);
             writer.WriteOptionalAttributeString("originalformat", obj.OriginalFormat);
-            writer.WriteOptionalAttributeString("nodump", obj.Nodump);
+            if (obj.Nodump is not null)
+                writer.WriteOptionalAttributeString("nodump", obj.Nodump.Value ? "1" : "0");
             writer.WriteOptionalAttributeString("tool", obj.Tool);
             writer.WriteOptionalAttributeString("origin", obj.Origin);
             writer.WriteOptionalAttributeString("comment1", obj.Comment1);
             writer.WriteOptionalAttributeString("comment2", obj.Comment2);
             writer.WriteOptionalAttributeString("link1", obj.Link1);
-            writer.WriteOptionalAttributeString("link1_public", obj.Link1Public);
+            if (obj.Link1Public is not null)
+                writer.WriteOptionalAttributeString("link1_public", obj.Link1Public.Value ? "1" : "0");
             writer.WriteOptionalAttributeString("link2", obj.Link2);
-            writer.WriteOptionalAttributeString("link2_public", obj.Link2Public);
+            if (obj.Link2Public is not null)
+                writer.WriteOptionalAttributeString("link2_public", obj.Link2Public.Value ? "1" : "0");
             writer.WriteOptionalAttributeString("link3", obj.Link3);
-            writer.WriteOptionalAttributeString("link3_public", obj.Link3Public);
+            if (obj.Link3Public is not null)
+                writer.WriteOptionalAttributeString("link3_public", obj.Link3Public.Value ? "1" : "0");
             writer.WriteOptionalAttributeString("region", obj.Region);
             writer.WriteOptionalAttributeString("media_title", obj.MediaTitle);
 

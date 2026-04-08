@@ -44,12 +44,12 @@ The softwaredb.xml file contains information about rom mapper types
 
         #endregion
 
-        #region Fields
+        #region Properties
 
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         #endregion
@@ -60,7 +60,7 @@ The softwaredb.xml file contains information about rom mapper types
         /// <param name="datFile">Parent DatFile to copy from</param>
         public OpenMSX(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.OpenMSX);
+            Header.DatFormat = DatFormat.OpenMSX;
         }
 
         /// <inheritdoc/>
@@ -68,15 +68,13 @@ The softwaredb.xml file contains information about rom mapper types
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (string.IsNullOrEmpty(rom.SHA1))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     break;
 
                 default:

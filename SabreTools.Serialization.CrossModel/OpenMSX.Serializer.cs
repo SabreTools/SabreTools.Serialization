@@ -13,14 +13,11 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
+                Header = ConvertHeaderToInternalModel(item),
             };
 
             if (item?.Software is not null && item.Software.Length > 0)
-            {
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
-                    = Array.ConvertAll(item.Software, ConvertMachineToInternalModel);
-            }
+                metadataFile.Machine = Array.ConvertAll(item.Software, ConvertMachineToInternalModel);
 
             return metadataFile;
         }
@@ -32,7 +29,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.TimestampKey] = item.Timestamp,
+                Timestamp = item.Timestamp,
             };
             return header;
         }
@@ -44,19 +41,16 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.NameKey] = item.Title,
-                [Data.Models.Metadata.Machine.GenMSXIDKey] = item.GenMSXID,
-                [Data.Models.Metadata.Machine.SystemKey] = item.System,
-                [Data.Models.Metadata.Machine.CompanyKey] = item.Company,
-                [Data.Models.Metadata.Machine.YearKey] = item.Year,
-                [Data.Models.Metadata.Machine.CountryKey] = item.Country,
+                Name = item.Title,
+                GenMSXID = item.GenMSXID,
+                System = item.System,
+                Company = item.Company,
+                Year = item.Year,
+                Country = item.Country,
             };
 
             if (item.Dump is not null && item.Dump.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.DumpKey]
-                    = Array.ConvertAll(item.Dump, ConvertToInternalModel);
-            }
+                machine.Dump = Array.ConvertAll(item.Dump, ConvertToInternalModel);
 
             return machine;
         }
@@ -69,22 +63,22 @@ namespace SabreTools.Serialization.CrossModel
             var dump = new Data.Models.Metadata.Dump();
 
             if (item.Original is not null)
-                dump[Data.Models.Metadata.Dump.OriginalKey] = ConvertToInternalModel(item.Original);
+                dump.Original = ConvertToInternalModel(item.Original);
 
             if (item.Rom is not null)
             {
                 switch (item.Rom)
                 {
                     case Rom rom:
-                        dump[Data.Models.Metadata.Dump.RomKey] = ConvertToInternalModel(rom);
+                        dump.Rom = ConvertToInternalModel(rom);
                         break;
 
                     case MegaRom megaRom:
-                        dump[Data.Models.Metadata.Dump.MegaRomKey] = ConvertToInternalModel(megaRom);
+                        dump.MegaRom = ConvertToInternalModel(megaRom);
                         break;
 
                     case SCCPlusCart sccPlusCart:
-                        dump[Data.Models.Metadata.Dump.SCCPlusCartKey] = ConvertToInternalModel(sccPlusCart);
+                        dump.SCCPlusCart = ConvertToInternalModel(sccPlusCart);
                         break;
 
                     default:
@@ -103,8 +97,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var original = new Data.Models.Metadata.Original
             {
-                [Data.Models.Metadata.Original.ValueKey] = item.Value,
-                [Data.Models.Metadata.Original.ContentKey] = item.Content,
+                Value = item.Value,
+                Content = item.Content,
             };
             return original;
         }
@@ -116,10 +110,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.StartKey] = item.Start,
-                [Data.Models.Metadata.Rom.OpenMSXType] = item.Type,
-                [Data.Models.Metadata.Rom.SHA1Key] = item.Hash,
-                [Data.Models.Metadata.Rom.RemarkKey] = item.Remark,
+                Start = item.Start,
+                OpenMSXType = item.Type,
+                SHA1 = item.Hash,
+                Remark = item.Remark,
             };
             return rom;
         }

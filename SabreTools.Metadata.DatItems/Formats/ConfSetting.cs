@@ -1,6 +1,5 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,19 +9,33 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("confsetting"), XmlRoot("confsetting")]
     public sealed class ConfSetting : DatItem<Data.Models.Metadata.ConfSetting>
     {
-        #region Fields
+        #region Properties
 
-        /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.ConfSetting;
+        public Condition? Condition { get; set; }
 
         [JsonIgnore]
-        public bool ConditionsSpecified
+        public bool ConditionSpecified => Condition is not null;
+
+        public bool? Default
         {
-            get
-            {
-                var conditions = Read<Condition[]?>(Data.Models.Metadata.ConfSetting.ConditionKey);
-                return conditions is not null && conditions.Length > 0;
-            }
+            get => _internal.Default;
+            set => _internal.Default = value;
+        }
+
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.ConfSetting;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public string? Value
+        {
+            get => _internal.Value;
+            set => _internal.Value = value;
         }
 
         #endregion
@@ -33,41 +46,62 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public ConfSetting(Data.Models.Metadata.ConfSetting item) : base(item)
         {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.ConfSetting.DefaultKey, defaultValue.FromYesNo());
-
             // Handle subitems
-            var condition = Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
-            if (condition is not null)
-                Write<Condition?>(Data.Models.Metadata.ConfSetting.ConditionKey, new Condition(condition));
+            if (item.Condition is not null)
+                Condition = new Condition(item.Condition);
         }
 
         public ConfSetting(Data.Models.Metadata.ConfSetting item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new ConfSetting(_internal.Clone() as Data.Models.Metadata.ConfSetting ?? []);
+        public override object Clone() => new ConfSetting(GetInternalClone());
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.ConfSetting GetInternalClone()
         {
-            var confSettingItem = base.GetInternalClone();
+            var confSettingItem = _internal.Clone() as Data.Models.Metadata.ConfSetting ?? new();
 
-            // Handle subitems
-            var condition = Read<Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
-            if (condition is not null)
-                confSettingItem[Data.Models.Metadata.ConfSetting.ConditionKey] = condition.GetInternalClone();
+            if (Condition is not null)
+                confSettingItem.Condition = Condition.GetInternalClone();
 
             return confSettingItem;
+        }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is ConfSetting otherConfSetting)
+                return _internal.Equals(otherConfSetting._internal);
+
+            // Everything else fails
+            return false;
         }
 
         #endregion

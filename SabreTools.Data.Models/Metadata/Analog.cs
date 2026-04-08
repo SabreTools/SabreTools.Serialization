@@ -1,18 +1,44 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("analog"), XmlRoot("analog")]
-    public class Analog : DatItem
+    public class Analog : DatItem, ICloneable, IEquatable<Analog>
     {
-        #region Keys
+        #region Properties
 
-        /// <remarks>string</remarks>
-        public const string MaskKey = "mask";
+        public string? Mask { get; set; }
 
         #endregion
 
-        public Analog() => Type = ItemType.Analog;
+        public Analog() => ItemType = ItemType.Analog;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Analog();
+
+            obj.Mask = Mask;
+
+            return obj;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Analog? other)
+        {
+            // Null never matches
+            if (other is null)
+                return false;
+
+            // Properties
+            if ((Mask is null) ^ (other.Mask is null))
+                return false;
+            else if (Mask is not null && !Mask.Equals(other.Mask, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            return true;
+        }
     }
 }

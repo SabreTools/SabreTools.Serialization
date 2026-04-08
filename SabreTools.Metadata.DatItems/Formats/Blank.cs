@@ -7,87 +7,66 @@ namespace SabreTools.Metadata.DatItems.Formats
     /// Represents a blank set from an input DAT
     /// </summary>
     [JsonObject("blank"), XmlRoot("blank")]
-    public sealed class Blank : DatItem
+    public sealed class Blank : DatItem<Data.Models.Metadata.Blank>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Blank;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Blank;
 
         #endregion
 
         #region Constructors
 
-        /// <summary>
-        /// Create a default, empty Blank object
-        /// </summary>
-        public Blank()
+        public Blank() : base() { }
+
+        public Blank(Data.Models.Metadata.Blank item) : base(item) { }
+
+        public Blank(Data.Models.Metadata.Blank item, Machine machine, Source source) : this(item)
         {
-            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
+            Source = source;
+            CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone()
-        {
-            var blank = new Blank();
-            blank.Write(MachineKey, GetMachine());
-            blank.Write(RemoveKey, ReadBool(RemoveKey));
-            blank.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
-            blank.Write<string?>(Data.Models.Metadata.DatItem.TypeKey, ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue());
+        public override object Clone() => new Blank(GetInternalClone());
 
-            return blank;
-        }
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Blank GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Blank ?? new();
 
         #endregion
 
         #region Comparision Methods
 
         /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem? other)
-        {
-            // If other is null
-            if (other is null)
-                return false;
-
-            // If the type is mismatched
-            if (other is not DatItem otherItem)
-                return false;
-
-            // Compare internal models
-            return Equals(otherItem);
-        }
-
-        /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem<Data.Models.Metadata.DatItem>? other)
-        {
-            // If other is null
-            if (other is null)
-                return false;
-
-            // If the type is mismatched
-            if (other is not DatItem otherItem)
-                return false;
-
-            // Compare internal models
-            return Equals(otherItem);
-        }
-
-        /// <inheritdoc/>
         public override bool Equals(DatItem? other)
         {
-            // If we don't have a blank, return false
-            if (ReadString(Data.Models.Metadata.DatItem.TypeKey) != other?.ReadString(Data.Models.Metadata.DatItem.TypeKey))
+            // If the other item is null
+            if (other is null)
                 return false;
 
-            // Otherwise, treat it as a Blank
-            Blank? newOther = other as Blank;
+            // If the type matches
+            if (other is Blank otherBlank)
+                return _internal.Equals(otherBlank._internal);
 
-            // If the machine information matches
-            return GetMachine() == newOther!.GetMachine();
+            // Everything else fails
+            return false;
         }
 
         #endregion

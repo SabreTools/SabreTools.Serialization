@@ -13,8 +13,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class Missfile : DatFile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
-            => Enum.GetValues(typeof(ItemType)) as ItemType[] ?? [];
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
+            => Enum.GetValues(typeof(Data.Models.Metadata.ItemType)) as Data.Models.Metadata.ItemType[] ?? [];
 
         /// <summary>
         /// Constructor designed for casting a base DatFile
@@ -22,7 +22,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public Missfile(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.MissFile);
+            Header.DatFormat = DatFormat.MissFile;
         }
 
         /// <inheritdoc/>
@@ -88,7 +88,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             WriteDatItem(sw, datItem, lastgame);
 
                         // Set the new data to compare against
-                        lastgame = datItem.GetMachine()!.GetName();
+                        lastgame = datItem.Machine!.Name;
                     }
                 }
 
@@ -149,7 +149,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             WriteDatItemDB(sw, datItem, lastgame);
 
                         // Set the new data to compare against
-                        lastgame = machine.Value!.GetName();
+                        lastgame = machine.Value!.Name;
                     }
                 }
 
@@ -174,7 +174,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="lastgame">The name of the last game to be output</param>
         private void WriteDatItem(StreamWriter sw, DatItem datItem, string? lastgame)
         {
-            var machine = datItem.GetMachine();
+            var machine = datItem.Machine;
             WriteDatItemImpl(sw, datItem, machine!, lastgame);
         }
 
@@ -205,8 +205,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
             // Romba mode automatically uses item name
             if (Modifiers.OutputDepot?.IsActive == true || Modifiers.UseRomName)
                 sw.Write($"{datItem.GetName() ?? string.Empty}\n");
-            else if (!Modifiers.UseRomName && machine!.GetName() != lastgame)
-                sw.Write($"{machine!.GetName() ?? string.Empty}\n");
+            else if (!Modifiers.UseRomName && machine!.Name != lastgame)
+                sw.Write($"{machine!.Name ?? string.Empty}\n");
 
             sw.Flush();
         }

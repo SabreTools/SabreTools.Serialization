@@ -10,9 +10,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class RomCenter : SerializableDatFile<Data.Models.RomCenter.MetadataFile, Serialization.Readers.RomCenter, Serialization.Writers.RomCenter, Serialization.CrossModel.RomCenter>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public RomCenter(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RomCenter);
+            Header.DatFormat = DatFormat.RomCenter;
         }
 
         /// <inheritdoc/>
@@ -29,17 +29,15 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)))
-                        missingFields.Add(Data.Models.Metadata.Rom.CRCKey);
-                    if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
-                        missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (string.IsNullOrEmpty(rom.CRC32))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC32));
+                    if (rom.Size is null || rom.Size < 0)
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
                     break;
 
                 default:

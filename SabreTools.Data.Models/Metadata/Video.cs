@@ -1,36 +1,115 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("video"), XmlRoot("video")]
-    public class Video : DatItem
+    public class Video : DatItem, ICloneable, IEquatable<Display>, IEquatable<Video>
     {
-        #region Keys
+        #region Properties
 
-        /// <remarks>long</remarks>
-        public const string AspectXKey = "aspectx";
+        public long? AspectX { get; set; }
 
-        /// <remarks>long</remarks>
-        public const string AspectYKey = "aspecty";
+        public long? AspectY { get; set; }
 
-        /// <remarks>long; Originally "y"</remarks>
-        public const string HeightKey = "height";
+        /// <remarks>Originally "y"</remarks>
+        public long? Height { get; set; }
 
         /// <remarks>(vertical|horizontal)</remarks>
-        public const string OrientationKey = "orientation";
+        public Rotation? Orientation { get; set; }
 
-        /// <remarks>double; Originally "freq"</remarks>
-        public const string RefreshKey = "refresh";
+        /// <remarks>Originally "freq"</remarks>
+        public double? Refresh { get; set; }
 
         /// <remarks>(raster|vector)</remarks>
-        public const string ScreenKey = "screen";
+        public DisplayType? Screen { get; set; }
 
-        /// <remarks>long; Originally "x"</remarks>
-        public const string WidthKey = "width";
+        /// <remarks>Originally "x"</remarks>
+        public long? Width { get; set; }
 
         #endregion
 
-        public Video() => Type = ItemType.Video;
+        public Video() => ItemType = ItemType.Video;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Video();
+
+            obj.AspectX = AspectX;
+            obj.AspectY = AspectY;
+            obj.Height = Height;
+            obj.Orientation = Orientation;
+            obj.Refresh = Refresh;
+            obj.Screen = Screen;
+            obj.Width = Width;
+
+            return obj;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Display? other)
+        {
+            // Null never matches
+            if (other is null)
+                return false;
+
+            // Properties
+            if (AspectX != other.AspectX)
+                return false;
+
+            if (AspectY != other.AspectY)
+                return false;
+
+            if (Height != other.Height)
+                return false;
+
+            if (Orientation != other.Rotate)
+                return false;
+
+            if (Refresh != other.Refresh)
+                return false;
+
+            if (Screen != other.DisplayType)
+                return false;
+
+            if (Width != other.Width)
+                return false;
+
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Video? other)
+        {
+            // Null never matches
+            if (other is null)
+                return false;
+
+            // Properties
+            if (AspectX != other.AspectX)
+                return false;
+
+            if (AspectY != other.AspectY)
+                return false;
+
+            if (Height != other.Height)
+                return false;
+
+            if (Orientation != other.Orientation)
+                return false;
+
+            if (Refresh != other.Refresh)
+                return false;
+
+            if (Screen != other.Screen)
+                return false;
+
+            if (Width != other.Width)
+                return false;
+
+            return true;
+        }
     }
 }

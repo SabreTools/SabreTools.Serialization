@@ -13,14 +13,11 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
+                Header = ConvertHeaderToInternalModel(item),
             };
 
             if (item?.Games?.Game is not null && item.Games.Game.Length > 0)
-            {
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
-                    = Array.ConvertAll(item.Games.Game, ConvertMachineToInternalModel);
-            }
+                metadataFile.Machine = Array.ConvertAll(item.Games.Game, ConvertMachineToInternalModel);
 
             return metadataFile;
         }
@@ -32,28 +29,26 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.SchemaLocationKey] = item.NoNamespaceSchemaLocation,
+                SchemaLocation = item.NoNamespaceSchemaLocation,
             };
 
             if (item.Configuration is not null)
             {
-                header[Data.Models.Metadata.Header.NameKey] = item.Configuration.DatName;
-                header[Data.Models.Metadata.Header.ImFolderKey] = item.Configuration.ImFolder;
-                header[Data.Models.Metadata.Header.DatVersionKey] = item.Configuration.DatVersion;
-                header[Data.Models.Metadata.Header.SystemKey] = item.Configuration.System;
-                header[Data.Models.Metadata.Header.ScreenshotsWidthKey] = item.Configuration.ScreenshotsWidth;
-                header[Data.Models.Metadata.Header.ScreenshotsHeightKey] = item.Configuration.ScreenshotsHeight;
-                header[Data.Models.Metadata.Header.InfosKey] = item.Configuration.Infos;
-                header[Data.Models.Metadata.Header.CanOpenKey] = item.Configuration.CanOpen;
-                header[Data.Models.Metadata.Header.NewDatKey] = item.Configuration.NewDat;
-                header[Data.Models.Metadata.Header.SearchKey] = item.Configuration.Search;
-                header[Data.Models.Metadata.Header.RomTitleKey] = item.Configuration.RomTitle;
+                header.Name = item.Configuration.DatName;
+                header.ImFolder = item.Configuration.ImFolder;
+                header.DatVersion = item.Configuration.DatVersion;
+                header.System = item.Configuration.System;
+                header.ScreenshotsHeight = item.Configuration.ScreenshotsWidth;
+                header.ScreenshotsWidth = item.Configuration.ScreenshotsHeight;
+                header.Infos = item.Configuration.Infos;
+                header.CanOpen = item.Configuration.CanOpen;
+                header.NewDat = item.Configuration.NewDat;
+                header.Search = item.Configuration.Search;
+                header.RomTitle = item.Configuration.RomTitle;
             }
 
             if (item.GUI is not null)
-            {
-                header[Data.Models.Metadata.Header.ImagesKey] = item.GUI.Images;
-            }
+                header.Images = item.GUI.Images;
 
             return header;
         }
@@ -65,27 +60,27 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.ImageNumberKey] = item.ImageNumber,
-                [Data.Models.Metadata.Machine.ReleaseNumberKey] = item.ReleaseNumber,
-                [Data.Models.Metadata.Machine.NameKey] = item.Title,
-                [Data.Models.Metadata.Machine.SaveTypeKey] = item.SaveType,
-                [Data.Models.Metadata.Machine.PublisherKey] = item.Publisher,
-                [Data.Models.Metadata.Machine.LocationKey] = item.Location,
-                [Data.Models.Metadata.Machine.SourceRomKey] = item.SourceRom,
-                [Data.Models.Metadata.Machine.LanguageKey] = item.Language,
-                [Data.Models.Metadata.Machine.Im1CRCKey] = item.Im1CRC,
-                [Data.Models.Metadata.Machine.Im2CRCKey] = item.Im2CRC,
-                [Data.Models.Metadata.Machine.CommentKey] = item.Comment,
-                [Data.Models.Metadata.Machine.DuplicateIDKey] = item.DuplicateID,
+                ImageNumber = item.ImageNumber,
+                ReleaseNumber = item.ReleaseNumber,
+                Name = item.Title,
+                SaveType = item.SaveType,
+                Publisher = item.Publisher,
+                Location = item.Location,
+                SourceRom = item.SourceRom,
+                Language = item.Language,
+                Im1CRC = item.Im1CRC,
+                Im2CRC = item.Im2CRC,
+                Comment = item.Comment is null ? null : [item.Comment],
+                DuplicateID = item.DuplicateID,
             };
 
             if (item.Files?.RomCRC is not null && item.Files.RomCRC.Length > 0)
             {
-                machine[Data.Models.Metadata.Machine.RomKey]
+                machine.Rom
                     = Array.ConvertAll(item.Files.RomCRC, romCRC =>
                         {
                             var rom = ConvertToInternalModel(romCRC);
-                            rom[Data.Models.Metadata.Rom.SizeKey] = item.RomSize;
+                            rom.Size = item.RomSize;
                             return rom;
                         });
             }
@@ -100,8 +95,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.ExtensionKey] = item.Extension,
-                [Data.Models.Metadata.Rom.CRCKey] = item.Content,
+                Extension = item.Extension,
+                CRC32 = item.Content,
             };
             return rom;
         }

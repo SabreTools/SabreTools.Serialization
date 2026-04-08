@@ -1,5 +1,7 @@
 
 #pragma warning disable IDE1006 // Naming Styles
+using SabreTools.Data.Models.Metadata;
+
 namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>rom</remarks>
@@ -11,7 +13,7 @@ namespace SabreTools.Data.Models.ClrMamePro
 
         /// <remarks>size, Numeric</remarks>
         [Required]
-        public string? Size { get; set; }
+        public long? Size { get; set; }
 
         /// <remarks>crc</remarks>
         public string? CRC { get; set; }
@@ -26,7 +28,7 @@ namespace SabreTools.Data.Models.ClrMamePro
         public string? Merge { get; set; }
 
         /// <remarks>status</remarks>
-        public string? Status { get; set; }
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>flags</remarks>
         public string? Flags { get; set; }
@@ -101,10 +103,10 @@ namespace SabreTools.Data.Models.ClrMamePro
         #region RomVault Extensions
 
         /// <remarks>inverted; Boolean; Appears after Date</remarks>
-        public string? Inverted { get; set; }
+        public bool? Inverted { get; set; }
 
         /// <remarks>mia; Boolean; Appears after Inverted</remarks>
-        public string? MIA { get; set; }
+        public bool? MIA { get; set; }
 
         #endregion
     }

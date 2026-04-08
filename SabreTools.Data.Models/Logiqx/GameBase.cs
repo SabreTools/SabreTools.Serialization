@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Logiqx
 {
@@ -17,15 +18,15 @@ namespace SabreTools.Data.Models.Logiqx
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("isbios")]
-        public string? IsBios { get; set; }
+        public bool? IsBios { get; set; }
 
         /// <remarks>(yes|no) "no", MAME extension</remarks>
         [XmlAttribute("isdevice")]
-        public string? IsDevice { get; set; }
+        public bool? IsDevice { get; set; }
 
         /// <remarks>(yes|no) "no", MAME extension</remarks>
         [XmlAttribute("ismechanical")]
-        public string? IsMechanical { get; set; }
+        public bool? IsMechanical { get; set; }
 
         [XmlAttribute("cloneof")]
         public string? CloneOf { get; set; }
@@ -52,7 +53,7 @@ namespace SabreTools.Data.Models.Logiqx
 
         /// <remarks>(no|partial|yes) "no"</remarks>
         [XmlAttribute("runnable")]
-        public string? Runnable { get; set; }
+        public Runnable? Runnable { get; set; }
 
         [XmlElement("comment")]
         public string[]? Comment { get; set; }

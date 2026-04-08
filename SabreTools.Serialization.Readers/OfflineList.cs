@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.OfflineList;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -167,7 +169,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -415,7 +417,7 @@ namespace SabreTools.Serialization.Readers
                         if (obj.RomSize is not null && Debug)
                             Console.WriteLine($"'{reader.Name}' element already found, overwriting");
 
-                        obj.RomSize = reader.ReadElementContentAsString();
+                        obj.RomSize = NumberHelper.ConvertToInt64(reader.ReadElementContentAsString());
                         break;
                     case "publisher":
                         if (obj.Publisher is not null && Debug)
@@ -578,7 +580,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -594,7 +596,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -627,7 +629,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -822,7 +824,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -838,7 +840,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -854,7 +856,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -870,7 +872,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -886,7 +888,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -902,7 +904,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -918,7 +920,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -934,7 +936,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -950,7 +952,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -966,7 +968,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Visible = reader.GetAttribute("visible");
             obj.InNamingOption = reader.GetAttribute("inNamingOption");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -1077,7 +1079,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new To();
 
             obj.Value = reader.GetAttribute("value");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
             obj.Auto = reader.GetAttribute("auto");
 
             List<Find> finds = [];

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Logiqx;
 using SabreTools.IO.Extensions;
 using SabreTools.Text.Extensions;
@@ -76,7 +77,7 @@ namespace SabreTools.Serialization.Writers
             return stream;
         }
 
-       /// <summary>
+        /// <summary>
         /// Write a Datafile to an XmlTextWriter
         /// </summary>
         /// <param name="obj">Datafile to write</param>
@@ -86,7 +87,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("datafile");
 
             writer.WriteOptionalAttributeString("build", obj.Build);
-            writer.WriteOptionalAttributeString("debug", obj.Debug);
+            writer.WriteOptionalAttributeString("debug", obj.Debug.FromYesNo());
 
             // TODO: Fix schema location writing
             // writer.WriteOptionalAttributeString("schemaLocation", obj.SchemaLocation);
@@ -125,9 +126,12 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("clrmamepro");
 
             writer.WriteOptionalAttributeString("header", obj.Header);
-            writer.WriteOptionalAttributeString("forcemerging", obj.ForceMerging);
-            writer.WriteOptionalAttributeString("forcenodump", obj.ForceNodump);
-            writer.WriteOptionalAttributeString("forcepacking", obj.ForcePacking);
+            if (obj.ForceMerging != Data.Models.Metadata.MergingFlag.None)
+                writer.WriteOptionalAttributeString("forcemerging", obj.ForceMerging.AsStringValue());
+            if (obj.ForceNodump != Data.Models.Metadata.NodumpFlag.None)
+                writer.WriteOptionalAttributeString("forcenodump", obj.ForceNodump.AsStringValue());
+            if (obj.ForcePacking != Data.Models.Metadata.PackingFlag.None)
+                writer.WriteOptionalAttributeString("forcepacking", obj.ForcePacking.AsStringValue());
 
             writer.WriteEndElement();
         }
@@ -155,6 +159,9 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalElementString("comment", obj.Comment);
             writer.WriteOptionalElementString("type", obj.Type);
 
+            if (obj.RomVault is not null)
+                WriteRomVault(obj.RomVault, writer);
+
             if (obj.ClrMamePro is not null)
                 WriteClrMamePro(obj.ClrMamePro, writer);
 
@@ -174,12 +181,36 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("romcenter");
 
             writer.WriteOptionalAttributeString("plugin", obj.Plugin);
-            writer.WriteOptionalAttributeString("rommode", obj.RomMode);
-            writer.WriteOptionalAttributeString("biosmode", obj.BiosMode);
-            writer.WriteOptionalAttributeString("samplemode", obj.SampleMode);
-            writer.WriteOptionalAttributeString("lockrommode", obj.LockRomMode);
-            writer.WriteOptionalAttributeString("lockbiosmode", obj.LockBiosMode);
-            writer.WriteOptionalAttributeString("locksamplemode", obj.LockSampleMode);
+
+            if (obj.RomMode != Data.Models.Metadata.MergingFlag.None)
+                writer.WriteOptionalAttributeString("rommode", obj.RomMode.AsStringValue());
+            if (obj.BiosMode != Data.Models.Metadata.MergingFlag.None)
+                writer.WriteOptionalAttributeString("biosmode", obj.BiosMode.AsStringValue());
+            if (obj.SampleMode != Data.Models.Metadata.MergingFlag.None)
+                writer.WriteOptionalAttributeString("samplemode", obj.SampleMode.AsStringValue());
+            writer.WriteOptionalAttributeString("lockrommode", obj.LockRomMode.FromYesNo());
+            writer.WriteOptionalAttributeString("lockbiosmode", obj.LockBiosMode.FromYesNo());
+            writer.WriteOptionalAttributeString("locksamplemode", obj.LockSampleMode.FromYesNo());
+
+            writer.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Write a RomVault to an XmlTextWriter
+        /// </summary>
+        /// <param name="obj">RomVault to write</param>
+        /// <param name="writer">XmlTextReader to write to</param>
+        private static void WriteRomVault(RomVault obj, XmlTextWriter writer)
+        {
+            writer.WriteStartElement("romvault");
+
+            writer.WriteOptionalAttributeString("header", obj.Header);
+            if (obj.ForceMerging != Data.Models.Metadata.MergingFlag.None)
+                writer.WriteOptionalAttributeString("forcemerging", obj.ForceMerging.AsStringValue());
+            if (obj.ForceNodump != Data.Models.Metadata.NodumpFlag.None)
+                writer.WriteOptionalAttributeString("forcenodump", obj.ForceNodump.AsStringValue());
+            if (obj.ForcePacking != Data.Models.Metadata.PackingFlag.None)
+                writer.WriteOptionalAttributeString("forcepacking", obj.ForcePacking.AsStringValue());
 
             writer.WriteEndElement();
         }
@@ -213,7 +244,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteRequiredAttributeString("description", obj.Description);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.FromYesNo());
 
             writer.WriteEndElement();
         }
@@ -275,7 +306,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("md5", obj.MD5);
             writer.WriteOptionalAttributeString("sha1", obj.SHA1);
             writer.WriteOptionalAttributeString("merge", obj.Merge);
-            writer.WriteOptionalAttributeString("status", obj.Status);
+            writer.WriteOptionalAttributeString("status", obj.Status?.AsStringValue());
             writer.WriteOptionalAttributeString("region", obj.Region);
 
             writer.WriteEndElement();
@@ -290,14 +321,14 @@ namespace SabreTools.Serialization.Writers
         {
             writer.WriteStartElement("driver");
 
-            writer.WriteRequiredAttributeString("status", obj.Status);
-            writer.WriteRequiredAttributeString("emulation", obj.Emulation);
-            writer.WriteRequiredAttributeString("cocktail", obj.Cocktail);
-            writer.WriteRequiredAttributeString("savestate", obj.SaveState);
-            writer.WriteOptionalAttributeString("requiresartwork", obj.RequiresArtwork);
-            writer.WriteOptionalAttributeString("unofficial", obj.Unofficial);
-            writer.WriteOptionalAttributeString("nosoundhardware", obj.NoSoundHardware);
-            writer.WriteOptionalAttributeString("incomplete", obj.Incomplete);
+            writer.WriteRequiredAttributeString("status", obj.Status?.AsStringValue());
+            writer.WriteRequiredAttributeString("emulation", obj.Emulation?.AsStringValue());
+            writer.WriteRequiredAttributeString("cocktail", obj.Cocktail?.AsStringValue());
+            writer.WriteRequiredAttributeString("savestate", obj.SaveState?.AsStringValue());
+            writer.WriteOptionalAttributeString("requiresartwork", obj.RequiresArtwork.FromYesNo());
+            writer.WriteOptionalAttributeString("unofficial", obj.Unofficial.FromYesNo());
+            writer.WriteOptionalAttributeString("nosoundhardware", obj.NoSoundHardware.FromYesNo());
+            writer.WriteOptionalAttributeString("incomplete", obj.Incomplete.FromYesNo());
 
             writer.WriteEndElement();
         }
@@ -318,9 +349,9 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteOptionalAttributeString("sourcefile", obj.SourceFile);
-            writer.WriteOptionalAttributeString("isbios", obj.IsBios);
-            writer.WriteOptionalAttributeString("isdevice", obj.IsDevice);
-            writer.WriteOptionalAttributeString("ismechanical", obj.IsMechanical);
+            writer.WriteOptionalAttributeString("isbios", obj.IsBios.FromYesNo());
+            writer.WriteOptionalAttributeString("isdevice", obj.IsDevice.FromYesNo());
+            writer.WriteOptionalAttributeString("ismechanical", obj.IsMechanical.FromYesNo());
             writer.WriteOptionalAttributeString("cloneof", obj.CloneOf);
             writer.WriteOptionalAttributeString("romof", obj.RomOf);
             writer.WriteOptionalAttributeString("sampleof", obj.SampleOf);
@@ -328,7 +359,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("rebuildto", obj.RebuildTo);
             writer.WriteOptionalAttributeString("id", obj.Id);
             writer.WriteOptionalAttributeString("cloneofid", obj.CloneOfId);
-            writer.WriteOptionalAttributeString("runnable", obj.Runnable);
+            writer.WriteOptionalAttributeString("runnable", obj.Runnable?.AsStringValue());
 
             if (obj.Comment is not null && obj.Comment.Length > 0)
             {
@@ -466,7 +497,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteRequiredAttributeString("region", obj.Region);
             writer.WriteOptionalAttributeString("language", obj.Language);
             writer.WriteOptionalAttributeString("date", obj.Date);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.FromYesNo());
 
             writer.WriteEndElement();
         }
@@ -481,7 +512,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("rom");
 
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteRequiredAttributeString("size", obj.Size);
+            writer.WriteRequiredAttributeString("size", obj.Size?.ToString());
             writer.WriteOptionalAttributeString("crc16", obj.CRC16);
             writer.WriteOptionalAttributeString("crc", obj.CRC);
             writer.WriteOptionalAttributeString("crc64", obj.CRC64);
@@ -498,12 +529,12 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("xxh3_64", obj.xxHash364);
             writer.WriteOptionalAttributeString("xxh3_128", obj.xxHash3128);
             writer.WriteOptionalAttributeString("merge", obj.Merge);
-            writer.WriteOptionalAttributeString("status", obj.Status);
+            writer.WriteOptionalAttributeString("status", obj.Status?.AsStringValue());
             writer.WriteOptionalAttributeString("serial", obj.Serial);
             writer.WriteOptionalAttributeString("header", obj.Header);
             writer.WriteOptionalAttributeString("date", obj.Date);
-            writer.WriteOptionalAttributeString("inverted", obj.Inverted);
-            writer.WriteOptionalAttributeString("mia", obj.MIA);
+            writer.WriteOptionalAttributeString("inverted", obj.Inverted.FromYesNo());
+            writer.WriteOptionalAttributeString("mia", obj.MIA.FromYesNo());
 
             writer.WriteEndElement();
         }
@@ -533,7 +564,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("tag", obj.Tag);
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteRequiredAttributeString("status", obj.Status);
+            writer.WriteRequiredAttributeString("status", obj.Status?.AsStringValue());
             writer.WriteOptionalAttributeString("filter", obj.Filter);
 
             writer.WriteEndElement();

@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ClrMamePro;
 using SabreTools.IO.Extensions;
 using SabreTools.Text.ClrMamePro;
@@ -110,9 +111,11 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalStandalone("comment", header.Comment);
             writer.WriteOptionalStandalone("header", header.Header);
             writer.WriteOptionalStandalone("type", header.Type);
-            writer.WriteOptionalStandalone("forcemerging", header.ForceMerging);
-            writer.WriteOptionalStandalone("forcezipping", header.ForceZipping);
-            writer.WriteOptionalStandalone("forcepacking", header.ForcePacking);
+            if (header.ForceMerging != Data.Models.Metadata.MergingFlag.None)
+                writer.WriteOptionalStandalone("forcemerging", header.ForceMerging.AsStringValue());
+            writer.WriteOptionalStandalone("forcezipping", header.ForceZipping.FromYesNo());
+            if (header.ForcePacking != Data.Models.Metadata.PackingFlag.None)
+                writer.WriteOptionalStandalone("forcepacking", header.ForcePacking.AsStringValue());
 
             writer.WriteEndElement(); // clrmamepro
             writer.Flush();
@@ -217,7 +220,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteRequiredAttributeString("region", release.Region, throwOnError: true);
                 writer.WriteOptionalAttributeString("language", release.Language);
                 writer.WriteOptionalAttributeString("date", release.Date);
-                writer.WriteOptionalAttributeString("default", release.Default);
+                writer.WriteOptionalAttributeString("default", release.Default.FromYesNo());
                 writer.WriteEndElement(); // release
             }
         }
@@ -238,7 +241,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteStartElement("biosset");
                 writer.WriteRequiredAttributeString("name", biosset.Name, throwOnError: true);
                 writer.WriteRequiredAttributeString("description", biosset.Description, throwOnError: true);
-                writer.WriteOptionalAttributeString("default", biosset.Default);
+                writer.WriteOptionalAttributeString("default", biosset.Default.FromYesNo());
                 writer.WriteEndElement(); // release
             }
         }
@@ -258,7 +261,7 @@ namespace SabreTools.Serialization.Writers
             {
                 writer.WriteStartElement("rom");
                 writer.WriteRequiredAttributeString("name", rom.Name, throwOnError: true);
-                writer.WriteRequiredAttributeString("size", rom.Size, throwOnError: true);
+                writer.WriteRequiredAttributeString("size", rom.Size?.ToString(), throwOnError: true);
                 writer.WriteOptionalAttributeString("crc16", rom.CRC16);
                 writer.WriteOptionalAttributeString("crc", rom.CRC);
                 writer.WriteOptionalAttributeString("crc64", rom.CRC64);
@@ -275,15 +278,15 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteOptionalAttributeString("xxh3_64", rom.xxHash364);
                 writer.WriteOptionalAttributeString("xxh3_128", rom.xxHash3128);
                 writer.WriteOptionalAttributeString("merge", rom.Merge);
-                writer.WriteOptionalAttributeString("status", rom.Status);
+                writer.WriteOptionalAttributeString("status", rom.Status?.AsStringValue());
                 writer.WriteOptionalAttributeString("region", rom.Region);
                 writer.WriteOptionalAttributeString("flags", rom.Flags);
                 writer.WriteOptionalAttributeString("offs", rom.Offs);
                 writer.WriteOptionalAttributeString("serial", rom.Serial);
                 writer.WriteOptionalAttributeString("header", rom.Header);
                 writer.WriteOptionalAttributeString("date", rom.Date);
-                writer.WriteOptionalAttributeString("inverted", rom.Inverted);
-                writer.WriteOptionalAttributeString("mia", rom.MIA);
+                writer.WriteOptionalAttributeString("inverted", rom.Inverted.FromYesNo());
+                writer.WriteOptionalAttributeString("mia", rom.MIA.FromYesNo());
                 writer.WriteEndElement(); // rom
             }
         }
@@ -306,7 +309,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteOptionalAttributeString("md5", disk.MD5);
                 writer.WriteOptionalAttributeString("sha1", disk.SHA1);
                 writer.WriteOptionalAttributeString("merge", disk.Merge);
-                writer.WriteOptionalAttributeString("status", disk.Status);
+                writer.WriteOptionalAttributeString("status", disk.Status?.AsStringValue());
                 writer.WriteOptionalAttributeString("flags", disk.Flags);
                 writer.WriteEndElement(); // disk
             }
@@ -387,10 +390,10 @@ namespace SabreTools.Serialization.Writers
             foreach (var chip in chips)
             {
                 writer.WriteStartElement("chip");
-                writer.WriteRequiredAttributeString("type", chip.Type, throwOnError: true);
+                writer.WriteRequiredAttributeString("type", chip.Type?.AsStringValue(), throwOnError: true);
                 writer.WriteRequiredAttributeString("name", chip.Name, throwOnError: true);
                 writer.WriteOptionalAttributeString("flags", chip.Flags);
-                writer.WriteOptionalAttributeString("clock", chip.Clock);
+                writer.WriteOptionalAttributeString("clock", chip.Clock?.ToString());
                 writer.WriteEndElement(); // chip
             }
         }
@@ -409,13 +412,13 @@ namespace SabreTools.Serialization.Writers
             foreach (var video in videos)
             {
                 writer.WriteStartElement("video");
-                writer.WriteRequiredAttributeString("screen", video.Screen, throwOnError: true);
-                writer.WriteRequiredAttributeString("orientation", video.Orientation, throwOnError: true);
-                writer.WriteOptionalAttributeString("x", video.X);
-                writer.WriteOptionalAttributeString("y", video.Y);
-                writer.WriteOptionalAttributeString("aspectx", video.AspectX);
-                writer.WriteOptionalAttributeString("aspecty", video.AspectY);
-                writer.WriteOptionalAttributeString("freq", video.Freq);
+                writer.WriteRequiredAttributeString("screen", video.Screen?.AsStringValue(), throwOnError: true);
+                writer.WriteRequiredAttributeString("orientation", video.Orientation?.AsStringValue(useSecond: true), throwOnError: true);
+                writer.WriteOptionalAttributeString("x", video.X?.ToString());
+                writer.WriteOptionalAttributeString("y", video.Y.ToString());
+                writer.WriteOptionalAttributeString("aspectx", video.AspectX.ToString());
+                writer.WriteOptionalAttributeString("aspecty", video.AspectY.ToString());
+                writer.WriteOptionalAttributeString("freq", video.Freq?.ToString("0.000000"));
                 writer.WriteEndElement(); // video
             }
         }
@@ -432,7 +435,7 @@ namespace SabreTools.Serialization.Writers
                 return;
 
             writer.WriteStartElement("sound");
-            writer.WriteRequiredAttributeString("channels", sound.Channels, throwOnError: true);
+            writer.WriteRequiredAttributeString("channels", sound.Channels?.ToString(), throwOnError: true);
             writer.WriteEndElement(); // sound
         }
 
@@ -448,12 +451,12 @@ namespace SabreTools.Serialization.Writers
                 return;
 
             writer.WriteStartElement("input");
-            writer.WriteRequiredAttributeString("players", input.Players, throwOnError: true);
+            writer.WriteRequiredAttributeString("players", input.Players?.ToString(), throwOnError: true);
             writer.WriteOptionalAttributeString("control", input.Control);
-            writer.WriteRequiredAttributeString("buttons", input.Buttons, throwOnError: true);
-            writer.WriteOptionalAttributeString("coins", input.Coins);
-            writer.WriteOptionalAttributeString("tilt", input.Tilt);
-            writer.WriteOptionalAttributeString("service", input.Service);
+            writer.WriteRequiredAttributeString("buttons", input.Buttons?.ToString(), throwOnError: true);
+            writer.WriteOptionalAttributeString("coins", input.Coins?.ToString());
+            writer.WriteOptionalAttributeString("tilt", input.Tilt.FromYesNo());
+            writer.WriteOptionalAttributeString("service", input.Service.FromYesNo());
             writer.WriteEndElement(); // input
         }
 
@@ -477,7 +480,7 @@ namespace SabreTools.Serialization.Writers
                     writer.WriteRequiredAttributeString("entry", entry);
                 }
 
-                writer.WriteOptionalAttributeString("default", dipswitch.Default);
+                writer.WriteOptionalAttributeString("default", dipswitch.Default.FromYesNo());
                 writer.WriteEndElement(); // dipswitch
             }
         }
@@ -494,11 +497,11 @@ namespace SabreTools.Serialization.Writers
                 return;
 
             writer.WriteStartElement("driver");
-            writer.WriteRequiredAttributeString("status", driver.Status, throwOnError: true);
-            writer.WriteOptionalAttributeString("color", driver.Color); // TODO: Probably actually required
-            writer.WriteOptionalAttributeString("sound", driver.Sound); // TODO: Probably actually required
+            writer.WriteRequiredAttributeString("status", driver.Status?.AsStringValue(), throwOnError: true);
+            writer.WriteOptionalAttributeString("color", driver.Color?.AsStringValue()); // TODO: Probably actually required
+            writer.WriteOptionalAttributeString("sound", driver.Sound?.AsStringValue()); // TODO: Probably actually required
             writer.WriteOptionalAttributeString("palettesize", driver.PaletteSize);
-            writer.WriteOptionalAttributeString("blit", driver.Blit);
+            writer.WriteOptionalAttributeString("blit", driver.Blit?.AsStringValue());
             writer.WriteEndElement(); // driver
         }
 

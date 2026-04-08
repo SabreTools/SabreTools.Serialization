@@ -11,9 +11,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class RipeMD128File : Hashfile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public RipeMD128File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.RIPEMD128;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpRIPEMD128);
+            Header.DatFormat = DatFormat.RedumpRIPEMD128;
         }
 
         /// <inheritdoc/>
@@ -31,15 +31,13 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.RIPEMD128Key);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (string.IsNullOrEmpty(rom.RIPEMD128))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.RIPEMD128));
                     break;
 
                 default:

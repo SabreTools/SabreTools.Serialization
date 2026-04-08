@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new MetadataFile();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             var items = new List<Row>();
             foreach (var machine in machines ?? [])
             {
@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Row[] ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item)
         {
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is null || roms.Length == 0)
                 return [];
 
@@ -45,12 +45,12 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                SHA256 = item.ReadString(Data.Models.Metadata.Rom.SHA256Key),
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
-                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                MD5 = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
-                CRC32 = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                SHA256 = item.SHA256,
+                Name = item.Name,
+                SHA1 = item.SHA1,
+                MD5 = item.MD5,
+                CRC32 = item.CRC32,
+                Size = item.Size,
             };
             return row;
         }

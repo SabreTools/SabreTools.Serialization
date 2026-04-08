@@ -11,10 +11,10 @@ namespace SabreTools.Serialization.CrossModel
             if (obj is null)
                 return null;
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             var metadataFile = header is not null ? ConvertHeaderFromInternalModel(header) : new Data.Models.SoftwareList.SoftwareList();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
                 metadataFile.Software = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
@@ -28,9 +28,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var softwareList = new Data.Models.SoftwareList.SoftwareList
             {
-                Name = item.ReadString(Data.Models.Metadata.Header.NameKey),
-                Description = item.ReadString(Data.Models.Metadata.Header.DescriptionKey),
-                Notes = item.ReadString(Data.Models.Metadata.Header.NotesKey),
+                Name = item.Name,
+                Description = item.Description,
+                Notes = item.Notes,
             };
             return softwareList;
         }
@@ -42,24 +42,24 @@ namespace SabreTools.Serialization.CrossModel
         {
             var software = new Software
             {
-                Name = item.ReadString(Data.Models.Metadata.Machine.NameKey),
-                CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
-                Supported = item.ReadString(Data.Models.Metadata.Machine.SupportedKey),
-                Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
-                Year = item.ReadString(Data.Models.Metadata.Machine.YearKey),
-                Publisher = item.ReadString(Data.Models.Metadata.Machine.PublisherKey),
-                Notes = item.ReadString(Data.Models.Metadata.Machine.NotesKey),
+                Name = item.Name,
+                CloneOf = item.CloneOf,
+                Supported = item.Supported,
+                Description = item.Description,
+                Year = item.Year,
+                Publisher = item.Publisher,
+                Notes = item.Notes,
             };
 
-            var infos = item.Read<Data.Models.Metadata.Info[]>(Data.Models.Metadata.Machine.InfoKey);
+            var infos = item.Info;
             if (infos is not null && infos.Length > 0)
                 software.Info = Array.ConvertAll(infos, ConvertFromInternalModel);
 
-            var sharedFeats = item.Read<Data.Models.Metadata.SharedFeat[]>(Data.Models.Metadata.Machine.SharedFeatKey);
+            var sharedFeats = item.SharedFeat;
             if (sharedFeats is not null && sharedFeats.Length > 0)
                 software.SharedFeat = Array.ConvertAll(sharedFeats, ConvertFromInternalModel);
 
-            var parts = item.Read<Data.Models.Metadata.Part[]>(Data.Models.Metadata.Machine.PartKey);
+            var parts = item.Part;
             if (parts is not null && parts.Length > 0)
                 software.Part = Array.ConvertAll(parts, ConvertFromInternalModel);
 
@@ -73,13 +73,13 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dataArea = new DataArea
             {
-                Name = item.ReadString(Data.Models.Metadata.DataArea.NameKey),
-                Size = item.ReadString(Data.Models.Metadata.DataArea.SizeKey),
-                Width = item.ReadString(Data.Models.Metadata.DataArea.WidthKey),
-                Endianness = item.ReadString(Data.Models.Metadata.DataArea.EndiannessKey),
+                Name = item.Name,
+                Size = item.Size,
+                Width = item.Width,
+                Endianness = item.Endianness,
             };
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.DataArea.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
                 dataArea.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
@@ -93,12 +93,12 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipSwitch = new DipSwitch
             {
-                Name = item.ReadString(Data.Models.Metadata.DipSwitch.NameKey),
-                Tag = item.ReadString(Data.Models.Metadata.DipSwitch.TagKey),
-                Mask = item.ReadString(Data.Models.Metadata.DipSwitch.MaskKey),
+                Name = item.Name,
+                Tag = item.Tag,
+                Mask = item.Mask,
             };
 
-            var dipValues = item.Read<Data.Models.Metadata.DipValue[]>(Data.Models.Metadata.DipSwitch.DipValueKey);
+            var dipValues = item.DipValue;
             if (dipValues is not null && dipValues.Length > 0)
                 dipSwitch.DipValue = Array.ConvertAll(dipValues, ConvertFromInternalModel);
 
@@ -112,9 +112,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipValue = new DipValue
             {
-                Name = item.ReadString(Data.Models.Metadata.DipValue.NameKey),
-                Value = item.ReadString(Data.Models.Metadata.DipValue.ValueKey),
-                Default = item.ReadString(Data.Models.Metadata.DipValue.DefaultKey),
+                Name = item.Name,
+                Value = item.Value,
+                Default = item.Default,
             };
             return dipValue;
         }
@@ -126,11 +126,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var disk = new Disk
             {
-                Name = item.ReadString(Data.Models.Metadata.Disk.NameKey),
-                MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
-                Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
-                Writeable = item.ReadString(Data.Models.Metadata.Disk.WritableKey),
+                Name = item.Name,
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                Status = item.Status,
+                Writeable = item.Writable,
             };
             return disk;
         }
@@ -142,10 +142,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var diskArea = new DiskArea
             {
-                Name = item.ReadString(Data.Models.Metadata.DiskArea.NameKey),
+                Name = item.Name,
             };
 
-            var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.DiskArea.DiskKey);
+            var disks = item.Disk;
             if (disks is not null && disks.Length > 0)
                 diskArea.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
@@ -159,8 +159,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var feature = new Feature
             {
-                Name = item.ReadString(Data.Models.Metadata.Feature.NameKey),
-                Value = item.ReadString(Data.Models.Metadata.Feature.ValueKey),
+                Name = item.Name,
+                Value = item.Value,
             };
             return feature;
         }
@@ -172,8 +172,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var info = new Info
             {
-                Name = item.ReadString(Data.Models.Metadata.Info.NameKey),
-                Value = item.ReadString(Data.Models.Metadata.Info.ValueKey),
+                Name = item.Name,
+                Value = item.Value,
             };
             return info;
         }
@@ -185,23 +185,23 @@ namespace SabreTools.Serialization.CrossModel
         {
             var part = new Part
             {
-                Name = item.ReadString(Data.Models.Metadata.Part.NameKey),
-                Interface = item.ReadString(Data.Models.Metadata.Part.InterfaceKey),
+                Name = item.Name,
+                Interface = item.Interface,
             };
 
-            var features = item.Read<Data.Models.Metadata.Feature[]>(Data.Models.Metadata.Part.FeatureKey);
+            var features = item.Feature;
             if (features is not null && features.Length > 0)
                 part.Feature = Array.ConvertAll(features, ConvertFromInternalModel);
 
-            var dataAreas = item.Read<Data.Models.Metadata.DataArea[]>(Data.Models.Metadata.Part.DataAreaKey);
+            var dataAreas = item.DataArea;
             if (dataAreas is not null && dataAreas.Length > 0)
                 part.DataArea = Array.ConvertAll(dataAreas, ConvertFromInternalModel);
 
-            var diskAreas = item.Read<Data.Models.Metadata.DiskArea[]>(Data.Models.Metadata.Part.DiskAreaKey);
+            var diskAreas = item.DiskArea;
             if (diskAreas is not null && diskAreas.Length > 0)
                 part.DiskArea = Array.ConvertAll(diskAreas, ConvertFromInternalModel);
 
-            var dipSwitches = item.Read<Data.Models.Metadata.DipSwitch[]>(Data.Models.Metadata.Part.DipSwitchKey);
+            var dipSwitches = item.DipSwitch;
             if (dipSwitches is not null && dipSwitches.Length > 0)
                 part.DipSwitch = Array.ConvertAll(dipSwitches, ConvertFromInternalModel);
 
@@ -215,15 +215,15 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Rom
             {
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
-                Length = item.ReadString(Data.Models.Metadata.Rom.LengthKey),
-                CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                Offset = item.ReadString(Data.Models.Metadata.Rom.OffsetKey),
-                Value = item.ReadString(Data.Models.Metadata.Rom.ValueKey),
-                Status = item.ReadString(Data.Models.Metadata.Rom.StatusKey),
-                LoadFlag = item.ReadString(Data.Models.Metadata.Rom.LoadFlagKey),
+                Name = item.Name,
+                Size = item.Size,
+                Length = item.Length,
+                CRC = item.CRC32,
+                SHA1 = item.SHA1,
+                Offset = item.Offset,
+                Value = item.Value,
+                Status = item.Status,
+                LoadFlag = item.LoadFlag,
             };
             return rom;
         }
@@ -235,8 +235,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sharedFeat = new SharedFeat
             {
-                Name = item.ReadString(Data.Models.Metadata.SharedFeat.NameKey),
-                Value = item.ReadString(Data.Models.Metadata.SharedFeat.ValueKey),
+                Name = item.Name,
+                Value = item.Value,
             };
             return sharedFeat;
         }

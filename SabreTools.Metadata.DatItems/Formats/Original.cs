@@ -9,24 +9,32 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("original"), XmlRoot("original")]
     public sealed class Original
     {
-        [JsonProperty("value"), XmlElement("value")]
-        public bool? Value
-        {
-            get => _internal.ReadBool(Data.Models.Metadata.Original.ValueKey);
-            set => _internal[Data.Models.Metadata.Original.ValueKey] = value;
-        }
+        #region Properties
 
         [JsonProperty("content"), XmlElement("content")]
         public string? Content
         {
-            get => _internal.ReadString(Data.Models.Metadata.Original.ContentKey);
-            set => _internal[Data.Models.Metadata.Original.ContentKey] = value;
+            get => _internal.Content;
+            set => _internal.Content = value;
         }
+
+        /// <inheritdoc cref="DatItem.ItemType">/>
+        public Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Original;
+
+        [JsonProperty("value"), XmlElement("value")]
+        public bool? Value
+        {
+            get => _internal.Value;
+            set => _internal.Value = value;
+        }
+
+        #endregion
 
         /// <summary>
         /// Internal Original model
         /// </summary>
         [JsonIgnore]
-        private readonly Data.Models.Metadata.Original _internal = [];
+        private readonly Data.Models.Metadata.Original _internal = new();
     }
 }

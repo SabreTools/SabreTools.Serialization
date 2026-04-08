@@ -11,9 +11,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class Sha384File : Hashfile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha384File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA384;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA384);
+            Header.DatFormat = DatFormat.RedumpSHA384;
         }
 
         /// <inheritdoc/>
@@ -31,15 +31,13 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA384Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA384Key);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (string.IsNullOrEmpty(rom.SHA384))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA384));
                     break;
 
                 default:

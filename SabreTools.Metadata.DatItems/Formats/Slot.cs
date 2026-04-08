@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -11,20 +10,22 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("slot"), XmlRoot("slot")]
     public sealed class Slot : DatItem<Data.Models.Metadata.Slot>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Slot;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Slot;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public SlotOption[]? SlotOption { get; set; }
 
         [JsonIgnore]
-        public bool SlotOptionsSpecified
-        {
-            get
-            {
-                var slotOptions = Read<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey);
-                return slotOptions is not null && slotOptions.Length > 0;
-            }
-        }
+        public bool SlotOptionSpecified => SlotOption is not null && SlotOption.Length > 0;
 
         #endregion
 
@@ -35,40 +36,61 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Slot(Data.Models.Metadata.Slot item) : base(item)
         {
             // Handle subitems
-            var slotOptions = item.ReadArray<Data.Models.Metadata.SlotOption>(Data.Models.Metadata.Slot.SlotOptionKey);
-            if (slotOptions is not null)
-            {
-                SlotOption[] slotOptionItems = Array.ConvertAll(slotOptions, slotOption => new SlotOption(slotOption));
-                Write<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey, slotOptionItems);
-            }
+            if (item.SlotOption is not null)
+                SlotOption = Array.ConvertAll(item.SlotOption, slotOption => new SlotOption(slotOption)); ;
         }
 
         public Slot(Data.Models.Metadata.Slot item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Slot(_internal.Clone() as Data.Models.Metadata.Slot ?? []);
+        public override object Clone() => new Slot(GetInternalClone());
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Slot GetInternalClone()
         {
-            var slotItem = base.GetInternalClone();
+            var slotItem = _internal.Clone() as Data.Models.Metadata.Slot ?? new();
 
-            var slotOptions = Read<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey);
-            if (slotOptions is not null)
-            {
-                Data.Models.Metadata.SlotOption[] slotOptionItems = Array.ConvertAll(slotOptions, slotOption => slotOption.GetInternalClone());
-                slotItem[Data.Models.Metadata.Slot.SlotOptionKey] = slotOptionItems;
-            }
+            if (SlotOption is not null)
+                slotItem.SlotOption = Array.ConvertAll(SlotOption, slotOption => slotOption.GetInternalClone());
 
             return slotItem;
+        }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Slot otherSlot)
+                return _internal.Equals(otherSlot._internal);
+
+            // Everything else fails
+            return false;
         }
 
         #endregion

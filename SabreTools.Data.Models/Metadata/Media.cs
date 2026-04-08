@@ -1,30 +1,41 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
+    // TODO: IEquatable<Media>
     [JsonObject("media"), XmlRoot("media")]
-    public class Media : DatItem
+    public class Media : DatItem, ICloneable
     {
-        #region Keys
+        #region Properties
 
-        /// <remarks>string</remarks>
-        public const string MD5Key = "md5";
+        public string? MD5 { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
+        public string? Name { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string SHA1Key = "sha1";
+        public string? SHA1 { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string SHA256Key = "sha256";
+        public string? SHA256 { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string SpamSumKey = "spamsum";
+        public string? SpamSum { get; set; }
 
         #endregion
 
-        public Media() => Type = ItemType.Media;
+        public Media() => ItemType = ItemType.Media;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Media();
+
+            obj.MD5 = MD5;
+            obj.Name = Name;
+            obj.SHA1 = SHA1;
+            obj.SHA256 = SHA256;
+            obj.SpamSum = SpamSum;
+
+            return obj;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 #pragma warning disable IDE1006 // Naming Styles
 namespace SabreTools.Data.Models.Logiqx
@@ -13,7 +14,7 @@ namespace SabreTools.Data.Models.Logiqx
 
         [Required]
         [XmlAttribute("size")]
-        public string? Size { get; set; }
+        public long? Size { get; set; }
 
         /// <remarks>Hash extension</remarks>
         [XmlAttribute("crc16")]
@@ -77,7 +78,7 @@ namespace SabreTools.Data.Models.Logiqx
 
         /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
         [XmlAttribute("status")]
-        public string? Status { get; set; }
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>No-Intro extension</remarks>
         [XmlAttribute("serial")]
@@ -92,10 +93,10 @@ namespace SabreTools.Data.Models.Logiqx
 
         /// <remarks>Boolean; RomVault extension</remarks>
         [XmlAttribute("inverted")]
-        public string? Inverted { get; set; }
+        public bool? Inverted { get; set; }
 
         /// <remarks>Boolean; RomVault extension</remarks>
         [XmlAttribute("mia")]
-        public string? MIA { get; set; }
+        public bool? MIA { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,47 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("chip"), XmlRoot("chip")]
     public sealed class Chip : DatItem<Data.Models.Metadata.Chip>
     {
-        #region Fields
+        #region Properties
+
+        public Data.Models.Metadata.ChipType? ChipType
+        {
+            get => _internal.ChipType;
+            set => _internal.ChipType = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Chip;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Chip;
+
+        public long? Clock
+        {
+            get => _internal.Clock;
+            set => _internal.Clock = value;
+        }
+
+        public string? Flags
+        {
+            get => _internal.Flags;
+            set => _internal.Flags = value;
+        }
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public bool? SoundOnly
+        {
+            get => _internal.SoundOnly;
+            set => _internal.SoundOnly = value;
+        }
+
+        public string? Tag
+        {
+            get => _internal.Tag;
+            set => _internal.Tag = value;
+        }
 
         #endregion
 
@@ -21,30 +57,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Chip() : base() { }
 
-        public Chip(Data.Models.Metadata.Chip item) : base(item)
-        {
-            // Process flag values
-            bool? soundOnly = ReadBool(Data.Models.Metadata.Chip.SoundOnlyKey);
-            if (soundOnly is not null)
-                Write<string?>(Data.Models.Metadata.Chip.SoundOnlyKey, soundOnly.FromYesNo());
-
-            string? chipType = ReadString(Data.Models.Metadata.Chip.ChipTypeKey);
-            if (chipType is not null)
-                Write<string?>(Data.Models.Metadata.Chip.ChipTypeKey, chipType.AsChipType()?.AsStringValue());
-        }
+        public Chip(Data.Models.Metadata.Chip item) : base(item) { }
 
         public Chip(Data.Models.Metadata.Chip item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Chip(_internal.Clone() as Data.Models.Metadata.Chip ?? []);
+        public override object Clone() => new Chip(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Chip GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Chip ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Chip otherChip)
+                return _internal.Equals(otherChip._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

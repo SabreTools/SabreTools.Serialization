@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Listxml;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -115,7 +117,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new Adjuster();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             while (reader.Read())
             {
@@ -170,7 +172,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Description = reader.GetAttribute("description");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -186,9 +188,9 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Tag = reader.GetAttribute("tag");
-            obj.Type = reader.GetAttribute("type");
-            obj.SoundOnly = reader.GetAttribute("soundonly");
-            obj.Clock = reader.GetAttribute("clock");
+            obj.Type = reader.GetAttribute("type").AsChipType();
+            obj.SoundOnly = reader.GetAttribute("soundonly").AsYesNo();
+            obj.Clock = NumberHelper.ConvertToInt64(reader.GetAttribute("clock"));
 
             return obj;
         }
@@ -204,7 +206,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Tag = reader.GetAttribute("tag");
             obj.Mask = reader.GetAttribute("mask");
-            obj.Relation = reader.GetAttribute("relation");
+            obj.Relation = reader.GetAttribute("relation").AsRelation();
             obj.Value = reader.GetAttribute("value");
 
             return obj;
@@ -281,8 +283,8 @@ namespace SabreTools.Serialization.Readers
             var obj = new ConfLocation();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Number = reader.GetAttribute("number");
-            obj.Inverted = reader.GetAttribute("inverted");
+            obj.Number = NumberHelper.ConvertToInt64(reader.GetAttribute("number"));
+            obj.Inverted = reader.GetAttribute("inverted").AsYesNo();
 
             return obj;
         }
@@ -298,7 +300,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Value = reader.GetAttribute("value");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             while (reader.Read())
             {
@@ -337,15 +339,15 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Control();
 
-            obj.Type = reader.GetAttribute("type");
-            obj.Player = reader.GetAttribute("player");
-            obj.Buttons = reader.GetAttribute("buttons");
-            obj.ReqButtons = reader.GetAttribute("reqbuttons");
-            obj.Minimum = reader.GetAttribute("minimum");
-            obj.Maximum = reader.GetAttribute("maximum");
-            obj.Sensitivity = reader.GetAttribute("sensitivity");
-            obj.KeyDelta = reader.GetAttribute("keydelta");
-            obj.Reverse = reader.GetAttribute("reverse");
+            obj.Type = reader.GetAttribute("type").AsControlType();
+            obj.Player = NumberHelper.ConvertToInt64(reader.GetAttribute("player"));
+            obj.Buttons = NumberHelper.ConvertToInt64(reader.GetAttribute("buttons"));
+            obj.ReqButtons = NumberHelper.ConvertToInt64(reader.GetAttribute("reqbuttons"));
+            obj.Minimum = NumberHelper.ConvertToInt64(reader.GetAttribute("minimum"));
+            obj.Maximum = NumberHelper.ConvertToInt64(reader.GetAttribute("maximum"));
+            obj.Sensitivity = NumberHelper.ConvertToInt64(reader.GetAttribute("sensitivity"));
+            obj.KeyDelta = NumberHelper.ConvertToInt64(reader.GetAttribute("keydelta"));
+            obj.Reverse = reader.GetAttribute("reverse").AsYesNo();
             obj.Ways = reader.GetAttribute("ways");
             obj.Ways2 = reader.GetAttribute("ways2");
             obj.Ways3 = reader.GetAttribute("ways3");
@@ -362,10 +364,10 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Device();
 
-            obj.Type = reader.GetAttribute("type");
+            obj.Type = reader.GetAttribute("type").AsDeviceType();
             obj.Tag = reader.GetAttribute("tag");
             obj.FixedImage = reader.GetAttribute("fixed_image");
-            obj.Mandatory = reader.GetAttribute("mandatory");
+            obj.Mandatory = reader.GetAttribute("mandatory").AsYesNo();
             obj.Interface = reader.GetAttribute("interface");
 
             List<Extension> extensions = [];
@@ -431,8 +433,8 @@ namespace SabreTools.Serialization.Readers
             var obj = new DipLocation();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Number = reader.GetAttribute("number");
-            obj.Inverted = reader.GetAttribute("inverted");
+            obj.Number = NumberHelper.ConvertToInt64(reader.GetAttribute("number"));
+            obj.Inverted = reader.GetAttribute("inverted").AsYesNo();
 
             return obj;
         }
@@ -509,7 +511,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Value = reader.GetAttribute("value");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             while (reader.Read())
             {
@@ -553,10 +555,10 @@ namespace SabreTools.Serialization.Readers
             obj.SHA1 = reader.GetAttribute("sha1");
             obj.Merge = reader.GetAttribute("merge");
             obj.Region = reader.GetAttribute("region");
-            obj.Index = reader.GetAttribute("index");
-            obj.Writable = reader.GetAttribute("writable");
-            obj.Status = reader.GetAttribute("status");
-            obj.Optional = reader.GetAttribute("optional");
+            obj.Index = NumberHelper.ConvertToInt64(reader.GetAttribute("index"));
+            obj.Writable = reader.GetAttribute("writable").AsYesNo();
+            obj.Status = reader.GetAttribute("status").AsItemStatus();
+            obj.Optional = reader.GetAttribute("optional").AsYesNo();
 
             return obj;
         }
@@ -571,19 +573,19 @@ namespace SabreTools.Serialization.Readers
             var obj = new Display();
 
             obj.Tag = reader.GetAttribute("tag");
-            obj.Type = reader.GetAttribute("type");
-            obj.Rotate = reader.GetAttribute("rotate");
-            obj.FlipX = reader.GetAttribute("flipx");
-            obj.Width = reader.GetAttribute("width");
-            obj.Height = reader.GetAttribute("height");
-            obj.Refresh = reader.GetAttribute("refresh");
-            obj.PixClock = reader.GetAttribute("pixclock");
-            obj.HTotal = reader.GetAttribute("htotal");
-            obj.HBEnd = reader.GetAttribute("hbend");
-            obj.HBStart = reader.GetAttribute("hbstart");
-            obj.VTotal = reader.GetAttribute("vtotal");
-            obj.VBEnd = reader.GetAttribute("vbend");
-            obj.VBStart = reader.GetAttribute("vbstart");
+            obj.Type = reader.GetAttribute("type").AsDisplayType();
+            obj.Rotate = reader.GetAttribute("rotate").AsRotation();
+            obj.FlipX = reader.GetAttribute("flipx").AsYesNo();
+            obj.Width = NumberHelper.ConvertToInt64(reader.GetAttribute("width"));
+            obj.Height = NumberHelper.ConvertToInt64(reader.GetAttribute("height"));
+            obj.Refresh = NumberHelper.ConvertToDouble(reader.GetAttribute("refresh"));
+            obj.PixClock = NumberHelper.ConvertToInt64(reader.GetAttribute("pixclock"));
+            obj.HTotal = NumberHelper.ConvertToInt64(reader.GetAttribute("htotal"));
+            obj.HBEnd = NumberHelper.ConvertToInt64(reader.GetAttribute("hbend"));
+            obj.HBStart = NumberHelper.ConvertToInt64(reader.GetAttribute("hbstart"));
+            obj.VTotal = NumberHelper.ConvertToInt64(reader.GetAttribute("vtotal"));
+            obj.VBEnd = NumberHelper.ConvertToInt64(reader.GetAttribute("vbend"));
+            obj.VBStart = NumberHelper.ConvertToInt64(reader.GetAttribute("vbstart"));
 
             return obj;
         }
@@ -597,17 +599,17 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Driver();
 
-            obj.Status = reader.GetAttribute("status");
-            obj.Color = reader.GetAttribute("color");
-            obj.Sound = reader.GetAttribute("sound");
+            obj.Status = reader.GetAttribute("status").AsSupportStatus();
+            obj.Color = reader.GetAttribute("color").AsSupportStatus();
+            obj.Sound = reader.GetAttribute("sound").AsSupportStatus();
             obj.PaletteSize = reader.GetAttribute("palettesize");
-            obj.Emulation = reader.GetAttribute("emulation");
-            obj.Cocktail = reader.GetAttribute("cocktail");
-            obj.SaveState = reader.GetAttribute("savestate");
-            obj.RequiresArtwork = reader.GetAttribute("requiresartwork");
-            obj.Unofficial = reader.GetAttribute("unofficial");
-            obj.NoSoundHardware = reader.GetAttribute("nosoundhardware");
-            obj.Incomplete = reader.GetAttribute("incomplete");
+            obj.Emulation = reader.GetAttribute("emulation").AsSupportStatus();
+            obj.Cocktail = reader.GetAttribute("cocktail").AsSupportStatus();
+            obj.SaveState = reader.GetAttribute("savestate").AsSupported();
+            obj.RequiresArtwork = reader.GetAttribute("requiresartwork").AsYesNo();
+            obj.Unofficial = reader.GetAttribute("unofficial").AsYesNo();
+            obj.NoSoundHardware = reader.GetAttribute("nosoundhardware").AsYesNo();
+            obj.Incomplete = reader.GetAttribute("incomplete").AsYesNo();
 
             return obj;
         }
@@ -635,9 +637,9 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Feature();
 
-            obj.Type = reader.GetAttribute("type");
-            obj.Status = reader.GetAttribute("status");
-            obj.Overall = reader.GetAttribute("overall");
+            obj.Type = reader.GetAttribute("type").AsFeatureType();
+            obj.Status = reader.GetAttribute("status").AsFeatureStatus();
+            obj.Overall = reader.GetAttribute("overall").AsFeatureStatus();
 
             return obj;
         }
@@ -659,10 +661,10 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.SourceFile = reader.GetAttribute("sourcefile");
-            obj.IsBios = reader.GetAttribute("isbios");
-            obj.IsDevice = reader.GetAttribute("isdevice");
-            obj.IsMechanical = reader.GetAttribute("ismechanical");
-            obj.Runnable = reader.GetAttribute("runnable");
+            obj.IsBios = reader.GetAttribute("isbios").AsYesNo();
+            obj.IsDevice = reader.GetAttribute("isdevice").AsYesNo();
+            obj.IsMechanical = reader.GetAttribute("ismechanical").AsYesNo();
+            obj.Runnable = reader.GetAttribute("runnable").AsRunnable();
             obj.CloneOf = reader.GetAttribute("cloneof");
             obj.RomOf = reader.GetAttribute("romof");
             obj.SampleOf = reader.GetAttribute("sampleof");
@@ -917,12 +919,12 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Input();
 
-            obj.Service = reader.GetAttribute("service");
-            obj.Tilt = reader.GetAttribute("tilt");
-            obj.Players = reader.GetAttribute("players");
+            obj.Service = reader.GetAttribute("service").AsYesNo();
+            obj.Tilt = reader.GetAttribute("tilt").AsYesNo();
+            obj.Players = NumberHelper.ConvertToInt64(reader.GetAttribute("players"));
             obj.ControlAttr = reader.GetAttribute("control");
-            obj.Buttons = reader.GetAttribute("buttons");
-            obj.Coins = reader.GetAttribute("coins");
+            obj.Buttons = NumberHelper.ConvertToInt64(reader.GetAttribute("buttons"));
+            obj.Coins = NumberHelper.ConvertToInt64(reader.GetAttribute("coins"));
 
             List<Control> controls = [];
 
@@ -1026,7 +1028,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new RamOption();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
             obj.Content = reader.ReadElementContentAsString();
 
             return obj;
@@ -1043,16 +1045,16 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Bios = reader.GetAttribute("bios");
-            obj.Size = reader.GetAttribute("size");
+            obj.Size = NumberHelper.ConvertToInt64(reader.GetAttribute("size"));
             obj.CRC = reader.GetAttribute("crc");
             obj.SHA1 = reader.GetAttribute("sha1");
             obj.Merge = reader.GetAttribute("merge");
             obj.Region = reader.GetAttribute("region");
             obj.Offset = reader.GetAttribute("offset");
-            obj.Status = reader.GetAttribute("status");
-            obj.Optional = reader.GetAttribute("optional");
-            obj.Dispose = reader.GetAttribute("dispose");
-            obj.SoundOnly = reader.GetAttribute("soundonly");
+            obj.Status = reader.GetAttribute("status").AsItemStatus();
+            obj.Optional = reader.GetAttribute("optional").AsYesNo();
+            obj.Dispose = reader.GetAttribute("dispose").AsYesNo();
+            obj.SoundOnly = reader.GetAttribute("soundonly").AsYesNo();
 
             return obj;
         }
@@ -1126,7 +1128,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.DevName = reader.GetAttribute("devname");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -1142,7 +1144,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Tag = reader.GetAttribute("tag");
             obj.Name = reader.GetAttribute("name");
-            obj.Status = reader.GetAttribute("status");
+            obj.Status = reader.GetAttribute("status").AsSoftwareListStatus();
             obj.Filter = reader.GetAttribute("filter");
 
             return obj;
@@ -1157,7 +1159,7 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Sound();
 
-            obj.Channels = reader.GetAttribute("channels");
+            obj.Channels = NumberHelper.ConvertToInt64(reader.GetAttribute("channels"));
 
             return obj;
         }
@@ -1171,13 +1173,13 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Video();
 
-            obj.Screen = reader.GetAttribute("screen");
-            obj.Orientation = reader.GetAttribute("orientation");
-            obj.Width = reader.GetAttribute("width");
-            obj.Height = reader.GetAttribute("height");
-            obj.AspectX = reader.GetAttribute("aspectx");
-            obj.AspectY = reader.GetAttribute("aspecty");
-            obj.Refresh = reader.GetAttribute("refresh");
+            obj.Screen = reader.GetAttribute("screen").AsDisplayType();
+            obj.Orientation = reader.GetAttribute("orientation").AsRotation();
+            obj.Width = NumberHelper.ConvertToInt64(reader.GetAttribute("width"));
+            obj.Height = NumberHelper.ConvertToInt64(reader.GetAttribute("height"));
+            obj.AspectX = NumberHelper.ConvertToInt64(reader.GetAttribute("aspectx"));
+            obj.AspectY = NumberHelper.ConvertToInt64(reader.GetAttribute("aspecty"));
+            obj.Refresh = NumberHelper.ConvertToDouble(reader.GetAttribute("refresh"));
 
             return obj;
         }

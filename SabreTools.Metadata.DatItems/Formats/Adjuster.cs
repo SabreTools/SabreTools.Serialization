@@ -1,6 +1,5 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,19 +9,27 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("adjuster"), XmlRoot("adjuster")]
     public sealed class Adjuster : DatItem<Data.Models.Metadata.Adjuster>
     {
-        #region Fields
+        #region Properties
 
-        /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Adjuster;
+        public Condition? Condition { get; set; }
 
         [JsonIgnore]
-        public bool ConditionsSpecified
+        public bool ConditionSpecified => Condition is not null;
+
+        public bool? Default
         {
-            get
-            {
-                var conditions = Read<Condition[]?>(Data.Models.Metadata.Adjuster.ConditionKey);
-                return conditions is not null && conditions.Length > 0;
-            }
+            get => _internal.Default;
+            set => _internal.Default = value;
+        }
+
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Adjuster;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
         #endregion
@@ -33,40 +40,62 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Adjuster(Data.Models.Metadata.Adjuster item) : base(item)
         {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.Adjuster.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.Adjuster.DefaultKey, defaultValue.FromYesNo());
-
             // Handle subitems
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
-            if (condition is not null)
-                Write(Data.Models.Metadata.Adjuster.ConditionKey, new Condition(condition));
+            if (item.Condition is not null)
+                Condition = new Condition(item.Condition);
         }
 
         public Adjuster(Data.Models.Metadata.Adjuster item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Adjuster(_internal.Clone() as Data.Models.Metadata.Adjuster ?? []);
+        public override object Clone() => new Adjuster(GetInternalClone());
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Adjuster GetInternalClone()
         {
-            var adjusterItem = base.GetInternalClone();
+            var adjusterItem = _internal.Clone() as Data.Models.Metadata.Adjuster ?? new();
 
-            var condition = Read<Condition?>(Data.Models.Metadata.Adjuster.ConditionKey);
-            if (condition is not null)
-                adjusterItem[Data.Models.Metadata.Adjuster.ConditionKey] = condition.GetInternalClone();
+            if (Condition is not null)
+                adjusterItem.Condition = Condition.GetInternalClone();
 
             return adjusterItem;
+        }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Adjuster otherAdjuster)
+                return _internal.Equals(otherAdjuster._internal);
+
+            // Everything else fails
+            return false;
         }
 
         #endregion

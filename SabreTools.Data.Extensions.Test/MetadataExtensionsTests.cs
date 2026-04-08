@@ -9,105 +9,1127 @@ namespace SabreTools.Data.Extensions.Test
         #region ConvertToRom
 
         [Fact]
-        public void ConvertToRom_Null_Null()
-        {
-            DictionaryBase? self = null;
-            Rom? actual = self.ConvertToRom();
-            Assert.Null(actual);
-        }
-
-        [Fact]
         public void ConvertToRom_EmptyDisk_EmptyRom()
         {
-            DictionaryBase? self = new Disk();
+            var self = new Disk();
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(8, actual.Count);
-            Assert.Equal(ItemType.Rom, actual["_type"]);
-            Assert.Null(actual[Rom.NameKey]);
-            Assert.Null(actual[Rom.MergeKey]);
-            Assert.Null(actual[Rom.RegionKey]);
-            Assert.Null(actual[Rom.StatusKey]);
-            Assert.Null(actual[Rom.OptionalKey]);
-            Assert.Null(actual[Rom.MD5Key]);
-            Assert.Null(actual[Rom.SHA1Key]);
+            Assert.Equal(ItemType.Rom, actual.ItemType);
+            Assert.Null(actual.Name);
+            Assert.Null(actual.Merge);
+            Assert.Null(actual.Region);
+            Assert.Null(actual.Status);
+            Assert.Null(actual.Optional);
+            Assert.Null(actual.MD5);
+            Assert.Null(actual.SHA1);
         }
 
         [Fact]
         public void ConvertToRom_FilledDisk_FilledRom()
         {
-            DictionaryBase? self = new Disk
+            var self = new Disk
             {
-                [Disk.NameKey] = "XXXXXX",
-                [Disk.MergeKey] = "XXXXXX",
-                [Disk.RegionKey] = "XXXXXX",
-                [Disk.StatusKey] = "XXXXXX",
-                [Disk.OptionalKey] = "XXXXXX",
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                Name = "name",
+                Merge = "merge",
+                Region = "region",
+                Status = ItemStatus.Good,
+                Optional = true,
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(8, actual.Count);
-            Assert.Equal(ItemType.Rom, actual["_type"]);
-            Assert.Equal("XXXXXX.chd", actual[Rom.NameKey]);
-            Assert.Equal("XXXXXX", actual[Rom.MergeKey]);
-            Assert.Equal("XXXXXX", actual[Rom.RegionKey]);
-            Assert.Equal("XXXXXX", actual[Rom.StatusKey]);
-            Assert.Equal("XXXXXX", actual[Rom.OptionalKey]);
-            Assert.Equal("XXXXXX", actual[Rom.MD5Key]);
-            Assert.Equal("XXXXXX", actual[Rom.SHA1Key]);
+            Assert.Equal(ItemType.Rom, actual.ItemType);
+            Assert.Equal("name.chd", actual.Name);
+            Assert.Equal("merge", actual.Merge);
+            Assert.Equal("region", actual.Region);
+            Assert.Equal(ItemStatus.Good, actual.Status);
+            Assert.Equal(true, actual.Optional);
+            Assert.Equal("md5", actual.MD5);
+            Assert.Equal("sha1", actual.SHA1);
         }
 
         [Fact]
         public void ConvertToRom_EmptyMedia_EmptyRom()
         {
-            DictionaryBase? self = new Media();
+            var self = new Media();
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(6, actual.Count);
-            Assert.Equal(ItemType.Rom, actual["_type"]);
-            Assert.Null(actual[Rom.NameKey]);
-            Assert.Null(actual[Rom.MD5Key]);
-            Assert.Null(actual[Rom.SHA1Key]);
-            Assert.Null(actual[Rom.SHA256Key]);
-            Assert.Null(actual[Rom.SpamSumKey]);
+            Assert.Equal(ItemType.Rom, actual.ItemType);
+            Assert.Null(actual.Name);
+            Assert.Null(actual.MD5);
+            Assert.Null(actual.SHA1);
+            Assert.Null(actual.SHA256);
+            Assert.Null(actual.SpamSum);
         }
 
         [Fact]
         public void ConvertToRom_FilledMedia_FilledRom()
         {
-            DictionaryBase? self = new Media
+            var self = new Media
             {
-                [Media.NameKey] = "XXXXXX",
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                Name = "name",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             Rom? actual = self.ConvertToRom();
 
             Assert.NotNull(actual);
-            Assert.Equal(6, actual.Count);
-            Assert.Equal(ItemType.Rom, actual["_type"]);
-            Assert.Equal("XXXXXX.aaruf", actual[Rom.NameKey]);
-            Assert.Equal("XXXXXX", actual[Rom.MD5Key]);
-            Assert.Equal("XXXXXX", actual[Rom.SHA1Key]);
-            Assert.Equal("XXXXXX", actual[Rom.SHA256Key]);
-            Assert.Equal("XXXXXX", actual[Rom.SpamSumKey]);
+            Assert.Equal(ItemType.Rom, actual.ItemType);
+            Assert.Equal("name.aaruf", actual.Name);
+            Assert.Equal("md5", actual.MD5);
+            Assert.Equal("sha1", actual.SHA1);
+            Assert.Equal("sha256", actual.SHA256);
+            Assert.Equal("spamsum", actual.SpamSum);
+        }
+
+        #endregion
+
+        #region PartialEquals
+
+        [Fact]
+        public void PartialEquals_Disk_Nodumps_True()
+        {
+            var self = new Disk
+            {
+                Status = ItemStatus.Nodump,
+                Name = "name",
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+            };
+            var other = new Disk
+            {
+                Status = ItemStatus.Nodump,
+                Name = "name",
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
         }
 
         [Fact]
-        public void ConvertToRom_Other_Null()
+        public void PartialEquals_Disk_Mismatch_False()
         {
-            DictionaryBase? self = new Sample();
-            Rom? actual = self.ConvertToRom();
-            Assert.Null(actual);
+            var self = new Disk
+            {
+                Name = "name",
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
+            };
+            var other = new Disk
+            {
+                Name = "name",
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.False(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Disk_PartialMD5_True()
+        {
+            var self = new Disk
+            {
+                Name = "XXXXXX1",
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
+            };
+            var other = new Disk
+            {
+                Name = "XXXXXX2",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Disk_PartialSHA1_True()
+        {
+            var self = new Disk
+            {
+                Name = "XXXXXX1",
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
+            };
+            var other = new Disk
+            {
+                Name = "XXXXXX2",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Disk_FullMatch_True()
+        {
+            var self = new Disk
+            {
+                Name = "XXXXXX1",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+            };
+            var other = new Disk
+            {
+                Name = "XXXXXX2",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Media_Mismatch_False()
+        {
+            var self = new Media
+            {
+                Name = "name",
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SpamSum = string.Empty,
+            };
+            var other = new Media
+            {
+                Name = "name",
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.False(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Media_PartialMD5_True()
+        {
+            var self = new Media
+            {
+                Name = "name",
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Media
+            {
+                Name = "name",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Media_PartialSHA1_True()
+        {
+            var self = new Media
+            {
+                Name = "name",
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Media
+            {
+                Name = "name",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Media_PartialSHA256_True()
+        {
+            var self = new Media
+            {
+                Name = "name",
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SpamSum = string.Empty,
+            };
+            var other = new Media
+            {
+                Name = "name",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Media_PartialSpamSum_True()
+        {
+            var self = new Media
+            {
+                Name = "name",
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = "XXXXXX",
+            };
+            var other = new Media
+            {
+                Name = "name",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Media_FullMatch_True()
+        {
+            var self = new Media
+            {
+                Name = "name",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+            var other = new Media
+            {
+                Name = "name",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_Nodumps_True()
+        {
+            var self = new Rom
+            {
+                Status = ItemStatus.Nodump,
+                Name = "name",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Status = ItemStatus.Nodump,
+                Name = "name",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_Mismatch_False()
+        {
+            var self = new Rom
+            {
+                Name = "name",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = string.Empty,
+                CRC64 = "XXXXXX",
+                MD2 = string.Empty,
+                MD4 = "XXXXXX",
+                MD5 = string.Empty,
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SHA384 = "XXXXXX",
+                SHA512 = string.Empty,
+                SpamSum = "XXXXXX",
+            };
+            var other = new Rom
+            {
+                Name = "name",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = "XXXXXX",
+                CRC64 = string.Empty,
+                MD2 = "XXXXXX",
+                MD4 = string.Empty,
+                MD5 = "XXXXXX",
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SHA384 = string.Empty,
+                SHA512 = "XXXXXX",
+                SpamSum = string.Empty,
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.False(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_NoSelfSize_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_NoOtherSize_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialCRC16_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialCRC_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = "XXXXXX",
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialCRC64_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = "XXXXXX",
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialMD2_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = "XXXXXX",
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialMD4_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = "XXXXXX",
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialMD5_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = "XXXXXX",
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialRIPEMD128_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialRIPEMD160_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialSHA1_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialSHA256_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialSHA384_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = "XXXXXX",
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialSHA512_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = "XXXXXX",
+                SpamSum = string.Empty,
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialSpamSum_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = "XXXXXX",
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_FullMatch_True()
+        {
+            var self = new Rom
+            {
+                Name = "XXXXXX1",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+            var other = new Rom
+            {
+                Name = "XXXXXX2",
+                Size = 12345,
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
         }
 
         #endregion
@@ -153,13 +1175,13 @@ namespace SabreTools.Data.Extensions.Test
         {
             Disk self = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = string.Empty,
+                MD5 = "md5",
+                SHA1 = string.Empty,
             };
             Disk other = new Disk
             {
-                [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = "sha1",
             };
 
             bool actual = self.HashMatch(other);
@@ -171,13 +1193,13 @@ namespace SabreTools.Data.Extensions.Test
         {
             Disk self = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = string.Empty,
+                MD5 = "md5",
+                SHA1 = string.Empty,
             };
             Disk other = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             bool actual = self.HashMatch(other);
@@ -189,13 +1211,13 @@ namespace SabreTools.Data.Extensions.Test
         {
             Disk self = new Disk
             {
-                [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = "sha1",
             };
             Disk other = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             bool actual = self.HashMatch(other);
@@ -207,13 +1229,13 @@ namespace SabreTools.Data.Extensions.Test
         {
             Disk self = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
             Disk other = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             bool actual = self.HashMatch(other);
@@ -225,17 +1247,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = "md5",
+                SHA1 = string.Empty,
+                SHA256 = "sha256",
+                SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = "sha1",
+                SHA256 = string.Empty,
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -247,17 +1269,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -269,17 +1291,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -291,17 +1313,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -313,17 +1335,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = "XXXXXX",
             };
             Media other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -335,17 +1357,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
             Media other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -357,35 +1379,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = string.Empty,
+                CRC64 = "XXXXXX",
+                MD2 = string.Empty,
+                MD4 = "XXXXXX",
+                MD5 = string.Empty,
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SHA384 = "XXXXXX",
+                SHA512 = string.Empty,
+                SpamSum = "XXXXXX",
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = "XXXXXX",
+                CRC64 = string.Empty,
+                MD2 = "XXXXXX",
+                MD4 = string.Empty,
+                MD5 = "XXXXXX",
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SHA384 = string.Empty,
+                SHA512 = "XXXXXX",
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HashMatch(other);
@@ -397,35 +1419,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = "XXXXXX",
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -437,35 +1459,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = "XXXXXX",
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -477,35 +1499,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = "XXXXXX",
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -517,35 +1539,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = "XXXXXX",
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -557,35 +1579,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = "XXXXXX",
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -597,35 +1619,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = "XXXXXX",
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -637,35 +1659,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -677,35 +1699,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = "XXXXXX",
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -717,35 +1739,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = "XXXXXX",
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -757,35 +1779,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = "XXXXXX",
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -797,35 +1819,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = "XXXXXX",
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -837,35 +1859,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = "XXXXXX",
+                SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -877,35 +1899,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = "XXXXXX",
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -917,35 +1939,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
             Rom other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HashMatch(other);
@@ -959,7 +1981,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Disk_NoHash_True()
         {
-            DictionaryBase self = new Disk();
+            var self = new Disk();
             bool actual = self.HasZeroHash();
             Assert.True(actual);
         }
@@ -967,10 +1989,10 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Disk_NonZeroHash_False()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
             };
 
             bool actual = self.HasZeroHash();
@@ -980,10 +2002,10 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Disk_ZeroMD5_True()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
-                [Disk.MD5Key] = HashType.MD5.ZeroString,
-                [Disk.SHA1Key] = string.Empty,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -993,10 +2015,10 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Disk_ZeroSHA1_True()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
-                [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = HashType.SHA1.ZeroString,
+                MD5 = string.Empty,
+                SHA1 = HashType.SHA1.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1006,10 +2028,10 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Disk_ZeroAll_True()
         {
-            DictionaryBase self = new Disk
+            var self = new Disk
             {
-                [Disk.MD5Key] = HashType.MD5.ZeroString,
-                [Disk.SHA1Key] = HashType.SHA1.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1019,7 +2041,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_NoHash_True()
         {
-            DictionaryBase self = new Media();
+            var self = new Media();
             bool actual = self.HasZeroHash();
             Assert.True(actual);
         }
@@ -1027,12 +2049,12 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_NonZeroHash_False()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HasZeroHash();
@@ -1042,12 +2064,12 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_ZeroMD5_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
-                [Media.MD5Key] = HashType.MD5.ZeroString,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1057,12 +2079,12 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_ZeroSHA1_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = HashType.SHA1.ZeroString,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1072,12 +2094,12 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_ZeroSHA256_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = HashType.SHA256.ZeroString,
-                [Media.SpamSumKey] = string.Empty,
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = HashType.SHA256.ZeroString,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1087,12 +2109,12 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_ZeroSpamSum_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
-                [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = HashType.SpamSum.ZeroString,
+                MD5 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SpamSum = HashType.SpamSum.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1102,12 +2124,12 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Media_ZeroAll_True()
         {
-            DictionaryBase self = new Media
+            var self = new Media
             {
-                [Media.MD5Key] = HashType.MD5.ZeroString,
-                [Media.SHA1Key] = HashType.SHA1.ZeroString,
-                [Media.SHA256Key] = HashType.SHA256.ZeroString,
-                [Media.SpamSumKey] = HashType.SpamSum.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SpamSum = HashType.SpamSum.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1117,7 +2139,7 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_NoHash_True()
         {
-            DictionaryBase self = new Rom();
+            var self = new Rom();
             bool actual = self.HasZeroHash();
             Assert.True(actual);
         }
@@ -1125,21 +2147,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_NonZeroHash_False()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             bool actual = self.HasZeroHash();
@@ -1149,21 +2171,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroCRC16_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = HashType.CRC16.ZeroString,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = HashType.CRC16.ZeroString,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1173,21 +2195,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroCRC_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = HashType.CRC32.ZeroString,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = HashType.CRC32.ZeroString,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1197,21 +2219,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroCRC64_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = HashType.CRC64.ZeroString,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = HashType.CRC64.ZeroString,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1221,21 +2243,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroMD2_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = HashType.MD2.ZeroString,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = HashType.MD2.ZeroString,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1245,21 +2267,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroMD4_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = HashType.MD4.ZeroString,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = HashType.MD4.ZeroString,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1269,21 +2291,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroMD5_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = HashType.MD5.ZeroString,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = HashType.MD5.ZeroString,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1293,21 +2315,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroRIPEMD128_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = HashType.RIPEMD128.ZeroString,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = HashType.RIPEMD128.ZeroString,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1317,21 +2339,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroRIPEMD160_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = HashType.RIPEMD160.ZeroString,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = HashType.RIPEMD160.ZeroString,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1341,21 +2363,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroSHA1_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = HashType.SHA1.ZeroString,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1365,21 +2387,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroSHA256_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = HashType.SHA256.ZeroString,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = HashType.SHA256.ZeroString,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1389,21 +2411,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroSHA384_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = HashType.SHA384.ZeroString,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = HashType.SHA384.ZeroString,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1413,21 +2435,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroSHA512_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = HashType.SHA512.ZeroString,
-                [Rom.SpamSumKey] = string.Empty,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = HashType.SHA512.ZeroString,
+                SpamSum = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -1437,21 +2459,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroSpamSum_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = string.Empty,
-                [Rom.CRCKey] = string.Empty,
-                [Rom.CRC64Key] = string.Empty,
-                [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = HashType.SpamSum.ZeroString,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = HashType.SpamSum.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1461,33 +2483,25 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void HasZeroHash_Rom_ZeroAll_True()
         {
-            DictionaryBase self = new Rom
+            var self = new Rom
             {
-                [Rom.CRC16Key] = HashType.CRC16.ZeroString,
-                [Rom.CRCKey] = HashType.CRC32.ZeroString,
-                [Rom.CRC64Key] = HashType.CRC64.ZeroString,
-                [Rom.MD2Key] = HashType.MD2.ZeroString,
-                [Rom.MD4Key] = HashType.MD4.ZeroString,
-                [Rom.MD5Key] = HashType.MD5.ZeroString,
-                [Rom.RIPEMD128Key] = HashType.RIPEMD128.ZeroString,
-                [Rom.RIPEMD160Key] = HashType.RIPEMD160.ZeroString,
-                [Rom.SHA1Key] = HashType.SHA1.ZeroString,
-                [Rom.SHA256Key] = HashType.SHA256.ZeroString,
-                [Rom.SHA384Key] = HashType.SHA384.ZeroString,
-                [Rom.SHA512Key] = HashType.SHA512.ZeroString,
-                [Rom.SpamSumKey] = HashType.SpamSum.ZeroString,
+                CRC16 = HashType.CRC16.ZeroString,
+                CRC32 = HashType.CRC32.ZeroString,
+                CRC64 = HashType.CRC64.ZeroString,
+                MD2 = HashType.MD2.ZeroString,
+                MD4 = HashType.MD4.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
+                RIPEMD128 = HashType.RIPEMD128.ZeroString,
+                RIPEMD160 = HashType.RIPEMD160.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SHA384 = HashType.SHA384.ZeroString,
+                SHA512 = HashType.SHA512.ZeroString,
+                SpamSum = HashType.SpamSum.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
-        }
-
-        [Fact]
-        public void HasZeroHash_Other_False()
-        {
-            DictionaryBase self = new Sample();
-            bool actual = self.HasZeroHash();
-            Assert.False(actual);
         }
 
         #endregion
@@ -1497,21 +2511,21 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void FillMissingHashes_Disk_BothEmpty()
         {
-            DictionaryBase self = new Disk();
-            DictionaryBase other = new Disk();
+            var self = new Disk();
+            var other = new Disk();
 
             self.FillMissingHashes(other);
-            Assert.Single(self);
+            Assert.False(self.HasHashes());
         }
 
         [Fact]
         public void FillMissingHashes_Disk_AllMissing()
         {
-            DictionaryBase self = new Disk();
-            DictionaryBase other = new Disk
+            var self = new Disk();
+            var other = new Disk
             {
-                [Disk.MD5Key] = "XXXXXX",
-                [Disk.SHA1Key] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
             };
 
             self.FillMissingHashes(other);
@@ -1520,22 +2534,22 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void FillMissingHashes_Media_BothEmpty()
         {
-            DictionaryBase self = new Media();
-            DictionaryBase other = new Media();
+            var self = new Media();
+            var other = new Media();
             self.FillMissingHashes(other);
-            Assert.Single(self);
+            Assert.False(self.HasHashes());
         }
 
         [Fact]
         public void FillMissingHashes_Media_AllMissing()
         {
-            DictionaryBase self = new Media();
-            DictionaryBase other = new Media
+            var self = new Media();
+            var other = new Media
             {
-                [Media.MD5Key] = "XXXXXX",
-                [Media.SHA1Key] = "XXXXXX",
-                [Media.SHA256Key] = "XXXXXX",
-                [Media.SpamSumKey] = "XXXXXX",
+                MD5 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             self.FillMissingHashes(other);
@@ -1544,31 +2558,31 @@ namespace SabreTools.Data.Extensions.Test
         [Fact]
         public void FillMissingHashes_Rom_BothEmpty()
         {
-            DictionaryBase self = new Rom();
-            DictionaryBase other = new Rom();
+            var self = new Rom();
+            var other = new Rom();
             self.FillMissingHashes(other);
-            Assert.Single(self);
+            Assert.False(self.HasHashes());
         }
 
         [Fact]
         public void FillMissingHashes_Rom_AllMissing()
         {
-            DictionaryBase self = new Rom();
-            DictionaryBase other = new Rom
+            var self = new Rom();
+            var other = new Rom
             {
-                [Rom.CRC16Key] = "XXXXXX",
-                [Rom.CRCKey] = "XXXXXX",
-                [Rom.CRC64Key] = "XXXXXX",
-                [Rom.MD2Key] = "XXXXXX",
-                [Rom.MD4Key] = "XXXXXX",
-                [Rom.MD5Key] = "XXXXXX",
-                [Rom.RIPEMD128Key] = "XXXXXX",
-                [Rom.RIPEMD160Key] = "XXXXXX",
-                [Rom.SHA1Key] = "XXXXXX",
-                [Rom.SHA256Key] = "XXXXXX",
-                [Rom.SHA384Key] = "XXXXXX",
-                [Rom.SHA512Key] = "XXXXXX",
-                [Rom.SpamSumKey] = "XXXXXX",
+                CRC16 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                CRC64 = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
+                MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
+                SHA1 = "XXXXXX",
+                SHA256 = "XXXXXX",
+                SHA384 = "XXXXXX",
+                SHA512 = "XXXXXX",
+                SpamSum = "XXXXXX",
             };
 
             self.FillMissingHashes(other);
@@ -1577,6 +2591,16 @@ namespace SabreTools.Data.Extensions.Test
         #endregion
 
         #region String to Enum
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("plain", Blit.Plain)]
+        [InlineData("dirty", Blit.Dirty)]
+        public void AsBlitTest(string? field, Blit? expected)
+        {
+            Blit? actual = field.AsBlit();
+            Assert.Equal(expected, actual);
+        }
 
         [Theory]
         [InlineData(null, null)]
@@ -1704,9 +2728,71 @@ namespace SabreTools.Data.Extensions.Test
         [InlineData("nodump", ItemStatus.Nodump)]
         [InlineData("yes", ItemStatus.Nodump)]
         [InlineData("verified", ItemStatus.Verified)]
+        [InlineData("deduped", ItemStatus.Deduped)]
         public void AsItemStatusTest(string? field, ItemStatus? expected)
         {
             ItemStatus? actual = field.AsItemStatus();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, ItemType.NULL)]
+        [InlineData("adjuster", ItemType.Adjuster)]
+        [InlineData("analog", ItemType.Analog)]
+        [InlineData("archive", ItemType.Archive)]
+        [InlineData("biosset", ItemType.BiosSet)]
+        [InlineData("blank", ItemType.Blank)]
+        [InlineData("chip", ItemType.Chip)]
+        [InlineData("condition", ItemType.Condition)]
+        [InlineData("configuration", ItemType.Configuration)]
+        [InlineData("conflocation", ItemType.ConfLocation)]
+        [InlineData("confsetting", ItemType.ConfSetting)]
+        [InlineData("control", ItemType.Control)]
+        [InlineData("dataarea", ItemType.DataArea)]
+        [InlineData("device", ItemType.Device)]
+        [InlineData("deviceref", ItemType.DeviceRef)]
+        [InlineData("device_ref", ItemType.DeviceRef)]
+        [InlineData("diplocation", ItemType.DipLocation)]
+        [InlineData("dipswitch", ItemType.DipSwitch)]
+        [InlineData("dipvalue", ItemType.DipValue)]
+        [InlineData("disk", ItemType.Disk)]
+        [InlineData("diskarea", ItemType.DiskArea)]
+        [InlineData("display", ItemType.Display)]
+        [InlineData("driver", ItemType.Driver)]
+        [InlineData("extension", ItemType.Extension)]
+        [InlineData("feature", ItemType.Feature)]
+        [InlineData("file", ItemType.File)]
+        [InlineData("info", ItemType.Info)]
+        [InlineData("input", ItemType.Input)]
+        [InlineData("instance", ItemType.Instance)]
+        [InlineData("media", ItemType.Media)]
+        [InlineData("part", ItemType.Part)]
+        [InlineData("partfeature", ItemType.PartFeature)]
+        [InlineData("part_feature", ItemType.PartFeature)]
+        [InlineData("port", ItemType.Port)]
+        [InlineData("ramoption", ItemType.RamOption)]
+        [InlineData("ram_option", ItemType.RamOption)]
+        [InlineData("release", ItemType.Release)]
+        [InlineData("releasedetails", ItemType.ReleaseDetails)]
+        [InlineData("release_details", ItemType.ReleaseDetails)]
+        [InlineData("rom", ItemType.Rom)]
+        [InlineData("sample", ItemType.Sample)]
+        [InlineData("serials", ItemType.Serials)]
+        [InlineData("sharedfeat", ItemType.SharedFeat)]
+        [InlineData("shared_feat", ItemType.SharedFeat)]
+        [InlineData("sharedfeature", ItemType.SharedFeat)]
+        [InlineData("shared_feature", ItemType.SharedFeat)]
+        [InlineData("slot", ItemType.Slot)]
+        [InlineData("slotoption", ItemType.SlotOption)]
+        [InlineData("slot_option", ItemType.SlotOption)]
+        [InlineData("softwarelist", ItemType.SoftwareList)]
+        [InlineData("software_list", ItemType.SoftwareList)]
+        [InlineData("sound", ItemType.Sound)]
+        [InlineData("sourcedetails", ItemType.SourceDetails)]
+        [InlineData("source_details", ItemType.SourceDetails)]
+        public void AsItemTypeTest(string? field, ItemType expected)
+        {
+            ItemType actual = field.AsItemType();
             Assert.Equal(expected, actual);
         }
 
@@ -1807,6 +2893,24 @@ namespace SabreTools.Data.Extensions.Test
 
         [Theory]
         [InlineData(null, null)]
+        [InlineData("0", Rotation.North)]
+        [InlineData("north", Rotation.North)]
+        [InlineData("vertical", Rotation.North)]
+        [InlineData("90", Rotation.East)]
+        [InlineData("east", Rotation.East)]
+        [InlineData("horizontal", Rotation.East)]
+        [InlineData("180", Rotation.South)]
+        [InlineData("south", Rotation.South)]
+        [InlineData("270", Rotation.West)]
+        [InlineData("west", Rotation.West)]
+        public void AsRotationTest(string? field, Rotation? expected)
+        {
+            Rotation? actual = field.AsRotation();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
         [InlineData("no", Runnable.No)]
         [InlineData("partial", Runnable.Partial)]
         [InlineData("yes", Runnable.Yes)]
@@ -1853,9 +2957,27 @@ namespace SabreTools.Data.Extensions.Test
 
         [Theory]
         [InlineData(null, null)]
+        [InlineData("8", Width.Byte)]
+        [InlineData("byte", Width.Byte)]
+        [InlineData("16", Width.Short)]
+        [InlineData("short", Width.Short)]
+        [InlineData("32", Width.Int)]
+        [InlineData("int", Width.Int)]
+        [InlineData("64", Width.Long)]
+        [InlineData("long", Width.Long)]
+        public void AsWidth(string? field, Width? expected)
+        {
+            Width? actual = field.AsWidth();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
         [InlineData("INVALID", null)]
+        [InlineData("1", true)]
         [InlineData("yes", true)]
         [InlineData("True", true)]
+        [InlineData("0", false)]
         [InlineData("no", false)]
         [InlineData("False", false)]
         public void AsYesNoTest(string? field, bool? expected)
@@ -1867,6 +2989,16 @@ namespace SabreTools.Data.Extensions.Test
         #endregion
 
         #region Enum to String
+
+        [Theory]
+        [InlineData((Blit)int.MaxValue, null)]
+        [InlineData(Blit.Plain, "plain")]
+        [InlineData(Blit.Dirty, "dirty")]
+        public void FromBlitTest(Blit field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
 
         [Theory]
         [InlineData((ChipType)int.MaxValue, null)]
@@ -1998,9 +3130,62 @@ namespace SabreTools.Data.Extensions.Test
         [InlineData(ItemStatus.Nodump, false, "nodump")]
         [InlineData(ItemStatus.Verified, true, "verified")]
         [InlineData(ItemStatus.Verified, false, "verified")]
+        [InlineData(ItemStatus.Deduped, true, "deduped")]
+        [InlineData(ItemStatus.Deduped, false, "deduped")]
         public void FromItemStatusTest(ItemStatus field, bool useSecond, string? expected)
         {
             string? actual = field.AsStringValue(useSecond);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(ItemType.NULL, null)]
+        [InlineData(ItemType.Adjuster, "adjuster")]
+        [InlineData(ItemType.Analog, "analog")]
+        [InlineData(ItemType.Archive, "archive")]
+        [InlineData(ItemType.BiosSet, "biosset")]
+        [InlineData(ItemType.Blank, "blank")]
+        [InlineData(ItemType.Chip, "chip")]
+        [InlineData(ItemType.Condition, "condition")]
+        [InlineData(ItemType.Configuration, "configuration")]
+        [InlineData(ItemType.ConfLocation, "conflocation")]
+        [InlineData(ItemType.ConfSetting, "confsetting")]
+        [InlineData(ItemType.Control, "control")]
+        [InlineData(ItemType.DataArea, "dataarea")]
+        [InlineData(ItemType.Device, "device")]
+        [InlineData(ItemType.DeviceRef, "device_ref")]
+        [InlineData(ItemType.DipLocation, "diplocation")]
+        [InlineData(ItemType.DipSwitch, "dipswitch")]
+        [InlineData(ItemType.DipValue, "dipvalue")]
+        [InlineData(ItemType.Disk, "disk")]
+        [InlineData(ItemType.DiskArea, "diskarea")]
+        [InlineData(ItemType.Display, "display")]
+        [InlineData(ItemType.Driver, "driver")]
+        [InlineData(ItemType.Extension, "extension")]
+        [InlineData(ItemType.Feature, "feature")]
+        [InlineData(ItemType.File, "file")]
+        [InlineData(ItemType.Info, "info")]
+        [InlineData(ItemType.Input, "input")]
+        [InlineData(ItemType.Instance, "instance")]
+        [InlineData(ItemType.Media, "media")]
+        [InlineData(ItemType.Part, "part")]
+        [InlineData(ItemType.PartFeature, "part_feature")]
+        [InlineData(ItemType.Port, "port")]
+        [InlineData(ItemType.RamOption, "ramoption")]
+        [InlineData(ItemType.Release, "release")]
+        [InlineData(ItemType.ReleaseDetails, "release_details")]
+        [InlineData(ItemType.Rom, "rom")]
+        [InlineData(ItemType.Sample, "sample")]
+        [InlineData(ItemType.Serials, "serials")]
+        [InlineData(ItemType.SharedFeat, "sharedfeat")]
+        [InlineData(ItemType.Slot, "slot")]
+        [InlineData(ItemType.SlotOption, "slotoption")]
+        [InlineData(ItemType.SoftwareList, "softwarelist")]
+        [InlineData(ItemType.Sound, "sound")]
+        [InlineData(ItemType.SourceDetails, "source_details")]
+        public void FromItemTypeTest(ItemType field, string? expected)
+        {
+            string? actual = field.AsStringValue();
             Assert.Equal(expected, actual);
         }
 
@@ -2103,6 +3288,21 @@ namespace SabreTools.Data.Extensions.Test
         }
 
         [Theory]
+        [InlineData(Rotation.North, true, "vertical")]
+        [InlineData(Rotation.North, false, "0")]
+        [InlineData(Rotation.East, true, "horizontal")]
+        [InlineData(Rotation.East, false, "90")]
+        [InlineData(Rotation.South, true, "vertical")]
+        [InlineData(Rotation.South, false, "180")]
+        [InlineData(Rotation.West, true, "horizontal")]
+        [InlineData(Rotation.West, false, "270")]
+        public void FromRotationTest(Rotation field, bool useSecond, string? expected)
+        {
+            string? actual = field.AsStringValue(useSecond);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
         [InlineData((Runnable)int.MaxValue, null)]
         [InlineData(Runnable.No, "no")]
         [InlineData(Runnable.Partial, "partial")]
@@ -2145,6 +3345,18 @@ namespace SabreTools.Data.Extensions.Test
         [InlineData(SupportStatus.Imperfect, "imperfect")]
         [InlineData(SupportStatus.Preliminary, "preliminary")]
         public void FromSupportStatusTest(SupportStatus field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((Width)int.MaxValue, null)]
+        [InlineData(Width.Byte, "8")]
+        [InlineData(Width.Short, "16")]
+        [InlineData(Width.Int, "32")]
+        [InlineData(Width.Long, "64")]
+        public void FromWidthTest(Width field, string? expected)
         {
             string? actual = field.AsStringValue();
             Assert.Equal(expected, actual);

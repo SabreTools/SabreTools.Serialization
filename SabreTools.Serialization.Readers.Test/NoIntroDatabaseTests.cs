@@ -106,7 +106,7 @@ namespace SabreTools.Serialization.Readers.Test
                 RegParent = "XXXXXX",
                 MergeOf = "XXXXXX",
                 MergeName = "XXXXXX",
-                Name = "XXXXXX",
+                Name = "name",
                 NameAlt = "XXXXXX",
                 Region = "XXXXXX",
                 Languages = "XXXXXX",
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Alt = "XXXXXX",
                 GameId1 = "XXXXXX",
                 GameId2 = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 Bios = "XXXXXX",
                 Licensed = "XXXXXX",
                 Pirate = "XXXXXX",
@@ -140,48 +140,48 @@ namespace SabreTools.Serialization.Readers.Test
 
             var sourceDetails = new Data.Models.NoIntroDatabase.SourceDetails
             {
-                Id = "XXXXXX",
-                AppendToNumber = "XXXXXX",
-                Section = "XXXXXX",
-                RomInfo = "XXXXXX",
-                DumpDate = "XXXXXX",
-                DumpDateInfo = "XXXXXX",
-                ReleaseDate = "XXXXXX",
-                ReleaseDateInfo = "XXXXXX",
-                Dumper = "XXXXXX",
-                Project = "XXXXXX",
-                OriginalFormat = "XXXXXX",
-                Nodump = "XXXXXX",
-                Tool = "XXXXXX",
-                Origin = "XXXXXX",
-                Comment1 = "XXXXXX",
-                Comment2 = "XXXXXX",
-                Link1 = "XXXXXX",
-                Link1Public = "XXXXXX",
-                Link2 = "XXXXXX",
-                Link2Public = "XXXXXX",
-                Link3 = "XXXXXX",
-                Link3Public = "XXXXXX",
-                Region = "XXXXXX",
-                MediaTitle = "XXXXXX",
+                Id = "id",
+                AppendToNumber = "appendtonumber",
+                Section = "section",
+                RomInfo = "rominfo",
+                DumpDate = "dumpdate",
+                DumpDateInfo = true,
+                ReleaseDate = "releasedate",
+                ReleaseDateInfo = true,
+                Dumper = "dumper",
+                Project = "project",
+                OriginalFormat = "originalformat",
+                Nodump = true,
+                Tool = "tool",
+                Origin = "origin",
+                Comment1 = "comment1",
+                Comment2 = "comment2",
+                Link1 = "link1",
+                Link1Public = true,
+                Link2 = "link2",
+                Link2Public = true,
+                Link3 = "link3",
+                Link3Public = true,
+                Region = "region",
+                MediaTitle = "mediatitle",
             };
 
             var serials = new Data.Models.NoIntroDatabase.Serials
             {
-                MediaSerial1 = "XXXXXX",
-                MediaSerial2 = "XXXXXX",
-                MediaSerial3 = "XXXXXX",
-                PCBSerial = "XXXXXX",
-                RomChipSerial1 = "XXXXXX",
-                RomChipSerial2 = "XXXXXX",
-                LockoutSerial = "XXXXXX",
-                SaveChipSerial = "XXXXXX",
-                ChipSerial = "XXXXXX",
-                BoxSerial = "XXXXXX",
-                MediaStamp = "XXXXXX",
-                BoxBarcode = "XXXXXX",
-                DigitalSerial1 = "XXXXXX",
-                DigitalSerial2 = "XXXXXX",
+                BoxBarcode = "boxbarcode",
+                BoxSerial = "boxserial",
+                ChipSerial = "chipserial",
+                DigitalSerial1 = "digitalserial1",
+                DigitalSerial2 = "digitalserial2",
+                LockoutSerial = "lockoutserial",
+                MediaSerial1 = "mediaserial1",
+                MediaSerial2 = "mediaserial2",
+                MediaSerial3 = "mediaserial3",
+                MediaStamp = "mediastamp",
+                PCBSerial = "pcbserial",
+                RomChipSerial1 = "romchipserial1",
+                RomChipSerial2 = "romchipserial2",
+                SaveChipSerial = "savechipserial",
             };
 
             var file = new Data.Models.NoIntroDatabase.File
@@ -196,7 +196,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Date = "XXXXXX",
                 Format = "XXXXXX",
                 Note = "XXXXXX",
-                Filter = "XXXXXX",
+                Filter = "filter",
                 Version = "XXXXXX",
                 UpdateType = "XXXXXX",
                 Size = "XXXXXX",
@@ -222,22 +222,22 @@ namespace SabreTools.Serialization.Readers.Test
 
             var releaseDetails = new Data.Models.NoIntroDatabase.ReleaseDetails
             {
-                Id = "XXXXXX",
-                AppendToNumber = "XXXXXX",
-                Date = "XXXXXX",
-                OriginalFormat = "XXXXXX",
-                Group = "XXXXXX",
-                DirName = "XXXXXX",
-                NfoName = "XXXXXX",
-                NfoSize = "XXXXXX",
-                NfoCRC = "XXXXXX",
-                ArchiveName = "XXXXXX",
-                RomInfo = "XXXXXX",
-                Category = "XXXXXX",
-                Comment = "XXXXXX",
-                Tool = "XXXXXX",
-                Region = "XXXXXX",
-                Origin = "XXXXXX",
+                Id = "id",
+                AppendToNumber = "appendtonumber",
+                Date = "date",
+                OriginalFormat = "originalformat",
+                Group = "group",
+                DirName = "dirname",
+                NfoName = "nfoname",
+                NfoSize = "nfosize",
+                NfoCRC = "nfocrc",
+                ArchiveName = "archivename",
+                RomInfo = "rominfo",
+                Category = "category",
+                Comment = "comment",
+                Tool = "tool",
+                Region = "region",
+                Origin = "origin",
             };
 
             var release = new Data.Models.NoIntroDatabase.Release
@@ -249,7 +249,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var game = new Data.Models.NoIntroDatabase.Game
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Archive = archive,
                 Media = [media],
                 Source = [source],
@@ -268,7 +268,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.NoIntroDatabase.Game? game)
         {
             Assert.NotNull(game);
-            Assert.Equal("XXXXXX", game.Name);
+            Assert.Equal("name", game.Name);
 
             Validate(game.Archive);
 
@@ -296,7 +296,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", archive.RegParent);
             Assert.Equal("XXXXXX", archive.MergeOf);
             Assert.Equal("XXXXXX", archive.MergeName);
-            Assert.Equal("XXXXXX", archive.Name);
+            Assert.Equal("name", archive.Name);
             Assert.Equal("XXXXXX", archive.NameAlt);
             Assert.Equal("XXXXXX", archive.Region);
             Assert.Equal("XXXXXX", archive.Languages);
@@ -311,7 +311,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", archive.Alt);
             Assert.Equal("XXXXXX", archive.GameId1);
             Assert.Equal("XXXXXX", archive.GameId2);
-            Assert.Equal("XXXXXX", archive.Description);
+            Assert.Equal("description", archive.Description);
             Assert.Equal("XXXXXX", archive.Bios);
             Assert.Equal("XXXXXX", archive.Licensed);
             Assert.Equal("XXXXXX", archive.Pirate);
@@ -356,30 +356,30 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.NoIntroDatabase.SourceDetails? sourceDetails)
         {
             Assert.NotNull(sourceDetails);
-            Assert.Equal("XXXXXX", sourceDetails.Id);
-            Assert.Equal("XXXXXX", sourceDetails.AppendToNumber);
-            Assert.Equal("XXXXXX", sourceDetails.Section);
-            Assert.Equal("XXXXXX", sourceDetails.RomInfo);
-            Assert.Equal("XXXXXX", sourceDetails.DumpDate);
-            Assert.Equal("XXXXXX", sourceDetails.DumpDateInfo);
-            Assert.Equal("XXXXXX", sourceDetails.ReleaseDate);
-            Assert.Equal("XXXXXX", sourceDetails.ReleaseDateInfo);
-            Assert.Equal("XXXXXX", sourceDetails.Dumper);
-            Assert.Equal("XXXXXX", sourceDetails.Project);
-            Assert.Equal("XXXXXX", sourceDetails.OriginalFormat);
-            Assert.Equal("XXXXXX", sourceDetails.Nodump);
-            Assert.Equal("XXXXXX", sourceDetails.Tool);
-            Assert.Equal("XXXXXX", sourceDetails.Origin);
-            Assert.Equal("XXXXXX", sourceDetails.Comment1);
-            Assert.Equal("XXXXXX", sourceDetails.Comment2);
-            Assert.Equal("XXXXXX", sourceDetails.Link1);
-            Assert.Equal("XXXXXX", sourceDetails.Link1Public);
-            Assert.Equal("XXXXXX", sourceDetails.Link2);
-            Assert.Equal("XXXXXX", sourceDetails.Link2Public);
-            Assert.Equal("XXXXXX", sourceDetails.Link3);
-            Assert.Equal("XXXXXX", sourceDetails.Link3Public);
-            Assert.Equal("XXXXXX", sourceDetails.Region);
-            Assert.Equal("XXXXXX", sourceDetails.MediaTitle);
+            Assert.Equal("id", sourceDetails.Id);
+            Assert.Equal("appendtonumber", sourceDetails.AppendToNumber);
+            Assert.Equal("section", sourceDetails.Section);
+            Assert.Equal("rominfo", sourceDetails.RomInfo);
+            Assert.Equal("dumpdate", sourceDetails.DumpDate);
+            Assert.Equal(true, sourceDetails.DumpDateInfo);
+            Assert.Equal("releasedate", sourceDetails.ReleaseDate);
+            Assert.Equal(true, sourceDetails.ReleaseDateInfo);
+            Assert.Equal("dumper", sourceDetails.Dumper);
+            Assert.Equal("project", sourceDetails.Project);
+            Assert.Equal("originalformat", sourceDetails.OriginalFormat);
+            Assert.Equal(true, sourceDetails.Nodump);
+            Assert.Equal("tool", sourceDetails.Tool);
+            Assert.Equal("origin", sourceDetails.Origin);
+            Assert.Equal("comment1", sourceDetails.Comment1);
+            Assert.Equal("comment2", sourceDetails.Comment2);
+            Assert.Equal("link1", sourceDetails.Link1);
+            Assert.Equal(true, sourceDetails.Link1Public);
+            Assert.Equal("link2", sourceDetails.Link2);
+            Assert.Equal(true, sourceDetails.Link2Public);
+            Assert.Equal("link3", sourceDetails.Link3);
+            Assert.Equal(true, sourceDetails.Link3Public);
+            Assert.Equal("region", sourceDetails.Region);
+            Assert.Equal("mediatitle", sourceDetails.MediaTitle);
         }
 
         /// <summary>
@@ -388,20 +388,20 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.NoIntroDatabase.Serials? serials)
         {
             Assert.NotNull(serials);
-            Assert.Equal("XXXXXX", serials.MediaSerial1);
-            Assert.Equal("XXXXXX", serials.MediaSerial2);
-            Assert.Equal("XXXXXX", serials.MediaSerial3);
-            Assert.Equal("XXXXXX", serials.PCBSerial);
-            Assert.Equal("XXXXXX", serials.RomChipSerial1);
-            Assert.Equal("XXXXXX", serials.RomChipSerial2);
-            Assert.Equal("XXXXXX", serials.LockoutSerial);
-            Assert.Equal("XXXXXX", serials.SaveChipSerial);
-            Assert.Equal("XXXXXX", serials.ChipSerial);
-            Assert.Equal("XXXXXX", serials.BoxSerial);
-            Assert.Equal("XXXXXX", serials.MediaStamp);
-            Assert.Equal("XXXXXX", serials.BoxBarcode);
-            Assert.Equal("XXXXXX", serials.DigitalSerial1);
-            Assert.Equal("XXXXXX", serials.DigitalSerial2);
+            Assert.Equal("boxbarcode", serials.BoxBarcode);
+            Assert.Equal("boxserial", serials.BoxSerial);
+            Assert.Equal("chipserial", serials.ChipSerial);
+            Assert.Equal("digitalserial1", serials.DigitalSerial1);
+            Assert.Equal("digitalserial2", serials.DigitalSerial2);
+            Assert.Equal("lockoutserial", serials.LockoutSerial);
+            Assert.Equal("mediaserial1", serials.MediaSerial1);
+            Assert.Equal("mediaserial2", serials.MediaSerial2);
+            Assert.Equal("mediaserial3", serials.MediaSerial3);
+            Assert.Equal("mediastamp", serials.MediaStamp);
+            Assert.Equal("pcbserial", serials.PCBSerial);
+            Assert.Equal("romchipserial1", serials.RomChipSerial1);
+            Assert.Equal("romchipserial2", serials.RomChipSerial2);
+            Assert.Equal("savechipserial", serials.SaveChipSerial);
         }
 
         /// <summary>
@@ -420,7 +420,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", file.Date);
             Assert.Equal("XXXXXX", file.Format);
             Assert.Equal("XXXXXX", file.Note);
-            Assert.Equal("XXXXXX", file.Filter);
+            Assert.Equal("filter", file.Filter);
             Assert.Equal("XXXXXX", file.Version);
             Assert.Equal("XXXXXX", file.UpdateType);
             Assert.Equal("XXXXXX", file.Size);
@@ -459,22 +459,22 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.NoIntroDatabase.ReleaseDetails? releaseDetails)
         {
             Assert.NotNull(releaseDetails);
-            Assert.Equal("XXXXXX", releaseDetails.Id);
-            Assert.Equal("XXXXXX", releaseDetails.AppendToNumber);
-            Assert.Equal("XXXXXX", releaseDetails.Date);
-            Assert.Equal("XXXXXX", releaseDetails.OriginalFormat);
-            Assert.Equal("XXXXXX", releaseDetails.Group);
-            Assert.Equal("XXXXXX", releaseDetails.DirName);
-            Assert.Equal("XXXXXX", releaseDetails.NfoName);
-            Assert.Equal("XXXXXX", releaseDetails.NfoSize);
-            Assert.Equal("XXXXXX", releaseDetails.NfoCRC);
-            Assert.Equal("XXXXXX", releaseDetails.ArchiveName);
-            Assert.Equal("XXXXXX", releaseDetails.RomInfo);
-            Assert.Equal("XXXXXX", releaseDetails.Category);
-            Assert.Equal("XXXXXX", releaseDetails.Comment);
-            Assert.Equal("XXXXXX", releaseDetails.Tool);
-            Assert.Equal("XXXXXX", releaseDetails.Region);
-            Assert.Equal("XXXXXX", releaseDetails.Origin);
+            Assert.Equal("id", releaseDetails.Id);
+            Assert.Equal("appendtonumber", releaseDetails.AppendToNumber);
+            Assert.Equal("date", releaseDetails.Date);
+            Assert.Equal("originalformat", releaseDetails.OriginalFormat);
+            Assert.Equal("group", releaseDetails.Group);
+            Assert.Equal("dirname", releaseDetails.DirName);
+            Assert.Equal("nfoname", releaseDetails.NfoName);
+            Assert.Equal("nfosize", releaseDetails.NfoSize);
+            Assert.Equal("nfocrc", releaseDetails.NfoCRC);
+            Assert.Equal("archivename", releaseDetails.ArchiveName);
+            Assert.Equal("rominfo", releaseDetails.RomInfo);
+            Assert.Equal("category", releaseDetails.Category);
+            Assert.Equal("comment", releaseDetails.Comment);
+            Assert.Equal("tool", releaseDetails.Tool);
+            Assert.Equal("region", releaseDetails.Region);
+            Assert.Equal("origin", releaseDetails.Origin);
         }
     }
 }

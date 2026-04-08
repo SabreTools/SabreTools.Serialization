@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void ConvertFromMetadata_Empty()
         {
-            Data.Models.Metadata.MetadataFile? item = [];
+            Data.Models.Metadata.MetadataFile? item = new Data.Models.Metadata.MetadataFile();
 
             DatFile datFile = new Formats.Logiqx(null, useGame: false);
             datFile.ConvertFromMetadata(item, "filename", indexId: 0, keep: true, statsOnly: false, filterRunner: null);
@@ -41,8 +41,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.Machine[]? machines = null;
             Data.Models.Metadata.MetadataFile? item = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = header,
-                [Data.Models.Metadata.MetadataFile.MachineKey] = machines,
+                Header = header,
+                Machine = machines,
             };
 
             DatFile datFile = new Formats.Logiqx(null, useGame: false);
@@ -59,8 +59,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.Machine[]? machines = [machine];
             Data.Models.Metadata.MetadataFile? item = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = header,
-                [Data.Models.Metadata.MetadataFile.MachineKey] = machines,
+                Header = header,
+                Machine = machines,
             };
 
             DatFile datFile = new Formats.Logiqx(null, useGame: false);
@@ -101,16 +101,16 @@ namespace SabreTools.Metadata.DatFiles.Test
             Disk? disk = Array.Find(datItems, item => item is Disk disk && !disk.DiskAreaSpecified && !disk.PartSpecified) as Disk;
             ValidateDisk(disk);
 
-            Display? display = Array.Find(datItems, item => item is Display display && display.ReadLong(Data.Models.Metadata.Video.AspectXKey) is null) as Display;
+            Display? display = Array.Find(datItems, item => item is Display display && display.AspectX is null) as Display;
             ValidateDisplay(display);
 
             Driver? driver = Array.Find(datItems, item => item is Driver) as Driver;
             ValidateDriver(driver);
 
             // All other fields are tested separately
-            Rom? dump = Array.Find(datItems, item => item is Rom rom && rom.ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType) is not null) as Rom;
+            Rom? dump = Array.Find(datItems, item => item is Rom rom && rom.OpenMSXMediaType is not null) as Rom;
             Assert.NotNull(dump);
-            Assert.Equal("rom", dump.ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType));
+            Assert.Equal(Data.Models.Metadata.OpenMSXSubType.Rom, dump.OpenMSXMediaType);
 
             Feature? feature = Array.Find(datItems, item => item is Feature) as Feature;
             ValidateFeature(feature);
@@ -127,16 +127,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             // All other fields are tested separately
             DipSwitch? partDipSwitch = Array.Find(datItems, item => item is DipSwitch dipSwitch && dipSwitch.PartSpecified) as DipSwitch;
             Assert.NotNull(partDipSwitch);
-            Part? dipSwitchPart = partDipSwitch.Read<Part>(DipSwitch.PartKey);
+            Part? dipSwitchPart = partDipSwitch.Part;
             ValidatePart(dipSwitchPart);
 
             // All other fields are tested separately
             Disk? partDisk = Array.Find(datItems, item => item is Disk disk && disk.DiskAreaSpecified && disk.PartSpecified) as Disk;
             Assert.NotNull(partDisk);
-            DiskArea? diskDiskArea = partDisk.Read<DiskArea>(Disk.DiskAreaKey);
-            ValidateDiskArea(diskDiskArea);
-            Part? diskPart = partDisk.Read<Part>(Disk.PartKey);
-            ValidatePart(diskPart);
+            ValidateDiskArea(partDisk.DiskArea);
+            ValidatePart(partDisk.Part);
 
             PartFeature? partFeature = Array.Find(datItems, item => item is PartFeature) as PartFeature;
             ValidatePartFeature(partFeature);
@@ -144,9 +142,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             // All other fields are tested separately
             Rom? partRom = Array.Find(datItems, item => item is Rom rom && rom.DataAreaSpecified && rom.PartSpecified) as Rom;
             Assert.NotNull(partRom);
-            DataArea? romDataArea = partRom.Read<DataArea>(Rom.DataAreaKey);
+            DataArea? romDataArea = partRom.DataArea;
             ValidateDataArea(romDataArea);
-            Part? romPart = partRom.Read<Part>(Rom.PartKey);
+            Part? romPart = partRom.Part;
             ValidatePart(romPart);
 
             Port? port = Array.Find(datItems, item => item is Port) as Port;
@@ -158,7 +156,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Release? release = Array.Find(datItems, item => item is Release) as Release;
             ValidateRelease(release);
 
-            Rom? rom = Array.Find(datItems, item => item is Rom rom && !rom.DataAreaSpecified && !rom.PartSpecified && rom.ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType) is null) as Rom;
+            Rom? rom = Array.Find(datItems, item => item is Rom rom && !rom.DataAreaSpecified && !rom.PartSpecified && rom.OpenMSXMediaType is null) as Rom;
             ValidateRom(rom);
 
             Sample? sample = Array.Find(datItems, item => item is Sample) as Sample;
@@ -176,7 +174,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Sound? sound = Array.Find(datItems, item => item is Sound) as Sound;
             ValidateSound(sound);
 
-            Display? video = Array.Find(datItems, item => item is Display display && display.ReadLong(Data.Models.Metadata.Video.AspectXKey) is not null) as Display;
+            Display? video = Array.Find(datItems, item => item is Display display && display.AspectX is not null) as Display;
             ValidateVideo(video);
         }
 
@@ -201,50 +199,52 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             return new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.AuthorKey] = "author",
-                [Data.Models.Metadata.Header.BiosModeKey] = "merged",
-                [Data.Models.Metadata.Header.BuildKey] = "build",
-                [Data.Models.Metadata.Header.CanOpenKey] = canOpen,
-                [Data.Models.Metadata.Header.CategoryKey] = "category",
-                [Data.Models.Metadata.Header.CommentKey] = "comment",
-                [Data.Models.Metadata.Header.DateKey] = "date",
-                [Data.Models.Metadata.Header.DatVersionKey] = "datversion",
-                [Data.Models.Metadata.Header.DebugKey] = "yes",
-                [Data.Models.Metadata.Header.DescriptionKey] = "description",
-                [Data.Models.Metadata.Header.EmailKey] = "email",
-                [Data.Models.Metadata.Header.EmulatorVersionKey] = "emulatorversion",
-                [Data.Models.Metadata.Header.ForceMergingKey] = "merged",
-                [Data.Models.Metadata.Header.ForceNodumpKey] = "required",
-                [Data.Models.Metadata.Header.ForcePackingKey] = "zip",
-                [Data.Models.Metadata.Header.ForceZippingKey] = "yes",
-                [Data.Models.Metadata.Header.HeaderKey] = "header",
-                [Data.Models.Metadata.Header.HomepageKey] = "homepage",
-                [Data.Models.Metadata.Header.IdKey] = "id",
-                [Data.Models.Metadata.Header.ImagesKey] = images,
-                [Data.Models.Metadata.Header.ImFolderKey] = "imfolder",
-                [Data.Models.Metadata.Header.InfosKey] = infos,
-                [Data.Models.Metadata.Header.LockBiosModeKey] = "yes",
-                [Data.Models.Metadata.Header.LockRomModeKey] = "yes",
-                [Data.Models.Metadata.Header.LockSampleModeKey] = "yes",
-                [Data.Models.Metadata.Header.MameConfigKey] = "mameconfig",
-                [Data.Models.Metadata.Header.NameKey] = "name",
-                [Data.Models.Metadata.Header.NewDatKey] = newDat,
-                [Data.Models.Metadata.Header.NotesKey] = "notes",
-                [Data.Models.Metadata.Header.PluginKey] = "plugin",
-                [Data.Models.Metadata.Header.RefNameKey] = "refname",
-                [Data.Models.Metadata.Header.RomModeKey] = "merged",
-                [Data.Models.Metadata.Header.RomTitleKey] = "romtitle",
-                [Data.Models.Metadata.Header.RootDirKey] = "rootdir",
-                [Data.Models.Metadata.Header.SampleModeKey] = "merged",
-                [Data.Models.Metadata.Header.SchemaLocationKey] = "schemalocation",
-                [Data.Models.Metadata.Header.ScreenshotsHeightKey] = "screenshotsheight",
-                [Data.Models.Metadata.Header.ScreenshotsWidthKey] = "screenshotsWidth",
-                [Data.Models.Metadata.Header.SearchKey] = search,
-                [Data.Models.Metadata.Header.SystemKey] = "system",
-                [Data.Models.Metadata.Header.TimestampKey] = "timestamp",
-                [Data.Models.Metadata.Header.TypeKey] = "type",
-                [Data.Models.Metadata.Header.UrlKey] = "url",
-                [Data.Models.Metadata.Header.VersionKey] = "version",
+                Author = "author",
+                BiosMode = Data.Models.Metadata.MergingFlag.Merged,
+                Build = "build",
+                CanOpen = canOpen,
+                Category = "category",
+                Comment = "comment",
+                Date = "date",
+                DatVersion = "datversion",
+                Debug = true,
+                Description = "description",
+                Email = "email",
+                EmulatorVersion = "emulatorversion",
+                FileName = "filename",
+                ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
+                ForceNodump = Data.Models.Metadata.NodumpFlag.Required,
+                ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
+                ForceZipping = true,
+                HeaderRow = ["header"],
+                HeaderSkipper = "header",
+                Homepage = "homepage",
+                Id = "id",
+                Images = images,
+                ImFolder = "imfolder",
+                Infos = infos,
+                LockBiosMode = true,
+                LockRomMode = true,
+                LockSampleMode = true,
+                MameConfig = "mameconfig",
+                Name = "name",
+                NewDat = newDat,
+                Notes = "notes",
+                Plugin = "plugin",
+                RefName = "refname",
+                RomMode = Data.Models.Metadata.MergingFlag.Merged,
+                RomTitle = "romtitle",
+                RootDir = "rootdir",
+                SampleMode = Data.Models.Metadata.MergingFlag.Merged,
+                SchemaLocation = "schemalocation",
+                ScreenshotsHeight = "screenshotsheight",
+                ScreenshotsWidth = "screenshotsWidth",
+                Search = search,
+                System = "system",
+                Timestamp = "timestamp",
+                Type = "type",
+                Url = "url",
+                Version = "version",
             };
         }
 
@@ -252,83 +252,93 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.AdjusterKey] = new Data.Models.Metadata.Adjuster[] { CreateMetadataAdjuster() },
-                [Data.Models.Metadata.Machine.ArchiveKey] = new Data.Models.Metadata.Archive[] { CreateMetadataArchive() },
-                [Data.Models.Metadata.Machine.BiosSetKey] = new Data.Models.Metadata.BiosSet[] { CreateMetadataBiosSet() },
-                [Data.Models.Metadata.Machine.BoardKey] = "board",
-                [Data.Models.Metadata.Machine.ButtonsKey] = "buttons",
-                [Data.Models.Metadata.Machine.CategoryKey] = "category",
-                [Data.Models.Metadata.Machine.ChipKey] = new Data.Models.Metadata.Chip[] { CreateMetadataChip() },
-                [Data.Models.Metadata.Machine.CloneOfKey] = "cloneof",
-                [Data.Models.Metadata.Machine.CloneOfIdKey] = "cloneofid",
-                [Data.Models.Metadata.Machine.CommentKey] = "comment",
-                [Data.Models.Metadata.Machine.CompanyKey] = "company",
-                [Data.Models.Metadata.Machine.ConfigurationKey] = new Data.Models.Metadata.Configuration[] { CreateMetadataConfiguration() },
-                [Data.Models.Metadata.Machine.ControlKey] = "control",
-                [Data.Models.Metadata.Machine.CountryKey] = "country",
-                [Data.Models.Metadata.Machine.DescriptionKey] = "description",
-                [Data.Models.Metadata.Machine.DeviceKey] = new Data.Models.Metadata.Device[] { CreateMetadataDevice() },
-                [Data.Models.Metadata.Machine.DeviceRefKey] = new Data.Models.Metadata.DeviceRef[] { CreateMetadataDeviceRef() },
-                [Data.Models.Metadata.Machine.DipSwitchKey] = new Data.Models.Metadata.DipSwitch[] { CreateMetadataDipSwitch() },
-                [Data.Models.Metadata.Machine.DirNameKey] = "dirname",
-                [Data.Models.Metadata.Machine.DiskKey] = new Data.Models.Metadata.Disk[] { CreateMetadataDisk() },
-                [Data.Models.Metadata.Machine.DisplayCountKey] = "displaycount",
-                [Data.Models.Metadata.Machine.DisplayKey] = new Data.Models.Metadata.Display[] { CreateMetadataDisplay() },
-                [Data.Models.Metadata.Machine.DisplayTypeKey] = "displaytype",
-                [Data.Models.Metadata.Machine.DriverKey] = CreateMetadataDriver(),
-                [Data.Models.Metadata.Machine.DumpKey] = new Data.Models.Metadata.Dump[] { CreateMetadataDump() },
-                [Data.Models.Metadata.Machine.DuplicateIDKey] = "duplicateid",
-                [Data.Models.Metadata.Machine.EmulatorKey] = "emulator",
-                [Data.Models.Metadata.Machine.ExtraKey] = "extra",
-                [Data.Models.Metadata.Machine.FavoriteKey] = "favorite",
-                [Data.Models.Metadata.Machine.FeatureKey] = new Data.Models.Metadata.Feature[] { CreateMetadataFeature() },
-                [Data.Models.Metadata.Machine.GenMSXIDKey] = "genmsxid",
-                [Data.Models.Metadata.Machine.HistoryKey] = "history",
-                [Data.Models.Metadata.Machine.IdKey] = "id",
-                [Data.Models.Metadata.Machine.Im1CRCKey] = HashType.CRC32.ZeroString,
-                [Data.Models.Metadata.Machine.Im2CRCKey] = HashType.CRC32.ZeroString,
-                [Data.Models.Metadata.Machine.ImageNumberKey] = "imagenumber",
-                [Data.Models.Metadata.Machine.InfoKey] = new Data.Models.Metadata.Info[] { CreateMetadataInfo() },
-                [Data.Models.Metadata.Machine.InputKey] = CreateMetadataInput(),
-                [Data.Models.Metadata.Machine.IsBiosKey] = "yes",
-                [Data.Models.Metadata.Machine.IsDeviceKey] = "yes",
-                [Data.Models.Metadata.Machine.IsMechanicalKey] = "yes",
-                [Data.Models.Metadata.Machine.LanguageKey] = "language",
-                [Data.Models.Metadata.Machine.LocationKey] = "location",
-                [Data.Models.Metadata.Machine.ManufacturerKey] = "manufacturer",
-                [Data.Models.Metadata.Machine.MediaKey] = new Data.Models.Metadata.Media[] { CreateMetadataMedia() },
-                [Data.Models.Metadata.Machine.NameKey] = "name",
-                [Data.Models.Metadata.Machine.NotesKey] = "notes",
-                [Data.Models.Metadata.Machine.PartKey] = new Data.Models.Metadata.Part[] { CreateMetadataPart() },
-                [Data.Models.Metadata.Machine.PlayedCountKey] = "playedcount",
-                [Data.Models.Metadata.Machine.PlayedTimeKey] = "playedtime",
-                [Data.Models.Metadata.Machine.PlayersKey] = "players",
-                [Data.Models.Metadata.Machine.PortKey] = new Data.Models.Metadata.Port[] { CreateMetadataPort() },
-                [Data.Models.Metadata.Machine.PublisherKey] = "publisher",
-                [Data.Models.Metadata.Machine.RamOptionKey] = new Data.Models.Metadata.RamOption[] { CreateMetadataRamOption() },
-                [Data.Models.Metadata.Machine.RebuildToKey] = "rebuildto",
-                [Data.Models.Metadata.Machine.ReleaseKey] = new Data.Models.Metadata.Release[] { CreateMetadataRelease() },
-                [Data.Models.Metadata.Machine.ReleaseNumberKey] = "releasenumber",
-                [Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { CreateMetadataRom() },
-                [Data.Models.Metadata.Machine.RomOfKey] = "romof",
-                [Data.Models.Metadata.Machine.RotationKey] = "rotation",
-                [Data.Models.Metadata.Machine.RunnableKey] = "yes",
-                [Data.Models.Metadata.Machine.SampleKey] = new Data.Models.Metadata.Sample[] { CreateMetadataSample() },
-                [Data.Models.Metadata.Machine.SampleOfKey] = "sampleof",
-                [Data.Models.Metadata.Machine.SaveTypeKey] = "savetype",
-                [Data.Models.Metadata.Machine.SharedFeatKey] = new Data.Models.Metadata.SharedFeat[] { CreateMetadataSharedFeat() },
-                [Data.Models.Metadata.Machine.SlotKey] = new Data.Models.Metadata.Slot[] { CreateMetadataSlot() },
-                [Data.Models.Metadata.Machine.SoftwareListKey] = new Data.Models.Metadata.SoftwareList[] { CreateMetadataSoftwareList() },
-                [Data.Models.Metadata.Machine.SoundKey] = CreateMetadataSound(),
-                [Data.Models.Metadata.Machine.SourceFileKey] = "sourcefile",
-                [Data.Models.Metadata.Machine.SourceRomKey] = "sourcerom",
-                [Data.Models.Metadata.Machine.StatusKey] = "status",
-                [Data.Models.Metadata.Machine.SupportedKey] = "yes",
-                [Data.Models.Metadata.Machine.SystemKey] = "system",
-                [Data.Models.Metadata.Machine.TagsKey] = "tags",
-                [Data.Models.Metadata.Machine.TruripKey] = CreateMetadataTrurip(),
-                [Data.Models.Metadata.Machine.VideoKey] = new Data.Models.Metadata.Video[] { CreateMetadataVideo() },
-                [Data.Models.Metadata.Machine.YearKey] = "year",
+                Adjuster = [CreateMetadataAdjuster()],
+                Archive = [CreateMetadataArchive()],
+                BiosSet = [CreateMetadataBiosSet()],
+                Board = "board",
+                Buttons = "buttons",
+                Category = ["category"],
+                Chip = [CreateMetadataChip()],
+                CloneOf = "cloneof",
+                CloneOfId = "cloneofid",
+                Comment = ["comment"],
+                Company = "company",
+                Configuration = [CreateMetadataConfiguration()],
+                Control = "control",
+                CRC = "crc",
+                Country = "country",
+                Description = "description",
+                Developer = "developer",
+                Device = [CreateMetadataDevice()],
+                DeviceRef = [CreateMetadataDeviceRef()],
+                DipSwitch = [CreateMetadataDipSwitch()],
+                DirName = "dirname",
+                Disk = [CreateMetadataDisk()],
+                DisplayCount = "displaycount",
+                Display = [CreateMetadataDisplay()],
+                DisplayType = "displaytype",
+                Driver = CreateMetadataDriver(),
+                Dump = [CreateMetadataDump()],
+                DuplicateID = "duplicateid",
+                Emulator = "emulator",
+                Enabled = "enabled",
+                Extra = "extra",
+                Favorite = "favorite",
+                Feature = [CreateMetadataFeature()],
+                GenMSXID = "genmsxid",
+                Genre = "genre",
+                History = "history",
+                Id = "id",
+                Im1CRC = HashType.CRC32.ZeroString,
+                Im2CRC = HashType.CRC32.ZeroString,
+                ImageNumber = "imagenumber",
+                Info = [CreateMetadataInfo()],
+                Input = CreateMetadataInput(),
+                IsBios = true,
+                IsDevice = true,
+                IsMechanical = true,
+                Language = "language",
+                Location = "location",
+                Manufacturer = "manufacturer",
+                Media = [CreateMetadataMedia()],
+                Name = "name",
+                Notes = "notes",
+                Part = [CreateMetadataPart()],
+                PlayedCount = "playedcount",
+                PlayedTime = "playedtime",
+                Players = "players",
+                Port = [CreateMetadataPort()],
+                Publisher = "publisher",
+                RamOption = [CreateMetadataRamOption()],
+                Ratings = "ratings",
+                RebuildTo = "rebuildto",
+                RelatedTo = "relatedto",
+                Release = [CreateMetadataRelease()],
+                ReleaseNumber = "releasenumber",
+                Rom = [CreateMetadataRom()],
+                RomOf = "romof",
+                Rotation = "rotation",
+                Runnable = Data.Models.Metadata.Runnable.Yes,
+                Sample = [CreateMetadataSample()],
+                SampleOf = "sampleof",
+                SaveType = "savetype",
+                Score = "score",
+                SharedFeat = [CreateMetadataSharedFeat()],
+                Slot = [CreateMetadataSlot()],
+                SoftwareList = [CreateMetadataSoftwareList()],
+                Sound = CreateMetadataSound(),
+                Source = "source",
+                SourceFile = "sourcefile",
+                SourceRom = "sourcerom",
+                Status = "status",
+                Subgenre = "subgenre",
+                Supported = Data.Models.Metadata.Supported.Yes,
+                System = "system",
+                Tags = "tags",
+                TitleID = "titleid",
+                Url = "url",
+                Video = [CreateMetadataVideo()],
+                Year = "year",
             };
         }
 
@@ -336,9 +346,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Adjuster
             {
-                [Data.Models.Metadata.Adjuster.ConditionKey] = CreateMetadataCondition(),
-                [Data.Models.Metadata.Adjuster.DefaultKey] = true,
-                [Data.Models.Metadata.Adjuster.NameKey] = "name",
+                Condition = CreateMetadataCondition(),
+                Default = true,
+                Name = "name",
             };
         }
 
@@ -346,7 +356,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Analog
             {
-                [Data.Models.Metadata.Analog.MaskKey] = "mask",
+                Mask = "mask",
             };
         }
 
@@ -354,39 +364,39 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Archive
             {
-                [Data.Models.Metadata.Archive.NumberKey] = "number",
-                [Data.Models.Metadata.Archive.CloneKey] = "clone",
-                [Data.Models.Metadata.Archive.RegParentKey] = "regparent",
-                [Data.Models.Metadata.Archive.MergeOfKey] = "mergeof",
-                [Data.Models.Metadata.Archive.MergeNameKey] = "mergename",
-                [Data.Models.Metadata.Archive.NameKey] = "name",
-                [Data.Models.Metadata.Archive.NameAltKey] = "name_alt",
-                [Data.Models.Metadata.Archive.RegionKey] = "region",
-                [Data.Models.Metadata.Archive.LanguagesKey] = "languages",
-                [Data.Models.Metadata.Archive.ShowLangKey] = "showlang",
-                [Data.Models.Metadata.Archive.LangCheckedKey] = "langchecked",
-                [Data.Models.Metadata.Archive.Version1Key] = "version1",
-                [Data.Models.Metadata.Archive.Version2Key] = "version2",
-                [Data.Models.Metadata.Archive.DevStatusKey] = "devstatus",
-                [Data.Models.Metadata.Archive.AdditionalKey] = "additional",
-                [Data.Models.Metadata.Archive.Special1Key] = "special1",
-                [Data.Models.Metadata.Archive.Special2Key] = "special2",
-                [Data.Models.Metadata.Archive.AltKey] = "alt",
-                [Data.Models.Metadata.Archive.GameId1Key] = "gameid1",
-                [Data.Models.Metadata.Archive.GameId2Key] = "gameid2",
-                [Data.Models.Metadata.Archive.DescriptionKey] = "description",
-                [Data.Models.Metadata.Archive.BiosKey] = "bios",
-                [Data.Models.Metadata.Archive.LicensedKey] = "licensed",
-                [Data.Models.Metadata.Archive.PirateKey] = "pirate",
-                [Data.Models.Metadata.Archive.PhysicalKey] = "physical",
-                [Data.Models.Metadata.Archive.CompleteKey] = "complete",
-                [Data.Models.Metadata.Archive.AdultKey] = "adult",
-                [Data.Models.Metadata.Archive.DatKey] = "dat",
-                [Data.Models.Metadata.Archive.ListedKey] = "listed",
-                [Data.Models.Metadata.Archive.PrivateKey] = "private",
-                [Data.Models.Metadata.Archive.StickyNoteKey] = "stickynote",
-                [Data.Models.Metadata.Archive.DatterNoteKey] = "datternote",
-                [Data.Models.Metadata.Archive.CategoriesKey] = "categories",
+                Number = "number",
+                CloneTag = "clone",
+                RegParent = "regparent",
+                MergeOf = "mergeof",
+                MergeName = "mergename",
+                Name = "name",
+                NameAlt = "name_alt",
+                Region = "region",
+                Languages = "languages",
+                ShowLang = true,
+                LangChecked = "langchecked",
+                Version1 = "version1",
+                Version2 = "version2",
+                DevStatus = "devstatus",
+                Additional = "additional",
+                Special1 = "special1",
+                Special2 = "special2",
+                Alt = true,
+                GameId1 = "gameid1",
+                GameId2 = "gameid2",
+                Description = "description",
+                Bios = true,
+                Licensed = true,
+                Pirate = true,
+                Physical = true,
+                Complete = true,
+                Adult = true,
+                Dat = true,
+                Listed = true,
+                Private = true,
+                StickyNote = "stickynote",
+                DatterNote = "datternote",
+                Categories = "categories",
             };
         }
 
@@ -394,9 +404,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.BiosSet
             {
-                [Data.Models.Metadata.BiosSet.DefaultKey] = true,
-                [Data.Models.Metadata.BiosSet.DescriptionKey] = "description",
-                [Data.Models.Metadata.BiosSet.NameKey] = "name",
+                Default = true,
+                Description = "description",
+                Name = "name",
             };
         }
 
@@ -404,12 +414,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Chip
             {
-                [Data.Models.Metadata.Chip.ClockKey] = 12345L,
-                [Data.Models.Metadata.Chip.FlagsKey] = "flags",
-                [Data.Models.Metadata.Chip.NameKey] = "name",
-                [Data.Models.Metadata.Chip.SoundOnlyKey] = "yes",
-                [Data.Models.Metadata.Chip.TagKey] = "tag",
-                [Data.Models.Metadata.Chip.ChipTypeKey] = "cpu",
+                Clock = 12345,
+                Flags = "flags",
+                Name = "name",
+                SoundOnly = true,
+                Tag = "tag",
+                ChipType = Data.Models.Metadata.ChipType.CPU,
             };
         }
 
@@ -417,12 +427,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Configuration
             {
-                [Data.Models.Metadata.Configuration.ConditionKey] = CreateMetadataCondition(),
-                [Data.Models.Metadata.Configuration.ConfLocationKey] = new Data.Models.Metadata.ConfLocation[] { CreateMetadataConfLocation() },
-                [Data.Models.Metadata.Configuration.ConfSettingKey] = new Data.Models.Metadata.ConfSetting[] { CreateMetadataConfSetting() },
-                [Data.Models.Metadata.Configuration.MaskKey] = "mask",
-                [Data.Models.Metadata.Configuration.NameKey] = "name",
-                [Data.Models.Metadata.Configuration.TagKey] = "tag",
+                Condition = CreateMetadataCondition(),
+                ConfLocation = [CreateMetadataConfLocation()],
+                ConfSetting = [CreateMetadataConfSetting()],
+                Mask = "mask",
+                Name = "name",
+                Tag = "tag",
             };
         }
 
@@ -430,10 +440,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Condition
             {
-                [Data.Models.Metadata.Condition.ValueKey] = "value",
-                [Data.Models.Metadata.Condition.MaskKey] = "mask",
-                [Data.Models.Metadata.Condition.RelationKey] = "eq",
-                [Data.Models.Metadata.Condition.TagKey] = "tag",
+                Value = "value",
+                Mask = "mask",
+                Relation = Data.Models.Metadata.Relation.Equal,
+                Tag = "tag",
             };
         }
 
@@ -441,9 +451,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.ConfLocation
             {
-                [Data.Models.Metadata.ConfLocation.InvertedKey] = "yes",
-                [Data.Models.Metadata.ConfLocation.NameKey] = "name",
-                [Data.Models.Metadata.ConfLocation.NumberKey] = "number",
+                Inverted = true,
+                Name = "name",
+                Number = 12345,
             };
         }
 
@@ -451,10 +461,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.ConfSetting
             {
-                [Data.Models.Metadata.ConfSetting.ConditionKey] = CreateMetadataCondition(),
-                [Data.Models.Metadata.ConfSetting.DefaultKey] = "yes",
-                [Data.Models.Metadata.ConfSetting.NameKey] = "name",
-                [Data.Models.Metadata.ConfSetting.ValueKey] = "value",
+                Condition = CreateMetadataCondition(),
+                Default = true,
+                Name = "name",
+                Value = "value",
             };
         }
 
@@ -462,18 +472,18 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Control
             {
-                [Data.Models.Metadata.Control.ButtonsKey] = 12345L,
-                [Data.Models.Metadata.Control.KeyDeltaKey] = 12345L,
-                [Data.Models.Metadata.Control.MaximumKey] = 12345L,
-                [Data.Models.Metadata.Control.MinimumKey] = 12345L,
-                [Data.Models.Metadata.Control.PlayerKey] = 12345L,
-                [Data.Models.Metadata.Control.ReqButtonsKey] = 12345L,
-                [Data.Models.Metadata.Control.ReverseKey] = "yes",
-                [Data.Models.Metadata.Control.SensitivityKey] = 12345L,
-                [Data.Models.Metadata.Control.ControlTypeKey] = "lightgun",
-                [Data.Models.Metadata.Control.WaysKey] = "ways",
-                [Data.Models.Metadata.Control.Ways2Key] = "ways2",
-                [Data.Models.Metadata.Control.Ways3Key] = "ways3",
+                Buttons = 12345,
+                KeyDelta = 12345,
+                Maximum = 12345,
+                Minimum = 12345,
+                Player = 12345,
+                ReqButtons = 12345,
+                Reverse = true,
+                Sensitivity = 12345,
+                ControlType = Data.Models.Metadata.ControlType.Lightgun,
+                Ways = "ways",
+                Ways2 = "ways2",
+                Ways3 = "ways3",
             };
         }
 
@@ -481,13 +491,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Device
             {
-                [Data.Models.Metadata.Device.ExtensionKey] = new Data.Models.Metadata.Extension[] { CreateMetadataExtension() },
-                [Data.Models.Metadata.Device.FixedImageKey] = "fixedimage",
-                [Data.Models.Metadata.Device.InstanceKey] = CreateMetadataInstance(),
-                [Data.Models.Metadata.Device.InterfaceKey] = "interface",
-                [Data.Models.Metadata.Device.MandatoryKey] = 1L,
-                [Data.Models.Metadata.Device.TagKey] = "tag",
-                [Data.Models.Metadata.Device.DeviceTypeKey] = "punchtape",
+                Extension = [CreateMetadataExtension()],
+                FixedImage = "fixedimage",
+                Instance = CreateMetadataInstance(),
+                Interface = "interface",
+                Mandatory = true,
+                Tag = "tag",
+                DeviceType = Data.Models.Metadata.DeviceType.PunchTape,
             };
         }
 
@@ -495,7 +505,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.DeviceRef
             {
-                [Data.Models.Metadata.DeviceRef.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -503,9 +513,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.DipLocation
             {
-                [Data.Models.Metadata.DipLocation.InvertedKey] = "yes",
-                [Data.Models.Metadata.DipLocation.NameKey] = "name",
-                [Data.Models.Metadata.DipLocation.NumberKey] = "number",
+                Inverted = true,
+                Name = "name",
+                Number = 12345,
             };
         }
 
@@ -513,14 +523,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.DipSwitch
             {
-                [Data.Models.Metadata.DipSwitch.ConditionKey] = CreateMetadataCondition(),
-                [Data.Models.Metadata.DipSwitch.DefaultKey] = "yes",
-                [Data.Models.Metadata.DipSwitch.DipLocationKey] = new Data.Models.Metadata.DipLocation[] { CreateMetadataDipLocation() },
-                [Data.Models.Metadata.DipSwitch.DipValueKey] = new Data.Models.Metadata.DipValue[] { CreateMetadataDipValue() },
-                [Data.Models.Metadata.DipSwitch.EntryKey] = new string[] { "entry" },
-                [Data.Models.Metadata.DipSwitch.MaskKey] = "mask",
-                [Data.Models.Metadata.DipSwitch.NameKey] = "name",
-                [Data.Models.Metadata.DipSwitch.TagKey] = "tag",
+                Condition = CreateMetadataCondition(),
+                Default = true,
+                DipLocation = [CreateMetadataDipLocation()],
+                DipValue = [CreateMetadataDipValue()],
+                Entry = ["entry"],
+                Mask = "mask",
+                Name = "name",
+                Tag = "tag",
             };
         }
 
@@ -528,10 +538,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.DipValue
             {
-                [Data.Models.Metadata.DipValue.ConditionKey] = CreateMetadataCondition(),
-                [Data.Models.Metadata.DipValue.DefaultKey] = "yes",
-                [Data.Models.Metadata.DipValue.NameKey] = "name",
-                [Data.Models.Metadata.DipValue.ValueKey] = "value",
+                Condition = CreateMetadataCondition(),
+                Default = true,
+                Name = "name",
+                Value = "value",
             };
         }
 
@@ -539,11 +549,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.DataArea
             {
-                [Data.Models.Metadata.DataArea.EndiannessKey] = "big",
-                [Data.Models.Metadata.DataArea.NameKey] = "name",
-                [Data.Models.Metadata.DataArea.RomKey] = new Data.Models.Metadata.Rom[] { [] },
-                [Data.Models.Metadata.DataArea.SizeKey] = 12345L,
-                [Data.Models.Metadata.DataArea.WidthKey] = 64,
+                Endianness = Data.Models.Metadata.Endianness.Big,
+                Name = "name",
+                Rom = [new Data.Models.Metadata.Rom()],
+                Size = 12345,
+                Width = Data.Models.Metadata.Width.Long,
             };
         }
 
@@ -551,15 +561,15 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Disk
             {
-                [Data.Models.Metadata.Disk.FlagsKey] = "flags",
-                [Data.Models.Metadata.Disk.IndexKey] = "index",
-                [Data.Models.Metadata.Disk.MD5Key] = HashType.MD5.ZeroString,
-                [Data.Models.Metadata.Disk.MergeKey] = "merge",
-                [Data.Models.Metadata.Disk.NameKey] = "name",
-                [Data.Models.Metadata.Disk.OptionalKey] = "yes",
-                [Data.Models.Metadata.Disk.RegionKey] = "region",
-                [Data.Models.Metadata.Disk.SHA1Key] = HashType.SHA1.ZeroString,
-                [Data.Models.Metadata.Disk.WritableKey] = "yes",
+                Flags = "flags",
+                Index = 12345,
+                MD5 = HashType.MD5.ZeroString,
+                Merge = "merge",
+                Name = "name",
+                Optional = true,
+                Region = "region",
+                SHA1 = HashType.SHA1.ZeroString,
+                Writable = true,
             };
         }
 
@@ -567,8 +577,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.DiskArea
             {
-                [Data.Models.Metadata.DiskArea.DiskKey] = new Data.Models.Metadata.Disk[] { [] },
-                [Data.Models.Metadata.DiskArea.NameKey] = "name",
+                Disk = [new Data.Models.Metadata.Disk()],
+                Name = "name",
             };
         }
 
@@ -576,20 +586,22 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Display
             {
-                [Data.Models.Metadata.Display.FlipXKey] = "yes",
-                [Data.Models.Metadata.Display.HBEndKey] = 12345L,
-                [Data.Models.Metadata.Display.HBStartKey] = 12345L,
-                [Data.Models.Metadata.Display.HeightKey] = 12345L,
-                [Data.Models.Metadata.Display.HTotalKey] = 12345L,
-                [Data.Models.Metadata.Display.PixClockKey] = 12345L,
-                [Data.Models.Metadata.Display.RefreshKey] = 12345L,
-                [Data.Models.Metadata.Display.RotateKey] = 90,
-                [Data.Models.Metadata.Display.TagKey] = "tag",
-                [Data.Models.Metadata.Display.DisplayTypeKey] = "vector",
-                [Data.Models.Metadata.Display.VBEndKey] = 12345L,
-                [Data.Models.Metadata.Display.VBStartKey] = 12345L,
-                [Data.Models.Metadata.Display.VTotalKey] = 12345L,
-                [Data.Models.Metadata.Display.WidthKey] = 12345L,
+                AspectX = null, // Null to ensure it is not Video
+                AspectY = null, // Null to ensure it is not Video
+                FlipX = true,
+                HBEnd = 12345,
+                HBStart = 12345,
+                Height = 12345,
+                HTotal = 12345,
+                PixClock = 12345,
+                Refresh = 123.45,
+                Rotate = Data.Models.Metadata.Rotation.East,
+                Tag = "tag",
+                DisplayType = Data.Models.Metadata.DisplayType.Vector,
+                VBEnd = 12345,
+                VBStart = 12345,
+                VTotal = 12345,
+                Width = 12345,
             };
         }
 
@@ -597,18 +609,18 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Driver
             {
-                [Data.Models.Metadata.Driver.BlitKey] = "plain",
-                [Data.Models.Metadata.Driver.CocktailKey] = "good",
-                [Data.Models.Metadata.Driver.ColorKey] = "good",
-                [Data.Models.Metadata.Driver.EmulationKey] = "good",
-                [Data.Models.Metadata.Driver.IncompleteKey] = "yes",
-                [Data.Models.Metadata.Driver.NoSoundHardwareKey] = "yes",
-                [Data.Models.Metadata.Driver.PaletteSizeKey] = "pallettesize",
-                [Data.Models.Metadata.Driver.RequiresArtworkKey] = "yes",
-                [Data.Models.Metadata.Driver.SaveStateKey] = "supported",
-                [Data.Models.Metadata.Driver.SoundKey] = "good",
-                [Data.Models.Metadata.Driver.StatusKey] = "good",
-                [Data.Models.Metadata.Driver.UnofficialKey] = "yes",
+                Blit = Data.Models.Metadata.Blit.Plain,
+                Cocktail = Data.Models.Metadata.SupportStatus.Good,
+                Color = Data.Models.Metadata.SupportStatus.Good,
+                Emulation = Data.Models.Metadata.SupportStatus.Good,
+                Incomplete = true,
+                NoSoundHardware = true,
+                PaletteSize = "palettesize",
+                RequiresArtwork = true,
+                SaveState = Data.Models.Metadata.Supported.Yes,
+                Sound = Data.Models.Metadata.SupportStatus.Good,
+                Status = Data.Models.Metadata.SupportStatus.Good,
+                Unofficial = true,
             };
         }
 
@@ -616,14 +628,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Dump
             {
-                [Data.Models.Metadata.Dump.OriginalKey] = CreateMetadataOriginal(),
+                Original = CreateMetadataOriginal(),
 
                 // The following are searched for in order
                 // For the purposes of this test, only RomKey will be populated
                 // The only difference is what OpenMSXSubType value is applied
-                [Data.Models.Metadata.Dump.RomKey] = new Data.Models.Metadata.Rom(),
-                [Data.Models.Metadata.Dump.MegaRomKey] = null,
-                [Data.Models.Metadata.Dump.SCCPlusCartKey] = null,
+                Rom = new Data.Models.Metadata.Rom(),
+                MegaRom = null,
+                SCCPlusCart = null,
             };
         }
 
@@ -631,7 +643,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Extension
             {
-                [Data.Models.Metadata.Extension.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -639,11 +651,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Feature
             {
-                [Data.Models.Metadata.Feature.NameKey] = "name",
-                [Data.Models.Metadata.Feature.OverallKey] = "imperfect",
-                [Data.Models.Metadata.Feature.StatusKey] = "imperfect",
-                [Data.Models.Metadata.Feature.FeatureTypeKey] = "protection",
-                [Data.Models.Metadata.Feature.ValueKey] = "value",
+                Name = "name",
+                Overall = Data.Models.Metadata.FeatureStatus.Imperfect,
+                Status = Data.Models.Metadata.FeatureStatus.Imperfect,
+                FeatureType = Data.Models.Metadata.FeatureType.Protection,
+                Value = "value",
             };
         }
 
@@ -651,8 +663,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Info
             {
-                [Data.Models.Metadata.Info.NameKey] = "name",
-                [Data.Models.Metadata.Info.ValueKey] = "value",
+                Name = "name",
+                Value = "value",
             };
         }
 
@@ -660,12 +672,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Input
             {
-                [Data.Models.Metadata.Input.ButtonsKey] = 12345L,
-                [Data.Models.Metadata.Input.CoinsKey] = 12345L,
-                [Data.Models.Metadata.Input.ControlKey] = new Data.Models.Metadata.Control[] { CreateMetadataControl() },
-                [Data.Models.Metadata.Input.PlayersKey] = 12345L,
-                [Data.Models.Metadata.Input.ServiceKey] = "yes",
-                [Data.Models.Metadata.Input.TiltKey] = "yes",
+                Buttons = 12345,
+                Coins = 12345,
+                Control = [CreateMetadataControl()],
+                ControlAttr = "controlattr",
+                Players = 12345,
+                Service = true,
+                Tilt = true,
             };
         }
 
@@ -673,8 +686,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Instance
             {
-                [Data.Models.Metadata.Instance.BriefNameKey] = "briefname",
-                [Data.Models.Metadata.Instance.NameKey] = "name",
+                BriefName = "briefname",
+                Name = "name",
             };
         }
 
@@ -682,11 +695,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Media
             {
-                [Data.Models.Metadata.Media.MD5Key] = HashType.MD5.ZeroString,
-                [Data.Models.Metadata.Media.NameKey] = "name",
-                [Data.Models.Metadata.Media.SHA1Key] = HashType.SHA1.ZeroString,
-                [Data.Models.Metadata.Media.SHA256Key] = HashType.SHA256.ZeroString,
-                [Data.Models.Metadata.Media.SpamSumKey] = HashType.SpamSum.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
+                Name = "name",
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SpamSum = HashType.SpamSum.ZeroString,
             };
         }
 
@@ -694,8 +707,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Original
             {
-                [Data.Models.Metadata.Original.ContentKey] = "content",
-                [Data.Models.Metadata.Original.ValueKey] = true,
+                Content = "content",
+                Value = true,
             };
         }
 
@@ -703,12 +716,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Part
             {
-                [Data.Models.Metadata.Part.DataAreaKey] = new Data.Models.Metadata.DataArea[] { CreateMetadataDataArea() },
-                [Data.Models.Metadata.Part.DiskAreaKey] = new Data.Models.Metadata.DiskArea[] { CreateMetadataDiskArea() },
-                [Data.Models.Metadata.Part.DipSwitchKey] = new Data.Models.Metadata.DipSwitch[] { [] },
-                [Data.Models.Metadata.Part.FeatureKey] = new Data.Models.Metadata.Feature[] { CreateMetadataFeature() },
-                [Data.Models.Metadata.Part.InterfaceKey] = "interface",
-                [Data.Models.Metadata.Part.NameKey] = "name",
+                DataArea = [CreateMetadataDataArea()],
+                DiskArea = [CreateMetadataDiskArea()],
+                DipSwitch = [new Data.Models.Metadata.DipSwitch()],
+                Feature = [CreateMetadataFeature()],
+                Interface = "interface",
+                Name = "name",
             };
         }
 
@@ -716,8 +729,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Port
             {
-                [Data.Models.Metadata.Port.AnalogKey] = new Data.Models.Metadata.Analog[] { CreateMetadataAnalog() },
-                [Data.Models.Metadata.Port.TagKey] = "tag",
+                Analog = [CreateMetadataAnalog()],
+                Tag = "tag",
             };
         }
 
@@ -725,9 +738,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.RamOption
             {
-                [Data.Models.Metadata.RamOption.ContentKey] = "content",
-                [Data.Models.Metadata.RamOption.DefaultKey] = "yes",
-                [Data.Models.Metadata.RamOption.NameKey] = "name",
+                Content = "content",
+                Default = true,
+                Name = "name",
             };
         }
 
@@ -735,11 +748,11 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Release
             {
-                [Data.Models.Metadata.Release.DateKey] = "date",
-                [Data.Models.Metadata.Release.DefaultKey] = "yes",
-                [Data.Models.Metadata.Release.LanguageKey] = "language",
-                [Data.Models.Metadata.Release.NameKey] = "name",
-                [Data.Models.Metadata.Release.RegionKey] = "region",
+                Date = "date",
+                Default = true,
+                Language = "language",
+                Name = "name",
+                Region = "region",
             };
         }
 
@@ -747,22 +760,22 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.ReleaseDetails
             {
-                [Data.Models.Metadata.ReleaseDetails.IdKey] = "id",
-                [Data.Models.Metadata.ReleaseDetails.AppendToNumberKey] = "appendtonumber",
-                [Data.Models.Metadata.ReleaseDetails.DateKey] = "date",
-                [Data.Models.Metadata.ReleaseDetails.OriginalFormatKey] = "originalformat",
-                [Data.Models.Metadata.ReleaseDetails.GroupKey] = "group",
-                [Data.Models.Metadata.ReleaseDetails.DirNameKey] = "dirname",
-                [Data.Models.Metadata.ReleaseDetails.NfoNameKey] = "nfoname",
-                [Data.Models.Metadata.ReleaseDetails.NfoSizeKey] = "nfosize",
-                [Data.Models.Metadata.ReleaseDetails.NfoCRCKey] = "nfocrc",
-                [Data.Models.Metadata.ReleaseDetails.ArchiveNameKey] = "archivename",
-                [Data.Models.Metadata.ReleaseDetails.RomInfoKey] = "rominfo",
-                [Data.Models.Metadata.ReleaseDetails.CategoryKey] = "category",
-                [Data.Models.Metadata.ReleaseDetails.CommentKey] = "comment",
-                [Data.Models.Metadata.ReleaseDetails.ToolKey] = "tool",
-                [Data.Models.Metadata.ReleaseDetails.RegionKey] = "region",
-                [Data.Models.Metadata.ReleaseDetails.OriginKey] = "origin",
+                AppendToNumber = "appendtonumber",
+                ArchiveName = "archivename",
+                Category = "category",
+                Comment = "comment",
+                Date = "date",
+                DirName = "dirname",
+                Group = "group",
+                Id = "id",
+                Origin = "origin",
+                OriginalFormat = "originalformat",
+                NfoCRC = "nfocrc",
+                NfoName = "nfoname",
+                NfoSize = "nfosize",
+                Region = "region",
+                RomInfo = "rominfo",
+                Tool = "tool",
             };
         }
 
@@ -770,102 +783,102 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.AlbumKey] = "album",
-                [Data.Models.Metadata.Rom.AltRomnameKey] = "alt_romname",
-                [Data.Models.Metadata.Rom.AltTitleKey] = "alt_title",
-                [Data.Models.Metadata.Rom.ArtistKey] = "artist",
-                [Data.Models.Metadata.Rom.ASRDetectedLangKey] = "asr_detected_lang",
-                [Data.Models.Metadata.Rom.ASRDetectedLangConfKey] = "asr_detected_lang_conf",
-                [Data.Models.Metadata.Rom.ASRTranscribedLangKey] = "asr_transcribed_lang",
-                [Data.Models.Metadata.Rom.BiosKey] = "bios",
-                [Data.Models.Metadata.Rom.BitrateKey] = "bitrate",
-                [Data.Models.Metadata.Rom.BitTorrentMagnetHashKey] = "btih",
-                [Data.Models.Metadata.Rom.ClothCoverDetectionModuleVersionKey] = "cloth_cover_detection_module_version",
-                [Data.Models.Metadata.Rom.CollectionCatalogNumberKey] = "collection-catalog-number",
-                [Data.Models.Metadata.Rom.CommentKey] = "comment",
-                [Data.Models.Metadata.Rom.CRCKey] = HashType.CRC32.ZeroString,
-                [Data.Models.Metadata.Rom.CRC16Key] = HashType.CRC16.ZeroString,
-                [Data.Models.Metadata.Rom.CRC64Key] = HashType.CRC64.ZeroString,
-                [Data.Models.Metadata.Rom.CreatorKey] = "creator",
-                [Data.Models.Metadata.Rom.DateKey] = "date",
-                [Data.Models.Metadata.Rom.DisposeKey] = "yes",
-                [Data.Models.Metadata.Rom.ExtensionKey] = "extension",
-                [Data.Models.Metadata.Rom.FileCountKey] = 12345L,
-                [Data.Models.Metadata.Rom.FileIsAvailableKey] = true,
-                [Data.Models.Metadata.Rom.FlagsKey] = "flags",
-                [Data.Models.Metadata.Rom.FormatKey] = "format",
-                [Data.Models.Metadata.Rom.HeaderKey] = "header",
-                [Data.Models.Metadata.Rom.HeightKey] = "height",
-                [Data.Models.Metadata.Rom.hOCRCharToWordhOCRVersionKey] = "hocr_char_to_word_hocr_version",
-                [Data.Models.Metadata.Rom.hOCRCharToWordModuleVersionKey] = "hocr_char_to_word_module_version",
-                [Data.Models.Metadata.Rom.hOCRFtsTexthOCRVersionKey] = "hocr_fts_text_hocr_version",
-                [Data.Models.Metadata.Rom.hOCRFtsTextModuleVersionKey] = "hocr_fts_text_module_version",
-                [Data.Models.Metadata.Rom.hOCRPageIndexhOCRVersionKey] = "hocr_pageindex_hocr_version",
-                [Data.Models.Metadata.Rom.hOCRPageIndexModuleVersionKey] = "hocr_pageindex_module_version",
-                [Data.Models.Metadata.Rom.InvertedKey] = "yes",
-                [Data.Models.Metadata.Rom.LastModifiedTimeKey] = "mtime",
-                [Data.Models.Metadata.Rom.LengthKey] = "length",
-                [Data.Models.Metadata.Rom.LoadFlagKey] = "load16_byte",
-                [Data.Models.Metadata.Rom.MatrixNumberKey] = "matrix_number",
-                [Data.Models.Metadata.Rom.MD2Key] = HashType.MD2.ZeroString,
-                [Data.Models.Metadata.Rom.MD4Key] = HashType.MD4.ZeroString,
-                [Data.Models.Metadata.Rom.MD5Key] = HashType.MD5.ZeroString,
+                Album = "album",
+                AltRomname = "alt_romname",
+                AltTitle = "alt_title",
+                Artist = "artist",
+                ASRDetectedLang = "asr_detected_lang",
+                ASRDetectedLangConf = "asr_detected_lang_conf",
+                ASRTranscribedLang = "asr_transcribed_lang",
+                Bios = "bios",
+                Bitrate = "bitrate",
+                BitTorrentMagnetHash = "btih",
+                ClothCoverDetectionModuleVersion = "cloth_cover_detection_module_version",
+                CollectionCatalogNumber = "collection-catalog-number",
+                Comment = "comment",
+                CRC16 = HashType.CRC16.ZeroString,
+                CRC32 = HashType.CRC32.ZeroString,
+                CRC64 = HashType.CRC64.ZeroString,
+                Creator = "creator",
+                Date = "date",
+                Dispose = true,
+                Extension = "extension",
+                FileCount = 12345,
+                FileIsAvailable = true,
+                Flags = "flags",
+                Format = "format",
+                Header = "header",
+                Height = "height",
+                hOCRCharToWordhOCRVersion = "hocr_char_to_word_hocr_version",
+                hOCRCharToWordModuleVersion = "hocr_char_to_word_module_version",
+                hOCRFtsTexthOCRVersion = "hocr_fts_text_hocr_version",
+                hOCRFtsTextModuleVersion = "hocr_fts_text_module_version",
+                hOCRPageIndexhOCRVersion = "hocr_pageindex_hocr_version",
+                hOCRPageIndexModuleVersion = "hocr_pageindex_module_version",
+                Inverted = true,
+                LastModifiedTime = "mtime",
+                Length = "length",
+                LoadFlag = Data.Models.Metadata.LoadFlag.Load16Byte,
+                MatrixNumber = "matrix_number",
+                MD2 = HashType.MD2.ZeroString,
+                MD4 = HashType.MD4.ZeroString,
+                MD5 = HashType.MD5.ZeroString,
                 // [Data.Models.Metadata.Rom.OpenMSXMediaType] = null, // Omit due to other test
-                [Data.Models.Metadata.Rom.MergeKey] = "merge",
-                [Data.Models.Metadata.Rom.MIAKey] = "yes",
-                [Data.Models.Metadata.Rom.NameKey] = "name",
-                [Data.Models.Metadata.Rom.TesseractOCRKey] = "ocr",
-                [Data.Models.Metadata.Rom.TesseractOCRConvertedKey] = "ocr_converted",
-                [Data.Models.Metadata.Rom.TesseractOCRDetectedLangKey] = "ocr_detected_lang",
-                [Data.Models.Metadata.Rom.TesseractOCRDetectedLangConfKey] = "ocr_detected_lang_conf",
-                [Data.Models.Metadata.Rom.TesseractOCRDetectedScriptKey] = "ocr_detected_script",
-                [Data.Models.Metadata.Rom.TesseractOCRDetectedScriptConfKey] = "ocr_detected_script_conf",
-                [Data.Models.Metadata.Rom.TesseractOCRModuleVersionKey] = "ocr_module_version",
-                [Data.Models.Metadata.Rom.TesseractOCRParametersKey] = "ocr_parameters",
-                [Data.Models.Metadata.Rom.OffsetKey] = "offset",
-                [Data.Models.Metadata.Rom.OptionalKey] = "yes",
-                [Data.Models.Metadata.Rom.OriginalKey] = "original",
-                [Data.Models.Metadata.Rom.PDFModuleVersionKey] = "pdf_module_version",
-                [Data.Models.Metadata.Rom.PreviewImageKey] = "preview-image",
-                [Data.Models.Metadata.Rom.PublisherKey] = "publisher",
-                [Data.Models.Metadata.Rom.RegionKey] = "region",
-                [Data.Models.Metadata.Rom.RemarkKey] = "remark",
-                [Data.Models.Metadata.Rom.RIPEMD128Key] = HashType.RIPEMD128.ZeroString,
-                [Data.Models.Metadata.Rom.RIPEMD160Key] = HashType.RIPEMD160.ZeroString,
-                [Data.Models.Metadata.Rom.RotationKey] = "rotation",
-                [Data.Models.Metadata.Rom.SerialKey] = "serial",
-                [Data.Models.Metadata.Rom.SHA1Key] = HashType.SHA1.ZeroString,
-                [Data.Models.Metadata.Rom.SHA256Key] = HashType.SHA256.ZeroString,
-                [Data.Models.Metadata.Rom.SHA384Key] = HashType.SHA384.ZeroString,
-                [Data.Models.Metadata.Rom.SHA512Key] = HashType.SHA512.ZeroString,
-                [Data.Models.Metadata.Rom.SizeKey] = 12345L,
-                [Data.Models.Metadata.Rom.SoundOnlyKey] = "yes",
-                [Data.Models.Metadata.Rom.SourceKey] = "source",
-                [Data.Models.Metadata.Rom.SpamSumKey] = HashType.SpamSum.ZeroString,
-                [Data.Models.Metadata.Rom.StartKey] = "start",
-                [Data.Models.Metadata.Rom.StatusKey] = "good",
-                [Data.Models.Metadata.Rom.SummationKey] = "summation",
-                [Data.Models.Metadata.Rom.TitleKey] = "title",
-                [Data.Models.Metadata.Rom.TrackKey] = "track",
-                [Data.Models.Metadata.Rom.OpenMSXType] = "type",
-                [Data.Models.Metadata.Rom.ValueKey] = "value",
-                [Data.Models.Metadata.Rom.WhisperASRModuleVersionKey] = "whisper_asr_module_version",
-                [Data.Models.Metadata.Rom.WhisperModelHashKey] = "whisper_model_hash",
-                [Data.Models.Metadata.Rom.WhisperModelNameKey] = "whisper_model_name",
-                [Data.Models.Metadata.Rom.WhisperVersionKey] = "whisper_version",
-                [Data.Models.Metadata.Rom.WidthKey] = "width",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval0To10Key] = "word_conf_0_10",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval11To20Key] = "word_conf_11_20",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval21To30Key] = "word_conf_21_30",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval31To40Key] = "word_conf_31_40",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval41To50Key] = "word_conf_41_50",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval51To60Key] = "word_conf_51_60",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval61To70Key] = "word_conf_61_70",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval71To80Key] = "word_conf_71_80",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval81To90Key] = "word_conf_81_90",
-                [Data.Models.Metadata.Rom.WordConfidenceInterval91To100Key] = "word_conf_91_100",
-                [Data.Models.Metadata.Rom.xxHash364Key] = HashType.XxHash3.ZeroString,
-                [Data.Models.Metadata.Rom.xxHash3128Key] = HashType.XxHash128.ZeroString,
+                OpenMSXType = "type",
+                Merge = "merge",
+                MIA = true,
+                Name = "name",
+                Offset = "offset",
+                Optional = true,
+                Original = "original",
+                PDFModuleVersion = "pdf_module_version",
+                PreviewImage = "preview-image",
+                Publisher = "publisher",
+                Region = "region",
+                Remark = "remark",
+                RIPEMD128 = HashType.RIPEMD128.ZeroString,
+                RIPEMD160 = HashType.RIPEMD160.ZeroString,
+                Rotation = "rotation",
+                Serial = "serial",
+                SHA1 = HashType.SHA1.ZeroString,
+                SHA256 = HashType.SHA256.ZeroString,
+                SHA384 = HashType.SHA384.ZeroString,
+                SHA512 = HashType.SHA512.ZeroString,
+                Size = 12345,
+                SoundOnly = true,
+                Source = "source",
+                SpamSum = HashType.SpamSum.ZeroString,
+                Start = "start",
+                Status = Data.Models.Metadata.ItemStatus.Good,
+                Summation = "summation",
+                TesseractOCR = "ocr",
+                TesseractOCRConverted = "ocr_converted",
+                TesseractOCRDetectedLang = "ocr_detected_lang",
+                TesseractOCRDetectedLangConf = "ocr_detected_lang_conf",
+                TesseractOCRDetectedScript = "ocr_detected_script",
+                TesseractOCRDetectedScriptConf = "ocr_detected_script_conf",
+                TesseractOCRModuleVersion = "ocr_module_version",
+                TesseractOCRParameters = "ocr_parameters",
+                Title = "title",
+                Track = "track",
+                Value = "value",
+                WhisperASRModuleVersion = "whisper_asr_module_version",
+                WhisperModelHash = "whisper_model_hash",
+                WhisperModelName = "whisper_model_name",
+                WhisperVersion = "whisper_version",
+                Width = "width",
+                WordConfidenceInterval0To10 = "word_conf_0_10",
+                WordConfidenceInterval11To20 = "word_conf_11_20",
+                WordConfidenceInterval21To30 = "word_conf_21_30",
+                WordConfidenceInterval31To40 = "word_conf_31_40",
+                WordConfidenceInterval41To50 = "word_conf_41_50",
+                WordConfidenceInterval51To60 = "word_conf_51_60",
+                WordConfidenceInterval61To70 = "word_conf_61_70",
+                WordConfidenceInterval71To80 = "word_conf_71_80",
+                WordConfidenceInterval81To90 = "word_conf_81_90",
+                WordConfidenceInterval91To100 = "word_conf_91_100",
+                xxHash364 = HashType.XxHash3.ZeroString,
+                xxHash3128 = HashType.XxHash128.ZeroString,
             };
         }
 
@@ -873,7 +886,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Sample
             {
-                [Data.Models.Metadata.Sample.NameKey] = "name",
+                Name = "name",
             };
         }
 
@@ -881,20 +894,20 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Serials
             {
-                [Data.Models.Metadata.Serials.MediaSerial1Key] = "mediaserial1",
-                [Data.Models.Metadata.Serials.MediaSerial2Key] = "mediaserial2",
-                [Data.Models.Metadata.Serials.MediaSerial3Key] = "mediaserial3",
-                [Data.Models.Metadata.Serials.PCBSerialKey] = "pcbserial",
-                [Data.Models.Metadata.Serials.RomChipSerial1Key] = "romchipserial1",
-                [Data.Models.Metadata.Serials.RomChipSerial2Key] = "romchipserial2",
-                [Data.Models.Metadata.Serials.LockoutSerialKey] = "lockoutserial",
-                [Data.Models.Metadata.Serials.SaveChipSerialKey] = "savechipserial",
-                [Data.Models.Metadata.Serials.ChipSerialKey] = "chipserial",
-                [Data.Models.Metadata.Serials.BoxSerialKey] = "boxserial",
-                [Data.Models.Metadata.Serials.MediaStampKey] = "mediastamp",
-                [Data.Models.Metadata.Serials.BoxBarcodeKey] = "boxbarcode",
-                [Data.Models.Metadata.Serials.DigitalSerial1Key] = "digitalserial1",
-                [Data.Models.Metadata.Serials.DigitalSerial2Key] = "digitalserial2",
+                BoxBarcode = "boxbarcode",
+                BoxSerial = "boxserial",
+                ChipSerial = "chipserial",
+                DigitalSerial1 = "digitalserial1",
+                DigitalSerial2 = "digitalserial2",
+                LockoutSerial = "lockoutserial",
+                MediaSerial1 = "mediaserial1",
+                MediaSerial2 = "mediaserial2",
+                MediaSerial3 = "mediaserial3",
+                MediaStamp = "mediastamp",
+                PCBSerial = "pcbserial",
+                RomChipSerial1 = "romchipserial1",
+                RomChipSerial2 = "romchipserial2",
+                SaveChipSerial = "savechipserial",
             };
         }
 
@@ -902,8 +915,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.SharedFeat
             {
-                [Data.Models.Metadata.SharedFeat.NameKey] = "name",
-                [Data.Models.Metadata.SharedFeat.ValueKey] = "value",
+                Name = "name",
+                Value = "value",
             };
         }
 
@@ -911,8 +924,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Slot
             {
-                [Data.Models.Metadata.Slot.NameKey] = "name",
-                [Data.Models.Metadata.Slot.SlotOptionKey] = new Data.Models.Metadata.SlotOption[] { CreateMetadataSlotOption() },
+                Name = "name",
+                SlotOption = [CreateMetadataSlotOption()],
             };
         }
 
@@ -920,26 +933,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.SlotOption
             {
-                [Data.Models.Metadata.SlotOption.DefaultKey] = "yes",
-                [Data.Models.Metadata.SlotOption.DevNameKey] = "devname",
-                [Data.Models.Metadata.SlotOption.NameKey] = "name",
-            };
-        }
-
-        private static Data.Models.Metadata.Software CreateMetadataSoftware()
-        {
-            return new Data.Models.Metadata.Software
-            {
-                [Data.Models.Metadata.Software.CloneOfKey] = "cloneof",
-                [Data.Models.Metadata.Software.DescriptionKey] = "description",
-                [Data.Models.Metadata.Software.InfoKey] = new Data.Models.Metadata.Info[] { CreateMetadataInfo() },
-                [Data.Models.Metadata.Software.NameKey] = "name",
-                [Data.Models.Metadata.Software.NotesKey] = "notes",
-                [Data.Models.Metadata.Software.PartKey] = new Data.Models.Metadata.Part[] { CreateMetadataPart() },
-                [Data.Models.Metadata.Software.PublisherKey] = "publisher",
-                [Data.Models.Metadata.Software.SharedFeatKey] = new Data.Models.Metadata.SharedFeat[] { CreateMetadataSharedFeat() },
-                [Data.Models.Metadata.Software.SupportedKey] = "yes",
-                [Data.Models.Metadata.Software.YearKey] = "year",
+                Default = true,
+                DevName = "devname",
+                Name = "name",
             };
         }
 
@@ -947,13 +943,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.SoftwareList
             {
-                [Data.Models.Metadata.SoftwareList.DescriptionKey] = "description",
-                [Data.Models.Metadata.SoftwareList.FilterKey] = "filter",
-                [Data.Models.Metadata.SoftwareList.NameKey] = "name",
-                [Data.Models.Metadata.SoftwareList.NotesKey] = "notes",
-                [Data.Models.Metadata.SoftwareList.SoftwareKey] = new Data.Models.Metadata.Software[] { CreateMetadataSoftware() },
-                [Data.Models.Metadata.SoftwareList.StatusKey] = "original",
-                [Data.Models.Metadata.SoftwareList.TagKey] = "tag",
+                Filter = "filter",
+                Name = "name",
+                Status = Data.Models.Metadata.SoftwareListStatus.Original,
+                Tag = "tag",
             };
         }
 
@@ -961,7 +954,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Sound
             {
-                [Data.Models.Metadata.Sound.ChannelsKey] = 12345L,
+                Channels = 12345,
             };
         }
 
@@ -969,51 +962,30 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.SourceDetails
             {
-                [Data.Models.Metadata.SourceDetails.IdKey] = "id",
-                [Data.Models.Metadata.SourceDetails.AppendToNumberKey] = "appendtonumber",
-                [Data.Models.Metadata.SourceDetails.SectionKey] = "section",
-                [Data.Models.Metadata.SourceDetails.RomInfoKey] = "rominfo",
-                [Data.Models.Metadata.SourceDetails.DumpDateKey] = "dumpdate",
-                [Data.Models.Metadata.SourceDetails.DumpDateInfoKey] = "dumpdateinfo",
-                [Data.Models.Metadata.SourceDetails.ReleaseDateKey] = "releasedate",
-                [Data.Models.Metadata.SourceDetails.ReleaseDateInfoKey] = "releasedateinfo",
-                [Data.Models.Metadata.SourceDetails.DumperKey] = "dumper",
-                [Data.Models.Metadata.SourceDetails.ProjectKey] = "project",
-                [Data.Models.Metadata.SourceDetails.OriginalFormatKey] = "originalformat",
-                [Data.Models.Metadata.SourceDetails.NodumpKey] = "nodump",
-                [Data.Models.Metadata.SourceDetails.ToolKey] = "tool",
-                [Data.Models.Metadata.SourceDetails.OriginKey] = "origin",
-                [Data.Models.Metadata.SourceDetails.Comment1Key] = "comment1",
-                [Data.Models.Metadata.SourceDetails.Comment2Key] = "comment2",
-                [Data.Models.Metadata.SourceDetails.Link1Key] = "link1",
-                [Data.Models.Metadata.SourceDetails.Link1PublicKey] = "link1public",
-                [Data.Models.Metadata.SourceDetails.Link2Key] = "link2",
-                [Data.Models.Metadata.SourceDetails.Link2PublicKey] = "link2public",
-                [Data.Models.Metadata.SourceDetails.Link3Key] = "link3",
-                [Data.Models.Metadata.SourceDetails.Link3PublicKey] = "link3public",
-                [Data.Models.Metadata.SourceDetails.RegionKey] = "region",
-                [Data.Models.Metadata.SourceDetails.MediaTitleKey] = "mediatitle",
-            };
-        }
-
-        private static Data.Models.Logiqx.Trurip CreateMetadataTrurip()
-        {
-            return new Data.Models.Logiqx.Trurip
-            {
-                TitleID = "titleid",
-                Publisher = "publisher",
-                Developer = "developer",
-                Year = "year",
-                Genre = "genre",
-                Subgenre = "subgenre",
-                Ratings = "ratings",
-                Score = "score",
-                Players = "players",
-                Enabled = "enabled",
-                CRC = "true",
-                Source = "source",
-                CloneOf = "cloneof",
-                RelatedTo = "relatedto",
+                AppendToNumber = "appendtonumber",
+                Comment1 = "comment1",
+                Comment2 = "comment2",
+                DumpDate = "dumpdate",
+                DumpDateInfo = true,
+                Dumper = "dumper",
+                Id = "id",
+                Link1 = "link1",
+                Link1Public = true,
+                Link2 = "link2",
+                Link2Public = true,
+                Link3 = "link3",
+                Link3Public = true,
+                MediaTitle = "mediatitle",
+                Nodump = true,
+                Origin = "origin",
+                OriginalFormat = "originalformat",
+                Project = "project",
+                Region = "region",
+                ReleaseDate = "releasedate",
+                ReleaseDateInfo = true,
+                RomInfo = "rominfo",
+                Section = "section",
+                Tool = "tool",
             };
         }
 
@@ -1021,13 +993,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Video
             {
-                [Data.Models.Metadata.Video.AspectXKey] = 12345L,
-                [Data.Models.Metadata.Video.AspectYKey] = 12345L,
-                [Data.Models.Metadata.Video.HeightKey] = 12345L,
-                [Data.Models.Metadata.Video.OrientationKey] = "vertical",
-                [Data.Models.Metadata.Video.RefreshKey] = 12345L,
-                [Data.Models.Metadata.Video.ScreenKey] = "vector",
-                [Data.Models.Metadata.Video.WidthKey] = 12345L,
+                AspectX = 12345,
+                AspectY = 12345,
+                Height = 12345,
+                Orientation = Data.Models.Metadata.Rotation.East,
+                Refresh = 123.45,
+                Screen = Data.Models.Metadata.DisplayType.Vector,
+                Width = 12345,
             };
         }
 
@@ -1037,176 +1009,190 @@ namespace SabreTools.Metadata.DatFiles.Test
 
         private static void ValidateHeader(DatHeader datHeader)
         {
-            Assert.Equal("author", datHeader.ReadString(Data.Models.Metadata.Header.AuthorKey));
-            Assert.Equal("merged", datHeader.ReadString(Data.Models.Metadata.Header.BiosModeKey));
-            Assert.Equal("build", datHeader.ReadString(Data.Models.Metadata.Header.BuildKey));
-            Assert.Equal("ext", datHeader.ReadString(Data.Models.Metadata.Header.CanOpenKey));
-            Assert.Equal("category", datHeader.ReadString(Data.Models.Metadata.Header.CategoryKey));
-            Assert.Equal("comment", datHeader.ReadString(Data.Models.Metadata.Header.CommentKey));
-            Assert.Equal("date", datHeader.ReadString(Data.Models.Metadata.Header.DateKey));
-            Assert.Equal("datversion", datHeader.ReadString(Data.Models.Metadata.Header.DatVersionKey));
-            Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.DebugKey));
-            Assert.Equal("description", datHeader.ReadString(Data.Models.Metadata.Header.DescriptionKey));
-            Assert.Equal("email", datHeader.ReadString(Data.Models.Metadata.Header.EmailKey));
-            Assert.Equal("emulatorversion", datHeader.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey));
-            Assert.Equal("merged", datHeader.ReadString(Data.Models.Metadata.Header.ForceMergingKey));
-            Assert.Equal("required", datHeader.ReadString(Data.Models.Metadata.Header.ForceNodumpKey));
-            Assert.Equal("zip", datHeader.ReadString(Data.Models.Metadata.Header.ForcePackingKey));
-            Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.ForceZippingKey));
-            Assert.Equal("header", datHeader.ReadString(Data.Models.Metadata.Header.HeaderKey));
-            Assert.Equal("homepage", datHeader.ReadString(Data.Models.Metadata.Header.HomepageKey));
-            Assert.Equal("id", datHeader.ReadString(Data.Models.Metadata.Header.IdKey));
-            Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.ImagesKey));
-            Assert.Equal("imfolder", datHeader.ReadString(Data.Models.Metadata.Header.ImFolderKey));
-            Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.InfosKey));
-            Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.LockBiosModeKey));
-            Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.LockRomModeKey));
-            Assert.True(datHeader.ReadBool(Data.Models.Metadata.Header.LockSampleModeKey));
-            Assert.Equal("mameconfig", datHeader.ReadString(Data.Models.Metadata.Header.MameConfigKey));
-            Assert.Equal("name", datHeader.ReadString(Data.Models.Metadata.Header.NameKey));
-            Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.NewDatKey));
-            Assert.Equal("notes", datHeader.ReadString(Data.Models.Metadata.Header.NotesKey));
-            Assert.Equal("plugin", datHeader.ReadString(Data.Models.Metadata.Header.PluginKey));
-            Assert.Equal("refname", datHeader.ReadString(Data.Models.Metadata.Header.RefNameKey));
-            Assert.Equal("merged", datHeader.ReadString(Data.Models.Metadata.Header.RomModeKey));
-            Assert.Equal("romtitle", datHeader.ReadString(Data.Models.Metadata.Header.RomTitleKey));
-            Assert.Equal("rootdir", datHeader.ReadString(Data.Models.Metadata.Header.RootDirKey));
-            Assert.Equal("merged", datHeader.ReadString(Data.Models.Metadata.Header.SampleModeKey));
-            Assert.Equal("schemalocation", datHeader.ReadString(Data.Models.Metadata.Header.SchemaLocationKey));
-            Assert.Equal("screenshotsheight", datHeader.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey));
-            Assert.Equal("screenshotsWidth", datHeader.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey));
-            Assert.NotNull(datHeader.ReadString(Data.Models.Metadata.Header.SearchKey));
-            Assert.Equal("system", datHeader.ReadString(Data.Models.Metadata.Header.SystemKey));
-            Assert.Equal("timestamp", datHeader.ReadString(Data.Models.Metadata.Header.TimestampKey));
-            Assert.Equal("type", datHeader.ReadString(Data.Models.Metadata.Header.TypeKey));
-            Assert.Equal("url", datHeader.ReadString(Data.Models.Metadata.Header.UrlKey));
-            Assert.Equal("version", datHeader.ReadString(Data.Models.Metadata.Header.VersionKey));
+            Assert.Equal("author", datHeader.Author);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.BiosMode);
+            Assert.Equal("build", datHeader.Build);
+            Assert.NotNull(datHeader.CanOpen);
+            Assert.Equal("category", datHeader.Category);
+            Assert.Equal("comment", datHeader.Comment);
+            Assert.Equal("date", datHeader.Date);
+            Assert.Equal("datversion", datHeader.DatVersion);
+            Assert.True(datHeader.Debug);
+            Assert.Equal("description", datHeader.Description);
+            Assert.Equal("email", datHeader.Email);
+            Assert.Equal("emulatorversion", datHeader.EmulatorVersion);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.ForceMerging);
+            Assert.Equal(Data.Models.Metadata.NodumpFlag.Required, datHeader.ForceNodump);
+            Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, datHeader.ForcePacking);
+            Assert.True(datHeader.ForceZipping);
+            Assert.Equal("header", datHeader.HeaderSkipper);
+            Assert.Equal("homepage", datHeader.Homepage);
+            Assert.Equal("id", datHeader.Id);
+            Assert.NotNull(datHeader.Images);
+            Assert.Equal("imfolder", datHeader.ImFolder);
+            Assert.NotNull(datHeader.Infos);
+            Assert.True(datHeader.LockBiosMode);
+            Assert.True(datHeader.LockRomMode);
+            Assert.True(datHeader.LockSampleMode);
+            Assert.Equal("mameconfig", datHeader.MameConfig);
+            Assert.Equal("name", datHeader.Name);
+            Assert.NotNull(datHeader.NewDat);
+            Assert.Equal("notes", datHeader.Notes);
+            Assert.Equal("plugin", datHeader.Plugin);
+            Assert.Equal("refname", datHeader.RefName);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.RomMode);
+            Assert.Equal("romtitle", datHeader.RomTitle);
+            Assert.Equal("rootdir", datHeader.RootDir);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.SampleMode);
+            Assert.Equal("schemalocation", datHeader.SchemaLocation);
+            Assert.Equal("screenshotsheight", datHeader.ScreenshotsHeight);
+            Assert.Equal("screenshotsWidth", datHeader.ScreenshotsWidth);
+            Assert.NotNull(datHeader.Search);
+            Assert.Equal("system", datHeader.System);
+            Assert.Equal("timestamp", datHeader.Timestamp);
+            Assert.Equal("type", datHeader.Type);
+            Assert.Equal("url", datHeader.Url);
+            Assert.Equal("version", datHeader.Version);
         }
 
 #pragma warning disable IDE0051
         private static void ValidateMachine(DatItems.Machine machine)
         {
-            Assert.Equal("board", machine.ReadString(Data.Models.Metadata.Machine.BoardKey));
-            Assert.Equal("buttons", machine.ReadString(Data.Models.Metadata.Machine.ButtonsKey));
-            Assert.Equal("category", machine.ReadString(Data.Models.Metadata.Machine.CategoryKey));
-            Assert.Equal("cloneof", machine.ReadString(Data.Models.Metadata.Machine.CloneOfKey));
-            Assert.Equal("cloneofid", machine.ReadString(Data.Models.Metadata.Machine.CloneOfIdKey));
-            Assert.Equal("comment", machine.ReadString(Data.Models.Metadata.Machine.CommentKey));
-            Assert.Equal("company", machine.ReadString(Data.Models.Metadata.Machine.CompanyKey));
-            Assert.Equal("control", machine.ReadString(Data.Models.Metadata.Machine.ControlKey));
-            Assert.Equal("country", machine.ReadString(Data.Models.Metadata.Machine.CountryKey));
-            Assert.Equal("description", machine.ReadString(Data.Models.Metadata.Machine.DescriptionKey));
-            Assert.Equal("dirname", machine.ReadString(Data.Models.Metadata.Machine.DirNameKey));
-            Assert.Equal("displaycount", machine.ReadString(Data.Models.Metadata.Machine.DisplayCountKey));
-            Assert.Equal("displaytype", machine.ReadString(Data.Models.Metadata.Machine.DisplayTypeKey));
-            Assert.Equal("duplicateid", machine.ReadString(Data.Models.Metadata.Machine.DuplicateIDKey));
-            Assert.Equal("emulator", machine.ReadString(Data.Models.Metadata.Machine.EmulatorKey));
-            Assert.Equal("extra", machine.ReadString(Data.Models.Metadata.Machine.ExtraKey));
-            Assert.Equal("favorite", machine.ReadString(Data.Models.Metadata.Machine.FavoriteKey));
-            Assert.Equal("genmsxid", machine.ReadString(Data.Models.Metadata.Machine.GenMSXIDKey));
-            Assert.Equal("history", machine.ReadString(Data.Models.Metadata.Machine.HistoryKey));
-            Assert.Equal("id", machine.ReadString(Data.Models.Metadata.Machine.IdKey));
-            Assert.Equal(HashType.CRC32.ZeroString, machine.ReadString(Data.Models.Metadata.Machine.Im1CRCKey));
-            Assert.Equal(HashType.CRC32.ZeroString, machine.ReadString(Data.Models.Metadata.Machine.Im2CRCKey));
-            Assert.Equal("imagenumber", machine.ReadString(Data.Models.Metadata.Machine.ImageNumberKey));
-            Assert.Equal("yes", machine.ReadString(Data.Models.Metadata.Machine.IsBiosKey));
-            Assert.Equal("yes", machine.ReadString(Data.Models.Metadata.Machine.IsDeviceKey));
-            Assert.Equal("yes", machine.ReadString(Data.Models.Metadata.Machine.IsMechanicalKey));
-            Assert.Equal("language", machine.ReadString(Data.Models.Metadata.Machine.LanguageKey));
-            Assert.Equal("location", machine.ReadString(Data.Models.Metadata.Machine.LocationKey));
-            Assert.Equal("manufacturer", machine.ReadString(Data.Models.Metadata.Machine.ManufacturerKey));
-            Assert.Equal("name", machine.GetName());
-            Assert.Equal("notes", machine.ReadString(Data.Models.Metadata.Machine.NotesKey));
-            Assert.Equal("playedcount", machine.ReadString(Data.Models.Metadata.Machine.PlayedCountKey));
-            Assert.Equal("playedtime", machine.ReadString(Data.Models.Metadata.Machine.PlayedTimeKey));
-            Assert.Equal("players", machine.ReadString(Data.Models.Metadata.Machine.PlayersKey));
-            Assert.Equal("publisher", machine.ReadString(Data.Models.Metadata.Machine.PublisherKey));
-            Assert.Equal("rebuildto", machine.ReadString(Data.Models.Metadata.Machine.RebuildToKey));
-            Assert.Equal("releasenumber", machine.ReadString(Data.Models.Metadata.Machine.ReleaseNumberKey));
-            Assert.Equal("romof", machine.ReadString(Data.Models.Metadata.Machine.RomOfKey));
-            Assert.Equal("rotation", machine.ReadString(Data.Models.Metadata.Machine.RotationKey));
-            Assert.Equal("yes", machine.ReadString(Data.Models.Metadata.Machine.RunnableKey));
-            Assert.Equal("sampleof", machine.ReadString(Data.Models.Metadata.Machine.SampleOfKey));
-            Assert.Equal("savetype", machine.ReadString(Data.Models.Metadata.Machine.SaveTypeKey));
-            Assert.Equal("sourcefile", machine.ReadString(Data.Models.Metadata.Machine.SourceFileKey));
-            Assert.Equal("sourcerom", machine.ReadString(Data.Models.Metadata.Machine.SourceRomKey));
-            Assert.Equal("status", machine.ReadString(Data.Models.Metadata.Machine.StatusKey));
-            Assert.Equal("yes", machine.ReadString(Data.Models.Metadata.Machine.SupportedKey));
-            Assert.Equal("system", machine.ReadString(Data.Models.Metadata.Machine.SystemKey));
-            Assert.Equal("tags", machine.ReadString(Data.Models.Metadata.Machine.TagsKey));
-            Assert.Equal("year", machine.ReadString(Data.Models.Metadata.Machine.YearKey));
+            Assert.Equal("board", machine.Board);
+            Assert.Equal("buttons", machine.Buttons);
+            Assert.Equal("cloneof", machine.CloneOf);
+            Assert.Equal("cloneofid", machine.CloneOfId);
+            Assert.Equal("company", machine.Company);
+            Assert.Equal("control", machine.Control);
+            Assert.Equal("country", machine.Country);
+            Assert.Equal("crc", machine.CRC);
+            Assert.Equal("description", machine.Description);
+            Assert.Equal("developer", machine.Developer);
+            Assert.Equal("dirname", machine.DirName);
+            Assert.Equal("displaycount", machine.DisplayCount);
+            Assert.Equal("displaytype", machine.DisplayType);
+            Assert.Equal("duplicateid", machine.DuplicateID);
+            Assert.Equal("emulator", machine.Emulator);
+            Assert.Equal("enabled", machine.Enabled);
+            Assert.Equal("extra", machine.Extra);
+            Assert.Equal("favorite", machine.Favorite);
+            Assert.Equal("genmsxid", machine.GenMSXID);
+            Assert.Equal("genre", machine.Genre);
+            Assert.Equal("history", machine.History);
+            Assert.Equal("id", machine.Id);
+            Assert.Equal(HashType.CRC32.ZeroString, machine.Im1CRC);
+            Assert.Equal(HashType.CRC32.ZeroString, machine.Im2CRC);
+            Assert.Equal("imagenumber", machine.ImageNumber);
+            Assert.Equal(true, machine.IsBios);
+            Assert.Equal(true, machine.IsDevice);
+            Assert.Equal(true, machine.IsMechanical);
+            Assert.Equal("language", machine.Language);
+            Assert.Equal("location", machine.Location);
+            Assert.Equal("manufacturer", machine.Manufacturer);
+            Assert.Equal("name", machine.Name);
+            Assert.Equal("notes", machine.Notes);
+            Assert.Equal("playedcount", machine.PlayedCount);
+            Assert.Equal("playedtime", machine.PlayedTime);
+            Assert.Equal("players", machine.Players);
+            Assert.Equal("publisher", machine.Publisher);
+            Assert.Equal("ratings", machine.Ratings);
+            Assert.Equal("rebuildto", machine.RebuildTo);
+            Assert.Equal("relatedto", machine.RelatedTo);
+            Assert.Equal("releasenumber", machine.ReleaseNumber);
+            Assert.Equal("romof", machine.RomOf);
+            Assert.Equal("rotation", machine.Rotation);
+            Assert.Equal(Data.Models.Metadata.Runnable.Yes, machine.Runnable);
+            Assert.Equal("sampleof", machine.SampleOf);
+            Assert.Equal("savetype", machine.SaveType);
+            Assert.Equal("score", machine.Score);
+            Assert.Equal("source", machine.Source);
+            Assert.Equal("sourcefile", machine.SourceFile);
+            Assert.Equal("sourcerom", machine.SourceRom);
+            Assert.Equal("status", machine.Status);
+            Assert.Equal("subgenre", machine.Subgenre);
+            Assert.Equal(Data.Models.Metadata.Supported.Yes, machine.Supported);
+            Assert.Equal("system", machine.System);
+            Assert.Equal("tags", machine.Tags);
+            Assert.Equal("titleid", machine.TitleID);
+            Assert.Equal("url", machine.Url);
+            Assert.Equal("year", machine.Year);
 
-            DatItems.Trurip? trurip = machine.Read<DatItems.Trurip>(Data.Models.Metadata.Machine.TruripKey);
-            ValidateTrurip(trurip);
+            string[]? categories = machine.Category;
+            Assert.NotNull(categories);
+            string? category = Assert.Single(categories);
+            Assert.Equal("category", category);
+
+            string[]? comments = machine.Comment;
+            Assert.NotNull(comments);
+            string? comment = Assert.Single(comments);
+            Assert.Equal("comment", comment);
         }
 #pragma warning restore IDE0051
 
         private static void ValidateAdjuster(Adjuster? adjuster)
         {
             Assert.NotNull(adjuster);
-            Assert.True(adjuster.ReadBool(Data.Models.Metadata.Adjuster.DefaultKey));
-            Assert.Equal("name", adjuster.ReadString(Data.Models.Metadata.Adjuster.NameKey));
+            Assert.True(adjuster.Default);
+            Assert.Equal("name", adjuster.Name);
 
-            Condition? condition = adjuster.Read<Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
-            ValidateCondition(condition);
+            ValidateCondition(adjuster.Condition);
         }
 
         private static void ValidateAnalog(Analog? analog)
         {
             Assert.NotNull(analog);
-            Assert.Equal("mask", analog.ReadString(Data.Models.Metadata.Analog.MaskKey));
+            Assert.Equal("mask", analog.Mask);
         }
 
         private static void ValidateArchive(Archive? archive)
         {
             Assert.NotNull(archive);
-            Assert.Equal("name", archive.ReadString(Data.Models.Metadata.Archive.NameKey));
+            Assert.Equal("name", archive.Name);
         }
 
         private static void ValidateBiosSet(BiosSet? biosSet)
         {
             Assert.NotNull(biosSet);
-            Assert.True(biosSet.ReadBool(Data.Models.Metadata.BiosSet.DefaultKey));
-            Assert.Equal("description", biosSet.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey));
-            Assert.Equal("name", biosSet.ReadString(Data.Models.Metadata.BiosSet.NameKey));
+            Assert.True(biosSet.Default);
+            Assert.Equal("description", biosSet.Description);
+            Assert.Equal("name", biosSet.Name);
         }
 
         private static void ValidateChip(Chip? chip)
         {
             Assert.NotNull(chip);
-            Assert.Equal(12345L, chip.ReadLong(Data.Models.Metadata.Chip.ClockKey));
-            Assert.Equal("flags", chip.ReadString(Data.Models.Metadata.Chip.FlagsKey));
-            Assert.Equal("name", chip.ReadString(Data.Models.Metadata.Chip.NameKey));
-            Assert.True(chip.ReadBool(Data.Models.Metadata.Chip.SoundOnlyKey));
-            Assert.Equal("tag", chip.ReadString(Data.Models.Metadata.Chip.TagKey));
-            Assert.Equal("cpu", chip.ReadString(Data.Models.Metadata.Chip.ChipTypeKey));
+            Assert.Equal(12345, chip.Clock);
+            Assert.Equal("flags", chip.Flags);
+            Assert.Equal("name", chip.Name);
+            Assert.True(chip.SoundOnly);
+            Assert.Equal("tag", chip.Tag);
+            Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.ChipType);
         }
 
         private static void ValidateCondition(Condition? condition)
         {
             Assert.NotNull(condition);
-            Assert.Equal("value", condition.ReadString(Data.Models.Metadata.Condition.ValueKey));
-            Assert.Equal("mask", condition.ReadString(Data.Models.Metadata.Condition.MaskKey));
-            Assert.Equal("eq", condition.ReadString(Data.Models.Metadata.Condition.RelationKey));
-            Assert.Equal("tag", condition.ReadString(Data.Models.Metadata.Condition.TagKey));
+            Assert.Equal("value", condition.Value);
+            Assert.Equal("mask", condition.Mask);
+            Assert.Equal(Data.Models.Metadata.Relation.Equal, condition.Relation);
+            Assert.Equal("tag", condition.Tag);
         }
 
         private static void ValidateConfiguration(Configuration? configuration)
         {
             Assert.NotNull(configuration);
-            Assert.Equal("mask", configuration.ReadString(Data.Models.Metadata.Configuration.MaskKey));
-            Assert.Equal("name", configuration.ReadString(Data.Models.Metadata.Configuration.NameKey));
-            Assert.Equal("tag", configuration.ReadString(Data.Models.Metadata.Configuration.TagKey));
+            Assert.Equal("mask", configuration.Mask);
+            Assert.Equal("name", configuration.Name);
+            Assert.Equal("tag", configuration.Tag);
 
-            Condition? condition = configuration.Read<Condition>(Data.Models.Metadata.Configuration.ConditionKey);
-            ValidateCondition(condition);
+            ValidateCondition(configuration.Condition);
 
-            ConfLocation[]? confLocations = configuration.Read<ConfLocation[]>(Data.Models.Metadata.Configuration.ConfLocationKey);
+            ConfLocation[]? confLocations = configuration.ConfLocation;
             Assert.NotNull(confLocations);
             ConfLocation? confLocation = Assert.Single(confLocations);
             ValidateConfLocation(confLocation);
 
-            ConfSetting[]? confSettings = configuration.Read<ConfSetting[]>(Data.Models.Metadata.Configuration.ConfSettingKey);
+            ConfSetting[]? confSettings = configuration.ConfSetting;
             Assert.NotNull(confSettings);
             ConfSetting? confSetting = Assert.Single(confSettings);
             ValidateConfSetting(confSetting);
@@ -1215,102 +1201,99 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateConfLocation(ConfLocation? confLocation)
         {
             Assert.NotNull(confLocation);
-            Assert.True(confLocation.ReadBool(Data.Models.Metadata.ConfLocation.InvertedKey));
-            Assert.Equal("name", confLocation.ReadString(Data.Models.Metadata.ConfLocation.NameKey));
-            Assert.Equal("number", confLocation.ReadString(Data.Models.Metadata.ConfLocation.NumberKey));
+            Assert.True(confLocation.Inverted);
+            Assert.Equal("name", confLocation.Name);
+            Assert.Equal(12345, confLocation.Number);
         }
 
         private static void ValidateConfSetting(ConfSetting? confSetting)
         {
             Assert.NotNull(confSetting);
-            Assert.True(confSetting.ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey));
-            Assert.Equal("name", confSetting.ReadString(Data.Models.Metadata.ConfSetting.NameKey));
-            Assert.Equal("value", confSetting.ReadString(Data.Models.Metadata.ConfSetting.ValueKey));
+            Assert.True(confSetting.Default);
+            Assert.Equal("name", confSetting.Name);
+            Assert.Equal("value", confSetting.Value);
 
-            Condition? condition = confSetting.Read<Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
-            ValidateCondition(condition);
+            ValidateCondition(confSetting.Condition);
         }
 
         private static void ValidateControl(Control? control)
         {
             Assert.NotNull(control);
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.ButtonsKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.KeyDeltaKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.MaximumKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.MinimumKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.PlayerKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.ReqButtonsKey));
-            Assert.True(control.ReadBool(Data.Models.Metadata.Control.ReverseKey));
-            Assert.Equal(12345L, control.ReadLong(Data.Models.Metadata.Control.SensitivityKey));
-            Assert.Equal("lightgun", control.ReadString(Data.Models.Metadata.Control.ControlTypeKey));
-            Assert.Equal("ways", control.ReadString(Data.Models.Metadata.Control.WaysKey));
-            Assert.Equal("ways2", control.ReadString(Data.Models.Metadata.Control.Ways2Key));
-            Assert.Equal("ways3", control.ReadString(Data.Models.Metadata.Control.Ways3Key));
+            Assert.Equal(12345, control.Buttons);
+            Assert.Equal(12345, control.KeyDelta);
+            Assert.Equal(12345, control.Maximum);
+            Assert.Equal(12345, control.Minimum);
+            Assert.Equal(12345, control.Player);
+            Assert.Equal(12345, control.ReqButtons);
+            Assert.True(control.Reverse);
+            Assert.Equal(12345, control.Sensitivity);
+            Assert.Equal(Data.Models.Metadata.ControlType.Lightgun, control.ControlType);
+            Assert.Equal("ways", control.Ways);
+            Assert.Equal("ways2", control.Ways2);
+            Assert.Equal("ways3", control.Ways3);
         }
 
         private static void ValidateDataArea(DataArea? dataArea)
         {
             Assert.NotNull(dataArea);
-            Assert.Equal("big", dataArea.ReadString(Data.Models.Metadata.DataArea.EndiannessKey));
-            Assert.Equal("name", dataArea.ReadString(Data.Models.Metadata.DataArea.NameKey));
-            Assert.Equal(12345L, dataArea.ReadLong(Data.Models.Metadata.DataArea.SizeKey));
-            Assert.Equal(64, dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey));
+            Assert.Equal(Data.Models.Metadata.Endianness.Big, dataArea.Endianness);
+            Assert.Equal("name", dataArea.Name);
+            Assert.Equal(12345, dataArea.Size);
+            Assert.Equal(Data.Models.Metadata.Width.Long, dataArea.Width);
         }
 
         private static void ValidateDevice(Device? device)
         {
             Assert.NotNull(device);
-            Assert.Equal("fixedimage", device.ReadString(Data.Models.Metadata.Device.FixedImageKey));
-            Assert.Equal("interface", device.ReadString(Data.Models.Metadata.Device.InterfaceKey));
-            Assert.Equal(1, device.ReadLong(Data.Models.Metadata.Device.MandatoryKey));
-            Assert.Equal("tag", device.ReadString(Data.Models.Metadata.Device.TagKey));
-            Assert.Equal("punchtape", device.ReadString(Data.Models.Metadata.Device.DeviceTypeKey));
+            Assert.Equal("fixedimage", device.FixedImage);
+            Assert.Equal("interface", device.Interface);
+            Assert.Equal(true, device.Mandatory);
+            Assert.Equal("tag", device.Tag);
+            Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.DeviceType);
 
-            Extension[]? extensions = device.Read<Extension[]>(Data.Models.Metadata.Device.ExtensionKey);
+            Extension[]? extensions = device.Extension;
             Assert.NotNull(extensions);
             Extension? extension = Assert.Single(extensions);
             ValidateExtension(extension);
 
-            Instance? instance = device.Read<Instance>(Data.Models.Metadata.Device.InstanceKey);
-            ValidateInstance(instance);
+            ValidateInstance(device.Instance);
         }
 
         private static void ValidateDeviceRef(DeviceRef? deviceRef)
         {
             Assert.NotNull(deviceRef);
-            Assert.Equal("name", deviceRef.ReadString(Data.Models.Metadata.DeviceRef.NameKey));
+            Assert.Equal("name", deviceRef.Name);
         }
 
         private static void ValidateDipLocation(DipLocation? dipLocation)
         {
             Assert.NotNull(dipLocation);
-            Assert.True(dipLocation.ReadBool(Data.Models.Metadata.DipLocation.InvertedKey));
-            Assert.Equal("name", dipLocation.ReadString(Data.Models.Metadata.DipLocation.NameKey));
-            Assert.Equal("number", dipLocation.ReadString(Data.Models.Metadata.DipLocation.NumberKey));
+            Assert.True(dipLocation.Inverted);
+            Assert.Equal("name", dipLocation.Name);
+            Assert.Equal(12345, dipLocation.Number);
         }
 
         private static void ValidateDipSwitch(DipSwitch? dipSwitch)
         {
             Assert.NotNull(dipSwitch);
-            Assert.True(dipSwitch.ReadBool(Data.Models.Metadata.DipSwitch.DefaultKey));
-            Assert.Equal("mask", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.MaskKey));
-            Assert.Equal("name", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.NameKey));
-            Assert.Equal("tag", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.TagKey));
+            Assert.True(dipSwitch.Default);
+            Assert.Equal("mask", dipSwitch.Mask);
+            Assert.Equal("name", dipSwitch.Name);
+            Assert.Equal("tag", dipSwitch.Tag);
 
-            Condition? condition = dipSwitch.Read<Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
-            ValidateCondition(condition);
+            ValidateCondition(dipSwitch.Condition);
 
-            DipLocation[]? dipLocations = dipSwitch.Read<DipLocation[]>(Data.Models.Metadata.DipSwitch.DipLocationKey);
+            DipLocation[]? dipLocations = dipSwitch.DipLocation;
             Assert.NotNull(dipLocations);
             DipLocation? dipLocation = Assert.Single(dipLocations);
             ValidateDipLocation(dipLocation);
 
-            DipValue[]? dipValues = dipSwitch.Read<DipValue[]>(Data.Models.Metadata.DipSwitch.DipValueKey);
+            DipValue[]? dipValues = dipSwitch.DipValue;
             Assert.NotNull(dipValues);
             DipValue? dipValue = Assert.Single(dipValues);
             ValidateDipValue(dipValue);
 
-            string[]? entries = dipSwitch.ReadStringArray(Data.Models.Metadata.DipSwitch.EntryKey);
+            string[]? entries = dipSwitch.Entry;
             Assert.NotNull(entries);
             string entry = Assert.Single(entries);
             Assert.Equal("entry", entry);
@@ -1319,103 +1302,105 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateDipValue(DipValue? dipValue)
         {
             Assert.NotNull(dipValue);
-            Assert.True(dipValue.ReadBool(Data.Models.Metadata.DipValue.DefaultKey));
-            Assert.Equal("name", dipValue.ReadString(Data.Models.Metadata.DipValue.NameKey));
-            Assert.Equal("value", dipValue.ReadString(Data.Models.Metadata.DipValue.ValueKey));
+            Assert.True(dipValue.Default);
+            Assert.Equal("name", dipValue.Name);
+            Assert.Equal("value", dipValue.Value);
 
-            Condition? condition = dipValue.Read<Condition>(Data.Models.Metadata.DipValue.ConditionKey);
-            ValidateCondition(condition);
+            ValidateCondition(dipValue.Condition);
         }
 
         private static void ValidateDisk(Disk? disk)
         {
             Assert.NotNull(disk);
-            Assert.Equal("flags", disk.ReadString(Data.Models.Metadata.Disk.FlagsKey));
-            Assert.Equal("index", disk.ReadString(Data.Models.Metadata.Disk.IndexKey));
-            Assert.Equal(HashType.MD5.ZeroString, disk.ReadString(Data.Models.Metadata.Disk.MD5Key));
-            Assert.Equal("merge", disk.ReadString(Data.Models.Metadata.Disk.MergeKey));
-            Assert.Equal("name", disk.ReadString(Data.Models.Metadata.Disk.NameKey));
-            Assert.True(disk.ReadBool(Data.Models.Metadata.Disk.OptionalKey));
-            Assert.Equal("region", disk.ReadString(Data.Models.Metadata.Disk.RegionKey));
-            Assert.Equal(HashType.SHA1.ZeroString, disk.ReadString(Data.Models.Metadata.Disk.SHA1Key));
-            Assert.True(disk.ReadBool(Data.Models.Metadata.Disk.WritableKey));
+            Assert.Equal("flags", disk.Flags);
+            Assert.Equal(12345, disk.Index);
+            Assert.Equal(HashType.MD5.ZeroString, disk.MD5);
+            Assert.Equal("merge", disk.Merge);
+            Assert.Equal("name", disk.Name);
+            Assert.True(disk.Optional);
+            Assert.Equal("region", disk.Region);
+            Assert.Equal(HashType.SHA1.ZeroString, disk.SHA1);
+            Assert.True(disk.Writable);
         }
 
         private static void ValidateDiskArea(DiskArea? diskArea)
         {
             Assert.NotNull(diskArea);
-            Assert.Equal("name", diskArea.ReadString(Data.Models.Metadata.DiskArea.NameKey));
+            Assert.Equal("name", diskArea.Name);
         }
 
         private static void ValidateDisplay(Display? display)
         {
             Assert.NotNull(display);
-            Assert.True(display.ReadBool(Data.Models.Metadata.Display.FlipXKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HBEndKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HBStartKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HeightKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HTotalKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.PixClockKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.RefreshKey));
-            Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
-            Assert.Equal("tag", display.ReadString(Data.Models.Metadata.Display.TagKey));
-            Assert.Equal("vector", display.ReadString(Data.Models.Metadata.Display.DisplayTypeKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.VBEndKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.VBStartKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.VTotalKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.WidthKey));
+            Assert.Null(display.AspectX);
+            Assert.Null(display.AspectY);
+            Assert.True(display.FlipX);
+            Assert.Equal(12345, display.HBEnd);
+            Assert.Equal(12345, display.HBStart);
+            Assert.Equal(12345, display.Height);
+            Assert.Equal(12345, display.HTotal);
+            Assert.Equal(12345, display.PixClock);
+            Assert.Equal(123.45, display.Refresh);
+            Assert.Equal(Data.Models.Metadata.Rotation.East, display.Rotate);
+            Assert.Equal("tag", display.Tag);
+            Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
+            Assert.Equal(12345, display.VBEnd);
+            Assert.Equal(12345, display.VBStart);
+            Assert.Equal(12345, display.VTotal);
+            Assert.Equal(12345, display.Width);
         }
 
         private static void ValidateDriver(Driver? driver)
         {
             Assert.NotNull(driver);
-            Assert.Equal("plain", driver.ReadString(Data.Models.Metadata.Driver.BlitKey));
-            Assert.Equal("good", driver.ReadString(Data.Models.Metadata.Driver.CocktailKey));
-            Assert.Equal("good", driver.ReadString(Data.Models.Metadata.Driver.ColorKey));
-            Assert.Equal("good", driver.ReadString(Data.Models.Metadata.Driver.EmulationKey));
-            Assert.True(driver.ReadBool(Data.Models.Metadata.Driver.IncompleteKey));
-            Assert.True(driver.ReadBool(Data.Models.Metadata.Driver.NoSoundHardwareKey));
-            Assert.Equal("pallettesize", driver.ReadString(Data.Models.Metadata.Driver.PaletteSizeKey));
-            Assert.True(driver.ReadBool(Data.Models.Metadata.Driver.RequiresArtworkKey));
-            Assert.Equal("supported", driver.ReadString(Data.Models.Metadata.Driver.SaveStateKey));
-            Assert.Equal("good", driver.ReadString(Data.Models.Metadata.Driver.SoundKey));
-            Assert.Equal("good", driver.ReadString(Data.Models.Metadata.Driver.StatusKey));
-            Assert.True(driver.ReadBool(Data.Models.Metadata.Driver.UnofficialKey));
+            Assert.Equal(Data.Models.Metadata.Blit.Plain, driver.Blit);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Cocktail);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Color);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Emulation);
+            Assert.True(driver.Incomplete);
+            Assert.True(driver.NoSoundHardware);
+            Assert.Equal("palettesize", driver.PaletteSize);
+            Assert.True(driver.RequiresArtwork);
+            Assert.Equal(Data.Models.Metadata.Supported.Yes, driver.SaveState);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Status);
+            Assert.True(driver.Unofficial);
         }
 
         private static void ValidateExtension(Extension? extension)
         {
             Assert.NotNull(extension);
-            Assert.Equal("name", extension.ReadString(Data.Models.Metadata.Extension.NameKey));
+            Assert.Equal("name", extension.Name);
         }
 
         private static void ValidateFeature(Feature? feature)
         {
             Assert.NotNull(feature);
-            Assert.Equal("name", feature.ReadString(Data.Models.Metadata.Feature.NameKey));
-            Assert.Equal("imperfect", feature.ReadString(Data.Models.Metadata.Feature.OverallKey));
-            Assert.Equal("imperfect", feature.ReadString(Data.Models.Metadata.Feature.StatusKey));
-            Assert.Equal("protection", feature.ReadString(Data.Models.Metadata.Feature.FeatureTypeKey));
-            Assert.Equal("value", feature.ReadString(Data.Models.Metadata.Feature.ValueKey));
+            Assert.Equal("name", feature.Name);
+            Assert.Equal(Data.Models.Metadata.FeatureStatus.Imperfect, feature.Overall);
+            Assert.Equal(Data.Models.Metadata.FeatureStatus.Imperfect, feature.Status);
+            Assert.Equal(Data.Models.Metadata.FeatureType.Protection, feature.FeatureType);
+            Assert.Equal("value", feature.Value);
         }
 
         private static void ValidateInfo(Info? info)
         {
             Assert.NotNull(info);
-            Assert.Equal("name", info.ReadString(Data.Models.Metadata.Info.NameKey));
-            Assert.Equal("value", info.ReadString(Data.Models.Metadata.Info.ValueKey));
+            Assert.Equal("name", info.Name);
+            Assert.Equal("value", info.Value);
         }
 
         private static void ValidateInput(Input? input)
         {
             Assert.NotNull(input);
-            Assert.Equal(12345L, input.ReadLong(Data.Models.Metadata.Input.ButtonsKey));
-            Assert.Equal(12345L, input.ReadLong(Data.Models.Metadata.Input.CoinsKey));
-            Assert.Equal(12345L, input.ReadLong(Data.Models.Metadata.Input.PlayersKey));
-            Assert.True(input.ReadBool(Data.Models.Metadata.Input.ServiceKey));
-            Assert.True(input.ReadBool(Data.Models.Metadata.Input.TiltKey));
+            Assert.Equal(12345, input.Buttons);
+            Assert.Equal(12345, input.Coins);
+            Assert.Equal("controlattr", input.ControlAttr);
+            Assert.Equal(12345, input.Players);
+            Assert.True(input.Service);
+            Assert.True(input.Tilt);
 
-            Control[]? controls = input.Read<Control[]>(Data.Models.Metadata.Input.ControlKey);
+            Control[]? controls = input.Control;
             Assert.NotNull(controls);
             Control? control = Assert.Single(controls);
             ValidateControl(control);
@@ -1424,46 +1409,46 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateInstance(Instance? instance)
         {
             Assert.NotNull(instance);
-            Assert.Equal("briefname", instance.ReadString(Data.Models.Metadata.Instance.BriefNameKey));
-            Assert.Equal("name", instance.ReadString(Data.Models.Metadata.Instance.NameKey));
+            Assert.Equal("briefname", instance.BriefName);
+            Assert.Equal("name", instance.Name);
         }
 
         private static void ValidateMedia(Media? media)
         {
             Assert.NotNull(media);
-            Assert.Equal(HashType.MD5.ZeroString, media.ReadString(Data.Models.Metadata.Media.MD5Key));
-            Assert.Equal("name", media.ReadString(Data.Models.Metadata.Media.NameKey));
-            Assert.Equal(HashType.SHA1.ZeroString, media.ReadString(Data.Models.Metadata.Media.SHA1Key));
-            Assert.Equal(HashType.SHA256.ZeroString, media.ReadString(Data.Models.Metadata.Media.SHA256Key));
-            Assert.Equal(HashType.SpamSum.ZeroString, media.ReadString(Data.Models.Metadata.Media.SpamSumKey));
+            Assert.Equal(HashType.MD5.ZeroString, media.MD5);
+            Assert.Equal("name", media.Name);
+            Assert.Equal(HashType.SHA1.ZeroString, media.SHA1);
+            Assert.Equal(HashType.SHA256.ZeroString, media.SHA256);
+            Assert.Equal(HashType.SpamSum.ZeroString, media.SpamSum);
         }
 
         private static void ValidatePart(Part? part)
         {
             Assert.NotNull(part);
-            Assert.Equal("interface", part.ReadString(Data.Models.Metadata.Part.InterfaceKey));
-            Assert.Equal("name", part.ReadString(Data.Models.Metadata.Part.NameKey));
+            Assert.Equal("interface", part.Interface);
+            Assert.Equal("name", part.Name);
         }
 
         private static void ValidatePartFeature(PartFeature? partFeature)
         {
             Assert.NotNull(partFeature);
-            Assert.Equal("name", partFeature.ReadString(Data.Models.Metadata.Feature.NameKey));
-            Assert.Equal("imperfect", partFeature.ReadString(Data.Models.Metadata.Feature.OverallKey));
-            Assert.Equal("imperfect", partFeature.ReadString(Data.Models.Metadata.Feature.StatusKey));
-            Assert.Equal("protection", partFeature.ReadString(Data.Models.Metadata.Feature.FeatureTypeKey));
-            Assert.Equal("value", partFeature.ReadString(Data.Models.Metadata.Feature.ValueKey));
+            Assert.Equal("name", partFeature.Name);
+            Assert.Equal(Data.Models.Metadata.FeatureStatus.Imperfect, partFeature.Overall);
+            Assert.Equal(Data.Models.Metadata.FeatureStatus.Imperfect, partFeature.Status);
+            Assert.Equal(Data.Models.Metadata.FeatureType.Protection, partFeature.FeatureType);
+            Assert.Equal("value", partFeature.Value);
 
-            Part? part = partFeature.Read<Part>(PartFeature.PartKey);
+            Part? part = partFeature.Part;
             ValidatePart(part);
         }
 
         private static void ValidatePort(Port? port)
         {
             Assert.NotNull(port);
-            Assert.Equal("tag", port.ReadString(Data.Models.Metadata.Port.TagKey));
+            Assert.Equal("tag", port.Tag);
 
-            Analog[]? dipValues = port.Read<Analog[]>(Data.Models.Metadata.Port.AnalogKey);
+            Analog[]? dipValues = port.Analog;
             Assert.NotNull(dipValues);
             Analog? dipValue = Assert.Single(dipValues);
             ValidateAnalog(dipValue);
@@ -1472,141 +1457,181 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateRamOption(RamOption? ramOption)
         {
             Assert.NotNull(ramOption);
-            Assert.Equal("content", ramOption.ReadString(Data.Models.Metadata.RamOption.ContentKey));
-            Assert.True(ramOption.ReadBool(Data.Models.Metadata.RamOption.DefaultKey));
-            Assert.Equal("name", ramOption.ReadString(Data.Models.Metadata.RamOption.NameKey));
+            Assert.Equal("content", ramOption.Content);
+            Assert.True(ramOption.Default);
+            Assert.Equal("name", ramOption.Name);
         }
 
         private static void ValidateRelease(Release? release)
         {
             Assert.NotNull(release);
-            Assert.Equal("date", release.ReadString(Data.Models.Metadata.Release.DateKey));
-            Assert.True(release.ReadBool(Data.Models.Metadata.Release.DefaultKey));
-            Assert.Equal("language", release.ReadString(Data.Models.Metadata.Release.LanguageKey));
-            Assert.Equal("name", release.ReadString(Data.Models.Metadata.Release.NameKey));
-            Assert.Equal("region", release.ReadString(Data.Models.Metadata.Release.RegionKey));
+            Assert.Equal("date", release.Date);
+            Assert.True(release.Default);
+            Assert.Equal("language", release.Language);
+            Assert.Equal("name", release.Name);
+            Assert.Equal("region", release.Region);
+        }
+
+        private static void ValidateReleaseDetails(ReleaseDetails? releaseDetails)
+        {
+            Assert.NotNull(releaseDetails);
+            Assert.Equal("appendtonumber", releaseDetails.AppendToNumber);
+            Assert.Equal("archivename", releaseDetails.ArchiveName);
+            Assert.Equal("category", releaseDetails.Category);
+            Assert.Equal("comment", releaseDetails.Comment);
+            Assert.Equal("date", releaseDetails.Date);
+            Assert.Equal("dirname", releaseDetails.DirName);
+            Assert.Equal("group", releaseDetails.Group);
+            Assert.Equal("id", releaseDetails.Id);
+            Assert.Equal("nfocrc", releaseDetails.NfoCRC);
+            Assert.Equal("nfoname", releaseDetails.NfoName);
+            Assert.Equal("nfosize", releaseDetails.NfoSize);
+            Assert.Equal("origin", releaseDetails.Origin);
+            Assert.Equal("originalformat", releaseDetails.OriginalFormat);
+            Assert.Equal("region", releaseDetails.Region);
+            Assert.Equal("rominfo", releaseDetails.RomInfo);
+            Assert.Equal("tool", releaseDetails.Tool);
         }
 
         private static void ValidateRom(Rom? rom)
         {
             Assert.NotNull(rom);
-            Assert.Equal("album", rom.ReadString(Data.Models.Metadata.Rom.AlbumKey));
-            Assert.Equal("alt_romname", rom.ReadString(Data.Models.Metadata.Rom.AltRomnameKey));
-            Assert.Equal("alt_title", rom.ReadString(Data.Models.Metadata.Rom.AltTitleKey));
-            Assert.Equal("artist", rom.ReadString(Data.Models.Metadata.Rom.ArtistKey));
-            Assert.Equal("asr_detected_lang", rom.ReadString(Data.Models.Metadata.Rom.ASRDetectedLangKey));
-            Assert.Equal("asr_detected_lang_conf", rom.ReadString(Data.Models.Metadata.Rom.ASRDetectedLangConfKey));
-            Assert.Equal("asr_transcribed_lang", rom.ReadString(Data.Models.Metadata.Rom.ASRTranscribedLangKey));
-            Assert.Equal("bios", rom.ReadString(Data.Models.Metadata.Rom.BiosKey));
-            Assert.Equal("bitrate", rom.ReadString(Data.Models.Metadata.Rom.BitrateKey));
-            Assert.Equal("btih", rom.ReadString(Data.Models.Metadata.Rom.BitTorrentMagnetHashKey));
-            Assert.Equal("cloth_cover_detection_module_version", rom.ReadString(Data.Models.Metadata.Rom.ClothCoverDetectionModuleVersionKey));
-            Assert.Equal("collection-catalog-number", rom.ReadString(Data.Models.Metadata.Rom.CollectionCatalogNumberKey));
-            Assert.Equal("comment", rom.ReadString(Data.Models.Metadata.Rom.CommentKey));
-            Assert.Equal(HashType.CRC32.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Equal(HashType.CRC16.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC16Key));
-            Assert.Equal(HashType.CRC64.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC64Key));
-            Assert.Equal("creator", rom.ReadString(Data.Models.Metadata.Rom.CreatorKey));
-            Assert.Equal("date", rom.ReadString(Data.Models.Metadata.Rom.DateKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.DisposeKey));
-            Assert.Equal("extension", rom.ReadString(Data.Models.Metadata.Rom.ExtensionKey));
-            Assert.Equal(12345L, rom.ReadLong(Data.Models.Metadata.Rom.FileCountKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.FileIsAvailableKey));
-            Assert.Equal("flags", rom.ReadString(Data.Models.Metadata.Rom.FlagsKey));
-            Assert.Equal("format", rom.ReadString(Data.Models.Metadata.Rom.FormatKey));
-            Assert.Equal("header", rom.ReadString(Data.Models.Metadata.Rom.HeaderKey));
-            Assert.Equal("height", rom.ReadString(Data.Models.Metadata.Rom.HeightKey));
-            Assert.Equal("hocr_char_to_word_hocr_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRCharToWordhOCRVersionKey));
-            Assert.Equal("hocr_char_to_word_module_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRCharToWordModuleVersionKey));
-            Assert.Equal("hocr_fts_text_hocr_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRFtsTexthOCRVersionKey));
-            Assert.Equal("hocr_fts_text_module_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRFtsTextModuleVersionKey));
-            Assert.Equal("hocr_pageindex_hocr_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRPageIndexhOCRVersionKey));
-            Assert.Equal("hocr_pageindex_module_version", rom.ReadString(Data.Models.Metadata.Rom.hOCRPageIndexModuleVersionKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.InvertedKey));
-            Assert.Equal("mtime", rom.ReadString(Data.Models.Metadata.Rom.LastModifiedTimeKey));
-            Assert.Equal("length", rom.ReadString(Data.Models.Metadata.Rom.LengthKey));
-            Assert.Equal("load16_byte", rom.ReadString(Data.Models.Metadata.Rom.LoadFlagKey));
-            Assert.Equal("matrix_number", rom.ReadString(Data.Models.Metadata.Rom.MatrixNumberKey));
-            Assert.Equal(HashType.MD2.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.MD2Key));
-            Assert.Equal(HashType.MD4.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.MD4Key));
-            Assert.Equal(HashType.MD5.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType)); // Omit due to other test
-            Assert.Equal("merge", rom.ReadString(Data.Models.Metadata.Rom.MergeKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.MIAKey));
-            Assert.Equal("name", rom.ReadString(Data.Models.Metadata.Rom.NameKey));
-            Assert.Equal("ocr", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRKey));
-            Assert.Equal("ocr_converted", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRConvertedKey));
-            Assert.Equal("ocr_detected_lang", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRDetectedLangKey));
-            Assert.Equal("ocr_detected_lang_conf", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRDetectedLangConfKey));
-            Assert.Equal("ocr_detected_script", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRDetectedScriptKey));
-            Assert.Equal("ocr_detected_script_conf", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRDetectedScriptConfKey));
-            Assert.Equal("ocr_module_version", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRModuleVersionKey));
-            Assert.Equal("ocr_parameters", rom.ReadString(Data.Models.Metadata.Rom.TesseractOCRParametersKey));
-            Assert.Equal("offset", rom.ReadString(Data.Models.Metadata.Rom.OffsetKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.OptionalKey));
-            Assert.Equal("original", rom.ReadString(Data.Models.Metadata.Rom.OriginalKey));
-            Assert.Equal("pdf_module_version", rom.ReadString(Data.Models.Metadata.Rom.PDFModuleVersionKey));
-            Assert.Equal("preview-image", rom.ReadString(Data.Models.Metadata.Rom.PreviewImageKey));
-            Assert.Equal("publisher", rom.ReadString(Data.Models.Metadata.Rom.PublisherKey));
-            Assert.Equal("region", rom.ReadString(Data.Models.Metadata.Rom.RegionKey));
-            Assert.Equal("remark", rom.ReadString(Data.Models.Metadata.Rom.RemarkKey));
-            Assert.Equal(HashType.RIPEMD128.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key));
-            Assert.Equal(HashType.RIPEMD160.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key));
-            Assert.Equal("rotation", rom.ReadString(Data.Models.Metadata.Rom.RotationKey));
-            Assert.Equal("serial", rom.ReadString(Data.Models.Metadata.Rom.SerialKey));
-            Assert.Equal(HashType.SHA1.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal(HashType.SHA256.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Equal(HashType.SHA384.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA384Key));
-            Assert.Equal(HashType.SHA512.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA512Key));
-            Assert.Equal(12345L, rom.ReadLong(Data.Models.Metadata.Rom.SizeKey));
-            Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.SoundOnlyKey));
-            Assert.Equal("source", rom.ReadString(Data.Models.Metadata.Rom.SourceKey));
-            Assert.Equal(HashType.SpamSum.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
-            Assert.Equal("start", rom.ReadString(Data.Models.Metadata.Rom.StartKey));
-            Assert.Equal("good", rom.ReadString(Data.Models.Metadata.Rom.StatusKey));
-            Assert.Equal("summation", rom.ReadString(Data.Models.Metadata.Rom.SummationKey));
-            Assert.Equal("title", rom.ReadString(Data.Models.Metadata.Rom.TitleKey));
-            Assert.Equal("track", rom.ReadString(Data.Models.Metadata.Rom.TrackKey));
-            Assert.Equal("type", rom.ReadString(Data.Models.Metadata.Rom.OpenMSXType));
-            Assert.Equal("value", rom.ReadString(Data.Models.Metadata.Rom.ValueKey));
-            Assert.Equal("whisper_asr_module_version", rom.ReadString(Data.Models.Metadata.Rom.WhisperASRModuleVersionKey));
-            Assert.Equal("whisper_model_hash", rom.ReadString(Data.Models.Metadata.Rom.WhisperModelHashKey));
-            Assert.Equal("whisper_model_name", rom.ReadString(Data.Models.Metadata.Rom.WhisperModelNameKey));
-            Assert.Equal("whisper_version", rom.ReadString(Data.Models.Metadata.Rom.WhisperVersionKey));
-            Assert.Equal("width", rom.ReadString(Data.Models.Metadata.Rom.WidthKey));
-            Assert.Equal("word_conf_0_10", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval0To10Key));
-            Assert.Equal("word_conf_11_20", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval11To20Key));
-            Assert.Equal("word_conf_21_30", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval21To30Key));
-            Assert.Equal("word_conf_31_40", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval31To40Key));
-            Assert.Equal("word_conf_41_50", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval41To50Key));
-            Assert.Equal("word_conf_51_60", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval51To60Key));
-            Assert.Equal("word_conf_61_70", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval61To70Key));
-            Assert.Equal("word_conf_71_80", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval71To80Key));
-            Assert.Equal("word_conf_81_90", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval81To90Key));
-            Assert.Equal("word_conf_91_100", rom.ReadString(Data.Models.Metadata.Rom.WordConfidenceInterval91To100Key));
-            Assert.Equal(HashType.XxHash3.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.xxHash364Key));
-            Assert.Equal(HashType.XxHash128.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.xxHash3128Key));
+            Assert.Equal("album", rom.Album);
+            Assert.Equal("alt_romname", rom.AltRomname);
+            Assert.Equal("alt_title", rom.AltTitle);
+            Assert.Equal("artist", rom.Artist);
+            Assert.Equal("asr_detected_lang", rom.ASRDetectedLang);
+            Assert.Equal("asr_detected_lang_conf", rom.ASRDetectedLangConf);
+            Assert.Equal("asr_transcribed_lang", rom.ASRTranscribedLang);
+            Assert.Equal("bios", rom.Bios);
+            Assert.Equal("bitrate", rom.Bitrate);
+            Assert.Equal("btih", rom.BitTorrentMagnetHash);
+            Assert.Equal("cloth_cover_detection_module_version", rom.ClothCoverDetectionModuleVersion);
+            Assert.Equal("collection-catalog-number", rom.CollectionCatalogNumber);
+            Assert.Equal("comment", rom.Comment);
+            Assert.Equal(HashType.CRC16.ZeroString, rom.CRC16);
+            Assert.Equal(HashType.CRC32.ZeroString, rom.CRC32);
+            Assert.Equal(HashType.CRC64.ZeroString, rom.CRC64);
+            Assert.Equal("creator", rom.Creator);
+            Assert.Equal("date", rom.Date);
+            Assert.True(rom.Dispose);
+            Assert.Equal("extension", rom.Extension);
+            Assert.Equal(12345, rom.FileCount);
+            Assert.True(rom.FileIsAvailable);
+            Assert.Equal("flags", rom.Flags);
+            Assert.Equal("format", rom.Format);
+            Assert.Equal("header", rom.Header);
+            Assert.Equal("height", rom.Height);
+            Assert.Equal("hocr_char_to_word_hocr_version", rom.hOCRCharToWordhOCRVersion);
+            Assert.Equal("hocr_char_to_word_module_version", rom.hOCRCharToWordModuleVersion);
+            Assert.Equal("hocr_fts_text_hocr_version", rom.hOCRFtsTexthOCRVersion);
+            Assert.Equal("hocr_fts_text_module_version", rom.hOCRFtsTextModuleVersion);
+            Assert.Equal("hocr_pageindex_hocr_version", rom.hOCRPageIndexhOCRVersion);
+            Assert.Equal("hocr_pageindex_module_version", rom.hOCRPageIndexModuleVersion);
+            Assert.True(rom.Inverted);
+            Assert.Equal("mtime", rom.LastModifiedTime);
+            Assert.Equal("length", rom.Length);
+            Assert.Equal(Data.Models.Metadata.LoadFlag.Load16Byte, rom.LoadFlag);
+            Assert.Equal("matrix_number", rom.MatrixNumber);
+            Assert.Equal(HashType.MD2.ZeroString, rom.MD2);
+            Assert.Equal(HashType.MD4.ZeroString, rom.MD4);
+            Assert.Equal(HashType.MD5.ZeroString, rom.MD5);
+            Assert.Null(rom.OpenMSXMediaType); // Omit due to other test
+            Assert.Equal("type", rom.OpenMSXType);
+            Assert.Equal("merge", rom.Merge);
+            Assert.True(rom.MIA);
+            Assert.Equal("name", rom.Name);
+            Assert.Equal("offset", rom.Offset);
+            Assert.True(rom.Optional);
+            Assert.Equal("original", rom.OriginalProperty);
+            Assert.Equal("pdf_module_version", rom.PDFModuleVersion);
+            Assert.Equal("preview-image", rom.PreviewImage);
+            Assert.Equal("publisher", rom.Publisher);
+            Assert.Equal("region", rom.Region);
+            Assert.Equal("remark", rom.Remark);
+            Assert.Equal(HashType.RIPEMD128.ZeroString, rom.RIPEMD128);
+            Assert.Equal(HashType.RIPEMD160.ZeroString, rom.RIPEMD160);
+            Assert.Equal("rotation", rom.Rotation);
+            Assert.Equal("serial", rom.Serial);
+            Assert.Equal(HashType.SHA1.ZeroString, rom.SHA1);
+            Assert.Equal(HashType.SHA256.ZeroString, rom.SHA256);
+            Assert.Equal(HashType.SHA384.ZeroString, rom.SHA384);
+            Assert.Equal(HashType.SHA512.ZeroString, rom.SHA512);
+            Assert.Equal(12345, rom.Size);
+            Assert.True(rom.SoundOnly);
+            Assert.Equal("source", rom.SourceProperty);
+            Assert.Equal(HashType.SpamSum.ZeroString, rom.SpamSum);
+            Assert.Equal("start", rom.Start);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
+            Assert.Equal("summation", rom.Summation);
+            Assert.Equal("ocr", rom.TesseractOCR);
+            Assert.Equal("ocr_converted", rom.TesseractOCRConverted);
+            Assert.Equal("ocr_detected_lang", rom.TesseractOCRDetectedLang);
+            Assert.Equal("ocr_detected_lang_conf", rom.TesseractOCRDetectedLangConf);
+            Assert.Equal("ocr_detected_script", rom.TesseractOCRDetectedScript);
+            Assert.Equal("ocr_detected_script_conf", rom.TesseractOCRDetectedScriptConf);
+            Assert.Equal("ocr_module_version", rom.TesseractOCRModuleVersion);
+            Assert.Equal("ocr_parameters", rom.TesseractOCRParameters);
+            Assert.Equal("title", rom.Title);
+            Assert.Equal("track", rom.Track);
+            Assert.Equal("value", rom.Value);
+            Assert.Equal("whisper_asr_module_version", rom.WhisperASRModuleVersion);
+            Assert.Equal("whisper_model_hash", rom.WhisperModelHash);
+            Assert.Equal("whisper_model_name", rom.WhisperModelName);
+            Assert.Equal("whisper_version", rom.WhisperVersion);
+            Assert.Equal("width", rom.Width);
+            Assert.Equal("word_conf_0_10", rom.WordConfidenceInterval0To10);
+            Assert.Equal("word_conf_11_20", rom.WordConfidenceInterval11To20);
+            Assert.Equal("word_conf_21_30", rom.WordConfidenceInterval21To30);
+            Assert.Equal("word_conf_31_40", rom.WordConfidenceInterval31To40);
+            Assert.Equal("word_conf_41_50", rom.WordConfidenceInterval41To50);
+            Assert.Equal("word_conf_51_60", rom.WordConfidenceInterval51To60);
+            Assert.Equal("word_conf_61_70", rom.WordConfidenceInterval61To70);
+            Assert.Equal("word_conf_71_80", rom.WordConfidenceInterval71To80);
+            Assert.Equal("word_conf_81_90", rom.WordConfidenceInterval81To90);
+            Assert.Equal("word_conf_91_100", rom.WordConfidenceInterval91To100);
+            Assert.Equal(HashType.XxHash3.ZeroString, rom.xxHash364);
+            Assert.Equal(HashType.XxHash128.ZeroString, rom.xxHash3128);
         }
 
         private static void ValidateSample(Sample? sample)
         {
             Assert.NotNull(sample);
-            Assert.Equal("name", sample.ReadString(Data.Models.Metadata.Sample.NameKey));
+            Assert.Equal("name", sample.Name);
         }
 
         private static void ValidateSharedFeat(SharedFeat? sharedFeat)
         {
             Assert.NotNull(sharedFeat);
-            Assert.Equal("name", sharedFeat.ReadString(Data.Models.Metadata.SharedFeat.NameKey));
-            Assert.Equal("value", sharedFeat.ReadString(Data.Models.Metadata.SharedFeat.ValueKey));
+            Assert.Equal("name", sharedFeat.Name);
+            Assert.Equal("value", sharedFeat.Value);
+        }
+
+        private static void ValidateSerials(Serials? serials)
+        {
+            Assert.NotNull(serials);
+            Assert.Equal("boxbarcode", serials.BoxBarcode);
+            Assert.Equal("boxserial", serials.BoxSerial);
+            Assert.Equal("chipserial", serials.ChipSerial);
+            Assert.Equal("digitalserial1", serials.DigitalSerial1);
+            Assert.Equal("digitalserial2", serials.DigitalSerial2);
+            Assert.Equal("lockoutserial", serials.LockoutSerial);
+            Assert.Equal("mediaserial1", serials.MediaSerial1);
+            Assert.Equal("mediaserial2", serials.MediaSerial2);
+            Assert.Equal("mediaserial3", serials.MediaSerial3);
+            Assert.Equal("mediastamp", serials.MediaStamp);
+            Assert.Equal("pcbserial", serials.PCBSerial);
+            Assert.Equal("romchipserial1", serials.RomChipSerial1);
+            Assert.Equal("romchipserial2", serials.RomChipSerial2);
+            Assert.Equal("savechipserial", serials.SaveChipSerial);
         }
 
         private static void ValidateSlot(Slot? slot)
         {
             Assert.NotNull(slot);
-            Assert.Equal("name", slot.ReadString(Data.Models.Metadata.Slot.NameKey));
+            Assert.Equal("name", slot.Name);
 
-            SlotOption[]? slotOptions = slot.Read<SlotOption[]>(Data.Models.Metadata.Slot.SlotOptionKey);
+            SlotOption[]? slotOptions = slot.SlotOption;
             Assert.NotNull(slotOptions);
             SlotOption? slotOption = Assert.Single(slotOptions);
             ValidateSlotOption(slotOption);
@@ -1615,59 +1640,36 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateSlotOption(SlotOption? slotOption)
         {
             Assert.NotNull(slotOption);
-            Assert.True(slotOption.ReadBool(Data.Models.Metadata.SlotOption.DefaultKey));
-            Assert.Equal("devname", slotOption.ReadString(Data.Models.Metadata.SlotOption.DevNameKey));
-            Assert.Equal("name", slotOption.ReadString(Data.Models.Metadata.SlotOption.NameKey));
+            Assert.True(slotOption.Default);
+            Assert.Equal("devname", slotOption.DevName);
+            Assert.Equal("name", slotOption.Name);
         }
 
         private static void ValidateSoftwareList(SoftwareList? softwareList)
         {
             Assert.NotNull(softwareList);
-            Assert.Equal("description", softwareList.ReadString(Data.Models.Metadata.SoftwareList.DescriptionKey));
-            Assert.Equal("filter", softwareList.ReadString(Data.Models.Metadata.SoftwareList.FilterKey));
-            Assert.Equal("name", softwareList.ReadString(Data.Models.Metadata.SoftwareList.NameKey));
-            Assert.Equal("notes", softwareList.ReadString(Data.Models.Metadata.SoftwareList.NotesKey));
-            // TODO: Figure out why Data.Models.Metadata.SoftwareList.SoftwareKey doesn't get processed
-            Assert.Equal("original", softwareList.ReadString(Data.Models.Metadata.SoftwareList.StatusKey));
-            Assert.Equal("tag", softwareList.ReadString(Data.Models.Metadata.SoftwareList.TagKey));
+            Assert.Equal("filter", softwareList.Filter);
+            Assert.Equal("name", softwareList.Name);
+            Assert.Equal(Data.Models.Metadata.SoftwareListStatus.Original, softwareList.Status);
+            Assert.Equal("tag", softwareList.Tag);
         }
 
         private static void ValidateSound(Sound? sound)
         {
             Assert.NotNull(sound);
-            Assert.Equal(12345L, sound.ReadLong(Data.Models.Metadata.Sound.ChannelsKey));
-        }
-
-        // TODO: Figure out why so many fields are omitted
-        private static void ValidateTrurip(DatItems.Trurip? trurip)
-        {
-            Assert.NotNull(trurip);
-            Assert.Equal("titleid", trurip.TitleID);
-            //Assert.Equal("publisher", trurip.Publisher); // Omitted from conversion
-            Assert.Equal("developer", trurip.Developer);
-            // Assert.Equal("year", trurip.Year); // Omitted from conversion
-            Assert.Equal("genre", trurip.Genre);
-            Assert.Equal("subgenre", trurip.Subgenre);
-            Assert.Equal("ratings", trurip.Ratings);
-            Assert.Equal("score", trurip.Score);
-            // Assert.Equal("players", trurip.Players); // Omitted from conversion
-            Assert.Equal("enabled", trurip.Enabled);
-            Assert.True(trurip.Crc);
-            // Assert.Equal("source", trurip.Source); // Omitted from conversion
-            // Assert.Equal("cloneof", trurip.CloneOf); // Omitted from conversion
-            Assert.Equal("relatedto", trurip.RelatedTo);
+            Assert.Equal(12345, sound.Channels);
         }
 
         private static void ValidateVideo(Display? display)
         {
             Assert.NotNull(display);
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Video.AspectXKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Video.AspectYKey));
-            Assert.Equal("vector", display.ReadString(Data.Models.Metadata.Display.DisplayTypeKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.HeightKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.RefreshKey));
-            Assert.Equal(12345L, display.ReadLong(Data.Models.Metadata.Display.WidthKey));
-            Assert.Equal(90, display.ReadLong(Data.Models.Metadata.Display.RotateKey));
+            Assert.Equal(12345, display.AspectX);
+            Assert.Equal(12345, display.AspectY);
+            Assert.Equal(Data.Models.Metadata.DisplayType.Vector, display.DisplayType);
+            Assert.Equal(12345, display.Height);
+            Assert.Equal(123.45, display.Refresh);
+            Assert.Equal(12345, display.Width);
+            Assert.Equal(Data.Models.Metadata.Rotation.East, display.Rotate);
         }
 
         #endregion

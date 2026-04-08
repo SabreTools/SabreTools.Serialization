@@ -101,11 +101,11 @@ namespace SabreTools.Serialization.Readers.Test
             var row = new Data.Models.EverdriveSMDB.Row
             {
                 SHA256 = "XXXXXX",
-                Name = "XXXXXX",
+                Name = "name",
                 SHA1 = "XXXXXX",
                 MD5 = "XXXXXX",
                 CRC32 = "XXXXXX",
-                Size = "XXXXXX",
+                Size = 12345,
             };
 
             return new Data.Models.EverdriveSMDB.MetadataFile
@@ -121,11 +121,11 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.SHA256);
-            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("name", row.Name);
             Assert.Equal("XXXXXX", row.SHA1);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.CRC32);
-            Assert.Equal("XXXXXX", row.Size);
+            Assert.Equal(12345, row.Size);
         }
     }
 }

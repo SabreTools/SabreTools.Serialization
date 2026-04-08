@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.DosCenter;
 using SabreTools.Text.ClrMamePro;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -176,7 +178,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>File object created from the reader context</returns>
-        private static Data.Models.DosCenter.File? CreateFile(Reader reader)
+        private Data.Models.DosCenter.File? CreateFile(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -190,7 +192,7 @@ namespace SabreTools.Serialization.Readers
                         file.Name = kvp.Value;
                         break;
                     case "size":
-                        file.Size = kvp.Value;
+                        file.Size = NumberHelper.ConvertToInt64(kvp.Value);
                         break;
                     case "crc":
                         file.CRC = kvp.Value;
@@ -202,7 +204,7 @@ namespace SabreTools.Serialization.Readers
                         file.Date = kvp.Value;
                         break;
                     default:
-                        // TODO: Log invalid values
+                        if (Debug) Console.Error.WriteLine($"'{kvp.Key}' is an unrecognized field");
                         break;
                 }
             }

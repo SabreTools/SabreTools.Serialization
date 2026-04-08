@@ -9,13 +9,12 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CloneTest()
         {
-            Machine item = new Machine();
-            item.Write(Data.Models.Metadata.Machine.NameKey, "name");
+            Machine item = new Machine { Name = "name" };
 
             object clone = item.Clone();
             Machine? actual = clone as Machine;
             Assert.NotNull(actual);
-            Assert.Equal("name", actual.GetName());
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion
@@ -25,11 +24,10 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void GetInternalCloneTest()
         {
-            Machine item = new Machine();
-            item.Write(Data.Models.Metadata.Machine.NameKey, "name");
+            Machine item = new Machine { Name = "name" };
 
             Data.Models.Metadata.Machine actual = item.GetInternalClone();
-            Assert.Equal("name", actual[Data.Models.Metadata.Machine.NameKey]);
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion
@@ -59,11 +57,9 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void Equals_MismatchedInternal_False()
         {
-            Machine self = new Machine();
-            self.Write(Data.Models.Metadata.Machine.NameKey, "self");
+            Machine self = new Machine { Name = "self" };
 
-            Machine? other = new Machine();
-            other.Write(Data.Models.Metadata.Machine.NameKey, "other");
+            Machine? other = new Machine { Name = "other" };
 
             bool actual = self.Equals(other);
             Assert.False(actual);
@@ -72,11 +68,9 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void Equals_EqualInternal_True()
         {
-            Machine self = new Machine();
-            self.Write(Data.Models.Metadata.Machine.NameKey, "name");
+            Machine self = new Machine { Name = "name" };
 
-            Machine? other = new Machine();
-            other.Write(Data.Models.Metadata.Machine.NameKey, "name");
+            Machine? other = new Machine { Name = "name" };
 
             bool actual = self.Equals(other);
             Assert.True(actual);

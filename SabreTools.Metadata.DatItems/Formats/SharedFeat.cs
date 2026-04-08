@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,23 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("sharedfeat"), XmlRoot("sharedfeat")]
     public sealed class SharedFeat : DatItem<Data.Models.Metadata.SharedFeat>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.SharedFeat;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.SharedFeat;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public string? Value
+        {
+            get => _internal.Value;
+            set => _internal.Value = value;
+        }
 
         #endregion
 
@@ -25,16 +37,49 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public SharedFeat(Data.Models.Metadata.SharedFeat item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new SharedFeat(_internal.Clone() as Data.Models.Metadata.SharedFeat ?? []);
+        public override object Clone() => new SharedFeat(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.SharedFeat GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.SharedFeat ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is SharedFeat otherSharedFeat)
+                return _internal.Equals(otherSharedFeat._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

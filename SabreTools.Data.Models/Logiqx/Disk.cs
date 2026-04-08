@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Logiqx
 {
@@ -21,7 +22,7 @@ namespace SabreTools.Data.Models.Logiqx
 
         /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
         [XmlAttribute("status")]
-        public string? Status { get; set; }
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>MAME extension</remarks>
         [XmlAttribute("region")]

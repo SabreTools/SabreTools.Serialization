@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             var file = new Data.Models.ArchiveDotOrg.File
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Source = "XXXXXX",
                 BitTorrentMagnetHash = "XXXXXX",
                 LastModifiedTime = "XXXXXX",
@@ -108,7 +108,7 @@ namespace SabreTools.Serialization.Readers.Test
                 MD5 = "XXXXXX",
                 CRC32 = "XXXXXX",
                 SHA1 = "XXXXXX",
-                FileCount = "XXXXXX",
+                FileCount = 12345,
                 Format = "XXXXXX",
                 Original = "XXXXXX",
                 Summation = "XXXXXX",
@@ -174,7 +174,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ArchiveDotOrg.File? file)
         {
             Assert.NotNull(file);
-            Assert.Equal("XXXXXX", file.Name);
+            Assert.Equal("name", file.Name);
             Assert.Equal("XXXXXX", file.Source);
             Assert.Equal("XXXXXX", file.BitTorrentMagnetHash);
             Assert.Equal("XXXXXX", file.LastModifiedTime);
@@ -182,7 +182,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", file.MD5);
             Assert.Equal("XXXXXX", file.CRC32);
             Assert.Equal("XXXXXX", file.SHA1);
-            Assert.Equal("XXXXXX", file.FileCount);
+            Assert.Equal(12345, file.FileCount);
             Assert.Equal("XXXXXX", file.Format);
             Assert.Equal("XXXXXX", file.Original);
             Assert.Equal("XXXXXX", file.Summation);

@@ -137,41 +137,41 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 GameName = "XXXXXX",
-                GameDescription = "XXXXXX",
+                GameDescription = "description",
                 Type = "disk",
                 DiskName = "XXXXXX",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
             };
 
             var media = new Data.Models.SeparatedValue.Row
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 GameName = "XXXXXX",
-                GameDescription = "XXXXXX",
+                GameDescription = "description",
                 Type = "media",
                 DiskName = "XXXXXX",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             var rom = new Data.Models.SeparatedValue.Row
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
-                Description = "XXXXXX",
+                Description = "description",
                 GameName = "XXXXXX",
-                GameDescription = "XXXXXX",
+                GameDescription = "description",
                 Type = "rom",
                 RomName = "XXXXXX",
-                Size = "XXXXXX",
+                Size = 12345,
                 CRC = "XXXXXX",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
@@ -179,7 +179,7 @@ namespace SabreTools.Serialization.Readers.Test
                 SHA384 = "XXXXXX",
                 SHA512 = "XXXXXX",
                 SpamSum = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
             };
 
             return new Data.Models.SeparatedValue.MetadataFile
@@ -209,13 +209,13 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);
             Assert.Equal("XXXXXX", row.InternalName);
-            Assert.Equal("XXXXXX", row.Description);
+            Assert.Equal("description", row.Description);
             Assert.Equal("XXXXXX", row.GameName);
-            Assert.Equal("XXXXXX", row.GameDescription);
+            Assert.Equal("description", row.GameDescription);
             Assert.Equal("disk", row.Type);
             Assert.NotNull(row.RomName); Assert.Empty(row.RomName);
             Assert.Equal("XXXXXX", row.DiskName);
-            Assert.NotNull(row.Size); Assert.Empty(row.Size);
+            Assert.Null(row.Size);
             Assert.NotNull(row.CRC); Assert.Empty(row.CRC);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.SHA1);
@@ -233,7 +233,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Assert.Null(row.SpamSum);
             }
 
-            Assert.Equal("XXXXXX", row.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, row.Status);
         }
 
         /// <summary>
@@ -244,22 +244,22 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);
             Assert.Equal("XXXXXX", row.InternalName);
-            Assert.Equal("XXXXXX", row.Description);
+            Assert.Equal("description", row.Description);
             Assert.Equal("XXXXXX", row.GameName);
-            Assert.Equal("XXXXXX", row.GameDescription);
+            Assert.Equal("description", row.GameDescription);
             Assert.Equal("media", row.Type);
             Assert.NotNull(row.RomName); Assert.Empty(row.RomName);
             Assert.Equal("XXXXXX", row.DiskName);
-            Assert.NotNull(row.Size); Assert.Empty(row.Size);
+            Assert.Null(row.Size);
             Assert.NotNull(row.CRC); Assert.Empty(row.CRC);
-            Assert.Equal("XXXXXX", row.MD5);
-            Assert.Equal("XXXXXX", row.SHA1);
-            Assert.Equal("XXXXXX", row.SHA256);
+            Assert.Equal("md5", row.MD5);
+            Assert.Equal("sha1", row.SHA1);
+            Assert.Equal("sha256", row.SHA256);
             if (longHeader)
             {
                 Assert.NotNull(row.SHA384); Assert.Empty(row.SHA384);
                 Assert.NotNull(row.SHA512); Assert.Empty(row.SHA512);
-                Assert.Equal("XXXXXX", row.SpamSum);
+                Assert.Equal("spamsum", row.SpamSum);
             }
             else
             {
@@ -268,7 +268,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Assert.Null(row.SpamSum);
             }
 
-            Assert.NotNull(row.Status); Assert.Empty(row.Status);
+            Assert.Null(row.Status);
         }
 
         /// <summary>
@@ -279,14 +279,14 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);
             Assert.Equal("XXXXXX", row.InternalName);
-            Assert.Equal("XXXXXX", row.Description);
+            Assert.Equal("description", row.Description);
             Assert.Equal("XXXXXX", row.GameName);
-            Assert.Equal("XXXXXX", row.GameDescription);
+            Assert.Equal("description", row.GameDescription);
             Assert.Equal("rom", row.Type);
             Assert.Equal("XXXXXX", row.RomName);
             Assert.NotNull(row.DiskName);
             Assert.Empty(row.DiskName);
-            Assert.Equal("XXXXXX", row.Size);
+            Assert.Equal(12345, row.Size);
             Assert.Equal("XXXXXX", row.CRC);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.SHA1);
@@ -304,7 +304,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Assert.Null(row.SpamSum);
             }
 
-            Assert.Equal("XXXXXX", row.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, row.Status);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using SabreTools.Metadata.DatItems;
 
 namespace SabreTools.Metadata.DatFiles.Formats
@@ -9,9 +9,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class AttractMode : SerializableDatFile<Data.Models.AttractMode.MetadataFile, Serialization.Readers.AttractMode, Serialization.Writers.AttractMode, Serialization.CrossModel.AttractMode>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public AttractMode(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.AttractMode);
+            Header.DatFormat = DatFormat.AttractMode;
         }
 
         /// <inheritdoc/>
@@ -28,9 +28,17 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
+            switch (datItem)
+            {
+                case DatItems.Formats.Rom rom:
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    break;
+
+                default:
+                    // Item type is not supported
+                    break;
+            }
 
             return missingFields;
         }

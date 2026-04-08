@@ -33,7 +33,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Header_Null_False()
         {
-            var header = new Header { [Header.AuthorKey] = null };
+            var header = new Header { Author = null };
             bool actual = _filterRunner.Run(header);
             Assert.False(actual);
         }
@@ -41,7 +41,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Header_Empty_False()
         {
-            var header = new Header { [Header.AuthorKey] = "" };
+            var header = new Header { Author = "" };
             bool actual = _filterRunner.Run(header);
             Assert.False(actual);
         }
@@ -49,7 +49,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Header_Incorrect_False()
         {
-            var header = new Header { [Header.AuthorKey] = "NO_MATCH" };
+            var header = new Header { Author = "NO_MATCH" };
             bool actual = _filterRunner.Run(header);
             Assert.False(actual);
         }
@@ -57,7 +57,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Header_Correct_True()
         {
-            var header = new Header { [Header.AuthorKey] = "auth" };
+            var header = new Header { Author = "auth" };
             bool actual = _filterRunner.Run(header);
             Assert.True(actual);
         }
@@ -77,7 +77,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Machine_Null_False()
         {
-            var machine = new Machine { [Machine.DescriptionKey] = null };
+            var machine = new Machine { Description = null };
             bool actual = _filterRunner.Run(machine);
             Assert.False(actual);
         }
@@ -85,7 +85,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Machine_Empty_False()
         {
-            var machine = new Machine { [Machine.DescriptionKey] = "" };
+            var machine = new Machine { Description = "" };
             bool actual = _filterRunner.Run(machine);
             Assert.False(actual);
         }
@@ -93,7 +93,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Machine_Incorrect_False()
         {
-            var machine = new Machine { [Machine.DescriptionKey] = "NO_MATCH" };
+            var machine = new Machine { Description = "NO_MATCH" };
             bool actual = _filterRunner.Run(machine);
             Assert.False(actual);
         }
@@ -101,7 +101,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void Machine_Correct_True()
         {
-            var machine = new Machine { [Machine.DescriptionKey] = "desc" };
+            var machine = new Machine { Description = "desc" };
             bool actual = _filterRunner.Run(machine);
             Assert.True(actual);
         }
@@ -121,7 +121,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void DatItem_Null_False()
         {
-            DatItem datItem = new Sample { [Sample.NameKey] = null };
+            DatItem datItem = new Sample { Name = null };
             bool actual = _filterRunner.Run(datItem);
             Assert.False(actual);
         }
@@ -129,7 +129,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void DatItem_Empty_False()
         {
-            DatItem datItem = new Sample { [Sample.NameKey] = "" };
+            DatItem datItem = new Sample { Name = "" };
             bool actual = _filterRunner.Run(datItem);
             Assert.False(actual);
         }
@@ -137,7 +137,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void DatItem_Incorrect_False()
         {
-            DatItem datItem = new Sample { [Sample.NameKey] = "NO_MATCH" };
+            DatItem datItem = new Sample { Name = "NO_MATCH" };
             bool actual = _filterRunner.Run(datItem);
             Assert.False(actual);
         }
@@ -145,7 +145,7 @@ namespace SabreTools.Metadata.Filter.Test
         [Fact]
         public void DatItem_Correct_True()
         {
-            DatItem datItem = new Sample { [Sample.NameKey] = "name" };
+            DatItem datItem = new Sample { Name = "name" };
             bool actual = _filterRunner.Run(datItem);
             Assert.True(actual);
         }
@@ -167,8 +167,8 @@ namespace SabreTools.Metadata.Filter.Test
         {
             DatItem datItem = new Rom
             {
-                [Rom.NameKey] = "name",
-                [Rom.CRCKey] = null,
+                Name = "name",
+                CRC32 = null,
             };
 
             bool actual = _filterRunner.Run(datItem);
@@ -180,8 +180,8 @@ namespace SabreTools.Metadata.Filter.Test
         {
             DatItem datItem = new Rom
             {
-                [Rom.NameKey] = "name",
-                [Rom.CRCKey] = "",
+                Name = "name",
+                CRC32 = "",
             };
 
             bool actual = _filterRunner.Run(datItem);
@@ -193,8 +193,8 @@ namespace SabreTools.Metadata.Filter.Test
         {
             DatItem datItem = new Rom
             {
-                [Rom.NameKey] = "name",
-                [Rom.CRCKey] = "NO_MATCH",
+                Name = "name",
+                CRC32 = "NO_MATCH",
             };
 
             bool actual = _filterRunner.Run(datItem);
@@ -206,8 +206,8 @@ namespace SabreTools.Metadata.Filter.Test
         {
             DatItem datItem = new Rom
             {
-                [Rom.NameKey] = "name",
-                [Rom.CRCKey] = "crc",
+                Name = "name",
+                CRC32 = "crc",
             };
 
             bool actual = _filterRunner.Run(datItem);

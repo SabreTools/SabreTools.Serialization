@@ -1,6 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -11,10 +11,40 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("dataarea"), XmlRoot("dataarea")]
     public sealed class DataArea : DatItem<Data.Models.Metadata.DataArea>
     {
-        #region Fields
+        #region Properties
+
+        public Data.Models.Metadata.Endianness? Endianness
+        {
+            get => _internal.Endianness;
+            set => _internal.Endianness = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.DataArea;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.DataArea;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public Rom[]? Rom { get; set; }
+
+        [JsonIgnore]
+        public bool RomSpecified => Rom is not null && Rom.Length > 0;
+
+        public long? Size
+        {
+            get => _internal.Size;
+            set => _internal.Size = value;
+        }
+
+        public Data.Models.Metadata.Width? Width
+        {
+            get => _internal.Width;
+            set => _internal.Width = value;
+        }
 
         #endregion
 
@@ -24,32 +54,62 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DataArea(Data.Models.Metadata.DataArea item) : base(item)
         {
-            // Process flag values
-            string? endianness = ReadString(Data.Models.Metadata.DataArea.EndiannessKey);
-            if (endianness is not null)
-                Write<string?>(Data.Models.Metadata.DataArea.EndiannessKey, endianness.AsEndianness()?.AsStringValue());
-
-            long? size = ReadLong(Data.Models.Metadata.DataArea.SizeKey);
-            if (size is not null)
-                Write<string?>(Data.Models.Metadata.DataArea.SizeKey, size.ToString());
-
-            long? width = ReadLong(Data.Models.Metadata.DataArea.WidthKey);
-            if (width is not null)
-                Write<string?>(Data.Models.Metadata.DataArea.WidthKey, width.ToString());
+            // Handle subitems
+            if (item.Rom is not null)
+                Rom = Array.ConvertAll(item.Rom, rom => new Rom(rom));
         }
 
         public DataArea(Data.Models.Metadata.DataArea item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new DataArea(_internal.Clone() as Data.Models.Metadata.DataArea ?? []);
+        public override object Clone() => new DataArea(GetInternalClone());
+
+        public override Data.Models.Metadata.DataArea GetInternalClone()
+        {
+            var partItem = _internal.Clone() as Data.Models.Metadata.DataArea ?? new();
+
+            if (Rom is not null)
+                partItem.Rom = Array.ConvertAll(Rom, rom => rom.GetInternalClone());
+
+            return partItem;
+        }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is DataArea otherDataArea)
+                return _internal.Equals(otherDataArea._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

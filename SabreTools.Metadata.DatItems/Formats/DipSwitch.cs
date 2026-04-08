@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -11,60 +10,67 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("dipswitch"), XmlRoot("dipswitch")]
     public sealed class DipSwitch : DatItem<Data.Models.Metadata.DipSwitch>
     {
-        #region Constants
+        #region Properties
 
-        /// <summary>
-        /// Non-standard key for inverted logic
-        /// </summary>
-        public const string PartKey = "PART";
+        public Condition? Condition { get; set; }
 
-        #endregion
+        [JsonIgnore]
+        public bool ConditionSpecified => Condition is not null;
 
-        #region Fields
+        public bool? Default
+        {
+            get => _internal.Default;
+            set => _internal.Default = value;
+        }
+
+        public DipLocation[]? DipLocation { get; set; }
+
+        [JsonIgnore]
+        public bool DipLocationSpecified => DipLocation is not null && DipLocation.Length > 0;
+
+        public DipValue[]? DipValue { get; set; }
+
+        [JsonIgnore]
+        public bool DipValueSpecified => DipValue is not null && DipValue.Length > 0;
+
+        public string[]? Entry { get; set; }
+
+        [JsonIgnore]
+        public bool EntrySpecified => Entry is not null && Entry.Length > 0;
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.DipSwitch;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.DipSwitch;
 
-        [JsonIgnore]
-        public bool ConditionsSpecified
+        public string? Mask
         {
-            get
-            {
-                var conditions = Read<Condition[]?>(Data.Models.Metadata.DipSwitch.ConditionKey);
-                return conditions is not null && conditions.Length > 0;
-            }
+            get => _internal.Mask;
+            set => _internal.Mask = value;
         }
 
-        [JsonIgnore]
-        public bool LocationsSpecified
+        public string? Name
         {
-            get
-            {
-                var locations = Read<DipLocation[]?>(Data.Models.Metadata.DipSwitch.DipLocationKey);
-                return locations is not null && locations.Length > 0;
-            }
+            get => _internal.Name;
+            set => _internal.Name = value;
         }
 
-        [JsonIgnore]
-        public bool ValuesSpecified
-        {
-            get
-            {
-                var values = Read<DipValue[]?>(Data.Models.Metadata.DipSwitch.DipValueKey);
-                return values is not null && values.Length > 0;
-            }
-        }
+        public Part? Part { get; set; }
 
         [JsonIgnore]
         public bool PartSpecified
         {
             get
             {
-                var part = Read<Part?>(PartKey);
-                return part is not null
-                    && (!string.IsNullOrEmpty(part.GetName())
-                        || !string.IsNullOrEmpty(part.ReadString(Data.Models.Metadata.Part.InterfaceKey)));
+                return Part is not null
+                    && (!string.IsNullOrEmpty(Part.Name)
+                        || !string.IsNullOrEmpty(Part.Interface));
             }
+        }
+
+        public string? Tag
+        {
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         #endregion
@@ -75,68 +81,80 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DipSwitch(Data.Models.Metadata.DipSwitch item) : base(item)
         {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.DipSwitch.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.DipSwitch.DefaultKey, defaultValue.FromYesNo());
-
             // Handle subitems
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
-            if (condition is not null)
-                Write<Condition?>(Data.Models.Metadata.DipSwitch.ConditionKey, new Condition(condition));
+            if (item.Condition is not null)
+                Condition = new Condition(item.Condition);
 
-            var dipLocations = item.ReadArray<Data.Models.Metadata.DipLocation>(Data.Models.Metadata.DipSwitch.DipLocationKey);
-            if (dipLocations is not null)
-            {
-                DipLocation[] dipLocationItems = Array.ConvertAll(dipLocations, dipLocation => new DipLocation(dipLocation));
-                Write<DipLocation[]?>(Data.Models.Metadata.DipSwitch.DipLocationKey, dipLocationItems);
-            }
+            if (item.DipLocation is not null)
+                DipLocation = Array.ConvertAll(item.DipLocation, dipLocation => new DipLocation(dipLocation));
 
-            var dipValues = item.ReadArray<Data.Models.Metadata.DipValue>(Data.Models.Metadata.DipSwitch.DipValueKey);
-            if (dipValues is not null)
-            {
-                DipValue[] dipValueItems = Array.ConvertAll(dipValues, dipValue => new DipValue(dipValue));
-                Write<DipValue[]?>(Data.Models.Metadata.DipSwitch.DipValueKey, dipValueItems);
-            }
+            if (item.DipValue is not null)
+                DipValue = Array.ConvertAll(item.DipValue, dipValue => new DipValue(dipValue));
+
+            if (item.Entry is not null)
+                Entry = Array.ConvertAll(item.Entry, entry => entry);
         }
 
         public DipSwitch(Data.Models.Metadata.DipSwitch item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new DipSwitch(_internal.Clone() as Data.Models.Metadata.DipSwitch ?? []);
+        public override object Clone() => new DipSwitch(GetInternalClone());
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.DipSwitch GetInternalClone()
         {
-            var dipSwitchItem = base.GetInternalClone();
+            var dipSwitchItem = _internal.Clone() as Data.Models.Metadata.DipSwitch ?? new();
 
-            var condition = Read<Condition?>(Data.Models.Metadata.DipSwitch.ConditionKey);
-            if (condition is not null)
-                dipSwitchItem[Data.Models.Metadata.DipSwitch.ConditionKey] = condition.GetInternalClone();
+            if (Condition is not null)
+                dipSwitchItem.Condition = Condition.GetInternalClone();
 
-            var dipLocations = Read<DipLocation[]?>(Data.Models.Metadata.DipSwitch.DipLocationKey);
-            if (dipLocations is not null)
-            {
-                Data.Models.Metadata.DipLocation[] dipLocationItems = Array.ConvertAll(dipLocations, dipLocation => dipLocation.GetInternalClone());
-                dipSwitchItem[Data.Models.Metadata.DipSwitch.DipLocationKey] = dipLocationItems;
-            }
+            if (DipLocation is not null)
+                dipSwitchItem.DipLocation = Array.ConvertAll(DipLocation, dipLocation => dipLocation.GetInternalClone());
 
-            var dipValues = Read<DipValue[]?>(Data.Models.Metadata.DipSwitch.DipValueKey);
-            if (dipValues is not null)
-            {
-                Data.Models.Metadata.DipValue[] dipValueItems = Array.ConvertAll(dipValues, dipValue => dipValue.GetInternalClone());
-                dipSwitchItem[Data.Models.Metadata.DipSwitch.DipValueKey] = dipValueItems;
-            }
+            if (DipValue is not null)
+                dipSwitchItem.DipValue = Array.ConvertAll(DipValue, dipValue => dipValue.GetInternalClone());
+
+            if (Entry is not null)
+                dipSwitchItem.Entry = Array.ConvertAll(Entry, entry => entry);
 
             return dipSwitchItem;
+        }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is DipSwitch otherDipSwitch)
+                return _internal.Equals(otherDipSwitch._internal);
+
+            // Everything else fails
+            return false;
         }
 
         #endregion

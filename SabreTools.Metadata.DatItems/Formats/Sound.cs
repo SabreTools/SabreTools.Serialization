@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,17 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("sound"), XmlRoot("sound")]
     public sealed class Sound : DatItem<Data.Models.Metadata.Sound>
     {
-        #region Fields
+        #region Properties
+
+        public long? Channels
+        {
+            get => _internal.Channels;
+            set => _internal.Channels = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Sound;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Sound;
 
         #endregion
 
@@ -21,26 +27,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Sound() : base() { }
 
-        public Sound(Data.Models.Metadata.Sound item) : base(item)
-        {
-            // Process flag values
-            long? channels = ReadLong(Data.Models.Metadata.Sound.ChannelsKey);
-            if (channels is not null)
-                Write<string?>(Data.Models.Metadata.Sound.ChannelsKey, channels.ToString());
-        }
+        public Sound(Data.Models.Metadata.Sound item) : base(item) { }
 
         public Sound(Data.Models.Metadata.Sound item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Sound(_internal.Clone() as Data.Models.Metadata.Sound ?? []);
+        public override object Clone() => new Sound(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Sound GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Sound ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Sound otherSound)
+                return _internal.Equals(otherSound._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

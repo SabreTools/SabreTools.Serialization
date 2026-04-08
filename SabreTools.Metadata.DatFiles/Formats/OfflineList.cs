@@ -10,9 +10,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class OfflineList : SerializableDatFile<Data.Models.OfflineList.Dat, Serialization.Readers.OfflineList, Serialization.Writers.OfflineList, Serialization.CrossModel.OfflineList>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public OfflineList(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.OfflineList);
+            Header.DatFormat = DatFormat.OfflineList;
         }
 
         /// <inheritdoc/>
@@ -32,10 +32,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Rom rom:
-                    if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
-                        missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)))
-                        missingFields.Add(Data.Models.Metadata.Rom.CRCKey);
+                    if (rom.Size is null || rom.Size < 0)
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
+                    if (string.IsNullOrEmpty(rom.CRC32))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC32));
                     break;
 
                 default:

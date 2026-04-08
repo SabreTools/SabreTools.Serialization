@@ -10,61 +10,60 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void ConvertToRomTest()
         {
-            DiskArea diskArea = new DiskArea();
-            diskArea.SetName("XXXXXX");
+            DiskArea diskArea = new DiskArea { Name = "name" };
 
-            Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "XXXXXX");
+            Machine machine = new Machine { Name = "name" };
 
-            Part part = new Part();
-            part.SetName("XXXXXX");
+            Part part = new Part { Name = "name" };
 
-            Source source = new Source(0, "XXXXXX");
+            Source source = new Source(0, "source");
 
-            Disk disk = new Disk();
-            disk.SetName("XXXXXX");
-            disk.Write(Disk.DiskAreaKey, diskArea);
-            disk.Write(Data.Models.Metadata.Disk.MergeKey, "XXXXXX");
-            disk.Write(Data.Models.Metadata.Disk.RegionKey, "XXXXXX");
-            disk.Write(Data.Models.Metadata.Disk.StatusKey, "good");
-            disk.Write(Data.Models.Metadata.Disk.OptionalKey, "XXXXXX");
-            disk.Write(Data.Models.Metadata.Disk.MD5Key, HashType.MD5.ZeroString);
-            disk.Write(Data.Models.Metadata.Disk.SHA1Key, HashType.SHA1.ZeroString);
-            disk.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
-            disk.Write(DatItem.MachineKey, machine);
-            disk.Write(Disk.PartKey, part);
-            disk.Write(DatItem.RemoveKey, (bool?)false);
-            disk.Write(DatItem.SourceKey, source);
+            Disk disk = new Disk
+            {
+                Name = "name",
+                DiskArea = diskArea,
+                Merge = "merge",
+                Region = "region",
+                Status = Data.Models.Metadata.ItemStatus.Good,
+                Optional = true,
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+                DupeType = DupeType.All | DupeType.External,
+                Machine = machine,
+                Part = part,
+                RemoveFlag = false,
+                Source = source,
+            };
 
             Rom actual = disk.ConvertToRom();
 
-            Assert.Equal("XXXXXX.chd", actual.GetName());
-            Assert.Equal("XXXXXX", actual.ReadString(Data.Models.Metadata.Rom.MergeKey));
-            Assert.Equal("XXXXXX", actual.ReadString(Data.Models.Metadata.Rom.RegionKey));
-            Assert.Equal("good", actual.ReadString(Data.Models.Metadata.Rom.StatusKey));
-            Assert.Equal("XXXXXX", actual.ReadString(Data.Models.Metadata.Rom.OptionalKey));
-            Assert.Equal(HashType.MD5.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Equal(HashType.SHA1.ZeroString, actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal(DupeType.All | DupeType.External, actual.Read<DupeType>(DatItem.DupeTypeKey));
+            Assert.Equal("name.chd", actual.Name);
+            Assert.Equal("merge", actual.Merge);
+            Assert.Equal("region", actual.Region);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, actual.Status);
+            Assert.Equal(true, actual.Optional);
+            Assert.Equal(HashType.MD5.ZeroString, actual.MD5);
+            Assert.Equal(HashType.SHA1.ZeroString, actual.SHA1);
+            Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
 
-            DataArea? actualDataArea = actual.Read<DataArea?>(Rom.DataAreaKey);
+            DataArea? actualDataArea = actual.DataArea;
             Assert.NotNull(actualDataArea);
-            Assert.Equal("XXXXXX", actualDataArea.ReadString(Data.Models.Metadata.DataArea.NameKey));
+            Assert.Equal("name", actualDataArea.Name);
 
-            Machine? actualMachine = actual.GetMachine();
+            Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);
-            Assert.Equal("XXXXXX", actualMachine.GetName());
+            Assert.Equal("name", actualMachine.Name);
 
-            Assert.Equal(false, actual.ReadBool(DatItem.RemoveKey));
+            Assert.False(actual.RemoveFlag);
 
-            Part? actualPart = actual.Read<Part?>(Rom.PartKey);
+            Part? actualPart = actual.Part;
             Assert.NotNull(actualPart);
-            Assert.Equal("XXXXXX", actualPart.ReadString(Data.Models.Metadata.Part.NameKey));
+            Assert.Equal("name", actualPart.Name);
 
-            Source? actualSource = actual.Read<Source?>(DatItem.SourceKey);
+            Source? actualSource = actual.Source;
             Assert.NotNull(actualSource);
             Assert.Equal(0, actualSource.Index);
-            Assert.Equal("XXXXXX", actualSource.Name);
+            Assert.Equal("source", actualSource.Name);
         }
 
         #endregion
@@ -79,8 +78,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             self.FillMissingInformation(other);
 
-            Assert.Null(self.ReadString(Data.Models.Metadata.Disk.MD5Key));
-            Assert.Null(self.ReadString(Data.Models.Metadata.Disk.SHA1Key));
+            Assert.Null(self.MD5);
+            Assert.Null(self.SHA1);
         }
 
         [Fact]
@@ -88,14 +87,16 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Disk self = new Disk();
 
-            Disk other = new Disk();
-            other.Write(Data.Models.Metadata.Disk.MD5Key, "XXXXXX");
-            other.Write(Data.Models.Metadata.Disk.SHA1Key, "XXXXXX");
+            Disk other = new Disk
+            {
+                MD5 = "md5",
+                SHA1 = "sha1",
+            };
 
             self.FillMissingInformation(other);
 
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Disk.MD5Key));
-            Assert.Equal("XXXXXX", self.ReadString(Data.Models.Metadata.Disk.SHA1Key));
+            Assert.Equal("md5", self.MD5);
+            Assert.Equal("sha1", self.SHA1);
         }
 
         #endregion
@@ -113,9 +114,11 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_MD5_True()
         {
-            Disk self = new Disk();
-            self.Write(Data.Models.Metadata.Disk.MD5Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Disk.SHA1Key, string.Empty);
+            Disk self = new Disk
+            {
+                MD5 = "md5",
+                SHA1 = string.Empty,
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -124,9 +127,11 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_SHA1_True()
         {
-            Disk self = new Disk();
-            self.Write(Data.Models.Metadata.Disk.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Disk.SHA1Key, "XXXXXX");
+            Disk self = new Disk
+            {
+                MD5 = string.Empty,
+                SHA1 = "sha1",
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -135,9 +140,11 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasHashes_All_True()
         {
-            Disk self = new Disk();
-            self.Write(Data.Models.Metadata.Disk.MD5Key, "XXXXXX");
-            self.Write(Data.Models.Metadata.Disk.SHA1Key, "XXXXXX");
+            Disk self = new Disk
+            {
+                MD5 = "md5",
+                SHA1 = "sha1",
+            };
 
             bool actual = self.HasHashes();
             Assert.True(actual);
@@ -158,9 +165,11 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_NonZeroHash_False()
         {
-            Disk self = new Disk();
-            self.Write(Data.Models.Metadata.Disk.MD5Key, "DEADBEEF");
-            self.Write(Data.Models.Metadata.Disk.SHA1Key, "DEADBEEF");
+            Disk self = new Disk
+            {
+                MD5 = "DEADBEEF",
+                SHA1 = "DEADBEEF",
+            };
 
             bool actual = self.HasZeroHash();
             Assert.False(actual);
@@ -169,9 +178,11 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroMD5_True()
         {
-            Disk self = new Disk();
-            self.Write(Data.Models.Metadata.Disk.MD5Key, HashType.MD5.ZeroString);
-            self.Write(Data.Models.Metadata.Disk.SHA1Key, string.Empty);
+            Disk self = new Disk
+            {
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = string.Empty,
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -180,9 +191,11 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroSHA1_True()
         {
-            Disk self = new Disk();
-            self.Write(Data.Models.Metadata.Disk.MD5Key, string.Empty);
-            self.Write(Data.Models.Metadata.Disk.SHA1Key, HashType.SHA1.ZeroString);
+            Disk self = new Disk
+            {
+                MD5 = string.Empty,
+                SHA1 = HashType.SHA1.ZeroString,
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -191,9 +204,11 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void HasZeroHash_ZeroAll_True()
         {
-            Disk self = new Disk();
-            self.Write(Data.Models.Metadata.Disk.MD5Key, HashType.MD5.ZeroString);
-            self.Write(Data.Models.Metadata.Disk.SHA1Key, HashType.SHA1.ZeroString);
+            Disk self = new Disk
+            {
+                MD5 = HashType.MD5.ZeroString,
+                SHA1 = HashType.SHA1.ZeroString,
+            };
 
             bool actual = self.HasZeroHash();
             Assert.True(actual);
@@ -213,10 +228,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [InlineData(ItemKey.Machine, false, true, "Machine")]
         [InlineData(ItemKey.Machine, true, false, "0000000000-machine")]
         [InlineData(ItemKey.Machine, true, true, "machine")]
-        [InlineData(ItemKey.CRC, false, false, "00000000")]
-        [InlineData(ItemKey.CRC, false, true, "00000000")]
-        [InlineData(ItemKey.CRC, true, false, "00000000")]
-        [InlineData(ItemKey.CRC, true, true, "00000000")]
+        [InlineData(ItemKey.CRC32, false, false, "00000000")]
+        [InlineData(ItemKey.CRC32, false, true, "00000000")]
+        [InlineData(ItemKey.CRC32, true, false, "00000000")]
+        [InlineData(ItemKey.CRC32, true, true, "00000000")]
         [InlineData(ItemKey.MD2, false, false, "8350e5a3e24c153df2275c9f80692773")]
         [InlineData(ItemKey.MD2, false, true, "8350e5a3e24c153df2275c9f80692773")]
         [InlineData(ItemKey.MD2, true, false, "8350e5a3e24c153df2275c9f80692773")]
@@ -253,12 +268,13 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "Machine");
+            Machine machine = new Machine { Name = "Machine" };
 
-            DatItem datItem = new Disk();
-            datItem.Write(Data.Models.Metadata.Disk.MD5Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Disk.SHA1Key, "DEADBEEF");
+            DatItem datItem = new Disk
+            {
+                MD5 = "DEADBEEF",
+                SHA1 = "DEADBEEF",
+            };
 
             string actual = datItem.GetKey(bucketedBy, machine, source, lower, norename);
             Assert.Equal(expected, actual);

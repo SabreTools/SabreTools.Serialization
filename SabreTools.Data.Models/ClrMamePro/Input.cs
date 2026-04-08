@@ -4,24 +4,24 @@ namespace SabreTools.Data.Models.ClrMamePro
     /// <remarks>input</remarks>
     public class Input
     {
-        /// <remarks>players, Numeric/remarks>
+        /// <remarks>"players"/remarks>
         [Required]
-        public string? Players { get; set; }
+        public long? Players { get; set; }
 
-        /// <remarks>control</remarks>
+        /// <remarks>"control"</remarks>
         public string? Control { get; set; }
 
-        /// <remarks>buttons, Numeric</remarks>
+        /// <remarks>"buttons"</remarks>
         [Required]
-        public string? Buttons { get; set; }
+        public long? Buttons { get; set; }
 
-        /// <remarks>coins, Numeric</remarks>
-        public string? Coins { get; set; }
+        /// <remarks>"coins"</remarks>
+        public long? Coins { get; set; }
 
-        /// <remarks>tilt, (yes|no) "no"</remarks>
-        public string? Tilt { get; set; }
+        /// <remarks>"tilt", (yes|no) "no"</remarks>
+        public bool? Tilt { get; set; }
 
-        /// <remarks>service, (yes|no) "no"</remarks>
-        public string? Service { get; set; }
+        /// <remarks>"service", (yes|no) "no"</remarks>
+        public bool? Service { get; set; }
     }
 }

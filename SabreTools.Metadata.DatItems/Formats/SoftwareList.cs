@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,35 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("softwarelist"), XmlRoot("softwarelist")]
     public sealed class SoftwareList : DatItem<Data.Models.Metadata.SoftwareList>
     {
-        #region Fields
+        #region Properties
+
+        public string? Filter
+        {
+            get => _internal.Filter;
+            set => _internal.Filter = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.SoftwareList;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.SoftwareList;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public Data.Models.Metadata.SoftwareListStatus? Status
+        {
+            get => _internal.Status;
+            set => _internal.Status = value;
+        }
+
+        public string? Tag
+        {
+            get => _internal.Tag;
+            set => _internal.Tag = value;
+        }
 
         #endregion
 
@@ -21,29 +45,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public SoftwareList() : base() { }
 
-        public SoftwareList(Data.Models.Metadata.SoftwareList item) : base(item)
-        {
-            // Process flag values
-            string? status = ReadString(Data.Models.Metadata.SoftwareList.StatusKey);
-            if (status is not null)
-                Write<string?>(Data.Models.Metadata.SoftwareList.StatusKey, status.AsSoftwareListStatus()?.AsStringValue());
-
-            // Handle subitems
-            // TODO: Handle the Software subitem
-        }
+        public SoftwareList(Data.Models.Metadata.SoftwareList item) : base(item) { }
 
         public SoftwareList(Data.Models.Metadata.SoftwareList item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new SoftwareList(_internal.Clone() as Data.Models.Metadata.SoftwareList ?? []);
+        public override object Clone() => new SoftwareList(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.SoftwareList GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.SoftwareList ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is SoftwareList otherSoftwareList)
+                return _internal.Equals(otherSoftwareList._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.SoftwareList;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -124,9 +126,9 @@ namespace SabreTools.Serialization.Readers
             var obj = new DataArea();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Size = reader.GetAttribute("size");
-            obj.Width = reader.GetAttribute("width");
-            obj.Endianness = reader.GetAttribute("endianness");
+            obj.Size = NumberHelper.ConvertToInt64(reader.GetAttribute("size"));
+            obj.Width = reader.GetAttribute("width").AsWidth();
+            obj.Endianness = reader.GetAttribute("endianness").AsEndianness();
 
             List<Rom> roms = [];
 
@@ -224,7 +226,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Value = reader.GetAttribute("value");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -241,8 +243,8 @@ namespace SabreTools.Serialization.Readers
             obj.Name = reader.GetAttribute("name");
             obj.MD5 = reader.GetAttribute("md5");
             obj.SHA1 = reader.GetAttribute("sha1");
-            obj.Status = reader.GetAttribute("status");
-            obj.Writeable = reader.GetAttribute("writable");
+            obj.Status = reader.GetAttribute("status").AsItemStatus();
+            obj.Writeable = reader.GetAttribute("writable").AsYesNo();
 
             return obj;
         }
@@ -412,14 +414,14 @@ namespace SabreTools.Serialization.Readers
             var obj = new Rom();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Size = reader.GetAttribute("size");
+            obj.Size = NumberHelper.ConvertToInt64(reader.GetAttribute("size"));
             obj.Length = reader.GetAttribute("length");
             obj.CRC = reader.GetAttribute("crc");
             obj.SHA1 = reader.GetAttribute("sha1");
             obj.Offset = reader.GetAttribute("offset");
             obj.Value = reader.GetAttribute("value");
-            obj.Status = reader.GetAttribute("status");
-            obj.LoadFlag = reader.GetAttribute("loadflag");
+            obj.Status = reader.GetAttribute("status").AsItemStatus();
+            obj.LoadFlag = reader.GetAttribute("loadflag").AsLoadFlag();
 
             return obj;
         }
@@ -450,7 +452,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.CloneOf = reader.GetAttribute("cloneof");
-            obj.Supported = reader.GetAttribute("supported");
+            obj.Supported = reader.GetAttribute("supported")?.AsSupported();
 
             List<Info> infos = [];
             List<SharedFeat> sharedFeats = [];

@@ -178,8 +178,8 @@ namespace SabreTools.Serialization.Readers.Test
         {
             var cmp = new Data.Models.ClrMamePro.ClrMamePro
             {
-                Name = "XXXXXX",
-                Description = "XXXXXX",
+                Name = "name",
+                Description = "description",
                 RootDir = "XXXXXX",
                 Category = "XXXXXX",
                 Version = "XXXXXX",
@@ -190,31 +190,31 @@ namespace SabreTools.Serialization.Readers.Test
                 Comment = "XXXXXX",
                 Header = "XXXXXX",
                 Type = "XXXXXX",
-                ForceMerging = "XXXXXX",
-                ForceZipping = "XXXXXX",
-                ForcePacking = "XXXXXX",
+                ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
+                ForceZipping = true,
+                ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
             };
 
             var release = new Data.Models.ClrMamePro.Release
             {
-                Name = "XXXXXX",
-                Region = "XXXXXX",
-                Language = "XXXXXX",
-                Date = "XXXXXX",
-                Default = "XXXXXX",
+                Name = "name",
+                Region = "region",
+                Language = "language",
+                Date = "date",
+                Default = true,
             };
 
             var biosset = new Data.Models.ClrMamePro.BiosSet
             {
-                Name = "XXXXXX",
-                Description = "XXXXXX",
-                Default = "XXXXXX",
+                Name = "name",
+                Description = "description",
+                Default = true,
             };
 
             var rom = new Data.Models.ClrMamePro.Rom
             {
-                Name = "XXXXXX",
-                Size = "XXXXXX",
+                Name = "name",
+                Size = 12345,
                 CRC16 = "XXXXXX",
                 CRC = "XXXXXX",
                 CRC64 = "XXXXXX",
@@ -225,7 +225,7 @@ namespace SabreTools.Serialization.Readers.Test
                 RIPEMD160 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Merge = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
                 Flags = "XXXXXX",
                 Date = "XXXXXX",
                 SHA256 = "XXXXXX",
@@ -238,95 +238,95 @@ namespace SabreTools.Serialization.Readers.Test
                 Offs = "XXXXXX",
                 Serial = "XXXXXX",
                 Header = "XXXXXX",
-                Inverted = "XXXXXX",
-                MIA = "XXXXXX",
+                Inverted = true,
+                MIA = true,
             };
 
             var disk = new Data.Models.ClrMamePro.Disk
             {
-                Name = "XXXXXX",
+                Name = "name",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Merge = "XXXXXX",
-                Status = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
                 Flags = "XXXXXX",
             };
 
             var sample = new Data.Models.ClrMamePro.Sample
             {
-                Name = "XXXXXX",
+                Name = "name",
             };
 
             var archive = new Data.Models.ClrMamePro.Archive
             {
-                Name = "XXXXXX",
+                Name = "name",
             };
 
             var media = new Data.Models.ClrMamePro.Media
             {
-                Name = "XXXXXX",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                Name = "name",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             var chip = new Data.Models.ClrMamePro.Chip
             {
-                Type = "XXXXXX",
-                Name = "XXXXXX",
-                Flags = "XXXXXX",
-                Clock = "XXXXXX",
+                Type = Data.Models.Metadata.ChipType.CPU,
+                Name = "name",
+                Flags = "flags",
+                Clock = 12345,
             };
 
             var video = new Data.Models.ClrMamePro.Video
             {
-                Screen = "XXXXXX",
-                Orientation = "XXXXXX",
-                X = "XXXXXX",
-                Y = "XXXXXX",
-                AspectX = "XXXXXX",
-                AspectY = "XXXXXX",
-                Freq = "XXXXXX",
+                Screen = Data.Models.Metadata.DisplayType.Vector,
+                Orientation = Data.Models.Metadata.Rotation.East,
+                X = 12345,
+                Y = 12345,
+                AspectX = 12345,
+                AspectY = 12345,
+                Freq = 123.45,
             };
 
             var sound = new Data.Models.ClrMamePro.Sound
             {
-                Channels = "XXXXXX",
+                Channels = 12345
             };
 
             var input = new Data.Models.ClrMamePro.Input
             {
-                Players = "XXXXXX",
+                Players = 12345,
                 Control = "XXXXXX",
-                Buttons = "XXXXXX",
-                Coins = "XXXXXX",
-                Tilt = "XXXXXX",
-                Service = "XXXXXX",
+                Buttons = 12345,
+                Coins = 12345,
+                Tilt = true,
+                Service = true,
             };
 
             var dipswitch = new Data.Models.ClrMamePro.DipSwitch
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Entry = ["XXXXXX"],
-                Default = "XXXXXX",
+                Default = true,
             };
 
             var driver = new Data.Models.ClrMamePro.Driver
             {
-                Status = "XXXXXX",
-                Color = "XXXXXX",
-                Sound = "XXXXXX",
-                PaletteSize = "XXXXXX",
-                Blit = "XXXXXX",
+                Status = Data.Models.Metadata.SupportStatus.Good,
+                Color = Data.Models.Metadata.SupportStatus.Good,
+                Sound = Data.Models.Metadata.SupportStatus.Good,
+                PaletteSize = "palettesize",
+                Blit = Data.Models.Metadata.Blit.Plain,
             };
 
             // TODO: This omits Set, should that have a separate case?
             Data.Models.ClrMamePro.GameBase gameBase = game
                 ? new Data.Models.ClrMamePro.Game()
                 : new Data.Models.ClrMamePro.Machine();
-            gameBase.Name = "XXXXXX";
-            gameBase.Description = "XXXXXX";
+            gameBase.Name = "name";
+            gameBase.Description = "description";
             gameBase.DriverStatus = "XXXXXX";
             gameBase.Year = "XXXXXX";
             gameBase.Manufacturer = "XXXXXX";
@@ -367,8 +367,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.ClrMamePro? cmp)
         {
             Assert.NotNull(cmp);
-            Assert.Equal("XXXXXX", cmp.Name);
-            Assert.Equal("XXXXXX", cmp.Description);
+            Assert.Equal("name", cmp.Name);
+            Assert.Equal("description", cmp.Description);
             Assert.Equal("XXXXXX", cmp.RootDir);
             Assert.Equal("XXXXXX", cmp.Category);
             Assert.Equal("XXXXXX", cmp.Version);
@@ -379,9 +379,9 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", cmp.Comment);
             Assert.Equal("XXXXXX", cmp.Header);
             Assert.Equal("XXXXXX", cmp.Type);
-            Assert.Equal("XXXXXX", cmp.ForceMerging);
-            Assert.Equal("XXXXXX", cmp.ForceZipping);
-            Assert.Equal("XXXXXX", cmp.ForcePacking);
+            Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, cmp.ForceMerging);
+            Assert.Equal(true, cmp.ForceZipping);
+            Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, cmp.ForcePacking);
         }
 
         /// <summary>
@@ -390,8 +390,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.GameBase? gb)
         {
             Assert.NotNull(gb);
-            Assert.Equal("XXXXXX", gb.Name);
-            Assert.Equal("XXXXXX", gb.Description);
+            Assert.Equal("name", gb.Name);
+            Assert.Equal("description", gb.Description);
             // Assert.Equal("XXXXXX", gb.DriverStatus); // TODO: Needs metadata mapping
             Assert.Equal("XXXXXX", gb.Year);
             Assert.Equal("XXXXXX", gb.Manufacturer);
@@ -452,11 +452,11 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Release? release)
         {
             Assert.NotNull(release);
-            Assert.Equal("XXXXXX", release.Name);
-            Assert.Equal("XXXXXX", release.Region);
-            Assert.Equal("XXXXXX", release.Language);
-            Assert.Equal("XXXXXX", release.Date);
-            Assert.Equal("XXXXXX", release.Default);
+            Assert.Equal("name", release.Name);
+            Assert.Equal("region", release.Region);
+            Assert.Equal("language", release.Language);
+            Assert.Equal("date", release.Date);
+            Assert.Equal(true, release.Default);
         }
 
         /// <summary>
@@ -465,9 +465,9 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.BiosSet? biosset)
         {
             Assert.NotNull(biosset);
-            Assert.Equal("XXXXXX", biosset.Name);
-            Assert.Equal("XXXXXX", biosset.Description);
-            Assert.Equal("XXXXXX", biosset.Default);
+            Assert.Equal("name", biosset.Name);
+            Assert.Equal("description", biosset.Description);
+            Assert.Equal(true, biosset.Default);
         }
 
         /// <summary>
@@ -476,8 +476,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Rom? rom)
         {
             Assert.NotNull(rom);
-            Assert.Equal("XXXXXX", rom.Name);
-            Assert.Equal("XXXXXX", rom.Size);
+            Assert.Equal("name", rom.Name);
+            Assert.Equal(12345, rom.Size);
             Assert.Equal("XXXXXX", rom.CRC16);
             Assert.Equal("XXXXXX", rom.CRC);
             Assert.Equal("XXXXXX", rom.CRC64);
@@ -488,7 +488,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", rom.RIPEMD160);
             Assert.Equal("XXXXXX", rom.SHA1);
             Assert.Equal("XXXXXX", rom.Merge);
-            Assert.Equal("XXXXXX", rom.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
             Assert.Equal("XXXXXX", rom.Flags);
             Assert.Equal("XXXXXX", rom.Date);
             Assert.Equal("XXXXXX", rom.SHA256);
@@ -501,8 +501,8 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", rom.Offs);
             Assert.Equal("XXXXXX", rom.Serial);
             Assert.Equal("XXXXXX", rom.Header);
-            Assert.Equal("XXXXXX", rom.Inverted);
-            Assert.Equal("XXXXXX", rom.MIA);
+            Assert.Equal(true, rom.Inverted);
+            Assert.Equal(true, rom.MIA);
         }
 
         /// <summary>
@@ -511,11 +511,11 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Disk? disk)
         {
             Assert.NotNull(disk);
-            Assert.Equal("XXXXXX", disk.Name);
+            Assert.Equal("name", disk.Name);
             Assert.Equal("XXXXXX", disk.MD5);
             Assert.Equal("XXXXXX", disk.SHA1);
             Assert.Equal("XXXXXX", disk.Merge);
-            Assert.Equal("XXXXXX", disk.Status);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, disk.Status);
             Assert.Equal("XXXXXX", disk.Flags);
         }
 
@@ -525,7 +525,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Sample? sample)
         {
             Assert.NotNull(sample);
-            Assert.Equal("XXXXXX", sample.Name);
+            Assert.Equal("name", sample.Name);
         }
 
         /// <summary>
@@ -534,7 +534,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Archive? archive)
         {
             Assert.NotNull(archive);
-            Assert.Equal("XXXXXX", archive.Name);
+            Assert.Equal("name", archive.Name);
         }
 
         /// <summary>
@@ -543,11 +543,11 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Media? media)
         {
             Assert.NotNull(media);
-            Assert.Equal("XXXXXX", media.Name);
-            Assert.Equal("XXXXXX", media.MD5);
-            Assert.Equal("XXXXXX", media.SHA1);
-            Assert.Equal("XXXXXX", media.SHA256);
-            Assert.Equal("XXXXXX", media.SpamSum);
+            Assert.Equal("name", media.Name);
+            Assert.Equal("md5", media.MD5);
+            Assert.Equal("sha1", media.SHA1);
+            Assert.Equal("sha256", media.SHA256);
+            Assert.Equal("spamsum", media.SpamSum);
         }
 
         /// <summary>
@@ -556,10 +556,10 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Chip? chip)
         {
             Assert.NotNull(chip);
-            Assert.Equal("XXXXXX", chip.Type);
-            Assert.Equal("XXXXXX", chip.Name);
-            Assert.Equal("XXXXXX", chip.Flags);
-            Assert.Equal("XXXXXX", chip.Clock);
+            Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.Type);
+            Assert.Equal("name", chip.Name);
+            Assert.Equal("flags", chip.Flags);
+            Assert.Equal(12345, chip.Clock);
         }
 
         /// <summary>
@@ -568,13 +568,13 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Video? video)
         {
             Assert.NotNull(video);
-            Assert.Equal("XXXXXX", video.Screen);
-            Assert.Equal("XXXXXX", video.Orientation);
-            Assert.Equal("XXXXXX", video.X);
-            Assert.Equal("XXXXXX", video.Y);
-            Assert.Equal("XXXXXX", video.AspectX);
-            Assert.Equal("XXXXXX", video.AspectY);
-            Assert.Equal("XXXXXX", video.Freq);
+            Assert.Equal(Data.Models.Metadata.DisplayType.Vector, video.Screen);
+            Assert.Equal(Data.Models.Metadata.Rotation.East, video.Orientation);
+            Assert.Equal(12345, video.X);
+            Assert.Equal(12345, video.Y);
+            Assert.Equal(12345, video.AspectX);
+            Assert.Equal(12345, video.AspectY);
+            Assert.Equal(123.45, video.Freq);
         }
 
         /// <summary>
@@ -583,7 +583,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Sound? sound)
         {
             Assert.NotNull(sound);
-            Assert.Equal("XXXXXX", sound.Channels);
+            Assert.Equal(12345, sound.Channels);
         }
 
         /// <summary>
@@ -592,12 +592,12 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Input? input)
         {
             Assert.NotNull(input);
-            Assert.Equal("XXXXXX", input.Players);
+            Assert.Equal(12345, input.Players);
             Assert.Equal("XXXXXX", input.Control);
-            Assert.Equal("XXXXXX", input.Buttons);
-            Assert.Equal("XXXXXX", input.Coins);
-            Assert.Equal("XXXXXX", input.Tilt);
-            Assert.Equal("XXXXXX", input.Service);
+            Assert.Equal(12345, input.Buttons);
+            Assert.Equal(12345, input.Coins);
+            Assert.Equal(true, input.Tilt);
+            Assert.Equal(true, input.Service);
         }
 
         /// <summary>
@@ -606,13 +606,13 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.DipSwitch? dipswitch)
         {
             Assert.NotNull(dipswitch);
-            Assert.Equal("XXXXXX", dipswitch.Name);
+            Assert.Equal("name", dipswitch.Name);
 
             Assert.NotNull(dipswitch.Entry);
             string entry = Assert.Single(dipswitch.Entry);
             Assert.Equal("XXXXXX", entry);
 
-            Assert.Equal("XXXXXX", dipswitch.Default);
+            Assert.Equal(true, dipswitch.Default);
         }
 
         /// <summary>
@@ -621,11 +621,11 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.ClrMamePro.Driver? driver)
         {
             Assert.NotNull(driver);
-            Assert.Equal("XXXXXX", driver.Status);
-            Assert.Equal("XXXXXX", driver.Color);
-            Assert.Equal("XXXXXX", driver.Sound);
-            Assert.Equal("XXXXXX", driver.PaletteSize);
-            Assert.Equal("XXXXXX", driver.Blit);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Status);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Color);
+            Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);
+            Assert.Equal("palettesize", driver.PaletteSize);
+            Assert.Equal(Data.Models.Metadata.Blit.Plain, driver.Blit);
         }
 
         /// <summary>

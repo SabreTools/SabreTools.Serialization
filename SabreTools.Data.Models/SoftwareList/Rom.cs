@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.SoftwareList
 {
@@ -11,7 +12,7 @@ namespace SabreTools.Data.Models.SoftwareList
         public string? Name { get; set; }
 
         [XmlAttribute("size")]
-        public string? Size { get; set; }
+        public long? Size { get; set; }
 
         [XmlAttribute("length")]
         public string? Length { get; set; }
@@ -31,10 +32,10 @@ namespace SabreTools.Data.Models.SoftwareList
 
         /// <remarks>(baddump|nodump|good) "good"</remarks>
         [XmlAttribute("status")]
-        public string? Status { get; set; }
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>(load16_byte|load16_word|load16_word_swap|load32_byte|load32_word|load32_word_swap|load32_dword|load64_word|load64_word_swap|reload|fill|continue|reload_plain|ignore)</remarks>
         [XmlAttribute("loadflag")]
-        public string? LoadFlag { get; set; }
+        public LoadFlag? LoadFlag { get; set; }
     }
 }

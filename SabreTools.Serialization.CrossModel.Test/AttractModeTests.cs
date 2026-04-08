@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var row = new Data.Models.AttractMode.Row
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Title = "XXXXXX",
                 Emulator = "XXXXXX",
                 CloneOf = "XXXXXX",
@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Tags = "XXXXXX",
                 PlayedCount = "XXXXXX",
                 PlayedTime = "XXXXXX",
-                FileIsAvailable = "XXXXXX",
+                FileIsAvailable = true,
             };
 
             return new Data.Models.AttractMode.MetadataFile
@@ -84,7 +84,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.AttractMode.Row? row)
         {
             Assert.NotNull(row);
-            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("name", row.Name);
             Assert.Equal("XXXXXX", row.Title);
             Assert.Equal("XXXXXX", row.Emulator);
             Assert.Equal("XXXXXX", row.CloneOf);
@@ -105,7 +105,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", row.Tags);
             Assert.Equal("XXXXXX", row.PlayedCount);
             Assert.Equal("XXXXXX", row.PlayedTime);
-            Assert.Equal("XXXXXX", row.FileIsAvailable);
+            Assert.Equal(true, row.FileIsAvailable);
         }
     }
 }

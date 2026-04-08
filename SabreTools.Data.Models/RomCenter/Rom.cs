@@ -22,7 +22,7 @@ namespace SabreTools.Data.Models.RomCenter
         public string? RomCRC { get; set; }
 
         /// <remarks>6</remarks>
-        public string? RomSize { get; set; }
+        public long? RomSize { get; set; }
 
         /// <remarks>7</remarks>
         public string? RomOf { get; set; }

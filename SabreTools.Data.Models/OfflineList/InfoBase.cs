@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.OfflineList
 {
     public class InfoBase
     {
-        /// <remarks>Boolean</remarks>
+        /// <remarks>(true|false) "false"</remarks>
         [XmlAttribute("visible")]
         public string? Visible { get; set; }
 
@@ -13,9 +13,9 @@ namespace SabreTools.Data.Models.OfflineList
         [XmlAttribute("inNamingOption")]
         public string? InNamingOption { get; set; }
 
-        /// <remarks>Boolean</remarks>
+        /// <remarks>(true|false) "false"</remarks>
         [XmlAttribute("default")]
-        public string? Default { get; set; }
+        public bool? Default { get; set; }
     }
 
     [XmlRoot("title")]

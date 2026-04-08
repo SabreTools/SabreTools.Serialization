@@ -1,38 +1,89 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("device"), XmlRoot("device")]
-    public class Device : DatItem
+    public class Device : DatItem, ICloneable, IEquatable<Device>
     {
-        #region Keys
-
-        /// <remarks>Extension[]</remarks>
-        [NoFilter]
-        public const string ExtensionKey = "extension";
-
-        /// <remarks>string</remarks>
-        public const string FixedImageKey = "fixed_image";
-
-        /// <remarks>Instance</remarks>
-        [NoFilter]
-        public const string InstanceKey = "instance";
-
-        /// <remarks>string</remarks>
-        public const string InterfaceKey = "interface";
-
-        /// <remarks>(0|1) "0"</remarks>
-        public const string MandatoryKey = "mandatory";
-
-        /// <remarks>string</remarks>
-        public const string TagKey = "tag";
+        #region Properties
 
         /// <remarks>(unknown|cartridge|floppydisk|harddisk|cylinder|cassette|punchcard|punchtape|printout|serial|parallel|snapshot|quickload|memcard|cdrom|magtape|romimage|midiin|midiout|picture|vidfile)</remarks>
-        public const string DeviceTypeKey = "type";
+        public DeviceType? DeviceType { get; set; }
+
+        public Extension[]? Extension { get; set; }
+
+        public string? FixedImage { get; set; }
+
+        public Instance? Instance { get; set; }
+
+        public string? Interface { get; set; }
+
+        /// <remarks>(0|1) "0"</remarks>
+        public bool? Mandatory { get; set; }
+
+        public string? Tag { get; set; }
 
         #endregion
 
-        public Device() => Type = ItemType.Device;
+        public Device() => ItemType = ItemType.Device;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Device();
+
+            obj.DeviceType = DeviceType;
+            if (Extension is not null)
+                obj.Extension = Array.ConvertAll(Extension, i => (Extension)i.Clone());
+            obj.FixedImage = FixedImage;
+            obj.Instance = Instance?.Clone() as Instance;
+            obj.Interface = Interface;
+            obj.Mandatory = Mandatory;
+            obj.Tag = Tag;
+
+            return obj;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Device? other)
+        {
+            // Null never matches
+            if (other is null)
+                return false;
+
+            // Properties
+            if (DeviceType != other.DeviceType)
+                return false;
+
+            if ((FixedImage is null) ^ (other.FixedImage is null))
+                return false;
+            else if (FixedImage is not null && !FixedImage.Equals(other.FixedImage, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((Interface is null) ^ (other.Interface is null))
+                return false;
+            else if (Interface is not null && !Interface.Equals(other.Interface, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if (Mandatory != other.Mandatory)
+                return false;
+
+            if ((Tag is null) ^ (other.Tag is null))
+                return false;
+            else if (Tag is not null && !Tag.Equals(other.Tag, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            // Sub-items
+            if ((Instance is null) ^ (other.Instance is null))
+                return false;
+            else if (Instance is not null && other.Instance is not null && Instance.Equals(other.Instance))
+                return false;
+
+            // TODO: Figure out how to properly check arrays
+
+            return true;
+        }
     }
 }

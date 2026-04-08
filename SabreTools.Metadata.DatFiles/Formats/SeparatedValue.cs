@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
@@ -12,14 +12,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
     /// </summary>
     public abstract class SeparatedValue : SerializableDatFile<Data.Models.SeparatedValue.MetadataFile, Serialization.Readers.SeparatedValue, Serialization.Writers.SeparatedValue, Serialization.CrossModel.SeparatedValue>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Disk,
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -66,44 +66,46 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Disk disk:
-                    if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
-                        && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
+                    if (string.IsNullOrEmpty(disk.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
+                    if (string.IsNullOrEmpty(disk.MD5)
+                        && string.IsNullOrEmpty(disk.SHA1))
                     {
-                        missingFields.Add(Data.Models.Metadata.Disk.SHA1Key);
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.SHA1));
                     }
 
                     break;
 
-                case Media media:
-                    if (string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.MD5Key))
-                        && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA1Key))
-                        && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA256Key))
-                        && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SpamSumKey)))
+                case Media medium:
+                    if (string.IsNullOrEmpty(medium.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.Name));
+                    if (string.IsNullOrEmpty(medium.MD5)
+                        && string.IsNullOrEmpty(medium.SHA1)
+                        && string.IsNullOrEmpty(medium.SHA256)
+                        && string.IsNullOrEmpty(medium.SpamSum))
                     {
-                        missingFields.Add(Data.Models.Metadata.Media.SHA1Key);
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.SHA1));
                     }
 
                     break;
 
                 case Rom rom:
-                    if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
-                        missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD5Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA256Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA384Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA512Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey)))
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (rom.Size is null || rom.Size < 0)
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
+                    if (string.IsNullOrEmpty(rom.CRC32)
+                        && string.IsNullOrEmpty(rom.MD5)
+                        && string.IsNullOrEmpty(rom.SHA1)
+                        && string.IsNullOrEmpty(rom.SHA256)
+                        && string.IsNullOrEmpty(rom.SHA384)
+                        && string.IsNullOrEmpty(rom.SHA512)
+                        && string.IsNullOrEmpty(rom.SpamSum))
                     {
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     }
 
                     break;

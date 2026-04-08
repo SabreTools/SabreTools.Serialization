@@ -127,12 +127,12 @@ namespace SabreTools.Serialization.Readers.Test
             var rom = new Data.Models.RomCenter.Rom
             {
                 ParentName = "XXXXXX",
-                ParentDescription = "XXXXXX",
+                ParentDescription = "description",
                 GameName = "XXXXXX",
-                GameDescription = "XXXXXX",
+                GameDescription = "description",
                 RomName = "XXXXXX",
                 RomCRC = "XXXXXX",
-                RomSize = "XXXXXX",
+                RomSize = 12345,
                 RomOf = "XXXXXX",
                 MergeName = "XXXXXX",
             };
@@ -206,12 +206,12 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(rom);
             Assert.Equal("XXXXXX", rom.ParentName);
-            Assert.Equal("XXXXXX", rom.ParentDescription);
+            Assert.Equal("description", rom.ParentDescription);
             Assert.Equal("XXXXXX", rom.GameName);
-            Assert.Equal("XXXXXX", rom.GameDescription);
+            Assert.Equal("description", rom.GameDescription);
             Assert.Equal("XXXXXX", rom.RomName);
             Assert.Equal("XXXXXX", rom.RomCRC);
-            Assert.Equal("XXXXXX", rom.RomSize);
+            Assert.Equal(12345, rom.RomSize);
             Assert.Equal("XXXXXX", rom.RomOf);
             Assert.Equal("XXXXXX", rom.MergeName);
         }

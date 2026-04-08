@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -11,19 +10,21 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("port"), XmlRoot("port")]
     public sealed class Port : DatItem<Data.Models.Metadata.Port>
     {
-        #region Fields
+        #region Properties
 
-        /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Port;
+        public Analog[]? Analog { get; set; }
 
         [JsonIgnore]
-        public bool AnalogsSpecified
+        public bool AnalogSpecified => Analog is not null && Analog.Length > 0;
+
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Port;
+
+        public string? Tag
         {
-            get
-            {
-                var analogs = Read<Analog[]?>(Data.Models.Metadata.Port.AnalogKey);
-                return analogs is not null && analogs.Length > 0;
-            }
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         #endregion
@@ -35,40 +36,61 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Port(Data.Models.Metadata.Port item) : base(item)
         {
             // Handle subitems
-            var analogs = item.ReadArray<Data.Models.Metadata.Analog>(Data.Models.Metadata.Port.AnalogKey);
-            if (analogs is not null)
-            {
-                Analog[] analogItems = Array.ConvertAll(analogs, analog => new Analog(analog));
-                Write<Analog[]?>(Data.Models.Metadata.Port.AnalogKey, analogItems);
-            }
+            if (item.Analog is not null)
+                Analog = Array.ConvertAll(item.Analog, analog => new Analog(analog)); ;
         }
 
         public Port(Data.Models.Metadata.Port item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Port(_internal.Clone() as Data.Models.Metadata.Port ?? []);
+        public override object Clone() => new Port(GetInternalClone());
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Port GetInternalClone()
         {
-            var portItem = base.GetInternalClone();
+            var portItem = _internal.Clone() as Data.Models.Metadata.Port ?? new();
 
-            var analogs = Read<Analog[]?>(Data.Models.Metadata.Port.AnalogKey);
-            if (analogs is not null)
-            {
-                Data.Models.Metadata.Analog[] analogItems = Array.ConvertAll(analogs, analog => analog.GetInternalClone());
-                portItem[Data.Models.Metadata.Port.AnalogKey] = analogItems;
-            }
+            if (Analog is not null)
+                portItem.Analog = Array.ConvertAll(Analog, analog => analog.GetInternalClone());
 
             return portItem;
+        }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Port otherPort)
+                return _internal.Equals(otherPort._internal);
+
+            // Everything else fails
+            return false;
         }
 
         #endregion

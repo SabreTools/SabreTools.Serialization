@@ -10,9 +10,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class DosCenter : SerializableDatFile<Data.Models.DosCenter.MetadataFile, Serialization.Readers.DosCenter, Serialization.Writers.DosCenter, Serialization.CrossModel.DosCenter>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public DosCenter(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.DOSCenter);
+            Header.DatFormat = DatFormat.DOSCenter;
         }
 
         /// <inheritdoc/>
@@ -29,21 +29,19 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Rom rom:
-                    if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
-                        missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (rom.Size is null || rom.Size < 0)
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
                     // if (string.IsNullOrEmpty(rom.Date))
-                    //     missingFields.Add(Data.Models.Metadata.Rom.DateKey);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)))
-                        missingFields.Add(Data.Models.Metadata.Rom.CRCKey);
+                    //     missingFields.Add(nameof(Data.Models.Metadata.Rom.Date));
+                    if (string.IsNullOrEmpty(rom.CRC32))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.CRC32));
                     // if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key)))
-                    //     missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
+                    //     missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     break;
 
                 default:

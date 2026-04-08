@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.Writers
                         row.Tags,
                         row.PlayedCount,
                         row.PlayedTime,
-                        row.FileIsAvailable,
+                        row.FileIsAvailable.ToString()?.ToLowerInvariant(),
                     ];
                 }
                 else

@@ -1,5 +1,3 @@
-﻿using SabreTools.Metadata.DatItems;
-
 namespace SabreTools.Metadata.DatFiles.Formats
 {
     /// <summary>
@@ -8,9 +6,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class ArchiveDotOrg : SerializableDatFile<Data.Models.ArchiveDotOrg.Files, Serialization.Readers.ArchiveDotOrg, Serialization.Writers.ArchiveDotOrg, Serialization.CrossModel.ArchiveDotOrg>
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -19,7 +17,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public ArchiveDotOrg(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.ArchiveDotOrg);
+            Header.DatFormat = DatFormat.ArchiveDotOrg;
         }
     }
 }

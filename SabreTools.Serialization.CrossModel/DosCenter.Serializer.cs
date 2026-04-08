@@ -14,13 +14,10 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = new Data.Models.Metadata.MetadataFile();
 
             if (obj?.DosCenter is not null)
-                metadataFile[Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj.DosCenter);
+                metadataFile.Header = ConvertHeaderToInternalModel(obj.DosCenter);
 
             if (obj?.Game is not null && obj.Game.Length > 0)
-            {
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
-                    = Array.ConvertAll(obj.Game, ConvertMachineToInternalModel);
-            }
+                metadataFile.Machine = Array.ConvertAll(obj.Game, ConvertMachineToInternalModel);
 
             return metadataFile;
         }
@@ -32,13 +29,13 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.NameKey] = item.Name,
-                [Data.Models.Metadata.Header.DescriptionKey] = item.Description,
-                [Data.Models.Metadata.Header.VersionKey] = item.Version,
-                [Data.Models.Metadata.Header.DateKey] = item.Date,
-                [Data.Models.Metadata.Header.AuthorKey] = item.Author,
-                [Data.Models.Metadata.Header.HomepageKey] = item.Homepage,
-                [Data.Models.Metadata.Header.CommentKey] = item.Comment,
+                Name =  item.Name,
+                Description = item.Description,
+                Version = item.Version,
+                Date = item.Date,
+                Author = item.Author,
+                Homepage = item.Homepage,
+                Comment = item.Comment,
             };
             return header;
         }
@@ -50,14 +47,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.NameKey] = item.Name,
+                Name = item.Name,
             };
 
             if (item.File is not null && item.File.Length > 0)
-            {
-                machine[Data.Models.Metadata.Machine.RomKey]
-                    = Array.ConvertAll(item.File, ConvertToInternalModel);
-            }
+                machine.Rom = Array.ConvertAll(item.File, ConvertToInternalModel);
 
             return machine;
         }
@@ -69,11 +63,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.NameKey] = item.Name,
-                [Data.Models.Metadata.Rom.SizeKey] = item.Size,
-                [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
-                [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
-                [Data.Models.Metadata.Rom.DateKey] = item.Date,
+                Name = item.Name,
+                Size = item.Size,
+                CRC32 = item.CRC,
+                SHA1 = item.SHA1,
+                Date = item.Date,
             };
             return rom;
         }

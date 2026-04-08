@@ -1,6 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -11,10 +11,22 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("diskarea"), XmlRoot("diskarea")]
     public sealed class DiskArea : DatItem<Data.Models.Metadata.DiskArea>
     {
-        #region Fields
+        #region Properties
+
+        public Disk[]? Disk { get; set; }
+
+        [JsonIgnore]
+        public bool DiskSpecified => Disk is not null && Disk.Length > 0;
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.DiskArea;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.DiskArea;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
 
         #endregion
 
@@ -22,20 +34,64 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DiskArea() : base() { }
 
-        public DiskArea(Data.Models.Metadata.DiskArea item) : base(item) { }
+        public DiskArea(Data.Models.Metadata.DiskArea item) : base(item)
+        {
+            // Handle subitems
+            if (item.Disk is not null)
+                Disk = Array.ConvertAll(item.Disk, rom => new Disk(rom));
+        }
 
         public DiskArea(Data.Models.Metadata.DiskArea item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new DiskArea(_internal.Clone() as Data.Models.Metadata.DiskArea ?? []);
+        public override object Clone() => new DiskArea(GetInternalClone());
+
+        public override Data.Models.Metadata.DiskArea GetInternalClone()
+        {
+            var partItem = _internal.Clone() as Data.Models.Metadata.DiskArea ?? new();
+
+            if (Disk is not null)
+                partItem.Disk = Array.ConvertAll(Disk, rom => rom.GetInternalClone());
+
+            return partItem;
+        }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is DiskArea otherDiskArea)
+                return _internal.Equals(otherDiskArea._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

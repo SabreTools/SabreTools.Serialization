@@ -18,16 +18,16 @@ namespace SabreTools.Serialization.CrossModel
 
             var datafile = new Datafile();
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             if (header is not null)
             {
-                datafile.Build = header.ReadString(Data.Models.Metadata.Header.BuildKey);
-                datafile.Debug = header.ReadString(Data.Models.Metadata.Header.DebugKey);
-                datafile.SchemaLocation = header.ReadString(Data.Models.Metadata.Header.SchemaLocationKey);
+                datafile.Build = header.Build;
+                datafile.Debug = header.Debug;
+                datafile.SchemaLocation = header.SchemaLocation;
                 datafile.Header = ConvertHeaderFromInternalModel(header);
             }
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
                 datafile.Game = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, game));
 
@@ -41,73 +41,70 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Header
             {
-                Id = item.ReadString(Data.Models.Metadata.Header.IdKey),
-                Name = item.ReadString(Data.Models.Metadata.Header.NameKey),
-                Description = item.ReadString(Data.Models.Metadata.Header.DescriptionKey),
-                RootDir = item.ReadString(Data.Models.Metadata.Header.RootDirKey),
-                Category = item.ReadString(Data.Models.Metadata.Header.CategoryKey),
-                Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
-                Date = item.ReadString(Data.Models.Metadata.Header.DateKey),
-                Author = item.ReadString(Data.Models.Metadata.Header.AuthorKey),
-                Email = item.ReadString(Data.Models.Metadata.Header.EmailKey),
-                Homepage = item.ReadString(Data.Models.Metadata.Header.HomepageKey),
-                Url = item.ReadString(Data.Models.Metadata.Header.UrlKey),
-                Comment = item.ReadString(Data.Models.Metadata.Header.CommentKey),
-                Type = item.ReadString(Data.Models.Metadata.Header.TypeKey),
+                Id = item.Id,
+                Name = item.Name,
+                Description = item.Description,
+                RootDir = item.RootDir,
+                Category = item.Category,
+                Version = item.Version,
+                Date = item.Date,
+                Author = item.Author,
+                Email = item.Email,
+                Homepage = item.Homepage,
+                Url = item.Url,
+                Comment = item.Comment,
+                Type = item.Type,
             };
 
-            string? headerVal = item.ReadString(Data.Models.Metadata.Header.HeaderKey);
-            string? forceMerging = item.ReadString(Data.Models.Metadata.Header.ForceMergingKey);
-            string? forceNodump = item.ReadString(Data.Models.Metadata.Header.ForceNodumpKey);
-            string? forceUnpacking = item.ReadString(Data.Models.Metadata.Header.ForcePackingKey);
-
-            if (headerVal is not null
-                || forceMerging is not null
-                || forceNodump is not null
-                || forceUnpacking is not null)
+            if (item.HeaderSkipper is not null
+                || item.ForceMerging is not Data.Models.Metadata.MergingFlag.None
+                || item.ForceNodump is not Data.Models.Metadata.NodumpFlag.None
+                || item.ForcePacking is not Data.Models.Metadata.PackingFlag.None)
             {
+                header.RomVault = new RomVault();
+                if (item.HeaderSkipper is not null)
+                    header.RomVault.Header = item.HeaderSkipper;
+                if (item.ForceMerging is not Data.Models.Metadata.MergingFlag.None)
+                    header.RomVault.ForceMerging = item.ForceMerging;
+                if (item.ForceNodump is not Data.Models.Metadata.NodumpFlag.None)
+                    header.RomVault.ForceNodump = item.ForceNodump;
+                if (item.ForcePacking is not Data.Models.Metadata.PackingFlag.None)
+                    header.RomVault.ForcePacking = item.ForcePacking;
+
                 header.ClrMamePro = new Data.Models.Logiqx.ClrMamePro();
-                if (headerVal is not null)
-                    header.ClrMamePro.Header = headerVal;
-                if (forceMerging is not null)
-                    header.ClrMamePro.ForceMerging = forceMerging;
-                if (forceNodump is not null)
-                    header.ClrMamePro.ForceNodump = forceNodump;
-                if (forceUnpacking is not null)
-                    header.ClrMamePro.ForcePacking = forceUnpacking;
+                if (item.HeaderSkipper is not null)
+                    header.ClrMamePro.Header = item.HeaderSkipper;
+                if (item.ForceMerging is not Data.Models.Metadata.MergingFlag.None)
+                    header.ClrMamePro.ForceMerging = item.ForceMerging;
+                if (item.ForceNodump is not Data.Models.Metadata.NodumpFlag.None)
+                    header.ClrMamePro.ForceNodump = item.ForceNodump;
+                if (item.ForcePacking is not Data.Models.Metadata.PackingFlag.None)
+                    header.ClrMamePro.ForcePacking = item.ForcePacking;
             }
 
-            string? plugin = item.ReadString(Data.Models.Metadata.Header.PluginKey);
-            string? romMode = item.ReadString(Data.Models.Metadata.Header.RomModeKey);
-            string? biosMode = item.ReadString(Data.Models.Metadata.Header.BiosModeKey);
-            string? sampleMode = item.ReadString(Data.Models.Metadata.Header.SampleModeKey);
-            string? lockRomMode = item.ReadString(Data.Models.Metadata.Header.LockRomModeKey);
-            string? lockBiosMode = item.ReadString(Data.Models.Metadata.Header.LockBiosModeKey);
-            string? lockSampleMode = item.ReadString(Data.Models.Metadata.Header.LockSampleModeKey);
-
-            if (plugin is not null
-                || romMode is not null
-                || biosMode is not null
-                || sampleMode is not null
-                || lockRomMode is not null
-                || lockBiosMode is not null
-                || lockSampleMode is not null)
+            if (item.Plugin is not null
+                || item.RomMode is not Data.Models.Metadata.MergingFlag.None
+                || item.BiosMode is not Data.Models.Metadata.MergingFlag.None
+                || item.SampleMode is not Data.Models.Metadata.MergingFlag.None
+                || item.LockRomMode is not null
+                || item.LockBiosMode is not null
+                || item.LockSampleMode is not null)
             {
                 header.RomCenter = new Data.Models.Logiqx.RomCenter();
-                if (plugin is not null)
-                    header.RomCenter.Plugin = plugin;
-                if (romMode is not null)
-                    header.RomCenter.RomMode = romMode;
-                if (biosMode is not null)
-                    header.RomCenter.BiosMode = biosMode;
-                if (sampleMode is not null)
-                    header.RomCenter.SampleMode = sampleMode;
-                if (lockRomMode is not null)
-                    header.RomCenter.LockRomMode = lockRomMode;
-                if (lockBiosMode is not null)
-                    header.RomCenter.LockBiosMode = lockBiosMode;
-                if (lockSampleMode is not null)
-                    header.RomCenter.LockSampleMode = lockSampleMode;
+                if (item.Plugin is not null)
+                    header.RomCenter.Plugin = item.Plugin;
+                if (item.RomMode is not Data.Models.Metadata.MergingFlag.None)
+                    header.RomCenter.RomMode = item.RomMode;
+                if (item.BiosMode is not Data.Models.Metadata.MergingFlag.None)
+                    header.RomCenter.BiosMode = item.BiosMode;
+                if (item.SampleMode is not Data.Models.Metadata.MergingFlag.None)
+                    header.RomCenter.SampleMode = item.SampleMode;
+                if (item.LockRomMode is not null)
+                    header.RomCenter.LockRomMode = item.LockRomMode;
+                if (item.LockBiosMode is not null)
+                    header.RomCenter.LockBiosMode = item.LockBiosMode;
+                if (item.LockSampleMode is not null)
+                    header.RomCenter.LockSampleMode = item.LockSampleMode;
             }
 
             return header;
@@ -120,67 +117,105 @@ namespace SabreTools.Serialization.CrossModel
         {
             GameBase gameBase = game ? new Game() : new Machine();
 
-            gameBase.Name = item.ReadString(Data.Models.Metadata.Machine.NameKey);
-            gameBase.SourceFile = item.ReadString(Data.Models.Metadata.Machine.SourceFileKey);
-            gameBase.IsBios = item.ReadString(Data.Models.Metadata.Machine.IsBiosKey);
-            gameBase.IsDevice = item.ReadString(Data.Models.Metadata.Machine.IsDeviceKey);
-            gameBase.IsMechanical = item.ReadString(Data.Models.Metadata.Machine.IsMechanicalKey);
-            gameBase.CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey);
-            gameBase.RomOf = item.ReadString(Data.Models.Metadata.Machine.RomOfKey);
-            gameBase.SampleOf = item.ReadString(Data.Models.Metadata.Machine.SampleOfKey);
-            gameBase.Board = item.ReadString(Data.Models.Metadata.Machine.BoardKey);
-            gameBase.RebuildTo = item.ReadString(Data.Models.Metadata.Machine.RebuildToKey);
-            gameBase.Id = item.ReadString(Data.Models.Metadata.Machine.IdKey);
-            gameBase.CloneOfId = item.ReadString(Data.Models.Metadata.Machine.CloneOfIdKey);
-            gameBase.Runnable = item.ReadString(Data.Models.Metadata.Machine.RunnableKey);
-            gameBase.Comment = item.ReadStringArray(Data.Models.Metadata.Machine.CommentKey);
-            gameBase.Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey);
-            gameBase.Year = item.ReadString(Data.Models.Metadata.Machine.YearKey);
-            gameBase.Manufacturer = item.ReadString(Data.Models.Metadata.Machine.ManufacturerKey);
-            gameBase.Publisher = item.ReadString(Data.Models.Metadata.Machine.PublisherKey);
-            gameBase.Category = item.ReadStringArray(Data.Models.Metadata.Machine.CategoryKey);
+            gameBase.Name = item.Name;
+            gameBase.SourceFile = item.SourceFile;
+            gameBase.IsBios = item.IsBios;
+            gameBase.IsDevice = item.IsDevice;
+            gameBase.IsMechanical = item.IsMechanical;
+            gameBase.CloneOf = item.CloneOf;
+            gameBase.RomOf = item.RomOf;
+            gameBase.SampleOf = item.SampleOf;
+            gameBase.Board = item.Board;
+            gameBase.RebuildTo = item.RebuildTo;
+            gameBase.Id = item.Id;
+            gameBase.CloneOfId = item.CloneOfId;
+            gameBase.Runnable = item.Runnable;
+            gameBase.Comment = item.Comment;
+            gameBase.Description = item.Description;
+            gameBase.Year = item.Year;
+            gameBase.Manufacturer = item.Manufacturer;
+            gameBase.Publisher = item.Publisher;
+            gameBase.Category = item.Category;
 
-            var trurip = item.Read<Trurip>(Data.Models.Metadata.Machine.TruripKey);
-            if (trurip is not null)
-                gameBase.Trurip = trurip;
+            if (item.TitleID is not null
+                || item.Developer is not null
+                || item.Genre is not null
+                || item.Subgenre is not null
+                || item.Ratings is not null
+                || item.Score is not null
+                || item.Enabled is not null
+                || item.CRC is not null
+                || item.Source is not null
+                || item.RelatedTo is not null)
+            {
+                gameBase.Trurip = new Trurip();
+                if (item.TitleID is not null)
+                    gameBase.Trurip.TitleID = item.TitleID;
+                if (item.Publisher is not null)
+                    gameBase.Trurip.Publisher = item.Publisher;
+                if (item.Developer is not null)
+                    gameBase.Trurip.Developer = item.Developer;
+                if (item.Year is not null)
+                    gameBase.Trurip.Year = item.Year;
+                if (item.Genre is not null)
+                    gameBase.Trurip.Genre = item.Genre;
+                if (item.Subgenre is not null)
+                    gameBase.Trurip.Subgenre = item.Subgenre;
+                if (item.Ratings is not null)
+                    gameBase.Trurip.Ratings = item.Ratings;
+                if (item.Score is not null)
+                    gameBase.Trurip.Score = item.Score;
+                if (item.Players is not null)
+                    gameBase.Trurip.Players = item.Players;
+                if (item.Enabled is not null)
+                    gameBase.Trurip.Enabled = item.Enabled;
+                if (item.CRC is not null)
+                    gameBase.Trurip.CRC = item.CRC;
+                if (item.Source is not null)
+                    gameBase.Trurip.Source = item.Source;
+                if (item.CloneOf is not null)
+                    gameBase.Trurip.CloneOf = item.CloneOf;
+                if (item.RelatedTo is not null)
+                    gameBase.Trurip.RelatedTo = item.RelatedTo;
+            }
 
-            var releases = item.Read<Data.Models.Metadata.Release[]>(Data.Models.Metadata.Machine.ReleaseKey);
+            var releases = item.Release;
             if (releases is not null && releases.Length > 0)
                 gameBase.Release = Array.ConvertAll(releases, ConvertFromInternalModel);
 
-            var biosSets = item.Read<Data.Models.Metadata.BiosSet[]>(Data.Models.Metadata.Machine.BiosSetKey);
+            var biosSets = item.BiosSet;
             if (biosSets is not null && biosSets.Length > 0)
                 gameBase.BiosSet = Array.ConvertAll(biosSets, ConvertFromInternalModel);
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
                 gameBase.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
-            var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
+            var disks = item.Disk;
             if (disks is not null && disks.Length > 0)
                 gameBase.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
-            var medias = item.Read<Data.Models.Metadata.Media[]>(Data.Models.Metadata.Machine.MediaKey);
+            var medias = item.Media;
             if (medias is not null && medias.Length > 0)
                 gameBase.Media = Array.ConvertAll(medias, ConvertFromInternalModel);
 
-            var deviceRefs = item.Read<Data.Models.Metadata.DeviceRef[]>(Data.Models.Metadata.Machine.DeviceRefKey);
+            var deviceRefs = item.DeviceRef;
             if (deviceRefs is not null && deviceRefs.Length > 0)
                 gameBase.DeviceRef = Array.ConvertAll(deviceRefs, ConvertFromInternalModel);
 
-            var samples = item.Read<Data.Models.Metadata.Sample[]>(Data.Models.Metadata.Machine.SampleKey);
+            var samples = item.Sample;
             if (samples is not null && samples.Length > 0)
                 gameBase.Sample = Array.ConvertAll(samples, ConvertFromInternalModel);
 
-            var archives = item.Read<Data.Models.Metadata.Archive[]>(Data.Models.Metadata.Machine.ArchiveKey);
+            var archives = item.Archive;
             if (archives is not null && archives.Length > 0)
                 gameBase.Archive = Array.ConvertAll(archives, ConvertFromInternalModel);
 
-            var driver = item.Read<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey);
+            var driver = item.Driver;
             if (driver is not null)
                 gameBase.Driver = ConvertFromInternalModel(driver);
 
-            var softwareLists = item.Read<Data.Models.Metadata.SoftwareList[]>(Data.Models.Metadata.Machine.SoftwareListKey);
+            var softwareLists = item.SoftwareList;
             if (softwareLists is not null && softwareLists.Length > 0)
                 gameBase.SoftwareList = Array.ConvertAll(softwareLists, ConvertFromInternalModel);
 
@@ -194,7 +229,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var archive = new Archive
             {
-                Name = item.ReadString(Data.Models.Metadata.Archive.NameKey),
+                Name = item.Name,
             };
             return archive;
         }
@@ -206,9 +241,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var biosset = new BiosSet
             {
-                Name = item.ReadString(Data.Models.Metadata.BiosSet.NameKey),
-                Description = item.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey),
-                Default = item.ReadString(Data.Models.Metadata.BiosSet.DefaultKey),
+                Name = item.Name,
+                Description = item.Description,
+                Default = item.Default,
             };
             return biosset;
         }
@@ -220,7 +255,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var deviceRef = new DeviceRef
             {
-                Name = item.ReadString(Data.Models.Metadata.DipSwitch.NameKey),
+                Name = item.Name,
             };
             return deviceRef;
         }
@@ -232,12 +267,12 @@ namespace SabreTools.Serialization.CrossModel
         {
             var disk = new Disk
             {
-                Name = item.ReadString(Data.Models.Metadata.Disk.NameKey),
-                MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
-                Merge = item.ReadString(Data.Models.Metadata.Disk.MergeKey),
-                Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
-                Region = item.ReadString(Data.Models.Metadata.Disk.RegionKey),
+                Name = item.Name,
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                Merge = item.Merge,
+                Status = item.Status,
+                Region = item.Region,
             };
             return disk;
         }
@@ -249,14 +284,14 @@ namespace SabreTools.Serialization.CrossModel
         {
             var driver = new Driver
             {
-                Status = item.ReadString(Data.Models.Metadata.Driver.StatusKey),
-                Emulation = item.ReadString(Data.Models.Metadata.Driver.EmulationKey),
-                Cocktail = item.ReadString(Data.Models.Metadata.Driver.CocktailKey),
-                SaveState = item.ReadString(Data.Models.Metadata.Driver.SaveStateKey),
-                RequiresArtwork = item.ReadString(Data.Models.Metadata.Driver.RequiresArtworkKey),
-                Unofficial = item.ReadString(Data.Models.Metadata.Driver.UnofficialKey),
-                NoSoundHardware = item.ReadString(Data.Models.Metadata.Driver.NoSoundHardwareKey),
-                Incomplete = item.ReadString(Data.Models.Metadata.Driver.IncompleteKey),
+                Status = item.Status,
+                Emulation = item.Emulation,
+                Cocktail = item.Cocktail,
+                SaveState = item.SaveState,
+                RequiresArtwork = item.RequiresArtwork,
+                Unofficial = item.Unofficial,
+                NoSoundHardware = item.NoSoundHardware,
+                Incomplete = item.Incomplete,
             };
             return driver;
         }
@@ -268,11 +303,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var media = new Media
             {
-                Name = item.ReadString(Data.Models.Metadata.Media.NameKey),
-                MD5 = item.ReadString(Data.Models.Metadata.Media.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Media.SHA1Key),
-                SHA256 = item.ReadString(Data.Models.Metadata.Media.SHA256Key),
-                SpamSum = item.ReadString(Data.Models.Metadata.Media.SpamSumKey),
+                Name = item.Name,
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                SHA256 = item.SHA256,
+                SpamSum = item.SpamSum,
             };
             return media;
         }
@@ -284,11 +319,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var release = new Release
             {
-                Name = item.ReadString(Data.Models.Metadata.Release.NameKey),
-                Region = item.ReadString(Data.Models.Metadata.Release.RegionKey),
-                Language = item.ReadString(Data.Models.Metadata.Release.LanguageKey),
-                Date = item.ReadString(Data.Models.Metadata.Release.DateKey),
-                Default = item.ReadString(Data.Models.Metadata.Release.DefaultKey),
+                Name = item.Name,
+                Region = item.Region,
+                Language = item.Language,
+                Date = item.Date,
+                Default = item.Default,
             };
             return release;
         }
@@ -300,30 +335,30 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Rom
             {
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
-                CRC16 = item.ReadString(Data.Models.Metadata.Rom.CRC16Key),
-                CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                CRC64 = item.ReadString(Data.Models.Metadata.Rom.CRC64Key),
-                MD2 = item.ReadString(Data.Models.Metadata.Rom.MD2Key),
-                MD4 = item.ReadString(Data.Models.Metadata.Rom.MD4Key),
-                MD5 = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
-                RIPEMD128 = item.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key),
-                RIPEMD160 = item.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                SHA256 = item.ReadString(Data.Models.Metadata.Rom.SHA256Key),
-                SHA384 = item.ReadString(Data.Models.Metadata.Rom.SHA384Key),
-                SHA512 = item.ReadString(Data.Models.Metadata.Rom.SHA512Key),
-                SpamSum = item.ReadString(Data.Models.Metadata.Rom.SpamSumKey),
-                xxHash364 = item.ReadString(Data.Models.Metadata.Rom.xxHash364Key),
-                xxHash3128 = item.ReadString(Data.Models.Metadata.Rom.xxHash3128Key),
-                Merge = item.ReadString(Data.Models.Metadata.Rom.MergeKey),
-                Status = item.ReadString(Data.Models.Metadata.Rom.StatusKey),
-                Serial = item.ReadString(Data.Models.Metadata.Rom.SerialKey),
-                Header = item.ReadString(Data.Models.Metadata.Rom.HeaderKey),
-                Date = item.ReadString(Data.Models.Metadata.Rom.DateKey),
-                Inverted = item.ReadString(Data.Models.Metadata.Rom.InvertedKey),
-                MIA = item.ReadString(Data.Models.Metadata.Rom.MIAKey),
+                Name = item.Name,
+                Size = item.Size,
+                CRC16 = item.CRC16,
+                CRC = item.CRC32,
+                CRC64 = item.CRC64,
+                MD2 = item.MD2,
+                MD4 = item.MD4,
+                MD5 = item.MD5,
+                RIPEMD128 = item.RIPEMD128,
+                RIPEMD160 = item.RIPEMD160,
+                SHA1 = item.SHA1,
+                SHA256 = item.SHA256,
+                SHA384 = item.SHA384,
+                SHA512 = item.SHA512,
+                SpamSum = item.SpamSum,
+                xxHash364 = item.xxHash364,
+                xxHash3128 = item.xxHash3128,
+                Merge = item.Merge,
+                Status = item.Status,
+                Serial = item.Serial,
+                Header = item.Header,
+                Date = item.Date,
+                Inverted = item.Inverted,
+                MIA = item.MIA,
             };
             return rom;
         }
@@ -333,10 +368,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Sample ConvertFromInternalModel(Data.Models.Metadata.Sample item)
         {
-            var sample = new Sample
-            {
-                Name = item.ReadString(Data.Models.Metadata.Sample.NameKey),
-            };
+            var sample = new Sample { Name = item.Name, };
             return sample;
         }
 
@@ -347,10 +379,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var softwareList = new Data.Models.Logiqx.SoftwareList
             {
-                Tag = item.ReadString(Data.Models.Metadata.SoftwareList.TagKey),
-                Name = item.ReadString(Data.Models.Metadata.SoftwareList.NameKey),
-                Status = item.ReadString(Data.Models.Metadata.SoftwareList.StatusKey),
-                Filter = item.ReadString(Data.Models.Metadata.SoftwareList.FilterKey),
+                Tag = item.Tag,
+                Name = item.Name,
+                Status = item.Status,
+                Filter = item.Filter,
             };
             return softwareList;
         }

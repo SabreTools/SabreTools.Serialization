@@ -41,8 +41,6 @@
     <ItemGroup>
         <Compile Include="..\SabreTools.Data.Extensions\*.cs" />
         <Compile Include="..\SabreTools.Data.Models\**\*.cs" Exclude="..\SabreTools.Data.Models\obj\**\*.cs" />
-        <Compile Include="..\SabreTools.Metadata\*.cs" />
-        <Compile Include="..\SabreTools.Metadata\Tools\*.cs" />
         <Compile Include="..\SabreTools.Metadata.DatFiles\*.cs" />
         <Compile Include="..\SabreTools.Metadata.DatFiles\Formats\*.cs" />
         <Compile Include="..\SabreTools.Metadata.DatItems\*.cs" />

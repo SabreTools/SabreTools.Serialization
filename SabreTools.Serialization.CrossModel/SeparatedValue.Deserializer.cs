@@ -12,10 +12,10 @@ namespace SabreTools.Serialization.CrossModel
             if (obj is null)
                 return null;
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             var metadataFile = header is not null ? ConvertHeaderFromInternalModel(header) : new MetadataFile();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             var items = new List<Row>();
             foreach (var machine in machines ?? [])
             {
@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var metadataFile = new MetadataFile
             {
-                Header = item.ReadStringArray(Data.Models.Metadata.Header.HeaderKey),
+                Header = item.HeaderRow,
             };
             return metadataFile;
         }
@@ -45,21 +45,21 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rowItems = new List<Row>();
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
             {
                 rowItems.AddRange(
                     Array.ConvertAll(roms, r => ConvertFromInternalModel(r, item, header)));
             }
 
-            var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
+            var disks = item.Disk;
             if (disks is not null && disks.Length > 0)
             {
                 rowItems.AddRange(
                     Array.ConvertAll(disks, d => ConvertFromInternalModel(d, item, header)));
             }
 
-            var media = item.Read<Data.Models.Metadata.Media[]>(Data.Models.Metadata.Machine.MediaKey);
+            var media = item.Media;
             if (media is not null && media.Length > 0)
             {
                 rowItems.AddRange(
@@ -76,23 +76,23 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
-                InternalName = header?.ReadString(Data.Models.Metadata.Header.NameKey),
-                Description = header?.ReadString(Data.Models.Metadata.Header.DescriptionKey),
-                GameName = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
-                GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
+                FileName = header?.FileName,
+                InternalName = header?.Name,
+                Description = header?.Description,
+                GameName = parent.Name,
+                GameDescription = parent.Description,
                 Type = "disk",
                 RomName = null,
-                DiskName = item.ReadString(Data.Models.Metadata.Disk.NameKey),
+                DiskName = item.Name,
                 Size = null,
                 CRC = null,
-                MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
                 SHA256 = null,
                 SHA384 = null,
                 SHA512 = null,
                 SpamSum = null,
-                Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
+                Status = item.Status,
             };
             return row;
         }
@@ -104,22 +104,22 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve on an item -- OriginalFilename
-                InternalName = header?.ReadString(Data.Models.Metadata.Header.NameKey),
-                Description = header?.ReadString(Data.Models.Metadata.Header.DescriptionKey),
-                GameName = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
-                GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
+                FileName = header?.FileName,
+                InternalName = header?.Name,
+                Description = header?.Description,
+                GameName = parent.Name,
+                GameDescription = parent.Description,
                 Type = "media",
                 RomName = null,
-                DiskName = item.ReadString(Data.Models.Metadata.Media.NameKey),
+                DiskName = item.Name,
                 Size = null,
                 CRC = null,
-                MD5 = item.ReadString(Data.Models.Metadata.Media.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Media.SHA1Key),
-                SHA256 = item.ReadString(Data.Models.Metadata.Media.SHA256Key),
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                SHA256 = item.SHA256,
                 SHA384 = null,
                 SHA512 = null,
-                SpamSum = item.ReadString(Data.Models.Metadata.Media.SpamSumKey),
+                SpamSum = item.SpamSum,
             };
             return row;
         }
@@ -131,23 +131,23 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
-                InternalName = header?.ReadString(Data.Models.Metadata.Header.NameKey),
-                Description = header?.ReadString(Data.Models.Metadata.Header.DescriptionKey),
-                GameName = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
-                GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
+                FileName = header?.FileName,
+                InternalName = header?.Name,
+                Description = header?.Description,
+                GameName = parent.Name,
+                GameDescription = parent.Description,
                 Type = "rom",
-                RomName = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                RomName = item.Name,
                 DiskName = null,
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
-                CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                MD5 = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                SHA256 = item.ReadString(Data.Models.Metadata.Rom.SHA256Key),
-                SHA384 = item.ReadString(Data.Models.Metadata.Rom.SHA384Key),
-                SHA512 = item.ReadString(Data.Models.Metadata.Rom.SHA512Key),
-                SpamSum = item.ReadString(Data.Models.Metadata.Rom.SpamSumKey),
-                Status = item.ReadString(Data.Models.Metadata.Rom.StatusKey),
+                Size = item.Size,
+                CRC = item.CRC32,
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                SHA256 = item.SHA256,
+                SHA384 = item.SHA384,
+                SHA512 = item.SHA512,
+                SpamSum = item.SpamSum,
+                Status = item.Status,
             };
             return row;
         }

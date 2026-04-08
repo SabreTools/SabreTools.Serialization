@@ -18,11 +18,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class SabreXML : DatFile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
 #if NET5_0_OR_GREATER
-            => Enum.GetValues<ItemType>();
+            => Enum.GetValues<Data.Models.Metadata.ItemType>();
 #else
-            => Enum.GetValues(typeof(ItemType)) as ItemType[] ?? [];
+            => Enum.GetValues(typeof(Data.Models.Metadata.ItemType)) as Data.Models.Metadata.ItemType[] ?? [];
 #endif
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public SabreXML(DatFile? datFile) : base(datFile)
         {
-            Header.Write(DatHeader.DatFormatKey, DatFormat.SabreXML);
+            Header.DatFormat = DatFormat.SabreXML;
         }
 
         /// <inheritdoc/>
@@ -223,7 +223,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             }
 
                             item.CopyMachineInformation(machine);
-                            item.Write<Source?>(DatItem.SourceKey, source);
+                            item.Source = source;
                             AddItem(item, statsOnly);
                             // AddItemDB(item, machineIndex, sourceIndex, statsOnly);
                         }
@@ -282,11 +282,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         DatItem datItem = datItems[index];
 
                         // If we have a different game and we're not at the start of the list, output the end of last item
-                        if (lastgame is not null && !string.Equals(lastgame, datItem.GetMachine()!.GetName(), StringComparison.OrdinalIgnoreCase))
+                        if (lastgame is not null && !string.Equals(lastgame, datItem.Machine!.Name, StringComparison.OrdinalIgnoreCase))
                             WriteEndGame(xtw);
 
                         // If we have a new game, output the beginning of the new item
-                        if (lastgame is null || !string.Equals(lastgame, datItem.GetMachine()!.GetName(), StringComparison.OrdinalIgnoreCase))
+                        if (lastgame is null || !string.Equals(lastgame, datItem.Machine!.Name, StringComparison.OrdinalIgnoreCase))
                             WriteStartGame(xtw, datItem);
 
                         // Check for a "null" item
@@ -297,7 +297,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             WriteDatItem(xtw, datItem);
 
                         // Set the new data to compare against
-                        lastgame = datItem.GetMachine()!.GetName();
+                        lastgame = datItem.Machine!.Name;
                     }
                 }
 
@@ -364,11 +364,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         var machine = GetMachineForItemDB(kvp.Key);
 
                         // If we have a different game and we're not at the start of the list, output the end of last item
-                        if (lastgame is not null && !string.Equals(lastgame, machine.Value!.GetName(), StringComparison.OrdinalIgnoreCase))
+                        if (lastgame is not null && !string.Equals(lastgame, machine.Value!.Name, StringComparison.OrdinalIgnoreCase))
                             WriteEndGame(xtw);
 
                         // If we have a new game, output the beginning of the new item
-                        if (lastgame is null || !string.Equals(lastgame, machine.Value!.GetName(), StringComparison.OrdinalIgnoreCase))
+                        if (lastgame is null || !string.Equals(lastgame, machine.Value!.Name, StringComparison.OrdinalIgnoreCase))
                             WriteStartGame(xtw, kvp.Value);
 
                         // Check for a "null" item
@@ -379,7 +379,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             WriteDatItemDB(xtw, datItem);
 
                         // Set the new data to compare against
-                        lastgame = machine.Value!.GetName();
+                        lastgame = machine.Value!.Name;
                     }
                 }
 
@@ -429,14 +429,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
         private static void WriteStartGame(XmlTextWriter xtw, DatItem datItem)
         {
             // No game should start with a path separator
-            datItem.GetMachine()!.SetName(datItem.GetMachine()!.GetName()?.TrimStart(Path.DirectorySeparatorChar) ?? string.Empty);
+            datItem.Machine!.Name = datItem.Machine!.Name?.TrimStart(Path.DirectorySeparatorChar) ?? string.Empty;
 
             // Write the machine
             xtw.WriteStartElement("directory");
             XmlSerializer xs = new(typeof(Machine));
             XmlSerializerNamespaces ns = new();
             ns.Add("", "");
-            xs.Serialize(xtw, datItem.GetMachine(), ns);
+            xs.Serialize(xtw, datItem.Machine, ns);
 
             xtw.WriteStartElement("files");
 
@@ -466,7 +466,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         private void WriteDatItem(XmlTextWriter xtw, DatItem datItem)
         {
             // Get the machine for the item
-            var machine = datItem.GetMachine();
+            var machine = datItem.Machine;
 
             // Pre-process the item name
             ProcessItemName(datItem, machine, forceRemoveQuotes: true, forceRomName: false);

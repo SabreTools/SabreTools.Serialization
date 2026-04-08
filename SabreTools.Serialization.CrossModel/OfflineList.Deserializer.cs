@@ -11,10 +11,10 @@ namespace SabreTools.Serialization.CrossModel
             if (obj is null)
                 return null;
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             var dat = header is not null ? ConvertHeaderFromInternalModel(header) : new Dat();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
             {
                 dat.Games = new Games
@@ -33,44 +33,39 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dat = new Dat
             {
-                NoNamespaceSchemaLocation = item.ReadString(Data.Models.Metadata.Header.SchemaLocationKey),
+                NoNamespaceSchemaLocation = item.SchemaLocation,
             };
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.NameKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.ImFolderKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.DatVersionKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.SystemKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.ScreenshotsWidthKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.ScreenshotsHeightKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.InfosKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.CanOpenKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.NewDatKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.SearchKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.RomTitleKey))
+            if (item.Name is not null
+                || item.ImFolder is not null
+                || item.DatVersion is not null
+                || item.System is not null
+                || item.ScreenshotsHeight is not null
+                || item.ScreenshotsWidth is not null
+                || item.Infos is not null
+                || item.CanOpen is not null
+                || item.NewDat is not null
+                || item.Search is not null
+                || item.RomTitle is not null)
             {
                 dat.Configuration = new Configuration
                 {
-                    DatName = item.ReadString(Data.Models.Metadata.Header.NameKey),
-                    ImFolder = item.ReadString(Data.Models.Metadata.Header.ImFolderKey),
-                    DatVersion = item.ReadString(Data.Models.Metadata.Header.DatVersionKey),
-                    System = item.ReadString(Data.Models.Metadata.Header.SystemKey),
-                    ScreenshotsWidth = item.ReadString(Data.Models.Metadata.Header.ScreenshotsWidthKey),
-                    ScreenshotsHeight = item.ReadString(Data.Models.Metadata.Header.ScreenshotsHeightKey),
-                    Infos = item.Read<Infos>(Data.Models.Metadata.Header.InfosKey),
-                    CanOpen = item.Read<CanOpen>(Data.Models.Metadata.Header.CanOpenKey),
-                    NewDat = item.Read<NewDat>(Data.Models.Metadata.Header.NewDatKey),
-                    Search = item.Read<Search>(Data.Models.Metadata.Header.SearchKey),
-                    RomTitle = item.ReadString(Data.Models.Metadata.Header.RomTitleKey),
+                    DatName = item.Name,
+                    ImFolder = item.ImFolder,
+                    DatVersion = item.DatVersion,
+                    System = item.System,
+                    ScreenshotsWidth = item.ScreenshotsHeight,
+                    ScreenshotsHeight = item.ScreenshotsWidth,
+                    Infos = item.Infos,
+                    CanOpen = item.CanOpen,
+                    NewDat = item.NewDat,
+                    Search = item.Search,
+                    RomTitle = item.RomTitle,
                 };
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.ImagesKey))
-            {
-                dat.GUI = new GUI
-                {
-                    Images = item.Read<Images>(Data.Models.Metadata.Header.ImagesKey),
-                };
-            }
+            if (item.Images is not null)
+                dat.GUI = new GUI { Images = item.Images };
 
             return dat;
         }
@@ -82,25 +77,25 @@ namespace SabreTools.Serialization.CrossModel
         {
             var game = new Game
             {
-                ImageNumber = item.ReadString(Data.Models.Metadata.Machine.ImageNumberKey),
-                ReleaseNumber = item.ReadString(Data.Models.Metadata.Machine.ReleaseNumberKey),
-                Title = item.ReadString(Data.Models.Metadata.Machine.NameKey),
-                SaveType = item.ReadString(Data.Models.Metadata.Machine.SaveTypeKey),
-                Publisher = item.ReadString(Data.Models.Metadata.Machine.PublisherKey),
-                Location = item.ReadString(Data.Models.Metadata.Machine.LocationKey),
-                SourceRom = item.ReadString(Data.Models.Metadata.Machine.SourceRomKey),
-                Language = item.ReadString(Data.Models.Metadata.Machine.LanguageKey),
-                Im1CRC = item.ReadString(Data.Models.Metadata.Machine.Im1CRCKey),
-                Im2CRC = item.ReadString(Data.Models.Metadata.Machine.Im2CRCKey),
-                Comment = item.ReadString(Data.Models.Metadata.Machine.CommentKey),
-                DuplicateID = item.ReadString(Data.Models.Metadata.Machine.DuplicateIDKey),
+                ImageNumber = item.ImageNumber,
+                ReleaseNumber = item.ReleaseNumber,
+                Title = item.Name,
+                SaveType = item.SaveType,
+                Publisher = item.Publisher,
+                Location = item.Location,
+                SourceRom = item.SourceRom,
+                Language = item.Language,
+                Im1CRC = item.Im1CRC,
+                Im2CRC = item.Im2CRC,
+                Comment = item.Comment is null ? null : string.Join(", ", item.Comment),
+                DuplicateID = item.DuplicateID,
             };
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
             {
-                var romSizes = Array.ConvertAll(roms, r => r.ReadLong(Data.Models.Metadata.Rom.SizeKey) ?? -1);
-                game.RomSize = Array.Find(romSizes, s => s > -1).ToString();
+                var romSizes = Array.ConvertAll(roms, r => r.Size ?? -1);
+                game.RomSize = Array.Find(romSizes, s => s > -1);
 
                 var romCRCs = Array.ConvertAll(roms, ConvertFromInternalModel);
                 game.Files = new Files { RomCRC = romCRCs };
@@ -116,8 +111,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var fileRomCRC = new FileRomCRC
             {
-                Extension = item.ReadString(Data.Models.Metadata.Rom.ExtensionKey),
-                Content = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
+                Extension = item.Extension,
+                Content = item.CRC32,
             };
             return fileRomCRC;
         }

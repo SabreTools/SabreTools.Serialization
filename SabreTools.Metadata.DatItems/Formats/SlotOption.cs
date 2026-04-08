@@ -1,6 +1,5 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,29 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("slotoption"), XmlRoot("slotoption")]
     public sealed class SlotOption : DatItem<Data.Models.Metadata.SlotOption>
     {
-        #region Fields
+        #region Properties
+
+        public bool? Default
+        {
+            get => _internal.Default;
+            set => _internal.Default = value;
+        }
+
+        public string? DevName
+        {
+            get => _internal.DevName;
+            set => _internal.DevName = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.SlotOption;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.SlotOption;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
 
         #endregion
 
@@ -21,26 +39,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public SlotOption() : base() { }
 
-        public SlotOption(Data.Models.Metadata.SlotOption item) : base(item)
-        {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.SlotOption.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.SlotOption.DefaultKey, defaultValue.FromYesNo());
-        }
+        public SlotOption(Data.Models.Metadata.SlotOption item) : base(item) { }
 
         public SlotOption(Data.Models.Metadata.SlotOption item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new SlotOption(_internal.Clone() as Data.Models.Metadata.SlotOption ?? []);
+        public override object Clone() => new SlotOption(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.SlotOption GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.SlotOption ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is SlotOption otherSlotOption)
+                return _internal.Equals(otherSlotOption._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

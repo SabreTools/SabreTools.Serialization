@@ -4,8 +4,8 @@ using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Logiqx
 {
-    [XmlRoot("clrmamepro")]
-    public class ClrMamePro
+    [XmlRoot("romvault")]
+    public class RomVault
     {
         [XmlAttribute("header")]
         public string? Header { get; set; }

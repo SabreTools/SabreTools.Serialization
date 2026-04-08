@@ -10,7 +10,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
     /// </summary>
     public abstract class Hashfile : SerializableDatFile<Data.Models.Hashfile.Hashfile, Serialization.Readers.Hashfile, Serialization.Writers.Hashfile, Serialization.CrossModel.Hashfile>
     {
-        #region Fields
+        #region Properties
 
         // Private instance variables specific to Hashfile DATs
         protected HashType _hash;

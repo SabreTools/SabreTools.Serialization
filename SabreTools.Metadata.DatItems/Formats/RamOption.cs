@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,29 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("ramoption"), XmlRoot("ramoption")]
     public sealed class RamOption : DatItem<Data.Models.Metadata.RamOption>
     {
-        #region Fields
+        #region Properties
+
+        public string? Content
+        {
+            get => _internal.Content;
+            set => _internal.Content = value;
+        }
+
+        public bool? Default
+        {
+            get => _internal.Default;
+            set => _internal.Default = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.RamOption;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.RamOption;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
 
         #endregion
 
@@ -21,26 +39,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public RamOption() : base() { }
 
-        public RamOption(Data.Models.Metadata.RamOption item) : base(item)
-        {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.RamOption.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.RamOption.DefaultKey, defaultValue.FromYesNo());
-        }
+        public RamOption(Data.Models.Metadata.RamOption item) : base(item) { }
 
         public RamOption(Data.Models.Metadata.RamOption item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new RamOption(_internal.Clone() as Data.Models.Metadata.RamOption ?? []);
+        public override object Clone() => new RamOption(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.RamOption GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.RamOption ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is RamOption otherRamOption)
+                return _internal.Equals(otherRamOption._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

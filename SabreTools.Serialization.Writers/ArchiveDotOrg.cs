@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalElementString("md5", obj.MD5);
             writer.WriteOptionalElementString("crc32", obj.CRC32);
             writer.WriteOptionalElementString("sha1", obj.SHA1);
-            writer.WriteOptionalElementString("filecount", obj.FileCount);
+            writer.WriteOptionalElementString("filecount", obj.FileCount?.ToString());
             writer.WriteOptionalElementString("format", obj.Format);
             writer.WriteOptionalElementString("original", obj.Original);
             writer.WriteOptionalElementString("summation", obj.Summation);

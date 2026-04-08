@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,17 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("extension"), XmlRoot("extension")]
     public sealed class Extension : DatItem<Data.Models.Metadata.Extension>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Extension;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Extension;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
 
         #endregion
 
@@ -25,16 +31,49 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Extension(Data.Models.Metadata.Extension item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Extension(_internal.Clone() as Data.Models.Metadata.Extension ?? []);
+        public override object Clone() => new Extension(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Extension GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Extension ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Extension otherExtension)
+                return _internal.Equals(otherExtension._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

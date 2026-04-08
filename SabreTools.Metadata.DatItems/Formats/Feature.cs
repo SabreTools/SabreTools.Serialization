@@ -1,6 +1,5 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,41 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("feature"), XmlRoot("feature")]
     public sealed class Feature : DatItem<Data.Models.Metadata.Feature>
     {
-        #region Fields
+        #region Properties
+
+        public Data.Models.Metadata.FeatureType? FeatureType
+        {
+            get => _internal.FeatureType;
+            set => _internal.FeatureType = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Feature;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Feature;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public Data.Models.Metadata.FeatureStatus? Overall
+        {
+            get => _internal.Overall;
+            set => _internal.Overall = value;
+        }
+
+        public Data.Models.Metadata.FeatureStatus? Status
+        {
+            get => _internal.Status;
+            set => _internal.Status = value;
+        }
+
+        public string? Value
+        {
+            get => _internal.Value;
+            set => _internal.Value = value;
+        }
 
         #endregion
 
@@ -21,34 +51,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Feature() : base() { }
 
-        public Feature(Data.Models.Metadata.Feature item) : base(item)
-        {
-            // Process flag values
-            string? overall = ReadString(Data.Models.Metadata.Feature.OverallKey);
-            if (overall is not null)
-                Write<string?>(Data.Models.Metadata.Feature.OverallKey, overall.AsFeatureStatus()?.AsStringValue());
-
-            string? status = ReadString(Data.Models.Metadata.Feature.StatusKey);
-            if (status is not null)
-                Write<string?>(Data.Models.Metadata.Feature.StatusKey, status.AsFeatureStatus()?.AsStringValue());
-
-            string? featureType = ReadString(Data.Models.Metadata.Feature.FeatureTypeKey);
-            if (featureType is not null)
-                Write<string?>(Data.Models.Metadata.Feature.FeatureTypeKey, featureType.AsFeatureType()?.AsStringValue());
-        }
+        public Feature(Data.Models.Metadata.Feature item) : base(item) { }
 
         public Feature(Data.Models.Metadata.Feature item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Feature(_internal.Clone() as Data.Models.Metadata.Feature ?? []);
+        public override object Clone() => new Feature(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Feature GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Feature ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Feature otherFeature)
+                return _internal.Equals(otherFeature._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

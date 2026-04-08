@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.EverdriveSMDB
         [Required]
         public string? CRC32 { get; set; }
 
-        public string? Size { get; set; }
+        public long? Size { get; set; }
     }
 }

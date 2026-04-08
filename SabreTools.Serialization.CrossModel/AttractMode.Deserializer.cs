@@ -12,10 +12,10 @@ namespace SabreTools.Serialization.CrossModel
             if (obj is null)
                 return null;
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             var metadataFile = header is not null ? ConvertHeaderFromInternalModel(header) : new MetadataFile();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             var items = new List<Row>();
             foreach (var machine in machines ?? [])
             {
@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var metadataFile = new MetadataFile
             {
-                Header = item.ReadStringArray(Data.Models.Metadata.Header.HeaderKey),
+                Header = item.HeaderRow,
             };
             return metadataFile;
         }
@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Row[] ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item)
         {
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is null || roms.Length == 0)
                 return [];
 
@@ -57,28 +57,28 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                Name = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
-                Title = item.ReadString(Data.Models.Metadata.Rom.NameKey),
-                Emulator = parent.ReadString(Data.Models.Metadata.Machine.EmulatorKey),
-                CloneOf = parent.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
-                Year = parent.ReadString(Data.Models.Metadata.Machine.YearKey),
-                Manufacturer = parent.ReadString(Data.Models.Metadata.Machine.ManufacturerKey),
-                Category = parent.ReadString(Data.Models.Metadata.Machine.CategoryKey),
-                Players = parent.ReadString(Data.Models.Metadata.Machine.PlayersKey),
-                Rotation = parent.ReadString(Data.Models.Metadata.Machine.RotationKey),
-                Control = parent.ReadString(Data.Models.Metadata.Machine.ControlKey),
-                Status = parent.ReadString(Data.Models.Metadata.Machine.StatusKey),
-                DisplayCount = parent.ReadString(Data.Models.Metadata.Machine.DisplayCountKey),
-                DisplayType = parent.ReadString(Data.Models.Metadata.Machine.DisplayTypeKey),
-                AltRomname = item.ReadString(Data.Models.Metadata.Rom.AltRomnameKey),
-                AltTitle = item.ReadString(Data.Models.Metadata.Rom.AltTitleKey),
-                Extra = parent.ReadString(Data.Models.Metadata.Machine.ExtraKey),
-                Buttons = parent.ReadString(Data.Models.Metadata.Machine.ButtonsKey),
-                Favorite = parent.ReadString(Data.Models.Metadata.Machine.FavoriteKey),
-                Tags = parent.ReadString(Data.Models.Metadata.Machine.TagsKey),
-                PlayedCount = parent.ReadString(Data.Models.Metadata.Machine.PlayedCountKey),
-                PlayedTime = parent.ReadString(Data.Models.Metadata.Machine.PlayedTimeKey),
-                FileIsAvailable = item.ReadString(Data.Models.Metadata.Rom.FileIsAvailableKey),
+                Name = parent.Name,
+                Title = item.Name,
+                Emulator = parent.Emulator,
+                CloneOf = parent.CloneOf,
+                Year = parent.Year,
+                Manufacturer = parent.Manufacturer,
+                Category = parent.Category is null ? null : string.Join(", ", parent.Category),
+                Players = parent.Players,
+                Rotation = parent.Rotation,
+                Control = parent.Control,
+                Status = parent.Status,
+                DisplayCount = parent.DisplayCount,
+                DisplayType = parent.DisplayType,
+                AltRomname = item.AltRomname,
+                AltTitle = item.AltTitle,
+                Extra = parent.Extra,
+                Buttons = parent.Buttons,
+                Favorite = parent.Favorite,
+                Tags = parent.Tags,
+                PlayedCount = parent.PlayedCount,
+                PlayedTime = parent.PlayedTime,
+                FileIsAvailable = item.FileIsAvailable,
             };
             return row;
         }

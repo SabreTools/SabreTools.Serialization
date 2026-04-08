@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using SabreTools.Data.Extensions;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 
@@ -221,21 +220,21 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
         #endregion
 
-        #region Fields
+        #region Properties
 
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Archive,
-                ItemType.BiosSet,
-                ItemType.DeviceRef,
-                ItemType.Disk,
-                ItemType.Driver,
-                ItemType.Media,
-                ItemType.Release,
-                ItemType.Rom,
-                ItemType.Sample,
-                ItemType.SoftwareList,
+                Data.Models.Metadata.ItemType.Archive,
+                Data.Models.Metadata.ItemType.BiosSet,
+                Data.Models.Metadata.ItemType.DeviceRef,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Driver,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Release,
+                Data.Models.Metadata.ItemType.Rom,
+                Data.Models.Metadata.ItemType.Sample,
+                Data.Models.Metadata.ItemType.SoftwareList,
             ];
 
         /// <summary>
@@ -254,9 +253,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             _useGame = useGame;
             if (useGame)
-                Header.Write(DatHeader.DatFormatKey, DatFormat.LogiqxDeprecated);
+                Header.DatFormat = DatFormat.LogiqxDeprecated;
             else
-                Header.Write(DatHeader.DatFormatKey, DatFormat.Logiqx);
+                Header.DatFormat = DatFormat.Logiqx;
         }
 
         /// <inheritdoc/>
@@ -267,100 +266,100 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Release release:
-                    if (string.IsNullOrEmpty(release.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Release.NameKey);
-                    if (string.IsNullOrEmpty(release.ReadString(Data.Models.Metadata.Release.RegionKey)))
-                        missingFields.Add(Data.Models.Metadata.Release.RegionKey);
+                    if (string.IsNullOrEmpty(release.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Release.Name));
+                    if (string.IsNullOrEmpty(release.Region))
+                        missingFields.Add(nameof(Data.Models.Metadata.Release.Region));
                     break;
 
                 case BiosSet biosset:
-                    if (string.IsNullOrEmpty(biosset.GetName()))
-                        missingFields.Add(Data.Models.Metadata.BiosSet.NameKey);
-                    if (string.IsNullOrEmpty(biosset.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey)))
-                        missingFields.Add(Data.Models.Metadata.BiosSet.DescriptionKey);
+                    if (string.IsNullOrEmpty(biosset.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Name));
+                    if (string.IsNullOrEmpty(biosset.Description))
+                        missingFields.Add(nameof(Data.Models.Metadata.BiosSet.Description));
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-                    if (rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) is null || rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) < 0)
-                        missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC64Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD2Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD4Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD5Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA256Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA384Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA512Key))
-                        && string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey)))
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (rom.Size is null || rom.Size < 0)
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
+                    if (string.IsNullOrEmpty(rom.CRC16)
+                        && string.IsNullOrEmpty(rom.CRC32)
+                        && string.IsNullOrEmpty(rom.CRC64)
+                        && string.IsNullOrEmpty(rom.MD2)
+                        && string.IsNullOrEmpty(rom.MD4)
+                        && string.IsNullOrEmpty(rom.MD5)
+                        && string.IsNullOrEmpty(rom.RIPEMD128)
+                        && string.IsNullOrEmpty(rom.RIPEMD160)
+                        && string.IsNullOrEmpty(rom.SHA1)
+                        && string.IsNullOrEmpty(rom.SHA256)
+                        && string.IsNullOrEmpty(rom.SHA384)
+                        && string.IsNullOrEmpty(rom.SHA512)
+                        && string.IsNullOrEmpty(rom.SpamSum))
                     {
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     }
 
                     break;
 
                 case Disk disk:
-                    if (string.IsNullOrEmpty(disk.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Disk.NameKey);
-                    if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
-                        && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
+                    if (string.IsNullOrEmpty(disk.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
+                    if (string.IsNullOrEmpty(disk.MD5)
+                        && string.IsNullOrEmpty(disk.SHA1))
                     {
-                        missingFields.Add(Data.Models.Metadata.Disk.SHA1Key);
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.SHA1));
                     }
 
                     break;
 
                 case Media media:
-                    if (string.IsNullOrEmpty(media.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Media.NameKey);
-                    if (string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.MD5Key))
-                        && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA1Key))
-                        && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA256Key))
-                        && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SpamSumKey)))
+                    if (string.IsNullOrEmpty(media.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.Name));
+                    if (string.IsNullOrEmpty(media.MD5)
+                        && string.IsNullOrEmpty(media.SHA1)
+                        && string.IsNullOrEmpty(media.SHA256)
+                        && string.IsNullOrEmpty(media.SpamSum))
                     {
-                        missingFields.Add(Data.Models.Metadata.Media.SHA1Key);
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.SHA1));
                     }
 
                     break;
 
                 case DeviceRef deviceref:
-                    if (string.IsNullOrEmpty(deviceref.GetName()))
-                        missingFields.Add(Data.Models.Metadata.DeviceRef.NameKey);
+                    if (string.IsNullOrEmpty(deviceref.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.DeviceRef.Name));
                     break;
 
                 case Sample sample:
-                    if (string.IsNullOrEmpty(sample.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Sample.NameKey);
+                    if (string.IsNullOrEmpty(sample.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Sample.Name));
                     break;
 
                 case Archive archive:
-                    if (string.IsNullOrEmpty(archive.GetName()))
-                        missingFields.Add(Data.Models.Metadata.Archive.NameKey);
+                    if (string.IsNullOrEmpty(archive.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Archive.Name));
                     break;
 
                 case Driver driver:
-                    if (driver.ReadString(Data.Models.Metadata.Driver.StatusKey).AsSupportStatus() is null)
-                        missingFields.Add(Data.Models.Metadata.Driver.StatusKey);
-                    if (driver.ReadString(Data.Models.Metadata.Driver.EmulationKey).AsSupportStatus() is null)
-                        missingFields.Add(Data.Models.Metadata.Driver.EmulationKey);
-                    if (driver.ReadString(Data.Models.Metadata.Driver.CocktailKey).AsSupportStatus() is null)
-                        missingFields.Add(Data.Models.Metadata.Driver.CocktailKey);
-                    if (driver.ReadString(Data.Models.Metadata.Driver.SaveStateKey).AsSupportStatus() is null)
-                        missingFields.Add(Data.Models.Metadata.Driver.SaveStateKey);
+                    if (driver.Status is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Driver.Status));
+                    if (driver.Emulation is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Driver.Emulation));
+                    if (driver.Cocktail is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Driver.Cocktail));
+                    if (driver.SaveState is null)
+                        missingFields.Add(nameof(Data.Models.Metadata.Driver.SaveState));
                     break;
 
                 case DatItems.Formats.SoftwareList softwarelist:
-                    if (string.IsNullOrEmpty(softwarelist.ReadString(Data.Models.Metadata.SoftwareList.TagKey)))
-                        missingFields.Add(Data.Models.Metadata.SoftwareList.TagKey);
-                    if (string.IsNullOrEmpty(softwarelist.GetName()))
-                        missingFields.Add(Data.Models.Metadata.SoftwareList.NameKey);
-                    if (softwarelist.ReadString(Data.Models.Metadata.SoftwareList.StatusKey).AsSoftwareListStatus() == null)
-                        missingFields.Add(Data.Models.Metadata.SoftwareList.StatusKey);
+                    if (string.IsNullOrEmpty(softwarelist.Tag))
+                        missingFields.Add(nameof(Data.Models.Metadata.SoftwareList.Tag));
+                    if (string.IsNullOrEmpty(softwarelist.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.SoftwareList.Name));
+                    if (softwarelist.Status == null)
+                        missingFields.Add(nameof(Data.Models.Metadata.SoftwareList.Status));
                     break;
 
                 default:
@@ -385,7 +384,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 // TODO: Enable No-Intro doctype writing instead of Logiqx
                 // Only write the doctype if we don't have No-Intro data
                 bool success;
-                if (string.IsNullOrEmpty(Header.ReadString(Data.Models.Metadata.Header.IdKey)))
+                if (string.IsNullOrEmpty(Header.Id))
                     success = new Serialization.Writers.Logiqx().SerializeFile(datafile, outfile);
                 else
                     success = new Serialization.Writers.Logiqx().SerializeFile(datafile, outfile);

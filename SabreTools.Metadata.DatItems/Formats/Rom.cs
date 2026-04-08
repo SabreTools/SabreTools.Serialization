@@ -12,69 +12,618 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("rom"), XmlRoot("rom")]
     public sealed class Rom : DatItem<Data.Models.Metadata.Rom>
     {
-        #region Constants
+        #region Properties
 
-        /// <summary>
-        /// Non-standard key for inverted logic
-        /// </summary>
-        public const string DataAreaKey = "DATAAREA";
-
-        /// <summary>
-        /// Non-standard key for inverted logic
-        /// </summary>
-        public const string PartKey = "PART";
-
-        #endregion
-
-        #region Fields
-
-        /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Rom;
-
-        [JsonIgnore]
-        public bool ItemStatusSpecified
+        public string? Album
         {
-            get
-            {
-                var status = ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus();
-                return status is not null && status != ItemStatus.None;
-            }
+            get => _internal.Album;
+            set => _internal.Album = value;
         }
 
-        [JsonIgnore]
-        public bool OriginalSpecified
+        public string? AltRomname
         {
-            get
-            {
-                var original = Read<Original?>("ORIGINAL");
-                return original is not null && original != default;
-            }
+            get => _internal.AltRomname;
+            set => _internal.AltRomname = value;
         }
+
+        public string? AltTitle
+        {
+            get => _internal.AltTitle;
+            set => _internal.AltTitle = value;
+        }
+
+        public string? Artist
+        {
+            get => _internal.Artist;
+            set => _internal.Artist = value;
+        }
+
+        public string? ASRDetectedLang
+        {
+            get => _internal.ASRDetectedLang;
+            set => _internal.ASRDetectedLang = value;
+        }
+
+        public string? ASRDetectedLangConf
+        {
+            get => _internal.ASRDetectedLangConf;
+            set => _internal.ASRDetectedLangConf = value;
+        }
+
+        public string? ASRTranscribedLang
+        {
+            get => _internal.ASRTranscribedLang;
+            set => _internal.ASRTranscribedLang = value;
+        }
+
+        public string? Bios
+        {
+            get => _internal.Bios;
+            set => _internal.Bios = value;
+        }
+
+        public string? Bitrate
+        {
+            get => _internal.Bitrate;
+            set => _internal.Bitrate = value;
+        }
+
+        public string? BitTorrentMagnetHash
+        {
+            get => _internal.BitTorrentMagnetHash;
+            set => _internal.BitTorrentMagnetHash = value;
+        }
+
+        public string? ClothCoverDetectionModuleVersion
+        {
+            get => _internal.ClothCoverDetectionModuleVersion;
+            set => _internal.ClothCoverDetectionModuleVersion = value;
+        }
+
+        public string? CollectionCatalogNumber
+        {
+            get => _internal.CollectionCatalogNumber;
+            set => _internal.CollectionCatalogNumber = value;
+        }
+
+        public string? Comment
+        {
+            get => _internal.Comment;
+            set => _internal.Comment = value;
+        }
+
+        public string? CRC16
+        {
+            get => _internal.CRC16;
+            set => _internal.CRC16 = value;
+        }
+
+        public string? CRC32
+        {
+            get => _internal.CRC32;
+            set => _internal.CRC32 = value;
+        }
+
+        public string? CRC64
+        {
+            get => _internal.CRC64;
+            set => _internal.CRC64 = value;
+        }
+
+        public string? Creator
+        {
+            get => _internal.Creator;
+            set => _internal.Creator = value;
+        }
+
+        public DataArea? DataArea { get; set; }
 
         [JsonIgnore]
         public bool DataAreaSpecified
         {
             get
             {
-                var dataArea = Read<DataArea?>(DataAreaKey);
-                return dataArea is not null
-                    && (!string.IsNullOrEmpty(dataArea.GetName())
-                        || dataArea.ReadLong(Data.Models.Metadata.DataArea.SizeKey) is not null
-                        || dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey) is not null
-                        || dataArea.ReadString(Data.Models.Metadata.DataArea.EndiannessKey).AsEndianness() is not null);
+                return DataArea is not null
+                    && (!string.IsNullOrEmpty(DataArea.Name)
+                        || DataArea.Size is not null
+                        || DataArea.Width is not null
+                        || DataArea.Endianness is not null);
             }
         }
+
+        public string? Date
+        {
+            get => _internal.Date;
+            set => _internal.Date = value;
+        }
+
+        public bool? Dispose
+        {
+            get => _internal.Dispose;
+            set => _internal.Dispose = value;
+        }
+
+        public string? Extension
+        {
+            get => _internal.Extension;
+            set => _internal.Extension = value;
+        }
+
+        public long? FileCount
+        {
+            get => _internal.FileCount;
+            set => _internal.FileCount = value;
+        }
+
+        public bool? FileIsAvailable
+        {
+            get => _internal.FileIsAvailable;
+            set => _internal.FileIsAvailable = value;
+        }
+
+        public string? Flags
+        {
+            get => _internal.Flags;
+            set => _internal.Flags = value;
+        }
+
+        public string? Format
+        {
+            get => _internal.Format;
+            set => _internal.Format = value;
+        }
+
+        public string? Header
+        {
+            get => _internal.Header;
+            set => _internal.Header = value;
+        }
+
+        public string? Height
+        {
+            get => _internal.Height;
+            set => _internal.Height = value;
+        }
+
+        public string? hOCRCharToWordhOCRVersion
+        {
+            get => _internal.hOCRCharToWordhOCRVersion;
+            set => _internal.hOCRCharToWordhOCRVersion = value;
+        }
+
+        public string? hOCRCharToWordModuleVersion
+        {
+            get => _internal.hOCRCharToWordModuleVersion;
+            set => _internal.hOCRCharToWordModuleVersion = value;
+        }
+
+        public string? hOCRFtsTexthOCRVersion
+        {
+            get => _internal.hOCRFtsTexthOCRVersion;
+            set => _internal.hOCRFtsTexthOCRVersion = value;
+        }
+
+        public string? hOCRFtsTextModuleVersion
+        {
+            get => _internal.hOCRFtsTextModuleVersion;
+            set => _internal.hOCRFtsTextModuleVersion = value;
+        }
+
+        public string? hOCRPageIndexhOCRVersion
+        {
+            get => _internal.hOCRPageIndexhOCRVersion;
+            set => _internal.hOCRPageIndexhOCRVersion = value;
+        }
+
+        public string? hOCRPageIndexModuleVersion
+        {
+            get => _internal.hOCRPageIndexModuleVersion;
+            set => _internal.hOCRPageIndexModuleVersion = value;
+        }
+
+        public bool? Inverted
+        {
+            get => _internal.Inverted;
+            set => _internal.Inverted = value;
+        }
+
+        public string? LastModifiedTime
+        {
+            get => _internal.LastModifiedTime;
+            set => _internal.LastModifiedTime = value;
+        }
+
+        /// <inheritdoc>/>
+        public override ItemType ItemType => ItemType.Rom;
+
+        public string? Length
+        {
+            get => _internal.Length;
+            set => _internal.Length = value;
+        }
+
+        public LoadFlag? LoadFlag
+        {
+            get => _internal.LoadFlag;
+            set => _internal.LoadFlag = value;
+        }
+
+        public string? MatrixNumber
+        {
+            get => _internal.MatrixNumber;
+            set => _internal.MatrixNumber = value;
+        }
+
+        public string? MD2
+        {
+            get => _internal.MD2;
+            set => _internal.MD2 = value;
+        }
+
+        public string? MD4
+        {
+            get => _internal.MD4;
+            set => _internal.MD4 = value;
+        }
+
+        public string? MD5
+        {
+            get => _internal.MD5;
+            set => _internal.MD5 = value;
+        }
+
+        public string? Merge
+        {
+            get => _internal.Merge;
+            set => _internal.Merge = value;
+        }
+
+        public bool? MIA
+        {
+            get => _internal.MIA;
+            set => _internal.MIA = value;
+        }
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public string? Offset
+        {
+            get => _internal.Offset;
+            set => _internal.Offset = value;
+        }
+
+        public string? OpenMSXType
+        {
+            get => _internal.OpenMSXType;
+            set => _internal.OpenMSXType = value;
+        }
+
+        public OpenMSXSubType? OpenMSXMediaType
+        {
+            get => _internal.OpenMSXMediaType;
+            set => _internal.OpenMSXMediaType = value;
+        }
+
+        public Original? Original { get; set; }
+
+        public string? OriginalProperty
+        {
+            get => _internal.Original;
+            set => _internal.Original = value;
+        }
+
+        [JsonIgnore]
+        public bool OriginalSpecified => Original is not null;
+
+        public bool? Optional
+        {
+            get => _internal.Optional;
+            set => _internal.Optional = value;
+        }
+
+        public Part? Part { get; set; }
 
         [JsonIgnore]
         public bool PartSpecified
         {
             get
             {
-                var part = Read<Part?>(PartKey);
-                return part is not null
-                    && (!string.IsNullOrEmpty(part.GetName())
-                        || !string.IsNullOrEmpty(part.ReadString(Data.Models.Metadata.Part.InterfaceKey)));
+                return Part is not null
+                    && (!string.IsNullOrEmpty(Part.Name)
+                        || !string.IsNullOrEmpty(Part.Interface));
             }
+        }
+
+        public string? PDFModuleVersion
+        {
+            get => _internal.PDFModuleVersion;
+            set => _internal.PDFModuleVersion = value;
+        }
+
+        public string? PreviewImage
+        {
+            get => _internal.PreviewImage;
+            set => _internal.PreviewImage = value;
+        }
+
+        public string? Publisher
+        {
+            get => _internal.Publisher;
+            set => _internal.Publisher = value;
+        }
+
+        public string? Region
+        {
+            get => _internal.Region;
+            set => _internal.Region = value;
+        }
+
+        public string? Remark
+        {
+            get => _internal.Remark;
+            set => _internal.Remark = value;
+        }
+
+        public string? RIPEMD128
+        {
+            get => _internal.RIPEMD128;
+            set => _internal.RIPEMD128 = value;
+        }
+
+        public string? RIPEMD160
+        {
+            get => _internal.RIPEMD160;
+            set => _internal.RIPEMD160 = value;
+        }
+
+        public string? Rotation
+        {
+            get => _internal.Rotation;
+            set => _internal.Rotation = value;
+        }
+
+        public string? Serial
+        {
+            get => _internal.Serial;
+            set => _internal.Serial = value;
+        }
+
+        public string? SHA1
+        {
+            get => _internal.SHA1;
+            set => _internal.SHA1 = value;
+        }
+
+        public string? SHA256
+        {
+            get => _internal.SHA256;
+            set => _internal.SHA256 = value;
+        }
+
+        public string? SHA384
+        {
+            get => _internal.SHA384;
+            set => _internal.SHA384 = value;
+        }
+
+        public string? SHA512
+        {
+            get => _internal.SHA512;
+            set => _internal.SHA512 = value;
+        }
+
+        public long? Size
+        {
+            get => _internal.Size;
+            set => _internal.Size = value;
+        }
+
+        public bool? SoundOnly
+        {
+            get => _internal.SoundOnly;
+            set => _internal.SoundOnly = value;
+        }
+
+        public string? SourceProperty
+        {
+            get => _internal.Source;
+            set => _internal.Source = value;
+        }
+
+        public string? SpamSum
+        {
+            get => _internal.SpamSum;
+            set => _internal.SpamSum = value;
+        }
+
+        public string? Start
+        {
+            get => _internal.Start;
+            set => _internal.Start = value;
+        }
+
+        public ItemStatus? Status
+        {
+            get => _internal.Status;
+            set => _internal.Status = value;
+        }
+
+        public string? Summation
+        {
+            get => _internal.Summation;
+            set => _internal.Summation = value;
+        }
+
+        public string? TesseractOCR
+        {
+            get => _internal.TesseractOCR;
+            set => _internal.TesseractOCR = value;
+        }
+
+        public string? TesseractOCRConverted
+        {
+            get => _internal.TesseractOCRConverted;
+            set => _internal.TesseractOCRConverted = value;
+        }
+
+        public string? TesseractOCRDetectedLang
+        {
+            get => _internal.TesseractOCRDetectedLang;
+            set => _internal.TesseractOCRDetectedLang = value;
+        }
+
+        public string? TesseractOCRDetectedLangConf
+        {
+            get => _internal.TesseractOCRDetectedLangConf;
+            set => _internal.TesseractOCRDetectedLangConf = value;
+        }
+
+        public string? TesseractOCRDetectedScript
+        {
+            get => _internal.TesseractOCRDetectedScript;
+            set => _internal.TesseractOCRDetectedScript = value;
+        }
+
+        public string? TesseractOCRDetectedScriptConf
+        {
+            get => _internal.TesseractOCRDetectedScriptConf;
+            set => _internal.TesseractOCRDetectedScriptConf = value;
+        }
+
+        public string? TesseractOCRModuleVersion
+        {
+            get => _internal.TesseractOCRModuleVersion;
+            set => _internal.TesseractOCRModuleVersion = value;
+        }
+
+        public string? TesseractOCRParameters
+        {
+            get => _internal.TesseractOCRParameters;
+            set => _internal.TesseractOCRParameters = value;
+        }
+
+        public string? Title
+        {
+            get => _internal.Title;
+            set => _internal.Title = value;
+        }
+
+        public string? Track
+        {
+            get => _internal.Track;
+            set => _internal.Track = value;
+        }
+
+        public string? Value
+        {
+            get => _internal.Value;
+            set => _internal.Value = value;
+        }
+
+        public string? WhisperASRModuleVersion
+        {
+            get => _internal.WhisperASRModuleVersion;
+            set => _internal.WhisperASRModuleVersion = value;
+        }
+
+        public string? WhisperModelHash
+        {
+            get => _internal.WhisperModelHash;
+            set => _internal.WhisperModelHash = value;
+        }
+
+        public string? WhisperModelName
+        {
+            get => _internal.WhisperModelName;
+            set => _internal.WhisperModelName = value;
+        }
+
+        public string? WhisperVersion
+        {
+            get => _internal.WhisperVersion;
+            set => _internal.WhisperVersion = value;
+        }
+
+        public string? Width
+        {
+            get => _internal.Width;
+            set => _internal.Width = value;
+        }
+
+        public string? WordConfidenceInterval0To10
+        {
+            get => _internal.WordConfidenceInterval0To10;
+            set => _internal.WordConfidenceInterval0To10 = value;
+        }
+
+        public string? WordConfidenceInterval11To20
+        {
+            get => _internal.WordConfidenceInterval11To20;
+            set => _internal.WordConfidenceInterval11To20 = value;
+        }
+
+        public string? WordConfidenceInterval21To30
+        {
+            get => _internal.WordConfidenceInterval21To30;
+            set => _internal.WordConfidenceInterval21To30 = value;
+        }
+
+        public string? WordConfidenceInterval31To40
+        {
+            get => _internal.WordConfidenceInterval31To40;
+            set => _internal.WordConfidenceInterval31To40 = value;
+        }
+
+        public string? WordConfidenceInterval41To50
+        {
+            get => _internal.WordConfidenceInterval41To50;
+            set => _internal.WordConfidenceInterval41To50 = value;
+        }
+
+        public string? WordConfidenceInterval51To60
+        {
+            get => _internal.WordConfidenceInterval51To60;
+            set => _internal.WordConfidenceInterval51To60 = value;
+        }
+
+        public string? WordConfidenceInterval61To70
+        {
+            get => _internal.WordConfidenceInterval61To70;
+            set => _internal.WordConfidenceInterval61To70 = value;
+        }
+
+        public string? WordConfidenceInterval71To80
+        {
+            get => _internal.WordConfidenceInterval71To80;
+            set => _internal.WordConfidenceInterval71To80 = value;
+        }
+
+        public string? WordConfidenceInterval81To90
+        {
+            get => _internal.WordConfidenceInterval81To90;
+            set => _internal.WordConfidenceInterval81To90 = value;
+        }
+
+        public string? WordConfidenceInterval91To100
+        {
+            get => _internal.WordConfidenceInterval91To100;
+            set => _internal.WordConfidenceInterval91To100 = value;
+        }
+
+        public string? xxHash364
+        {
+            get => _internal.xxHash364;
+            set => _internal.xxHash364 = value;
+        }
+
+        public string? xxHash3128
+        {
+            get => _internal.xxHash3128;
+            set => _internal.xxHash3128 = value;
         }
 
         #endregion
@@ -83,8 +632,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Rom() : base()
         {
-            Write<DupeType>(DupeTypeKey, 0x00);
-            Write<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.None.AsStringValue());
+            DupeType = 0x00;
+            Status = ItemStatus.None;
         }
 
         public Rom(Dump item, Machine machine, Source source, int index)
@@ -93,19 +642,19 @@ namespace SabreTools.Metadata.DatItems.Formats
             Data.Models.Metadata.Rom? rom = null;
             OpenMSXSubType? subType = null;
 
-            if (item.Read<Data.Models.Metadata.Rom>(Dump.RomKey) is not null)
+            if (item.Rom is not null)
             {
-                rom = item.Read<Data.Models.Metadata.Rom>(Dump.RomKey);
+                rom = item.Rom;
                 subType = OpenMSXSubType.Rom;
             }
-            else if (item.Read<Data.Models.Metadata.Rom>(Dump.MegaRomKey) is not null)
+            else if (item.MegaRom is not null)
             {
-                rom = item.Read<Data.Models.Metadata.Rom>(Dump.MegaRomKey);
+                rom = item.MegaRom;
                 subType = OpenMSXSubType.MegaRom;
             }
-            else if (item.Read<Data.Models.Metadata.Rom>(Dump.SCCPlusCartKey) is not null)
+            else if (item.SCCPlusCart is not null)
             {
-                rom = item.Read<Data.Models.Metadata.Rom>(Dump.SCCPlusCartKey);
+                rom = item.SCCPlusCart;
                 subType = OpenMSXSubType.SCCPlusCart;
             }
 
@@ -113,181 +662,140 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (rom is null)
                 return;
 
-            string name = $"{machine.GetName()}_{index++}{(!string.IsNullOrEmpty(rom!.ReadString(Data.Models.Metadata.Rom.RemarkKey)) ? $" {rom.ReadString(Data.Models.Metadata.Rom.RemarkKey)}" : string.Empty)}";
+            string name = $"{machine.Name}_{index++}{(!string.IsNullOrEmpty(rom!.Remark) ? $" {rom.Remark}" : string.Empty)}";
 
-            SetName(name);
-            Write<string?>(Data.Models.Metadata.Rom.OffsetKey, rom.ReadString(Data.Models.Metadata.Rom.StartKey));
-            Write<string?>(Data.Models.Metadata.Rom.OpenMSXMediaType, subType?.AsStringValue());
-            Write<string?>(Data.Models.Metadata.Rom.OpenMSXType, rom.ReadString(Data.Models.Metadata.Rom.OpenMSXType) ?? rom.ReadString(Data.Models.Metadata.DatItem.TypeKey));
-            Write<string?>(Data.Models.Metadata.Rom.RemarkKey, rom.ReadString(Data.Models.Metadata.Rom.RemarkKey));
-            Write<string?>(Data.Models.Metadata.Rom.SHA1Key, rom.ReadString(Data.Models.Metadata.Rom.SHA1Key));
-            Write<string?>(Data.Models.Metadata.Rom.StartKey, rom.ReadString(Data.Models.Metadata.Rom.StartKey));
-            Write<Source?>(SourceKey, source);
+            Name = name;
+            Offset = rom.Start;
+            OpenMSXMediaType = subType;
+            OpenMSXType = rom.ItemType.ToString();
+            Remark = rom.Remark;
+            SHA1 = rom.SHA1;
+            Start = rom.Start;
+            Source = source;
 
-            var original = item.Read<Data.Models.Metadata.Original>(Dump.OriginalKey);
+            var original = item.Original;
             if (original is not null)
             {
-                Write<Original?>("ORIGINAL", new Original
+                Original = new Original
                 {
-                    Value = original.ReadBool(Data.Models.Metadata.Original.ValueKey),
-                    Content = original.ReadString(Data.Models.Metadata.Original.ContentKey),
-                });
+                    Value = original.Value,
+                    Content = original.Content,
+                };
             }
 
             CopyMachineInformation(machine);
 
             // Process hash values
-            long? size = ReadLong(Data.Models.Metadata.Rom.SizeKey);
-            if (size is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SizeKey, size.ToString());
-
             // TODO: This should be normalized to CRC-16
-            string? crc16 = ReadString(Data.Models.Metadata.Rom.CRC16Key);
+            string? crc16 = CRC16;
             if (crc16 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.CRC16Key, NormalizeHashData(crc16, 4));
+                CRC16 = NormalizeHashData(crc16, 4);
 
-            string? crc = ReadString(Data.Models.Metadata.Rom.CRCKey);
-            if (crc is not null)
-                Write<string?>(Data.Models.Metadata.Rom.CRCKey, TextHelper.NormalizeCRC32(crc));
+            string? crc32 = CRC32;
+            if (crc32 is not null)
+                CRC32 = TextHelper.NormalizeCRC32(crc32);
 
             // TODO: This should be normalized to CRC-64
-            string? crc64 = ReadString(Data.Models.Metadata.Rom.CRC64Key);
+            string? crc64 = CRC64;
             if (crc64 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.CRC64Key, NormalizeHashData(crc64, 16));
+                CRC64 = NormalizeHashData(crc64, 16);
 
-            string? md2 = ReadString(Data.Models.Metadata.Rom.MD2Key);
+            string? md2 = MD2;
             if (md2 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.MD2Key, TextHelper.NormalizeMD2(md2));
+                MD2 = TextHelper.NormalizeMD2(md2);
 
-            string? md4 = ReadString(Data.Models.Metadata.Rom.MD4Key);
+            string? md4 = MD4;
             if (md4 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.MD4Key, TextHelper.NormalizeMD5(md4));
+                MD4 = TextHelper.NormalizeMD5(md4);
 
-            string? md5 = ReadString(Data.Models.Metadata.Rom.MD5Key);
+            string? md5 = MD5;
             if (md5 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.MD5Key, TextHelper.NormalizeMD5(md5));
+                MD5 = TextHelper.NormalizeMD5(md5);
 
-            string? ripemd128 = ReadString(Data.Models.Metadata.Rom.RIPEMD128Key);
+            string? ripemd128 = RIPEMD128;
             if (ripemd128 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.RIPEMD128Key, TextHelper.NormalizeRIPEMD128(ripemd128));
+                RIPEMD128 = TextHelper.NormalizeRIPEMD128(ripemd128);
 
-            string? ripemd160 = ReadString(Data.Models.Metadata.Rom.RIPEMD160Key);
+            string? ripemd160 = RIPEMD160;
             if (ripemd160 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.RIPEMD160Key, TextHelper.NormalizeRIPEMD160(ripemd160));
+                RIPEMD160 = TextHelper.NormalizeRIPEMD160(ripemd160);
 
-            string? sha1 = ReadString(Data.Models.Metadata.Rom.SHA1Key);
+            string? sha1 = SHA1;
             if (sha1 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SHA1Key, TextHelper.NormalizeSHA1(sha1));
+                SHA1 = TextHelper.NormalizeSHA1(sha1);
 
-            string? sha256 = ReadString(Data.Models.Metadata.Rom.SHA256Key);
+            string? sha256 = SHA256;
             if (sha256 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SHA256Key, TextHelper.NormalizeSHA256(sha256));
+                SHA256 = TextHelper.NormalizeSHA256(sha256);
 
-            string? sha384 = ReadString(Data.Models.Metadata.Rom.SHA384Key);
+            string? sha384 = SHA384;
             if (sha384 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SHA384Key, TextHelper.NormalizeSHA384(sha384));
+                SHA384 = TextHelper.NormalizeSHA384(sha384);
 
-            string? sha512 = ReadString(Data.Models.Metadata.Rom.SHA512Key);
+            string? sha512 = SHA512;
             if (sha512 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SHA512Key, TextHelper.NormalizeSHA512(sha512));
+                SHA512 = TextHelper.NormalizeSHA512(sha512);
         }
 
         public Rom(Data.Models.Metadata.Rom item) : base(item)
         {
-            Write<DupeType>(DupeTypeKey, 0x00);
-
-            // Process flag values
-            bool? dispose = ReadBool(Data.Models.Metadata.Rom.DisposeKey);
-            if (dispose is not null)
-                Write<string?>(Data.Models.Metadata.Rom.DisposeKey, dispose.FromYesNo());
-
-            bool? inverted = ReadBool(Data.Models.Metadata.Rom.InvertedKey);
-            if (inverted is not null)
-                Write<string?>(Data.Models.Metadata.Rom.InvertedKey, inverted.FromYesNo());
-
-            string? loadFlag = ReadString(Data.Models.Metadata.Rom.LoadFlagKey);
-            if (loadFlag is not null)
-                Write<string?>(Data.Models.Metadata.Rom.LoadFlagKey, loadFlag.AsLoadFlag()?.AsStringValue());
-
-            string? openMSXMediaType = ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType);
-            if (openMSXMediaType is not null)
-                Write<string?>(Data.Models.Metadata.Rom.OpenMSXMediaType, openMSXMediaType.AsOpenMSXSubType()?.AsStringValue());
-
-            bool? mia = ReadBool(Data.Models.Metadata.Rom.MIAKey);
-            if (mia is not null)
-                Write<string?>(Data.Models.Metadata.Rom.MIAKey, mia.FromYesNo());
-
-            bool? optional = ReadBool(Data.Models.Metadata.Rom.OptionalKey);
-            if (optional is not null)
-                Write<string?>(Data.Models.Metadata.Rom.OptionalKey, optional.FromYesNo());
-
-            bool? soundOnly = ReadBool(Data.Models.Metadata.Rom.SoundOnlyKey);
-            if (soundOnly is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SoundOnlyKey, soundOnly.FromYesNo());
-
-            string? status = ReadString(Data.Models.Metadata.Rom.StatusKey);
-            if (status is not null)
-                Write<string?>(Data.Models.Metadata.Rom.StatusKey, status.AsItemStatus()?.AsStringValue());
+            DupeType = 0x00;
 
             // Process hash values
-            long? size = ReadLong(Data.Models.Metadata.Rom.SizeKey);
-            if (size is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SizeKey, size.ToString());
-
             // TODO: This should be normalized to CRC-16
-            string? crc16 = ReadString(Data.Models.Metadata.Rom.CRC16Key);
+            string? crc16 = CRC16;
             if (crc16 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.CRC16Key, NormalizeHashData(crc16, 4));
+                CRC16 = NormalizeHashData(crc16, 4);
 
-            string? crc = ReadString(Data.Models.Metadata.Rom.CRCKey);
-            if (crc is not null)
-                Write<string?>(Data.Models.Metadata.Rom.CRCKey, TextHelper.NormalizeCRC32(crc));
+            string? crc32 = CRC32;
+            if (crc32 is not null)
+                CRC32 = TextHelper.NormalizeCRC32(crc32);
 
             // TODO: This should be normalized to CRC-64
-            string? crc64 = ReadString(Data.Models.Metadata.Rom.CRC64Key);
+            string? crc64 = CRC64;
             if (crc64 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.CRC64Key, NormalizeHashData(crc64, 16));
+                CRC64 = NormalizeHashData(crc64, 16);
 
-            string? md2 = ReadString(Data.Models.Metadata.Rom.MD2Key);
+            string? md2 = MD2;
             if (md2 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.MD2Key, TextHelper.NormalizeMD2(md2));
+                MD2 = TextHelper.NormalizeMD2(md2);
 
-            string? md4 = ReadString(Data.Models.Metadata.Rom.MD4Key);
+            string? md4 = MD4;
             if (md4 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.MD4Key, TextHelper.NormalizeMD5(md4));
+                MD4 = TextHelper.NormalizeMD5(md4);
 
-            string? md5 = ReadString(Data.Models.Metadata.Rom.MD5Key);
+            string? md5 = MD5;
             if (md5 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.MD5Key, TextHelper.NormalizeMD5(md5));
+                MD5 = TextHelper.NormalizeMD5(md5);
 
-            string? ripemd128 = ReadString(Data.Models.Metadata.Rom.RIPEMD128Key);
+            string? ripemd128 = RIPEMD128;
             if (ripemd128 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.RIPEMD128Key, TextHelper.NormalizeRIPEMD128(ripemd128));
+                RIPEMD128 = TextHelper.NormalizeRIPEMD128(ripemd128);
 
-            string? ripemd160 = ReadString(Data.Models.Metadata.Rom.RIPEMD160Key);
+            string? ripemd160 = RIPEMD160;
             if (ripemd160 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.RIPEMD160Key, TextHelper.NormalizeRIPEMD160(ripemd160));
+                RIPEMD160 = TextHelper.NormalizeRIPEMD160(ripemd160);
 
-            string? sha1 = ReadString(Data.Models.Metadata.Rom.SHA1Key);
+            string? sha1 = SHA1;
             if (sha1 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SHA1Key, TextHelper.NormalizeSHA1(sha1));
+                SHA1 = TextHelper.NormalizeSHA1(sha1);
 
-            string? sha256 = ReadString(Data.Models.Metadata.Rom.SHA256Key);
+            string? sha256 = SHA256;
             if (sha256 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SHA256Key, TextHelper.NormalizeSHA256(sha256));
+                SHA256 = TextHelper.NormalizeSHA256(sha256);
 
-            string? sha384 = ReadString(Data.Models.Metadata.Rom.SHA384Key);
+            string? sha384 = SHA384;
             if (sha384 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SHA384Key, TextHelper.NormalizeSHA384(sha384));
+                SHA384 = TextHelper.NormalizeSHA384(sha384);
 
-            string? sha512 = ReadString(Data.Models.Metadata.Rom.SHA512Key);
+            string? sha512 = SHA512;
             if (sha512 is not null)
-                Write<string?>(Data.Models.Metadata.Rom.SHA512Key, TextHelper.NormalizeSHA512(sha512));
+                SHA512 = TextHelper.NormalizeSHA512(sha512);
         }
 
         public Rom(Data.Models.Metadata.Rom item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
 
@@ -374,14 +882,43 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         #endregion
 
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
+
+        #endregion
+
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Rom(_internal.Clone() as Data.Models.Metadata.Rom ?? []);
+        public override object Clone() => new Rom(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Rom GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Rom ?? new();
 
         #endregion
 
         #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Rom otherRom)
+                return _internal.PartialEquals(otherRom._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         /// <summary>
         /// Fill any missing size and hash information from another Rom
@@ -417,55 +954,55 @@ namespace SabreTools.Metadata.DatItems.Formats
             switch (bucketedBy)
             {
                 case ItemKey.CRC16:
-                    key = ReadString(Data.Models.Metadata.Rom.CRC16Key);
+                    key = CRC16;
                     break;
 
-                case ItemKey.CRC:
-                    key = ReadString(Data.Models.Metadata.Rom.CRCKey);
+                case ItemKey.CRC32:
+                    key = CRC32;
                     break;
 
                 case ItemKey.CRC64:
-                    key = ReadString(Data.Models.Metadata.Rom.CRC64Key);
+                    key = CRC64;
                     break;
 
                 case ItemKey.MD2:
-                    key = ReadString(Data.Models.Metadata.Rom.MD2Key);
+                    key = MD2;
                     break;
 
                 case ItemKey.MD4:
-                    key = ReadString(Data.Models.Metadata.Rom.MD4Key);
+                    key = MD4;
                     break;
 
                 case ItemKey.MD5:
-                    key = ReadString(Data.Models.Metadata.Rom.MD5Key);
+                    key = MD5;
                     break;
 
                 case ItemKey.RIPEMD128:
-                    key = ReadString(Data.Models.Metadata.Rom.RIPEMD128Key);
+                    key = RIPEMD128;
                     break;
 
                 case ItemKey.RIPEMD160:
-                    key = ReadString(Data.Models.Metadata.Rom.RIPEMD160Key);
+                    key = RIPEMD160;
                     break;
 
                 case ItemKey.SHA1:
-                    key = ReadString(Data.Models.Metadata.Rom.SHA1Key);
+                    key = SHA1;
                     break;
 
                 case ItemKey.SHA256:
-                    key = ReadString(Data.Models.Metadata.Rom.SHA256Key);
+                    key = SHA256;
                     break;
 
                 case ItemKey.SHA384:
-                    key = ReadString(Data.Models.Metadata.Rom.SHA384Key);
+                    key = SHA384;
                     break;
 
                 case ItemKey.SHA512:
-                    key = ReadString(Data.Models.Metadata.Rom.SHA512Key);
+                    key = SHA512;
                     break;
 
                 case ItemKey.SpamSum:
-                    key = ReadString(Data.Models.Metadata.Rom.SpamSumKey);
+                    key = SpamSum;
                     break;
 
                 // Let the base handle generic stuff

@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalElementString("releaseNumber", obj.ReleaseNumber);
             writer.WriteOptionalElementString("title", obj.Title);
             writer.WriteOptionalElementString("saveType", obj.SaveType);
-            writer.WriteOptionalElementString("romSize", obj.RomSize);
+            writer.WriteOptionalElementString("romSize", obj.RomSize?.ToString());
             writer.WriteOptionalElementString("publisher", obj.Publisher);
             writer.WriteOptionalElementString("location", obj.Location);
             writer.WriteOptionalElementString("sourceRom", obj.SourceRom);
@@ -333,7 +333,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteOptionalAttributeString("visible", obj.Visible);
             writer.WriteOptionalAttributeString("inNamingOption", obj.InNamingOption);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.ToString()?.ToLowerInvariant());
 
             writer.WriteEndElement();
         }
@@ -441,7 +441,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("to");
 
             writer.WriteOptionalAttributeString("value", obj.Value);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.ToString()?.ToLowerInvariant());
             writer.WriteOptionalAttributeString("auto", obj.Auto);
 
             if (obj.Find is not null && obj.Find.Length > 0)

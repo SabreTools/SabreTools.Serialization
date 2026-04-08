@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Metadata.Filter
 {
@@ -65,14 +64,14 @@ namespace SabreTools.Metadata.Filter
         #region Matching
 
         /// <summary>
-        /// Determine if a DictionaryBase object matches the group
+        /// Determine if a object matches the group
         /// </summary>
-        public bool Matches(DictionaryBase dictionaryBase)
+        public bool Matches(object obj)
         {
             return GroupType switch
             {
-                GroupType.AND => MatchesAnd(dictionaryBase),
-                GroupType.OR => MatchesOr(dictionaryBase),
+                GroupType.AND => MatchesAnd(obj),
+                GroupType.OR => MatchesOr(obj),
 
                 GroupType.NONE => false,
                 _ => false,
@@ -82,13 +81,13 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Determines if a value matches all filters
         /// </summary>
-        private bool MatchesAnd(DictionaryBase dictionaryBase)
+        private bool MatchesAnd(object obj)
         {
             // Run standalone filters
             foreach (var filter in _subfilters)
             {
                 // One failed match fails the group
-                if (!filter.Matches(dictionaryBase))
+                if (!filter.Matches(obj))
                     return false;
             }
 
@@ -96,7 +95,7 @@ namespace SabreTools.Metadata.Filter
             foreach (var group in _subgroups)
             {
                 // One failed match fails the group
-                if (!group.Matches(dictionaryBase))
+                if (!group.Matches(obj))
                     return false;
             }
 
@@ -106,13 +105,13 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Determines if a value matches any filters
         /// </summary>
-        private bool MatchesOr(DictionaryBase dictionaryBase)
+        private bool MatchesOr(object obj)
         {
             // Run standalone filters
             foreach (var filter in _subfilters)
             {
                 // One successful match passes the group
-                if (filter.Matches(dictionaryBase))
+                if (filter.Matches(obj))
                     return true;
             }
 
@@ -120,7 +119,7 @@ namespace SabreTools.Metadata.Filter
             foreach (var group in _subgroups)
             {
                 // One successful match passes the group
-                if (group.Matches(dictionaryBase))
+                if (group.Matches(obj))
                     return true;
             }
 

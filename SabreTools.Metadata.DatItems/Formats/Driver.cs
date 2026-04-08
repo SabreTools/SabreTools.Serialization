@@ -1,6 +1,5 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,83 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("driver"), XmlRoot("driver")]
     public sealed class Driver : DatItem<Data.Models.Metadata.Driver>
     {
-        #region Fields
+        #region Properties
+
+        public Data.Models.Metadata.Blit? Blit
+        {
+            get => _internal.Blit;
+            set => _internal.Blit = value;
+        }
+
+        public Data.Models.Metadata.SupportStatus? Cocktail
+        {
+            get => _internal.Cocktail;
+            set => _internal.Cocktail = value;
+        }
+
+        public Data.Models.Metadata.SupportStatus? Color
+        {
+            get => _internal.Color;
+            set => _internal.Color = value;
+        }
+
+        public Data.Models.Metadata.SupportStatus? Emulation
+        {
+            get => _internal.Emulation;
+            set => _internal.Emulation = value;
+        }
+
+        public bool? Incomplete
+        {
+            get => _internal.Incomplete;
+            set => _internal.Incomplete = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Driver;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Driver;
+
+        public bool? NoSoundHardware
+        {
+            get => _internal.NoSoundHardware;
+            set => _internal.NoSoundHardware = value;
+        }
+
+        public string? PaletteSize
+        {
+            get => _internal.PaletteSize;
+            set => _internal.PaletteSize = value;
+        }
+
+        public bool? RequiresArtwork
+        {
+            get => _internal.RequiresArtwork;
+            set => _internal.RequiresArtwork = value;
+        }
+
+        public Data.Models.Metadata.Supported? SaveState
+        {
+            get => _internal.SaveState;
+            set => _internal.SaveState = value;
+        }
+
+        public Data.Models.Metadata.SupportStatus? Sound
+        {
+            get => _internal.Sound;
+            set => _internal.Sound = value;
+        }
+
+        public Data.Models.Metadata.SupportStatus? Status
+        {
+            get => _internal.Status;
+            set => _internal.Status = value;
+        }
+
+        public bool? Unofficial
+        {
+            get => _internal.Unofficial;
+            set => _internal.Unofficial = value;
+        }
 
         #endregion
 
@@ -21,66 +93,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Driver() : base() { }
 
-        public Driver(Data.Models.Metadata.Driver item) : base(item)
-        {
-            // Process flag values
-            string? cocktail = ReadString(Data.Models.Metadata.Driver.CocktailKey);
-            if (cocktail is not null)
-                Write<string?>(Data.Models.Metadata.Driver.CocktailKey, cocktail.AsSupportStatus()?.AsStringValue());
-
-            string? color = ReadString(Data.Models.Metadata.Driver.ColorKey);
-            if (color is not null)
-                Write<string?>(Data.Models.Metadata.Driver.ColorKey, color.AsSupportStatus()?.AsStringValue());
-
-            string? emulation = ReadString(Data.Models.Metadata.Driver.EmulationKey);
-            if (emulation is not null)
-                Write<string?>(Data.Models.Metadata.Driver.EmulationKey, emulation.AsSupportStatus()?.AsStringValue());
-
-            bool? incomplete = ReadBool(Data.Models.Metadata.Driver.IncompleteKey);
-            if (incomplete is not null)
-                Write<string?>(Data.Models.Metadata.Driver.IncompleteKey, incomplete.FromYesNo());
-
-            bool? noSoundHardware = ReadBool(Data.Models.Metadata.Driver.NoSoundHardwareKey);
-            if (noSoundHardware is not null)
-                Write<string?>(Data.Models.Metadata.Driver.NoSoundHardwareKey, noSoundHardware.FromYesNo());
-
-            long? paletteSize = ReadLong(Data.Models.Metadata.Driver.PaletteSizeKey);
-            if (paletteSize is not null)
-                Write<string?>(Data.Models.Metadata.Driver.PaletteSizeKey, paletteSize.ToString());
-
-            bool? requiresArtwork = ReadBool(Data.Models.Metadata.Driver.RequiresArtworkKey);
-            if (requiresArtwork is not null)
-                Write<string?>(Data.Models.Metadata.Driver.RequiresArtworkKey, requiresArtwork.FromYesNo());
-
-            string? saveState = ReadString(Data.Models.Metadata.Driver.SaveStateKey);
-            if (saveState is not null)
-                Write<string?>(Data.Models.Metadata.Driver.SaveStateKey, saveState.AsSupported()?.AsStringValue(useSecond: true));
-
-            string? sound = ReadString(Data.Models.Metadata.Driver.SoundKey);
-            if (sound is not null)
-                Write<string?>(Data.Models.Metadata.Driver.SoundKey, sound.AsSupportStatus()?.AsStringValue());
-
-            string? status = ReadString(Data.Models.Metadata.Driver.StatusKey);
-            if (status is not null)
-                Write<string?>(Data.Models.Metadata.Driver.StatusKey, status.AsSupportStatus()?.AsStringValue());
-
-            bool? unofficial = ReadBool(Data.Models.Metadata.Driver.UnofficialKey);
-            if (unofficial is not null)
-                Write<string?>(Data.Models.Metadata.Driver.UnofficialKey, unofficial.FromYesNo());
-        }
+        public Driver(Data.Models.Metadata.Driver item) : base(item) { }
 
         public Driver(Data.Models.Metadata.Driver item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Driver(_internal.Clone() as Data.Models.Metadata.Driver ?? []);
+        public override object Clone() => new Driver(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Driver GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Driver ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Driver otherDriver)
+                return _internal.Equals(otherDriver._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

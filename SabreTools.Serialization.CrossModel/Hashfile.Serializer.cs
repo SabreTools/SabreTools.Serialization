@@ -13,11 +13,11 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(),
+                Header = ConvertHeaderToInternalModel(),
             };
 
             var machine = ConvertMachineToInternalModel(obj);
-            metadataFile[Data.Models.Metadata.MetadataFile.MachineKey] = new Data.Models.Metadata.Machine[] { machine };
+            metadataFile.Machine = new Data.Models.Metadata.Machine[] { machine };
 
             return metadataFile;
         }
@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.NameKey] = "Hashfile",
+                Name =  "Hashfile",
             };
             return header;
         }
@@ -42,27 +42,27 @@ namespace SabreTools.Serialization.CrossModel
             var machine = new Data.Models.Metadata.Machine();
 
             if (item.SFV is not null && item.SFV.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SFV, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.SFV, ConvertToInternalModel);
             else if (item.MD2 is not null && item.MD2.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.MD2, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.MD2, ConvertToInternalModel);
             else if (item.MD4 is not null && item.MD4.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.MD4, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.MD4, ConvertToInternalModel);
             else if (item.MD5 is not null && item.MD5.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.MD5, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.MD5, ConvertToInternalModel);
             else if (item.RIPEMD128 is not null && item.RIPEMD128.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.RIPEMD128, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.RIPEMD128, ConvertToInternalModel);
             else if (item.RIPEMD160 is not null && item.RIPEMD160.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.RIPEMD160, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.RIPEMD160, ConvertToInternalModel);
             else if (item.SHA1 is not null && item.SHA1.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SHA1, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.SHA1, ConvertToInternalModel);
             else if (item.SHA256 is not null && item.SHA256.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SHA256, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.SHA256, ConvertToInternalModel);
             else if (item.SHA384 is not null && item.SHA384.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SHA384, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.SHA384, ConvertToInternalModel);
             else if (item.SHA512 is not null && item.SHA512.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SHA512, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.SHA512, ConvertToInternalModel);
             else if (item.SpamSum is not null && item.SpamSum.Length > 0)
-                machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SpamSum, ConvertToInternalModel);
+                machine.Rom = Array.ConvertAll(item.SpamSum, ConvertToInternalModel);
 
             return machine;
         }
@@ -74,8 +74,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.MD2Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                MD2 = item.Hash,
+                Name = item.File,
             };
             return rom;
         }
@@ -87,8 +87,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.MD4Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                MD4 = item.Hash,
+                Name = item.File,
             };
             return rom;
         }
@@ -100,8 +100,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.MD5Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                MD5 = item.Hash,
+                Name = item.File,
             };
             return rom;
         }
@@ -113,8 +113,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.RIPEMD128Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                RIPEMD128 = item.Hash,
+                Name = item.File,
             };
             return rom;
         }
@@ -126,8 +126,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.RIPEMD160Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                RIPEMD160 = item.Hash,
+                Name = item.File,
             };
             return rom;
         }
@@ -139,8 +139,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
-                [Data.Models.Metadata.Rom.CRCKey] = item.Hash,
+                Name = item.File,
+                CRC32 = item.Hash,
             };
             return rom;
         }
@@ -152,8 +152,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.SHA1Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                SHA1 = item.Hash,
+                Name = item.File,
             };
             return rom;
         }
@@ -165,8 +165,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.SHA256Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                SHA256 = item.Hash,
+                Name = item.File,
             };
             return rom;
         }
@@ -178,8 +178,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.SHA384Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                SHA384 = item.Hash,
+                Name = item.File,
             };
             return rom;
         }
@@ -191,8 +191,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.SHA512Key] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                SHA512 = item.Hash,
+                Name = item.File,
             };
             return rom;
         }
@@ -204,8 +204,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.SpamSumKey] = item.Hash,
-                [Data.Models.Metadata.Rom.NameKey] = item.File,
+                SpamSum = item.Hash,
+                Name = item.File,
             };
             return rom;
         }

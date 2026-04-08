@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,17 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("analog"), XmlRoot("analog")]
     public sealed class Analog : DatItem<Data.Models.Metadata.Analog>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Analog;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Analog;
+
+        public string? Mask
+        {
+            get => _internal.Mask;
+            set => _internal.Mask = value;
+        }
 
         #endregion
 
@@ -25,16 +31,49 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Analog(Data.Models.Metadata.Analog item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Analog(_internal.Clone() as Data.Models.Metadata.Analog ?? []);
+        public override object Clone() => new Analog(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Analog GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Analog ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Analog otherAnalog)
+                return _internal.Equals(otherAnalog._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

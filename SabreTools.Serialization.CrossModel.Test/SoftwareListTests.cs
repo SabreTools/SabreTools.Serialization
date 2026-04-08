@@ -22,9 +22,9 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             // Validate the data
             Assert.NotNull(newSl);
-            Assert.Equal("XXXXXX", newSl.Name);
-            Assert.Equal("XXXXXX", newSl.Description);
-            Assert.Equal("XXXXXX", newSl.Notes);
+            Assert.Equal("name", newSl.Name);
+            Assert.Equal("description", newSl.Description);
+            Assert.Equal("notes", newSl.Notes);
 
             Assert.NotNull(newSl.Software);
             var newSoftware = Assert.Single(newSl.Software);
@@ -38,78 +38,78 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             var info = new Data.Models.SoftwareList.Info
             {
-                Name = "XXXXXX",
-                Value = "XXXXXX",
+                Name = "name",
+                Value = "value",
             };
 
             var sharedfeat = new Data.Models.SoftwareList.SharedFeat
             {
-                Name = "XXXXXX",
-                Value = "XXXXXX",
+                Name = "name",
+                Value = "value",
             };
 
             var feature = new Data.Models.SoftwareList.Feature
             {
-                Name = "XXXXXX",
-                Value = "XXXXXX",
+                Name = "name",
+                Value = "value",
             };
 
             var rom = new Data.Models.SoftwareList.Rom
             {
-                Name = "XXXXXX",
-                Size = "XXXXXX",
+                Name = "name",
+                Size = 12345,
                 Length = "XXXXXX",
                 CRC = "XXXXXX",
                 SHA1 = "XXXXXX",
                 Offset = "XXXXXX",
-                Value = "XXXXXX",
-                Status = "XXXXXX",
-                LoadFlag = "XXXXXX",
+                Value = "value",
+                Status = Data.Models.Metadata.ItemStatus.Good,
+                LoadFlag = Data.Models.Metadata.LoadFlag.Load16Byte,
             };
 
             var dataarea = new Data.Models.SoftwareList.DataArea
             {
-                Name = "XXXXXX",
-                Size = "XXXXXX",
-                Width = "XXXXXX",
-                Endianness = "XXXXXX",
+                Name = "name",
+                Size = 12345,
+                Width = Data.Models.Metadata.Width.Long,
+                Endianness = Data.Models.Metadata.Endianness.Big,
                 Rom = [rom],
             };
 
             var disk = new Data.Models.SoftwareList.Disk
             {
-                Name = "XXXXXX",
+                Name = "name",
                 MD5 = "XXXXXX",
                 SHA1 = "XXXXXX",
-                Status = "XXXXXX",
-                Writeable = "XXXXXX",
+                Status = Data.Models.Metadata.ItemStatus.Good,
+                Writeable = true,
             };
 
             var diskarea = new Data.Models.SoftwareList.DiskArea
             {
-                Name = "XXXXXX",
+                Name = "name",
                 Disk = [disk],
             };
 
             var dipvalue = new Data.Models.SoftwareList.DipValue
             {
-                Name = "XXXXXX",
-                Value = "XXXXXX",
-                Default = "XXXXXX",
+                Name = "name",
+                Value = "value",
+                Default = true,
             };
 
             var dipswitch = new Data.Models.SoftwareList.DipSwitch
             {
-                Name = "XXXXXX",
-                Tag = "XXXXXX",
-                Mask = "XXXXXX",
+                Name = "name",
+                Tag = "tag",
+                Mask = "mask",
                 DipValue = [dipvalue],
             };
 
             var part = new Data.Models.SoftwareList.Part
             {
-                Name = "XXXXXX",
-                Interface = "XXXXXX",
+                Name = "name",
+                Interface = "interface",
                 Feature = [feature],
                 DataArea = [dataarea],
                 DiskArea = [diskarea],
@@ -118,13 +118,13 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var software = new Data.Models.SoftwareList.Software
             {
-                Name = "XXXXXX",
+                Name = "name",
                 CloneOf = "XXXXXX",
-                Supported = "XXXXXX",
-                Description = "XXXXXX",
+                Supported = Data.Models.Metadata.Supported.Yes,
+                Description = "description",
                 Year = "XXXXXX",
                 Publisher = "XXXXXX",
-                Notes = "XXXXXX",
+                Notes = "notes",
                 Info = [info],
                 SharedFeat = [sharedfeat],
                 Part = [part],
@@ -132,9 +132,9 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             return new Data.Models.SoftwareList.SoftwareList
             {
-                Name = "XXXXXX",
-                Description = "XXXXXX",
-                Notes = "XXXXXX",
+                Name = "name",
+                Description = "description",
+                Notes = "notes",
                 Software = [software],
             };
         }
@@ -145,13 +145,13 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.Software? software)
         {
             Assert.NotNull(software);
-            Assert.Equal("XXXXXX", software.Name);
+            Assert.Equal("name", software.Name);
             Assert.Equal("XXXXXX", software.CloneOf);
-            Assert.Equal("XXXXXX", software.Supported);
-            Assert.Equal("XXXXXX", software.Description);
+            Assert.Equal(Data.Models.Metadata.Supported.Yes, software.Supported);
+            Assert.Equal("description", software.Description);
             Assert.Equal("XXXXXX", software.Year);
             Assert.Equal("XXXXXX", software.Publisher);
-            Assert.Equal("XXXXXX", software.Notes);
+            Assert.Equal("notes", software.Notes);
 
             Assert.NotNull(software.Info);
             var info = Assert.Single(software.Info);
@@ -172,8 +172,8 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.Info? info)
         {
             Assert.NotNull(info);
-            Assert.Equal("XXXXXX", info.Name);
-            Assert.Equal("XXXXXX", info.Value);
+            Assert.Equal("name", info.Name);
+            Assert.Equal("value", info.Value);
         }
 
         /// <summary>
@@ -182,8 +182,8 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.SharedFeat? sharedfeat)
         {
             Assert.NotNull(sharedfeat);
-            Assert.Equal("XXXXXX", sharedfeat.Name);
-            Assert.Equal("XXXXXX", sharedfeat.Value);
+            Assert.Equal("name", sharedfeat.Name);
+            Assert.Equal("value", sharedfeat.Value);
         }
 
         /// <summary>
@@ -192,8 +192,8 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.Part? part)
         {
             Assert.NotNull(part);
-            Assert.Equal("XXXXXX", part.Name);
-            Assert.Equal("XXXXXX", part.Interface);
+            Assert.Equal("name", part.Name);
+            Assert.Equal("interface", part.Interface);
 
             Assert.NotNull(part.Feature);
             var feature = Assert.Single(part.Feature);
@@ -218,8 +218,8 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.Feature? feature)
         {
             Assert.NotNull(feature);
-            Assert.Equal("XXXXXX", feature.Name);
-            Assert.Equal("XXXXXX", feature.Value);
+            Assert.Equal("name", feature.Name);
+            Assert.Equal("value", feature.Value);
         }
 
         /// <summary>
@@ -228,10 +228,10 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.DataArea? dataarea)
         {
             Assert.NotNull(dataarea);
-            Assert.Equal("XXXXXX", dataarea.Name);
-            Assert.Equal("XXXXXX", dataarea.Size);
-            Assert.Equal("XXXXXX", dataarea.Width);
-            Assert.Equal("XXXXXX", dataarea.Endianness);
+            Assert.Equal("name", dataarea.Name);
+            Assert.Equal(12345, dataarea.Size);
+            Assert.Equal(Data.Models.Metadata.Width.Long, dataarea.Width);
+            Assert.Equal(Data.Models.Metadata.Endianness.Big, dataarea.Endianness);
 
             Assert.NotNull(dataarea.Rom);
             var rom = Assert.Single(dataarea.Rom);
@@ -244,15 +244,15 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.Rom? rom)
         {
             Assert.NotNull(rom);
-            Assert.Equal("XXXXXX", rom.Name);
-            Assert.Equal("XXXXXX", rom.Size);
+            Assert.Equal("name", rom.Name);
+            Assert.Equal(12345, rom.Size);
             Assert.Equal("XXXXXX", rom.Length);
             Assert.Equal("XXXXXX", rom.CRC);
             Assert.Equal("XXXXXX", rom.SHA1);
             Assert.Equal("XXXXXX", rom.Offset);
-            Assert.Equal("XXXXXX", rom.Value);
-            Assert.Equal("XXXXXX", rom.Status);
-            Assert.Equal("XXXXXX", rom.LoadFlag);
+            Assert.Equal("value", rom.Value);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
+            Assert.Equal(Data.Models.Metadata.LoadFlag.Load16Byte, rom.LoadFlag);
         }
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.DiskArea? diskarea)
         {
             Assert.NotNull(diskarea);
-            Assert.Equal("XXXXXX", diskarea.Name);
+            Assert.Equal("name", diskarea.Name);
 
             Assert.NotNull(diskarea.Disk);
             var disk = Assert.Single(diskarea.Disk);
@@ -274,11 +274,11 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.Disk? disk)
         {
             Assert.NotNull(disk);
-            Assert.Equal("XXXXXX", disk.Name);
+            Assert.Equal("name", disk.Name);
             Assert.Equal("XXXXXX", disk.MD5);
             Assert.Equal("XXXXXX", disk.SHA1);
-            Assert.Equal("XXXXXX", disk.Status);
-            Assert.Equal("XXXXXX", disk.Writeable);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, disk.Status);
+            Assert.Equal(true, disk.Writeable);
         }
 
         /// <summary>
@@ -287,9 +287,9 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.DipSwitch? dipswitch)
         {
             Assert.NotNull(dipswitch);
-            Assert.Equal("XXXXXX", dipswitch.Name);
-            Assert.Equal("XXXXXX", dipswitch.Tag);
-            Assert.Equal("XXXXXX", dipswitch.Mask);
+            Assert.Equal("name", dipswitch.Name);
+            Assert.Equal("tag", dipswitch.Tag);
+            Assert.Equal("mask", dipswitch.Mask);
 
             Assert.NotNull(dipswitch.DipValue);
             var dipvalue = Assert.Single(dipswitch.DipValue);
@@ -302,9 +302,9 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.SoftwareList.DipValue? dipvalue)
         {
             Assert.NotNull(dipvalue);
-            Assert.Equal("XXXXXX", dipvalue.Name);
-            Assert.Equal("XXXXXX", dipvalue.Value);
-            Assert.Equal("XXXXXX", dipvalue.Default);
+            Assert.Equal("name", dipvalue.Name);
+            Assert.Equal("value", dipvalue.Value);
+            Assert.Equal(true, dipvalue.Default);
         }
     }
 }

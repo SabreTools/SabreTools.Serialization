@@ -11,10 +11,10 @@ namespace SabreTools.Serialization.CrossModel
             if (obj is null)
                 return null;
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             var mame = header is not null ? ConvertMameFromInternalModel(header) : new Mame();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
                 mame.Game = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
@@ -28,9 +28,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var mame = new Mame
             {
-                Build = item.ReadString(Data.Models.Metadata.Header.BuildKey),
-                Debug = item.ReadString(Data.Models.Metadata.Header.DebugKey),
-                MameConfig = item.ReadString(Data.Models.Metadata.Header.MameConfigKey),
+                Build = item.Build,
+                Debug = item.Debug,
+                MameConfig = item.MameConfig,
             };
 
             return mame;
@@ -43,98 +43,98 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Machine
             {
-                Name = item.ReadString(Data.Models.Metadata.Machine.NameKey),
-                SourceFile = item.ReadString(Data.Models.Metadata.Machine.SourceFileKey),
-                IsBios = item.ReadString(Data.Models.Metadata.Machine.IsBiosKey),
-                IsDevice = item.ReadString(Data.Models.Metadata.Machine.IsDeviceKey),
-                IsMechanical = item.ReadString(Data.Models.Metadata.Machine.IsMechanicalKey),
-                Runnable = item.ReadString(Data.Models.Metadata.Machine.RunnableKey),
-                CloneOf = item.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
-                RomOf = item.ReadString(Data.Models.Metadata.Machine.RomOfKey),
-                SampleOf = item.ReadString(Data.Models.Metadata.Machine.SampleOfKey),
-                Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
-                Year = item.ReadString(Data.Models.Metadata.Machine.YearKey),
-                Manufacturer = item.ReadString(Data.Models.Metadata.Machine.ManufacturerKey),
-                History = item.ReadString(Data.Models.Metadata.Machine.HistoryKey),
+                Name = item.Name,
+                SourceFile = item.SourceFile,
+                IsBios = item.IsBios,
+                IsDevice = item.IsDevice,
+                IsMechanical = item.IsMechanical,
+                Runnable = item.Runnable,
+                CloneOf = item.CloneOf,
+                RomOf = item.RomOf,
+                SampleOf = item.SampleOf,
+                Description = item.Description,
+                Year = item.Year,
+                Manufacturer = item.Manufacturer,
+                History = item.History,
             };
 
-            var biosSets = item.Read<Data.Models.Metadata.BiosSet[]>(Data.Models.Metadata.Machine.BiosSetKey);
+            var biosSets = item.BiosSet;
             if (biosSets is not null && biosSets.Length > 0)
                 machine.BiosSet = Array.ConvertAll(biosSets, ConvertFromInternalModel);
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null && roms.Length > 0)
                 machine.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
-            var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
+            var disks = item.Disk;
             if (disks is not null && disks.Length > 0)
                 machine.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
-            var deviceRefs = item.Read<Data.Models.Metadata.DeviceRef[]>(Data.Models.Metadata.Machine.DeviceRefKey);
+            var deviceRefs = item.DeviceRef;
             if (deviceRefs is not null && deviceRefs.Length > 0)
                 machine.DeviceRef = Array.ConvertAll(deviceRefs, ConvertFromInternalModel);
 
-            var samples = item.Read<Data.Models.Metadata.Sample[]>(Data.Models.Metadata.Machine.SampleKey);
+            var samples = item.Sample;
             if (samples is not null && samples.Length > 0)
                 machine.Sample = Array.ConvertAll(samples, ConvertFromInternalModel);
 
-            var chips = item.Read<Data.Models.Metadata.Chip[]>(Data.Models.Metadata.Machine.ChipKey);
+            var chips = item.Chip;
             if (chips is not null && chips.Length > 0)
                 machine.Chip = Array.ConvertAll(chips, ConvertFromInternalModel);
 
-            var displays = item.Read<Data.Models.Metadata.Display[]>(Data.Models.Metadata.Machine.DisplayKey);
+            var displays = item.Display;
             if (displays is not null && displays.Length > 0)
                 machine.Display = Array.ConvertAll(displays, ConvertFromInternalModel);
 
-            var videos = item.Read<Data.Models.Metadata.Video[]>(Data.Models.Metadata.Machine.VideoKey);
+            var videos = item.Video;
             if (videos is not null && videos.Length > 0)
                 machine.Video = Array.ConvertAll(videos, ConvertFromInternalModel);
 
-            var sound = item.Read<Data.Models.Metadata.Sound>(Data.Models.Metadata.Machine.SoundKey);
+            var sound = item.Sound;
             if (sound is not null)
                 machine.Sound = ConvertFromInternalModel(sound);
 
-            var input = item.Read<Data.Models.Metadata.Input>(Data.Models.Metadata.Machine.InputKey);
+            var input = item.Input;
             if (input is not null)
                 machine.Input = ConvertFromInternalModel(input);
 
-            var dipSwitches = item.Read<Data.Models.Metadata.DipSwitch[]>(Data.Models.Metadata.Machine.DipSwitchKey);
+            var dipSwitches = item.DipSwitch;
             if (dipSwitches is not null && dipSwitches.Length > 0)
                 machine.DipSwitch = Array.ConvertAll(dipSwitches, ConvertFromInternalModel);
 
-            var configurations = item.Read<Data.Models.Metadata.Configuration[]>(Data.Models.Metadata.Machine.ConfigurationKey);
+            var configurations = item.Configuration;
             if (configurations is not null && configurations.Length > 0)
                 machine.Configuration = Array.ConvertAll(configurations, ConvertFromInternalModel);
 
-            var ports = item.Read<Data.Models.Metadata.Port[]>(Data.Models.Metadata.Machine.PortKey);
+            var ports = item.Port;
             if (ports is not null && ports.Length > 0)
                 machine.Port = Array.ConvertAll(ports, ConvertFromInternalModel);
 
-            var adjusters = item.Read<Data.Models.Metadata.Adjuster[]>(Data.Models.Metadata.Machine.AdjusterKey);
+            var adjusters = item.Adjuster;
             if (adjusters is not null && adjusters.Length > 0)
                 machine.Adjuster = Array.ConvertAll(adjusters, ConvertFromInternalModel);
 
-            var driver = item.Read<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey);
+            var driver = item.Driver;
             if (driver is not null)
                 machine.Driver = ConvertFromInternalModel(driver);
 
-            var features = item.Read<Data.Models.Metadata.Feature[]>(Data.Models.Metadata.Machine.FeatureKey);
+            var features = item.Feature;
             if (features is not null && features.Length > 0)
                 machine.Feature = Array.ConvertAll(features, ConvertFromInternalModel);
 
-            var devices = item.Read<Data.Models.Metadata.Device[]>(Data.Models.Metadata.Machine.DeviceKey);
+            var devices = item.Device;
             if (devices is not null && devices.Length > 0)
                 machine.Device = Array.ConvertAll(devices, ConvertFromInternalModel);
 
-            var slots = item.Read<Data.Models.Metadata.Slot[]>(Data.Models.Metadata.Machine.SlotKey);
+            var slots = item.Slot;
             if (slots is not null && slots.Length > 0)
                 machine.Slot = Array.ConvertAll(slots, ConvertFromInternalModel);
 
-            var softwareLists = item.Read<Data.Models.Metadata.SoftwareList[]>(Data.Models.Metadata.Machine.SoftwareListKey);
+            var softwareLists = item.SoftwareList;
             if (softwareLists is not null && softwareLists.Length > 0)
                 machine.SoftwareList = Array.ConvertAll(softwareLists, ConvertFromInternalModel);
 
-            var ramOptions = item.Read<Data.Models.Metadata.RamOption[]>(Data.Models.Metadata.Machine.RamOptionKey);
+            var ramOptions = item.RamOption;
             if (ramOptions is not null && ramOptions.Length > 0)
                 machine.RamOption = Array.ConvertAll(ramOptions, ConvertFromInternalModel);
 
@@ -148,11 +148,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var adjuster = new Adjuster
             {
-                Name = item.ReadString(Data.Models.Metadata.Adjuster.NameKey),
-                Default = item.ReadString(Data.Models.Metadata.Adjuster.DefaultKey),
+                Name = item.Name,
+                Default = item.Default,
             };
 
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
+            var condition = item.Condition;
             if (condition is not null)
                 adjuster.Condition = ConvertFromInternalModel(condition);
 
@@ -166,7 +166,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var analog = new Analog
             {
-                Mask = item.ReadString(Data.Models.Metadata.Analog.MaskKey),
+                Mask = item.Mask,
             };
             return analog;
         }
@@ -178,9 +178,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var biosset = new BiosSet
             {
-                Name = item.ReadString(Data.Models.Metadata.BiosSet.NameKey),
-                Description = item.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey),
-                Default = item.ReadString(Data.Models.Metadata.BiosSet.DefaultKey),
+                Name = item.Name,
+                Description = item.Description,
+                Default = item.Default,
             };
             return biosset;
         }
@@ -192,11 +192,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var chip = new Chip
             {
-                Name = item.ReadString(Data.Models.Metadata.Chip.NameKey),
-                Tag = item.ReadString(Data.Models.Metadata.Chip.TagKey),
-                Type = item.ReadString(Data.Models.Metadata.Chip.ChipTypeKey),
-                SoundOnly = item.ReadString(Data.Models.Metadata.Chip.SoundOnlyKey),
-                Clock = item.ReadString(Data.Models.Metadata.Chip.ClockKey),
+                Name = item.Name,
+                Tag = item.Tag,
+                Type = item.ChipType,
+                SoundOnly = item.SoundOnly,
+                Clock = item.Clock,
             };
             return chip;
         }
@@ -208,10 +208,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var condition = new Condition
             {
-                Tag = item.ReadString(Data.Models.Metadata.Condition.TagKey),
-                Mask = item.ReadString(Data.Models.Metadata.Condition.MaskKey),
-                Relation = item.ReadString(Data.Models.Metadata.Condition.RelationKey),
-                Value = item.ReadString(Data.Models.Metadata.Condition.ValueKey),
+                Tag = item.Tag,
+                Mask = item.Mask,
+                Relation = item.Relation,
+                Value = item.Value,
             };
             return condition;
         }
@@ -223,20 +223,20 @@ namespace SabreTools.Serialization.CrossModel
         {
             var configuration = new Configuration
             {
-                Name = item.ReadString(Data.Models.Metadata.Configuration.NameKey),
-                Tag = item.ReadString(Data.Models.Metadata.Configuration.TagKey),
-                Mask = item.ReadString(Data.Models.Metadata.Configuration.MaskKey),
+                Name = item.Name,
+                Tag = item.Tag,
+                Mask = item.Mask,
             };
 
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Configuration.ConditionKey);
+            var condition = item.Condition;
             if (condition is not null)
                 configuration.Condition = ConvertFromInternalModel(condition);
 
-            var confLocations = item.Read<Data.Models.Metadata.ConfLocation[]>(Data.Models.Metadata.Configuration.ConfLocationKey);
+            var confLocations = item.ConfLocation;
             if (confLocations is not null && confLocations.Length > 0)
                 configuration.ConfLocation = Array.ConvertAll(confLocations, ConvertFromInternalModel);
 
-            var confSettings = item.Read<Data.Models.Metadata.ConfSetting[]>(Data.Models.Metadata.Configuration.ConfSettingKey);
+            var confSettings = item.ConfSetting;
             if (confSettings is not null && confSettings.Length > 0)
                 configuration.ConfSetting = Array.ConvertAll(confSettings, ConvertFromInternalModel);
 
@@ -250,9 +250,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var confLocation = new ConfLocation
             {
-                Name = item.ReadString(Data.Models.Metadata.ConfLocation.NameKey),
-                Number = item.ReadString(Data.Models.Metadata.ConfLocation.NumberKey),
-                Inverted = item.ReadString(Data.Models.Metadata.ConfLocation.InvertedKey),
+                Name = item.Name,
+                Number = item.Number,
+                Inverted = item.Inverted,
             };
             return confLocation;
         }
@@ -264,12 +264,12 @@ namespace SabreTools.Serialization.CrossModel
         {
             var confSetting = new ConfSetting
             {
-                Name = item.ReadString(Data.Models.Metadata.ConfSetting.NameKey),
-                Value = item.ReadString(Data.Models.Metadata.ConfSetting.ValueKey),
-                Default = item.ReadString(Data.Models.Metadata.ConfSetting.DefaultKey),
+                Name = item.Name,
+                Value = item.Value,
+                Default = item.Default,
             };
 
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
+            var condition = item.Condition;
             if (condition is not null)
                 confSetting.Condition = ConvertFromInternalModel(condition);
 
@@ -283,18 +283,18 @@ namespace SabreTools.Serialization.CrossModel
         {
             var control = new Control
             {
-                Type = item.ReadString(Data.Models.Metadata.Control.ControlTypeKey),
-                Player = item.ReadString(Data.Models.Metadata.Control.PlayerKey),
-                Buttons = item.ReadString(Data.Models.Metadata.Control.ButtonsKey),
-                ReqButtons = item.ReadString(Data.Models.Metadata.Control.ReqButtonsKey),
-                Minimum = item.ReadString(Data.Models.Metadata.Control.MinimumKey),
-                Maximum = item.ReadString(Data.Models.Metadata.Control.MaximumKey),
-                Sensitivity = item.ReadString(Data.Models.Metadata.Control.SensitivityKey),
-                KeyDelta = item.ReadString(Data.Models.Metadata.Control.KeyDeltaKey),
-                Reverse = item.ReadString(Data.Models.Metadata.Control.ReverseKey),
-                Ways = item.ReadString(Data.Models.Metadata.Control.WaysKey),
-                Ways2 = item.ReadString(Data.Models.Metadata.Control.Ways2Key),
-                Ways3 = item.ReadString(Data.Models.Metadata.Control.Ways3Key),
+                Type = item.ControlType,
+                Player = item.Player,
+                Buttons = item.Buttons,
+                ReqButtons = item.ReqButtons,
+                Minimum = item.Minimum,
+                Maximum = item.Maximum,
+                Sensitivity = item.Sensitivity,
+                KeyDelta = item.KeyDelta,
+                Reverse = item.Reverse,
+                Ways = item.Ways,
+                Ways2 = item.Ways2,
+                Ways3 = item.Ways3,
             };
             return control;
         }
@@ -306,18 +306,18 @@ namespace SabreTools.Serialization.CrossModel
         {
             var device = new Device
             {
-                Type = item.ReadString(Data.Models.Metadata.Device.DeviceTypeKey),
-                Tag = item.ReadString(Data.Models.Metadata.Device.TagKey),
-                FixedImage = item.ReadString(Data.Models.Metadata.Device.FixedImageKey),
-                Mandatory = item.ReadString(Data.Models.Metadata.Device.MandatoryKey),
-                Interface = item.ReadString(Data.Models.Metadata.Device.InterfaceKey),
+                Type = item.DeviceType,
+                Tag = item.Tag,
+                FixedImage = item.FixedImage,
+                Mandatory = item.Mandatory,
+                Interface = item.Interface,
             };
 
-            var instance = item.Read<Data.Models.Metadata.Instance>(Data.Models.Metadata.Device.InstanceKey);
+            var instance = item.Instance;
             if (instance is not null)
                 device.Instance = ConvertFromInternalModel(instance);
 
-            var extensions = item.Read<Data.Models.Metadata.Extension[]>(Data.Models.Metadata.Device.ExtensionKey);
+            var extensions = item.Extension;
             if (extensions is not null && extensions.Length > 0)
                 device.Extension = Array.ConvertAll(extensions, ConvertFromInternalModel);
 
@@ -331,7 +331,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var deviceRef = new DeviceRef
             {
-                Name = item.ReadString(Data.Models.Metadata.DeviceRef.NameKey),
+                Name = item.Name,
             };
             return deviceRef;
         }
@@ -343,9 +343,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipLocation = new DipLocation
             {
-                Name = item.ReadString(Data.Models.Metadata.DipLocation.NameKey),
-                Number = item.ReadString(Data.Models.Metadata.DipLocation.NumberKey),
-                Inverted = item.ReadString(Data.Models.Metadata.DipLocation.InvertedKey),
+                Name = item.Name,
+                Number = item.Number,
+                Inverted = item.Inverted,
             };
             return dipLocation;
         }
@@ -357,20 +357,20 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipSwitch = new DipSwitch
             {
-                Name = item.ReadString(Data.Models.Metadata.DipSwitch.NameKey),
-                Tag = item.ReadString(Data.Models.Metadata.DipSwitch.TagKey),
-                Mask = item.ReadString(Data.Models.Metadata.DipSwitch.MaskKey),
+                Name = item.Name,
+                Tag = item.Tag,
+                Mask = item.Mask,
             };
 
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
+            var condition = item.Condition;
             if (condition is not null)
                 dipSwitch.Condition = ConvertFromInternalModel(condition);
 
-            var dipLocations = item.Read<Data.Models.Metadata.DipLocation[]>(Data.Models.Metadata.DipSwitch.DipLocationKey);
+            var dipLocations = item.DipLocation;
             if (dipLocations is not null && dipLocations.Length > 0)
                 dipSwitch.DipLocation = Array.ConvertAll(dipLocations, ConvertFromInternalModel);
 
-            var dipValues = item.Read<Data.Models.Metadata.DipValue[]>(Data.Models.Metadata.DipSwitch.DipValueKey);
+            var dipValues = item.DipValue;
             if (dipValues is not null && dipValues.Length > 0)
                 dipSwitch.DipValue = Array.ConvertAll(dipValues, ConvertFromInternalModel);
 
@@ -384,12 +384,12 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipValue = new DipValue
             {
-                Name = item.ReadString(Data.Models.Metadata.DipValue.NameKey),
-                Value = item.ReadString(Data.Models.Metadata.DipValue.ValueKey),
-                Default = item.ReadString(Data.Models.Metadata.DipValue.DefaultKey),
+                Name = item.Name,
+                Value = item.Value,
+                Default = item.Default,
             };
 
-            var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
+            var condition = item.Condition;
             if (condition is not null)
                 dipValue.Condition = ConvertFromInternalModel(condition);
 
@@ -403,15 +403,15 @@ namespace SabreTools.Serialization.CrossModel
         {
             var disk = new Disk
             {
-                Name = item.ReadString(Data.Models.Metadata.Disk.NameKey),
-                MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
-                Merge = item.ReadString(Data.Models.Metadata.Disk.MergeKey),
-                Region = item.ReadString(Data.Models.Metadata.Disk.RegionKey),
-                Index = item.ReadString(Data.Models.Metadata.Disk.IndexKey),
-                Writable = item.ReadString(Data.Models.Metadata.Disk.WritableKey),
-                Status = item.ReadString(Data.Models.Metadata.Disk.StatusKey),
-                Optional = item.ReadString(Data.Models.Metadata.Disk.OptionalKey),
+                Name = item.Name,
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
+                Merge = item.Merge,
+                Region = item.Region,
+                Index = item.Index,
+                Writable = item.Writable,
+                Status = item.Status,
+                Optional = item.Optional,
             };
             return disk;
         }
@@ -423,20 +423,20 @@ namespace SabreTools.Serialization.CrossModel
         {
             var display = new Display
             {
-                Tag = item.ReadString(Data.Models.Metadata.Display.TagKey),
-                Type = item.ReadString(Data.Models.Metadata.Display.DisplayTypeKey),
-                Rotate = item.ReadString(Data.Models.Metadata.Display.RotateKey),
-                FlipX = item.ReadString(Data.Models.Metadata.Display.FlipXKey),
-                Width = item.ReadString(Data.Models.Metadata.Display.WidthKey),
-                Height = item.ReadString(Data.Models.Metadata.Display.HeightKey),
-                Refresh = item.ReadString(Data.Models.Metadata.Display.RefreshKey),
-                PixClock = item.ReadString(Data.Models.Metadata.Display.PixClockKey),
-                HTotal = item.ReadString(Data.Models.Metadata.Display.HTotalKey),
-                HBEnd = item.ReadString(Data.Models.Metadata.Display.HBEndKey),
-                HBStart = item.ReadString(Data.Models.Metadata.Display.HBStartKey),
-                VTotal = item.ReadString(Data.Models.Metadata.Display.VTotalKey),
-                VBEnd = item.ReadString(Data.Models.Metadata.Display.VBEndKey),
-                VBStart = item.ReadString(Data.Models.Metadata.Display.VBStartKey),
+                Tag = item.Tag,
+                Type = item.DisplayType,
+                Rotate = item.Rotate,
+                FlipX = item.FlipX,
+                Width = item.Width,
+                Height = item.Height,
+                Refresh = item.Refresh,
+                PixClock = item.PixClock,
+                HTotal = item.HTotal,
+                HBEnd = item.HBEnd,
+                HBStart = item.HBStart,
+                VTotal = item.VTotal,
+                VBEnd = item.VBEnd,
+                VBStart = item.VBStart,
             };
             return display;
         }
@@ -448,17 +448,17 @@ namespace SabreTools.Serialization.CrossModel
         {
             var driver = new Driver
             {
-                Status = item.ReadString(Data.Models.Metadata.Driver.StatusKey),
-                Color = item.ReadString(Data.Models.Metadata.Driver.ColorKey),
-                Sound = item.ReadString(Data.Models.Metadata.Driver.SoundKey),
-                PaletteSize = item.ReadString(Data.Models.Metadata.Driver.PaletteSizeKey),
-                Emulation = item.ReadString(Data.Models.Metadata.Driver.EmulationKey),
-                Cocktail = item.ReadString(Data.Models.Metadata.Driver.CocktailKey),
-                SaveState = item.ReadString(Data.Models.Metadata.Driver.SaveStateKey),
-                RequiresArtwork = item.ReadString(Data.Models.Metadata.Driver.RequiresArtworkKey),
-                Unofficial = item.ReadString(Data.Models.Metadata.Driver.UnofficialKey),
-                NoSoundHardware = item.ReadString(Data.Models.Metadata.Driver.NoSoundHardwareKey),
-                Incomplete = item.ReadString(Data.Models.Metadata.Driver.IncompleteKey),
+                Status = item.Status,
+                Color = item.Color,
+                Sound = item.Sound,
+                PaletteSize = item.PaletteSize,
+                Emulation = item.Emulation,
+                Cocktail = item.Cocktail,
+                SaveState = item.SaveState,
+                RequiresArtwork = item.RequiresArtwork,
+                Unofficial = item.Unofficial,
+                NoSoundHardware = item.NoSoundHardware,
+                Incomplete = item.Incomplete,
             };
             return driver;
         }
@@ -470,7 +470,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var extension = new Extension
             {
-                Name = item.ReadString(Data.Models.Metadata.Extension.NameKey),
+                Name = item.Name,
             };
             return extension;
         }
@@ -482,9 +482,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var feature = new Feature
             {
-                Type = item.ReadString(Data.Models.Metadata.Feature.FeatureTypeKey),
-                Status = item.ReadString(Data.Models.Metadata.Feature.StatusKey),
-                Overall = item.ReadString(Data.Models.Metadata.Feature.OverallKey),
+                Type = item.FeatureType,
+                Status = item.Status,
+                Overall = item.Overall,
             };
             return feature;
         }
@@ -496,18 +496,15 @@ namespace SabreTools.Serialization.CrossModel
         {
             var input = new Input
             {
-                Service = item.ReadString(Data.Models.Metadata.Input.ServiceKey),
-                Tilt = item.ReadString(Data.Models.Metadata.Input.TiltKey),
-                Players = item.ReadString(Data.Models.Metadata.Input.PlayersKey),
-                Buttons = item.ReadString(Data.Models.Metadata.Input.ButtonsKey),
-                Coins = item.ReadString(Data.Models.Metadata.Input.CoinsKey),
+                Service = item.Service,
+                Tilt = item.Tilt,
+                Players = item.Players,
+                ControlAttr = item.ControlAttr,
+                Buttons = item.Buttons,
+                Coins = item.Coins,
             };
 
-            var controlAttr = item.ReadString(Data.Models.Metadata.Input.ControlKey);
-            if (controlAttr is not null)
-                input.ControlAttr = controlAttr;
-
-            var controls = item.Read<Data.Models.Metadata.Control[]>(Data.Models.Metadata.Input.ControlKey);
+            var controls = item.Control;
             if (controls is not null && controls.Length > 0)
                 input.Control = Array.ConvertAll(controls, ConvertFromInternalModel);
 
@@ -521,8 +518,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var instance = new Instance
             {
-                Name = item.ReadString(Data.Models.Metadata.Instance.NameKey),
-                BriefName = item.ReadString(Data.Models.Metadata.Instance.BriefNameKey),
+                Name = item.Name,
+                BriefName = item.BriefName,
             };
             return instance;
         }
@@ -534,10 +531,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var port = new Port
             {
-                Tag = item.ReadString(Data.Models.Metadata.Port.TagKey),
+                Tag = item.Tag,
             };
 
-            var analogs = item.Read<Data.Models.Metadata.Analog[]>(Data.Models.Metadata.Port.AnalogKey);
+            var analogs = item.Analog;
             if (analogs is not null && analogs.Length > 0)
                 port.Analog = Array.ConvertAll(analogs, ConvertFromInternalModel);
 
@@ -551,9 +548,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var ramOption = new RamOption
             {
-                Name = item.ReadString(Data.Models.Metadata.RamOption.NameKey),
-                Default = item.ReadString(Data.Models.Metadata.RamOption.DefaultKey),
-                Content = item.ReadString(Data.Models.Metadata.RamOption.ContentKey),
+                Name = item.Name,
+                Default = item.Default,
+                Content = item.Content,
             };
             return ramOption;
         }
@@ -565,18 +562,18 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Rom
             {
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
-                Bios = item.ReadString(Data.Models.Metadata.Rom.BiosKey),
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
-                CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                Merge = item.ReadString(Data.Models.Metadata.Rom.MergeKey),
-                Region = item.ReadString(Data.Models.Metadata.Rom.RegionKey),
-                Offset = item.ReadString(Data.Models.Metadata.Rom.OffsetKey),
-                Status = item.ReadString(Data.Models.Metadata.Rom.StatusKey),
-                Optional = item.ReadString(Data.Models.Metadata.Rom.OptionalKey),
-                Dispose = item.ReadString(Data.Models.Metadata.Rom.DisposeKey),
-                SoundOnly = item.ReadString(Data.Models.Metadata.Rom.SoundOnlyKey),
+                Name = item.Name,
+                Bios = item.Bios,
+                Size = item.Size,
+                CRC = item.CRC32,
+                SHA1 = item.SHA1,
+                Merge = item.Merge,
+                Region = item.Region,
+                Offset = item.Offset,
+                Status = item.Status,
+                Optional = item.Optional,
+                Dispose = item.Dispose,
+                SoundOnly = item.SoundOnly,
             };
             return rom;
         }
@@ -586,10 +583,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Sample ConvertFromInternalModel(Data.Models.Metadata.Sample item)
         {
-            var sample = new Sample
-            {
-                Name = item.ReadString(Data.Models.Metadata.Sample.NameKey),
-            };
+            var sample = new Sample { Name = item.Name, };
             return sample;
         }
 
@@ -600,10 +594,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var slot = new Slot
             {
-                Name = item.ReadString(Data.Models.Metadata.Slot.NameKey),
+                Name = item.Name,
             };
 
-            var slotOptions = item.Read<Data.Models.Metadata.SlotOption[]>(Data.Models.Metadata.Slot.SlotOptionKey);
+            var slotOptions = item.SlotOption;
             if (slotOptions is not null && slotOptions.Length > 0)
                 slot.SlotOption = Array.ConvertAll(slotOptions, ConvertFromInternalModel);
 
@@ -617,9 +611,9 @@ namespace SabreTools.Serialization.CrossModel
         {
             var slotOption = new SlotOption
             {
-                Name = item.ReadString(Data.Models.Metadata.SlotOption.NameKey),
-                DevName = item.ReadString(Data.Models.Metadata.SlotOption.DevNameKey),
-                Default = item.ReadString(Data.Models.Metadata.SlotOption.DefaultKey),
+                Name = item.Name,
+                DevName = item.DevName,
+                Default = item.Default,
             };
             return slotOption;
         }
@@ -631,10 +625,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var softwareList = new Data.Models.Listxml.SoftwareList
             {
-                Tag = item.ReadString(Data.Models.Metadata.SoftwareList.TagKey),
-                Name = item.ReadString(Data.Models.Metadata.SoftwareList.NameKey),
-                Status = item.ReadString(Data.Models.Metadata.SoftwareList.StatusKey),
-                Filter = item.ReadString(Data.Models.Metadata.SoftwareList.FilterKey),
+                Tag = item.Tag,
+                Name = item.Name,
+                Status = item.Status,
+                Filter = item.Filter,
             };
             return softwareList;
         }
@@ -646,7 +640,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sound = new Sound
             {
-                Channels = item.ReadString(Data.Models.Metadata.Sound.ChannelsKey),
+                Channels = item.Channels,
             };
             return sound;
         }
@@ -658,13 +652,13 @@ namespace SabreTools.Serialization.CrossModel
         {
             var video = new Video
             {
-                Screen = item.ReadString(Data.Models.Metadata.Video.ScreenKey),
-                Orientation = item.ReadString(Data.Models.Metadata.Video.OrientationKey),
-                Width = item.ReadString(Data.Models.Metadata.Video.WidthKey),
-                Height = item.ReadString(Data.Models.Metadata.Video.HeightKey),
-                AspectX = item.ReadString(Data.Models.Metadata.Video.AspectXKey),
-                AspectY = item.ReadString(Data.Models.Metadata.Video.AspectYKey),
-                Refresh = item.ReadString(Data.Models.Metadata.Video.RefreshKey),
+                Screen = item.Screen,
+                Orientation = item.Orientation,
+                Width = item.Width,
+                Height = item.Height,
+                AspectX = item.AspectX,
+                AspectY = item.AspectY,
+                Refresh = item.Refresh,
             };
             return video;
         }

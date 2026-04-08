@@ -39,85 +39,85 @@ namespace SabreTools.Serialization.CrossModel.Test
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Location = new Data.Models.OfflineList.Location
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Publisher = new Data.Models.OfflineList.Publisher
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 SourceRom = new Data.Models.OfflineList.SourceRom
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 SaveType = new Data.Models.OfflineList.SaveType
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 RomSize = new Data.Models.OfflineList.RomSize
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 ReleaseNumber = new Data.Models.OfflineList.ReleaseNumber
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 ImageNumber = new Data.Models.OfflineList.ImageNumber
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 LanguageNumber = new Data.Models.OfflineList.LanguageNumber
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Comment = new Data.Models.OfflineList.Comment
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 RomCRC = new Data.Models.OfflineList.RomCRC
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Im1CRC = new Data.Models.OfflineList.Im1CRC
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Im2CRC = new Data.Models.OfflineList.Im2CRC
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Languages = new Data.Models.OfflineList.Languages
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
             };
 
@@ -142,14 +142,14 @@ namespace SabreTools.Serialization.CrossModel.Test
             var find = new Data.Models.OfflineList.Find
             {
                 Operation = "XXXXXX",
-                Value = "XXXXXX",
+                Value = "value",
                 Content = "XXXXXX",
             };
 
             var to = new Data.Models.OfflineList.To
             {
-                Value = "XXXXXX",
-                Default = "XXXXXX",
+                Value = "value",
+                Default = true,
                 Auto = "XXXXXX",
                 Find = [find],
             };
@@ -191,7 +191,7 @@ namespace SabreTools.Serialization.CrossModel.Test
                 ReleaseNumber = "XXXXXX",
                 Title = "XXXXXX",
                 SaveType = "XXXXXX",
-                RomSize = "XXXXXX",
+                RomSize = 12345,
                 Publisher = "XXXXXX",
                 Location = "XXXXXX",
                 SourceRom = "XXXXXX",
@@ -286,7 +286,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(info);
             Assert.Equal("XXXXXX", info.Visible);
             Assert.Equal("XXXXXX", info.InNamingOption);
-            Assert.Equal("XXXXXX", info.Default);
+            Assert.Equal(true, info.Default);
         }
 
         /// <summary>
@@ -338,8 +338,8 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.OfflineList.To? to)
         {
             Assert.NotNull(to);
-            Assert.Equal("XXXXXX", to.Value);
-            Assert.Equal("XXXXXX", to.Default);
+            Assert.Equal("value", to.Value);
+            Assert.Equal(true, to.Default);
             Assert.Equal("XXXXXX", to.Auto);
 
             Assert.NotNull(to.Find);
@@ -354,7 +354,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(find);
             Assert.Equal("XXXXXX", find.Operation);
-            Assert.Equal("XXXXXX", find.Value);
+            Assert.Equal("value", find.Value);
             Assert.Equal("XXXXXX", find.Content);
         }
 
@@ -379,7 +379,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", game.ReleaseNumber);
             Assert.Equal("XXXXXX", game.Title);
             Assert.Equal("XXXXXX", game.SaveType);
-            Assert.Equal("0", game.RomSize); // Converted due to filtering
+            Assert.Equal(12345, game.RomSize);
             Assert.Equal("XXXXXX", game.Publisher);
             Assert.Equal("XXXXXX", game.Location);
             Assert.Equal("XXXXXX", game.SourceRom);

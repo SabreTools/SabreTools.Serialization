@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Data.Models.Listxml
 {
@@ -9,31 +10,26 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>(raster|vector)</remarks>
         [Required]
         [XmlAttribute("screen")]
-        public string? Screen { get; set; }
+        public DisplayType? Screen { get; set; }
 
         /// <remarks>(vertical|horizontal)</remarks>
         [Required]
         [XmlAttribute("orientation")]
-        public string? Orientation { get; set; }
+        public Rotation? Orientation { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("width")]
-        public string? Width { get; set; }
+        public long? Width { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("height")]
-        public string? Height { get; set; }
+        public long? Height { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("aspectx")]
-        public string? AspectX { get; set; }
+        public long? AspectX { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("aspecty")]
-        public string? AspectY { get; set; }
+        public long? AspectY { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [XmlAttribute("refresh")]
-        public string? Refresh { get; set; }
+        public double? Refresh { get; set; }
     }
 }

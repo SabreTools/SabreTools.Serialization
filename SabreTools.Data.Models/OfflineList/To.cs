@@ -9,9 +9,9 @@ namespace SabreTools.Data.Models.OfflineList
         [XmlAttribute("value")]
         public string? Value { get; set; }
 
-        /// <remarks>Boolean</remarks>
+        /// <remarks>(true|false) "false"</remarks>
         [XmlAttribute("default")]
-        public string? Default { get; set; }
+        public bool? Default { get; set; }
 
         /// <remarks>Boolean</remarks>
         [XmlAttribute("auto")]

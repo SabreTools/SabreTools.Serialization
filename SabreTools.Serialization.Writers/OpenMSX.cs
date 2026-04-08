@@ -115,7 +115,7 @@ namespace SabreTools.Serialization.Writers
         {
             writer.WriteStartElement("original");
 
-            writer.WriteOptionalAttributeString("value", obj.Value);
+            writer.WriteOptionalAttributeString("value", obj.Value?.ToString().ToLowerInvariant());
 
             if (obj.Content is not null)
                 writer.WriteRaw(obj.Content);

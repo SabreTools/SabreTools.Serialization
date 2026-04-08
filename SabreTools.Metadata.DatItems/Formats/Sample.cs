@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,17 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("sample"), XmlRoot("sample")]
     public class Sample : DatItem<Data.Models.Metadata.Sample>
     {
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Sample;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Sample;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
 
         #endregion
 
@@ -25,16 +31,49 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Sample(Data.Models.Metadata.Sample item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Sample(_internal.Clone() as Data.Models.Metadata.Sample ?? []);
+        public override object Clone() => new Sample(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.Sample GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.Sample ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Sample otherSample)
+                return _internal.Equals(otherSample._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

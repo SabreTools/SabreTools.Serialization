@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using SabreTools.Metadata.DatFiles.Formats;
-using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 using Xunit;
 
@@ -17,7 +16,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         /// <summary>
         /// All defined item types
         /// </summary>
-        private static readonly ItemType[] AllTypes = Enum.GetValues<ItemType>();
+        private static readonly Data.Models.Metadata.ItemType[] AllTypes = Enum.GetValues<Data.Models.Metadata.ItemType>();
 
         #endregion
 
@@ -29,7 +28,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new ArchiveDotOrg(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -43,7 +42,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new AttractMode(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -57,7 +56,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
+                nameof(Data.Models.Metadata.Rom.Name),
             ]));
         }
 
@@ -71,19 +70,19 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new ClrMamePro(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Archive,
-                ItemType.BiosSet,
-                ItemType.Chip,
-                ItemType.DipSwitch,
-                ItemType.Disk,
-                ItemType.Display,
-                ItemType.Driver,
-                ItemType.Input,
-                ItemType.Media,
-                ItemType.Release,
-                ItemType.Rom,
-                ItemType.Sample,
-                ItemType.Sound,
+                Data.Models.Metadata.ItemType.Archive,
+                Data.Models.Metadata.ItemType.BiosSet,
+                Data.Models.Metadata.ItemType.Chip,
+                Data.Models.Metadata.ItemType.DipSwitch,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Display,
+                Data.Models.Metadata.ItemType.Driver,
+                Data.Models.Metadata.ItemType.Input,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Release,
+                Data.Models.Metadata.ItemType.Rom,
+                Data.Models.Metadata.ItemType.Sample,
+                Data.Models.Metadata.ItemType.Sound,
             ]));
         }
 
@@ -97,8 +96,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Release.NameKey,
-                Data.Models.Metadata.Release.RegionKey,
+                nameof(Data.Models.Metadata.Release.Name),
+                nameof(Data.Models.Metadata.Release.Region),
             ]));
         }
 
@@ -112,8 +111,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.BiosSet.NameKey,
-                Data.Models.Metadata.BiosSet.DescriptionKey,
+                nameof(Data.Models.Metadata.BiosSet.Name),
+                nameof(Data.Models.Metadata.BiosSet.Description),
             ]));
         }
 
@@ -127,9 +126,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SizeKey,
-                Data.Models.Metadata.Rom.SHA1Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.Size),
+                nameof(Data.Models.Metadata.Rom.SHA1),
             ]));
         }
 
@@ -143,8 +142,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Disk.NameKey,
-                Data.Models.Metadata.Disk.SHA1Key,
+                nameof(Data.Models.Metadata.Disk.Name),
+                nameof(Data.Models.Metadata.Disk.SHA1),
             ]));
         }
 
@@ -158,7 +157,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Sample.NameKey,
+                nameof(Data.Models.Metadata.Sample.Name),
             ]));
         }
 
@@ -172,7 +171,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Archive.NameKey,
+                nameof(Data.Models.Metadata.Archive.Name),
             ]));
         }
 
@@ -186,8 +185,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Chip.ChipTypeKey,
-                Data.Models.Metadata.Chip.NameKey,
+                nameof(Data.Models.Metadata.Chip.ChipType),
+                nameof(Data.Models.Metadata.Chip.Name),
             ]));
         }
 
@@ -201,8 +200,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Display.DisplayTypeKey,
-                Data.Models.Metadata.Display.RotateKey,
+                nameof(Data.Models.Metadata.Display.DisplayType),
+                nameof(Data.Models.Metadata.Display.Rotate),
             ]));
         }
 
@@ -216,7 +215,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Sound.ChannelsKey,
+                nameof(Data.Models.Metadata.Sound.Channels),
             ]));
         }
 
@@ -230,8 +229,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Input.PlayersKey,
-                Data.Models.Metadata.Input.ControlKey,
+                nameof(Data.Models.Metadata.Input.Players),
+                nameof(Data.Models.Metadata.Input.Control),
             ]));
         }
 
@@ -245,7 +244,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.DipSwitch.NameKey,
+                nameof(Data.Models.Metadata.DipSwitch.Name),
             ]));
         }
 
@@ -259,8 +258,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Driver.StatusKey,
-                Data.Models.Metadata.Driver.EmulationKey,
+                nameof(Data.Models.Metadata.Driver.Status),
+                nameof(Data.Models.Metadata.Driver.Emulation),
             ]));
         }
 
@@ -274,7 +273,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new DosCenter(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -288,9 +287,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SizeKey,
-                Data.Models.Metadata.Rom.CRCKey,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.Size),
+                nameof(Data.Models.Metadata.Rom.CRC32),
             ]));
         }
 
@@ -304,7 +303,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new EverdriveSMDB(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -318,11 +317,11 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SHA256Key,
-                Data.Models.Metadata.Rom.SHA1Key,
-                Data.Models.Metadata.Rom.MD5Key,
-                Data.Models.Metadata.Rom.CRCKey,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.SHA256),
+                nameof(Data.Models.Metadata.Rom.SHA1),
+                nameof(Data.Models.Metadata.Rom.MD5),
+                nameof(Data.Models.Metadata.Rom.CRC32),
             ]));
         }
 
@@ -336,7 +335,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new SfvFile(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -350,8 +349,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.CRCKey,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.CRC32),
             ]));
         }
 
@@ -361,7 +360,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Md2File(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -375,8 +374,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.MD2Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.MD2),
             ]));
         }
 
@@ -386,7 +385,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Md4File(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -400,8 +399,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.MD4Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.MD4),
             ]));
         }
 
@@ -411,9 +410,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Md5File(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Disk,
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -427,8 +426,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Disk.NameKey,
-                Data.Models.Metadata.Disk.MD5Key,
+                nameof(Data.Models.Metadata.Disk.Name),
+                nameof(Data.Models.Metadata.Disk.MD5),
             ]));
         }
 
@@ -442,8 +441,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Media.NameKey,
-                Data.Models.Metadata.Media.MD5Key,
+                nameof(Data.Models.Metadata.Media.Name),
+                nameof(Data.Models.Metadata.Media.MD5),
             ]));
         }
 
@@ -457,8 +456,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.MD5Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.MD5),
             ]));
         }
 
@@ -468,7 +467,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new RipeMD128File(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -482,8 +481,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.RIPEMD128Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.RIPEMD128),
             ]));
         }
 
@@ -493,7 +492,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new RipeMD160File(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -507,8 +506,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.RIPEMD160Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.RIPEMD160),
             ]));
         }
 
@@ -518,9 +517,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Sha1File(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Disk,
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -534,8 +533,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Disk.NameKey,
-                Data.Models.Metadata.Disk.SHA1Key,
+                nameof(Data.Models.Metadata.Disk.Name),
+                nameof(Data.Models.Metadata.Disk.SHA1),
             ]));
         }
 
@@ -549,8 +548,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Media.NameKey,
-                Data.Models.Metadata.Media.SHA1Key,
+                nameof(Data.Models.Metadata.Media.Name),
+                nameof(Data.Models.Metadata.Media.SHA1),
             ]));
         }
 
@@ -564,8 +563,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SHA1Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.SHA1),
             ]));
         }
 
@@ -575,8 +574,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Sha256File(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -590,8 +589,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Media.NameKey,
-                Data.Models.Metadata.Media.SHA256Key,
+                nameof(Data.Models.Metadata.Media.Name),
+                nameof(Data.Models.Metadata.Media.SHA256),
             ]));
         }
 
@@ -605,8 +604,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SHA256Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.SHA256),
             ]));
         }
 
@@ -616,7 +615,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Sha384File(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -630,8 +629,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SHA384Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.SHA384),
             ]));
         }
 
@@ -641,7 +640,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Sha512File(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -655,8 +654,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SHA512Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.SHA512),
             ]));
         }
 
@@ -666,8 +665,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new SpamSumFile(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -681,8 +680,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Media.NameKey,
-                Data.Models.Metadata.Media.SpamSumKey,
+                nameof(Data.Models.Metadata.Media.Name),
+                nameof(Data.Models.Metadata.Media.SpamSum),
             ]));
         }
 
@@ -696,8 +695,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SpamSumKey,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.SpamSum),
             ]));
         }
 
@@ -711,8 +710,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Listrom(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Disk,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -726,8 +725,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Disk.NameKey,
-                Data.Models.Metadata.Disk.SHA1Key,
+                nameof(Data.Models.Metadata.Disk.Name),
+                nameof(Data.Models.Metadata.Disk.SHA1),
             ]));
         }
 
@@ -741,10 +740,10 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SizeKey,
-                Data.Models.Metadata.Rom.CRCKey,
-                Data.Models.Metadata.Rom.SHA1Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.Size),
+                nameof(Data.Models.Metadata.Rom.CRC32),
+                nameof(Data.Models.Metadata.Rom.SHA1),
             ]));
         }
 
@@ -758,26 +757,26 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Listxml(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Adjuster,
-                ItemType.BiosSet,
-                ItemType.Chip,
-                ItemType.Condition,
-                ItemType.Configuration,
-                ItemType.Device,
-                ItemType.DeviceRef,
-                ItemType.DipSwitch,
-                ItemType.Disk,
-                ItemType.Display,
-                ItemType.Driver,
-                ItemType.Feature,
-                ItemType.Input,
-                ItemType.Port,
-                ItemType.RamOption,
-                ItemType.Rom,
-                ItemType.Sample,
-                ItemType.Slot,
-                ItemType.SoftwareList,
-                ItemType.Sound,
+                Data.Models.Metadata.ItemType.Adjuster,
+                Data.Models.Metadata.ItemType.BiosSet,
+                Data.Models.Metadata.ItemType.Chip,
+                Data.Models.Metadata.ItemType.Condition,
+                Data.Models.Metadata.ItemType.Configuration,
+                Data.Models.Metadata.ItemType.Device,
+                Data.Models.Metadata.ItemType.DeviceRef,
+                Data.Models.Metadata.ItemType.DipSwitch,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Display,
+                Data.Models.Metadata.ItemType.Driver,
+                Data.Models.Metadata.ItemType.Feature,
+                Data.Models.Metadata.ItemType.Input,
+                Data.Models.Metadata.ItemType.Port,
+                Data.Models.Metadata.ItemType.RamOption,
+                Data.Models.Metadata.ItemType.Rom,
+                Data.Models.Metadata.ItemType.Sample,
+                Data.Models.Metadata.ItemType.Slot,
+                Data.Models.Metadata.ItemType.SoftwareList,
+                Data.Models.Metadata.ItemType.Sound,
             ]));
         }
 
@@ -791,8 +790,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.BiosSet.NameKey,
-                Data.Models.Metadata.BiosSet.DescriptionKey,
+                nameof(Data.Models.Metadata.BiosSet.Name),
+                nameof(Data.Models.Metadata.BiosSet.Description),
             ]));
         }
 
@@ -806,9 +805,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SizeKey,
-                Data.Models.Metadata.Rom.SHA1Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.Size),
+                nameof(Data.Models.Metadata.Rom.SHA1),
             ]));
         }
 
@@ -822,8 +821,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Disk.NameKey,
-                Data.Models.Metadata.Disk.SHA1Key,
+                nameof(Data.Models.Metadata.Disk.Name),
+                nameof(Data.Models.Metadata.Disk.SHA1),
             ]));
         }
 
@@ -837,7 +836,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.DeviceRef.NameKey,
+                nameof(Data.Models.Metadata.DeviceRef.Name),
             ]));
         }
 
@@ -851,7 +850,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Sample.NameKey,
+                nameof(Data.Models.Metadata.Sample.Name),
             ]));
         }
 
@@ -865,8 +864,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Chip.NameKey,
-                Data.Models.Metadata.Chip.ChipTypeKey,
+                nameof(Data.Models.Metadata.Chip.Name),
+                nameof(Data.Models.Metadata.Chip.ChipType),
             ]));
         }
 
@@ -880,8 +879,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Display.DisplayTypeKey,
-                Data.Models.Metadata.Display.RefreshKey,
+                nameof(Data.Models.Metadata.Display.DisplayType),
+                nameof(Data.Models.Metadata.Display.Refresh),
             ]));
         }
 
@@ -895,7 +894,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Sound.ChannelsKey,
+                nameof(Data.Models.Metadata.Sound.Channels),
             ]));
         }
 
@@ -909,7 +908,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Input.PlayersKey,
+                nameof(Data.Models.Metadata.Input.Players),
             ]));
         }
 
@@ -923,8 +922,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.DipSwitch.NameKey,
-                Data.Models.Metadata.DipSwitch.TagKey,
+                nameof(Data.Models.Metadata.DipSwitch.Name),
+                nameof(Data.Models.Metadata.DipSwitch.Tag),
             ]));
         }
 
@@ -938,8 +937,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Configuration.NameKey,
-                Data.Models.Metadata.Configuration.TagKey,
+                nameof(Data.Models.Metadata.Configuration.Name),
+                nameof(Data.Models.Metadata.Configuration.Tag),
             ]));
         }
 
@@ -953,7 +952,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Port.TagKey,
+                nameof(Data.Models.Metadata.Port.Tag),
             ]));
         }
 
@@ -967,7 +966,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Adjuster.NameKey,
+                nameof(Data.Models.Metadata.Adjuster.Name),
             ]));
         }
 
@@ -981,10 +980,10 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Driver.StatusKey,
-                Data.Models.Metadata.Driver.EmulationKey,
-                Data.Models.Metadata.Driver.CocktailKey,
-                Data.Models.Metadata.Driver.SaveStateKey,
+                nameof(Data.Models.Metadata.Driver.Status),
+                nameof(Data.Models.Metadata.Driver.Emulation),
+                nameof(Data.Models.Metadata.Driver.Cocktail),
+                nameof(Data.Models.Metadata.Driver.SaveState),
             ]));
         }
 
@@ -998,7 +997,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Feature.FeatureTypeKey,
+                nameof(Data.Models.Metadata.Feature.FeatureType),
             ]));
         }
 
@@ -1012,7 +1011,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Device.DeviceTypeKey,
+                nameof(Data.Models.Metadata.Device.DeviceType),
             ]));
         }
 
@@ -1026,7 +1025,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Slot.NameKey,
+                nameof(Data.Models.Metadata.Slot.Name),
             ]));
         }
 
@@ -1040,9 +1039,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.SoftwareList.TagKey,
-                Data.Models.Metadata.SoftwareList.NameKey,
-                Data.Models.Metadata.SoftwareList.StatusKey,
+                nameof(Data.Models.Metadata.SoftwareList.Tag),
+                nameof(Data.Models.Metadata.SoftwareList.Name),
+                nameof(Data.Models.Metadata.SoftwareList.Status),
             ]));
         }
 
@@ -1056,7 +1055,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.RamOption.NameKey,
+                nameof(Data.Models.Metadata.RamOption.Name),
             ]));
         }
 
@@ -1070,16 +1069,16 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Logiqx(null, false);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Archive,
-                ItemType.BiosSet,
-                ItemType.DeviceRef,
-                ItemType.Disk,
-                ItemType.Driver,
-                ItemType.Media,
-                ItemType.Release,
-                ItemType.Rom,
-                ItemType.Sample,
-                ItemType.SoftwareList,
+                Data.Models.Metadata.ItemType.Archive,
+                Data.Models.Metadata.ItemType.BiosSet,
+                Data.Models.Metadata.ItemType.DeviceRef,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Driver,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Release,
+                Data.Models.Metadata.ItemType.Rom,
+                Data.Models.Metadata.ItemType.Sample,
+                Data.Models.Metadata.ItemType.SoftwareList,
             ]));
         }
 
@@ -1093,8 +1092,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Release.NameKey,
-                Data.Models.Metadata.Release.RegionKey,
+                nameof(Data.Models.Metadata.Release.Name),
+                nameof(Data.Models.Metadata.Release.Region),
             ]));
         }
 
@@ -1108,8 +1107,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.BiosSet.NameKey,
-                Data.Models.Metadata.BiosSet.DescriptionKey,
+                nameof(Data.Models.Metadata.BiosSet.Name),
+                nameof(Data.Models.Metadata.BiosSet.Description),
             ]));
         }
 
@@ -1123,9 +1122,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SizeKey,
-                Data.Models.Metadata.Rom.SHA1Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.Size),
+                nameof(Data.Models.Metadata.Rom.SHA1),
             ]));
         }
 
@@ -1139,8 +1138,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Disk.NameKey,
-                Data.Models.Metadata.Disk.SHA1Key,
+                nameof(Data.Models.Metadata.Disk.Name),
+                nameof(Data.Models.Metadata.Disk.SHA1),
             ]));
         }
 
@@ -1154,8 +1153,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Media.NameKey,
-                Data.Models.Metadata.Media.SHA1Key,
+                nameof(Data.Models.Metadata.Media.Name),
+                nameof(Data.Models.Metadata.Media.SHA1),
             ]));
         }
 
@@ -1169,7 +1168,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.DeviceRef.NameKey,
+                nameof(Data.Models.Metadata.DeviceRef.Name),
             ]));
         }
 
@@ -1183,7 +1182,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Sample.NameKey,
+                nameof(Data.Models.Metadata.Sample.Name),
             ]));
         }
 
@@ -1197,7 +1196,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Archive.NameKey,
+                nameof(Data.Models.Metadata.Archive.Name),
             ]));
         }
 
@@ -1211,10 +1210,10 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Driver.StatusKey,
-                Data.Models.Metadata.Driver.EmulationKey,
-                Data.Models.Metadata.Driver.CocktailKey,
-                Data.Models.Metadata.Driver.SaveStateKey,
+                nameof(Data.Models.Metadata.Driver.Status),
+                nameof(Data.Models.Metadata.Driver.Emulation),
+                nameof(Data.Models.Metadata.Driver.Cocktail),
+                nameof(Data.Models.Metadata.Driver.SaveState),
             ]));
         }
 
@@ -1228,9 +1227,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.SoftwareList.TagKey,
-                Data.Models.Metadata.SoftwareList.NameKey,
-                Data.Models.Metadata.SoftwareList.StatusKey,
+                nameof(Data.Models.Metadata.SoftwareList.Tag),
+                nameof(Data.Models.Metadata.SoftwareList.Name),
+                nameof(Data.Models.Metadata.SoftwareList.Status),
             ]));
         }
 
@@ -1263,7 +1262,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new OfflineList(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -1277,8 +1276,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.SizeKey,
-                Data.Models.Metadata.Rom.CRCKey,
+                nameof(Data.Models.Metadata.Rom.Size),
+                nameof(Data.Models.Metadata.Rom.CRC32),
             ]));
         }
 
@@ -1292,7 +1291,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new OpenMSX(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -1306,8 +1305,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SHA1Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.SHA1),
             ]));
         }
 
@@ -1321,7 +1320,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new RomCenter(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -1335,9 +1334,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.CRCKey,
-                Data.Models.Metadata.Rom.SizeKey,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.CRC32),
+                nameof(Data.Models.Metadata.Rom.Size),
             ]));
         }
 
@@ -1375,9 +1374,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new CommaSeparatedValue(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Disk,
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -1391,8 +1390,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Disk.NameKey,
-                Data.Models.Metadata.Disk.SHA1Key,
+                nameof(Data.Models.Metadata.Disk.Name),
+                nameof(Data.Models.Metadata.Disk.SHA1),
             ]));
         }
 
@@ -1406,8 +1405,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Media.NameKey,
-                Data.Models.Metadata.Media.SHA1Key,
+                nameof(Data.Models.Metadata.Media.Name),
+                nameof(Data.Models.Metadata.Media.SHA1),
             ]));
         }
 
@@ -1421,9 +1420,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SizeKey,
-                Data.Models.Metadata.Rom.SHA1Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.Size),
+                nameof(Data.Models.Metadata.Rom.SHA1),
             ]));
         }
 
@@ -1433,9 +1432,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new SemicolonSeparatedValue(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Disk,
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -1449,8 +1448,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Disk.NameKey,
-                Data.Models.Metadata.Disk.SHA1Key,
+                nameof(Data.Models.Metadata.Disk.Name),
+                nameof(Data.Models.Metadata.Disk.SHA1),
             ]));
         }
 
@@ -1464,8 +1463,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Media.NameKey,
-                Data.Models.Metadata.Media.SHA1Key,
+                nameof(Data.Models.Metadata.Media.Name),
+                nameof(Data.Models.Metadata.Media.SHA1),
             ]));
         }
 
@@ -1479,9 +1478,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SizeKey,
-                Data.Models.Metadata.Rom.SHA1Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.Size),
+                nameof(Data.Models.Metadata.Rom.SHA1),
             ]));
         }
 
@@ -1491,9 +1490,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new TabSeparatedValue(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.Disk,
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ]));
         }
 
@@ -1507,8 +1506,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Disk.NameKey,
-                Data.Models.Metadata.Disk.SHA1Key,
+                nameof(Data.Models.Metadata.Disk.Name),
+                nameof(Data.Models.Metadata.Disk.SHA1),
             ]));
         }
 
@@ -1522,8 +1521,8 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Media.NameKey,
-                Data.Models.Metadata.Media.SHA1Key,
+                nameof(Data.Models.Metadata.Media.Name),
+                nameof(Data.Models.Metadata.Media.SHA1),
             ]));
         }
 
@@ -1537,9 +1536,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Rom.NameKey,
-                Data.Models.Metadata.Rom.SizeKey,
-                Data.Models.Metadata.Rom.SHA1Key,
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.Size),
+                nameof(Data.Models.Metadata.Rom.SHA1),
             ]));
         }
 
@@ -1553,12 +1552,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             var datFile = new Formats.SoftwareList(null);
             var actual = datFile.SupportedTypes;
             Assert.True(actual.SequenceEqual([
-                ItemType.DipSwitch,
-                ItemType.Disk,
-                ItemType.Info,
-                ItemType.PartFeature,
-                ItemType.Rom,
-                ItemType.SharedFeat,
+                Data.Models.Metadata.ItemType.DipSwitch,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Info,
+                Data.Models.Metadata.ItemType.PartFeature,
+                Data.Models.Metadata.ItemType.Rom,
+                Data.Models.Metadata.ItemType.SharedFeat,
             ]));
         }
 
@@ -1572,11 +1571,11 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Part.NameKey,
-                Data.Models.Metadata.Part.InterfaceKey,
-                Data.Models.Metadata.DipSwitch.NameKey,
-                Data.Models.Metadata.DipSwitch.TagKey,
-                Data.Models.Metadata.DipSwitch.MaskKey,
+                nameof(Data.Models.Metadata.Part.Name),
+                nameof(Data.Models.Metadata.Part.Interface),
+                nameof(Data.Models.Metadata.DipSwitch.Name),
+                nameof(Data.Models.Metadata.DipSwitch.Tag),
+                nameof(Data.Models.Metadata.DipSwitch.Mask),
             ]));
         }
 
@@ -1590,10 +1589,10 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Part.NameKey,
-                Data.Models.Metadata.Part.InterfaceKey,
-                Data.Models.Metadata.DiskArea.NameKey,
-                Data.Models.Metadata.Disk.NameKey,
+                nameof(Data.Models.Metadata.Part.Name),
+                nameof(Data.Models.Metadata.Part.Interface),
+                nameof(Data.Models.Metadata.DiskArea.Name),
+                nameof(Data.Models.Metadata.Disk.Name),
             ]));
         }
 
@@ -1607,7 +1606,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Info.NameKey,
+                nameof(Data.Models.Metadata.Info.Name),
             ]));
         }
 
@@ -1621,10 +1620,10 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.Part.NameKey,
-                Data.Models.Metadata.Part.InterfaceKey,
-                Data.Models.Metadata.DataArea.NameKey,
-                Data.Models.Metadata.DataArea.SizeKey,
+                nameof(Data.Models.Metadata.Part.Name),
+                nameof(Data.Models.Metadata.Part.Interface),
+                nameof(Data.Models.Metadata.DataArea.Name),
+                nameof(Data.Models.Metadata.DataArea.Size),
             ]));
         }
 
@@ -1638,7 +1637,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.NotNull(actual);
             Assert.True(actual.SequenceEqual([
-                Data.Models.Metadata.SharedFeat.NameKey,
+                nameof(Data.Models.Metadata.SharedFeat.Name),
             ]));
         }
 

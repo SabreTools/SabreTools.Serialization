@@ -82,7 +82,6 @@ Below are a list of the included namespaces with links to their README files:
 
 - [SabreTools.Data.Extensions](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Data.Extensions)
 - [SabreTools.Data.Models](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Data.Models)
-- [SabreTools.Metadata](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Metadata)
 - [SabreTools.Metadata.DatFiles](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Metadata.DatFiles)
 - [SabreTools.Metadata.DatItems](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Metadata.Datitems)
 - [SabreTools.Metadata.Filter](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Metadata.Filter)

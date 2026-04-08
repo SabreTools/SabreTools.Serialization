@@ -11,10 +11,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class Sha256File : Hashfile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha256File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA256;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA256);
+            Header.DatFormat = DatFormat.RedumpSHA256;
         }
 
         /// <inheritdoc/>
@@ -32,20 +32,20 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.SHA256Key)))
-                        missingFields.Add(Data.Models.Metadata.Media.SHA256Key);
+                    if (string.IsNullOrEmpty(medium.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.Name));
+                    if (string.IsNullOrEmpty(medium.SHA256))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.SHA256));
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA256Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA256Key);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (string.IsNullOrEmpty(rom.SHA256))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA256));
                     break;
 
                 default:

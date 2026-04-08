@@ -13,14 +13,11 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(),
+                Header = ConvertHeaderToInternalModel(),
             };
 
             if (obj?.Row is not null && obj.Row.Length > 0)
-            {
-                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
-                    = Array.ConvertAll(obj.Row, ConvertMachineToInternalModel);
-            }
+                metadataFile.Machine = Array.ConvertAll(obj.Row, ConvertMachineToInternalModel);
 
             return metadataFile;
         }
@@ -32,7 +29,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                [Data.Models.Metadata.Header.NameKey] = "Everdrive SMDB",
+                Name =  "Everdrive SMDB",
             };
             return header;
         }
@@ -44,7 +41,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Data.Models.Metadata.Machine
             {
-                [Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { ConvertToInternalModel(item) },
+                Rom = new Data.Models.Metadata.Rom[] { ConvertToInternalModel(item) },
             };
             return machine;
         }
@@ -56,12 +53,12 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                [Data.Models.Metadata.Rom.SHA256Key] = item.SHA256,
-                [Data.Models.Metadata.Rom.NameKey] = item.Name,
-                [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
-                [Data.Models.Metadata.Rom.MD5Key] = item.MD5,
-                [Data.Models.Metadata.Rom.CRCKey] = item.CRC32,
-                [Data.Models.Metadata.Rom.SizeKey] = item.Size,
+                SHA256 = item.SHA256,
+                Name = item.Name,
+                SHA1 = item.SHA1,
+                MD5 = item.MD5,
+                CRC32 = item.CRC32,
+                Size = item.Size,
             };
             return rom;
         }

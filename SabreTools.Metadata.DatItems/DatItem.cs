@@ -1,9 +1,7 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 using SabreTools.Hashing;
-using SabreTools.Logging;
 using SabreTools.Metadata.DatItems.Formats;
 using SabreTools.Metadata.Filter;
 
@@ -54,71 +52,50 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(SoftwareList))]
     [XmlInclude(typeof(Sound))]
     [XmlInclude(typeof(SourceDetails))]
-    public abstract class DatItem : ModelBackedItem<Data.Models.Metadata.DatItem>, IEquatable<DatItem>, IComparable<DatItem>, ICloneable
+    public abstract class DatItem : ICloneable, IEquatable<DatItem>
     {
-        #region Constants
+        #region Properties
 
         /// <summary>
         /// Duplicate type when compared to another item
         /// </summary>
-        public const string DupeTypeKey = "DUPETYPE";
-
-        /// <summary>
-        /// Machine associated with the item
-        /// </summary>
-        public const string MachineKey = "MACHINE";
-
-        /// <summary>
-        /// Flag if item should be removed
-        /// </summary>
-        public const string RemoveKey = "REMOVE";
-
-        /// <summary>
-        /// Source information
-        /// </summary>
-        public const string SourceKey = "SOURCE";
-
-        #endregion
-
-        #region Fields
+        public DupeType DupeType { get; set; } = 0x00;
 
         /// <summary>
         /// Item type for the object
         /// </summary>
-        protected abstract ItemType ItemType { get; }
-
-        #endregion
-
-        #region Logging
+        public abstract Data.Models.Metadata.ItemType ItemType { get; }
 
         /// <summary>
-        /// Static logger for static methods
+        /// Get the machine for a DatItem
         /// </summary>
-        [JsonIgnore, XmlIgnore]
-        protected static readonly Logger _staticLogger = new();
+        public Machine? Machine { get; set; }
+
+        /// <summary>
+        /// Flag if item should be removed
+        /// </summary>
+        public bool RemoveFlag { get; set; } = false;
+
+        /// <summary>
+        /// Source information
+        /// </summary>
+        public Source? Source { get; set; }
 
         #endregion
 
         #region Accessors
 
         /// <summary>
-        /// Get the machine for a DatItem
-        /// </summary>
-        /// <returns>Machine if available, null otherwise</returns>
-        /// <remarks>Relies on <see cref="MachineKey"/></remarks>
-        public Machine? GetMachine() => Read<Machine>(MachineKey);
-
-        /// <summary>
         /// Gets the name to use for a DatItem
         /// </summary>
         /// <returns>Name if available, null otherwise</returns>
-        public virtual string? GetName() => _internal.GetName();
+        public abstract string? GetName();
 
         /// <summary>
         /// Sets the name to use for a DatItem
         /// </summary>
         /// <param name="name">Name to set for the item</param>
-        public virtual void SetName(string? name) => _internal.SetName(name);
+        public abstract void SetName(string? name);
 
         #endregion
 
@@ -137,11 +114,10 @@ namespace SabreTools.Metadata.DatItems
         public void CopyMachineInformation(DatItem item)
         {
             // If there is no machine
-            if (!item._internal.ContainsKey(MachineKey))
+            if (item.Machine is null)
                 return;
 
-            var machine = item.GetMachine();
-            CopyMachineInformation(machine);
+            CopyMachineInformation(item.Machine);
         }
 
         /// <summary>
@@ -154,85 +130,19 @@ namespace SabreTools.Metadata.DatItems
                 return;
 
             if (machine.Clone() is Machine cloned)
-                Write(MachineKey, cloned);
+                Machine = cloned;
         }
 
         #endregion
 
         #region Comparision Methods
 
-        /// <inheritdoc/>
-        public int CompareTo(DatItem? other)
-        {
-            // If the other item doesn't exist
-            if (other is null)
-                return 1;
-
-            // Get the names to avoid changing values
-            string? selfName = GetName();
-            string? otherName = other.GetName();
-
-            // If the names are equal
-            if (selfName == otherName)
-                return Equals(other) ? 0 : 1;
-
-            // If `otherName` is null, Compare will return > 0
-            // If `selfName` is null, Compare will return < 0
-            return string.Compare(selfName, otherName, StringComparison.Ordinal);
-        }
-
-        /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem? other)
-        {
-            // If other is null
-            if (other is null)
-                return false;
-
-            // If the type is mismatched
-            if (other is not DatItem otherItem)
-                return false;
-
-            // Compare internal models
-            return _internal.Equals(otherItem);
-        }
-
-        /// <inheritdoc/>
-        public override bool Equals(ModelBackedItem<Data.Models.Metadata.DatItem>? other)
-        {
-            // If other is null
-            if (other is null)
-                return false;
-
-            // If the type is mismatched
-            if (other is not DatItem otherItem)
-                return false;
-
-            // Compare internal models
-            return _internal.Equals(otherItem);
-        }
-
         /// <summary>
         /// Determine if an item is a duplicate using partial matching logic
         /// </summary>
         /// <param name="other">DatItem to use as a baseline</param>
         /// <returns>True if the items are duplicates, false otherwise</returns>
-        public virtual bool Equals(DatItem? other)
-        {
-            // If the other item is null
-            if (other is null)
-                return false;
-
-            // Get the types for comparison
-            ItemType selfType = ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
-            ItemType otherType = other.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
-
-            // If we don't have a matched type, return false
-            if (selfType != otherType)
-                return false;
-
-            // Compare the internal models
-            return _internal.EqualTo(other._internal);
-        }
+        public abstract bool Equals(DatItem? other);
 
         #endregion
 
@@ -243,22 +153,14 @@ namespace SabreTools.Metadata.DatItems
         /// </summary>
         /// <param name="filterRunner">Filter runner to use for checking</param>
         /// <returns>True if the item and its machine passes the filter, false otherwise</returns>
-        public bool PassesFilter(FilterRunner filterRunner)
-        {
-            var machine = GetMachine();
-            if (machine is not null && !machine.PassesFilter(filterRunner))
-                return false;
-
-            return filterRunner.Run(_internal);
-        }
+        public abstract bool PassesFilter(FilterRunner filterRunner);
 
         /// <summary>
         /// Runs a filter and determines if it passes or not
         /// </summary>
         /// <param name="filterRunner">Filter runner to use for checking</param>
         /// <returns>True if the item passes the filter, false otherwise</returns>
-        public bool PassesFilterDB(FilterRunner filterRunner)
-            => filterRunner.Run(_internal);
+        public abstract bool PassesFilterDB(FilterRunner filterRunner);
 
         #endregion
 
@@ -279,7 +181,7 @@ namespace SabreTools.Metadata.DatItems
             string key = string.Empty;
 
             string sourceKeyPadded = source?.Index.ToString().PadLeft(10, '0') + '-';
-            string machineName = machine?.GetName() ?? "Default";
+            string machineName = machine?.Name ?? "Default";
 
             // Now determine what the key should be based on the bucketedBy value
             switch (bucketedBy)
@@ -288,7 +190,7 @@ namespace SabreTools.Metadata.DatItems
                     key = HashType.CRC16.ZeroString;
                     break;
 
-                case ItemKey.CRC:
+                case ItemKey.CRC32:
                     key = HashType.CRC32.ZeroString;
                     break;
 

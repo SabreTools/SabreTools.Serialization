@@ -1,28 +1,68 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("dipvalue"), XmlRoot("dipvalue")]
-    public class DipValue : DatItem
+    public class DipValue : DatItem, ICloneable, IEquatable<DipValue>
     {
-        #region Keys
+        #region Properties
 
-        /// <remarks>Condition</remarks>
-        [NoFilter]
-        public const string ConditionKey = "condition";
+        public Condition? Condition { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
-        public const string DefaultKey = "default";
+        public bool? Default { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
+        public string? Name { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string ValueKey = "value";
+        public string? Value { get; set; }
 
         #endregion
 
-        public DipValue() => Type = ItemType.DipValue;
+        public DipValue() => ItemType = ItemType.DipValue;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new DipValue();
+
+            obj.Condition = Condition?.Clone() as Condition;
+            obj.Default = Default;
+            obj.Name = Name;
+            obj.Value = Value;
+
+            return obj;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(DipValue? other)
+        {
+            // Null never matches
+            if (other is null)
+                return false;
+
+            // Properties
+            if (Default != other.Default)
+                return false;
+
+            if ((Name is null) ^ (other.Name is null))
+                return false;
+            else if (Name is not null && !Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((Value is null) ^ (other.Value is null))
+                return false;
+            else if (Value is not null && !Value.Equals(other.Value, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            // Sub-items
+            if ((Condition is null) ^ (other.Condition is null))
+                return false;
+            else if (Condition is not null && other.Condition is not null && Condition.Equals(other.Condition))
+                return false;
+
+            return true;
+        }
     }
 }

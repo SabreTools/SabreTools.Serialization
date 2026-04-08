@@ -1,36 +1,79 @@
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("configuration"), XmlRoot("configuration")]
-    public class Configuration : DatItem
+    public class Configuration : DatItem, ICloneable, IEquatable<Configuration>
     {
-        #region Keys
+        #region Properties
 
-        /// <remarks>Condition</remarks>
-        [NoFilter]
-        public const string ConditionKey = "condition";
+        public Condition? Condition { get; set; }
 
-        /// <remarks>ConfLocation[]</remarks>
-        [NoFilter]
-        public const string ConfLocationKey = "conflocation";
+        public ConfLocation[]? ConfLocation { get; set; }
 
-        /// <remarks>ConfSetting[]</remarks>
-        [NoFilter]
-        public const string ConfSettingKey = "confsetting";
+        public ConfSetting[]? ConfSetting { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string MaskKey = "mask";
+        public string? Mask { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string NameKey = "name";
+        public string? Name { get; set; }
 
-        /// <remarks>string</remarks>
-        public const string TagKey = "tag";
+        public string? Tag { get; set; }
 
         #endregion
 
-        public Configuration() => Type = ItemType.Configuration;
+        public Configuration() => ItemType = ItemType.Configuration;
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var obj = new Configuration();
+
+            obj.Condition = Condition?.Clone() as Condition;
+            if (ConfLocation is not null)
+                obj.ConfLocation = Array.ConvertAll(ConfLocation, i => (ConfLocation)i.Clone());
+            if (ConfSetting is not null)
+                obj.ConfSetting = Array.ConvertAll(ConfSetting, i => (ConfSetting)i.Clone());
+            obj.Mask = Mask;
+            obj.Name = Name;
+            obj.Tag = Tag;
+
+            return obj;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Configuration? other)
+        {
+            // Null never matches
+            if (other is null)
+                return false;
+
+            // Properties
+            if ((Mask is null) ^ (other.Mask is null))
+                return false;
+            else if (Mask is not null && !Mask.Equals(other.Mask, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((Name is null) ^ (other.Name is null))
+                return false;
+            else if (Name is not null && !Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((Tag is null) ^ (other.Tag is null))
+                return false;
+            else if (Tag is not null && !Tag.Equals(other.Tag, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            // Sub-items
+            if ((Condition is null) ^ (other.Condition is null))
+                return false;
+            else if (Condition is not null && other.Condition is not null && Condition.Equals(other.Condition))
+                return false;
+
+            // TODO: Figure out how to properly check arrays
+
+            return true;
+        }
     }
 }

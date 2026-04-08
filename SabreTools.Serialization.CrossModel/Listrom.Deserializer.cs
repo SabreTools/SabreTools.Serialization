@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new MetadataFile();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
                 metadataFile.Set = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
@@ -27,20 +27,20 @@ namespace SabreTools.Serialization.CrossModel
         private static Set ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item)
         {
             var set = new Set();
-            if (item.ReadString(Data.Models.Metadata.Machine.IsDeviceKey) == "yes")
-                set.Device = item.ReadString(Data.Models.Metadata.Machine.NameKey);
+            if (item.IsDevice == true)
+                set.Device = item.Name;
             else
-                set.Driver = item.ReadString(Data.Models.Metadata.Machine.NameKey);
+                set.Driver = item.Name;
 
             var rowItems = new List<Row>();
 
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is not null)
             {
                 rowItems.AddRange(Array.ConvertAll(roms, ConvertFromInternalModel));
             }
 
-            var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
+            var disks = item.Disk;
             if (disks is not null)
                 rowItems.AddRange(Array.ConvertAll(disks, ConvertFromInternalModel));
 
@@ -55,14 +55,14 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                Name = item.ReadString(Data.Models.Metadata.Disk.NameKey),
-                MD5 = item.ReadString(Data.Models.Metadata.Disk.MD5Key),
-                SHA1 = item.ReadString(Data.Models.Metadata.Disk.SHA1Key),
+                Name = item.Name,
+                MD5 = item.MD5,
+                SHA1 = item.SHA1,
             };
 
-            if ((item[Data.Models.Metadata.Disk.StatusKey] as string) == "nodump")
+            if (item.Status == Data.Models.Metadata.ItemStatus.Nodump)
                 row.NoGoodDumpKnown = true;
-            else if ((item[Data.Models.Metadata.Disk.StatusKey] as string) == "baddump")
+            else if (item.Status == Data.Models.Metadata.ItemStatus.BadDump)
                 row.Bad = true;
 
             return row;
@@ -75,15 +75,15 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
-                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
-                CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
+                Name = item.Name,
+                Size = item.Size,
+                CRC = item.CRC32,
+                SHA1 = item.SHA1,
             };
 
-            if ((item[Data.Models.Metadata.Rom.StatusKey] as string) == "nodump")
+            if (item.Status == Data.Models.Metadata.ItemStatus.Nodump)
                 row.NoGoodDumpKnown = true;
-            else if ((item[Data.Models.Metadata.Rom.StatusKey] as string) == "baddump")
+            else if (item.Status == Data.Models.Metadata.ItemStatus.BadDump)
                 row.Bad = true;
 
             return row;

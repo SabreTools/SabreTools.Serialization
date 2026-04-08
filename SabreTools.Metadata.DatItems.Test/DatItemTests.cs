@@ -1,4 +1,4 @@
-using SabreTools.Data.Extensions;
+using System;
 using SabreTools.Metadata.DatItems.Formats;
 using Xunit;
 
@@ -11,9 +11,21 @@ namespace SabreTools.Metadata.DatItems.Test
         /// <summary>
         /// Testing implementation of Data.Models.Metadata.DatItem
         /// </summary>
-        private class TestDatItemModel : Data.Models.Metadata.DatItem
+        private class TestDatItemModel : Data.Models.Metadata.DatItem, ICloneable, IEquatable<TestDatItemModel>
         {
-            public const string NameKey = "__NAME__";
+            public string? Name { get; set; }
+
+            /// <inheritdoc/>
+            public object Clone() => new TestDatItemModel { Name = Name };
+
+            /// <inheritdoc/>
+            public bool Equals(TestDatItemModel? other)
+            {
+                if (other is null)
+                    return false;
+
+                return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
         /// <summary>
@@ -21,28 +33,47 @@ namespace SabreTools.Metadata.DatItems.Test
         /// </summary>
         private class TestDatItem : DatItem<TestDatItemModel>
         {
-            private readonly string? _nameKey;
+            public override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.Blank;
 
-            protected override ItemType ItemType => ItemType.Blank;
+            public string? Name
+            {
+                get => _internal?.Name;
+                set => _internal?.Name = value;
+            }
 
-            public TestDatItem() => _nameKey = TestDatItemModel.NameKey;
-
-            public TestDatItem(string? nameKey) => _nameKey = nameKey;
+            public TestDatItem() { }
 
             /// <inheritdoc/>
             public override object Clone() => new TestDatItem()
             {
-                _internal = _internal.Clone() as TestDatItemModel ?? []
+                _internal = GetInternalClone(),
             };
 
             /// <inheritdoc/>
-            public override string? GetName() => _nameKey is not null ? _internal.ReadString(_nameKey) : null;
+            public override TestDatItemModel GetInternalClone()
+            {
+                return _internal?.Clone() as TestDatItemModel ?? new();
+            }
 
             /// <inheritdoc/>
-            public override void SetName(string? name)
+            public override string? GetName() => Name;
+
+            /// <inheritdoc/>
+            public override void SetName(string? name) => Name = name;
+
+            /// <inheritdoc/>
+            public override bool Equals(DatItem? other)
             {
-                if (_nameKey is not null)
-                    _internal[_nameKey] = name;
+                // If the other value is invalid
+                if (other is null)
+                    return false;
+
+                // If the type matches
+                if (other is TestDatItem otherTestDatItem)
+                    return _internal.Equals(otherTestDatItem._internal);
+
+                // Everything else fails
+                return false;
             }
         }
 
@@ -53,176 +84,97 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CopyMachineInformation_NewItem_Overwrite()
         {
-            Machine? machineA = new Machine();
-            machineA.SetName("machineA");
-
             var romA = new Rom();
 
-            var romB = new Rom();
-            romB.Remove(DatItem.MachineKey);
+            var romB = new Rom { Machine = null };
 
             romA.CopyMachineInformation(romB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
-            Assert.Null(actualMachineA.GetName());
+            Assert.Null(actualMachineA.Name);
         }
 
         [Fact]
         public void CopyMachineInformation_EmptyItem_NoChange()
         {
-            Machine? machineA = new Machine();
-            machineA.SetName("machineA");
+            Machine? machineA = new Machine { Name = "machineA" };
 
-            var romA = new Rom();
-            romA.Write(DatItem.MachineKey, machineA);
+            var romA = new Rom { Machine = machineA };
 
-            var romB = new Rom();
-            romB.Remove(DatItem.MachineKey);
+            var romB = new Rom { Machine = null };
 
             romA.CopyMachineInformation(romB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
-            Assert.Equal("machineA", actualMachineA.GetName());
+            Assert.Equal("machineA", actualMachineA.Name);
         }
 
         [Fact]
         public void CopyMachineInformation_NullMachine_NoChange()
         {
-            Machine? machineA = new Machine();
-            machineA.SetName("machineA");
+            Machine? machineA = new Machine { Name = "machineA" };
 
             Machine? machineB = null;
 
-            var romA = new Rom();
-            romA.Write(DatItem.MachineKey, machineA);
+            var romA = new Rom { Machine = machineA };
 
-            var romB = new Rom();
-            romB.Write(DatItem.MachineKey, machineB);
+            var romB = new Rom { Machine = machineB };
 
             romA.CopyMachineInformation(romB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
-            Assert.Equal("machineA", actualMachineA.GetName());
+            Assert.Equal("machineA", actualMachineA.Name);
         }
 
         [Fact]
         public void CopyMachineInformation_EmptyMachine_Overwrite()
         {
-            Machine? machineA = new Machine();
-            machineA.SetName("machineA");
+            Machine? machineA = new Machine { Name = "machineA" };
 
             Machine? machineB = new Machine();
 
-            var romA = new Rom();
-            romA.Write(DatItem.MachineKey, machineA);
+            var romA = new Rom { Machine = machineA };
 
-            var romB = new Rom();
-            romB.Write(DatItem.MachineKey, machineB);
+            var romB = new Rom { Machine = machineB };
 
             romA.CopyMachineInformation(romB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
-            Assert.Null(actualMachineA.GetName());
+            Assert.Null(actualMachineA.Name);
         }
 
         [Fact]
         public void CopyMachineInformation_FilledMachine_Overwrite()
         {
-            Machine? machineA = new Machine();
-            machineA.SetName("machineA");
+            Machine? machineA = new Machine { Name = "machineA" };
 
-            Machine? machineB = new Machine();
-            machineB.SetName("machineB");
+            Machine? machineB = new Machine { Name = "machineB" };
 
-            var romA = new Rom();
-            romA.Write(DatItem.MachineKey, machineA);
+            var romA = new Rom { Machine = machineA };
 
-            var romB = new Rom();
-            romB.Write(DatItem.MachineKey, machineB);
+            var romB = new Rom { Machine = machineB };
 
             romA.CopyMachineInformation(romB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
-            Assert.Equal("machineB", actualMachineA.GetName());
+            Assert.Equal("machineB", actualMachineA.Name);
         }
 
         [Fact]
         public void CopyMachineInformation_MismatchedType_Overwrite()
         {
-            Machine? machineA = new Machine();
-            machineA.SetName("machineA");
+            Machine? machineA = new Machine { Name = "machineA" };
 
-            Machine? machineB = new Machine();
-            machineB.SetName("machineB");
+            Machine? machineB = new Machine { Name = "machineB" };
 
-            var romA = new Rom();
-            romA.Write(DatItem.MachineKey, machineA);
+            var romA = new Rom { Machine = machineA };
 
-            var diskB = new Disk();
-            diskB.Write(DatItem.MachineKey, machineB);
+            var diskB = new Disk { Machine = machineB };
 
             romA.CopyMachineInformation(diskB);
-            var actualMachineA = romA.GetMachine();
+            var actualMachineA = romA.Machine;
             Assert.NotNull(actualMachineA);
-            Assert.Equal("machineB", actualMachineA.GetName());
-        }
-
-        #endregion
-
-        #region CompareTo
-
-        [Fact]
-        public void CompareTo_NullOther_Returns1()
-        {
-            DatItem self = new Rom();
-            DatItem? other = null;
-
-            int actual = self.CompareTo(other);
-            Assert.Equal(1, actual);
-        }
-
-        [Fact]
-        public void CompareTo_DifferentOther_Returns1()
-        {
-            DatItem self = new Rom();
-            self.SetName("name");
-
-            DatItem? other = new Disk();
-            other.SetName("name");
-
-            int actual = self.CompareTo(other);
-            Assert.Equal(1, actual);
-        }
-
-        [Fact]
-        public void CompareTo_Empty_Returns1()
-        {
-            DatItem self = new Rom();
-            DatItem? other = new Rom();
-
-            int actual = self.CompareTo(other);
-            Assert.Equal(1, actual);
-        }
-
-        [Theory]
-        [InlineData(null, null, 0)]
-        [InlineData("name", null, 1)]
-        [InlineData("name", "other", -1)]
-        [InlineData(null, "name", -1)]
-        [InlineData("other", "name", 1)]
-        [InlineData("name", "name", 0)]
-        public void CompareTo_NamesOnly(string? selfName, string? otherName, int expected)
-        {
-            DatItem self = new Rom();
-            self.SetName(selfName);
-            self.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-
-            DatItem? other = new Rom();
-            other.SetName(otherName);
-            other.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-
-            int actual = self.CompareTo(other);
-            Assert.Equal(expected, actual);
+            Assert.Equal("machineB", actualMachineA.Name);
         }
 
         #endregion
@@ -260,19 +212,6 @@ namespace SabreTools.Metadata.DatItems.Test
         }
 
         [Fact]
-        public void Equals_MismatchedInternal_False()
-        {
-            DatItem self = new TestDatItem();
-            self.SetName("self");
-
-            DatItem? other = new TestDatItem();
-            other.SetName("other");
-
-            bool actual = self.Equals(other);
-            Assert.False(actual);
-        }
-
-        [Fact]
         public void Equals_EqualInternal_True()
         {
             DatItem self = new TestDatItem();
@@ -303,10 +242,10 @@ namespace SabreTools.Metadata.DatItems.Test
         [InlineData(ItemKey.CRC16, false, true, "0000")]
         [InlineData(ItemKey.CRC16, true, false, "0000")]
         [InlineData(ItemKey.CRC16, true, true, "0000")]
-        [InlineData(ItemKey.CRC, false, false, "00000000")]
-        [InlineData(ItemKey.CRC, false, true, "00000000")]
-        [InlineData(ItemKey.CRC, true, false, "00000000")]
-        [InlineData(ItemKey.CRC, true, true, "00000000")]
+        [InlineData(ItemKey.CRC32, false, false, "00000000")]
+        [InlineData(ItemKey.CRC32, false, true, "00000000")]
+        [InlineData(ItemKey.CRC32, true, false, "00000000")]
+        [InlineData(ItemKey.CRC32, true, true, "00000000")]
         [InlineData(ItemKey.CRC64, false, false, "0000000000000000")]
         [InlineData(ItemKey.CRC64, false, true, "0000000000000000")]
         [InlineData(ItemKey.CRC64, true, false, "0000000000000000")]
@@ -355,8 +294,7 @@ namespace SabreTools.Metadata.DatItems.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "Machine");
+            Machine machine = new Machine { Name = "Machine" };
 
             DatItem datItem = new Blank();
 
@@ -377,10 +315,10 @@ namespace SabreTools.Metadata.DatItems.Test
         [InlineData(ItemKey.CRC16, false, true, "DEADBEEF")]
         [InlineData(ItemKey.CRC16, true, false, "deadbeef")]
         [InlineData(ItemKey.CRC16, true, true, "deadbeef")]
-        [InlineData(ItemKey.CRC, false, false, "DEADBEEF")]
-        [InlineData(ItemKey.CRC, false, true, "DEADBEEF")]
-        [InlineData(ItemKey.CRC, true, false, "deadbeef")]
-        [InlineData(ItemKey.CRC, true, true, "deadbeef")]
+        [InlineData(ItemKey.CRC32, false, false, "DEADBEEF")]
+        [InlineData(ItemKey.CRC32, false, true, "DEADBEEF")]
+        [InlineData(ItemKey.CRC32, true, false, "deadbeef")]
+        [InlineData(ItemKey.CRC32, true, true, "deadbeef")]
         [InlineData(ItemKey.CRC64, false, false, "DEADBEEF")]
         [InlineData(ItemKey.CRC64, false, true, "DEADBEEF")]
         [InlineData(ItemKey.CRC64, true, false, "deadbeef")]
@@ -429,104 +367,27 @@ namespace SabreTools.Metadata.DatItems.Test
         {
             Source source = new Source(0);
 
-            Machine machine = new Machine();
-            machine.Write(Data.Models.Metadata.Machine.NameKey, "Machine");
+            Machine machine = new Machine { Name = "Machine" };
 
-            DatItem datItem = new Rom();
-            datItem.Write(Data.Models.Metadata.Rom.CRC16Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.CRC64Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.MD2Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.MD4Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.MD5Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA1Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA256Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA384Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SHA512Key, "DEADBEEF");
-            datItem.Write(Data.Models.Metadata.Rom.SpamSumKey, "BASE64");
+            DatItem datItem = new Rom
+            {
+                CRC16 = "DEADBEEF",
+                CRC32 = "DEADBEEF",
+                CRC64 = "DEADBEEF",
+                MD2 = "DEADBEEF",
+                MD4 = "DEADBEEF",
+                MD5 = "DEADBEEF",
+                RIPEMD128 = "DEADBEEF",
+                RIPEMD160 = "DEADBEEF",
+                SHA1 = "DEADBEEF",
+                SHA256 = "DEADBEEF",
+                SHA384 = "DEADBEEF",
+                SHA512 = "DEADBEEF",
+                SpamSum = "BASE64"
+            };
 
             string actual = datItem.GetKey(bucketedBy, machine, source, lower, norename);
             Assert.Equal(expected, actual);
-        }
-
-        #endregion
-
-        #region GetName
-
-        [Fact]
-        public void GetName_NoNameKey_Null()
-        {
-            DatItem item = new TestDatItem(nameKey: null);
-            item.Write(TestDatItemModel.NameKey, "name");
-
-            string? actual = item.GetName();
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void GetName_EmptyNameKey_Null()
-        {
-            DatItem item = new TestDatItem(nameKey: string.Empty);
-            item.Write(TestDatItemModel.NameKey, "name");
-
-            string? actual = item.GetName();
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void GetName_NameKeyNotExists_Null()
-        {
-            DatItem item = new TestDatItem(nameKey: "INVALID");
-            item.Write(TestDatItemModel.NameKey, "name");
-
-            string? actual = item.GetName();
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void GetName_NameKeyExists_Filled()
-        {
-            DatItem item = new TestDatItem(nameKey: TestDatItemModel.NameKey);
-            item.Write(TestDatItemModel.NameKey, "name");
-
-            string? actual = item.GetName();
-            Assert.Equal("name", actual);
-        }
-
-        #endregion
-
-        #region SetName
-
-        [Fact]
-        public void SetName_NoNameKey_Null()
-        {
-            DatItem item = new TestDatItem(nameKey: null);
-            item.SetName("name");
-
-            string? actual = item.GetName();
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void SetName_EmptyNameKey_Null()
-        {
-            DatItem item = new TestDatItem(nameKey: string.Empty);
-            item.SetName("name");
-
-            string? actual = item.GetName();
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void SetName_NameKeyNonEmpty_Filled()
-        {
-            DatItem item = new TestDatItem(nameKey: TestDatItemModel.NameKey);
-            item.SetName("name");
-
-            string? actual = item.GetName();
-            Assert.Equal("name", actual);
         }
 
         #endregion
@@ -536,13 +397,12 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void CloneTest()
         {
-            DatItem item = new Sample();
-            item.SetName("name");
+            DatItem item = new Sample { Name = "name" };
 
             object clone = item.Clone();
             Sample? actual = clone as Sample;
             Assert.NotNull(actual);
-            Assert.Equal("name", actual.GetName());
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion
@@ -552,11 +412,9 @@ namespace SabreTools.Metadata.DatItems.Test
         [Fact]
         public void GetInternalCloneTest()
         {
-            DatItem<TestDatItemModel> item = new TestDatItem();
-            item.SetName("name");
-
+            DatItem<TestDatItemModel> item = new TestDatItem { Name = "name" };
             TestDatItemModel actual = item.GetInternalClone();
-            Assert.Equal("name", actual[TestDatItemModel.NameKey]);
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion

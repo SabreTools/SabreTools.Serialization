@@ -4,126 +4,17 @@ namespace SabreTools.Metadata.DatFiles.Test
 {
     public class DatHeaderTests
     {
-        #region CanOpenSpecified
-
-        [Fact]
-        public void CanOpenSpecified_Missing()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<string[]>(Data.Models.Metadata.Header.CanOpenKey, null);
-            Assert.False(header.CanOpenSpecified);
-        }
-
-        [Fact]
-        public void CanOpenSpecified_Empty()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<string[]>(Data.Models.Metadata.Header.CanOpenKey, []);
-            Assert.False(header.CanOpenSpecified);
-        }
-
-        [Fact]
-        public void CanOpenSpecified_Exists()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<string[]>(Data.Models.Metadata.Header.CanOpenKey, ["value"]);
-            Assert.True(header.CanOpenSpecified);
-        }
-
-        #endregion
-
-        #region ImagesSpecified
-
-        [Fact]
-        public void ImagesSpecified_Missing()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey, null);
-            Assert.False(header.ImagesSpecified);
-        }
-
-        [Fact]
-        public void ImagesSpecified_Exists()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey, new());
-            Assert.True(header.ImagesSpecified);
-        }
-
-        #endregion
-
-        #region InfosSpecified
-
-        [Fact]
-        public void InfosSpecified_Missing()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<Data.Models.OfflineList.Infos>(Data.Models.Metadata.Header.InfosKey, null);
-            Assert.False(header.InfosSpecified);
-        }
-
-        [Fact]
-        public void InfosSpecified_Exists()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<Data.Models.OfflineList.Infos>(Data.Models.Metadata.Header.InfosKey, new());
-            Assert.True(header.InfosSpecified);
-        }
-
-        #endregion
-
-        #region NewDatSpecified
-
-        [Fact]
-        public void NewDatSpecified_Missing()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<Data.Models.OfflineList.NewDat>(Data.Models.Metadata.Header.NewDatKey, null);
-            Assert.False(header.NewDatSpecified);
-        }
-
-        [Fact]
-        public void NewDatSpecified_Exists()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<Data.Models.OfflineList.NewDat>(Data.Models.Metadata.Header.NewDatKey, new());
-            Assert.True(header.NewDatSpecified);
-        }
-
-        #endregion
-
-        #region SearchSpecified
-
-        [Fact]
-        public void SearchSpecified_Missing()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey, null);
-            Assert.False(header.SearchSpecified);
-        }
-
-        [Fact]
-        public void SearchSpecified_Exists()
-        {
-            DatHeader header = new DatHeader();
-            header.Write<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey, new());
-            Assert.True(header.SearchSpecified);
-        }
-
-        #endregion
-
         #region Clone
 
         [Fact]
         public void CloneTest()
         {
-            DatHeader header = new DatHeader();
-            header.Write(Data.Models.Metadata.Header.NameKey, "name");
+            DatHeader header = new DatHeader { Name = "name" };
 
             object clone = header.Clone();
             DatHeader? actual = clone as DatHeader;
             Assert.NotNull(actual);
-            Assert.Equal("name", actual.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion
@@ -133,13 +24,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void CloneFormatTest()
         {
-            DatHeader header = new DatHeader();
-            header.Write(DatHeader.DatFormatKey, DatFormat.Logiqx);
+            DatHeader header = new DatHeader { DatFormat = DatFormat.Logiqx };
 
             object clone = header.Clone();
             DatHeader? actual = clone as DatHeader;
             Assert.NotNull(actual);
-            Assert.Equal(DatFormat.Logiqx, actual.Read<DatFormat>(DatHeader.DatFormatKey));
+            Assert.Equal(DatFormat.Logiqx, actual.DatFormat);
         }
 
         #endregion
@@ -149,11 +39,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetInternalCloneTest()
         {
-            DatHeader header = new DatHeader();
-            header.Write(Data.Models.Metadata.Header.NameKey, "name");
+            DatHeader header = new DatHeader { Name = "name" };
 
             Data.Models.Metadata.Header actual = header.GetInternalClone();
-            Assert.Equal("name", actual[Data.Models.Metadata.Header.NameKey]);
+            Assert.Equal("name", actual.Name);
         }
 
         #endregion
@@ -183,11 +72,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void Equals_MismatchedInternal_False()
         {
-            DatHeader self = new DatHeader();
-            self.Write(Data.Models.Metadata.Header.NameKey, "self");
+            DatHeader self = new DatHeader { Name = "self" };
 
-            DatHeader? other = new DatHeader();
-            other.Write(Data.Models.Metadata.Header.NameKey, "other");
+            DatHeader? other = new DatHeader { Name = "other" };
 
             bool actual = self.Equals(other);
             Assert.False(actual);
@@ -196,11 +83,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void Equals_EqualInternal_True()
         {
-            DatHeader self = new DatHeader();
-            self.Write(Data.Models.Metadata.Header.NameKey, "name");
+            DatHeader self = new DatHeader { Name = "name" };
 
-            DatHeader? other = new DatHeader();
-            other.Write(Data.Models.Metadata.Header.NameKey, "name");
+            DatHeader? other = new DatHeader { Name = "name" };
 
             bool actual = self.Equals(other);
             Assert.True(actual);

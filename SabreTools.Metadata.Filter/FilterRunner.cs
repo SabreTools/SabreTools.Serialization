@@ -17,7 +17,11 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Cached item type names for filter selection
         /// </summary>
-        private readonly string[] _datItemTypeNames = TypeHelper.GetDatItemTypeNames();
+#if NET5_0_OR_GREATER
+        private static readonly string[] _datItemTypeNames = Enum.GetNames<ItemType>();
+#else
+        private static readonly string[] _datItemTypeNames = Enum.GetNames(typeof(ItemType));
+#endif
 
         public FilterRunner(FilterObject[] filters)
         {
@@ -30,15 +34,15 @@ namespace SabreTools.Metadata.Filter
         }
 
         /// <summary>
-        /// Run filtering on a DictionaryBase item
+        /// Run filtering on an item
         /// </summary>
-        public bool Run(DictionaryBase dictionaryBase)
+        public bool Run(object obj)
         {
-            string? itemName = dictionaryBase switch
+            string? itemName = obj switch
             {
-                Header => MetadataFile.HeaderKey,
-                Machine => MetadataFile.MachineKey,
-                DatItem => TypeHelper.GetXmlRootAttributeElementName(dictionaryBase.GetType()),
+                Header => "header",
+                Machine => "machine",
+                DatItem datItem => datItem.ItemType.ToString(),
                 _ => null,
             };
 
@@ -52,11 +56,11 @@ namespace SabreTools.Metadata.Filter
                 // Skip filters not applicable to the item
                 if (filterKey.StartsWith("item.") && Array.IndexOf(_datItemTypeNames, itemName) == -1)
                     continue;
-                else if (!filterKey.StartsWith("item.") && !filterKey.StartsWith(itemName))
+                else if (!filterKey.StartsWith("item.") && !filterKey.StartsWith(itemName, StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 // If we don't get a match, it's a failure
-                bool matchOne = Filters[filterKey].Matches(dictionaryBase);
+                bool matchOne = Filters[filterKey].Matches(obj);
                 if (!matchOne)
                     return false;
             }
@@ -72,25 +76,15 @@ namespace SabreTools.Metadata.Filter
             // Get the key as a string
             string key = filter.Key.ToString();
 
-            // Special case for machine types
-            if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == Machine.IsBiosKey)
-                key = $"{MetadataFile.MachineKey}.COMBINEDTYPE";
-            else if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == Machine.IsDeviceKey)
-                key = $"{MetadataFile.MachineKey}.COMBINEDTYPE";
-            else if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == Machine.IsMechanicalKey)
-                key = $"{MetadataFile.MachineKey}.COMBINEDTYPE";
-
             // Set the expected group type
             GroupType groupType = GroupType.OR;
 
             // Special case for size
-            if (filter.Key.ItemName == "item" && filter.Key.FieldName == DataArea.SizeKey)
+            if (filter.Key.ItemName == "item" && filter.Key.FieldName == "size")
                 groupType = GroupType.AND;
-            else if (filter.Key.ItemName == "item" && filter.Key.FieldName == Rom.SizeKey)
+            else if (filter.Key.ItemName == "dataarea" && filter.Key.FieldName == "size")
                 groupType = GroupType.AND;
-            if (filter.Key.ItemName == "dataarea" && filter.Key.FieldName == DataArea.SizeKey)
-                groupType = GroupType.AND;
-            else if (filter.Key.ItemName == "rom" && filter.Key.FieldName == Rom.SizeKey)
+            else if (filter.Key.ItemName == "rom" && filter.Key.FieldName == "size")
                 groupType = GroupType.AND;
 
             // Ensure the key exists

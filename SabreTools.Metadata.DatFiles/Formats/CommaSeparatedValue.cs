@@ -12,7 +12,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public CommaSeparatedValue(DatFile? datFile) : base(datFile)
         {
             _delim = ',';
-            Header.Write(DatHeader.DatFormatKey, DatFormat.CSV);
+            Header.DatFormat = DatFormat.CSV;
         }
     }
 }

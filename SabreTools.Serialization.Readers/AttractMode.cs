@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.AttractMode;
 using SabreTools.Text.SeparatedValue;
 
@@ -99,7 +100,7 @@ namespace SabreTools.Serialization.Readers
                             Tags = reader.Line[18],
                             PlayedCount = reader.Line[19],
                             PlayedTime = reader.Line[20],
-                            FileIsAvailable = reader.Line[21],
+                            FileIsAvailable = reader.Line[21].AsYesNo(),
                         };
                     }
 

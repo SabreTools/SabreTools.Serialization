@@ -11,10 +11,10 @@ namespace SabreTools.Serialization.CrossModel
             if (obj is null)
                 return null;
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             var softwareDb = header is not null ? ConvertHeaderFromInternalModel(header) : new SoftwareDb();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             if (machines is not null && machines.Length > 0)
                 softwareDb.Software = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var softwareDb = new SoftwareDb
             {
-                Timestamp = item.ReadString(Data.Models.Metadata.Header.TimestampKey),
+                Timestamp = item.Timestamp,
             };
             return softwareDb;
         }
@@ -40,15 +40,15 @@ namespace SabreTools.Serialization.CrossModel
         {
             var game = new Software
             {
-                Title = item.ReadString(Data.Models.Metadata.Machine.NameKey),
-                GenMSXID = item.ReadString(Data.Models.Metadata.Machine.GenMSXIDKey),
-                System = item.ReadString(Data.Models.Metadata.Machine.SystemKey),
-                Company = item.ReadString(Data.Models.Metadata.Machine.CompanyKey),
-                Year = item.ReadString(Data.Models.Metadata.Machine.YearKey),
-                Country = item.ReadString(Data.Models.Metadata.Machine.CountryKey),
+                Title = item.Name,
+                GenMSXID = item.GenMSXID,
+                System = item.System,
+                Company = item.Company,
+                Year = item.Year,
+                Country = item.Country,
             };
 
-            var dumps = item.Read<Data.Models.Metadata.Dump[]>(Data.Models.Metadata.Machine.DumpKey);
+            var dumps = item.Dump;
             if (dumps is not null && dumps.Length > 0)
                 game.Dump = Array.ConvertAll(dumps, ConvertFromInternalModel);
 
@@ -62,19 +62,19 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dump = new Dump();
 
-            var original = item.Read<Data.Models.Metadata.Original>(Data.Models.Metadata.Dump.OriginalKey);
+            var original = item.Original;
             if (original is not null)
                 dump.Original = ConvertFromInternalModel(original);
 
-            var rom = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.RomKey);
+            var rom = item.Rom;
             if (rom is not null)
                 dump.Rom = ConvertRomFromInternalModel(rom);
 
-            var megaRom = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.MegaRomKey);
+            var megaRom = item.MegaRom;
             if (megaRom is not null)
                 dump.Rom = ConvertMegaRomFromInternalModel(megaRom);
 
-            var sccPlusCart = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.SCCPlusCartKey);
+            var sccPlusCart = item.SCCPlusCart;
             if (sccPlusCart is not null)
                 dump.Rom = ConvertSCCPlusCartFromInternalModel(sccPlusCart);
 
@@ -88,10 +88,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var megaRom = new MegaRom
             {
-                Start = item.ReadString(Data.Models.Metadata.Rom.StartKey),
-                Type = item.ReadString(Data.Models.Metadata.Rom.OpenMSXType),
-                Hash = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                Remark = item.ReadString(Data.Models.Metadata.Rom.RemarkKey),
+                Start = item.Start,
+                Type = item.OpenMSXType,
+                Hash = item.SHA1,
+                Remark = item.Remark,
             };
             return megaRom;
         }
@@ -103,8 +103,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var original = new Original
             {
-                Value = item.ReadString(Data.Models.Metadata.Original.ValueKey),
-                Content = item.ReadString(Data.Models.Metadata.Original.ContentKey),
+                Value = item.Value,
+                Content = item.Content,
             };
             return original;
         }
@@ -116,10 +116,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Rom
             {
-                Start = item.ReadString(Data.Models.Metadata.Rom.StartKey),
-                Type = item.ReadString(Data.Models.Metadata.Rom.OpenMSXType),
-                Hash = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                Remark = item.ReadString(Data.Models.Metadata.Rom.RemarkKey),
+                Start = item.Start,
+                Type = item.OpenMSXType,
+                Hash = item.SHA1,
+                Remark = item.Remark,
             };
             return rom;
         }
@@ -131,10 +131,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sccPlusCart = new SCCPlusCart
             {
-                Start = item.ReadString(Data.Models.Metadata.Rom.StartKey),
-                Type = item.ReadString(Data.Models.Metadata.Rom.OpenMSXType),
-                Hash = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
-                Remark = item.ReadString(Data.Models.Metadata.Rom.RemarkKey),
+                Start = item.Start,
+                Type = item.OpenMSXType,
+                Hash = item.SHA1,
+                Remark = item.Remark,
             };
             return sccPlusCart;
         }

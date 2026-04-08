@@ -4,9 +4,11 @@ using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
+using SabreTools.Metadata.Filter;
 using SabreTools.Text.Extensions;
 
 // TODO: Add item mappings for all fields
+// TODO: Investigate whether this is the "File" from NIDB
 namespace SabreTools.Metadata.DatItems.Formats
 {
     /// <summary>
@@ -24,10 +26,10 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         #endregion
 
-        #region Fields
+        #region Properties
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.File;
+        public override Data.Models.Metadata.ItemType ItemType => Data.Models.Metadata.ItemType.File;
 
         /// <summary>
         /// ID value
@@ -100,10 +102,17 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <summary>
         /// Create a default, empty File object
         /// </summary>
-        public File()
-        {
-            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
-        }
+        public File() { }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 
@@ -123,10 +132,10 @@ namespace SabreTools.Metadata.DatItems.Formats
                 _sha256 = this._sha256,
                 Format = this.Format,
             };
-            file.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
-            file.Write(MachineKey, GetMachine()!.Clone() as Machine ?? new Machine());
-            file.Write(RemoveKey, ReadBool(RemoveKey));
-            file.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
+            file.DupeType = DupeType;
+            file.Machine = Machine!.Clone() as Machine ?? new Machine();
+            file.RemoveFlag = RemoveFlag;
+            file.Source = Source?.Clone() as Source;
 
             return file;
         }
@@ -139,17 +148,17 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var rom = new Rom();
 
-            rom.SetName($"{Id}.{Extension}");
-            rom.Write(Data.Models.Metadata.Rom.SizeKey, Size);
-            rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, CRC);
-            rom.Write<string?>(Data.Models.Metadata.Rom.MD5Key, MD5);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, SHA1);
-            rom.Write<string?>(Data.Models.Metadata.Rom.SHA256Key, SHA256);
+            rom.Name = $"{Id}.{Extension}";
+            rom.Size = Size;
+            rom.CRC32 = CRC;
+            rom.MD5 = MD5;
+            rom.SHA1 = SHA1;
+            rom.SHA256 = SHA256;
 
-            rom.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
-            rom.Write(MachineKey, GetMachine()?.Clone() as Machine);
-            rom.Write(RemoveKey, ReadBool(RemoveKey));
-            rom.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
+            rom.DupeType = DupeType;
+            rom.Machine = Machine?.Clone() as Machine;
+            rom.RemoveFlag = RemoveFlag;
+            rom.Source = Source?.Clone() as Source;
 
             return rom;
         }
@@ -164,7 +173,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             bool dupefound = false;
 
             // If we don't have a file, return false
-            if (ReadString(Data.Models.Metadata.DatItem.TypeKey) != other?.ReadString(Data.Models.Metadata.DatItem.TypeKey))
+            if (ItemType != other?.ItemType)
                 return dupefound;
 
             // Otherwise, treat it as a File
@@ -288,7 +297,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Now determine what the key should be based on the bucketedBy value
             switch (bucketedBy)
             {
-                case ItemKey.CRC:
+                case ItemKey.CRC32:
                     key = CRC;
                     break;
 
@@ -317,6 +326,18 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             return key;
         }
+
+        #endregion
+
+        #region Manipulation
+
+        /// <inheritdoc/>
+        /// <remarks>Not implemented</remarks>
+        public override bool PassesFilter(FilterRunner filterRunner) => false;
+
+        /// <inheritdoc/>
+        /// <remarks>Not implemented</remarks>
+        public override bool PassesFilterDB(FilterRunner filterRunner) => false;
 
         #endregion
     }

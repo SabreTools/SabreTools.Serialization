@@ -11,11 +11,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class Sha1File : Hashfile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Disk,
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha1File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA1;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA1);
+            Header.DatFormat = DatFormat.RedumpSHA1;
         }
 
         /// <inheritdoc/>
@@ -33,25 +33,27 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Disk disk:
-                    if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
-                        missingFields.Add(Data.Models.Metadata.Disk.SHA1Key);
+                    if (string.IsNullOrEmpty(disk.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
+                    if (string.IsNullOrEmpty(disk.SHA1))
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.SHA1));
                     break;
 
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.SHA1Key)))
-                        missingFields.Add(Data.Models.Metadata.Media.SHA1Key);
+                    if (string.IsNullOrEmpty(medium.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.Name));
+                    if (string.IsNullOrEmpty(medium.SHA1))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.SHA1));
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (string.IsNullOrEmpty(rom.SHA1))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.SHA1));
                     break;
 
                 default:

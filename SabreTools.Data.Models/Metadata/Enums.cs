@@ -1,6 +1,18 @@
 namespace SabreTools.Data.Models.Metadata
 {
     /// <summary>
+    /// Determine the blit type
+    /// </summary>
+    public enum Blit
+    {
+        /// <summary>"plain"</summary>
+        Plain,
+
+        /// <summary>"dirty"</summary>
+        Dirty,
+    }
+
+    /// <summary>
     /// Determine the chip type
     /// </summary>
     public enum ChipType
@@ -244,6 +256,9 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <summary>"verified"</summary>
         Verified,
+
+        /// <summary>"deduped", RomVault extensions</summary>
+        Deduped,
     }
 
     /// <summary>
@@ -279,12 +294,14 @@ namespace SabreTools.Data.Models.Metadata
         Dump,
         Extension,
         Feature,
+        File, // TODO: This should be merged with Rom?
         Info,
         Input,
         Instance,
         Media,
         Original,
         Part,
+        PartFeature,
         Port,
         RamOption,
         Release,
@@ -295,7 +312,6 @@ namespace SabreTools.Data.Models.Metadata
         SharedFeat,
         Slot,
         SlotOption,
-        Software,
         SoftwareList,
         Sound,
         SourceDetails,
@@ -482,6 +498,24 @@ namespace SabreTools.Data.Models.Metadata
     }
 
     /// <summary>
+    /// Determine display rotation
+    /// </summary>
+    public enum Rotation
+    {
+        /// <summary>0</summary>
+        North = 0,
+
+        /// <summary>90</summary>
+        East = 90,
+
+        /// <summary>180</summary>
+        South = 180,
+
+        /// <summary>270</summary>
+        West = 270,
+    }
+
+    /// <summary>
     /// Determine machine runnable status
     /// </summary>
     public enum Runnable
@@ -539,5 +573,26 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <summary>"preliminary"</summary>
         Preliminary,
+
+        /// <summary>"test"</summary>
+        Test,
+    }
+
+    /// <summary>
+    /// Determine area width
+    /// </summary>
+    public enum Width
+    {
+        /// <summary>8</summary>
+        Byte = 8,
+
+        /// <summary>16</summary>
+        Short = 16,
+
+        /// <summary>32</summary>
+        Int = 32,
+
+        /// <summary>64</summary>
+        Long = 64,
     }
 }

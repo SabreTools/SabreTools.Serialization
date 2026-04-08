@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.Listrom;
+using SabreTools.Text.Extensions;
 
 #pragma warning disable IDE0057 // Use range operator
 namespace SabreTools.Serialization.Readers
@@ -146,7 +147,7 @@ namespace SabreTools.Serialization.Readers
                         // Normal ROM (Name, Size, CRC, MD5/SHA1)
                         case 3 when line.Contains("CRC"):
                             row.Name = name;
-                            row.Size = lineParts[0];
+                            row.Size = NumberHelper.ConvertToInt64(lineParts[0]);
 #if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
                             row.CRC = lineParts[1]["CRC".Length..].Trim('(', ')');
 #else
@@ -193,7 +194,7 @@ namespace SabreTools.Serialization.Readers
                         // Bad ROM (Name, Size, BAD, CRC, MD5/SHA1, BAD_DUMP)
                         case 5 when line.Contains("BAD_DUMP"):
                             row.Name = name;
-                            row.Size = lineParts[0];
+                            row.Size = NumberHelper.ConvertToInt64(lineParts[0]);
                             row.Bad = true;
 #if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
                             row.CRC = lineParts[2]["CRC".Length..].Trim('(', ')');
@@ -217,7 +218,7 @@ namespace SabreTools.Serialization.Readers
                         // Nodump ROM (Name, Size, NO GOOD DUMP KNOWN)
                         case 5 when line.Contains("NO GOOD DUMP KNOWN"):
                             row.Name = name;
-                            row.Size = lineParts[0];
+                            row.Size = NumberHelper.ConvertToInt64(lineParts[0]);
                             row.NoGoodDumpKnown = true;
                             break;
 

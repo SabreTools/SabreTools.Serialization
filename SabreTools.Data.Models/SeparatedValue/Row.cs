@@ -1,4 +1,6 @@
 
+using SabreTools.Data.Models.Metadata;
+
 namespace SabreTools.Data.Models.SeparatedValue
 {
     /// <summary>
@@ -33,7 +35,7 @@ namespace SabreTools.Data.Models.SeparatedValue
         public string? DiskName { get; set; }
 
         /// <remarks>Size, Numeric</remarks>
-        public string? Size { get; set; }
+        public long? Size { get; set; }
 
         /// <remarks>CRC</remarks>
         public string? CRC { get; set; }
@@ -57,6 +59,6 @@ namespace SabreTools.Data.Models.SeparatedValue
         public string? SpamSum { get; set; }
 
         /// <remarks>Status, Nodump</remarks>
-        public string? Status { get; set; }
+        public ItemStatus? Status { get; set; }
     }
 }

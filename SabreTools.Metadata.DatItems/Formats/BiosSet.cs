@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,10 +9,29 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("biosset"), XmlRoot("biosset")]
     public sealed class BiosSet : DatItem<Data.Models.Metadata.BiosSet>
     {
-        #region Fields
+        #region Properties
+
+        public bool? Default
+        {
+            get => _internal.Default;
+            set => _internal.Default = value;
+        }
+
+        public string? Description
+        {
+            get => _internal.Description;
+            set => _internal.Description = value;
+        }
 
         /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.BiosSet;
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.BiosSet;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
 
         #endregion
 
@@ -21,26 +39,53 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public BiosSet() : base() { }
 
-        public BiosSet(Data.Models.Metadata.BiosSet item) : base(item)
-        {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.BiosSet.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.BiosSet.DefaultKey, defaultValue.FromYesNo());
-        }
+        public BiosSet(Data.Models.Metadata.BiosSet item) : base(item) { }
 
         public BiosSet(Data.Models.Metadata.BiosSet item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new BiosSet(_internal.Clone() as Data.Models.Metadata.BiosSet ?? []);
+        public override object Clone() => new BiosSet(GetInternalClone());
+
+        /// <inheritdoc/>
+        public override Data.Models.Metadata.BiosSet GetInternalClone()
+            => _internal.Clone() as Data.Models.Metadata.BiosSet ?? new();
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is BiosSet otherBiosSet)
+                return _internal.Equals(otherBiosSet._internal);
+
+            // Everything else fails
+            return false;
+        }
 
         #endregion
     }

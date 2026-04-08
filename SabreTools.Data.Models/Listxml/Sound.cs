@@ -9,6 +9,6 @@ namespace SabreTools.Data.Models.Listxml
         /// <remarks>Numeric</remarks>
         [Required]
         [XmlAttribute("channels")]
-        public string? Channels { get; set; }
+        public long? Channels { get; set; }
     }
 }

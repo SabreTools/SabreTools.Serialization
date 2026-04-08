@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -11,29 +10,50 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("device"), XmlRoot("device")]
     public sealed class Device : DatItem<Data.Models.Metadata.Device>
     {
-        #region Fields
+        #region Properties
 
-        /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.Device;
-
-        [JsonIgnore]
-        public bool InstancesSpecified
+        public Data.Models.Metadata.DeviceType? DeviceType
         {
-            get
-            {
-                var instances = Read<Instance[]?>(Data.Models.Metadata.Device.InstanceKey);
-                return instances is not null && instances.Length > 0;
-            }
+            get => _internal.DeviceType;
+            set => _internal.DeviceType = value;
         }
 
+        public Extension[]? Extension { get; set; }
+
         [JsonIgnore]
-        public bool ExtensionsSpecified
+        public bool ExtensionSpecified => Extension is not null && Extension.Length > 0;
+
+        public string? FixedImage
         {
-            get
-            {
-                var extensions = Read<Extension[]?>(Data.Models.Metadata.Device.ExtensionKey);
-                return extensions is not null && extensions.Length > 0;
-            }
+            get => _internal.FixedImage;
+            set => _internal.FixedImage = value;
+        }
+
+        public Instance? Instance { get; set; }
+
+        [JsonIgnore]
+        public bool InstanceSpecified => Instance is not null;
+
+        public string? Interface
+        {
+            get => _internal.Interface;
+            set => _internal.Interface = value;
+        }
+
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.Device;
+
+        public bool? Mandatory
+        {
+            get => _internal.Mandatory;
+            set => _internal.Mandatory = value;
+        }
+
+        public string? Tag
+        {
+            get => _internal.Tag;
+            set => _internal.Tag = value;
         }
 
         #endregion
@@ -44,58 +64,74 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Device(Data.Models.Metadata.Device item) : base(item)
         {
-            // Process flag values
-            bool? mandatory = ReadBool(Data.Models.Metadata.Device.MandatoryKey);
-            if (mandatory is not null)
-                Write<string?>(Data.Models.Metadata.Device.MandatoryKey, mandatory.FromYesNo());
-
-            string? deviceType = ReadString(Data.Models.Metadata.Device.DeviceTypeKey);
-            if (deviceType is not null)
-                Write<string?>(Data.Models.Metadata.Device.DeviceTypeKey, deviceType.AsDeviceType()?.AsStringValue());
-
             // Handle subitems
-            var instance = item.Read<Data.Models.Metadata.Instance>(Data.Models.Metadata.Device.InstanceKey);
-            if (instance is not null)
-                Write<Instance?>(Data.Models.Metadata.Device.InstanceKey, new Instance(instance));
+            if (item.Extension is not null)
+                Extension = Array.ConvertAll(item.Extension, extension => new Extension(extension)); ;
 
-            var extensions = item.ReadArray<Data.Models.Metadata.Extension>(Data.Models.Metadata.Device.ExtensionKey);
-            if (extensions is not null)
-            {
-                Extension[] extensionItems = Array.ConvertAll(extensions, extension => new Extension(extension));
-                Write<Extension[]?>(Data.Models.Metadata.Device.ExtensionKey, extensionItems);
-            }
+            if (item.Instance is not null)
+                Instance = new Instance(item.Instance);
         }
 
         public Device(Data.Models.Metadata.Device item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => null;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) { }
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new Device(_internal.Clone() as Data.Models.Metadata.Device ?? []);
+        public override object Clone() => new Device(GetInternalClone());
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Device GetInternalClone()
         {
-            var deviceItem = base.GetInternalClone();
+            var deviceItem = _internal.Clone() as Data.Models.Metadata.Device ?? new();
 
-            var instance = Read<Instance?>(Data.Models.Metadata.Device.InstanceKey);
-            if (instance is not null)
-                deviceItem[Data.Models.Metadata.Device.InstanceKey] = instance.GetInternalClone();
+            deviceItem.DeviceType = DeviceType;
+            deviceItem.FixedImage = FixedImage;
+            deviceItem.Interface = Interface;
+            deviceItem.Mandatory = Mandatory;
+            deviceItem.Tag = Tag;
 
-            var extensions = Read<Extension[]?>(Data.Models.Metadata.Device.ExtensionKey);
-            if (extensions is not null)
-            {
-                Data.Models.Metadata.Extension[] extensionItems = Array.ConvertAll(extensions, extension => extension.GetInternalClone());
-                deviceItem[Data.Models.Metadata.Device.ExtensionKey] = extensionItems;
-            }
+            if (Instance is not null)
+                deviceItem.Instance = Instance.GetInternalClone();
+
+            if (Extension is not null)
+                deviceItem.Extension = Array.ConvertAll(Extension, extension => extension.GetInternalClone()); ;
 
             return deviceItem;
+        }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is Device otherDevice)
+                return _internal.Equals(otherDevice._internal);
+
+            // Everything else fails
+            return false;
         }
 
         #endregion

@@ -8,28 +8,26 @@ namespace SabreTools.Data.Models.Listxml
     {
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("service")]
-        public string? Service { get; set; }
+        public bool? Service { get; set; }
 
         /// <remarks>(yes|no) "no"</remarks>
         [XmlAttribute("tilt")]
-        public string? Tilt { get; set; }
+        public bool? Tilt { get; set; }
 
-        /// <remarks>Numeric</remarks>
         [Required]
         [XmlAttribute("players")]
-        public string? Players { get; set; }
+        public long? Players { get; set; }
 
         /// <remarks>Only present in older versions</remarks>
         [XmlAttribute("control")]
         public string? ControlAttr { get; set; }
 
-        /// <remarks>Only present in older versions, Numeric?</remarks>
+        /// <remarks>Only present in older versions</remarks>
         [XmlAttribute("buttons")]
-        public string? Buttons { get; set; }
+        public long? Buttons { get; set; }
 
-        /// <remarks>Numeric?</remarks>
         [XmlAttribute("coins")]
-        public string? Coins { get; set; }
+        public long? Coins { get; set; }
 
         [XmlElement("control")]
         public Control[]? Control { get; set; }

@@ -11,11 +11,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
     public sealed class Md5File : Hashfile
     {
         /// <inheritdoc/>
-        public override ItemType[] SupportedTypes
+        public override Data.Models.Metadata.ItemType[] SupportedTypes
             => [
-                ItemType.Disk,
-                ItemType.Media,
-                ItemType.Rom,
+                Data.Models.Metadata.ItemType.Disk,
+                Data.Models.Metadata.ItemType.Media,
+                Data.Models.Metadata.ItemType.Rom,
             ];
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Md5File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.MD5;
-            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpMD5);
+            Header.DatFormat = DatFormat.RedumpMD5;
         }
 
         /// <inheritdoc/>
@@ -33,25 +33,27 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-            // Check item name
-            if (string.IsNullOrEmpty(datItem.GetName()))
-                missingFields.Add(Data.Models.Metadata.Rom.NameKey);
-
             switch (datItem)
             {
                 case Disk disk:
-                    if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key)))
-                        missingFields.Add(Data.Models.Metadata.Disk.MD5Key);
+                    if (string.IsNullOrEmpty(disk.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));
+                    if (string.IsNullOrEmpty(disk.MD5))
+                        missingFields.Add(nameof(Data.Models.Metadata.Disk.MD5));
                     break;
 
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.MD5Key)))
-                        missingFields.Add(Data.Models.Metadata.Media.MD5Key);
+                    if (string.IsNullOrEmpty(medium.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.Name));
+                    if (string.IsNullOrEmpty(medium.MD5))
+                        missingFields.Add(nameof(Data.Models.Metadata.Media.MD5));
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD5Key)))
-                        missingFields.Add(Data.Models.Metadata.Rom.MD5Key);
+                    if (string.IsNullOrEmpty(rom.Name))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
+                    if (string.IsNullOrEmpty(rom.MD5))
+                        missingFields.Add(nameof(Data.Models.Metadata.Rom.MD5));
                     break;
 
                 default:

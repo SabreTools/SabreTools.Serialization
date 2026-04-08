@@ -1,6 +1,5 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -10,19 +9,33 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("dipvalue"), XmlRoot("dipvalue")]
     public sealed class DipValue : DatItem<Data.Models.Metadata.DipValue>
     {
-        #region Fields
+        #region Properties
 
-        /// <inheritdoc>/>
-        protected override ItemType ItemType => ItemType.DipValue;
+        public Condition? Condition { get; set; }
 
         [JsonIgnore]
-        public bool ConditionsSpecified
+        public bool ConditionSpecified => Condition is not null;
+
+        public bool? Default
         {
-            get
-            {
-                var conditions = Read<Condition[]?>(Data.Models.Metadata.DipValue.ConditionKey);
-                return conditions is not null && conditions.Length > 0;
-            }
+            get => _internal.Default;
+            set => _internal.Default = value;
+        }
+
+        /// <inheritdoc>/>
+        public override Data.Models.Metadata.ItemType ItemType
+            => Data.Models.Metadata.ItemType.DipValue;
+
+        public string? Name
+        {
+            get => _internal.Name;
+            set => _internal.Name = value;
+        }
+
+        public string? Value
+        {
+            get => _internal.Value;
+            set => _internal.Value = value;
         }
 
         #endregion
@@ -33,41 +46,62 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DipValue(Data.Models.Metadata.DipValue item) : base(item)
         {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.DipValue.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.DipValue.DefaultKey, defaultValue.FromYesNo());
-
             // Handle subitems
-            var condition = Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
-            if (condition is not null)
-                Write<Condition?>(Data.Models.Metadata.DipValue.ConditionKey, new Condition(condition));
+            if (item.Condition is not null)
+                Condition = new Condition(item.Condition);
         }
 
         public DipValue(Data.Models.Metadata.DipValue item, Machine machine, Source source) : this(item)
         {
-            Write<Source?>(SourceKey, source);
+            Source = source;
             CopyMachineInformation(machine);
         }
+
+        #endregion
+
+        #region Accessors
+
+        /// <inheritdoc/>
+        public override string? GetName() => Name;
+
+        /// <inheritdoc/>
+        public override void SetName(string? name) => Name = name;
 
         #endregion
 
         #region Cloning Methods
 
         /// <inheritdoc/>
-        public override object Clone() => new DipValue(_internal.Clone() as Data.Models.Metadata.DipValue ?? []);
+        public override object Clone() => new DipValue(GetInternalClone());
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.DipValue GetInternalClone()
         {
-            var dipValueItem = base.GetInternalClone();
+            var dipValueItem = _internal.Clone() as Data.Models.Metadata.DipValue ?? new();
 
-            // Handle subitems
-            var subCondition = Read<Condition>(Data.Models.Metadata.DipValue.ConditionKey);
-            if (subCondition is not null)
-                dipValueItem[Data.Models.Metadata.DipValue.ConditionKey] = subCondition.GetInternalClone();
+            if (Condition is not null)
+                dipValueItem.Condition = Condition.GetInternalClone();
 
             return dipValueItem;
+        }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(DatItem? other)
+        {
+            // If the other item is null
+            if (other is null)
+                return false;
+
+            // If the type matches
+            if (other is DipValue otherDipValue)
+                return _internal.Equals(otherDipValue._internal);
+
+            // Everything else fails
+            return false;
         }
 
         #endregion

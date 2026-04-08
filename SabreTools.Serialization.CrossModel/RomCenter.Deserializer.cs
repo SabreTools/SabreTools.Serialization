@@ -12,10 +12,10 @@ namespace SabreTools.Serialization.CrossModel
             if (obj is null)
                 return null;
 
-            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Header;
             var metadataFile = header is not null ? ConvertHeaderFromInternalModel(header) : new MetadataFile();
 
-            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Machine;
             var items = new List<Rom>();
             foreach (var machine in machines ?? [])
             {
@@ -33,46 +33,45 @@ namespace SabreTools.Serialization.CrossModel
         {
             var metadataFile = new MetadataFile();
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.AuthorKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.VersionKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.EmailKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.HomepageKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.UrlKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.DateKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.CommentKey))
+            if (item.Author != null
+                || item.Version != null
+                || item.Email != null
+                || item.Homepage != null
+                || item.Url != null
+                || item.Date != null
+                || item.Comment != null)
             {
                 metadataFile.Credits = new Credits
                 {
-                    Author = item.ReadString(Data.Models.Metadata.Header.AuthorKey),
-                    Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
-                    Email = item.ReadString(Data.Models.Metadata.Header.EmailKey),
-                    Homepage = item.ReadString(Data.Models.Metadata.Header.HomepageKey),
-                    Url = item.ReadString(Data.Models.Metadata.Header.UrlKey),
-                    Date = item.ReadString(Data.Models.Metadata.Header.DateKey),
-                    Comment = item.ReadString(Data.Models.Metadata.Header.CommentKey),
+                    Author = item.Author,
+                    Version = item.Version,
+                    Email = item.Email,
+                    Homepage = item.Homepage,
+                    Url = item.Url,
+                    Date = item.Date,
+                    Comment = item.Comment,
                 };
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.DatVersionKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.PluginKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.ForceMergingKey))
+            if (item.DatVersion != null
+                || item.Plugin != null
+                || item.ForceMerging != Data.Models.Metadata.MergingFlag.None)
             {
                 metadataFile.Dat = new Dat
                 {
-                    Version = item.ReadString(Data.Models.Metadata.Header.DatVersionKey),
-                    Plugin = item.ReadString(Data.Models.Metadata.Header.PluginKey),
-                    Split = item.ReadString(Data.Models.Metadata.Header.ForceMergingKey) == "split" ? "yes" : "no",
-                    Merge = item.ReadString(Data.Models.Metadata.Header.ForceMergingKey) == "merge" ? "yes" : "no",
+                    Version = item.DatVersion,
+                    Plugin = item.Plugin,
+                    Split = item.ForceMerging == Data.Models.Metadata.MergingFlag.Split ? "yes" : "no",
+                    Merge = item.ForceMerging == Data.Models.Metadata.MergingFlag.Merged ? "yes" : "no",
                 };
             }
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.RefNameKey)
-                || item.ContainsKey(Data.Models.Metadata.Header.EmulatorVersionKey))
+            if (item.RefName != null || item.EmulatorVersion != null)
             {
                 metadataFile.Emulator = new Emulator
                 {
-                    RefName = item.ReadString(Data.Models.Metadata.Header.RefNameKey),
-                    Version = item.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey),
+                    RefName = item.RefName,
+                    Version = item.EmulatorVersion,
                 };
             }
 
@@ -84,7 +83,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Rom[] ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item)
         {
-            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
+            var roms = item.Rom;
             if (roms is null)
                 return [];
 
@@ -98,15 +97,15 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Rom
             {
-                ParentName = parent.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
+                ParentName = parent.CloneOf,
                 //ParentDescription = parent.ReadString(Data.Models.Metadata.Machine.ParentDescriptionKey), // This is unmappable
-                GameName = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
-                GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
-                RomName = item.ReadString(Data.Models.Metadata.Rom.NameKey),
-                RomCRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
-                RomSize = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
-                RomOf = parent.ReadString(Data.Models.Metadata.Machine.RomOfKey),
-                MergeName = item.ReadString(Data.Models.Metadata.Rom.MergeKey),
+                GameName = parent.Name,
+                GameDescription = parent.Description,
+                RomName = item.Name,
+                RomCRC = item.CRC32,
+                RomSize = item.Size,
+                RomOf = parent.RomOf,
+                MergeName = item.Merge,
             };
             return row;
         }
