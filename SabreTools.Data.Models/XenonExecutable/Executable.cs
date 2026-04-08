@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.XenonExecutable
     /// It is based on PE format and is PPC architecutre (therefore Big-Endian)
     /// During alpha stage, Xenon was a slightly modified Apple Power Mac G5
     /// Early (Before March 2005) builds used pure PE-formatted executables, June 2005 XDK began requiring XEX-format
-    /// Early (August 2005 and earlier) XEX-format images (XEX0, XEX?, XEX-, XEX1) are not supported.
+    /// Early (August 2005 and earlier) XEX-format images (XEX0, XEX?, XEX-, XEX%, XEX1) are not supported.
     /// </summary>
     /// <see href="http://oskarsapps.mine.nu/xexdump"/>
     /// <see href="https://free60.org/System-Software/Formats/XEX/"/>
