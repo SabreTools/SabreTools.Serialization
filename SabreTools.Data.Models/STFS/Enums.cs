@@ -58,4 +58,17 @@ namespace SabreTools.Data.Models.XenonExecutable
         DEVICE_ID_TRANSFER = 0x00000040,
         PROFILE_ID_TRANSFER = 0x00000080,
     }
+
+    /// <summary>
+    /// Installer cache package resume state
+    /// </summary>
+    public enum ResumeState : uint
+    {
+        FILE_HEADERS_NOT_READY = 0x46494C48,
+        NEW_FOLDER = 0x666F6C64,
+        NEW_FOLDER_RESUME_ATTEMPT_1 = 0x666F6C31,
+        NEW_FOLDER_RESUME_ATTEMPT_2 = 0x666F6C32,
+        NEW_FOLDER_RESUME_ATTEMPT_UNKNOWN = 0x666F6C3F,
+        NEW_FOLDER_RESUME_ATTEMPT_SPECIFIC = 0x666F6C40,
+    }
 }

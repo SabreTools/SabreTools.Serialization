@@ -34,8 +34,8 @@ namespace SabreTools.Data.Models.STFS
         public byte[] HeaderHash { get; set; } = new byte[20];
 
         /// <summary>
-        /// Size of the header, in bytes (from ??? to ???)
-        /// The actual end of header is padded and zeroed up until next multiple of 4096 bytes
+        /// Size of the header, in bytes (from start of file)
+        /// The actual end of header is padded and zeroed up until next block (multiple of 4096 bytes)
         /// </summary>
         /// <remarks>Big-endian</remarks>
         public uint HeaderSize { get; set; }
@@ -274,5 +274,10 @@ namespace SabreTools.Data.Models.STFS
         /// </summary>
         /// <remarks>If present, 768 bytes, UTF-8 string</remarks>
         public byte[]? AdditionalDisplayDescriptions { get; set; }
+
+        /// <summary>
+        /// Optional field present on installer update/cache packages
+        /// </summary>
+        public InstallerHeader? InstallerHeader { get; set; }
     }
 }

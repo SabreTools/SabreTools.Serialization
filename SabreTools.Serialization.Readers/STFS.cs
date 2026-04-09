@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using SabreTools.Data.Models.STFS;
 using SabreTools.IO.Extensions;
 using SabreTools.Numerics.Extensions;
@@ -15,7 +16,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Simple check for a valid stream length
-            if (Constants.StandardHeaderSize > data.Length - data.Position)
+            if (Constants.MinimumHeaderSize > data.Length - data.Position)
                 return null;
 
             try
@@ -127,6 +128,38 @@ namespace SabreTools.Serialization.Readers
                 obj.TitleThumbnailImage = data.ReadBytes(0x4000);
             }
 
+            // Parse optional header if header size (rounded up to nearest block) is sufficiently large
+            if (((obj.HeaderSize + 0xFFF) & 0xFFFFF000) - Constants.MinimumHeaderSize >= 0x15F4)
+            {
+                byte[] installerType = data.ReadBytes(4);
+                string type = Encoding.UTF8.GetString(installerType);
+                if (type.Equals(Constants.InstallerTypeSystemUpdate) || type.Equals(Constants.InstallerTypeTitleUpdate))
+                {
+                    var updateHeader = new InstallerUpdateHeader();
+                    updateHeader.InstallerType = installerType;
+                    updateHeader.InstallerBaseVersion = data.ReadUInt32BigEndian();
+                    updateHeader.InstallerVersion = data.ReadUInt32BigEndian();
+                    obj.InstallerHeader = updateHeader;
+                }
+                else if (type.Equals(Constants.InstallerTypeSystemUpdateCache) || type.Equals(Constants.InstallerTypeTitleUpdateCache) || type.Equals(Constants.InstallerTypeTitleContentCache))
+                {
+                    var cacheHeader = new InstallerCacheHeader();
+                    cacheHeader.InstallerType = installerType;
+                    cacheHeader.ResumeState = data.ReadUInt32BigEndian();
+                    cacheHeader.CurrentFileIndex = data.ReadUInt64BigEndian();
+                    cacheHeader.BytesProcessed = data.ReadUInt64BigEndian();
+                    cacheHeader.LastModifiedDateTime = data.ReadInt64BigEndian();
+                    cacheHeader.ResumeData = data.ReadBytes(5584);
+                    obj.InstallerHeader = cacheHeader;
+                }
+                else
+                {
+                    var installerHeader = new InstallerHeader();
+                    installerHeader.InstallerType = installerType;
+                    obj.InstallerHeader = installerHeader;
+                }
+            }
+
             return obj;
         }
 
@@ -200,8 +233,8 @@ namespace SabreTools.Serialization.Readers
                 obj.WorkerThreadProcessor = data.ReadByteValue();
                 obj.WorkerThreadPriority = data.ReadByteValue();
                 obj.Hash = data.ReadBytes(20);
-                obj.DataBlockCount = data.ReadUInt24BigEndian();
-                obj.DataBlockOffset = data.ReadUInt24BigEndian();
+                obj.DataBlockCount = data.ReadUInt24LittleEndian();
+                obj.DataBlockOffset = data.ReadUInt24LittleEndian();
                 obj.Hash = data.ReadBytes(5);
 
                 return obj;
@@ -213,8 +246,8 @@ namespace SabreTools.Serialization.Readers
                 obj.VolumeDescriptorSize = data.ReadByteValue();
                 obj.Reserved = data.ReadByteValue();
                 obj.BlockSeparation = data.ReadByteValue();
-                obj.FileTableBlockCount = data.ReadInt16BigEndian();
-                obj.FileTableBlockNumber = data.ReadInt24BigEndian();
+                obj.FileTableBlockCount = data.ReadInt16LittleEndian();
+                obj.FileTableBlockNumber = data.ReadInt24LittleEndian();
                 obj.TopHashTableHash = data.ReadBytes(20);
                 obj.TotalAllocatedBlockCount = data.ReadInt32BigEndian();
                 obj.TotalUnallocatedBlockCount = data.ReadInt32BigEndian();
