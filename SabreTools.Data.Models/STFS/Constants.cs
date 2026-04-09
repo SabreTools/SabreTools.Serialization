@@ -34,8 +34,33 @@ namespace SabreTools.Data.Models.STFS
         public const string MagicStringCON = "CON ";
 
         /// <summary>
-        /// Standard length of an STFS header
+        /// Standard length of all fixed STFS header fields
         /// </summary>
-        public const uint StandardHeaderSize = 0xB000;
+        public const uint MinimumHeaderSize = 0x971A;
+
+        /// <summary>
+        /// System Update installer type magic string
+        /// </summary>
+        public const string InstallerTypeSystemUpdate = "SUPD";
+
+        /// <summary>
+        /// Title Update installer type magic string
+        /// </summary>
+        public const string InstallerTypeTitleUpdate = "TUPD";
+
+        /// <summary>
+        /// System Update Cache installer type magic string
+        /// </summary>
+        public const string InstallerTypeSystemUpdateCache = "P$SU";
+
+        /// <summary>
+        /// Title Update Cache installer type magic string
+        /// </summary>
+        public const string InstallerTypeTitleUpdateCache = "P$TU";
+
+        /// <summary>
+        /// Title Content Cache installer type magic string
+        /// </summary>
+        public const string InstallerTypeTitleContentCache = "P$TC";
     }
 }

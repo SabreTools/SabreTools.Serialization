@@ -163,6 +163,9 @@ namespace SabreTools.Wrappers
                 }
             }
 
+            if (header.InstallerHeader is not null)
+                Print(builder, header.InstallerHeader);
+
             builder.AppendLine();
         }
 
@@ -263,6 +266,48 @@ namespace SabreTools.Wrappers
             else
             {
                 builder.AppendLine("    Unknown Volume Descriptor Type");
+            }
+
+            builder.AppendLine();
+        }
+
+        protected static void Print(StringBuilder builder, InstallerHeader installerHeader)
+        {
+            builder.AppendLine("  Installer Information");
+            builder.AppendLine("  -------------------------");
+
+            builder.AppendLine(installerHeader.InstallerType, "    Installer Type");
+            builder.AppendLine(Encoding.UTF8.GetString(installerHeader.InstallerType), "    Installer Type (Parsed)");
+
+            if (installerHeader is InstallerUpdateHeader updateHeader)
+            {
+                builder.AppendLine(updateHeader.InstallerBaseVersion, "    Installer Base Version");
+
+                uint bvMajor = updateHeader.InstallerBaseVersion >> 28; // Top 4 bits
+                uint bvMinor = (updateHeader.InstallerBaseVersion >> 24) & 0xF; // Next top 4 bits
+                uint bvBuild = (updateHeader.InstallerBaseVersion >> 8) & 0xFFFF; // Next 16 bits
+                uint bvRevision = updateHeader.InstallerBaseVersion & 0xFF; // Lowest 8 bits
+                builder.AppendLine($"{bvMajor}.{bvMinor}.{bvBuild}.{bvRevision}", "    Installer Base Version (Parsed)");
+
+                builder.AppendLine(updateHeader.InstallerVersion, "    Installer Version");
+
+                uint vMajor = updateHeader.InstallerVersion >> 28; // Top 4 bits
+                uint vMinor = (updateHeader.InstallerVersion >> 24) & 0xF; // Next top 4 bits
+                uint vBuild = (updateHeader.InstallerVersion >> 8) & 0xFFFF; // Next 8 bits
+                uint vRevision = updateHeader.InstallerVersion & 0xFF; // Lowest 8 bits
+                builder.AppendLine($"{vMajor}.{vMinor}.{vBuild}.{vRevision}", "    Installer Version (Parsed)");
+            }
+            else if (installerHeader is InstallerCacheHeader cacheHeader)
+            {
+                builder.AppendLine(cacheHeader.ResumeState, "    Resume State"); // See Enums.ResumeState
+                builder.AppendLine(cacheHeader.CurrentFileIndex, "    Current File Index");
+                builder.AppendLine(cacheHeader.BytesProcessed, "    Bytes Processed");
+                builder.AppendLine(cacheHeader.LastModifiedDateTime, "    Last Modified Date Time");
+
+                DateTime datetime = DateTime.FromFileTime(cacheHeader.LastModifiedDateTime);
+                builder.AppendLine(datetime.ToString("yyyy-MM-dd HH:mm:ss"), "    Last Modified Date Time (Parsed)");
+
+                builder.AppendLine(cacheHeader.ResumeData, "    Resume Data");
             }
 
             builder.AppendLine();

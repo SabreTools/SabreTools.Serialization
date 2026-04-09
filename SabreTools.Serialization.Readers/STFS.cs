@@ -127,6 +127,38 @@ namespace SabreTools.Serialization.Readers
                 obj.TitleThumbnailImage = data.ReadBytes(0x4000);
             }
 
+            // Parse optional header if header size (rounded up to nearest block) is sufficiently large
+            if (((obj.HeaderSize + 0xFFF) & 0xFFFFF000) - Constants.MinimumHeaderSize >= 0x15F4)
+            {
+                byte[] installerType = data.ReadBytes(4);
+                string type = Encoding.UTF8.GetString(installerType);
+                if (type.Equals(Constants.InstallerTypeSystemUpdate) || type.Equals(Constants.InstallerTypeTitleUpdate))
+                {
+                    var updateHeader = new InstallerUpdateHeader();
+                    updateHeader.InstallerType = installerType;
+                    updateHeader.InstallerBaseVersion = data.ReadBytes(4);
+                    updateHeader.InstallerVersion = data.ReadBytes(4);
+                    obj.InstallerHeader = updateHeader;
+                }
+                else if (type.Equals(Constants.InstallerTypeSystemUpdateCache) || type.Equals(Constants.InstallerTypeTitleUpdateCache) || type.Equals(Constants.InstallerTypeTitleContentCache))
+                {
+                    var cacheHeader = new InstallerCacheHeader();
+                    cacheHeader.InstallerType = installerType;
+                    cacheHeader.ResumeState = data.ReadUInt32BigEndian();
+                    cacheHeader.CurrentFileIndex = data.ReadUInt64BigEndian();
+                    cacheHeader.BytesProcessed = data.ReadUInt64BigEndian();
+                    cacheHeader.LastModifiedDateTime = data.ReadBytes(4);
+                    cacheHeader.ResumeData = data.ReadBytes(5584);
+                    obj.InstallerHeader = cacheHeader;
+                }
+                else
+                {
+                    var installerHeader = new InstallerHeader();
+                    installerHeader.InstallerType = installerType;
+                    obj.InstallerHeader = installerHeader;
+                }
+            }
+
             return obj;
         }
 
