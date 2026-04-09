@@ -101,40 +101,40 @@ namespace SabreTools.Serialization.Readers.Test
         {
             var credits = new Data.Models.RomCenter.Credits
             {
-                Author = "XXXXXX",
-                Version = "XXXXXX",
-                Email = "XXXXXX",
-                Homepage = "XXXXXX",
-                Url = "XXXXXX",
-                Date = "XXXXXX",
-                Comment = "XXXXXX",
+                Author = "author",
+                Version = "version",
+                Email = "email",
+                Homepage = "homepage",
+                Url = "url",
+                Date = "date",
+                Comment = "comment",
             };
 
             var dat = new Data.Models.RomCenter.Dat
             {
-                Version = "XXXXXX",
-                Plugin = "XXXXXX",
-                Split = "XXXXXX",
-                Merge = "XXXXXX",
+                Version = "version",
+                Plugin = "plugin",
+                Split = "split",
+                Merge = "merge",
             };
 
             var emulator = new Data.Models.RomCenter.Emulator
             {
-                RefName = "XXXXXX",
-                Version = "XXXXXX",
+                RefName = "refname",
+                Version = "version",
             };
 
             var rom = new Data.Models.RomCenter.Rom
             {
-                ParentName = "XXXXXX",
+                ParentName = "parentname",
                 ParentDescription = "description",
-                GameName = "XXXXXX",
+                GameName = "gamename",
                 GameDescription = "description",
-                RomName = "XXXXXX",
-                RomCRC = "XXXXXX",
+                RomName = "romname",
+                RomCRC = "romcrc",
                 RomSize = 12345,
-                RomOf = "XXXXXX",
-                MergeName = "XXXXXX",
+                RomOf = "romof",
+                MergeName = "mergename",
             };
 
             var games = new Data.Models.RomCenter.Games
@@ -157,13 +157,13 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.RomCenter.Credits? credits)
         {
             Assert.NotNull(credits);
-            Assert.Equal("XXXXXX", credits.Author);
-            Assert.Equal("XXXXXX", credits.Version);
-            Assert.Equal("XXXXXX", credits.Email);
-            Assert.Equal("XXXXXX", credits.Homepage);
-            Assert.Equal("XXXXXX", credits.Url);
-            Assert.Equal("XXXXXX", credits.Date);
-            Assert.Equal("XXXXXX", credits.Comment);
+            Assert.Equal("author", credits.Author);
+            Assert.Equal("version", credits.Version);
+            Assert.Equal("email", credits.Email);
+            Assert.Equal("homepage", credits.Homepage);
+            Assert.Equal("url", credits.Url);
+            Assert.Equal("date", credits.Date);
+            Assert.Equal("comment", credits.Comment);
         }
 
         /// <summary>
@@ -172,10 +172,10 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.RomCenter.Dat? dat)
         {
             Assert.NotNull(dat);
-            Assert.Equal("XXXXXX", dat.Version);
-            Assert.Equal("XXXXXX", dat.Plugin);
-            Assert.Equal("XXXXXX", dat.Split);
-            Assert.Equal("XXXXXX", dat.Merge);
+            Assert.Equal("version", dat.Version);
+            Assert.Equal("plugin", dat.Plugin);
+            Assert.Equal("split", dat.Split);
+            Assert.Equal("merge", dat.Merge);
         }
 
         /// <summary>
@@ -184,8 +184,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.RomCenter.Emulator? emulator)
         {
             Assert.NotNull(emulator);
-            Assert.Equal("XXXXXX", emulator.RefName);
-            Assert.Equal("XXXXXX", emulator.Version);
+            Assert.Equal("refname", emulator.RefName);
+            Assert.Equal("version", emulator.Version);
         }
 
         /// <summary>
@@ -205,15 +205,15 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.RomCenter.Rom? rom)
         {
             Assert.NotNull(rom);
-            Assert.Equal("XXXXXX", rom.ParentName);
+            Assert.Equal("parentname", rom.ParentName);
             Assert.Equal("description", rom.ParentDescription);
-            Assert.Equal("XXXXXX", rom.GameName);
+            Assert.Equal("gamename", rom.GameName);
             Assert.Equal("description", rom.GameDescription);
-            Assert.Equal("XXXXXX", rom.RomName);
-            Assert.Equal("XXXXXX", rom.RomCRC);
+            Assert.Equal("romname", rom.RomName);
+            Assert.Equal("romcrc", rom.RomCRC);
             Assert.Equal(12345, rom.RomSize);
-            Assert.Equal("XXXXXX", rom.RomOf);
-            Assert.Equal("XXXXXX", rom.MergeName);
+            Assert.Equal("romof", rom.RomOf);
+            Assert.Equal("mergename", rom.MergeName);
         }
     }
 }

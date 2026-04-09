@@ -37,36 +37,36 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX"
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum"
             };
 
             self.FillMissingInformation(other);
 
-            Assert.Equal("XXXXXX", self.CRC16);
-            Assert.Equal("XXXXXX", self.CRC32);
-            Assert.Equal("XXXXXX", self.CRC64);
-            Assert.Equal("XXXXXX", self.MD2);
-            Assert.Equal("XXXXXX", self.MD4);
-            Assert.Equal("XXXXXX", self.MD5);
-            Assert.Equal("XXXXXX", self.RIPEMD128);
-            Assert.Equal("XXXXXX", self.RIPEMD160);
-            Assert.Equal("XXXXXX", self.SHA1);
-            Assert.Equal("XXXXXX", self.SHA256);
-            Assert.Equal("XXXXXX", self.SHA384);
-            Assert.Equal("XXXXXX", self.SHA512);
-            Assert.Equal("XXXXXX", self.SpamSum);
+            Assert.Equal("crc16", self.CRC16);
+            Assert.Equal("crc32", self.CRC32);
+            Assert.Equal("crc64", self.CRC64);
+            Assert.Equal("md2", self.MD2);
+            Assert.Equal("md4", self.MD4);
+            Assert.Equal("md5", self.MD5);
+            Assert.Equal("ripemd128", self.RIPEMD128);
+            Assert.Equal("ripemd160", self.RIPEMD160);
+            Assert.Equal("sha1", self.SHA1);
+            Assert.Equal("sha256", self.SHA256);
+            Assert.Equal("sha384", self.SHA384);
+            Assert.Equal("sha512", self.SHA512);
+            Assert.Equal("spamsum", self.SpamSum);
         }
 
         #endregion
@@ -86,7 +86,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Rom self = new Rom
             {
-                CRC16 = "XXXXXX",
+                CRC16 = "crc16",
                 CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
@@ -111,7 +111,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC32 = "XXXXXX",
+                CRC32 = "crc32",
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -136,7 +136,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             {
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
-                CRC64 = "XXXXXX",
+                CRC64 = "crc64",
                 MD2 = string.Empty,
                 MD4 = string.Empty,
                 MD5 = string.Empty,
@@ -161,7 +161,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
                 CRC64 = string.Empty,
-                MD2 = "XXXXXX",
+                MD2 = "md2",
                 MD4 = string.Empty,
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
@@ -186,7 +186,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
-                MD4 = "XXXXXX",
+                MD4 = "md4",
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
@@ -211,7 +211,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
@@ -236,7 +236,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 MD2 = string.Empty,
                 MD4 = string.Empty,
                 MD5 = string.Empty,
-                RIPEMD128 = "XXXXXX",
+                RIPEMD128 = "ripemd128",
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
@@ -261,7 +261,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 MD4 = string.Empty,
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
-                RIPEMD160 = "XXXXXX",
+                RIPEMD160 = "ripemd160",
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
@@ -286,7 +286,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
@@ -311,7 +311,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
-                SHA256 = "XXXXXX",
+                SHA256 = "sha256",
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty
@@ -336,7 +336,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
-                SHA384 = "XXXXXX",
+                SHA384 = "sha384",
                 SHA512 = string.Empty,
                 SpamSum = string.Empty
             };
@@ -361,7 +361,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
-                SHA512 = "XXXXXX",
+                SHA512 = "sha512",
                 SpamSum = string.Empty
             };
 
@@ -386,7 +386,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = "XXXXXX"
+                SpamSum = "spamsum"
             };
 
             bool actual = self.HasHashes();
@@ -398,19 +398,19 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Rom self = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX"
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum"
             };
 
             bool actual = self.HasHashes();
@@ -434,19 +434,19 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Rom self = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX"
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum"
             };
 
             bool actual = self.HasZeroHash();

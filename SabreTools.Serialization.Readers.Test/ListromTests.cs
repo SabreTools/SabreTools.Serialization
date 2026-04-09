@@ -149,13 +149,13 @@ namespace SabreTools.Serialization.Readers.Test
 
             var device = new Data.Models.Listrom.Set()
             {
-                Device = "XXXXXX",
+                Device = "device",
                 Row = [romGood, romBad],
             };
 
             var driver = new Data.Models.Listrom.Set()
             {
-                Driver = "XXXXXX",
+                Driver = "driver",
                 Row = [diskGoodMd5, diskGoodSha1, diskBad],
             };
 
@@ -171,7 +171,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void ValidateDevice(Data.Models.Listrom.Set? set)
         {
             Assert.NotNull(set);
-            Assert.Equal("XXXXXX", set.Device);
+            Assert.Equal("device", set.Device);
 
             Assert.NotNull(set.Row);
             Assert.Equal(2, set.Row.Length);
@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void ValidateDriver(Data.Models.Listrom.Set? set)
         {
             Assert.NotNull(set);
-            Assert.Equal("XXXXXX", set.Driver);
+            Assert.Equal("driver", set.Driver);
 
             Assert.NotNull(set.Row);
             Assert.Equal(3, set.Row.Length);

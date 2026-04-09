@@ -1658,7 +1658,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Disk_MD5()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Disk { MD5 = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
@@ -1668,7 +1668,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Disk_SHA1()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Disk { SHA1 = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
@@ -1734,7 +1734,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Media_MD5()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Media() { MD5 = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
@@ -1744,7 +1744,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Media_SHA1()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Media() { SHA1 = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
@@ -1754,7 +1754,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Media_SHA256()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Media() { SHA256 = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
@@ -1764,7 +1764,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Media_SpamSum()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Media() { SpamSum = hash };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
@@ -1782,7 +1782,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_CRC16()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 CRC16 = hash
@@ -1795,7 +1795,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_CRC32()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 CRC32 = hash
@@ -1808,7 +1808,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_CRC64()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 CRC64 = hash
@@ -1821,7 +1821,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_MD2()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 MD2 = hash
@@ -1834,7 +1834,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_MD4()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 MD4 = hash
@@ -1847,7 +1847,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_MD5()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 MD5 = hash
@@ -1860,7 +1860,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_RIPEMD128()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 RIPEMD128 = hash
@@ -1873,7 +1873,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_RIPEMD160()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 RIPEMD160 = hash
@@ -1886,7 +1886,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_SHA1()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 SHA1 = hash
@@ -1899,7 +1899,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_SHA256()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 SHA256 = hash
@@ -1912,7 +1912,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_SHA384()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 SHA384 = hash
@@ -1925,7 +1925,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_SHA512()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 SHA512 = hash
@@ -1938,7 +1938,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateSuffix_Rom_SpamSum()
         {
-            string hash = "XXXXXX";
+            string hash = "hash";
             DatItem datItem = new Rom
             {
                 SpamSum = hash

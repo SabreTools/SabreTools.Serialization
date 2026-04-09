@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             // Validate the data
             Assert.NotNull(newMess);
-            Assert.Equal("XXXXXX", newMess.Version);
+            Assert.Equal("version", newMess.Version);
 
             Assert.NotNull(newMess.Game);
             var newGame = Assert.Single(newMess.Game);
@@ -114,7 +114,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             // Validate the data
             Assert.NotNull(newMess);
-            Assert.Equal("XXXXXX", newMess.Version);
+            Assert.Equal("version", newMess.Version);
 
             Assert.NotNull(newMess.Game);
             var newGame = Assert.Single(newMess.Game);
@@ -136,13 +136,13 @@ namespace SabreTools.Serialization.Readers.Test
             var rom = new Data.Models.Listxml.Rom
             {
                 Name = "name",
-                Bios = "XXXXXX",
+                Bios = "bios",
                 Size = 12345,
-                CRC = "XXXXXX",
-                SHA1 = "XXXXXX",
-                Merge = "XXXXXX",
-                Region = "XXXXXX",
-                Offset = "XXXXXX",
+                CRC = "crc32",
+                SHA1 = "sha1",
+                Merge = "merge",
+                Region = "region",
+                Offset = "offset",
                 Status = Data.Models.Metadata.ItemStatus.Good,
                 Optional = true,
                 Dispose = true,
@@ -394,18 +394,18 @@ namespace SabreTools.Serialization.Readers.Test
                 ? new Data.Models.Listxml.Game()
                 : new Data.Models.Listxml.Machine();
             gameBase.Name = "name";
-            gameBase.SourceFile = "XXXXXX";
+            gameBase.SourceFile = "sourcefile";
             gameBase.IsBios = true;
             gameBase.IsDevice = true;
             gameBase.IsMechanical = true;
             gameBase.Runnable = Data.Models.Metadata.Runnable.Yes;
-            gameBase.CloneOf = "XXXXXX";
-            gameBase.RomOf = "XXXXXX";
-            gameBase.SampleOf = "XXXXXX";
+            gameBase.CloneOf = "cloneof";
+            gameBase.RomOf = "romof";
+            gameBase.SampleOf = "sampleof";
             gameBase.Description = "description";
-            gameBase.Year = "XXXXXX";
-            gameBase.Manufacturer = "XXXXXX";
-            gameBase.History = "XXXXXX";
+            gameBase.Year = "year";
+            gameBase.Manufacturer = "manufacturer";
+            gameBase.History = "history";
             gameBase.BiosSet = [biosset];
             gameBase.Rom = [rom];
             gameBase.Disk = [disk];
@@ -429,7 +429,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             return new Data.Models.Listxml.Mess
             {
-                Version = "XXXXXX",
+                Version = "version",
                 Game = [gameBase],
             };
         }
@@ -441,18 +441,18 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(gb);
             Assert.Equal("name", gb.Name);
-            Assert.Equal("XXXXXX", gb.SourceFile);
+            Assert.Equal("sourcefile", gb.SourceFile);
             Assert.Equal(true, gb.IsBios);
             Assert.Equal(true, gb.IsDevice);
             Assert.Equal(true, gb.IsMechanical);
             Assert.Equal(Data.Models.Metadata.Runnable.Yes, gb.Runnable);
-            Assert.Equal("XXXXXX", gb.CloneOf);
-            Assert.Equal("XXXXXX", gb.RomOf);
-            Assert.Equal("XXXXXX", gb.SampleOf);
+            Assert.Equal("cloneof", gb.CloneOf);
+            Assert.Equal("romof", gb.RomOf);
+            Assert.Equal("sampleof", gb.SampleOf);
             Assert.Equal("description", gb.Description);
-            Assert.Equal("XXXXXX", gb.Year);
-            Assert.Equal("XXXXXX", gb.Manufacturer);
-            Assert.Equal("XXXXXX", gb.History);
+            Assert.Equal("year", gb.Year);
+            Assert.Equal("manufacturer", gb.Manufacturer);
+            Assert.Equal("history", gb.History);
 
             Assert.NotNull(gb.BiosSet);
             var biosset = Assert.Single(gb.BiosSet);
@@ -546,13 +546,13 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(rom);
             Assert.Equal("name", rom.Name);
-            Assert.Equal("XXXXXX", rom.Bios);
+            Assert.Equal("bios", rom.Bios);
             Assert.Equal(12345, rom.Size);
-            Assert.Equal("XXXXXX", rom.CRC);
-            Assert.Equal("XXXXXX", rom.SHA1);
-            Assert.Equal("XXXXXX", rom.Merge);
-            Assert.Equal("XXXXXX", rom.Region);
-            Assert.Equal("XXXXXX", rom.Offset);
+            Assert.Equal("crc32", rom.CRC);
+            Assert.Equal("sha1", rom.SHA1);
+            Assert.Equal("merge", rom.Merge);
+            Assert.Equal("region", rom.Region);
+            Assert.Equal("offset", rom.Offset);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
             Assert.Equal(true, rom.Optional);
             Assert.Equal(true, rom.Dispose);

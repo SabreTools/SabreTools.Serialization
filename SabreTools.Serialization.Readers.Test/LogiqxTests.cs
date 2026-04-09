@@ -88,9 +88,9 @@ namespace SabreTools.Serialization.Readers.Test
 
             // Validate the data
             Assert.NotNull(newDf);
-            Assert.Equal("XXXXXX", newDf.Build);
+            Assert.Equal("build", newDf.Build);
             Assert.Equal(true, newDf.Debug);
-            // Assert.Equal("XXXXXX", newDf.SchemaLocation); // TODO: Fix this based on No-Intro DATs
+            // Assert.Equal("schemalocation", newDf.SchemaLocation); // TODO: Fix this based on No-Intro DATs
             Validate(newDf.Header);
 
             Assert.NotNull(newDf.Game);
@@ -120,9 +120,9 @@ namespace SabreTools.Serialization.Readers.Test
 
             // Validate the data
             Assert.NotNull(newDf);
-            Assert.Equal("XXXXXX", newDf.Build);
+            Assert.Equal("build", newDf.Build);
             Assert.Equal(true, newDf.Debug);
-            // Assert.Equal("XXXXXX", newDf.SchemaLocation); // TODO: Fix this based on No-Intro DATs
+            // Assert.Equal("schemalocation", newDf.SchemaLocation); // TODO: Fix this based on No-Intro DATs
             Validate(newDf.Header);
 
             Assert.NotNull(newDf.Game);
@@ -140,7 +140,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             var romvault = new Data.Models.Logiqx.RomVault
             {
-                Header = "XXXXXX",
+                Header = "header",
                 ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
                 ForceNodump = Data.Models.Metadata.NodumpFlag.Required,
                 ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var clrmamepro = new Data.Models.Logiqx.ClrMamePro
             {
-                Header = "XXXXXX",
+                Header = "header",
                 ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
                 ForceNodump = Data.Models.Metadata.NodumpFlag.Required,
                 ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
@@ -156,7 +156,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             var romcenter = new Data.Models.Logiqx.RomCenter
             {
-                Plugin = "XXXXXX",
+                Plugin = "plugin",
                 RomMode = Data.Models.Metadata.MergingFlag.Merged,
                 BiosMode = Data.Models.Metadata.MergingFlag.Merged,
                 SampleMode = Data.Models.Metadata.MergingFlag.Merged,
@@ -167,19 +167,19 @@ namespace SabreTools.Serialization.Readers.Test
 
             var header = new Data.Models.Logiqx.Header
             {
-                Id = "XXXXXX",
+                Id = "id",
                 Name = "name",
                 Description = "description",
-                RootDir = "XXXXXX",
-                Category = "XXXXXX",
-                Version = "XXXXXX",
-                Date = "XXXXXX",
-                Author = "XXXXXX",
-                Email = "XXXXXX",
-                Homepage = "XXXXXX",
-                Url = "XXXXXX",
-                Comment = "XXXXXX",
-                Type = "XXXXXX",
+                RootDir = "rootdir",
+                Category = "category",
+                Version = "version",
+                Date = "date",
+                Author = "author",
+                Email = "email",
+                Homepage = "homepage",
+                Url = "url",
+                Comment = "comment",
+                Type = "type",
                 RomVault = romvault,
                 ClrMamePro = clrmamepro,
                 RomCenter = romcenter,
@@ -187,20 +187,20 @@ namespace SabreTools.Serialization.Readers.Test
 
             var trurip = new Data.Models.Logiqx.Trurip
             {
-                TitleID = "XXXXXX",
-                Publisher = "XXXXXX",
-                Developer = "XXXXXX",
-                Year = "XXXXXX",
-                Genre = "XXXXXX",
-                Subgenre = "XXXXXX",
-                Ratings = "XXXXXX",
-                Score = "XXXXXX",
-                Players = "XXXXXX",
-                Enabled = "XXXXXX",
-                CRC = "XXXXXX",
-                Source = "XXXXXX",
-                CloneOf = "XXXXXX",
-                RelatedTo = "XXXXXX",
+                TitleID = "titleid",
+                Publisher = "publisher",
+                Developer = "developer",
+                Year = "year",
+                Genre = "genre",
+                Subgenre = "subgenre",
+                Ratings = "ratings",
+                Score = "score",
+                Players = "players",
+                Enabled = "enabled",
+                CRC = "crc32",
+                Source = "source",
+                CloneOf = "cloneof",
+                RelatedTo = "relatedto",
             };
 
             var release = new Data.Models.Logiqx.Release
@@ -223,26 +223,26 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Name = "name",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
-                xxHash364 = "XXXXXX",
-                xxHash3128 = "XXXXXX",
-                Merge = "XXXXXX",
+                CRC16 = "crc16",
+                CRC = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
+                xxHash364 = "xxhash364",
+                xxHash3128 = "xxhash3128",
+                Merge = "merge",
                 Status = Data.Models.Metadata.ItemStatus.Good,
-                Serial = "XXXXXX",
-                Header = "XXXXXX",
-                Date = "XXXXXX",
+                Serial = "serial",
+                Header = "header",
+                Date = "date",
                 Inverted = true,
                 MIA = true,
             };
@@ -250,11 +250,11 @@ namespace SabreTools.Serialization.Readers.Test
             var disk = new Data.Models.Logiqx.Disk
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                Merge = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                Merge = "merge",
                 Status = Data.Models.Metadata.ItemStatus.Good,
-                Region = "XXXXXX",
+                Region = "region",
             };
 
             var media = new Data.Models.Logiqx.Media
@@ -305,24 +305,24 @@ namespace SabreTools.Serialization.Readers.Test
                 ? new Data.Models.Logiqx.Game()
                 : new Data.Models.Logiqx.Machine();
             gameBase.Name = "name";
-            gameBase.SourceFile = "XXXXXX";
+            gameBase.SourceFile = "sourcefile";
             gameBase.IsBios = true;
             gameBase.IsDevice = true;
             gameBase.IsMechanical = true;
-            gameBase.CloneOf = "XXXXXX";
-            gameBase.RomOf = "XXXXXX";
-            gameBase.SampleOf = "XXXXXX";
-            gameBase.Board = "XXXXXX";
-            gameBase.RebuildTo = "XXXXXX";
-            gameBase.Id = "XXXXXX";
-            gameBase.CloneOfId = "XXXXXX";
+            gameBase.CloneOf = "cloneof";
+            gameBase.RomOf = "romof";
+            gameBase.SampleOf = "sampleof";
+            gameBase.Board = "board";
+            gameBase.RebuildTo = "rebuildto";
+            gameBase.Id = "id";
+            gameBase.CloneOfId = "cloneofid";
             gameBase.Runnable = Data.Models.Metadata.Runnable.Yes;
-            gameBase.Comment = ["XXXXXX"];
+            gameBase.Comment = ["comment"];
             gameBase.Description = "description";
-            gameBase.Year = "XXXXXX";
-            gameBase.Manufacturer = "XXXXXX";
-            gameBase.Publisher = "XXXXXX";
-            gameBase.Category = ["XXXXXX"];
+            gameBase.Year = "year";
+            gameBase.Manufacturer = "manufacturer";
+            gameBase.Publisher = "publisher";
+            gameBase.Category = ["category"];
             gameBase.Trurip = trurip;
             gameBase.Release = [release];
             gameBase.BiosSet = [biosset];
@@ -337,9 +337,9 @@ namespace SabreTools.Serialization.Readers.Test
 
             return new Data.Models.Logiqx.Datafile
             {
-                Build = "XXXXXX",
+                Build = "build",
                 Debug = true,
-                SchemaLocation = "XXXXXX",
+                SchemaLocation = "schemalocation",
                 Header = header,
                 Game = [gameBase],
                 // Dir = [dir], // TODO: Unsupported
@@ -352,19 +352,19 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Logiqx.Header? header)
         {
             Assert.NotNull(header);
-            Assert.Equal("XXXXXX", header.Id);
+            Assert.Equal("id", header.Id);
             Assert.Equal("name", header.Name);
             Assert.Equal("description", header.Description);
-            Assert.Equal("XXXXXX", header.RootDir);
-            Assert.Equal("XXXXXX", header.Category);
-            Assert.Equal("XXXXXX", header.Version);
-            Assert.Equal("XXXXXX", header.Date);
-            Assert.Equal("XXXXXX", header.Author);
-            Assert.Equal("XXXXXX", header.Email);
-            Assert.Equal("XXXXXX", header.Homepage);
-            Assert.Equal("XXXXXX", header.Url);
-            Assert.Equal("XXXXXX", header.Comment);
-            Assert.Equal("XXXXXX", header.Type);
+            Assert.Equal("rootdir", header.RootDir);
+            Assert.Equal("category", header.Category);
+            Assert.Equal("version", header.Version);
+            Assert.Equal("date", header.Date);
+            Assert.Equal("author", header.Author);
+            Assert.Equal("email", header.Email);
+            Assert.Equal("homepage", header.Homepage);
+            Assert.Equal("url", header.Url);
+            Assert.Equal("comment", header.Comment);
+            Assert.Equal("type", header.Type);
             Validate(header.RomVault);
             Validate(header.ClrMamePro);
             Validate(header.RomCenter);
@@ -376,7 +376,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Logiqx.RomVault? rv)
         {
             Assert.NotNull(rv);
-            Assert.Equal("XXXXXX", rv.Header);
+            Assert.Equal("header", rv.Header);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, rv.ForceMerging);
             Assert.Equal(Data.Models.Metadata.NodumpFlag.Required, rv.ForceNodump);
             Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, rv.ForcePacking);
@@ -388,7 +388,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Logiqx.ClrMamePro? cmp)
         {
             Assert.NotNull(cmp);
-            Assert.Equal("XXXXXX", cmp.Header);
+            Assert.Equal("header", cmp.Header);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, cmp.ForceMerging);
             Assert.Equal(Data.Models.Metadata.NodumpFlag.Required, cmp.ForceNodump);
             Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, cmp.ForcePacking);
@@ -400,7 +400,7 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Logiqx.RomCenter? rc)
         {
             Assert.NotNull(rc);
-            Assert.Equal("XXXXXX", rc.Plugin);
+            Assert.Equal("plugin", rc.Plugin);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, rc.RomMode);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, rc.BiosMode);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, rc.SampleMode);
@@ -416,31 +416,31 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(gb);
             Assert.Equal("name", gb.Name);
-            Assert.Equal("XXXXXX", gb.SourceFile);
+            Assert.Equal("sourcefile", gb.SourceFile);
             Assert.Equal(true, gb.IsBios);
             Assert.Equal(true, gb.IsDevice);
             Assert.Equal(true, gb.IsMechanical);
-            Assert.Equal("XXXXXX", gb.CloneOf);
-            Assert.Equal("XXXXXX", gb.RomOf);
-            Assert.Equal("XXXXXX", gb.SampleOf);
-            Assert.Equal("XXXXXX", gb.Board);
-            Assert.Equal("XXXXXX", gb.RebuildTo);
-            Assert.Equal("XXXXXX", gb.Id);
-            Assert.Equal("XXXXXX", gb.CloneOfId);
+            Assert.Equal("cloneof", gb.CloneOf);
+            Assert.Equal("romof", gb.RomOf);
+            Assert.Equal("sampleof", gb.SampleOf);
+            Assert.Equal("board", gb.Board);
+            Assert.Equal("rebuildto", gb.RebuildTo);
+            Assert.Equal("id", gb.Id);
+            Assert.Equal("cloneofid", gb.CloneOfId);
             Assert.Equal(Data.Models.Metadata.Runnable.Yes, gb.Runnable);
 
             Assert.NotNull(gb.Comment);
             string comment = Assert.Single(gb.Comment);
-            Assert.Equal("XXXXXX", comment);
+            Assert.Equal("comment", comment);
 
             Assert.Equal("description", gb.Description);
-            Assert.Equal("XXXXXX", gb.Year);
-            Assert.Equal("XXXXXX", gb.Manufacturer);
-            Assert.Equal("XXXXXX", gb.Publisher);
+            Assert.Equal("year", gb.Year);
+            Assert.Equal("manufacturer", gb.Manufacturer);
+            Assert.Equal("publisher", gb.Publisher);
 
             Assert.NotNull(gb.Category);
             string category = Assert.Single(gb.Category);
-            Assert.Equal("XXXXXX", category);
+            Assert.Equal("category", category);
 
             Validate(gb.Trurip);
 
@@ -489,20 +489,20 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Logiqx.Trurip? trurip)
         {
             Assert.NotNull(trurip);
-            Assert.Equal("XXXXXX", trurip.TitleID);
-            Assert.Equal("XXXXXX", trurip.Publisher);
-            Assert.Equal("XXXXXX", trurip.Developer);
-            Assert.Equal("XXXXXX", trurip.Year);
-            Assert.Equal("XXXXXX", trurip.Genre);
-            Assert.Equal("XXXXXX", trurip.Subgenre);
-            Assert.Equal("XXXXXX", trurip.Ratings);
-            Assert.Equal("XXXXXX", trurip.Score);
-            Assert.Equal("XXXXXX", trurip.Players);
-            Assert.Equal("XXXXXX", trurip.Enabled);
-            Assert.Equal("XXXXXX", trurip.CRC);
-            Assert.Equal("XXXXXX", trurip.Source);
-            Assert.Equal("XXXXXX", trurip.CloneOf);
-            Assert.Equal("XXXXXX", trurip.RelatedTo);
+            Assert.Equal("titleid", trurip.TitleID);
+            Assert.Equal("publisher", trurip.Publisher);
+            Assert.Equal("developer", trurip.Developer);
+            Assert.Equal("year", trurip.Year);
+            Assert.Equal("genre", trurip.Genre);
+            Assert.Equal("subgenre", trurip.Subgenre);
+            Assert.Equal("ratings", trurip.Ratings);
+            Assert.Equal("score", trurip.Score);
+            Assert.Equal("players", trurip.Players);
+            Assert.Equal("enabled", trurip.Enabled);
+            Assert.Equal("crc32", trurip.CRC);
+            Assert.Equal("source", trurip.Source);
+            Assert.Equal("cloneof", trurip.CloneOf);
+            Assert.Equal("relatedto", trurip.RelatedTo);
         }
 
         /// <summary>
@@ -537,24 +537,24 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(rom);
             Assert.Equal("name", rom.Name);
             Assert.Equal(12345, rom.Size);
-            Assert.Equal("XXXXXX", rom.CRC);
-            Assert.Equal("XXXXXX", rom.MD2);
-            Assert.Equal("XXXXXX", rom.MD4);
-            Assert.Equal("XXXXXX", rom.MD5);
-            Assert.Equal("XXXXXX", rom.RIPEMD128);
-            Assert.Equal("XXXXXX", rom.RIPEMD160);
-            Assert.Equal("XXXXXX", rom.SHA1);
-            Assert.Equal("XXXXXX", rom.SHA256);
-            Assert.Equal("XXXXXX", rom.SHA384);
-            Assert.Equal("XXXXXX", rom.SHA512);
-            Assert.Equal("XXXXXX", rom.SpamSum);
-            Assert.Equal("XXXXXX", rom.xxHash364);
-            Assert.Equal("XXXXXX", rom.xxHash3128);
-            Assert.Equal("XXXXXX", rom.Merge);
+            Assert.Equal("crc32", rom.CRC);
+            Assert.Equal("md2", rom.MD2);
+            Assert.Equal("md4", rom.MD4);
+            Assert.Equal("md5", rom.MD5);
+            Assert.Equal("ripemd128", rom.RIPEMD128);
+            Assert.Equal("ripemd160", rom.RIPEMD160);
+            Assert.Equal("sha1", rom.SHA1);
+            Assert.Equal("sha256", rom.SHA256);
+            Assert.Equal("sha384", rom.SHA384);
+            Assert.Equal("sha512", rom.SHA512);
+            Assert.Equal("spamsum", rom.SpamSum);
+            Assert.Equal("xxhash364", rom.xxHash364);
+            Assert.Equal("xxhash3128", rom.xxHash3128);
+            Assert.Equal("merge", rom.Merge);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
-            Assert.Equal("XXXXXX", rom.Serial);
-            Assert.Equal("XXXXXX", rom.Header);
-            Assert.Equal("XXXXXX", rom.Date);
+            Assert.Equal("serial", rom.Serial);
+            Assert.Equal("header", rom.Header);
+            Assert.Equal("date", rom.Date);
             Assert.Equal(true, rom.Inverted);
             Assert.Equal(true, rom.MIA);
         }
@@ -566,11 +566,11 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(disk);
             Assert.Equal("name", disk.Name);
-            Assert.Equal("XXXXXX", disk.MD5);
-            Assert.Equal("XXXXXX", disk.SHA1);
-            Assert.Equal("XXXXXX", disk.Merge);
+            Assert.Equal("md5", disk.MD5);
+            Assert.Equal("sha1", disk.SHA1);
+            Assert.Equal("merge", disk.Merge);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, disk.Status);
-            Assert.Equal("XXXXXX", disk.Region);
+            Assert.Equal("region", disk.Region);
         }
 
         /// <summary>

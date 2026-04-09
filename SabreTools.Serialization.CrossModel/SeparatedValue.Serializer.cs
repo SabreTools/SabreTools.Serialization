@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 var first = item.Row[0];
                 header.FileName = first.FileName;
-                header.Name =  first.FileName;
+                header.Name =  first.InternalName;
                 header.Description = first.Description;
             }
 
@@ -58,15 +58,15 @@ namespace SabreTools.Serialization.CrossModel
             switch (datItem)
             {
                 case Data.Models.Metadata.Disk disk:
-                    machine.Disk = new Data.Models.Metadata.Disk[] { disk };
+                    machine.Disk = [disk];
                     break;
 
                 case Data.Models.Metadata.Media media:
-                    machine.Media = new Data.Models.Metadata.Media[] { media };
+                    machine.Media = [media];
                     break;
 
                 case Data.Models.Metadata.Rom rom:
-                    machine.Rom = new Data.Models.Metadata.Rom[] { rom };
+                    machine.Rom = [rom];
                     break;
 
                 default:

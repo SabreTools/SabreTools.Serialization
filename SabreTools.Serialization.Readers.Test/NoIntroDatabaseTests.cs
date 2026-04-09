@@ -101,39 +101,39 @@ namespace SabreTools.Serialization.Readers.Test
         {
             var archive = new Data.Models.NoIntroDatabase.Archive
             {
-                Number = "XXXXXX",
-                Clone = "XXXXXX",
-                RegParent = "XXXXXX",
-                MergeOf = "XXXXXX",
-                MergeName = "XXXXXX",
+                Number = "number",
+                Clone = "clone",
+                RegParent = "regparent",
+                MergeOf = "mergeof",
+                MergeName = "mergename",
                 Name = "name",
-                NameAlt = "XXXXXX",
-                Region = "XXXXXX",
-                Languages = "XXXXXX",
-                ShowLang = "XXXXXX",
-                LangChecked = "XXXXXX",
-                Version1 = "XXXXXX",
-                Version2 = "XXXXXX",
-                DevStatus = "XXXXXX",
-                Additional = "XXXXXX",
-                Special1 = "XXXXXX",
-                Special2 = "XXXXXX",
-                Alt = "XXXXXX",
-                GameId1 = "XXXXXX",
-                GameId2 = "XXXXXX",
+                NameAlt = "namealt",
+                Region = "region",
+                Languages = "languages",
+                ShowLang = "showlang",
+                LangChecked = "langchecked",
+                Version1 = "version1",
+                Version2 = "version2",
+                DevStatus = "devstatus",
+                Additional = "additional",
+                Special1 = "special1",
+                Special2 = "special2",
+                Alt = "alt",
+                GameId1 = "gameid1",
+                GameId2 = "gameid2",
                 Description = "description",
-                Bios = "XXXXXX",
-                Licensed = "XXXXXX",
-                Pirate = "XXXXXX",
-                Physical = "XXXXXX",
-                Complete = "XXXXXX",
-                Adult = "XXXXXX",
-                Dat = "XXXXXX",
-                Listed = "XXXXXX",
-                Private = "XXXXXX",
-                StickyNote = "XXXXXX",
-                DatterNote = "XXXXXX",
-                Categories = "XXXXXX",
+                Bios = "bios",
+                Licensed = "licensed",
+                Pirate = "pirate",
+                Physical = "physical",
+                Complete = "complete",
+                Adult = "adult",
+                Dat = "dat",
+                Listed = "listed",
+                Private = "private",
+                StickyNote = "stickynote",
+                DatterNote = "datternote",
+                Categories = "categories",
             };
 
             var media = new Data.Models.NoIntroDatabase.Media();
@@ -186,31 +186,31 @@ namespace SabreTools.Serialization.Readers.Test
 
             var file = new Data.Models.NoIntroDatabase.File
             {
-                Id = "XXXXXX",
-                AppendToSourceId = "XXXXXX",
-                ForceName = "XXXXXX",
-                ForceSceneName = "XXXXXX",
-                EmptyDir = "XXXXXX",
-                Extension = "XXXXXX",
-                Item = "XXXXXX",
-                Date = "XXXXXX",
-                Format = "XXXXXX",
-                Note = "XXXXXX",
+                Id = "id",
+                AppendToSourceId = "appendtosourceid",
+                ForceName = "forcename",
+                ForceSceneName = "forcescenename",
+                EmptyDir = "emptydir",
+                Extension = "extension",
+                Item = "item",
+                Date = "date",
+                Format = "format",
+                Note = "note",
                 Filter = "filter",
-                Version = "XXXXXX",
-                UpdateType = "XXXXXX",
-                Size = "XXXXXX",
-                CRC32 = "XXXXXX",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                Serial = "XXXXXX",
-                Header = "XXXXXX",
-                Bad = "XXXXXX",
-                MIA = "XXXXXX",
-                Unique = "XXXXXX",
-                MergeName = "XXXXXX",
-                UniqueAttachment = "XXXXXX",
+                Version = "version",
+                UpdateType = "updatetype",
+                Size = "size",
+                CRC32 = "crc32",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                Serial = "serial",
+                Header = "header",
+                Bad = "bad",
+                MIA = "mia",
+                Unique = "unique",
+                MergeName = "mergename",
+                UniqueAttachment = "uniqueattachment",
             };
 
             var source = new Data.Models.NoIntroDatabase.Source
@@ -291,39 +291,39 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.NoIntroDatabase.Archive? archive)
         {
             Assert.NotNull(archive);
-            Assert.Equal("XXXXXX", archive.Number);
-            Assert.Equal("XXXXXX", archive.Clone);
-            Assert.Equal("XXXXXX", archive.RegParent);
-            Assert.Equal("XXXXXX", archive.MergeOf);
-            Assert.Equal("XXXXXX", archive.MergeName);
+            Assert.Equal("number", archive.Number);
+            Assert.Equal("clone", archive.Clone);
+            Assert.Equal("regparent", archive.RegParent);
+            Assert.Equal("mergeof", archive.MergeOf);
+            Assert.Equal("mergename", archive.MergeName);
             Assert.Equal("name", archive.Name);
-            Assert.Equal("XXXXXX", archive.NameAlt);
-            Assert.Equal("XXXXXX", archive.Region);
-            Assert.Equal("XXXXXX", archive.Languages);
-            Assert.Equal("XXXXXX", archive.ShowLang);
-            Assert.Equal("XXXXXX", archive.LangChecked);
-            Assert.Equal("XXXXXX", archive.Version1);
-            Assert.Equal("XXXXXX", archive.Version2);
-            Assert.Equal("XXXXXX", archive.DevStatus);
-            Assert.Equal("XXXXXX", archive.Additional);
-            Assert.Equal("XXXXXX", archive.Special1);
-            Assert.Equal("XXXXXX", archive.Special2);
-            Assert.Equal("XXXXXX", archive.Alt);
-            Assert.Equal("XXXXXX", archive.GameId1);
-            Assert.Equal("XXXXXX", archive.GameId2);
+            Assert.Equal("namealt", archive.NameAlt);
+            Assert.Equal("region", archive.Region);
+            Assert.Equal("languages", archive.Languages);
+            Assert.Equal("showlang", archive.ShowLang);
+            Assert.Equal("langchecked", archive.LangChecked);
+            Assert.Equal("version1", archive.Version1);
+            Assert.Equal("version2", archive.Version2);
+            Assert.Equal("devstatus", archive.DevStatus);
+            Assert.Equal("additional", archive.Additional);
+            Assert.Equal("special1", archive.Special1);
+            Assert.Equal("special2", archive.Special2);
+            Assert.Equal("alt", archive.Alt);
+            Assert.Equal("gameid1", archive.GameId1);
+            Assert.Equal("gameid2", archive.GameId2);
             Assert.Equal("description", archive.Description);
-            Assert.Equal("XXXXXX", archive.Bios);
-            Assert.Equal("XXXXXX", archive.Licensed);
-            Assert.Equal("XXXXXX", archive.Pirate);
-            Assert.Equal("XXXXXX", archive.Physical);
-            Assert.Equal("XXXXXX", archive.Complete);
-            Assert.Equal("XXXXXX", archive.Adult);
-            Assert.Equal("XXXXXX", archive.Dat);
-            Assert.Equal("XXXXXX", archive.Listed);
-            Assert.Equal("XXXXXX", archive.Private);
-            Assert.Equal("XXXXXX", archive.StickyNote);
-            Assert.Equal("XXXXXX", archive.DatterNote);
-            Assert.Equal("XXXXXX", archive.Categories);
+            Assert.Equal("bios", archive.Bios);
+            Assert.Equal("licensed", archive.Licensed);
+            Assert.Equal("pirate", archive.Pirate);
+            Assert.Equal("physical", archive.Physical);
+            Assert.Equal("complete", archive.Complete);
+            Assert.Equal("adult", archive.Adult);
+            Assert.Equal("dat", archive.Dat);
+            Assert.Equal("listed", archive.Listed);
+            Assert.Equal("private", archive.Private);
+            Assert.Equal("stickynote", archive.StickyNote);
+            Assert.Equal("datternote", archive.DatterNote);
+            Assert.Equal("categories", archive.Categories);
         }
 
         /// <summary>
@@ -410,31 +410,31 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.NoIntroDatabase.File? file)
         {
             Assert.NotNull(file);
-            Assert.Equal("XXXXXX", file.Id);
-            Assert.Equal("XXXXXX", file.AppendToSourceId);
-            Assert.Equal("XXXXXX", file.ForceName);
-            Assert.Equal("XXXXXX", file.ForceSceneName);
-            Assert.Equal("XXXXXX", file.EmptyDir);
-            Assert.Equal("XXXXXX", file.Extension);
-            Assert.Equal("XXXXXX", file.Item);
-            Assert.Equal("XXXXXX", file.Date);
-            Assert.Equal("XXXXXX", file.Format);
-            Assert.Equal("XXXXXX", file.Note);
+            Assert.Equal("id", file.Id);
+            Assert.Equal("appendtosourceid", file.AppendToSourceId);
+            Assert.Equal("forcename", file.ForceName);
+            Assert.Equal("forcescenename", file.ForceSceneName);
+            Assert.Equal("emptydir", file.EmptyDir);
+            Assert.Equal("extension", file.Extension);
+            Assert.Equal("item", file.Item);
+            Assert.Equal("date", file.Date);
+            Assert.Equal("format", file.Format);
+            Assert.Equal("note", file.Note);
             Assert.Equal("filter", file.Filter);
-            Assert.Equal("XXXXXX", file.Version);
-            Assert.Equal("XXXXXX", file.UpdateType);
-            Assert.Equal("XXXXXX", file.Size);
-            Assert.Equal("XXXXXX", file.CRC32);
-            Assert.Equal("XXXXXX", file.MD5);
-            Assert.Equal("XXXXXX", file.SHA1);
-            Assert.Equal("XXXXXX", file.SHA256);
-            Assert.Equal("XXXXXX", file.Serial);
-            Assert.Equal("XXXXXX", file.Header);
-            Assert.Equal("XXXXXX", file.Bad);
-            Assert.Equal("XXXXXX", file.MIA);
-            Assert.Equal("XXXXXX", file.Unique);
-            Assert.Equal("XXXXXX", file.MergeName);
-            Assert.Equal("XXXXXX", file.UniqueAttachment);
+            Assert.Equal("version", file.Version);
+            Assert.Equal("updatetype", file.UpdateType);
+            Assert.Equal("size", file.Size);
+            Assert.Equal("crc32", file.CRC32);
+            Assert.Equal("md5", file.MD5);
+            Assert.Equal("sha1", file.SHA1);
+            Assert.Equal("sha256", file.SHA256);
+            Assert.Equal("serial", file.Serial);
+            Assert.Equal("header", file.Header);
+            Assert.Equal("bad", file.Bad);
+            Assert.Equal("mia", file.MIA);
+            Assert.Equal("unique", file.Unique);
+            Assert.Equal("mergename", file.MergeName);
+            Assert.Equal("uniqueattachment", file.UniqueAttachment);
         }
 
         /// <summary>

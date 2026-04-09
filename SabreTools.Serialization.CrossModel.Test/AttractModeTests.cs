@@ -38,26 +38,26 @@ namespace SabreTools.Serialization.CrossModel.Test
             var row = new Data.Models.AttractMode.Row
             {
                 Name = "name",
-                Title = "XXXXXX",
-                Emulator = "XXXXXX",
-                CloneOf = "XXXXXX",
-                Year = "XXXXXX",
-                Manufacturer = "XXXXXX",
-                Category = "XXXXXX",
-                Players = "XXXXXX",
-                Rotation = "XXXXXX",
-                Control = "XXXXXX",
-                Status = "XXXXXX",
-                DisplayCount = "XXXXXX",
-                DisplayType = "XXXXXX",
-                AltRomname = "XXXXXX",
-                AltTitle = "XXXXXX",
-                Extra = "XXXXXX",
-                Buttons = "XXXXXX",
-                Favorite = "XXXXXX",
-                Tags = "XXXXXX",
-                PlayedCount = "XXXXXX",
-                PlayedTime = "XXXXXX",
+                Title = "title",
+                Emulator = "emulator",
+                CloneOf = "cloneof",
+                Year = "year",
+                Manufacturer = "manufacturer",
+                Category = "category",
+                Players = "players",
+                Rotation = "rotation",
+                Control = "control",
+                Status = "status",
+                DisplayCount = "displaycount",
+                DisplayType = "displaytype",
+                AltRomname = "altromname",
+                AltTitle = "alttitle",
+                Extra = "extra",
+                Buttons = "buttons",
+                Favorite = "favorite",
+                Tags = "tags",
+                PlayedCount = "playedcount",
+                PlayedTime = "playedtime",
                 FileIsAvailable = true,
             };
 
@@ -85,26 +85,26 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(row);
             Assert.Equal("name", row.Name);
-            Assert.Equal("XXXXXX", row.Title);
-            Assert.Equal("XXXXXX", row.Emulator);
-            Assert.Equal("XXXXXX", row.CloneOf);
-            Assert.Equal("XXXXXX", row.Year);
-            Assert.Equal("XXXXXX", row.Manufacturer);
-            Assert.Equal("XXXXXX", row.Category);
-            Assert.Equal("XXXXXX", row.Players);
-            Assert.Equal("XXXXXX", row.Rotation);
-            Assert.Equal("XXXXXX", row.Control);
-            Assert.Equal("XXXXXX", row.Status);
-            Assert.Equal("XXXXXX", row.DisplayCount);
-            Assert.Equal("XXXXXX", row.DisplayType);
-            Assert.Equal("XXXXXX", row.AltRomname);
-            Assert.Equal("XXXXXX", row.AltTitle);
-            Assert.Equal("XXXXXX", row.Extra);
-            Assert.Equal("XXXXXX", row.Buttons);
-            Assert.Equal("XXXXXX", row.Favorite);
-            Assert.Equal("XXXXXX", row.Tags);
-            Assert.Equal("XXXXXX", row.PlayedCount);
-            Assert.Equal("XXXXXX", row.PlayedTime);
+            Assert.Equal("title", row.Title);
+            Assert.Equal("emulator", row.Emulator);
+            Assert.Equal("cloneof", row.CloneOf);
+            Assert.Equal("year", row.Year);
+            Assert.Equal("manufacturer", row.Manufacturer);
+            Assert.Equal("category", row.Category);
+            Assert.Equal("players", row.Players);
+            Assert.Equal("rotation", row.Rotation);
+            Assert.Equal("control", row.Control);
+            Assert.Equal("status", row.Status);
+            Assert.Equal("displaycount", row.DisplayCount);
+            Assert.Equal("displaytype", row.DisplayType);
+            Assert.Equal("altromname", row.AltRomname);
+            Assert.Equal("alttitle", row.AltTitle);
+            Assert.Equal("extra", row.Extra);
+            Assert.Equal("buttons", row.Buttons);
+            Assert.Equal("favorite", row.Favorite);
+            Assert.Equal("tags", row.Tags);
+            Assert.Equal("playedcount", row.PlayedCount);
+            Assert.Equal("playedtime", row.PlayedTime);
             Assert.Equal(true, row.FileIsAvailable);
         }
     }

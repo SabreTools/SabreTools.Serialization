@@ -265,7 +265,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Company = "company",
                 Configuration = [CreateMetadataConfiguration()],
                 Control = "control",
-                CRC = "crc",
+                CRC = "crc32",
                 Country = "country",
                 Description = "description",
                 Developer = "developer",
@@ -1065,7 +1065,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("company", machine.Company);
             Assert.Equal("control", machine.Control);
             Assert.Equal("country", machine.Country);
-            Assert.Equal("crc", machine.CRC);
+            Assert.Equal("crc32", machine.CRC);
             Assert.Equal("description", machine.Description);
             Assert.Equal("developer", machine.Developer);
             Assert.Equal("dirname", machine.DirName);

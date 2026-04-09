@@ -20,53 +20,53 @@ namespace SabreTools.Metadata.Filter.Test
         }
 
         [Theory]
-        [InlineData("Sample.Name=XXXXXX", Operation.Equals)]
-        [InlineData("Sample.Name==XXXXXX", Operation.Equals)]
-        [InlineData("Sample.Name:XXXXXX", Operation.Equals)]
-        [InlineData("Sample.Name::XXXXXX", Operation.Equals)]
-        [InlineData("Sample.Name!XXXXXX", Operation.NotEquals)]
-        [InlineData("Sample.Name!=XXXXXX", Operation.NotEquals)]
-        [InlineData("Sample.Name!:XXXXXX", Operation.NotEquals)]
-        [InlineData("Sample.Name>XXXXXX", Operation.GreaterThan)]
-        [InlineData("Sample.Name>=XXXXXX", Operation.GreaterThanOrEqual)]
-        [InlineData("Sample.Name<XXXXXX", Operation.LessThan)]
-        [InlineData("Sample.Name<=XXXXXX", Operation.LessThanOrEqual)]
-        [InlineData("Sample.Name:!XXXXXX", Operation.NONE)]
-        [InlineData("Sample.Name=>XXXXXX", Operation.NONE)]
-        [InlineData("Sample.Name=<XXXXXX", Operation.NONE)]
-        [InlineData("Sample.Name<>XXXXXX", Operation.NONE)]
-        [InlineData("Sample.Name><XXXXXX", Operation.NONE)]
+        [InlineData("Sample.Name=value", Operation.Equals)]
+        [InlineData("Sample.Name==value", Operation.Equals)]
+        [InlineData("Sample.Name:value", Operation.Equals)]
+        [InlineData("Sample.Name::value", Operation.Equals)]
+        [InlineData("Sample.Name!value", Operation.NotEquals)]
+        [InlineData("Sample.Name!=value", Operation.NotEquals)]
+        [InlineData("Sample.Name!:value", Operation.NotEquals)]
+        [InlineData("Sample.Name>value", Operation.GreaterThan)]
+        [InlineData("Sample.Name>=value", Operation.GreaterThanOrEqual)]
+        [InlineData("Sample.Name<value", Operation.LessThan)]
+        [InlineData("Sample.Name<=value", Operation.LessThanOrEqual)]
+        [InlineData("Sample.Name:!value", Operation.NONE)]
+        [InlineData("Sample.Name=>value", Operation.NONE)]
+        [InlineData("Sample.Name=<value", Operation.NONE)]
+        [InlineData("Sample.Name<>value", Operation.NONE)]
+        [InlineData("Sample.Name><value", Operation.NONE)]
         public void Constructor_FilterString(string filterString, Operation expected)
         {
             FilterObject filterObject = new FilterObject(filterString);
             Assert.Equal("sample", filterObject.Key.ItemName);
             Assert.Equal("name", filterObject.Key.FieldName);
-            Assert.Equal("XXXXXX", filterObject.Value);
+            Assert.Equal("value", filterObject.Value);
             Assert.Equal(expected, filterObject.Operation);
         }
 
         [Theory]
-        [InlineData("Sample.Name", "XXXXXX", "=", Operation.Equals)]
-        [InlineData("Sample.Name", "XXXXXX", "==", Operation.Equals)]
-        [InlineData("Sample.Name", "XXXXXX", ":", Operation.Equals)]
-        [InlineData("Sample.Name", "XXXXXX", "::", Operation.Equals)]
-        [InlineData("Sample.Name", "XXXXXX", "!", Operation.NotEquals)]
-        [InlineData("Sample.Name", "XXXXXX", "!=", Operation.NotEquals)]
-        [InlineData("Sample.Name", "XXXXXX", "!:", Operation.NotEquals)]
-        [InlineData("Sample.Name", "XXXXXX", ">", Operation.GreaterThan)]
-        [InlineData("Sample.Name", "XXXXXX", ">=", Operation.GreaterThanOrEqual)]
-        [InlineData("Sample.Name", "XXXXXX", "<", Operation.LessThan)]
-        [InlineData("Sample.Name", "XXXXXX", "<=", Operation.LessThanOrEqual)]
-        [InlineData("Sample.Name", "XXXXXX", "@@", Operation.NONE)]
-        [InlineData("Sample.Name", "XXXXXX", ":!", Operation.NONE)]
-        [InlineData("Sample.Name", "XXXXXX", "=>", Operation.NONE)]
-        [InlineData("Sample.Name", "XXXXXX", "=<", Operation.NONE)]
+        [InlineData("Sample.Name", "value", "=", Operation.Equals)]
+        [InlineData("Sample.Name", "value", "==", Operation.Equals)]
+        [InlineData("Sample.Name", "value", ":", Operation.Equals)]
+        [InlineData("Sample.Name", "value", "::", Operation.Equals)]
+        [InlineData("Sample.Name", "value", "!", Operation.NotEquals)]
+        [InlineData("Sample.Name", "value", "!=", Operation.NotEquals)]
+        [InlineData("Sample.Name", "value", "!:", Operation.NotEquals)]
+        [InlineData("Sample.Name", "value", ">", Operation.GreaterThan)]
+        [InlineData("Sample.Name", "value", ">=", Operation.GreaterThanOrEqual)]
+        [InlineData("Sample.Name", "value", "<", Operation.LessThan)]
+        [InlineData("Sample.Name", "value", "<=", Operation.LessThanOrEqual)]
+        [InlineData("Sample.Name", "value", "@@", Operation.NONE)]
+        [InlineData("Sample.Name", "value", ":!", Operation.NONE)]
+        [InlineData("Sample.Name", "value", "=>", Operation.NONE)]
+        [InlineData("Sample.Name", "value", "=<", Operation.NONE)]
         public void Constructor_TripleString(string itemField, string? value, string? operation, Operation expected)
         {
             FilterObject filterObject = new FilterObject(itemField, value, operation);
             Assert.Equal("sample", filterObject.Key.ItemName);
             Assert.Equal("name", filterObject.Key.FieldName);
-            Assert.Equal("XXXXXX", filterObject.Value);
+            Assert.Equal("value", filterObject.Value);
             Assert.Equal(expected, filterObject.Operation);
         }
 
@@ -257,7 +257,7 @@ namespace SabreTools.Metadata.Filter.Test
         public void MatchesGreaterThan_RegexValue()
         {
             var sample = new Sample { Name = "name" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "^XXXXXX$", Operation.GreaterThan);
+            FilterObject filterObject = new FilterObject("Sample.Name", "^value$", Operation.GreaterThan);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
         }
@@ -266,7 +266,7 @@ namespace SabreTools.Metadata.Filter.Test
         public void MatchesGreaterThan_StringValue()
         {
             var sample = new Sample { Name = "name" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "XXXXXX", Operation.GreaterThan);
+            FilterObject filterObject = new FilterObject("Sample.Name", "value", Operation.GreaterThan);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
         }
@@ -324,7 +324,7 @@ namespace SabreTools.Metadata.Filter.Test
         public void MatchesGreaterThanOrEqual_RegexValue()
         {
             var sample = new Sample { Name = "name" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "^XXXXXX$", Operation.GreaterThanOrEqual);
+            FilterObject filterObject = new FilterObject("Sample.Name", "^value$", Operation.GreaterThanOrEqual);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
         }
@@ -333,7 +333,7 @@ namespace SabreTools.Metadata.Filter.Test
         public void MatchesGreaterThanOrEqual_StringValue()
         {
             var sample = new Sample { Name = "name" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "XXXXXX", Operation.GreaterThanOrEqual);
+            FilterObject filterObject = new FilterObject("Sample.Name", "value", Operation.GreaterThanOrEqual);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
         }
@@ -391,7 +391,7 @@ namespace SabreTools.Metadata.Filter.Test
         public void MatchesLessThan_RegexValue()
         {
             var sample = new Sample { Name = "name" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "^XXXXXX$", Operation.LessThan);
+            FilterObject filterObject = new FilterObject("Sample.Name", "^value$", Operation.LessThan);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
         }
@@ -400,7 +400,7 @@ namespace SabreTools.Metadata.Filter.Test
         public void MatchesLessThan_StringValue()
         {
             var sample = new Sample { Name = "name" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "XXXXXX", Operation.LessThan);
+            FilterObject filterObject = new FilterObject("Sample.Name", "value", Operation.LessThan);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
         }
@@ -458,7 +458,7 @@ namespace SabreTools.Metadata.Filter.Test
         public void MatchesLessThanOrEqual_RegexValue()
         {
             var sample = new Sample { Name = "name" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "^XXXXXX$", Operation.LessThanOrEqual);
+            FilterObject filterObject = new FilterObject("Sample.Name", "^value$", Operation.LessThanOrEqual);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
         }
@@ -467,7 +467,7 @@ namespace SabreTools.Metadata.Filter.Test
         public void MatchesLessThanOrEqual_StringValue()
         {
             var sample = new Sample { Name = "name" };
-            FilterObject filterObject = new FilterObject("Sample.Name", "XXXXXX", Operation.LessThanOrEqual);
+            FilterObject filterObject = new FilterObject("Sample.Name", "value", Operation.LessThanOrEqual);
             bool actual = filterObject.Matches(sample);
             Assert.False(actual);
         }
@@ -1277,7 +1277,7 @@ namespace SabreTools.Metadata.Filter.Test
         [InlineData("machine.comment", "comment")]
         [InlineData("machine.company", "company")]
         [InlineData("machine.control", "control")]
-        [InlineData("machine.crc", "crc")]
+        [InlineData("machine.crc", "crc32")]
         [InlineData("machine.country", "country")]
         [InlineData("machine.description", "description")]
         [InlineData("machine.developer", "developer")]
@@ -1346,7 +1346,7 @@ namespace SabreTools.Metadata.Filter.Test
                 Comment = ["comment"],
                 Company = "company",
                 Control = "control",
-                CRC = "crc",
+                CRC = "crc32",
                 Country = "country",
                 Description = "description",
                 Developer = "developer",

@@ -37,20 +37,20 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "name",
                 Description = "description",
-                Version = "XXXXXX",
-                Date = "XXXXXX",
-                Author = "XXXXXX",
-                Homepage = "XXXXXX",
-                Comment = "XXXXXX",
+                Version = "version",
+                Date = "date",
+                Author = "author",
+                Homepage = "homepage",
+                Comment = "comment",
             };
 
             var file = new Data.Models.DosCenter.File
             {
                 Name = "name",
                 Size = 12345,
-                CRC = "XXXXXX",
-                SHA1 = "XXXXXX",
-                Date = "XXXXXX",
+                CRC = "crc32",
+                SHA1 = "sha1",
+                Date = "date",
             };
 
             var game = new Data.Models.DosCenter.Game
@@ -74,11 +74,11 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(cmp);
             Assert.Equal("name", cmp.Name);
             Assert.Equal("description", cmp.Description);
-            Assert.Equal("XXXXXX", cmp.Version);
-            Assert.Equal("XXXXXX", cmp.Date);
-            Assert.Equal("XXXXXX", cmp.Author);
-            Assert.Equal("XXXXXX", cmp.Homepage);
-            Assert.Equal("XXXXXX", cmp.Comment);
+            Assert.Equal("version", cmp.Version);
+            Assert.Equal("date", cmp.Date);
+            Assert.Equal("author", cmp.Author);
+            Assert.Equal("homepage", cmp.Homepage);
+            Assert.Equal("comment", cmp.Comment);
         }
 
         /// <summary>
@@ -102,9 +102,9 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(rom);
             Assert.Equal("name", rom.Name);
             Assert.Equal(12345, rom.Size);
-            Assert.Equal("XXXXXX", rom.CRC);
-            Assert.Equal("XXXXXX", rom.SHA1);
-            Assert.Equal("XXXXXX", rom.Date);
+            Assert.Equal("crc32", rom.CRC);
+            Assert.Equal("sha1", rom.SHA1);
+            Assert.Equal("date", rom.Date);
         }
     }
 }

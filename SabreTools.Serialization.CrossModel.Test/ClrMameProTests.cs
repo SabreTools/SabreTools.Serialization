@@ -63,16 +63,16 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "name",
                 Description = "description",
-                RootDir = "XXXXXX",
-                Category = "XXXXXX",
-                Version = "XXXXXX",
-                Date = "XXXXXX",
-                Author = "XXXXXX",
-                Homepage = "XXXXXX",
-                Url = "XXXXXX",
-                Comment = "XXXXXX",
-                Header = "XXXXXX",
-                Type = "XXXXXX",
+                RootDir = "rootdir",
+                Category = "category",
+                Version = "version",
+                Date = "date",
+                Author = "author",
+                Homepage = "homepage",
+                Url = "url",
+                Comment = "comment",
+                Header = "header",
+                Type = "type",
                 ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
                 ForceZipping = true,
                 ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
@@ -98,29 +98,29 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "name",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                Merge = "XXXXXX",
+                CRC16 = "crc16",
+                CRC = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                Merge = "merge",
                 Status = Data.Models.Metadata.ItemStatus.Good,
-                Flags = "XXXXXX",
-                Date = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
-                xxHash364 = "XXXXXX",
-                xxHash3128 = "XXXXXX",
-                Region = "XXXXXX",
-                Offs = "XXXXXX",
-                Serial = "XXXXXX",
-                Header = "XXXXXX",
+                Flags = "flags",
+                Date = "date",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
+                xxHash364 = "xxhash364",
+                xxHash3128 = "xxhash3128",
+                Region = "region",
+                Offs = "offs",
+                Serial = "serial",
+                Header = "header",
                 Inverted = true,
                 MIA = true,
             };
@@ -181,7 +181,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var input = new Data.Models.ClrMamePro.Input
             {
                 Players = 12345,
-                Control = "XXXXXX",
+                Control = "control",
                 Buttons = 12345,
                 Coins = 12345,
                 Tilt = true,
@@ -191,7 +191,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var dipswitch = new Data.Models.ClrMamePro.DipSwitch
             {
                 Name = "name",
-                Entry = ["XXXXXX"],
+                Entry = ["entry"],
                 Default = true,
             };
 
@@ -210,13 +210,13 @@ namespace SabreTools.Serialization.CrossModel.Test
                 : new Data.Models.ClrMamePro.Machine();
             gameBase.Name = "name";
             gameBase.Description = "description";
-            gameBase.DriverStatus = "XXXXXX";
-            gameBase.Year = "XXXXXX";
-            gameBase.Manufacturer = "XXXXXX";
-            gameBase.Category = "XXXXXX";
-            gameBase.CloneOf = "XXXXXX";
-            gameBase.RomOf = "XXXXXX";
-            gameBase.SampleOf = "XXXXXX";
+            gameBase.DriverStatus = "driverstatus";
+            gameBase.Year = "year";
+            gameBase.Manufacturer = "manufacturer";
+            gameBase.Category = "category";
+            gameBase.CloneOf = "cloneof";
+            gameBase.RomOf = "romof";
+            gameBase.SampleOf = "sampleof";
             gameBase.Release = [release];
             gameBase.BiosSet = [biosset];
             gameBase.Rom = [rom];
@@ -233,7 +233,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var info = new Data.Models.ClrMamePro.Info
             {
-                Source = ["XXXXXX"],
+                Source = ["source"],
             };
 
             return new Data.Models.ClrMamePro.MetadataFile
@@ -252,16 +252,16 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(cmp);
             Assert.Equal("name", cmp.Name);
             Assert.Equal("description", cmp.Description);
-            Assert.Equal("XXXXXX", cmp.RootDir);
-            Assert.Equal("XXXXXX", cmp.Category);
-            Assert.Equal("XXXXXX", cmp.Version);
-            Assert.Equal("XXXXXX", cmp.Date);
-            Assert.Equal("XXXXXX", cmp.Author);
-            Assert.Equal("XXXXXX", cmp.Homepage);
-            Assert.Equal("XXXXXX", cmp.Url);
-            Assert.Equal("XXXXXX", cmp.Comment);
-            Assert.Equal("XXXXXX", cmp.Header);
-            Assert.Equal("XXXXXX", cmp.Type);
+            Assert.Equal("rootdir", cmp.RootDir);
+            Assert.Equal("category", cmp.Category);
+            Assert.Equal("version", cmp.Version);
+            Assert.Equal("date", cmp.Date);
+            Assert.Equal("author", cmp.Author);
+            Assert.Equal("homepage", cmp.Homepage);
+            Assert.Equal("url", cmp.Url);
+            Assert.Equal("comment", cmp.Comment);
+            Assert.Equal("header", cmp.Header);
+            Assert.Equal("type", cmp.Type);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, cmp.ForceMerging);
             Assert.Equal(true, cmp.ForceZipping);
             Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, cmp.ForcePacking);
@@ -275,13 +275,13 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(gb);
             Assert.Equal("name", gb.Name);
             Assert.Equal("description", gb.Description);
-            // Assert.Equal("XXXXXX", gb.DriverStatus); // TODO: Needs metadata mapping
-            Assert.Equal("XXXXXX", gb.Year);
-            Assert.Equal("XXXXXX", gb.Manufacturer);
-            Assert.Equal("XXXXXX", gb.Category);
-            Assert.Equal("XXXXXX", gb.CloneOf);
-            Assert.Equal("XXXXXX", gb.RomOf);
-            Assert.Equal("XXXXXX", gb.SampleOf);
+            // Assert.Equal("driverstatus", gb.DriverStatus); // TODO: Needs metadata mapping
+            Assert.Equal("year", gb.Year);
+            Assert.Equal("manufacturer", gb.Manufacturer);
+            Assert.Equal("category", gb.Category);
+            Assert.Equal("cloneof", gb.CloneOf);
+            Assert.Equal("romof", gb.RomOf);
+            Assert.Equal("sampleof", gb.SampleOf);
 
             Assert.NotNull(gb.Release);
             var release = Assert.Single(gb.Release);
@@ -361,29 +361,29 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(rom);
             Assert.Equal("name", rom.Name);
             Assert.Equal(12345, rom.Size);
-            Assert.Equal("XXXXXX", rom.CRC16);
-            Assert.Equal("XXXXXX", rom.CRC);
-            Assert.Equal("XXXXXX", rom.CRC64);
-            Assert.Equal("XXXXXX", rom.MD2);
-            Assert.Equal("XXXXXX", rom.MD4);
-            Assert.Equal("XXXXXX", rom.MD5);
-            Assert.Equal("XXXXXX", rom.RIPEMD128);
-            Assert.Equal("XXXXXX", rom.RIPEMD160);
-            Assert.Equal("XXXXXX", rom.SHA1);
-            Assert.Equal("XXXXXX", rom.Merge);
+            Assert.Equal("crc16", rom.CRC16);
+            Assert.Equal("crc32", rom.CRC);
+            Assert.Equal("crc64", rom.CRC64);
+            Assert.Equal("md2", rom.MD2);
+            Assert.Equal("md4", rom.MD4);
+            Assert.Equal("md5", rom.MD5);
+            Assert.Equal("ripemd128", rom.RIPEMD128);
+            Assert.Equal("ripemd160", rom.RIPEMD160);
+            Assert.Equal("sha1", rom.SHA1);
+            Assert.Equal("merge", rom.Merge);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
-            Assert.Equal("XXXXXX", rom.Flags);
-            Assert.Equal("XXXXXX", rom.Date);
-            Assert.Equal("XXXXXX", rom.SHA256);
-            Assert.Equal("XXXXXX", rom.SHA384);
-            Assert.Equal("XXXXXX", rom.SHA512);
-            Assert.Equal("XXXXXX", rom.SpamSum);
-            Assert.Equal("XXXXXX", rom.xxHash364);
-            Assert.Equal("XXXXXX", rom.xxHash3128);
-            Assert.Equal("XXXXXX", rom.Region);
-            Assert.Equal("XXXXXX", rom.Offs);
-            Assert.Equal("XXXXXX", rom.Serial);
-            Assert.Equal("XXXXXX", rom.Header);
+            Assert.Equal("flags", rom.Flags);
+            Assert.Equal("date", rom.Date);
+            Assert.Equal("sha256", rom.SHA256);
+            Assert.Equal("sha384", rom.SHA384);
+            Assert.Equal("sha512", rom.SHA512);
+            Assert.Equal("spamsum", rom.SpamSum);
+            Assert.Equal("xxhash364", rom.xxHash364);
+            Assert.Equal("xxhash3128", rom.xxHash3128);
+            Assert.Equal("region", rom.Region);
+            Assert.Equal("offs", rom.Offs);
+            Assert.Equal("serial", rom.Serial);
+            Assert.Equal("header", rom.Header);
             Assert.Equal(true, rom.Inverted);
             Assert.Equal(true, rom.MIA);
         }
@@ -476,7 +476,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(input);
             Assert.Equal(12345, input.Players);
-            Assert.Equal("XXXXXX", input.Control);
+            Assert.Equal("control", input.Control);
             Assert.Equal(12345, input.Buttons);
             Assert.Equal(12345, input.Coins);
             Assert.Equal(true, input.Tilt);
@@ -493,7 +493,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             Assert.NotNull(dipswitch.Entry);
             string entry = Assert.Single(dipswitch.Entry);
-            Assert.Equal("XXXXXX", entry);
+            Assert.Equal("entry", entry);
 
             Assert.Equal(true, dipswitch.Default);
         }
@@ -519,7 +519,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(info);
             Assert.NotNull(info.Source);
             string source = Assert.Single(info.Source);
-            Assert.Equal("XXXXXX", source);
+            Assert.Equal("source", source);
         }
     }
 }

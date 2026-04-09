@@ -12,7 +12,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Machine machine = new Machine { Name = "name" };
 
-            Source source = new Source(0, "XXXXXX");
+            Source source = new Source(0, "source");
 
             Media media = new Media
             {
@@ -45,7 +45,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Source? actualSource = actual.Source;
             Assert.NotNull(actualSource);
             Assert.Equal(0, actualSource.Index);
-            Assert.Equal("XXXXXX", actualSource.Name);
+            Assert.Equal("source", actualSource.Name);
         }
 
         #endregion
@@ -73,18 +73,18 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Media other = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX"
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum"
             };
 
             self.FillMissingInformation(other);
 
-            Assert.Equal("XXXXXX", self.MD5);
-            Assert.Equal("XXXXXX", self.SHA1);
-            Assert.Equal("XXXXXX", self.SHA256);
-            Assert.Equal("XXXXXX", self.SpamSum);
+            Assert.Equal("md5", self.MD5);
+            Assert.Equal("sha1", self.SHA1);
+            Assert.Equal("sha256", self.SHA256);
+            Assert.Equal("spamsum", self.SpamSum);
         }
 
         #endregion
@@ -104,7 +104,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Media self = new Media
             {
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
                 SpamSum = string.Empty
@@ -120,7 +120,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Media self = new Media
             {
                 MD5 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
                 SHA256 = string.Empty,
                 SpamSum = string.Empty
             };
@@ -136,7 +136,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             {
                 MD5 = string.Empty,
                 SHA1 = string.Empty,
-                SHA256 = "XXXXXX",
+                SHA256 = "sha256",
                 SpamSum = string.Empty
             };
 
@@ -152,7 +152,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 MD5 = string.Empty,
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
-                SpamSum = "XXXXXX"
+                SpamSum = "spamsum"
             };
 
             bool actual = self.HasHashes();
@@ -164,10 +164,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Media self = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX"
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum"
             };
 
             bool actual = self.HasHashes();
@@ -191,10 +191,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Media self = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX"
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum"
             };
 
             bool actual = self.HasZeroHash();

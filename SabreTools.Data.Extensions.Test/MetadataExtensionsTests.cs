@@ -122,14 +122,14 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Disk
             {
                 Name = "name",
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 SHA1 = string.Empty,
             };
             var other = new Disk
             {
                 Name = "name",
                 MD5 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
             };
 
             bool actual = self.PartialEquals(other);
@@ -141,15 +141,15 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Disk
             {
-                Name = "XXXXXX1",
-                MD5 = "XXXXXX",
+                Name = "name1",
+                MD5 = "md5",
                 SHA1 = string.Empty,
             };
             var other = new Disk
             {
-                Name = "XXXXXX2",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
+                Name = "name2",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             bool actual = self.PartialEquals(other);
@@ -161,15 +161,15 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Disk
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 MD5 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
             };
             var other = new Disk
             {
-                Name = "XXXXXX2",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
+                Name = "name2",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             bool actual = self.PartialEquals(other);
@@ -181,15 +181,15 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Disk
             {
-                Name = "XXXXXX1",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
+                Name = "name1",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
             var other = new Disk
             {
-                Name = "XXXXXX2",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
+                Name = "name2",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             bool actual = self.PartialEquals(other);
@@ -202,18 +202,18 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Media
             {
                 Name = "name",
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 SHA1 = string.Empty,
-                SHA256 = "XXXXXX",
+                SHA256 = "sha256",
                 SpamSum = string.Empty,
             };
             var other = new Media
             {
                 Name = "name",
                 MD5 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
                 SHA256 = string.Empty,
-                SpamSum = "XXXXXX",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -226,7 +226,7 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Media
             {
                 Name = "name",
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
                 SpamSum = string.Empty,
@@ -234,10 +234,10 @@ namespace SabreTools.Data.Extensions.Test
             var other = new Media
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -251,17 +251,17 @@ namespace SabreTools.Data.Extensions.Test
             {
                 Name = "name",
                 MD5 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
                 SHA256 = string.Empty,
                 SpamSum = string.Empty,
             };
             var other = new Media
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -276,16 +276,16 @@ namespace SabreTools.Data.Extensions.Test
                 Name = "name",
                 MD5 = string.Empty,
                 SHA1 = string.Empty,
-                SHA256 = "XXXXXX",
+                SHA256 = "sha256",
                 SpamSum = string.Empty,
             };
             var other = new Media
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -301,15 +301,15 @@ namespace SabreTools.Data.Extensions.Test
                 MD5 = string.Empty,
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
-                SpamSum = "XXXXXX",
+                SpamSum = "spamsum",
             };
             var other = new Media
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -322,18 +322,18 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Media
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
             var other = new Media
             {
                 Name = "name",
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -393,36 +393,36 @@ namespace SabreTools.Data.Extensions.Test
             {
                 Name = "name",
                 Size = 12345,
-                CRC16 = "XXXXXX",
+                CRC16 = "crc16",
                 CRC32 = string.Empty,
-                CRC64 = "XXXXXX",
+                CRC64 = "crc64",
                 MD2 = string.Empty,
-                MD4 = "XXXXXX",
+                MD4 = "md4",
                 MD5 = string.Empty,
-                RIPEMD128 = "XXXXXX",
+                RIPEMD128 = "ripemd128",
                 RIPEMD160 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
                 SHA256 = string.Empty,
-                SHA384 = "XXXXXX",
+                SHA384 = "sha384",
                 SHA512 = string.Empty,
-                SpamSum = "XXXXXX",
+                SpamSum = "spamsum",
             };
             var other = new Rom
             {
                 Name = "name",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC32 = "XXXXXX",
+                CRC32 = "crc32",
                 CRC64 = string.Empty,
-                MD2 = "XXXXXX",
+                MD2 = "md2",
                 MD4 = string.Empty,
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 RIPEMD128 = string.Empty,
-                RIPEMD160 = "XXXXXX",
+                RIPEMD160 = "ripemd160",
                 SHA1 = string.Empty,
-                SHA256 = "XXXXXX",
+                SHA256 = "sha256",
                 SHA384 = string.Empty,
-                SHA512 = "XXXXXX",
+                SHA512 = "sha512",
                 SpamSum = string.Empty,
             };
 
@@ -435,38 +435,38 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                Name = "name1",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -478,38 +478,38 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                Name = "name2",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -521,9 +521,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
-                CRC16 = "XXXXXX",
+                CRC16 = "crc16",
                 CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
@@ -539,21 +539,21 @@ namespace SabreTools.Data.Extensions.Test
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -565,10 +565,10 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
-                CRC32 = "XXXXXX",
+                CRC32 = "crc32",
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -583,21 +583,21 @@ namespace SabreTools.Data.Extensions.Test
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -609,11 +609,11 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
-                CRC64 = "XXXXXX",
+                CRC64 = "crc64",
                 MD2 = string.Empty,
                 MD4 = string.Empty,
                 MD5 = string.Empty,
@@ -627,21 +627,21 @@ namespace SabreTools.Data.Extensions.Test
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -653,12 +653,12 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
                 CRC64 = string.Empty,
-                MD2 = "XXXXXX",
+                MD2 = "md2",
                 MD4 = string.Empty,
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
@@ -671,21 +671,21 @@ namespace SabreTools.Data.Extensions.Test
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -697,13 +697,13 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
-                MD4 = "XXXXXX",
+                MD4 = "md4",
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
@@ -715,21 +715,21 @@ namespace SabreTools.Data.Extensions.Test
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -741,14 +741,14 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
@@ -759,21 +759,21 @@ namespace SabreTools.Data.Extensions.Test
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -785,7 +785,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
@@ -793,7 +793,7 @@ namespace SabreTools.Data.Extensions.Test
                 MD2 = string.Empty,
                 MD4 = string.Empty,
                 MD5 = string.Empty,
-                RIPEMD128 = "XXXXXX",
+                RIPEMD128 = "ripemd128",
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
@@ -803,21 +803,21 @@ namespace SabreTools.Data.Extensions.Test
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -829,7 +829,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
@@ -838,7 +838,7 @@ namespace SabreTools.Data.Extensions.Test
                 MD4 = string.Empty,
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
-                RIPEMD160 = "XXXXXX",
+                RIPEMD160 = "ripemd160",
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
@@ -847,21 +847,21 @@ namespace SabreTools.Data.Extensions.Test
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -873,7 +873,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
@@ -883,7 +883,7 @@ namespace SabreTools.Data.Extensions.Test
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
@@ -891,21 +891,21 @@ namespace SabreTools.Data.Extensions.Test
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -917,7 +917,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
@@ -928,28 +928,28 @@ namespace SabreTools.Data.Extensions.Test
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
-                SHA256 = "XXXXXX",
+                SHA256 = "sha256",
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -961,7 +961,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
@@ -973,27 +973,27 @@ namespace SabreTools.Data.Extensions.Test
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
-                SHA384 = "XXXXXX",
+                SHA384 = "sha384",
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -1005,7 +1005,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
@@ -1018,26 +1018,26 @@ namespace SabreTools.Data.Extensions.Test
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
-                SHA512 = "XXXXXX",
+                SHA512 = "sha512",
                 SpamSum = string.Empty,
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -1049,7 +1049,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
@@ -1063,25 +1063,25 @@ namespace SabreTools.Data.Extensions.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = "XXXXXX",
+                SpamSum = "spamsum",
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -1093,39 +1093,39 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                Name = "XXXXXX1",
+                Name = "name1",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
             var other = new Rom
             {
-                Name = "XXXXXX2",
+                Name = "name2",
                 Size = 12345,
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.PartialEquals(other);
@@ -1269,17 +1269,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
                 SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1292,16 +1292,16 @@ namespace SabreTools.Data.Extensions.Test
             Media self = new Media
             {
                 MD5 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
                 SHA256 = string.Empty,
                 SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1315,15 +1315,15 @@ namespace SabreTools.Data.Extensions.Test
             {
                 MD5 = string.Empty,
                 SHA1 = string.Empty,
-                SHA256 = "XXXXXX",
+                SHA256 = "sha256",
                 SpamSum = string.Empty,
             };
             Media other = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1338,14 +1338,14 @@ namespace SabreTools.Data.Extensions.Test
                 MD5 = string.Empty,
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
-                SpamSum = "XXXXXX",
+                SpamSum = "spamsum",
             };
             Media other = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1357,17 +1357,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             Media self = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
             Media other = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1379,34 +1379,34 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                CRC16 = "XXXXXX",
+                CRC16 = "crc16",
                 CRC32 = string.Empty,
-                CRC64 = "XXXXXX",
+                CRC64 = "crc64",
                 MD2 = string.Empty,
-                MD4 = "XXXXXX",
+                MD4 = "md4",
                 MD5 = string.Empty,
-                RIPEMD128 = "XXXXXX",
+                RIPEMD128 = "ripemd128",
                 RIPEMD160 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
                 SHA256 = string.Empty,
-                SHA384 = "XXXXXX",
+                SHA384 = "sha384",
                 SHA512 = string.Empty,
-                SpamSum = "XXXXXX",
+                SpamSum = "spamsum",
             };
             Rom other = new Rom
             {
                 CRC16 = string.Empty,
-                CRC32 = "XXXXXX",
+                CRC32 = "crc32",
                 CRC64 = string.Empty,
-                MD2 = "XXXXXX",
+                MD2 = "md2",
                 MD4 = string.Empty,
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 RIPEMD128 = string.Empty,
-                RIPEMD160 = "XXXXXX",
+                RIPEMD160 = "ripemd160",
                 SHA1 = string.Empty,
-                SHA256 = "XXXXXX",
+                SHA256 = "sha256",
                 SHA384 = string.Empty,
-                SHA512 = "XXXXXX",
+                SHA512 = "sha512",
                 SpamSum = string.Empty,
             };
 
@@ -1419,7 +1419,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                CRC16 = "XXXXXX",
+                CRC16 = "crc16",
                 CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
@@ -1435,19 +1435,19 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1460,7 +1460,7 @@ namespace SabreTools.Data.Extensions.Test
             Rom self = new Rom
             {
                 CRC16 = string.Empty,
-                CRC32 = "XXXXXX",
+                CRC32 = "crc32",
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
@@ -1475,19 +1475,19 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1501,7 +1501,7 @@ namespace SabreTools.Data.Extensions.Test
             {
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
-                CRC64 = "XXXXXX",
+                CRC64 = "crc64",
                 MD2 = string.Empty,
                 MD4 = string.Empty,
                 MD5 = string.Empty,
@@ -1515,19 +1515,19 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1542,7 +1542,7 @@ namespace SabreTools.Data.Extensions.Test
                 CRC16 = string.Empty,
                 CRC32 = string.Empty,
                 CRC64 = string.Empty,
-                MD2 = "XXXXXX",
+                MD2 = "md2",
                 MD4 = string.Empty,
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
@@ -1555,19 +1555,19 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1583,7 +1583,7 @@ namespace SabreTools.Data.Extensions.Test
                 CRC32 = string.Empty,
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
-                MD4 = "XXXXXX",
+                MD4 = "md4",
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
@@ -1595,19 +1595,19 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1624,7 +1624,7 @@ namespace SabreTools.Data.Extensions.Test
                 CRC64 = string.Empty,
                 MD2 = string.Empty,
                 MD4 = string.Empty,
-                MD5 = "XXXXXX",
+                MD5 = "md5",
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
@@ -1635,19 +1635,19 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1665,7 +1665,7 @@ namespace SabreTools.Data.Extensions.Test
                 MD2 = string.Empty,
                 MD4 = string.Empty,
                 MD5 = string.Empty,
-                RIPEMD128 = "XXXXXX",
+                RIPEMD128 = "ripemd128",
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
@@ -1675,19 +1675,19 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1706,7 +1706,7 @@ namespace SabreTools.Data.Extensions.Test
                 MD4 = string.Empty,
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
-                RIPEMD160 = "XXXXXX",
+                RIPEMD160 = "ripemd160",
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
@@ -1715,19 +1715,19 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1747,7 +1747,7 @@ namespace SabreTools.Data.Extensions.Test
                 MD5 = string.Empty,
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
-                SHA1 = "XXXXXX",
+                SHA1 = "sha1",
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
@@ -1755,19 +1755,19 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1788,26 +1788,26 @@ namespace SabreTools.Data.Extensions.Test
                 RIPEMD128 = string.Empty,
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
-                SHA256 = "XXXXXX",
+                SHA256 = "sha256",
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1829,25 +1829,25 @@ namespace SabreTools.Data.Extensions.Test
                 RIPEMD160 = string.Empty,
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
-                SHA384 = "XXXXXX",
+                SHA384 = "sha384",
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1870,24 +1870,24 @@ namespace SabreTools.Data.Extensions.Test
                 SHA1 = string.Empty,
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
-                SHA512 = "XXXXXX",
+                SHA512 = "sha512",
                 SpamSum = string.Empty,
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1911,23 +1911,23 @@ namespace SabreTools.Data.Extensions.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = "XXXXXX",
+                SpamSum = "spamsum",
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1939,35 +1939,35 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
             Rom other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HashMatch(other);
@@ -1991,8 +1991,8 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Disk
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             bool actual = self.HasZeroHash();
@@ -2051,10 +2051,10 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HasZeroHash();
@@ -2149,19 +2149,19 @@ namespace SabreTools.Data.Extensions.Test
         {
             var self = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             bool actual = self.HasZeroHash();
@@ -2524,8 +2524,8 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Disk();
             var other = new Disk
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
             };
 
             self.FillMissingHashes(other);
@@ -2546,10 +2546,10 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Media();
             var other = new Media
             {
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SpamSum = "spamsum",
             };
 
             self.FillMissingHashes(other);
@@ -2570,19 +2570,19 @@ namespace SabreTools.Data.Extensions.Test
             var self = new Rom();
             var other = new Rom
             {
-                CRC16 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                CRC64 = "XXXXXX",
-                MD2 = "XXXXXX",
-                MD4 = "XXXXXX",
-                MD5 = "XXXXXX",
-                RIPEMD128 = "XXXXXX",
-                RIPEMD160 = "XXXXXX",
-                SHA1 = "XXXXXX",
-                SHA256 = "XXXXXX",
-                SHA384 = "XXXXXX",
-                SHA512 = "XXXXXX",
-                SpamSum = "XXXXXX",
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
             };
 
             self.FillMissingHashes(other);

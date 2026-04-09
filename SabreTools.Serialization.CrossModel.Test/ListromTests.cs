@@ -39,8 +39,8 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Name = "name",
                 Size = 12345,
                 Bad = true,
-                CRC = "XXXXXX",
-                SHA1 = "XXXXXX",
+                CRC = "crc32",
+                SHA1 = "sha1",
                 NoGoodDumpKnown = false,
             };
 
@@ -48,20 +48,20 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "name",
                 Bad = false,
-                MD5 = "XXXXXX",
-                SHA1 = "XXXXXX",
+                MD5 = "md5",
+                SHA1 = "sha1",
                 NoGoodDumpKnown = true,
             };
 
             var device = new Data.Models.Listrom.Set()
             {
-                Device = "XXXXXX",
+                Device = "device",
                 Row = [rom],
             };
 
             var driver = new Data.Models.Listrom.Set()
             {
-                Driver = "XXXXXX",
+                Driver = "driver",
                 Row = [disk],
             };
 
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void ValidateDevice(Data.Models.Listrom.Set? set)
         {
             Assert.NotNull(set);
-            Assert.Equal("XXXXXX", set.Device);
+            Assert.Equal("device", set.Device);
 
             Assert.NotNull(set.Row);
             var row = Assert.Single(set.Row);
@@ -90,7 +90,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void ValidateDriver(Data.Models.Listrom.Set? set)
         {
             Assert.NotNull(set);
-            Assert.Equal("XXXXXX", set.Driver);
+            Assert.Equal("driver", set.Driver);
 
             Assert.NotNull(set.Row);
             var row = Assert.Single(set.Row);
@@ -106,8 +106,8 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("name", row.Name);
             Assert.Equal(12345, row.Size);
             Assert.True(row.Bad);
-            Assert.Equal("XXXXXX", row.CRC);
-            Assert.Equal("XXXXXX", row.SHA1);
+            Assert.Equal("crc32", row.CRC);
+            Assert.Equal("sha1", row.SHA1);
             Assert.False(row.NoGoodDumpKnown);
         }
 
@@ -119,8 +119,8 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(row);
             Assert.Equal("name", row.Name);
             Assert.False(row.Bad);
-            Assert.Equal("XXXXXX", row.MD5);
-            Assert.Equal("XXXXXX", row.SHA1);
+            Assert.Equal("md5", row.MD5);
+            Assert.Equal("sha1", row.SHA1);
             Assert.True(row.NoGoodDumpKnown);
         }
     }

@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             // Validate the data
             Assert.NotNull(newSdb);
-            Assert.Equal("XXXXXX", newSdb.Timestamp);
+            Assert.Equal("timestamp", newSdb.Timestamp);
 
             Assert.NotNull(newSdb.Software);
             var software = Assert.Single(newSdb.Software);
@@ -42,10 +42,10 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var rom = new Data.Models.OpenMSX.Rom
             {
-                Start = "XXXXXX",
-                Type = "XXXXXX",
-                Hash = "XXXXXX",
-                Remark = "XXXXXX",
+                Start = "start",
+                Type = "type",
+                Hash = "hash",
+                Remark = "remark",
             };
 
             var dump_rom = new Data.Models.OpenMSX.Dump
@@ -56,10 +56,10 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var megarom = new Data.Models.OpenMSX.MegaRom
             {
-                Start = "XXXXXX",
-                Type = "XXXXXX",
-                Hash = "XXXXXX",
-                Remark = "XXXXXX",
+                Start = "start",
+                Type = "type",
+                Hash = "hash",
+                Remark = "remark",
             };
 
             var dump_megarom = new Data.Models.OpenMSX.Dump
@@ -70,10 +70,10 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var sccpluscart = new Data.Models.OpenMSX.SCCPlusCart
             {
-                Start = "XXXXXX",
-                Type = "XXXXXX",
-                Hash = "XXXXXX",
-                Remark = "XXXXXX",
+                Start = "start",
+                Type = "type",
+                Hash = "hash",
+                Remark = "remark",
             };
 
             var dump_sccpluscart = new Data.Models.OpenMSX.Dump
@@ -84,18 +84,18 @@ namespace SabreTools.Serialization.CrossModel.Test
 
             var software = new Data.Models.OpenMSX.Software
             {
-                Title = "XXXXXX",
-                GenMSXID = "XXXXXX",
-                System = "XXXXXX",
-                Company = "XXXXXX",
-                Year = "XXXXXX",
-                Country = "XXXXXX",
+                Title = "title",
+                GenMSXID = "genmsxid",
+                System = "system",
+                Company = "company",
+                Year = "year",
+                Country = "country",
                 Dump = [dump_rom, dump_megarom, dump_sccpluscart],
             };
 
             return new Data.Models.OpenMSX.SoftwareDb
             {
-                Timestamp = "XXXXXX",
+                Timestamp = "timestamp",
                 Software = [software],
             };
         }
@@ -106,12 +106,12 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.OpenMSX.Software? software)
         {
             Assert.NotNull(software);
-            Assert.Equal("XXXXXX", software.Title);
-            Assert.Equal("XXXXXX", software.GenMSXID);
-            Assert.Equal("XXXXXX", software.System);
-            Assert.Equal("XXXXXX", software.Company);
-            Assert.Equal("XXXXXX", software.Year);
-            Assert.Equal("XXXXXX", software.Country);
+            Assert.Equal("title", software.Title);
+            Assert.Equal("genmsxid", software.GenMSXID);
+            Assert.Equal("system", software.System);
+            Assert.Equal("company", software.Company);
+            Assert.Equal("year", software.Year);
+            Assert.Equal("country", software.Country);
 
             Assert.NotNull(software.Dump);
             Assert.Equal(3, software.Dump.Length);
@@ -147,10 +147,10 @@ namespace SabreTools.Serialization.CrossModel.Test
         private static void Validate(Data.Models.OpenMSX.RomBase? rombase)
         {
             Assert.NotNull(rombase);
-            Assert.Equal("XXXXXX", rombase.Start);
-            Assert.Equal("XXXXXX", rombase.Type);
-            Assert.Equal("XXXXXX", rombase.Hash);
-            Assert.Equal("XXXXXX", rombase.Remark);
+            Assert.Equal("start", rombase.Start);
+            Assert.Equal("type", rombase.Type);
+            Assert.Equal("hash", rombase.Hash);
+            Assert.Equal("remark", rombase.Remark);
         }
     }
 }

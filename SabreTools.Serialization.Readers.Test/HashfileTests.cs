@@ -293,23 +293,23 @@ namespace SabreTools.Serialization.Readers.Test
         private static Data.Models.Hashfile.Hashfile Build(HashType hashType)
         {
             if (hashType == HashType.CRC32)
-                return new Data.Models.Hashfile.Hashfile { SFV = [new Data.Models.Hashfile.SFV { File = "XXXXXX", Hash = "XXXXXX" }] };
+                return new Data.Models.Hashfile.Hashfile { SFV = [new Data.Models.Hashfile.SFV { File = "file", Hash = "hash" }] };
             else if (hashType == HashType.MD2)
-                return new Data.Models.Hashfile.Hashfile { MD2 = [new Data.Models.Hashfile.MD2 { Hash = "XXXXXX", File = "XXXXXX" }] };
+                return new Data.Models.Hashfile.Hashfile { MD2 = [new Data.Models.Hashfile.MD2 { Hash = "hash", File = "file" }] };
             else if (hashType == HashType.MD4)
-                return new Data.Models.Hashfile.Hashfile { MD4 = [new Data.Models.Hashfile.MD4 { Hash = "XXXXXX", File = "XXXXXX" }] };
+                return new Data.Models.Hashfile.Hashfile { MD4 = [new Data.Models.Hashfile.MD4 { Hash = "hash", File = "file" }] };
             else if (hashType == HashType.MD5)
-                return new Data.Models.Hashfile.Hashfile { MD5 = [new Data.Models.Hashfile.MD5 { Hash = "XXXXXX", File = "XXXXXX" }] };
+                return new Data.Models.Hashfile.Hashfile { MD5 = [new Data.Models.Hashfile.MD5 { Hash = "hash", File = "file" }] };
             else if (hashType == HashType.SHA1)
-                return new Data.Models.Hashfile.Hashfile { SHA1 = [new Data.Models.Hashfile.SHA1 { Hash = "XXXXXX", File = "XXXXXX" }] };
+                return new Data.Models.Hashfile.Hashfile { SHA1 = [new Data.Models.Hashfile.SHA1 { Hash = "hash", File = "file" }] };
             else if (hashType == HashType.SHA256)
-                return new Data.Models.Hashfile.Hashfile { SHA256 = [new Data.Models.Hashfile.SHA256 { Hash = "XXXXXX", File = "XXXXXX" }] };
+                return new Data.Models.Hashfile.Hashfile { SHA256 = [new Data.Models.Hashfile.SHA256 { Hash = "hash", File = "file" }] };
             else if (hashType == HashType.SHA384)
-                return new Data.Models.Hashfile.Hashfile { SHA384 = [new Data.Models.Hashfile.SHA384 { Hash = "XXXXXX", File = "XXXXXX" }] };
+                return new Data.Models.Hashfile.Hashfile { SHA384 = [new Data.Models.Hashfile.SHA384 { Hash = "hash", File = "file" }] };
             else if (hashType == HashType.SHA512)
-                return new Data.Models.Hashfile.Hashfile { SHA512 = [new Data.Models.Hashfile.SHA512 { Hash = "XXXXXX", File = "XXXXXX" }] };
+                return new Data.Models.Hashfile.Hashfile { SHA512 = [new Data.Models.Hashfile.SHA512 { Hash = "hash", File = "file" }] };
             else if (hashType == HashType.SpamSum)
-                return new Data.Models.Hashfile.Hashfile { SpamSum = [new Data.Models.Hashfile.SpamSum { Hash = "XXXXXX", File = "XXXXXX" }] };
+                return new Data.Models.Hashfile.Hashfile { SpamSum = [new Data.Models.Hashfile.SpamSum { Hash = "hash", File = "file" }] };
             else
                 throw new ArgumentOutOfRangeException(nameof(hashType));
         }
@@ -320,8 +320,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Hashfile.SFV? sfv)
         {
             Assert.NotNull(sfv);
-            Assert.Equal("XXXXXX", sfv.File);
-            Assert.Equal("XXXXXX", sfv.Hash);
+            Assert.Equal("file", sfv.File);
+            Assert.Equal("hash", sfv.Hash);
         }
 
         /// <summary>
@@ -330,8 +330,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Hashfile.MD2? md2)
         {
             Assert.NotNull(md2);
-            Assert.Equal("XXXXXX", md2.Hash);
-            Assert.Equal("XXXXXX", md2.File);
+            Assert.Equal("hash", md2.Hash);
+            Assert.Equal("file", md2.File);
         }
 
         /// <summary>
@@ -340,8 +340,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Hashfile.MD4? md4)
         {
             Assert.NotNull(md4);
-            Assert.Equal("XXXXXX", md4.Hash);
-            Assert.Equal("XXXXXX", md4.File);
+            Assert.Equal("hash", md4.Hash);
+            Assert.Equal("file", md4.File);
         }
 
         /// <summary>
@@ -350,8 +350,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Hashfile.MD5? md5)
         {
             Assert.NotNull(md5);
-            Assert.Equal("XXXXXX", md5.Hash);
-            Assert.Equal("XXXXXX", md5.File);
+            Assert.Equal("hash", md5.Hash);
+            Assert.Equal("file", md5.File);
         }
 
         /// <summary>
@@ -360,8 +360,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Hashfile.SHA1? sha1)
         {
             Assert.NotNull(sha1);
-            Assert.Equal("XXXXXX", sha1.Hash);
-            Assert.Equal("XXXXXX", sha1.File);
+            Assert.Equal("hash", sha1.Hash);
+            Assert.Equal("file", sha1.File);
         }
 
         /// <summary>
@@ -370,8 +370,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Hashfile.SHA256? sha256)
         {
             Assert.NotNull(sha256);
-            Assert.Equal("XXXXXX", sha256.Hash);
-            Assert.Equal("XXXXXX", sha256.File);
+            Assert.Equal("hash", sha256.Hash);
+            Assert.Equal("file", sha256.File);
         }
 
         /// <summary>
@@ -380,8 +380,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Hashfile.SHA384? sha384)
         {
             Assert.NotNull(sha384);
-            Assert.Equal("XXXXXX", sha384.Hash);
-            Assert.Equal("XXXXXX", sha384.File);
+            Assert.Equal("hash", sha384.Hash);
+            Assert.Equal("file", sha384.File);
         }
 
         /// <summary>
@@ -390,8 +390,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Hashfile.SHA512? sha512)
         {
             Assert.NotNull(sha512);
-            Assert.Equal("XXXXXX", sha512.Hash);
-            Assert.Equal("XXXXXX", sha512.File);
+            Assert.Equal("hash", sha512.Hash);
+            Assert.Equal("file", sha512.File);
         }
 
         /// <summary>
@@ -400,8 +400,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.Hashfile.SpamSum? spamsum)
         {
             Assert.NotNull(spamsum);
-            Assert.Equal("XXXXXX", spamsum.Hash);
-            Assert.Equal("XXXXXX", spamsum.File);
+            Assert.Equal("hash", spamsum.Hash);
+            Assert.Equal("file", spamsum.File);
         }
     }
 }

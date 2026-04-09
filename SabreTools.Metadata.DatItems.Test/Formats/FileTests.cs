@@ -12,18 +12,18 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         {
             Machine machine = new Machine { Name = "name" };
 
-            Source source = new Source(0, "XXXXXX");
+            Source source = new Source(0, "source");
 
             var file = new File
             {
-                Id = "XXXXXX",
-                Extension = "XXXXXX",
+                Id = "id",
+                Extension = "ext",
                 Size = 12345,
                 CRC = "DEADBEEF",
                 MD5 = "DEADBEEF",
                 SHA1 = "DEADBEEF",
                 SHA256 = "DEADBEEF",
-                Format = "XXXXXX",
+                Format = "format",
                 DupeType = DupeType.All | DupeType.External,
                 Machine = machine,
                 RemoveFlag = false,
@@ -34,7 +34,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Rom actual = file.ConvertToRom();
 
-            Assert.Equal("XXXXXX.XXXXXX", actual.Name);
+            Assert.Equal("id.ext", actual.Name);
             Assert.Equal(12345, actual.Size);
             Assert.Equal("deadbeef", actual.CRC32);
             Assert.Equal("000000000000000000000000deadbeef", actual.MD5);
@@ -51,7 +51,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Source? actualSource = actual.Source;
             Assert.NotNull(actualSource);
             Assert.Equal(0, actualSource.Index);
-            Assert.Equal("XXXXXX", actualSource.Name);
+            Assert.Equal("source", actualSource.Name);
         }
 
         #endregion

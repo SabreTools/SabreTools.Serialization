@@ -101,65 +101,65 @@ namespace SabreTools.Serialization.Readers.Test
             var file = new Data.Models.ArchiveDotOrg.File
             {
                 Name = "name",
-                Source = "XXXXXX",
-                BitTorrentMagnetHash = "XXXXXX",
-                LastModifiedTime = "XXXXXX",
-                Size = "XXXXXX",
-                MD5 = "XXXXXX",
-                CRC32 = "XXXXXX",
-                SHA1 = "XXXXXX",
+                Source = "source",
+                BitTorrentMagnetHash = "bittorrentmagnethash",
+                LastModifiedTime = "lastmodifiedtime",
+                Size = "size",
+                MD5 = "md5",
+                CRC32 = "crc32",
+                SHA1 = "sha1",
                 FileCount = 12345,
-                Format = "XXXXXX",
-                Original = "XXXXXX",
-                Summation = "XXXXXX",
-                MatrixNumber = "XXXXXX",
-                CollectionCatalogNumber = "XXXXXX",
-                Publisher = "XXXXXX",
-                Comment = "XXXXXX",
-                ASRDetectedLang = "XXXXXX",
-                ASRDetectedLangConf = "XXXXXX",
-                ASRTranscribedLang = "XXXXXX",
-                WhisperASRModuleVersion = "XXXXXX",
-                WhisperModelHash = "XXXXXX",
-                WhisperModelName = "XXXXXX",
-                WhisperVersion = "XXXXXX",
-                ClothCoverDetectionModuleVersion = "XXXXXX",
-                hOCRCharToWordhOCRVersion = "XXXXXX",
-                hOCRCharToWordModuleVersion = "XXXXXX",
-                hOCRFtsTexthOCRVersion = "XXXXXX",
-                hOCRFtsTextModuleVersion = "XXXXXX",
-                hOCRPageIndexhOCRVersion = "XXXXXX",
-                hOCRPageIndexModuleVersion = "XXXXXX",
-                TesseractOCR = "XXXXXX",
-                TesseractOCRConverted = "XXXXXX",
-                TesseractOCRDetectedLang = "XXXXXX",
-                TesseractOCRDetectedLangConf = "XXXXXX",
-                TesseractOCRDetectedScript = "XXXXXX",
-                TesseractOCRDetectedScriptConf = "XXXXXX",
-                TesseractOCRModuleVersion = "XXXXXX",
-                TesseractOCRParameters = "XXXXXX",
-                PDFModuleVersion = "XXXXXX",
-                WordConfidenceInterval0To10 = "XXXXXX",
-                WordConfidenceInterval11To20 = "XXXXXX",
-                WordConfidenceInterval21To30 = "XXXXXX",
-                WordConfidenceInterval31To40 = "XXXXXX",
-                WordConfidenceInterval41To50 = "XXXXXX",
-                WordConfidenceInterval51To60 = "XXXXXX",
-                WordConfidenceInterval61To70 = "XXXXXX",
-                WordConfidenceInterval71To80 = "XXXXXX",
-                WordConfidenceInterval81To90 = "XXXXXX",
-                WordConfidenceInterval91To100 = "XXXXXX",
-                Album = "XXXXXX",
-                Artist = "XXXXXX",
-                Bitrate = "XXXXXX",
-                Creator = "XXXXXX",
-                Height = "XXXXXX",
-                Length = "XXXXXX",
-                PreviewImage = "XXXXXX",
-                Rotation = "XXXXXX",
-                Title = "XXXXXX",
-                Track = "XXXXXX",
-                Width = "XXXXXX",
+                Format = "format",
+                Original = "original",
+                Summation = "summation",
+                MatrixNumber = "matrixnumber",
+                CollectionCatalogNumber = "collectioncatalognumber",
+                Publisher = "publisher",
+                Comment = "comment",
+                ASRDetectedLang = "asrdetectedlang",
+                ASRDetectedLangConf = "asrdetectedlangconf",
+                ASRTranscribedLang = "asrtranscribedlang",
+                WhisperASRModuleVersion = "whisperasrmoduleversion",
+                WhisperModelHash = "whispermodelhash",
+                WhisperModelName = "whispermodelname",
+                WhisperVersion = "whisperversion",
+                ClothCoverDetectionModuleVersion = "clothcoverdetectionmoduleversion",
+                hOCRCharToWordhOCRVersion = "hocrchartowordhocrversion",
+                hOCRCharToWordModuleVersion = "hocrchartowordmoduleversion",
+                hOCRFtsTexthOCRVersion = "hocrftstexthocrversion",
+                hOCRFtsTextModuleVersion = "hocrftstextmoduleversion",
+                hOCRPageIndexhOCRVersion = "hocrpageindexhocrversion",
+                hOCRPageIndexModuleVersion = "hocrpageindexmoduleversion",
+                TesseractOCR = "tesseractocr",
+                TesseractOCRConverted = "tesseractocrconverted",
+                TesseractOCRDetectedLang = "tesseractocrdetectedlang",
+                TesseractOCRDetectedLangConf = "tesseractocrdetectedlangconf",
+                TesseractOCRDetectedScript = "tesseractocrdetectedscript",
+                TesseractOCRDetectedScriptConf = "tesseractocrdetectedscriptconf",
+                TesseractOCRModuleVersion = "tesseractocrmoduleversion",
+                TesseractOCRParameters = "tesseractocrparameters",
+                PDFModuleVersion = "pdfmoduleversion",
+                WordConfidenceInterval0To10 = "wordconfidenceinterval0to10",
+                WordConfidenceInterval11To20 = "wordconfidenceinterval11to20",
+                WordConfidenceInterval21To30 = "wordconfidenceinterval21to30",
+                WordConfidenceInterval31To40 = "wordconfidenceinterval31to40",
+                WordConfidenceInterval41To50 = "wordconfidenceinterval41to50",
+                WordConfidenceInterval51To60 = "wordconfidenceinterval51to60",
+                WordConfidenceInterval61To70 = "wordconfidenceinterval61to70",
+                WordConfidenceInterval71To80 = "wordconfidenceinterval71to80",
+                WordConfidenceInterval81To90 = "wordconfidenceinterval81to90",
+                WordConfidenceInterval91To100 = "wordconfidenceinterval91to100",
+                Album = "album",
+                Artist = "artist",
+                Bitrate = "bitrate",
+                Creator = "creator",
+                Height = "height",
+                Length = "length",
+                PreviewImage = "previewimage",
+                Rotation = "rotation",
+                Title = "title",
+                Track = "track",
+                Width = "width",
             };
 
             return new Data.Models.ArchiveDotOrg.Files
@@ -175,65 +175,65 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(file);
             Assert.Equal("name", file.Name);
-            Assert.Equal("XXXXXX", file.Source);
-            Assert.Equal("XXXXXX", file.BitTorrentMagnetHash);
-            Assert.Equal("XXXXXX", file.LastModifiedTime);
-            Assert.Equal("XXXXXX", file.Size);
-            Assert.Equal("XXXXXX", file.MD5);
-            Assert.Equal("XXXXXX", file.CRC32);
-            Assert.Equal("XXXXXX", file.SHA1);
+            Assert.Equal("source", file.Source);
+            Assert.Equal("bittorrentmagnethash", file.BitTorrentMagnetHash);
+            Assert.Equal("lastmodifiedtime", file.LastModifiedTime);
+            Assert.Equal("size", file.Size);
+            Assert.Equal("md5", file.MD5);
+            Assert.Equal("crc32", file.CRC32);
+            Assert.Equal("sha1", file.SHA1);
             Assert.Equal(12345, file.FileCount);
-            Assert.Equal("XXXXXX", file.Format);
-            Assert.Equal("XXXXXX", file.Original);
-            Assert.Equal("XXXXXX", file.Summation);
-            Assert.Equal("XXXXXX", file.MatrixNumber);
-            Assert.Equal("XXXXXX", file.CollectionCatalogNumber);
-            Assert.Equal("XXXXXX", file.Publisher);
-            Assert.Equal("XXXXXX", file.Comment);
-            Assert.Equal("XXXXXX", file.ASRDetectedLang);
-            Assert.Equal("XXXXXX", file.ASRDetectedLangConf);
-            Assert.Equal("XXXXXX", file.ASRTranscribedLang);
-            Assert.Equal("XXXXXX", file.WhisperASRModuleVersion);
-            Assert.Equal("XXXXXX", file.WhisperModelHash);
-            Assert.Equal("XXXXXX", file.WhisperModelName);
-            Assert.Equal("XXXXXX", file.WhisperVersion);
-            Assert.Equal("XXXXXX", file.ClothCoverDetectionModuleVersion);
-            Assert.Equal("XXXXXX", file.hOCRCharToWordhOCRVersion);
-            Assert.Equal("XXXXXX", file.hOCRCharToWordModuleVersion);
-            Assert.Equal("XXXXXX", file.hOCRFtsTexthOCRVersion);
-            Assert.Equal("XXXXXX", file.hOCRFtsTextModuleVersion);
-            Assert.Equal("XXXXXX", file.hOCRPageIndexhOCRVersion);
-            Assert.Equal("XXXXXX", file.hOCRPageIndexModuleVersion);
-            Assert.Equal("XXXXXX", file.TesseractOCR);
-            Assert.Equal("XXXXXX", file.TesseractOCRConverted);
-            Assert.Equal("XXXXXX", file.TesseractOCRDetectedLang);
-            Assert.Equal("XXXXXX", file.TesseractOCRDetectedLangConf);
-            Assert.Equal("XXXXXX", file.TesseractOCRDetectedScript);
-            Assert.Equal("XXXXXX", file.TesseractOCRDetectedScriptConf);
-            Assert.Equal("XXXXXX", file.TesseractOCRModuleVersion);
-            Assert.Equal("XXXXXX", file.TesseractOCRParameters);
-            Assert.Equal("XXXXXX", file.PDFModuleVersion);
-            Assert.Equal("XXXXXX", file.WordConfidenceInterval0To10);
-            Assert.Equal("XXXXXX", file.WordConfidenceInterval11To20);
-            Assert.Equal("XXXXXX", file.WordConfidenceInterval21To30);
-            Assert.Equal("XXXXXX", file.WordConfidenceInterval31To40);
-            Assert.Equal("XXXXXX", file.WordConfidenceInterval41To50);
-            Assert.Equal("XXXXXX", file.WordConfidenceInterval51To60);
-            Assert.Equal("XXXXXX", file.WordConfidenceInterval61To70);
-            Assert.Equal("XXXXXX", file.WordConfidenceInterval71To80);
-            Assert.Equal("XXXXXX", file.WordConfidenceInterval81To90);
-            Assert.Equal("XXXXXX", file.WordConfidenceInterval91To100);
-            Assert.Equal("XXXXXX", file.Album);
-            Assert.Equal("XXXXXX", file.Artist);
-            Assert.Equal("XXXXXX", file.Bitrate);
-            Assert.Equal("XXXXXX", file.Creator);
-            Assert.Equal("XXXXXX", file.Height);
-            Assert.Equal("XXXXXX", file.Length);
-            Assert.Equal("XXXXXX", file.PreviewImage);
-            Assert.Equal("XXXXXX", file.Rotation);
-            Assert.Equal("XXXXXX", file.Title);
-            Assert.Equal("XXXXXX", file.Track);
-            Assert.Equal("XXXXXX", file.Width);
+            Assert.Equal("format", file.Format);
+            Assert.Equal("original", file.Original);
+            Assert.Equal("summation", file.Summation);
+            Assert.Equal("matrixnumber", file.MatrixNumber);
+            Assert.Equal("collectioncatalognumber", file.CollectionCatalogNumber);
+            Assert.Equal("publisher", file.Publisher);
+            Assert.Equal("comment", file.Comment);
+            Assert.Equal("asrdetectedlang", file.ASRDetectedLang);
+            Assert.Equal("asrdetectedlangconf", file.ASRDetectedLangConf);
+            Assert.Equal("asrtranscribedlang", file.ASRTranscribedLang);
+            Assert.Equal("whisperasrmoduleversion", file.WhisperASRModuleVersion);
+            Assert.Equal("whispermodelhash", file.WhisperModelHash);
+            Assert.Equal("whispermodelname", file.WhisperModelName);
+            Assert.Equal("whisperversion", file.WhisperVersion);
+            Assert.Equal("clothcoverdetectionmoduleversion", file.ClothCoverDetectionModuleVersion);
+            Assert.Equal("hocrchartowordhocrversion", file.hOCRCharToWordhOCRVersion);
+            Assert.Equal("hocrchartowordmoduleversion", file.hOCRCharToWordModuleVersion);
+            Assert.Equal("hocrftstexthocrversion", file.hOCRFtsTexthOCRVersion);
+            Assert.Equal("hocrftstextmoduleversion", file.hOCRFtsTextModuleVersion);
+            Assert.Equal("hocrpageindexhocrversion", file.hOCRPageIndexhOCRVersion);
+            Assert.Equal("hocrpageindexmoduleversion", file.hOCRPageIndexModuleVersion);
+            Assert.Equal("tesseractocr", file.TesseractOCR);
+            Assert.Equal("tesseractocrconverted", file.TesseractOCRConverted);
+            Assert.Equal("tesseractocrdetectedlang", file.TesseractOCRDetectedLang);
+            Assert.Equal("tesseractocrdetectedlangconf", file.TesseractOCRDetectedLangConf);
+            Assert.Equal("tesseractocrdetectedscript", file.TesseractOCRDetectedScript);
+            Assert.Equal("tesseractocrdetectedscriptconf", file.TesseractOCRDetectedScriptConf);
+            Assert.Equal("tesseractocrmoduleversion", file.TesseractOCRModuleVersion);
+            Assert.Equal("tesseractocrparameters", file.TesseractOCRParameters);
+            Assert.Equal("pdfmoduleversion", file.PDFModuleVersion);
+            Assert.Equal("wordconfidenceinterval0to10", file.WordConfidenceInterval0To10);
+            Assert.Equal("wordconfidenceinterval11to20", file.WordConfidenceInterval11To20);
+            Assert.Equal("wordconfidenceinterval21to30", file.WordConfidenceInterval21To30);
+            Assert.Equal("wordconfidenceinterval31to40", file.WordConfidenceInterval31To40);
+            Assert.Equal("wordconfidenceinterval41to50", file.WordConfidenceInterval41To50);
+            Assert.Equal("wordconfidenceinterval51to60", file.WordConfidenceInterval51To60);
+            Assert.Equal("wordconfidenceinterval61to70", file.WordConfidenceInterval61To70);
+            Assert.Equal("wordconfidenceinterval71to80", file.WordConfidenceInterval71To80);
+            Assert.Equal("wordconfidenceinterval81to90", file.WordConfidenceInterval81To90);
+            Assert.Equal("wordconfidenceinterval91to100", file.WordConfidenceInterval91To100);
+            Assert.Equal("album", file.Album);
+            Assert.Equal("artist", file.Artist);
+            Assert.Equal("bitrate", file.Bitrate);
+            Assert.Equal("creator", file.Creator);
+            Assert.Equal("height", file.Height);
+            Assert.Equal("length", file.Length);
+            Assert.Equal("previewimage", file.PreviewImage);
+            Assert.Equal("rotation", file.Rotation);
+            Assert.Equal("title", file.Title);
+            Assert.Equal("track", file.Track);
+            Assert.Equal("width", file.Width);
         }
     }
 }
