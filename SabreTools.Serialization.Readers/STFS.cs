@@ -200,8 +200,8 @@ namespace SabreTools.Serialization.Readers
                 obj.WorkerThreadProcessor = data.ReadByteValue();
                 obj.WorkerThreadPriority = data.ReadByteValue();
                 obj.Hash = data.ReadBytes(20);
-                obj.DataBlockCount = data.ReadUInt24BigEndian();
-                obj.DataBlockOffset = data.ReadUInt24BigEndian();
+                obj.DataBlockCount = data.ReadUInt24LittleEndian();
+                obj.DataBlockOffset = data.ReadUInt24LittleEndian();
                 obj.Hash = data.ReadBytes(5);
 
                 return obj;
@@ -213,8 +213,8 @@ namespace SabreTools.Serialization.Readers
                 obj.VolumeDescriptorSize = data.ReadByteValue();
                 obj.Reserved = data.ReadByteValue();
                 obj.BlockSeparation = data.ReadByteValue();
-                obj.FileTableBlockCount = data.ReadInt16BigEndian();
-                obj.FileTableBlockNumber = data.ReadInt24BigEndian();
+                obj.FileTableBlockCount = data.ReadInt16LittleEndian();
+                obj.FileTableBlockNumber = data.ReadInt24LittleEndian();
                 obj.TopHashTableHash = data.ReadBytes(20);
                 obj.TotalAllocatedBlockCount = data.ReadInt32BigEndian();
                 obj.TotalUnallocatedBlockCount = data.ReadInt32BigEndian();

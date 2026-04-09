@@ -26,13 +26,13 @@ namespace SabreTools.Data.Models.STFS
         /// <summary>
         /// File Table Block Count
         /// </summary>
-        /// <remarks>Big-endian</remarks>
+        /// <remarks>Little-endian</remarks>
         public short FileTableBlockCount { get; set; }
 
         /// <summary>
         /// File Table Block Number
         /// </summary>
-        /// <remarks>Big-endian, 3-byte int24</remarks>
+        /// <remarks>Little-endian, 3-byte int24</remarks>
         public Int24 FileTableBlockNumber { get; set; } = new();
 
         /// <summary>

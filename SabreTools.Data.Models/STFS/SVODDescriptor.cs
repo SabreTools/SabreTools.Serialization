@@ -37,13 +37,13 @@ namespace SabreTools.Data.Models.STFS
         /// <summary>
         /// Data Block Count
         /// </summary>
-        /// <remarks>Big-endian, 3-byte uint24</remarks>
+        /// <remarks>Little-endian, 3-byte uint24</remarks>
         public UInt24 DataBlockCount { get; set; } = new();
 
         /// <summary>
         /// Data Block Offset
         /// </summary>
-        /// <remarks>Big-endian, 3-byte uint24</remarks>
+        /// <remarks>Little-endian, 3-byte uint24</remarks>
         public UInt24 DataBlockOffset { get; set; } = new();
 
         /// <summary>
