@@ -40,23 +40,4 @@ namespace SabreTools.Metadata.DatItems
         SHA512,
         SpamSum,
     }
-
-    /// <summary>
-    /// Determine what type of machine it is
-    /// </summary>
-    [Flags]
-    public enum MachineType
-    {
-        /// <summary>"none"</summary>
-        None = 0,
-
-        /// <summary>"bios"</summary>
-        Bios = 1 << 0,
-
-        /// <summary>"device", "dev"</summary>
-        Device = 1 << 1,
-
-        /// <summary>"mechanical", "mech"</summary>
-        Mechanical = 1 << 2,
-    }
 }
