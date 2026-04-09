@@ -11,12 +11,12 @@ namespace SabreTools.Data.Models.STFS
         /// Field for base version number, major.minor.build.revision
         /// </summary>
         /// <remarks>4 bytes</remarks>
-        public byte[] InstallerBaseVersion { get; set; } = new byte[4];
+        public uint InstallerBaseVersion { get; set; }
 
         /// <summary>
         /// Field for version number number, major.minor.build.revision
         /// </summary>
         /// <remarks>4 bytes</remarks>
-        public byte[] InstallerVersion { get; set; } = new byte[4];
+        public uint InstallerVersion { get; set; }
     }
 }

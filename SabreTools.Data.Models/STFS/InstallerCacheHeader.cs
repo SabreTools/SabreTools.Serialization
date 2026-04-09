@@ -29,8 +29,8 @@ namespace SabreTools.Data.Models.STFS
         /// <summary>
         /// Datetime for last modified
         /// </summary>
-        /// <remarks>Microsoft FILETIME, 4 bytes</remarks>
-        public byte[] LastModifiedDateTime { get; set; } = new byte[4];
+        /// <remarks>Microsoft FILETIME, Big-endian, 8 bytes</remarks>
+        public ulong LastModifiedDateTime { get; set; };
 
         /// <summary>
         /// Cache resume data

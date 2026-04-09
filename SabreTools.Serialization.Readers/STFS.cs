@@ -136,8 +136,8 @@ namespace SabreTools.Serialization.Readers
                 {
                     var updateHeader = new InstallerUpdateHeader();
                     updateHeader.InstallerType = installerType;
-                    updateHeader.InstallerBaseVersion = data.ReadBytes(4);
-                    updateHeader.InstallerVersion = data.ReadBytes(4);
+                    updateHeader.InstallerBaseVersion = data.ReadUInt32BigEndian();
+                    updateHeader.InstallerVersion = data.ReadUInt32BigEndian();
                     obj.InstallerHeader = updateHeader;
                 }
                 else if (type.Equals(Constants.InstallerTypeSystemUpdateCache) || type.Equals(Constants.InstallerTypeTitleUpdateCache) || type.Equals(Constants.InstallerTypeTitleContentCache))
@@ -147,7 +147,7 @@ namespace SabreTools.Serialization.Readers
                     cacheHeader.ResumeState = data.ReadUInt32BigEndian();
                     cacheHeader.CurrentFileIndex = data.ReadUInt64BigEndian();
                     cacheHeader.BytesProcessed = data.ReadUInt64BigEndian();
-                    cacheHeader.LastModifiedDateTime = data.ReadBytes(4);
+                    cacheHeader.LastModifiedDateTime = data.ReadUInt64BigEndian();
                     cacheHeader.ResumeData = data.ReadBytes(5584);
                     obj.InstallerHeader = cacheHeader;
                 }
