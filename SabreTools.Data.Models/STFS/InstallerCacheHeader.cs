@@ -30,7 +30,7 @@ namespace SabreTools.Data.Models.STFS
         /// Datetime for last modified
         /// </summary>
         /// <remarks>Microsoft FILETIME, Big-endian, 8 bytes</remarks>
-        public ulong LastModifiedDateTime { get; set; }
+        public long LastModifiedDateTime { get; set; }
 
         /// <summary>
         /// Cache resume data

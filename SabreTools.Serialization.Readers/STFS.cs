@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using SabreTools.Data.Models.STFS;
 using SabreTools.IO.Extensions;
 using SabreTools.Numerics.Extensions;
@@ -15,7 +16,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Simple check for a valid stream length
-            if (Constants.StandardHeaderSize > data.Length - data.Position)
+            if (Constants.MinimumHeaderSize > data.Length - data.Position)
                 return null;
 
             try
@@ -147,7 +148,7 @@ namespace SabreTools.Serialization.Readers
                     cacheHeader.ResumeState = data.ReadUInt32BigEndian();
                     cacheHeader.CurrentFileIndex = data.ReadUInt64BigEndian();
                     cacheHeader.BytesProcessed = data.ReadUInt64BigEndian();
-                    cacheHeader.LastModifiedDateTime = data.ReadUInt64BigEndian();
+                    cacheHeader.LastModifiedDateTime = data.ReadInt64BigEndian();
                     cacheHeader.ResumeData = data.ReadBytes(5584);
                     obj.InstallerHeader = cacheHeader;
                 }
