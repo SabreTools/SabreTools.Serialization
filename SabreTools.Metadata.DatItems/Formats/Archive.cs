@@ -64,6 +64,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             get => _internal.DatterNote;
             set => _internal.DatterNote = value;
         }
+
         public string? Description
         {
             get => _internal.Description;
