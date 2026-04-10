@@ -10,46 +10,6 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
-        /// <remarks>(yes|no) "no"</remarks>
-        public bool? Dispose { get; set; }
-
-        /// <remarks>ArchiveDotOrg.File</remarks>
-        public long? FileCount { get; set; }
-
-        /// <remarks>bool; AttractMode.Row</remarks>
-        public bool? FileIsAvailable { get; set; }
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public bool? Inverted { get; set; }
-
-        /// <remarks>(load16_byte|load16_word|load16_word_swap|load32_byte|load32_word|load32_word_swap|load32_dword|load64_word|load64_word_swap|reload|fill|continue|reload_plain|ignore)</remarks>
-        public LoadFlag? LoadFlag { get; set; }
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public bool? MIA { get; set; }
-
-        public string? Name { get; set; }
-
-        /// <remarks>OpenMSX.RomBase</remarks>
-        public OpenMSXSubType? OpenMSXMediaType { get; set; }
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public bool? Optional { get; set; }
-
-        public long? Size { get; set; }
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public bool? SoundOnly { get; set; }
-
-        /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
-        public ItemStatus? Status { get; set; }
-
-        public string? Value { get; set; }
-
-        #endregion
-
-        #region Keys
-
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? Album { get; set; }
 
@@ -100,8 +60,17 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Date { get; set; }
 
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Dispose { get; set; }
+
         /// <remarks>OfflineList.FileRomCRC</remarks>
         public string? Extension { get; set; }
+
+        /// <remarks>ArchiveDotOrg.File</remarks>
+        public long? FileCount { get; set; }
+
+        /// <remarks>bool; AttractMode.Row</remarks>
+        public bool? FileIsAvailable { get; set; }
 
         public string? Flags { get; set; }
 
@@ -131,11 +100,17 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? hOCRPageIndexModuleVersion { get; set; }
 
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Inverted { get; set; }
+
         /// <remarks>Possibly long; ArchiveDotOrg.File</remarks>
         public string? LastModifiedTime { get; set; }
 
         /// <remarks>Possibly long; Also in ArchiveDotOrg.File</remarks>
         public string? Length { get; set; }
+
+        /// <remarks>(load16_byte|load16_word|load16_word_swap|load32_byte|load32_word|load32_word_swap|load32_dword|load64_word|load64_word_swap|reload|fill|continue|reload_plain|ignore)</remarks>
+        public LoadFlag? LoadFlag { get; set; }
 
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? MatrixNumber { get; set; }
@@ -148,11 +123,22 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Merge { get; set; }
 
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? MIA { get; set; }
+
+        public string? Name { get; set; }
+
         /// <remarks>Possibly long; Originally "offs"</remarks>
         public string? Offset { get; set; }
 
         /// <remarks>OpenMSX.RomBase</remarks>
+        public OpenMSXSubType? OpenMSXMediaType { get; set; }
+
+        /// <remarks>OpenMSX.RomBase</remarks>
         public string? OpenMSXType { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? Optional { get; set; }
 
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? Original { get; set; }
@@ -188,6 +174,11 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? SHA512 { get; set; }
 
+        public long? Size { get; set; }
+
+        /// <remarks>(yes|no) "no"</remarks>
+        public bool? SoundOnly { get; set; }
+
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? Source { get; set; }
 
@@ -195,6 +186,9 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>Possibly long; OpenMSX.RomBase</remarks>
         public string? Start { get; set; }
+
+        /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
+        public ItemStatus? Status { get; set; }
 
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? Summation { get; set; }
@@ -228,6 +222,8 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>Possibly long; ArchiveDotOrg.File</remarks>
         public string? Track { get; set; }
+
+        public string? Value { get; set; }
 
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? WhisperASRModuleVersion { get; set; }
