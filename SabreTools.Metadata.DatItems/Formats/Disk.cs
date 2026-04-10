@@ -144,8 +144,8 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Create a DataArea if there was an existing DiskArea
             if (DiskAreaName is not null)
             {
-                var dataArea = new DataArea { Name = DiskAreaName };
-                rom.DataArea = dataArea;
+                rom.DataAreaEndianness = Endianness.Little;
+                rom.DataAreaName = DiskAreaName;
             }
 
             rom.DupeType = DupeType;

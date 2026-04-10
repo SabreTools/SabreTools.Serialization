@@ -217,15 +217,23 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Rom = [.. machine.Rom, romItem];
 
                             // Add Part and DataArea mappings
-                            if ((rom.PartInterface is not null || rom.PartName is not null) && rom.DataArea is not null)
+                            if ((rom.PartInterface is not null || rom.PartName is not null)
+                                && (rom.DataAreaEndianness is not null || rom.DataAreaName is not null || rom.DataAreaSize is not null || rom.DataAreaWidth is not null))
                             {
                                 var partItemInternal = new Data.Models.Metadata.Part
                                 {
                                     Interface = rom.PartInterface,
                                     Name = rom.PartName,
                                 };
+                                var dataAreaItemInternal = new Data.Models.Metadata.DataArea
+                                {
+                                    Endianness = rom.DataAreaEndianness,
+                                    Name = rom.DataAreaName,
+                                    Size = rom.DataAreaSize,
+                                    Width = rom.DataAreaWidth,
+                                };
                                 partMappings[partItemInternal] = romItem;
-                                dataAreaMappings[partItemInternal] = (rom.DataArea.GetInternalClone(), romItem);
+                                dataAreaMappings[partItemInternal] = (dataAreaItemInternal, romItem);
                             }
 
                             break;
@@ -555,15 +563,23 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Rom = [.. machine.Rom, romItem];
 
                             // Add Part and DataArea mappings
-                            if ((rom.PartInterface is not null || rom.PartName is not null) && rom.DataArea is not null)
+                            if ((rom.PartInterface is not null || rom.PartName is not null)
+                                && (rom.DataAreaEndianness is not null || rom.DataAreaName is not null || rom.DataAreaSize is not null || rom.DataAreaWidth is not null))
                             {
                                 var partItemInternal = new Data.Models.Metadata.Part
                                 {
                                     Interface = rom.PartInterface,
                                     Name = rom.PartName,
                                 };
+                                var dataAreaItemInternal = new Data.Models.Metadata.DataArea
+                                {
+                                    Endianness = rom.DataAreaEndianness,
+                                    Name = rom.DataAreaName,
+                                    Size = rom.DataAreaSize,
+                                    Width = rom.DataAreaWidth,
+                                };
                                 partMappings[partItemInternal] = romItem;
-                                dataAreaMappings[partItemInternal] = (rom.DataArea.GetInternalClone(), romItem);
+                                dataAreaMappings[partItemInternal] = (dataAreaItemInternal, romItem);
                             }
 
                             break;

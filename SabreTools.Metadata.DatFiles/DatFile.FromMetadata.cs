@@ -588,7 +588,6 @@ namespace SabreTools.Metadata.DatFiles
                 {
                     foreach (var dataArea in dataAreas)
                     {
-                        var dataAreaItem = new DataArea(dataArea, machine, source);
                         var roms = dataArea.Rom;
                         if (roms is null)
                             continue;
@@ -617,7 +616,10 @@ namespace SabreTools.Metadata.DatFiles
                                 continue;
                             }
 
-                            romItem.DataArea = dataAreaItem;
+                            romItem.DataAreaEndianness = dataArea.Endianness;
+                            romItem.DataAreaName = dataArea.Name;
+                            romItem.DataAreaSize = dataArea.Size;
+                            romItem.DataAreaWidth = dataArea.Width;
                             romItem.PartInterface = item.Interface;
                             romItem.PartName = item.Name;
 

@@ -2,7 +2,6 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Metadata;
-using SabreTools.Metadata.Filter;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
@@ -117,20 +116,13 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => _internal.Creator = value;
         }
 
-        public DataArea? DataArea { get; set; }
+        public Endianness? DataAreaEndianness { get; set; }
 
-        [JsonIgnore]
-        public bool DataAreaSpecified
-        {
-            get
-            {
-                return DataArea is not null
-                    && (!string.IsNullOrEmpty(DataArea.Name)
-                        || DataArea.Size is not null
-                        || DataArea.Width is not null
-                        || DataArea.Endianness is not null);
-            }
-        }
+        public string? DataAreaName { get; set; }
+
+        public long? DataAreaSize { get; set; }
+
+        public Width? DataAreaWidth { get; set; }
 
         public string? Date
         {
@@ -930,31 +922,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         /// <returns>True if any hash matches the 0-byte value, false otherwise</returns>
         public bool HasZeroHash() => _internal.HasZeroHash();
-
-        #endregion
-
-        #region Manipulation
-
-        /// <inheritdoc/>
-        public override bool PassesFilter(FilterRunner filterRunner)
-        {
-            if (Machine is not null && !Machine.PassesFilter(filterRunner))
-                return false;
-
-            // TODO: DataArea
-            // TODO: Part
-
-            return filterRunner.Run(_internal);
-        }
-
-        /// <inheritdoc/>
-        public override bool PassesFilterDB(FilterRunner filterRunner)
-        {
-            // TODO: DataArea
-            // TODO: Part
-
-            return filterRunner.Run(_internal);
-        }
 
         #endregion
 

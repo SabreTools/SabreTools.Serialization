@@ -34,6 +34,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Rom actual = disk.ConvertToRom();
 
+            Assert.Equal(Data.Models.Metadata.Endianness.Little, actual.DataAreaEndianness);
+            Assert.Equal("name", actual.DataAreaName);
             Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
             Assert.Equal(HashType.MD5.ZeroString, actual.MD5);
             Assert.Equal("merge", actual.Merge);
@@ -45,10 +47,6 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.False(actual.RemoveFlag);
             Assert.Equal(HashType.SHA1.ZeroString, actual.SHA1);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, actual.Status);
-
-            DataArea? actualDataArea = actual.DataArea;
-            Assert.NotNull(actualDataArea);
-            Assert.Equal("name", actualDataArea.Name);
 
             Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);

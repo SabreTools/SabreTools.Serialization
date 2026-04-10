@@ -107,18 +107,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case DipSwitch dipSwitch:
-                    if (dipSwitch.PartInterface is null && dipSwitch.PartName is null)
-                    {
+                    if (string.IsNullOrEmpty(dipSwitch.PartName))
                         missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
+                    if (string.IsNullOrEmpty(dipSwitch.PartInterface))
                         missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(dipSwitch.PartName))
-                            missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        if (string.IsNullOrEmpty(dipSwitch.PartInterface))
-                            missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
-                    }
 
                     if (string.IsNullOrEmpty(dipSwitch.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.DipSwitch.Name));
@@ -138,18 +130,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Disk disk:
-                    if (disk.PartInterface is null && disk.PartName is null)
-                    {
+                    if (string.IsNullOrEmpty(disk.PartName))
                         missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
+                    if (string.IsNullOrEmpty(disk.PartInterface))
                         missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(disk.PartName))
-                            missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        if (string.IsNullOrEmpty(disk.PartInterface))
-                            missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
-                    }
 
                     if (disk.DiskAreaName is null)
                         missingFields.Add(nameof(Data.Models.Metadata.DiskArea.Name));
@@ -164,31 +148,15 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Rom rom:
-                    if (rom.PartInterface is null && rom.PartName is null)
-                    {
+                    if (string.IsNullOrEmpty(rom.PartName))
                         missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
+                    if (string.IsNullOrEmpty(rom.PartInterface))
                         missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(rom.PartName))
-                            missingFields.Add(nameof(Data.Models.Metadata.Part.Name));
-                        if (string.IsNullOrEmpty(rom.PartInterface))
-                            missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
-                    }
 
-                    if (!rom.DataAreaSpecified)
-                    {
+                    if (string.IsNullOrEmpty(rom.DataAreaName))
                         missingFields.Add(nameof(Data.Models.Metadata.DataArea.Name));
+                    if (rom.DataAreaSize is null)
                         missingFields.Add(nameof(Data.Models.Metadata.DataArea.Size));
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(rom.DataArea!.Name))
-                            missingFields.Add(nameof(Data.Models.Metadata.DataArea.Name));
-                        if (rom.DataArea!.Size is null)
-                            missingFields.Add(nameof(Data.Models.Metadata.DataArea.Size));
-                    }
 
                     break;
 

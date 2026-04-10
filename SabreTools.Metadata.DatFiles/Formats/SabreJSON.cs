@@ -282,9 +282,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     case Data.Models.Metadata.ItemType.Control:
                         datItem = datItemObj.ToObject<Control>();
                         break;
-                    case Data.Models.Metadata.ItemType.DataArea:
-                        datItem = datItemObj.ToObject<DataArea>();
-                        break;
                     case Data.Models.Metadata.ItemType.Device:
                         datItem = datItemObj.ToObject<Device>();
                         break;
@@ -302,9 +299,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         break;
                     case Data.Models.Metadata.ItemType.Disk:
                         datItem = datItemObj.ToObject<Disk>();
-                        break;
-                    case Data.Models.Metadata.ItemType.DiskArea:
-                        datItem = datItemObj.ToObject<DiskArea>();
                         break;
                     case Data.Models.Metadata.ItemType.Display:
                         datItem = datItemObj.ToObject<Display>();
@@ -371,6 +365,12 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         break;
                     case Data.Models.Metadata.ItemType.SourceDetails:
                         datItem = datItemObj.ToObject<SourceDetails>();
+                        break;
+
+                    // Removed
+                    case Data.Models.Metadata.ItemType.DataArea:
+                    case Data.Models.Metadata.ItemType.DiskArea:
+                    case Data.Models.Metadata.ItemType.Part:
                         break;
 
                     // TODO: Implement these?

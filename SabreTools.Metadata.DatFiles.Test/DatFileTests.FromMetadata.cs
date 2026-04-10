@@ -141,10 +141,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             ValidatePartFeature(partFeature);
 
             // All other fields are tested separately
-            Rom? partRom = Array.Find(datItems, item => item is Rom rom && rom.DataAreaSpecified && rom.PartInterface is not null) as Rom;
+            Rom? partRom = Array.Find(datItems, item => item is Rom rom && rom.DataAreaName is not null && rom.PartInterface is not null) as Rom;
             Assert.NotNull(partRom);
-            DataArea? romDataArea = partRom.DataArea;
-            ValidateDataArea(romDataArea);
+            Assert.Equal(Data.Models.Metadata.Endianness.Big, partRom.DataAreaEndianness);
+            Assert.Equal("name", partRom.DataAreaName);
+            Assert.Equal(12345, partRom.DataAreaSize);
+            Assert.Equal(Data.Models.Metadata.Width.Long, partRom.DataAreaWidth);
             Assert.Equal("interface", partRom.PartInterface);
             Assert.Equal("name", partRom.PartName);
 
@@ -157,7 +159,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Release? release = Array.Find(datItems, item => item is Release) as Release;
             ValidateRelease(release);
 
-            Rom? rom = Array.Find(datItems, item => item is Rom rom && !rom.DataAreaSpecified && rom.PartInterface is null && rom.OpenMSXMediaType is null) as Rom;
+            Rom? rom = Array.Find(datItems, item => item is Rom rom && rom.DataAreaName is null && rom.PartInterface is null && rom.OpenMSXMediaType is null) as Rom;
             ValidateRom(rom);
 
             Sample? sample = Array.Find(datItems, item => item is Sample) as Sample;
@@ -1205,15 +1207,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("ways3", control.Ways3);
         }
 
-        private static void ValidateDataArea(DataArea? dataArea)
-        {
-            Assert.NotNull(dataArea);
-            Assert.Equal(Data.Models.Metadata.Endianness.Big, dataArea.Endianness);
-            Assert.Equal("name", dataArea.Name);
-            Assert.Equal(12345, dataArea.Size);
-            Assert.Equal(Data.Models.Metadata.Width.Long, dataArea.Width);
-        }
-
         private static void ValidateDevice(Device? device)
         {
             Assert.NotNull(device);
@@ -1297,12 +1290,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("region", disk.Region);
             Assert.Equal(HashType.SHA1.ZeroString, disk.SHA1);
             Assert.True(disk.Writable);
-        }
-
-        private static void ValidateDiskArea(DiskArea? diskArea)
-        {
-            Assert.NotNull(diskArea);
-            Assert.Equal("name", diskArea.Name);
         }
 
         private static void ValidateDisplay(Display? display)

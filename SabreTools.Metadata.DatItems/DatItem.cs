@@ -20,7 +20,6 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(ConfLocation))]
     [XmlInclude(typeof(ConfSetting))]
     [XmlInclude(typeof(Control))]
-    [XmlInclude(typeof(DataArea))]
     [XmlInclude(typeof(Device))]
     [XmlInclude(typeof(DeviceRef))]
     [XmlInclude(typeof(DipLocation))]

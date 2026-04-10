@@ -152,13 +152,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             return item;
         }
 
-        private static DataArea CreateDataArea(Machine machine)
-        {
-            DataArea item = new DataArea(CreateMetadataDataArea());
-            item.CopyMachineInformation(machine);
-            return item;
-        }
-
         private static DeviceRef CreateDeviceRef(Machine machine)
         {
             DeviceRef item = new DeviceRef(CreateMetadataDeviceRef());
@@ -283,7 +276,10 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Rom item = new Rom(CreateMetadataRom());
             item.CopyMachineInformation(machine);
-            item.DataArea = CreateDataArea(machine);
+            item.DataAreaEndianness = Data.Models.Metadata.Endianness.Big;
+            item.DataAreaName = "name";
+            item.DataAreaSize = 12345;
+            item.DataAreaWidth = Data.Models.Metadata.Width.Long;
             item.PartInterface = "interface";
             item.PartName = "name";
             return item;
