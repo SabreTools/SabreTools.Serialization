@@ -98,7 +98,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DipSwitch? dipSwitch = Array.Find(datItems, item => item is DipSwitch dipSwitch && dipSwitch.PartInterface is null) as DipSwitch;
             ValidateDipSwitch(dipSwitch);
 
-            Disk? disk = Array.Find(datItems, item => item is Disk disk && !disk.DiskAreaSpecified && disk.PartInterface is null) as Disk;
+            Disk? disk = Array.Find(datItems, item => item is Disk disk && disk.DiskAreaName is null && disk.PartInterface is null) as Disk;
             ValidateDisk(disk);
 
             Display? display = Array.Find(datItems, item => item is Display display && display.AspectX is null) as Display;
@@ -131,9 +131,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("name", partDipSwitch.PartName);
 
             // All other fields are tested separately
-            Disk? partDisk = Array.Find(datItems, item => item is Disk disk && disk.DiskAreaSpecified && disk.PartInterface is not null) as Disk;
+            Disk? partDisk = Array.Find(datItems, item => item is Disk disk && disk.DiskAreaName is not null && disk.PartInterface is not null) as Disk;
             Assert.NotNull(partDisk);
-            ValidateDiskArea(partDisk.DiskArea);
+            Assert.Equal("name", partDisk.DiskAreaName);
             Assert.Equal("interface", partDisk.PartInterface);
             Assert.Equal("name", partDisk.PartName);
 

@@ -27,7 +27,6 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(DipSwitch))]
     [XmlInclude(typeof(DipValue))]
     [XmlInclude(typeof(Disk))]
-    [XmlInclude(typeof(DiskArea))]
     [XmlInclude(typeof(Display))]
     [XmlInclude(typeof(Driver))]
     [XmlInclude(typeof(Feature))]

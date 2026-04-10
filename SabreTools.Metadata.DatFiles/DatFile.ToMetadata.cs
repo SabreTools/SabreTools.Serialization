@@ -139,7 +139,7 @@ namespace SabreTools.Metadata.DatFiles
 
                             // Add Part mapping
                             if (dipSwitch.PartInterface is not null || dipSwitch.PartName is not null)
-                                partMappings[new Data.Models.Metadata.Part { Interface = dipSwitch.PartInterface, Name = dipSwitch.PartName}] = dipSwitchItem;
+                                partMappings[new Data.Models.Metadata.Part { Interface = dipSwitch.PartInterface, Name = dipSwitch.PartName }] = dipSwitchItem;
 
                             break;
                         case DatItems.Formats.Disk disk:
@@ -148,7 +148,7 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Disk = [.. machine.Disk, diskItem];
 
                             // Add Part and DiskArea mappings
-                            if ((disk.PartInterface is not null || disk.PartName is not null) && disk.DiskArea is not null)
+                            if ((disk.PartInterface is not null || disk.PartName is not null) && disk.DiskAreaName is not null)
                             {
                                 var partItemInternal = new Data.Models.Metadata.Part
                                 {
@@ -156,7 +156,7 @@ namespace SabreTools.Metadata.DatFiles
                                     Name = disk.PartName,
                                 };
                                 partMappings[partItemInternal] = diskItem;
-                                diskAreaMappings[partItemInternal] = (disk.DiskArea.GetInternalClone(), diskItem);
+                                diskAreaMappings[partItemInternal] = (new Data.Models.Metadata.DiskArea { Name = disk.DiskAreaName }, diskItem);
                             }
 
                             break;
@@ -193,7 +193,7 @@ namespace SabreTools.Metadata.DatFiles
 
                             // Add Part mapping
                             if (partFeature.PartInterface is not null || partFeature.PartName is not null)
-                                partMappings[new Data.Models.Metadata.Part { Interface = partFeature.PartInterface, Name = partFeature.PartName}] = partFeatureItem;
+                                partMappings[new Data.Models.Metadata.Part { Interface = partFeature.PartInterface, Name = partFeature.PartName }] = partFeatureItem;
 
                             break;
                         case DatItems.Formats.Port port:
@@ -477,7 +477,7 @@ namespace SabreTools.Metadata.DatFiles
 
                             // Add Part mapping
                             if (dipSwitch.PartInterface is not null || dipSwitch.PartName is not null)
-                                partMappings[new Data.Models.Metadata.Part { Interface = dipSwitch.PartInterface, Name = dipSwitch.PartName}] = dipSwitchItem;
+                                partMappings[new Data.Models.Metadata.Part { Interface = dipSwitch.PartInterface, Name = dipSwitch.PartName }] = dipSwitchItem;
 
                             break;
                         case DatItems.Formats.Disk disk:
@@ -486,7 +486,7 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Disk = [.. machine.Disk, diskItem];
 
                             // Add Part and DiskArea mappings
-                            if ((disk.PartInterface is not null || disk.PartName is not null) && disk.DiskArea is not null)
+                            if ((disk.PartInterface is not null || disk.PartName is not null) && disk.DiskAreaName is not null)
                             {
                                 var partItemInternal = new Data.Models.Metadata.Part
                                 {
@@ -494,7 +494,7 @@ namespace SabreTools.Metadata.DatFiles
                                     Name = disk.PartName,
                                 };
                                 partMappings[partItemInternal] = diskItem;
-                                diskAreaMappings[partItemInternal] = (disk.DiskArea.GetInternalClone(), diskItem);
+                                diskAreaMappings[partItemInternal] = (new Data.Models.Metadata.DiskArea { Name = disk.DiskAreaName }, diskItem);
                             }
 
                             break;
@@ -531,7 +531,7 @@ namespace SabreTools.Metadata.DatFiles
 
                             // Add Part mapping
                             if (partFeature.PartInterface is not null || partFeature.PartName is not null)
-                                partMappings[new Data.Models.Metadata.Part { Interface = partFeature.PartInterface, Name = partFeature.PartName}] = partFeatureItem;
+                                partMappings[new Data.Models.Metadata.Part { Interface = partFeature.PartInterface, Name = partFeature.PartName }] = partFeatureItem;
 
                             break;
                         case DatItems.Formats.Port port:

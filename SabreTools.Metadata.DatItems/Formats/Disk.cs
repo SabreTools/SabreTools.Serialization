@@ -15,11 +15,7 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Properties
 
-        public DiskArea? DiskArea { get; set; }
-
-        [JsonIgnore]
-        public bool DiskAreaSpecified
-            => DiskArea is not null && !string.IsNullOrEmpty(DiskArea.Name);
+        public string? DiskAreaName { get; set; }
 
         public string? Flags
         {
@@ -146,9 +142,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             var rom = new Rom(_internal.ConvertToRom()!);
 
             // Create a DataArea if there was an existing DiskArea
-            if (DiskArea is not null)
+            if (DiskAreaName is not null)
             {
-                var dataArea = new DataArea { Name = DiskArea.Name };
+                var dataArea = new DataArea { Name = DiskAreaName };
                 rom.DataArea = dataArea;
             }
 

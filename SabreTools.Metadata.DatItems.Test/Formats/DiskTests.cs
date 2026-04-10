@@ -10,15 +10,13 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [Fact]
         public void ConvertToRomTest()
         {
-            DiskArea diskArea = new DiskArea { Name = "name" };
-
             Machine machine = new Machine { Name = "name" };
 
             Source source = new Source(0, "source");
 
             Disk disk = new Disk
             {
-                DiskArea = diskArea,
+                DiskAreaName = "name",
                 DupeType = DupeType.All | DupeType.External,
                 Machine = machine,
                 MD5 = HashType.MD5.ZeroString,

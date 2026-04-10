@@ -193,16 +193,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Disk item = new Disk(CreateMetadataDisk());
             item.CopyMachineInformation(machine);
-            item.DiskArea = CreateDiskArea(machine);
+            item.DiskAreaName = "name";
             item.PartInterface = "interface";
             item.PartName = "name";
-            return item;
-        }
-
-        private static DiskArea CreateDiskArea(Machine machine)
-        {
-            DiskArea item = new DiskArea(CreateMetadataDiskArea());
-            item.CopyMachineInformation(machine);
             return item;
         }
 

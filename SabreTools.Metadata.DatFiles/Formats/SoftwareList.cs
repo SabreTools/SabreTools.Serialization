@@ -151,15 +151,8 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             missingFields.Add(nameof(Data.Models.Metadata.Part.Interface));
                     }
 
-                    if (!disk.DiskAreaSpecified)
-                    {
+                    if (disk.DiskAreaName is null)
                         missingFields.Add(nameof(Data.Models.Metadata.DiskArea.Name));
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(disk.DiskArea!.Name))
-                            missingFields.Add(nameof(Data.Models.Metadata.DiskArea.Name));
-                    }
 
                     if (string.IsNullOrEmpty(disk.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Disk.Name));

@@ -638,7 +638,6 @@ namespace SabreTools.Metadata.DatFiles
                 {
                     foreach (var diskArea in diskAreas)
                     {
-                        var diskAreaitem = new DiskArea(diskArea, machine, source);
                         var disks = diskArea.Disk;
                         if (disks is null)
                             continue;
@@ -651,7 +650,7 @@ namespace SabreTools.Metadata.DatFiles
 
                             var diskItem = new Disk(disk, machine, source)
                             {
-                                DiskArea = diskAreaitem,
+                                DiskAreaName = diskArea.Name,
                                 PartInterface = item.Interface,
                                 PartName = item.Name,
                             };
