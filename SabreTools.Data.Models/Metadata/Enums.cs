@@ -291,7 +291,6 @@ namespace SabreTools.Data.Models.Metadata
         Display,
         Driver,
         Dump,
-        Extension,
         Feature,
         File, // TODO: This should be merged with Rom?
         Info,

@@ -489,7 +489,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Device
             {
-                Extension = [CreateMetadataExtension()],
+                ExtensionName = ["name"],
                 FixedImage = "fixedimage",
                 InstanceBriefName = "briefname",
                 InstanceName = "name",
@@ -641,14 +641,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Rom = new Data.Models.Metadata.Rom(),
                 MegaRom = null,
                 SCCPlusCart = null,
-            };
-        }
-
-        private static Data.Models.Metadata.Extension CreateMetadataExtension()
-        {
-            return new Data.Models.Metadata.Extension
-            {
-                Name = "name",
             };
         }
 
@@ -1246,10 +1238,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("tag", device.Tag);
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.DeviceType);
 
-            Extension[]? extensions = device.Extension;
-            Assert.NotNull(extensions);
-            Extension? extension = Assert.Single(extensions);
-            ValidateExtension(extension);
+            string[]? extensionNames = device.ExtensionName;
+            Assert.NotNull(extensionNames);
+            string? extensionName = Assert.Single(extensionNames);
+            Assert.Equal("name", extensionName);
         }
 
         private static void ValidateDeviceRef(DeviceRef? deviceRef)
@@ -1362,12 +1354,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Status);
             Assert.True(driver.Unofficial);
-        }
-
-        private static void ValidateExtension(Extension? extension)
-        {
-            Assert.NotNull(extension);
-            Assert.Equal("name", extension.Name);
         }
 
         private static void ValidateFeature(Feature? feature)

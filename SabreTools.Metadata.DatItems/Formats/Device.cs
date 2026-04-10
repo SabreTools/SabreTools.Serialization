@@ -1,7 +1,5 @@
-using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Metadata.Filter;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -19,10 +17,11 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => _internal.DeviceType = value;
         }
 
-        public Extension[]? Extension { get; set; }
-
-        [JsonIgnore]
-        public bool ExtensionSpecified => Extension is not null && Extension.Length > 0;
+        public string[]? ExtensionName
+        {
+            get => _internal.ExtensionName;
+            set => _internal.ExtensionName = value;
+        }
 
         public string? FixedImage
         {
@@ -70,12 +69,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Device() : base() { }
 
-        public Device(Data.Models.Metadata.Device item) : base(item)
-        {
-            // Handle subitems
-            if (item.Extension is not null)
-                Extension = Array.ConvertAll(item.Extension, extension => new Extension(extension));
-        }
+        public Device(Data.Models.Metadata.Device item) : base(item) { }
 
         public Device(Data.Models.Metadata.Device item, Machine machine, Source source) : this(item)
         {
@@ -102,14 +96,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Device GetInternalClone()
-        {
-            var deviceItem = _internal.Clone() as Data.Models.Metadata.Device ?? new();
-
-            if (Extension is not null)
-                deviceItem.Extension = Array.ConvertAll(Extension, extension => extension.GetInternalClone()); ;
-
-            return deviceItem;
-        }
+            => _internal.Clone() as Data.Models.Metadata.Device ?? new();
 
         #endregion
 
@@ -128,29 +115,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // Everything else fails
             return false;
-        }
-
-        #endregion
-
-        #region Manipulation
-
-        /// <inheritdoc/>
-        public override bool PassesFilter(FilterRunner filterRunner)
-        {
-            if (Machine is not null && !Machine.PassesFilter(filterRunner))
-                return false;
-
-            // TODO: Extension
-
-            return filterRunner.Run(_internal);
-        }
-
-        /// <inheritdoc/>
-        public override bool PassesFilterDB(FilterRunner filterRunner)
-        {
-            // TODO: Extension
-
-            return filterRunner.Run(_internal);
         }
 
         #endregion

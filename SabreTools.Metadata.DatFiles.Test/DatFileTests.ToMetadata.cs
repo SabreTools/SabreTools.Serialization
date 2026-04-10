@@ -767,10 +767,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("tag", device.Tag);
             Assert.Equal(Data.Models.Metadata.DeviceType.PunchTape, device.DeviceType);
 
-            Data.Models.Metadata.Extension[]? extensions = device.Extension;
-            Assert.NotNull(extensions);
-            Data.Models.Metadata.Extension? extension = Assert.Single(extensions);
-            ValidateMetadataExtension(extension);
+            string[]? extensionNames = device.ExtensionName;
+            Assert.NotNull(extensionNames);
+            string? extensionName = Assert.Single(extensionNames);
+            Assert.Equal("name", extensionName);
         }
 
         private static void ValidateMetadataDeviceRef(Data.Models.Metadata.DeviceRef? deviceRef)
@@ -888,12 +888,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Sound);
             Assert.Equal(Data.Models.Metadata.SupportStatus.Good, driver.Status);
             Assert.True(driver.Unofficial);
-        }
-
-        private static void ValidateMetadataExtension(Data.Models.Metadata.Extension? extension)
-        {
-            Assert.NotNull(extension);
-            Assert.Equal("name", extension.Name);
         }
 
         private static void ValidateMetadataFeature(Data.Models.Metadata.Feature? feature)

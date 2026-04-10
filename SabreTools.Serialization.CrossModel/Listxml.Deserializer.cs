@@ -338,9 +338,9 @@ namespace SabreTools.Serialization.CrossModel
                 };
             }
 
-            var extensions = item.Extension;
+            var extensions = item.ExtensionName;
             if (extensions is not null && extensions.Length > 0)
-                device.Extension = Array.ConvertAll(extensions, ConvertFromInternalModel);
+                device.Extension = Array.ConvertAll(extensions, name => new Extension { Name = name });
 
             return device;
         }
@@ -502,18 +502,6 @@ namespace SabreTools.Serialization.CrossModel
                 Incomplete = item.Incomplete,
             };
             return driver;
-        }
-
-        /// <summary>
-        /// Convert from <see cref="Models.Metadata.Extension"/> to <see cref="Extension"/>
-        /// </summary>
-        private static Extension ConvertFromInternalModel(Data.Models.Metadata.Extension item)
-        {
-            var extension = new Extension
-            {
-                Name = item.Name,
-            };
-            return extension;
         }
 
         /// <summary>

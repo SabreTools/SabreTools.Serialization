@@ -315,9 +315,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     case Data.Models.Metadata.ItemType.Driver:
                         datItem = datItemObj.ToObject<Driver>();
                         break;
-                    case Data.Models.Metadata.ItemType.Extension:
-                        datItem = datItemObj.ToObject<Extension>();
-                        break;
                     case Data.Models.Metadata.ItemType.Feature:
                         datItem = datItemObj.ToObject<Feature>();
                         break;

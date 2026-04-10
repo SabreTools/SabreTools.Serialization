@@ -12,7 +12,8 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(unknown|cartridge|floppydisk|harddisk|cylinder|cassette|punchcard|punchtape|printout|serial|parallel|snapshot|quickload|memcard|cdrom|magtape|romimage|midiin|midiout|picture|vidfile)</remarks>
         public DeviceType? DeviceType { get; set; }
 
-        public Extension[]? Extension { get; set; }
+        /// <remarks>Extension subitem</remarks>
+        public string[]? ExtensionName { get; set; }
 
         public string? FixedImage { get; set; }
 
@@ -37,8 +38,8 @@ namespace SabreTools.Data.Models.Metadata
             var obj = new Device();
 
             obj.DeviceType = DeviceType;
-            if (Extension is not null)
-                obj.Extension = Array.ConvertAll(Extension, i => (Extension)i.Clone());
+            if (ExtensionName is not null)
+                obj.ExtensionName = Array.ConvertAll(ExtensionName, i => i);
             obj.FixedImage = FixedImage;
             obj.InstanceBriefName = InstanceBriefName;
             obj.InstanceName = InstanceName;

@@ -803,6 +803,7 @@ namespace SabreTools.Metadata.Filter.Test
 
         [Theory]
         [InlineData("device.devicetype", "punchcard")]
+        // [InlineData("device.extension.name", "name")] // TODO: Figure out how to deal with string arrays
         [InlineData("device.fixedimage", "fixedimage")]
         [InlineData("device.instance.briefname", "briefname")]
         [InlineData("device.instance.name", "name")]
@@ -815,6 +816,7 @@ namespace SabreTools.Metadata.Filter.Test
             Device obj = new Device
             {
                 DeviceType = DeviceType.PunchCard,
+                ExtensionName = ["name"],
                 FixedImage = "fixedimage",
                 InstanceBriefName = "briefname",
                 InstanceName = "name",
@@ -1070,24 +1072,6 @@ namespace SabreTools.Metadata.Filter.Test
                 Sound = SupportStatus.Test,
                 Status = SupportStatus.Test,
                 Unofficial = true,
-            };
-
-            bool actual = filter.Matches(obj);
-            Assert.True(actual);
-        }
-
-        #endregion
-
-        #region Extension
-
-        [Theory]
-        [InlineData("extension.name", "name")]
-        public void Matches_Extension(string itemField, string value)
-        {
-            var filter = new FilterObject(itemField, value, Operation.Equals);
-            Extension obj = new Extension
-            {
-                Name = "name",
             };
 
             bool actual = filter.Matches(obj);

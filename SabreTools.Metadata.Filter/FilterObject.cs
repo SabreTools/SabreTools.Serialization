@@ -397,7 +397,6 @@ namespace SabreTools.Metadata.Filter
                 case DiskArea item: return GetCheckValue(item, fieldName, out checkValue);
                 case Display item: return GetCheckValue(item, fieldName, out checkValue);
                 case Driver item: return GetCheckValue(item, fieldName, out checkValue);
-                case Extension item: return GetCheckValue(item, fieldName, out checkValue);
                 case Feature item: return GetCheckValue(item, fieldName, out checkValue);
                 case Header item: return GetCheckValue(item, fieldName, out checkValue);
                 case Info item: return GetCheckValue(item, fieldName, out checkValue);
@@ -906,6 +905,10 @@ namespace SabreTools.Metadata.Filter
                 case "devicetype":
                     checkValue = obj.DeviceType?.AsStringValue();
                     return true;
+                // TODO: Figure out how to deal with string arrays
+                // case "extension.name":
+                //     checkValue = obj.ExtensionName;
+                //     return true;
                 case "fixedimage":
                     checkValue = obj.FixedImage;
                     return true;
@@ -1222,24 +1225,6 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case "unofficial":
                     checkValue = obj.Unofficial.FromYesNo();
-                    return true;
-
-                // If the key doesn't exist, we count it as null
-                default:
-                    checkValue = null;
-                    return false;
-            }
-        }
-
-        /// <summary>
-        /// Get the check value for a field
-        /// </summary>
-        private static bool GetCheckValue(Extension obj, string fieldName, out string? checkValue)
-        {
-            switch (fieldName)
-            {
-                case "name":
-                    checkValue = obj.Name;
                     return true;
 
                 // If the key doesn't exist, we count it as null

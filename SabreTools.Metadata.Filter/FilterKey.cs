@@ -194,6 +194,7 @@ namespace SabreTools.Metadata.Filter
         private static readonly string[] _deviceKeys =
         [
             "devicetype",
+            "extension.name",
             "fixedimage",
             "instance.briefname",
             "instance.name",
@@ -319,14 +320,6 @@ namespace SabreTools.Metadata.Filter
             "sound",
             "status",
             "unofficial",
-        ];
-
-        /// <summary>
-        /// Known keys for Extension
-        /// </summary>
-        private static readonly string[] _extensionKeys =
-        [
-            "name",
         ];
 
         /// <summary>
@@ -1031,7 +1024,6 @@ namespace SabreTools.Metadata.Filter
                 "diskarea" => _diskAreaKeys,
                 "display" => _displayKeys,
                 "driver" => _driverKeys,
-                "extension" => _extensionKeys,
                 "feature" or "partfeature" => _featureKeys,
                 "game" or "machine" or "resource" or "set" => _machineKeys,
                 "header" => _headerKeys,

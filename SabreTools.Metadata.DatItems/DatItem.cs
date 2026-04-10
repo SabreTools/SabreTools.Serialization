@@ -31,7 +31,6 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(DiskArea))]
     [XmlInclude(typeof(Display))]
     [XmlInclude(typeof(Driver))]
-    [XmlInclude(typeof(Extension))]
     [XmlInclude(typeof(Feature))]
     [XmlInclude(typeof(Info))]
     [XmlInclude(typeof(Input))]
