@@ -258,9 +258,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     case Data.Models.Metadata.ItemType.Adjuster:
                         datItem = datItemObj.ToObject<Adjuster>();
                         break;
-                    case Data.Models.Metadata.ItemType.Analog:
-                        datItem = datItemObj.ToObject<Analog>();
-                        break;
                     case Data.Models.Metadata.ItemType.Archive:
                         datItem = datItemObj.ToObject<Archive>();
                         break;

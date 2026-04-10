@@ -905,7 +905,6 @@ namespace SabreTools.Data.Extensions
 
                 // "Auxiliary" item types
                 "adjuster" => ItemType.Adjuster,
-                "analog" => ItemType.Analog,
                 "archive" => ItemType.Archive,
                 "biosset" => ItemType.BiosSet,
                 "chip" => ItemType.Chip,
@@ -1386,7 +1385,6 @@ namespace SabreTools.Data.Extensions
 
                 // "Auxiliary" item types
                 ItemType.Adjuster => "adjuster",
-                ItemType.Analog => "analog",
                 ItemType.Archive => "archive",
                 ItemType.BiosSet => "biosset",
                 ItemType.Chip => "chip",

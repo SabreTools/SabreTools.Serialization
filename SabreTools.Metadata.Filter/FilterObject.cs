@@ -379,7 +379,6 @@ namespace SabreTools.Metadata.Filter
             switch (obj)
             {
                 case Adjuster item: return GetCheckValue(item, fieldName, out checkValue);
-                case Analog item: return GetCheckValue(item, fieldName, out checkValue);
                 case Archive item: return GetCheckValue(item, fieldName, out checkValue);
                 case BiosSet item: return GetCheckValue(item, fieldName, out checkValue);
                 case Chip item: return GetCheckValue(item, fieldName, out checkValue);
@@ -522,24 +521,6 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case "name":
                     checkValue = obj.Name;
-                    return true;
-
-                // If the key doesn't exist, we count it as null
-                default:
-                    checkValue = null;
-                    return false;
-            }
-        }
-
-        /// <summary>
-        /// Get the check value for a field
-        /// </summary>
-        private static bool GetCheckValue(Analog obj, string fieldName, out string? checkValue)
-        {
-            switch (fieldName)
-            {
-                case "mask":
-                    checkValue = obj.Mask;
                     return true;
 
                 // If the key doesn't exist, we count it as null
@@ -1739,6 +1720,10 @@ namespace SabreTools.Metadata.Filter
         {
             switch (fieldName)
             {
+                // TODO: Figure out how to deal with string arrays
+                // case "analog.mask":
+                //     checkValue = obj.AnalogMask;
+                //     return true;
                 case "tag":
                     checkValue = obj.Tag;
                     return true;

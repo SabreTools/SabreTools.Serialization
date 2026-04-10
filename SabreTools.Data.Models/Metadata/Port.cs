@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
-        public Analog[]? Analog { get; set; }
+        public string[]? AnalogMask { get; set; }
 
         public string? Tag { get; set; }
 
@@ -22,8 +22,8 @@ namespace SabreTools.Data.Models.Metadata
         {
             var obj = new Port();
 
-            if (Analog is not null)
-                obj.Analog = Array.ConvertAll(Analog, i => (Analog)i.Clone());
+            if (AnalogMask is not null)
+                obj.AnalogMask = Array.ConvertAll(AnalogMask, i => i);
             obj.Tag = Tag;
 
             return obj;

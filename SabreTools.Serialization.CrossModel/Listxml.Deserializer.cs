@@ -170,18 +170,6 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Models.Metadata.Analog"/> to <see cref="Analog"/>
-        /// </summary>
-        private static Analog ConvertFromInternalModel(Data.Models.Metadata.Analog item)
-        {
-            var analog = new Analog
-            {
-                Mask = item.Mask,
-            };
-            return analog;
-        }
-
-        /// <summary>
         /// Convert from <see cref="Models.Metadata.BiosSet"/> to <see cref="BiosSet"/>
         /// </summary>
         private static BiosSet ConvertFromInternalModel(Data.Models.Metadata.BiosSet item)
@@ -550,9 +538,9 @@ namespace SabreTools.Serialization.CrossModel
                 Tag = item.Tag,
             };
 
-            var analogs = item.Analog;
-            if (analogs is not null && analogs.Length > 0)
-                port.Analog = Array.ConvertAll(analogs, ConvertFromInternalModel);
+            var analogMasks = item.AnalogMask;
+            if (analogMasks is not null && analogMasks.Length > 0)
+                port.Analog = Array.ConvertAll(analogMasks, analogMask => new Analog { Mask = analogMask });
 
             return port;
         }

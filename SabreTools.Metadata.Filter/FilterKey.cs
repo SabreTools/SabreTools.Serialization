@@ -49,14 +49,6 @@ namespace SabreTools.Metadata.Filter
         ];
 
         /// <summary>
-        /// Known keys for Analog
-        /// </summary>
-        private static readonly string[] _analogKeys =
-        [
-            "mask"
-        ];
-
-        /// <summary>
         /// Known keys for Archive
         /// </summary>
         private static readonly string[] _archiveKeys =
@@ -509,6 +501,7 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static readonly string[] _portKeys =
         [
+            "analog.mask",
             "tag",
         ];
 
@@ -1006,7 +999,6 @@ namespace SabreTools.Metadata.Filter
             string[]? properties = itemName.ToLowerInvariant() switch
             {
                 "adjuster" => _adjusterKeys,
-                "analog" => _analogKeys,
                 "archive" => _archiveKeys,
                 "biosset" => _biossetKeys,
                 "chip" => _chipKeys,

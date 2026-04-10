@@ -1,7 +1,5 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Metadata.Filter;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -13,10 +11,11 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Properties
 
-        public Analog[]? Analog { get; set; }
-
-        [JsonIgnore]
-        public bool AnalogSpecified => Analog is not null && Analog.Length > 0;
+        public string[]? AnalogMask
+        {
+            get => _internal.AnalogMask;
+            set => _internal.AnalogMask = value;
+        }
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType
@@ -34,12 +33,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Port() : base() { }
 
-        public Port(Data.Models.Metadata.Port item) : base(item)
-        {
-            // Handle subitems
-            if (item.Analog is not null)
-                Analog = Array.ConvertAll(item.Analog, analog => new Analog(analog)); ;
-        }
+        public Port(Data.Models.Metadata.Port item) : base(item) { }
 
         public Port(Data.Models.Metadata.Port item, Machine machine, Source source) : this(item)
         {
@@ -66,14 +60,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Port GetInternalClone()
-        {
-            var portItem = _internal.Clone() as Data.Models.Metadata.Port ?? new();
-
-            if (Analog is not null)
-                portItem.Analog = Array.ConvertAll(Analog, analog => analog.GetInternalClone());
-
-            return portItem;
-        }
+            => _internal.Clone() as Data.Models.Metadata.Port ?? new();
 
         #endregion
 
@@ -92,29 +79,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // Everything else fails
             return false;
-        }
-
-        #endregion
-
-        #region Manipulation
-
-        /// <inheritdoc/>
-        public override bool PassesFilter(FilterRunner filterRunner)
-        {
-            if (Machine is not null && !Machine.PassesFilter(filterRunner))
-                return false;
-
-            // TODO: Analog
-
-            return filterRunner.Run(_internal);
-        }
-
-        /// <inheritdoc/>
-        public override bool PassesFilterDB(FilterRunner filterRunner)
-        {
-            // TODO: Analog
-
-            return filterRunner.Run(_internal);
         }
 
         #endregion

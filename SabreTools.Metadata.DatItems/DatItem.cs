@@ -12,7 +12,6 @@ namespace SabreTools.Metadata.DatItems
     /// </summary>
     [JsonObject("datitem"), XmlRoot("datitem")]
     [XmlInclude(typeof(Adjuster))]
-    [XmlInclude(typeof(Analog))]
     [XmlInclude(typeof(Archive))]
     [XmlInclude(typeof(BiosSet))]
     [XmlInclude(typeof(Blank))]

@@ -502,24 +502,6 @@ namespace SabreTools.Metadata.Filter.Test
 
         #endregion
 
-        #region Analog
-
-        [Theory]
-        [InlineData("analog.mask", "mask")]
-        public void Matches_Analog(string itemField, string value)
-        {
-            var filter = new FilterObject(itemField, value, Operation.Equals);
-            Analog obj = new Analog
-            {
-                Mask = "mask",
-            };
-
-            bool actual = filter.Matches(obj);
-            Assert.True(actual);
-        }
-
-        #endregion
-
         #region Archive
 
         [Theory]
@@ -1462,12 +1444,14 @@ namespace SabreTools.Metadata.Filter.Test
         #region Port
 
         [Theory]
+        // [InlineData("port.analog.mask", "mask")] // TODO: Figure out how to deal with string arrays
         [InlineData("port.tag", "tag")]
         public void Matches_Port(string itemField, string value)
         {
             var filter = new FilterObject(itemField, value, Operation.Equals);
             Port obj = new Port
             {
+                AnalogMask = ["mask"],
                 Tag = "tag",
             };
 

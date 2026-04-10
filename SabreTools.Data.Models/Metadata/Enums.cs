@@ -272,7 +272,6 @@ namespace SabreTools.Data.Models.Metadata
         NULL = 0,
 
         Adjuster,
-        Analog,
         Archive,
         BiosSet,
         Chip,

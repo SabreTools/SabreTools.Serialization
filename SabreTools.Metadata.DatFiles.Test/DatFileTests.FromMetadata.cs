@@ -355,14 +355,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
         }
 
-        private static Data.Models.Metadata.Analog CreateMetadataAnalog()
-        {
-            return new Data.Models.Metadata.Analog
-            {
-                Mask = "mask",
-            };
-        }
-
         private static Data.Models.Metadata.Archive CreateMetadataArchive()
         {
             return new Data.Models.Metadata.Archive
@@ -717,7 +709,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.Port
             {
-                Analog = [CreateMetadataAnalog()],
+                AnalogMask = ["mask"],
                 Tag = "tag",
             };
         }
@@ -1128,12 +1120,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("name", adjuster.Name);
         }
 
-        private static void ValidateAnalog(Analog? analog)
-        {
-            Assert.NotNull(analog);
-            Assert.Equal("mask", analog.Mask);
-        }
-
         private static void ValidateArchive(Archive? archive)
         {
             Assert.NotNull(archive);
@@ -1424,10 +1410,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(port);
             Assert.Equal("tag", port.Tag);
 
-            Analog[]? dipValues = port.Analog;
-            Assert.NotNull(dipValues);
-            Analog? dipValue = Assert.Single(dipValues);
-            ValidateAnalog(dipValue);
+            string[]? analogMasks = port.AnalogMask;
+            Assert.NotNull(analogMasks);
+            string? analogMask = Assert.Single(analogMasks);
+            Assert.Equal("mask", analogMask);
         }
 
         private static void ValidateRamOption(RamOption? ramOption)
