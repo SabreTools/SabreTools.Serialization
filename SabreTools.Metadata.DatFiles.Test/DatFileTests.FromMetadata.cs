@@ -491,7 +491,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Extension = [CreateMetadataExtension()],
                 FixedImage = "fixedimage",
-                Instance = CreateMetadataInstance(),
+                InstanceBriefName = "briefname",
+                InstanceName = "name",
                 Interface = "interface",
                 Mandatory = true,
                 Tag = "tag",
@@ -683,15 +684,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Players = 12345,
                 Service = true,
                 Tilt = true,
-            };
-        }
-
-        private static Data.Models.Metadata.Instance CreateMetadataInstance()
-        {
-            return new Data.Models.Metadata.Instance
-            {
-                BriefName = "briefname",
-                Name = "name",
             };
         }
 
@@ -1247,6 +1239,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(device);
             Assert.Equal("fixedimage", device.FixedImage);
+            Assert.Equal("briefname", device.InstanceBriefName);
+            Assert.Equal("name", device.InstanceName);
             Assert.Equal("interface", device.Interface);
             Assert.Equal(true, device.Mandatory);
             Assert.Equal("tag", device.Tag);
@@ -1256,8 +1250,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(extensions);
             Extension? extension = Assert.Single(extensions);
             ValidateExtension(extension);
-
-            ValidateInstance(device.Instance);
         }
 
         private static void ValidateDeviceRef(DeviceRef? deviceRef)
@@ -1409,13 +1401,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(controls);
             Control? control = Assert.Single(controls);
             ValidateControl(control);
-        }
-
-        private static void ValidateInstance(Instance? instance)
-        {
-            Assert.NotNull(instance);
-            Assert.Equal("briefname", instance.BriefName);
-            Assert.Equal("name", instance.Name);
         }
 
         private static void ValidateMedia(Media? media)

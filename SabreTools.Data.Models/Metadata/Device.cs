@@ -16,7 +16,9 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? FixedImage { get; set; }
 
-        public Instance? Instance { get; set; }
+        public string? InstanceBriefName { get; set; }
+
+        public string? InstanceName { get; set; }
 
         public string? Interface { get; set; }
 
@@ -38,7 +40,8 @@ namespace SabreTools.Data.Models.Metadata
             if (Extension is not null)
                 obj.Extension = Array.ConvertAll(Extension, i => (Extension)i.Clone());
             obj.FixedImage = FixedImage;
-            obj.Instance = Instance?.Clone() as Instance;
+            obj.InstanceBriefName = InstanceBriefName;
+            obj.InstanceName = InstanceName;
             obj.Interface = Interface;
             obj.Mandatory = Mandatory;
             obj.Tag = Tag;
@@ -62,6 +65,16 @@ namespace SabreTools.Data.Models.Metadata
             else if (FixedImage is not null && !FixedImage.Equals(other.FixedImage, StringComparison.OrdinalIgnoreCase))
                 return false;
 
+            if ((InstanceBriefName is null) ^ (other.InstanceBriefName is null))
+                return false;
+            else if (InstanceBriefName is not null && !InstanceBriefName.Equals(other.InstanceBriefName, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((InstanceName is null) ^ (other.InstanceName is null))
+                return false;
+            else if (InstanceName is not null && !InstanceName.Equals(other.InstanceName, StringComparison.OrdinalIgnoreCase))
+                return false;
+
             if ((Interface is null) ^ (other.Interface is null))
                 return false;
             else if (Interface is not null && !Interface.Equals(other.Interface, StringComparison.OrdinalIgnoreCase))
@@ -73,12 +86,6 @@ namespace SabreTools.Data.Models.Metadata
             if ((Tag is null) ^ (other.Tag is null))
                 return false;
             else if (Tag is not null && !Tag.Equals(other.Tag, StringComparison.OrdinalIgnoreCase))
-                return false;
-
-            // Sub-items
-            if ((Instance is null) ^ (other.Instance is null))
-                return false;
-            else if (Instance is not null && other.Instance is not null && Instance.Equals(other.Instance))
                 return false;
 
             // TODO: Figure out how to properly check arrays

@@ -35,7 +35,6 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(Feature))]
     [XmlInclude(typeof(Info))]
     [XmlInclude(typeof(Input))]
-    [XmlInclude(typeof(Instance))]
     [XmlInclude(typeof(Media))]
     [XmlInclude(typeof(Part))]
     [XmlInclude(typeof(PartFeature))]

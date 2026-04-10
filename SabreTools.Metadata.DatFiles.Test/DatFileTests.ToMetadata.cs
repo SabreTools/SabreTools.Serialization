@@ -760,6 +760,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(device);
             Assert.Equal("fixedimage", device.FixedImage);
+            Assert.Equal("briefname", device.InstanceBriefName);
+            Assert.Equal("name", device.InstanceName);
             Assert.Equal("interface", device.Interface);
             Assert.Equal(true, device.Mandatory);
             Assert.Equal("tag", device.Tag);
@@ -769,8 +771,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(extensions);
             Data.Models.Metadata.Extension? extension = Assert.Single(extensions);
             ValidateMetadataExtension(extension);
-
-            ValidateMetadataInstance(device.Instance);
         }
 
         private static void ValidateMetadataDeviceRef(Data.Models.Metadata.DeviceRef? deviceRef)
@@ -927,13 +927,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(controls);
             Data.Models.Metadata.Control? control = Assert.Single(controls);
             ValidateMetadataControl(control);
-        }
-
-        private static void ValidateMetadataInstance(Data.Models.Metadata.Instance? instance)
-        {
-            Assert.NotNull(instance);
-            Assert.Equal("briefname", instance.BriefName);
-            Assert.Equal("name", instance.Name);
         }
 
         private static void ValidateMetadataMedia(Data.Models.Metadata.Media? media)

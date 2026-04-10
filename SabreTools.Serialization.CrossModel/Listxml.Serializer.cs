@@ -270,14 +270,13 @@ namespace SabreTools.Serialization.CrossModel
             var device = new Data.Models.Metadata.Device
             {
                 DeviceType = item.Type,
-                Tag = item.Tag,
                 FixedImage = item.FixedImage,
-                Mandatory = item.Mandatory,
+                InstanceBriefName = item.Instance?.BriefName,
+                InstanceName = item.Instance?.Name,
                 Interface = item.Interface,
+                Mandatory = item.Mandatory,
+                Tag = item.Tag,
             };
-
-            if (item.Instance is not null)
-                device.Instance = ConvertToInternalModel(item.Instance);
 
             if (item.Extension is not null && item.Extension.Length > 0)
                 device.Extension = Array.ConvertAll(item.Extension, ConvertToInternalModel);
@@ -467,19 +466,6 @@ namespace SabreTools.Serialization.CrossModel
                 input.Control = Array.ConvertAll(item.Control, ConvertToInternalModel);
 
             return input;
-        }
-
-        /// <summary>
-        /// Convert from <see cref="Instance"/> to <see cref="Models.Metadata.Instance"/>
-        /// </summary>
-        private static Data.Models.Metadata.Instance ConvertToInternalModel(Instance item)
-        {
-            var instance = new Data.Models.Metadata.Instance
-            {
-                Name = item.Name,
-                BriefName = item.BriefName,
-            };
-            return instance;
         }
 
         /// <summary>

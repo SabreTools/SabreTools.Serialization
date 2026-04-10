@@ -296,7 +296,6 @@ namespace SabreTools.Data.Models.Metadata
         File, // TODO: This should be merged with Rom?
         Info,
         Input,
-        Instance,
         Media,
         Original,
         Part,

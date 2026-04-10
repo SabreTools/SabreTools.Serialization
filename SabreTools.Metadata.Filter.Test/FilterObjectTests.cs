@@ -804,6 +804,8 @@ namespace SabreTools.Metadata.Filter.Test
         [Theory]
         [InlineData("device.devicetype", "punchcard")]
         [InlineData("device.fixedimage", "fixedimage")]
+        [InlineData("device.instance.briefname", "briefname")]
+        [InlineData("device.instance.name", "name")]
         [InlineData("device.interface", "interface")]
         [InlineData("device.mandatory", "yes")]
         [InlineData("device.tag", "tag")]
@@ -814,6 +816,8 @@ namespace SabreTools.Metadata.Filter.Test
             {
                 DeviceType = DeviceType.PunchCard,
                 FixedImage = "fixedimage",
+                InstanceBriefName = "briefname",
+                InstanceName = "name",
                 Interface = "interface",
                 Mandatory = true,
                 Tag = "tag",
@@ -825,7 +829,7 @@ namespace SabreTools.Metadata.Filter.Test
 
         #endregion
 
-        #region Device
+        #region DeviceRef
 
         [Theory]
         [InlineData("deviceref.name", "name")]
@@ -1257,24 +1261,6 @@ namespace SabreTools.Metadata.Filter.Test
                 Players = 12345,
                 Service = true,
                 Tilt = true,
-            };
-
-            bool actual = filter.Matches(obj);
-            Assert.True(actual);
-        }
-
-        #endregion
-
-        #region Instance
-
-        [Theory]
-        [InlineData("instance.name", "name")]
-        public void Matches_Instance(string itemField, string value)
-        {
-            var filter = new FilterObject(itemField, value, Operation.Equals);
-            Instance obj = new Instance
-            {
-                Name = "name",
             };
 
             bool actual = filter.Matches(obj);

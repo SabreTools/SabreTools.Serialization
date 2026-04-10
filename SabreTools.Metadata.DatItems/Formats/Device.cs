@@ -30,10 +30,17 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => _internal.FixedImage = value;
         }
 
-        public Instance? Instance { get; set; }
+        public string? InstanceBriefName
+        {
+            get => _internal.InstanceBriefName;
+            set => _internal.InstanceBriefName = value;
+        }
 
-        [JsonIgnore]
-        public bool InstanceSpecified => Instance is not null;
+        public string? InstanceName
+        {
+            get => _internal.InstanceName;
+            set => _internal.InstanceName = value;
+        }
 
         public string? Interface
         {
@@ -67,10 +74,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             // Handle subitems
             if (item.Extension is not null)
-                Extension = Array.ConvertAll(item.Extension, extension => new Extension(extension)); ;
-
-            if (item.Instance is not null)
-                Instance = new Instance(item.Instance);
+                Extension = Array.ConvertAll(item.Extension, extension => new Extension(extension));
         }
 
         public Device(Data.Models.Metadata.Device item, Machine machine, Source source) : this(item)
@@ -100,9 +104,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override Data.Models.Metadata.Device GetInternalClone()
         {
             var deviceItem = _internal.Clone() as Data.Models.Metadata.Device ?? new();
-
-            if (Instance is not null)
-                deviceItem.Instance = Instance.GetInternalClone();
 
             if (Extension is not null)
                 deviceItem.Extension = Array.ConvertAll(Extension, extension => extension.GetInternalClone()); ;
@@ -139,7 +140,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (Machine is not null && !Machine.PassesFilter(filterRunner))
                 return false;
 
-            // TODO: Instance
             // TODO: Extension
 
             return filterRunner.Run(_internal);
@@ -148,7 +148,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override bool PassesFilterDB(FilterRunner filterRunner)
         {
-            // TODO: Instance
             // TODO: Extension
 
             return filterRunner.Run(_internal);

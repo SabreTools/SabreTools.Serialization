@@ -195,6 +195,8 @@ namespace SabreTools.Metadata.Filter
         [
             "devicetype",
             "fixedimage",
+            "instance.briefname",
+            "instance.name",
             "interface",
             "mandatory",
             "tag",
@@ -409,14 +411,6 @@ namespace SabreTools.Metadata.Filter
             "players",
             "service",
             "tilt",
-        ];
-
-        /// <summary>
-        /// Known keys for Instance
-        /// </summary>
-        private static readonly string[] _instanceKeys =
-        [
-            "name",
         ];
 
         /// <summary>
@@ -1043,7 +1037,6 @@ namespace SabreTools.Metadata.Filter
                 "header" => _headerKeys,
                 "info" => _infoKeys,
                 "input" => _inputKeys,
-                "instance" => _instanceKeys,
                 "media" => _mediaKeys,
                 "original" => _originalKeys,
                 "part" => _partKeys,

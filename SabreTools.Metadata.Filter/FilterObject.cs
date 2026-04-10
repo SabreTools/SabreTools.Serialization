@@ -402,7 +402,6 @@ namespace SabreTools.Metadata.Filter
                 case Header item: return GetCheckValue(item, fieldName, out checkValue);
                 case Info item: return GetCheckValue(item, fieldName, out checkValue);
                 case Input item: return GetCheckValue(item, fieldName, out checkValue);
-                case Instance item: return GetCheckValue(item, fieldName, out checkValue);
                 case Machine item: return GetCheckValue(item, fieldName, out checkValue);
                 case Media item: return GetCheckValue(item, fieldName, out checkValue);
                 case Original item: return GetCheckValue(item, fieldName, out checkValue);
@@ -909,6 +908,12 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case "fixedimage":
                     checkValue = obj.FixedImage;
+                    return true;
+                case "instance.briefname":
+                    checkValue = obj.InstanceBriefName;
+                    return true;
+                case "instance.name":
+                    checkValue = obj.InstanceName;
                     return true;
                 case "interface":
                     checkValue = obj.Interface;
@@ -1463,24 +1468,6 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case "tilt":
                     checkValue = obj.Tilt.FromYesNo();
-                    return true;
-
-                // If the key doesn't exist, we count it as null
-                default:
-                    checkValue = null;
-                    return false;
-            }
-        }
-
-        /// <summary>
-        /// Get the check value for a field
-        /// </summary>
-        private static bool GetCheckValue(Instance obj, string fieldName, out string? checkValue)
-        {
-            switch (fieldName)
-            {
-                case "name":
-                    checkValue = obj.Name;
                     return true;
 
                 // If the key doesn't exist, we count it as null

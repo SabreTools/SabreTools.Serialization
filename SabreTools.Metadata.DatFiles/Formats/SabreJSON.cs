@@ -330,9 +330,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     case Data.Models.Metadata.ItemType.Input:
                         datItem = datItemObj.ToObject<Input>();
                         break;
-                    case Data.Models.Metadata.ItemType.Instance:
-                        datItem = datItemObj.ToObject<Instance>();
-                        break;
                     case Data.Models.Metadata.ItemType.Media:
                         datItem = datItemObj.ToObject<Media>();
                         break;
