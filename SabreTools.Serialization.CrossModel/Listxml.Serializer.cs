@@ -128,12 +128,13 @@ namespace SabreTools.Serialization.CrossModel
         {
             var adjuster = new Data.Models.Metadata.Adjuster
             {
+                ConditionMask = item.Condition?.Mask,
+                ConditionRelation = item.Condition?.Relation,
+                ConditionTag = item.Condition?.Tag,
+                ConditionValue = item.Condition?.Value,
                 Name = item.Name,
                 Default = item.Default,
             };
-
-            if (item.Condition is not null)
-                adjuster.Condition = ConvertToInternalModel(item.Condition);
 
             return adjuster;
         }
@@ -181,34 +182,20 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Condition"/> to <see cref="Models.Metadata.Condition"/>
-        /// </summary>
-        private static Data.Models.Metadata.Condition ConvertToInternalModel(Condition item)
-        {
-            var condition = new Data.Models.Metadata.Condition
-            {
-                Tag = item.Tag,
-                Mask = item.Mask,
-                Relation = item.Relation,
-                Value = item.Value,
-            };
-            return condition;
-        }
-
-        /// <summary>
         /// Convert from <see cref="Configuration"/> to <see cref="Models.Metadata.Configuration"/>
         /// </summary>
         private static Data.Models.Metadata.Configuration ConvertToInternalModel(Configuration item)
         {
             var configuration = new Data.Models.Metadata.Configuration
             {
+                ConditionMask = item.Condition?.Mask,
+                ConditionRelation = item.Condition?.Relation,
+                ConditionTag = item.Condition?.Tag,
+                ConditionValue = item.Condition?.Value,
                 Name = item.Name,
                 Tag = item.Tag,
                 Mask = item.Mask,
             };
-
-            if (item.Condition is not null)
-                configuration.Condition = ConvertToInternalModel(item.Condition);
 
             if (item.ConfLocation is not null && item.ConfLocation.Length > 0)
                 configuration.ConfLocation = Array.ConvertAll(item.ConfLocation, ConvertToInternalModel);
@@ -240,13 +227,14 @@ namespace SabreTools.Serialization.CrossModel
         {
             var confSetting = new Data.Models.Metadata.ConfSetting
             {
+                ConditionMask = item.Condition?.Mask,
+                ConditionRelation = item.Condition?.Relation,
+                ConditionTag = item.Condition?.Tag,
+                ConditionValue = item.Condition?.Value,
                 Name = item.Name,
                 Value = item.Value,
                 Default = item.Default,
             };
-
-            if (item.Condition is not null)
-                confSetting.Condition = ConvertToInternalModel(item.Condition);
 
             return confSetting;
         }
@@ -330,13 +318,14 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipSwitch = new Data.Models.Metadata.DipSwitch
             {
+                ConditionMask = item.Condition?.Mask,
+                ConditionRelation = item.Condition?.Relation,
+                ConditionTag = item.Condition?.Tag,
+                ConditionValue = item.Condition?.Value,
                 Name = item.Name,
                 Tag = item.Tag,
                 Mask = item.Mask,
             };
-
-            if (item.Condition is not null)
-                dipSwitch.Condition = ConvertToInternalModel(item.Condition);
 
             if (item.DipLocation is not null && item.DipLocation.Length > 0)
                 dipSwitch.DipLocation = Array.ConvertAll(item.DipLocation, ConvertToInternalModel);
@@ -354,13 +343,14 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dipValue = new Data.Models.Metadata.DipValue
             {
+                ConditionMask = item.Condition?.Mask,
+                ConditionRelation = item.Condition?.Relation,
+                ConditionTag = item.Condition?.Tag,
+                ConditionValue = item.Condition?.Value,
                 Name = item.Name,
                 Value = item.Value,
                 Default = item.Default,
             };
-
-            if (item.Condition is not null)
-                dipValue.Condition = ConvertToInternalModel(item.Condition);
 
             return dipValue;
         }

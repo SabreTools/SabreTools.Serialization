@@ -273,9 +273,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     case Data.Models.Metadata.ItemType.Chip:
                         datItem = datItemObj.ToObject<Chip>();
                         break;
-                    case Data.Models.Metadata.ItemType.Condition:
-                        datItem = datItemObj.ToObject<Condition>();
-                        break;
                     case Data.Models.Metadata.ItemType.Configuration:
                         datItem = datItemObj.ToObject<Configuration>();
                         break;

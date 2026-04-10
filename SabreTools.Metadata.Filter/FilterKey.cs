@@ -40,6 +40,10 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static readonly string[] _adjusterKeys =
         [
+            "condition.mask",
+            "condition.relation",
+            "condition.tag",
+            "condition.value",
             "default",
             "name"
         ];
@@ -117,21 +121,14 @@ namespace SabreTools.Metadata.Filter
         ];
 
         /// <summary>
-        /// Known keys for Condition
-        /// </summary>
-        private static readonly string[] _conditionKeys =
-        [
-            "mask",
-            "relation",
-            "tag",
-            "value",
-        ];
-
-        /// <summary>
         /// Known keys for Configuration
         /// </summary>
         private static readonly string[] _configurationKeys =
         [
+            "condition.mask",
+            "condition.relation",
+            "condition.tag",
+            "condition.value",
             "mask",
             "name",
             "tag",
@@ -152,6 +149,10 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static readonly string[] _confSettingKeys =
         [
+            "condition.mask",
+            "condition.relation",
+            "condition.tag",
+            "condition.value",
             "default",
             "name",
             "value",
@@ -222,6 +223,10 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static readonly string[] _dipSwitchKeys =
         [
+            "condition.mask",
+            "condition.relation",
+            "condition.tag",
+            "condition.value",
             "default",
             "mask",
             "name",
@@ -233,6 +238,10 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private static readonly string[] _dipValueKeys =
         [
+            "condition.mask",
+            "condition.relation",
+            "condition.tag",
+            "condition.value",
             "default",
             "name",
             "value",
@@ -876,12 +885,12 @@ namespace SabreTools.Metadata.Filter
 
             // If we only have one part, we can't do anything
             string[] splitFilter = itemFieldString!.Split('.');
-            if (splitFilter.Length != 2)
+            if (splitFilter.Length < 2)
                 return false;
 
             // Set and sanitize the filter ID
             itemName = splitFilter[0];
-            fieldName = splitFilter[1];
+            fieldName = string.Join(".", splitFilter, 1, splitFilter.Length - 1);
             return ParseFilterId(ref itemName, ref fieldName);
         }
 
@@ -1014,7 +1023,6 @@ namespace SabreTools.Metadata.Filter
                 "archive" => _archiveKeys,
                 "biosset" => _biossetKeys,
                 "chip" => _chipKeys,
-                "condition" => _conditionKeys,
                 "configuration" => _configurationKeys,
                 "conflocation" => _confLocationKeys,
                 "confsetting" => _confSettingKeys,

@@ -1,6 +1,5 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Metadata.Filter;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -12,10 +11,29 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Properties
 
-        public Condition? Condition { get; set; }
+        public string? ConditionMask
+        {
+            get => _internal.ConditionMask;
+            set => _internal.ConditionMask = value;
+        }
 
-        [JsonIgnore]
-        public bool ConditionSpecified => Condition is not null;
+        public Data.Models.Metadata.Relation? ConditionRelation
+        {
+            get => _internal.ConditionRelation;
+            set => _internal.ConditionRelation = value;
+        }
+
+        public string? ConditionTag
+        {
+            get => _internal.ConditionTag;
+            set => _internal.ConditionTag = value;
+        }
+
+        public string? ConditionValue
+        {
+            get => _internal.ConditionValue;
+            set => _internal.ConditionValue = value;
+        }
 
         public bool? Default
         {
@@ -45,12 +63,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public ConfSetting() : base() { }
 
-        public ConfSetting(Data.Models.Metadata.ConfSetting item) : base(item)
-        {
-            // Handle subitems
-            if (item.Condition is not null)
-                Condition = new Condition(item.Condition);
-        }
+        public ConfSetting(Data.Models.Metadata.ConfSetting item) : base(item) { }
 
         public ConfSetting(Data.Models.Metadata.ConfSetting item, Machine machine, Source source) : this(item)
         {
@@ -77,14 +90,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.ConfSetting GetInternalClone()
-        {
-            var confSettingItem = _internal.Clone() as Data.Models.Metadata.ConfSetting ?? new();
-
-            if (Condition is not null)
-                confSettingItem.Condition = Condition.GetInternalClone();
-
-            return confSettingItem;
-        }
+            => _internal.Clone() as Data.Models.Metadata.ConfSetting ?? new();
 
         #endregion
 
@@ -103,29 +109,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // Everything else fails
             return false;
-        }
-
-        #endregion
-
-        #region Manipulation
-
-        /// <inheritdoc/>
-        public override bool PassesFilter(FilterRunner filterRunner)
-        {
-            if (Machine is not null && !Machine.PassesFilter(filterRunner))
-                return false;
-
-            // TODO: Condition
-
-            return filterRunner.Run(_internal);
-        }
-
-        /// <inheritdoc/>
-        public override bool PassesFilterDB(FilterRunner filterRunner)
-        {
-            // TODO: Condition
-
-            return filterRunner.Run(_internal);
         }
 
         #endregion

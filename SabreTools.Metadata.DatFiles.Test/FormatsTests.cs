@@ -760,7 +760,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Data.Models.Metadata.ItemType.Adjuster,
                 Data.Models.Metadata.ItemType.BiosSet,
                 Data.Models.Metadata.ItemType.Chip,
-                Data.Models.Metadata.ItemType.Condition,
                 Data.Models.Metadata.ItemType.Configuration,
                 Data.Models.Metadata.ItemType.Device,
                 Data.Models.Metadata.ItemType.DeviceRef,

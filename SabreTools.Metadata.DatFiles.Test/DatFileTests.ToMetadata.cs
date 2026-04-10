@@ -612,11 +612,12 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataAdjuster(Data.Models.Metadata.Adjuster? adjuster)
         {
             Assert.NotNull(adjuster);
+            Assert.Equal("value", adjuster.ConditionValue);
+            Assert.Equal("mask", adjuster.ConditionMask);
+            Assert.Equal(Data.Models.Metadata.Relation.Equal, adjuster.ConditionRelation);
+            Assert.Equal("tag", adjuster.ConditionTag);
             Assert.True(adjuster.Default);
             Assert.Equal("name", adjuster.Name);
-
-            Data.Models.Metadata.Condition? condition = adjuster.Condition;
-            ValidateMetadataCondition(condition);
         }
 
         private static void ValidateMetadataAnalog(Data.Models.Metadata.Analog? analog)
@@ -682,23 +683,16 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(Data.Models.Metadata.ChipType.CPU, chip.ChipType);
         }
 
-        private static void ValidateMetadataCondition(Data.Models.Metadata.Condition? condition)
-        {
-            Assert.NotNull(condition);
-            Assert.Equal("value", condition.Value);
-            Assert.Equal("mask", condition.Mask);
-            Assert.Equal(Data.Models.Metadata.Relation.Equal, condition.Relation);
-            Assert.Equal("tag", condition.Tag);
-        }
-
         private static void ValidateMetadataConfiguration(Data.Models.Metadata.Configuration? configuration)
         {
             Assert.NotNull(configuration);
+            Assert.Equal("value", configuration.ConditionValue);
+            Assert.Equal("mask", configuration.ConditionMask);
+            Assert.Equal(Data.Models.Metadata.Relation.Equal, configuration.ConditionRelation);
+            Assert.Equal("tag", configuration.ConditionTag);
             Assert.Equal("mask", configuration.Mask);
             Assert.Equal("name", configuration.Name);
             Assert.Equal("tag", configuration.Tag);
-
-            ValidateMetadataCondition(configuration.Condition);
 
             Data.Models.Metadata.ConfLocation[]? confLocations = configuration.ConfLocation;
             Assert.NotNull(confLocations);
@@ -722,11 +716,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataConfSetting(Data.Models.Metadata.ConfSetting? confSetting)
         {
             Assert.NotNull(confSetting);
+            Assert.Equal("value", confSetting.ConditionValue);
+            Assert.Equal("mask", confSetting.ConditionMask);
+            Assert.Equal(Data.Models.Metadata.Relation.Equal, confSetting.ConditionRelation);
+            Assert.Equal("tag", confSetting.ConditionTag);
             Assert.True(confSetting.Default);
             Assert.Equal("name", confSetting.Name);
             Assert.Equal("value", confSetting.Value);
-
-            ValidateMetadataCondition(confSetting.Condition);
         }
 
         private static void ValidateMetadataControl(Data.Models.Metadata.Control? control)
@@ -794,12 +790,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataDipSwitch(Data.Models.Metadata.DipSwitch? dipSwitch)
         {
             Assert.NotNull(dipSwitch);
+            Assert.Equal("value", dipSwitch.ConditionValue);
+            Assert.Equal("mask", dipSwitch.ConditionMask);
+            Assert.Equal(Data.Models.Metadata.Relation.Equal, dipSwitch.ConditionRelation);
+            Assert.Equal("tag", dipSwitch.ConditionTag);
             Assert.True(dipSwitch.Default);
             Assert.Equal("mask", dipSwitch.Mask);
             Assert.Equal("name", dipSwitch.Name);
             Assert.Equal("tag", dipSwitch.Tag);
-
-            ValidateMetadataCondition(dipSwitch.Condition);
 
             Data.Models.Metadata.DipLocation[]? dipLocations = dipSwitch.DipLocation;
             Assert.NotNull(dipLocations);
@@ -820,11 +818,13 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataDipValue(Data.Models.Metadata.DipValue? dipValue)
         {
             Assert.NotNull(dipValue);
+            Assert.Equal("value", dipValue.ConditionValue);
+            Assert.Equal("mask", dipValue.ConditionMask);
+            Assert.Equal(Data.Models.Metadata.Relation.Equal, dipValue.ConditionRelation);
+            Assert.Equal("tag", dipValue.ConditionTag);
             Assert.True(dipValue.Default);
             Assert.Equal("name", dipValue.Name);
             Assert.Equal("value", dipValue.Value);
-
-            ValidateMetadataCondition(dipValue.Condition);
         }
 
         private static void ValidateMetadataDisk(Data.Models.Metadata.Disk? disk)

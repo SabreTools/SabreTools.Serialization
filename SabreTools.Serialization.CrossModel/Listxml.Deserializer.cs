@@ -152,9 +152,19 @@ namespace SabreTools.Serialization.CrossModel
                 Default = item.Default,
             };
 
-            var condition = item.Condition;
-            if (condition is not null)
-                adjuster.Condition = ConvertFromInternalModel(condition);
+            if (item.ConditionMask is not null
+                || item.ConditionRelation is not null
+                || item.ConditionTag is not null
+                || item.ConditionValue is not null)
+            {
+                adjuster.Condition = new Condition
+                {
+                    Mask = item.ConditionMask,
+                    Relation = item.ConditionRelation,
+                    Tag = item.ConditionTag,
+                    Value = item.ConditionValue,
+                };
+            }
 
             return adjuster;
         }
@@ -202,21 +212,6 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Models.Metadata.Condition"/> to <see cref="Condition"/>
-        /// </summary>
-        private static Condition ConvertFromInternalModel(Data.Models.Metadata.Condition item)
-        {
-            var condition = new Condition
-            {
-                Tag = item.Tag,
-                Mask = item.Mask,
-                Relation = item.Relation,
-                Value = item.Value,
-            };
-            return condition;
-        }
-
-        /// <summary>
         /// Convert from <see cref="Models.Metadata.Configuration"/> to <see cref="Configuration"/>
         /// </summary>
         private static Configuration ConvertFromInternalModel(Data.Models.Metadata.Configuration item)
@@ -228,9 +223,19 @@ namespace SabreTools.Serialization.CrossModel
                 Mask = item.Mask,
             };
 
-            var condition = item.Condition;
-            if (condition is not null)
-                configuration.Condition = ConvertFromInternalModel(condition);
+            if (item.ConditionMask is not null
+                || item.ConditionRelation is not null
+                || item.ConditionTag is not null
+                || item.ConditionValue is not null)
+            {
+                configuration.Condition = new Condition
+                {
+                    Mask = item.ConditionMask,
+                    Relation = item.ConditionRelation,
+                    Tag = item.ConditionTag,
+                    Value = item.ConditionValue,
+                };
+            }
 
             var confLocations = item.ConfLocation;
             if (confLocations is not null && confLocations.Length > 0)
@@ -269,9 +274,19 @@ namespace SabreTools.Serialization.CrossModel
                 Default = item.Default,
             };
 
-            var condition = item.Condition;
-            if (condition is not null)
-                confSetting.Condition = ConvertFromInternalModel(condition);
+            if (item.ConditionMask is not null
+                || item.ConditionRelation is not null
+                || item.ConditionTag is not null
+                || item.ConditionValue is not null)
+            {
+                confSetting.Condition = new Condition
+                {
+                    Mask = item.ConditionMask,
+                    Relation = item.ConditionRelation,
+                    Tag = item.ConditionTag,
+                    Value = item.ConditionValue,
+                };
+            }
 
             return confSetting;
         }
@@ -362,9 +377,19 @@ namespace SabreTools.Serialization.CrossModel
                 Mask = item.Mask,
             };
 
-            var condition = item.Condition;
-            if (condition is not null)
-                dipSwitch.Condition = ConvertFromInternalModel(condition);
+            if (item.ConditionMask is not null
+                || item.ConditionRelation is not null
+                || item.ConditionTag is not null
+                || item.ConditionValue is not null)
+            {
+                dipSwitch.Condition = new Condition
+                {
+                    Mask = item.ConditionMask,
+                    Relation = item.ConditionRelation,
+                    Tag = item.ConditionTag,
+                    Value = item.ConditionValue,
+                };
+            }
 
             var dipLocations = item.DipLocation;
             if (dipLocations is not null && dipLocations.Length > 0)
@@ -389,9 +414,19 @@ namespace SabreTools.Serialization.CrossModel
                 Default = item.Default,
             };
 
-            var condition = item.Condition;
-            if (condition is not null)
-                dipValue.Condition = ConvertFromInternalModel(condition);
+            if (item.ConditionMask is not null
+                || item.ConditionRelation is not null
+                || item.ConditionTag is not null
+                || item.ConditionValue is not null)
+            {
+                dipValue.Condition = new Condition
+                {
+                    Mask = item.ConditionMask,
+                    Relation = item.ConditionRelation,
+                    Tag = item.ConditionTag,
+                    Value = item.ConditionValue,
+                };
+            }
 
             return dipValue;
         }

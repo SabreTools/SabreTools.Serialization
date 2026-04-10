@@ -383,7 +383,6 @@ namespace SabreTools.Metadata.Filter
                 case Archive item: return GetCheckValue(item, fieldName, out checkValue);
                 case BiosSet item: return GetCheckValue(item, fieldName, out checkValue);
                 case Chip item: return GetCheckValue(item, fieldName, out checkValue);
-                case Condition item: return GetCheckValue(item, fieldName, out checkValue);
                 case Configuration item: return GetCheckValue(item, fieldName, out checkValue);
                 case ConfLocation item: return GetCheckValue(item, fieldName, out checkValue);
                 case ConfSetting item: return GetCheckValue(item, fieldName, out checkValue);
@@ -508,6 +507,18 @@ namespace SabreTools.Metadata.Filter
         {
             switch (fieldName)
             {
+                case "condition.mask":
+                    checkValue = obj.ConditionMask;
+                    return true;
+                case "condition.relation":
+                    checkValue = obj.ConditionRelation?.AsStringValue();
+                    return true;
+                case "condition.tag":
+                    checkValue = obj.ConditionTag;
+                    return true;
+                case "condition.value":
+                    checkValue = obj.ConditionValue;
+                    return true;
                 case "default":
                     checkValue = obj.Default.FromYesNo();
                     return true;
@@ -715,37 +726,22 @@ namespace SabreTools.Metadata.Filter
         /// <summary>
         /// Get the check value for a field
         /// </summary>
-        private static bool GetCheckValue(Condition obj, string fieldName, out string? checkValue)
-        {
-            switch (fieldName)
-            {
-                case "mask":
-                    checkValue = obj.Mask;
-                    return true;
-                case "relation":
-                    checkValue = obj.Relation?.AsStringValue();
-                    return true;
-                case "tag":
-                    checkValue = obj.Tag;
-                    return true;
-                case "value":
-                    checkValue = obj.Value;
-                    return true;
-
-                // If the key doesn't exist, we count it as null
-                default:
-                    checkValue = null;
-                    return false;
-            }
-        }
-
-        /// <summary>
-        /// Get the check value for a field
-        /// </summary>
         private static bool GetCheckValue(Configuration obj, string fieldName, out string? checkValue)
         {
             switch (fieldName)
             {
+                case "condition.mask":
+                    checkValue = obj.ConditionMask;
+                    return true;
+                case "condition.relation":
+                    checkValue = obj.ConditionRelation?.AsStringValue();
+                    return true;
+                case "condition.tag":
+                    checkValue = obj.ConditionTag;
+                    return true;
+                case "condition.value":
+                    checkValue = obj.ConditionValue;
+                    return true;
                 case "mask":
                     checkValue = obj.Mask;
                     return true;
@@ -794,6 +790,18 @@ namespace SabreTools.Metadata.Filter
         {
             switch (fieldName)
             {
+                case "condition.mask":
+                    checkValue = obj.ConditionMask;
+                    return true;
+                case "condition.relation":
+                    checkValue = obj.ConditionRelation?.AsStringValue();
+                    return true;
+                case "condition.tag":
+                    checkValue = obj.ConditionTag;
+                    return true;
+                case "condition.value":
+                    checkValue = obj.ConditionValue;
+                    return true;
                 case "default":
                     checkValue = obj.Default.FromYesNo();
                     return true;
@@ -968,6 +976,18 @@ namespace SabreTools.Metadata.Filter
         {
             switch (fieldName)
             {
+                case "condition.mask":
+                    checkValue = obj.ConditionMask;
+                    return true;
+                case "condition.relation":
+                    checkValue = obj.ConditionRelation?.AsStringValue();
+                    return true;
+                case "condition.tag":
+                    checkValue = obj.ConditionTag;
+                    return true;
+                case "condition.value":
+                    checkValue = obj.ConditionValue;
+                    return true;
                 case "default":
                     checkValue = obj.Default.FromYesNo();
                     return true;
@@ -995,6 +1015,18 @@ namespace SabreTools.Metadata.Filter
         {
             switch (fieldName)
             {
+                case "condition.mask":
+                    checkValue = obj.ConditionMask;
+                    return true;
+                case "condition.relation":
+                    checkValue = obj.ConditionRelation?.AsStringValue();
+                    return true;
+                case "condition.tag":
+                    checkValue = obj.ConditionTag;
+                    return true;
+                case "condition.value":
+                    checkValue = obj.ConditionValue;
+                    return true;
                 case "default":
                     checkValue = obj.Default.FromYesNo();
                     return true;

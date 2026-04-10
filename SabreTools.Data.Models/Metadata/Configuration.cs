@@ -9,7 +9,17 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
-        public Condition? Condition { get; set; }
+        /// <remarks>Condition subitem</remarks>
+        public string? ConditionMask { get; set; }
+
+        /// <remarks>Condition subitem, (eq|ne|gt|le|lt|ge)</remarks>
+        public Relation? ConditionRelation { get; set; }
+
+        /// <remarks>Condition subitem</remarks>
+        public string? ConditionTag { get; set; }
+
+        /// <remarks>Condition subitem</remarks>
+        public string? ConditionValue { get; set; }
 
         public ConfLocation[]? ConfLocation { get; set; }
 
@@ -30,7 +40,10 @@ namespace SabreTools.Data.Models.Metadata
         {
             var obj = new Configuration();
 
-            obj.Condition = Condition?.Clone() as Condition;
+            obj.ConditionMask = ConditionMask;
+            obj.ConditionRelation = ConditionRelation;
+            obj.ConditionTag = ConditionTag;
+            obj.ConditionValue = ConditionValue;
             if (ConfLocation is not null)
                 obj.ConfLocation = Array.ConvertAll(ConfLocation, i => (ConfLocation)i.Clone());
             if (ConfSetting is not null)
@@ -50,6 +63,24 @@ namespace SabreTools.Data.Models.Metadata
                 return false;
 
             // Properties
+            if ((ConditionMask is null) ^ (other.ConditionMask is null))
+                return false;
+            else if (ConditionMask is not null && !ConditionMask.Equals(other.ConditionMask, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if (ConditionRelation != other.ConditionRelation)
+                return false;
+
+            if ((ConditionTag is null) ^ (other.ConditionTag is null))
+                return false;
+            else if (ConditionTag is not null && !ConditionTag.Equals(other.ConditionTag, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((ConditionValue is null) ^ (other.ConditionValue is null))
+                return false;
+            else if (ConditionValue is not null && !ConditionValue.Equals(other.ConditionValue, StringComparison.OrdinalIgnoreCase))
+                return false;
+
             if ((Mask is null) ^ (other.Mask is null))
                 return false;
             else if (Mask is not null && !Mask.Equals(other.Mask, StringComparison.OrdinalIgnoreCase))
@@ -63,12 +94,6 @@ namespace SabreTools.Data.Models.Metadata
             if ((Tag is null) ^ (other.Tag is null))
                 return false;
             else if (Tag is not null && !Tag.Equals(other.Tag, StringComparison.OrdinalIgnoreCase))
-                return false;
-
-            // Sub-items
-            if ((Condition is null) ^ (other.Condition is null))
-                return false;
-            else if (Condition is not null && other.Condition is not null && Condition.Equals(other.Condition))
                 return false;
 
             // TODO: Figure out how to properly check arrays

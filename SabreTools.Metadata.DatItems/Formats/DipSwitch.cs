@@ -13,10 +13,29 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Properties
 
-        public Condition? Condition { get; set; }
+        public string? ConditionMask
+        {
+            get => _internal.ConditionMask;
+            set => _internal.ConditionMask = value;
+        }
 
-        [JsonIgnore]
-        public bool ConditionSpecified => Condition is not null;
+        public Data.Models.Metadata.Relation? ConditionRelation
+        {
+            get => _internal.ConditionRelation;
+            set => _internal.ConditionRelation = value;
+        }
+
+        public string? ConditionTag
+        {
+            get => _internal.ConditionTag;
+            set => _internal.ConditionTag = value;
+        }
+
+        public string? ConditionValue
+        {
+            get => _internal.ConditionValue;
+            set => _internal.ConditionValue = value;
+        }
 
         public bool? Default
         {
@@ -83,9 +102,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         public DipSwitch(Data.Models.Metadata.DipSwitch item) : base(item)
         {
             // Handle subitems
-            if (item.Condition is not null)
-                Condition = new Condition(item.Condition);
-
             if (item.DipLocation is not null)
                 DipLocation = Array.ConvertAll(item.DipLocation, dipLocation => new DipLocation(dipLocation));
 
@@ -123,9 +139,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override Data.Models.Metadata.DipSwitch GetInternalClone()
         {
             var dipSwitchItem = _internal.Clone() as Data.Models.Metadata.DipSwitch ?? new();
-
-            if (Condition is not null)
-                dipSwitchItem.Condition = Condition.GetInternalClone();
 
             if (DipLocation is not null)
                 dipSwitchItem.DipLocation = Array.ConvertAll(DipLocation, dipLocation => dipLocation.GetInternalClone());
@@ -168,7 +181,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (Machine is not null && !Machine.PassesFilter(filterRunner))
                 return false;
 
-            // TODO: Condition
             // TODO: DipLocation
             // TODO: DipValue
             // TODO: Entry
@@ -179,7 +191,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override bool PassesFilterDB(FilterRunner filterRunner)
         {
-            // TODO: Condition
             // TODO: DipLocation
             // TODO: DipValue
             // TODO: Entry

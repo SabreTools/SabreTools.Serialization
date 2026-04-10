@@ -13,10 +13,29 @@ namespace SabreTools.Metadata.DatItems.Formats
     {
         #region Properties
 
-        public Condition? Condition { get; set; }
+        public string? ConditionMask
+        {
+            get => _internal.ConditionMask;
+            set => _internal.ConditionMask = value;
+        }
 
-        [JsonIgnore]
-        public bool ConditionSpecified => Condition is not null;
+        public Data.Models.Metadata.Relation? ConditionRelation
+        {
+            get => _internal.ConditionRelation;
+            set => _internal.ConditionRelation = value;
+        }
+
+        public string? ConditionTag
+        {
+            get => _internal.ConditionTag;
+            set => _internal.ConditionTag = value;
+        }
+
+        public string? ConditionValue
+        {
+            get => _internal.ConditionValue;
+            set => _internal.ConditionValue = value;
+        }
 
         public ConfLocation[]? ConfLocation { get; set; }
 
@@ -59,9 +78,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Configuration(Data.Models.Metadata.Configuration item) : base(item)
         {
             // Handle subitems
-            if (item.Condition is not null)
-                Condition = new Condition(item.Condition);
-
             if (item.ConfLocation is not null)
                 ConfLocation = Array.ConvertAll(item.ConfLocation, confLocation => new ConfLocation(confLocation));
 
@@ -96,9 +112,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override Data.Models.Metadata.Configuration GetInternalClone()
         {
             var configurationItem = _internal.Clone() as Data.Models.Metadata.Configuration ?? new();
-
-            if (Condition is not null)
-                configurationItem.Condition = Condition.GetInternalClone();
 
             if (ConfLocation is not null)
                 configurationItem.ConfLocation = Array.ConvertAll(ConfLocation, confLocation => confLocation.GetInternalClone());
@@ -138,7 +151,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (Machine is not null && !Machine.PassesFilter(filterRunner))
                 return false;
 
-            // TODO: Condition
             // TODO: ConfLocation
             // TODO: ConfSetting
 
@@ -148,7 +160,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override bool PassesFilterDB(FilterRunner filterRunner)
         {
-            // TODO: Condition
             // TODO: ConfLocation
             // TODO: ConfSetting
 

@@ -17,7 +17,6 @@ namespace SabreTools.Metadata.DatItems
     [XmlInclude(typeof(BiosSet))]
     [XmlInclude(typeof(Blank))]
     [XmlInclude(typeof(Chip))]
-    [XmlInclude(typeof(Condition))]
     [XmlInclude(typeof(Configuration))]
     [XmlInclude(typeof(ConfLocation))]
     [XmlInclude(typeof(ConfSetting))]

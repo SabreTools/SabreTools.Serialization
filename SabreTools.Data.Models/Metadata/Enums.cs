@@ -276,7 +276,6 @@ namespace SabreTools.Data.Models.Metadata
         Archive,
         BiosSet,
         Chip,
-        Condition,
         Configuration,
         ConfLocation,
         ConfSetting,

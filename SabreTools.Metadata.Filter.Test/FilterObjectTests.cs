@@ -477,6 +477,10 @@ namespace SabreTools.Metadata.Filter.Test
         #region Adjuster
 
         [Theory]
+        [InlineData("adjuster.condition.mask", "mask")]
+        [InlineData("adjuster.condition.relation", "ne")]
+        [InlineData("adjuster.condition.tag", "tag")]
+        [InlineData("adjuster.condition.value", "value")]
         [InlineData("adjuster.default", "yes")]
         [InlineData("adjuster.name", "name")]
         public void Matches_Adjsuter(string itemField, string value)
@@ -484,6 +488,10 @@ namespace SabreTools.Metadata.Filter.Test
             var filter = new FilterObject(itemField, value, Operation.Equals);
             Adjuster obj = new Adjuster
             {
+                ConditionMask = "mask",
+                ConditionRelation = Relation.NotEqual,
+                ConditionTag = "tag",
+                ConditionValue = "value",
                 Default = true,
                 Name = "name",
             };
@@ -645,33 +653,13 @@ namespace SabreTools.Metadata.Filter.Test
 
         #endregion
 
-        #region Condition
-
-        [Theory]
-        [InlineData("condition.mask", "mask")]
-        [InlineData("condition.relation", "ne")]
-        [InlineData("condition.tag", "tag")]
-        [InlineData("condition.value", "value")]
-        public void Matches_Condition(string itemField, string value)
-        {
-            var filter = new FilterObject(itemField, value, Operation.Equals);
-            Condition obj = new Condition
-            {
-                Mask = "mask",
-                Relation = Relation.NotEqual,
-                Tag = "tag",
-                Value = "value",
-            };
-
-            bool actual = filter.Matches(obj);
-            Assert.True(actual);
-        }
-
-        #endregion
-
         #region Configuration
 
         [Theory]
+        [InlineData("configuration.condition.mask", "mask")]
+        [InlineData("configuration.condition.relation", "ne")]
+        [InlineData("configuration.condition.tag", "tag")]
+        [InlineData("configuration.condition.value", "value")]
         [InlineData("configuration.mask", "mask")]
         [InlineData("configuration.name", "name")]
         [InlineData("configuration.tag", "tag")]
@@ -680,6 +668,10 @@ namespace SabreTools.Metadata.Filter.Test
             var filter = new FilterObject(itemField, value, Operation.Equals);
             Configuration obj = new Configuration
             {
+                ConditionMask = "mask",
+                ConditionRelation = Relation.NotEqual,
+                ConditionTag = "tag",
+                ConditionValue = "value",
                 Mask = "mask",
                 Name = "name",
                 Tag = "tag",
@@ -716,6 +708,10 @@ namespace SabreTools.Metadata.Filter.Test
         #region ConfSetting
 
         [Theory]
+        [InlineData("confsetting.condition.mask", "mask")]
+        [InlineData("confsetting.condition.relation", "ne")]
+        [InlineData("confsetting.condition.tag", "tag")]
+        [InlineData("confsetting.condition.value", "value")]
         [InlineData("confsetting.default", "yes")]
         [InlineData("confsetting.name", "name")]
         [InlineData("confsetting.value", "value")]
@@ -724,6 +720,10 @@ namespace SabreTools.Metadata.Filter.Test
             var filter = new FilterObject(itemField, value, Operation.Equals);
             ConfSetting obj = new ConfSetting
             {
+                ConditionMask = "mask",
+                ConditionRelation = Relation.NotEqual,
+                ConditionTag = "tag",
+                ConditionValue = "value",
                 Default = true,
                 Name = "name",
                 Value = "value",
@@ -868,6 +868,10 @@ namespace SabreTools.Metadata.Filter.Test
         #region DipSwitch
 
         [Theory]
+        [InlineData("dipswitch.condition.mask", "mask")]
+        [InlineData("dipswitch.condition.relation", "ne")]
+        [InlineData("dipswitch.condition.tag", "tag")]
+        [InlineData("dipswitch.condition.value", "value")]
         [InlineData("dipswitch.default", "yes")]
         [InlineData("dipswitch.mask", "mask")]
         [InlineData("dipswitch.name", "name")]
@@ -877,6 +881,10 @@ namespace SabreTools.Metadata.Filter.Test
             var filter = new FilterObject(itemField, value, Operation.Equals);
             DipSwitch obj = new DipSwitch
             {
+                ConditionMask = "mask",
+                ConditionRelation = Relation.NotEqual,
+                ConditionTag = "tag",
+                ConditionValue = "value",
                 Default = true,
                 Mask = "mask",
                 Name = "name",
@@ -892,6 +900,10 @@ namespace SabreTools.Metadata.Filter.Test
         #region DipValue
 
         [Theory]
+        [InlineData("dipvalue.condition.mask", "mask")]
+        [InlineData("dipvalue.condition.relation", "ne")]
+        [InlineData("dipvalue.condition.tag", "tag")]
+        [InlineData("dipvalue.condition.value", "value")]
         [InlineData("dipvalue.default", "yes")]
         [InlineData("dipvalue.name", "name")]
         [InlineData("dipvalue.value", "value")]
@@ -900,6 +912,10 @@ namespace SabreTools.Metadata.Filter.Test
             var filter = new FilterObject(itemField, value, Operation.Equals);
             DipValue obj = new DipValue
             {
+                ConditionMask = "mask",
+                ConditionRelation = Relation.NotEqual,
+                ConditionTag = "tag",
+                ConditionValue = "value",
                 Default = true,
                 Name = "name",
                 Value = "value",
