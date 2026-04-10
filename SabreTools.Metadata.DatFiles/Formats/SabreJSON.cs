@@ -330,9 +330,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     case Data.Models.Metadata.ItemType.Original:
                         // Cannot be converted to a DatItem
                         break;
-                    case Data.Models.Metadata.ItemType.Part:
-                        datItem = datItemObj.ToObject<Part>();
-                        break;
                     case Data.Models.Metadata.ItemType.PartFeature:
                         datItem = datItemObj.ToObject<PartFeature>();
                         break;

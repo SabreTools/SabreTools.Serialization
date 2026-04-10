@@ -582,8 +582,6 @@ namespace SabreTools.Metadata.DatFiles
             // Loop through the items and add
             foreach (var item in items)
             {
-                var partItem = new Part(item, machine, source);
-
                 // Handle subitems
                 var dataAreas = item.DataArea;
                 if (dataAreas is not null)
@@ -620,7 +618,8 @@ namespace SabreTools.Metadata.DatFiles
                             }
 
                             romItem.DataArea = dataAreaItem;
-                            romItem.Part = partItem;
+                            romItem.PartInterface = item.Interface;
+                            romItem.PartName = item.Name;
 
                             addRoms.Add(romItem);
                         }
@@ -653,7 +652,8 @@ namespace SabreTools.Metadata.DatFiles
                             var diskItem = new Disk(disk, machine, source)
                             {
                                 DiskArea = diskAreaitem,
-                                Part = partItem,
+                                PartInterface = item.Interface,
+                                PartName = item.Name,
                             };
 
                             AddItem(diskItem, statsOnly);
@@ -671,7 +671,11 @@ namespace SabreTools.Metadata.DatFiles
                         if (filterRunner is not null && !filterRunner.Run(dipSwitch))
                             continue;
 
-                        var dipSwitchItem = new DipSwitch(dipSwitch, machine, source) { Part = partItem };
+                        var dipSwitchItem = new DipSwitch(dipSwitch, machine, source)
+                        {
+                            PartInterface = item.Interface,
+                            PartName = item.Name,
+                        };
 
                         AddItem(dipSwitchItem, statsOnly);
                         // AddItemDB(dipSwitchItem, machineIndex, sourceIndex, statsOnly);
@@ -689,7 +693,8 @@ namespace SabreTools.Metadata.DatFiles
 
                         var partFeatureItem = new PartFeature(partFeature)
                         {
-                            Part = partItem,
+                            PartInterface = item.Interface,
+                            PartName = item.Name,
                             Source = source,
                         };
                         partFeatureItem.CopyMachineInformation(machine);

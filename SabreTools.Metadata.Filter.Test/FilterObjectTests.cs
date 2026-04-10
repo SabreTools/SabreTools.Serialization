@@ -853,6 +853,7 @@ namespace SabreTools.Metadata.Filter.Test
 
         #endregion
 
+        // TODO: Handle inverted Part(?)
         #region DipSwitch
 
         [Theory]
@@ -915,6 +916,7 @@ namespace SabreTools.Metadata.Filter.Test
 
         #endregion
 
+        // TODO: Handle inverted Part(?)
         #region Disk
 
         [Theory]
@@ -1062,6 +1064,7 @@ namespace SabreTools.Metadata.Filter.Test
 
         #endregion
 
+        // TODO: Handle inverted Part(?) [PartFeature]
         #region Feature
 
         [Theory]
@@ -1557,6 +1560,7 @@ namespace SabreTools.Metadata.Filter.Test
 
         #endregion
 
+        // TODO: Handle inverted Part(?)
         #region Rom
 
         [Theory]

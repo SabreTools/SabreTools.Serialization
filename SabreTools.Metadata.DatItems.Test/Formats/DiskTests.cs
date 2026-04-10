@@ -14,37 +14,39 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
 
             Machine machine = new Machine { Name = "name" };
 
-            Part part = new Part { Name = "name" };
-
             Source source = new Source(0, "source");
 
             Disk disk = new Disk
             {
-                Name = "name",
                 DiskArea = diskArea,
-                Merge = "merge",
-                Region = "region",
-                Status = Data.Models.Metadata.ItemStatus.Good,
-                Optional = true,
-                MD5 = HashType.MD5.ZeroString,
-                SHA1 = HashType.SHA1.ZeroString,
                 DupeType = DupeType.All | DupeType.External,
                 Machine = machine,
-                Part = part,
+                MD5 = HashType.MD5.ZeroString,
+                Merge = "merge",
+                Name = "name",
+                Optional = true,
+                PartInterface = "interface",
+                PartName = "name",
+                Region = "region",
                 RemoveFlag = false,
+                SHA1 = HashType.SHA1.ZeroString,
                 Source = source,
+                Status = Data.Models.Metadata.ItemStatus.Good,
             };
 
             Rom actual = disk.ConvertToRom();
 
-            Assert.Equal("name.chd", actual.Name);
-            Assert.Equal("merge", actual.Merge);
-            Assert.Equal("region", actual.Region);
-            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, actual.Status);
-            Assert.Equal(true, actual.Optional);
-            Assert.Equal(HashType.MD5.ZeroString, actual.MD5);
-            Assert.Equal(HashType.SHA1.ZeroString, actual.SHA1);
             Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
+            Assert.Equal(HashType.MD5.ZeroString, actual.MD5);
+            Assert.Equal("merge", actual.Merge);
+            Assert.Equal("name.chd", actual.Name);
+            Assert.Equal(true, actual.Optional);
+            Assert.Equal("interface", actual.PartInterface);
+            Assert.Equal("name", actual.PartName);
+            Assert.Equal("region", actual.Region);
+            Assert.False(actual.RemoveFlag);
+            Assert.Equal(HashType.SHA1.ZeroString, actual.SHA1);
+            Assert.Equal(Data.Models.Metadata.ItemStatus.Good, actual.Status);
 
             DataArea? actualDataArea = actual.DataArea;
             Assert.NotNull(actualDataArea);
@@ -53,12 +55,6 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);
             Assert.Equal("name", actualMachine.Name);
-
-            Assert.False(actual.RemoveFlag);
-
-            Part? actualPart = actual.Part;
-            Assert.NotNull(actualPart);
-            Assert.Equal("name", actualPart.Name);
 
             Source? actualSource = actual.Source;
             Assert.NotNull(actualSource);

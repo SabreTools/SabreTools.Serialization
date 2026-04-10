@@ -138,8 +138,8 @@ namespace SabreTools.Metadata.DatFiles
                             machine.DipSwitch = [.. machine.DipSwitch, dipSwitchItem];
 
                             // Add Part mapping
-                            if (dipSwitch.Part is not null)
-                                partMappings[dipSwitch.Part.GetInternalClone()] = dipSwitchItem;
+                            if (dipSwitch.PartInterface is not null || dipSwitch.PartName is not null)
+                                partMappings[new Data.Models.Metadata.Part { Interface = dipSwitch.PartInterface, Name = dipSwitch.PartName}] = dipSwitchItem;
 
                             break;
                         case DatItems.Formats.Disk disk:
@@ -148,9 +148,13 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Disk = [.. machine.Disk, diskItem];
 
                             // Add Part and DiskArea mappings
-                            if (disk.Part is not null && disk.DiskArea is not null)
+                            if ((disk.PartInterface is not null || disk.PartName is not null) && disk.DiskArea is not null)
                             {
-                                var partItemInternal = disk.Part.GetInternalClone();
+                                var partItemInternal = new Data.Models.Metadata.Part
+                                {
+                                    Interface = disk.PartInterface,
+                                    Name = disk.PartName,
+                                };
                                 partMappings[partItemInternal] = diskItem;
                                 diskAreaMappings[partItemInternal] = (disk.DiskArea.GetInternalClone(), diskItem);
                             }
@@ -188,8 +192,8 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Feature = [.. machine.Feature, partFeatureItem];
 
                             // Add Part mapping
-                            if (partFeature.Part is not null)
-                                partMappings[partFeature.Part.GetInternalClone()] = partFeatureItem;
+                            if (partFeature.PartInterface is not null || partFeature.PartName is not null)
+                                partMappings[new Data.Models.Metadata.Part { Interface = partFeature.PartInterface, Name = partFeature.PartName}] = partFeatureItem;
 
                             break;
                         case DatItems.Formats.Port port:
@@ -213,9 +217,13 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Rom = [.. machine.Rom, romItem];
 
                             // Add Part and DataArea mappings
-                            if (rom.Part is not null && rom.DataArea is not null)
+                            if ((rom.PartInterface is not null || rom.PartName is not null) && rom.DataArea is not null)
                             {
-                                var partItemInternal = rom.Part.GetInternalClone();
+                                var partItemInternal = new Data.Models.Metadata.Part
+                                {
+                                    Interface = rom.PartInterface,
+                                    Name = rom.PartName,
+                                };
                                 partMappings[partItemInternal] = romItem;
                                 dataAreaMappings[partItemInternal] = (rom.DataArea.GetInternalClone(), romItem);
                             }
@@ -468,8 +476,8 @@ namespace SabreTools.Metadata.DatFiles
                             machine.DipSwitch = [.. machine.DipSwitch, dipSwitchItem];
 
                             // Add Part mapping
-                            if (dipSwitch.Part is not null)
-                                partMappings[dipSwitch.Part.GetInternalClone()] = dipSwitchItem;
+                            if (dipSwitch.PartInterface is not null || dipSwitch.PartName is not null)
+                                partMappings[new Data.Models.Metadata.Part { Interface = dipSwitch.PartInterface, Name = dipSwitch.PartName}] = dipSwitchItem;
 
                             break;
                         case DatItems.Formats.Disk disk:
@@ -478,9 +486,13 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Disk = [.. machine.Disk, diskItem];
 
                             // Add Part and DiskArea mappings
-                            if (disk.Part is not null && disk.DiskArea is not null)
+                            if ((disk.PartInterface is not null || disk.PartName is not null) && disk.DiskArea is not null)
                             {
-                                var partItemInternal = disk.Part.GetInternalClone();
+                                var partItemInternal = new Data.Models.Metadata.Part
+                                {
+                                    Interface = disk.PartInterface,
+                                    Name = disk.PartName,
+                                };
                                 partMappings[partItemInternal] = diskItem;
                                 diskAreaMappings[partItemInternal] = (disk.DiskArea.GetInternalClone(), diskItem);
                             }
@@ -518,8 +530,8 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Feature = [.. machine.Feature, partFeatureItem];
 
                             // Add Part mapping
-                            if (partFeature.Part is not null)
-                                partMappings[partFeature.Part.GetInternalClone()] = partFeatureItem;
+                            if (partFeature.PartInterface is not null || partFeature.PartName is not null)
+                                partMappings[new Data.Models.Metadata.Part { Interface = partFeature.PartInterface, Name = partFeature.PartName}] = partFeatureItem;
 
                             break;
                         case DatItems.Formats.Port port:
@@ -543,9 +555,13 @@ namespace SabreTools.Metadata.DatFiles
                             machine.Rom = [.. machine.Rom, romItem];
 
                             // Add Part and DataArea mappings
-                            if (rom.Part is not null && rom.DataArea is not null)
+                            if ((rom.PartInterface is not null || rom.PartName is not null) && rom.DataArea is not null)
                             {
-                                var partItemInternal = rom.Part.GetInternalClone();
+                                var partItemInternal = new Data.Models.Metadata.Part
+                                {
+                                    Interface = rom.PartInterface,
+                                    Name = rom.PartName,
+                                };
                                 partMappings[partItemInternal] = romItem;
                                 dataAreaMappings[partItemInternal] = (rom.DataArea.GetInternalClone(), romItem);
                             }

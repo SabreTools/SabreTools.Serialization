@@ -326,18 +326,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => _internal.Optional = value;
         }
 
-        public Part? Part { get; set; }
+        public string? PartInterface { get; set; }
 
-        [JsonIgnore]
-        public bool PartSpecified
-        {
-            get
-            {
-                return Part is not null
-                    && (!string.IsNullOrEmpty(Part.Name)
-                        || !string.IsNullOrEmpty(Part.Interface));
-            }
-        }
+        public string? PartName { get; set; }
 
         public string? PDFModuleVersion
         {

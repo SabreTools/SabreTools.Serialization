@@ -60,18 +60,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => _internal.Optional = value;
         }
 
-        public Part? Part { get; set; }
+        public string? PartInterface { get; set; }
 
-        [JsonIgnore]
-        public bool PartSpecified
-        {
-            get
-            {
-                return Part is not null
-                    && (!string.IsNullOrEmpty(Part.Name)
-                        || !string.IsNullOrEmpty(Part.Interface));
-            }
-        }
+        public string? PartName { get; set; }
 
         public string? Region
         {
@@ -163,7 +154,8 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             rom.DupeType = DupeType;
             rom.Machine = Machine?.Clone() as Machine;
-            rom.Part = Part?.Clone() as Part;
+            rom.PartInterface = PartInterface;
+            rom.PartName = PartName;
             rom.RemoveFlag = RemoveFlag;
             rom.Source = Source?.Clone() as Source;
 

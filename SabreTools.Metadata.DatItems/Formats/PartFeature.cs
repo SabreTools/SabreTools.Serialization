@@ -34,10 +34,9 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => _internal.Overall = value;
         }
 
-        public Part? Part { get; set; }
+        public string? PartInterface { get; set; }
 
-        [JsonIgnore]
-        public bool PartSpecified => Part is not null;
+        public string? PartName { get; set; }
 
         public Data.Models.Metadata.FeatureStatus? Status
         {

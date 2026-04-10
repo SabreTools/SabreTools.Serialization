@@ -177,7 +177,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DipSwitch item = new DipSwitch(CreateMetadataDipSwitch());
             item.CopyMachineInformation(machine);
-            item.Part = CreatePart(machine);
+            item.PartInterface = "interface";
+            item.PartName = "name";
             return item;
         }
 
@@ -193,7 +194,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Disk item = new Disk(CreateMetadataDisk());
             item.CopyMachineInformation(machine);
             item.DiskArea = CreateDiskArea(machine);
-            item.Part = CreatePart(machine);
+            item.PartInterface = "interface";
+            item.PartName = "name";
             return item;
         }
 
@@ -246,18 +248,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             return item;
         }
 
-        private static Part CreatePart(Machine machine)
-        {
-            Part item = new Part(CreateMetadataPart());
-            item.CopyMachineInformation(machine);
-            return item;
-        }
-
         private static PartFeature CreatePartFeature(Machine machine)
         {
             PartFeature item = new PartFeature(CreateMetadataFeature());
             item.CopyMachineInformation(machine);
-            item.Part = CreatePart(machine);
+            item.PartInterface = "interface";
+            item.PartName = "name";
             return item;
         }
 
@@ -295,7 +291,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom item = new Rom(CreateMetadataRom());
             item.CopyMachineInformation(machine);
             item.DataArea = CreateDataArea(machine);
-            item.Part = CreatePart(machine);
+            item.PartInterface = "interface";
+            item.PartName = "name";
             return item;
         }
 

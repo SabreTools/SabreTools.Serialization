@@ -95,10 +95,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             DeviceRef? deviceRef = Array.Find(datItems, item => item is DeviceRef) as DeviceRef;
             ValidateDeviceRef(deviceRef);
 
-            DipSwitch? dipSwitch = Array.Find(datItems, item => item is DipSwitch dipSwitch && !dipSwitch.PartSpecified) as DipSwitch;
+            DipSwitch? dipSwitch = Array.Find(datItems, item => item is DipSwitch dipSwitch && dipSwitch.PartInterface is null) as DipSwitch;
             ValidateDipSwitch(dipSwitch);
 
-            Disk? disk = Array.Find(datItems, item => item is Disk disk && !disk.DiskAreaSpecified && !disk.PartSpecified) as Disk;
+            Disk? disk = Array.Find(datItems, item => item is Disk disk && !disk.DiskAreaSpecified && disk.PartInterface is null) as Disk;
             ValidateDisk(disk);
 
             Display? display = Array.Find(datItems, item => item is Display display && display.AspectX is null) as Display;
@@ -125,27 +125,28 @@ namespace SabreTools.Metadata.DatFiles.Test
             ValidateMedia(media);
 
             // All other fields are tested separately
-            DipSwitch? partDipSwitch = Array.Find(datItems, item => item is DipSwitch dipSwitch && dipSwitch.PartSpecified) as DipSwitch;
+            DipSwitch? partDipSwitch = Array.Find(datItems, item => item is DipSwitch dipSwitch && dipSwitch.PartInterface is not null) as DipSwitch;
             Assert.NotNull(partDipSwitch);
-            Part? dipSwitchPart = partDipSwitch.Part;
-            ValidatePart(dipSwitchPart);
+            Assert.Equal("interface", partDipSwitch.PartInterface);
+            Assert.Equal("name", partDipSwitch.PartName);
 
             // All other fields are tested separately
-            Disk? partDisk = Array.Find(datItems, item => item is Disk disk && disk.DiskAreaSpecified && disk.PartSpecified) as Disk;
+            Disk? partDisk = Array.Find(datItems, item => item is Disk disk && disk.DiskAreaSpecified && disk.PartInterface is not null) as Disk;
             Assert.NotNull(partDisk);
             ValidateDiskArea(partDisk.DiskArea);
-            ValidatePart(partDisk.Part);
+            Assert.Equal("interface", partDisk.PartInterface);
+            Assert.Equal("name", partDisk.PartName);
 
             PartFeature? partFeature = Array.Find(datItems, item => item is PartFeature) as PartFeature;
             ValidatePartFeature(partFeature);
 
             // All other fields are tested separately
-            Rom? partRom = Array.Find(datItems, item => item is Rom rom && rom.DataAreaSpecified && rom.PartSpecified) as Rom;
+            Rom? partRom = Array.Find(datItems, item => item is Rom rom && rom.DataAreaSpecified && rom.PartInterface is not null) as Rom;
             Assert.NotNull(partRom);
             DataArea? romDataArea = partRom.DataArea;
             ValidateDataArea(romDataArea);
-            Part? romPart = partRom.Part;
-            ValidatePart(romPart);
+            Assert.Equal("interface", partRom.PartInterface);
+            Assert.Equal("name", partRom.PartName);
 
             Port? port = Array.Find(datItems, item => item is Port) as Port;
             ValidatePort(port);
@@ -156,7 +157,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Release? release = Array.Find(datItems, item => item is Release) as Release;
             ValidateRelease(release);
 
-            Rom? rom = Array.Find(datItems, item => item is Rom rom && !rom.DataAreaSpecified && !rom.PartSpecified && rom.OpenMSXMediaType is null) as Rom;
+            Rom? rom = Array.Find(datItems, item => item is Rom rom && !rom.DataAreaSpecified && rom.PartInterface is null && rom.OpenMSXMediaType is null) as Rom;
             ValidateRom(rom);
 
             Sample? sample = Array.Find(datItems, item => item is Sample) as Sample;
@@ -1385,24 +1386,16 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.SpamSum.ZeroString, media.SpamSum);
         }
 
-        private static void ValidatePart(Part? part)
-        {
-            Assert.NotNull(part);
-            Assert.Equal("interface", part.Interface);
-            Assert.Equal("name", part.Name);
-        }
-
         private static void ValidatePartFeature(PartFeature? partFeature)
         {
             Assert.NotNull(partFeature);
             Assert.Equal("name", partFeature.Name);
             Assert.Equal(Data.Models.Metadata.FeatureStatus.Imperfect, partFeature.Overall);
+            Assert.Equal("interface", partFeature.PartInterface);
+            Assert.Equal("name", partFeature.PartName);
             Assert.Equal(Data.Models.Metadata.FeatureStatus.Imperfect, partFeature.Status);
             Assert.Equal(Data.Models.Metadata.FeatureType.Protection, partFeature.FeatureType);
             Assert.Equal("value", partFeature.Value);
-
-            Part? part = partFeature.Part;
-            ValidatePart(part);
         }
 
         private static void ValidatePort(Port? port)
