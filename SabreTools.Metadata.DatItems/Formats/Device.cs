@@ -1,6 +1,7 @@
 using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Metadata.Filter;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -100,12 +101,6 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var deviceItem = _internal.Clone() as Data.Models.Metadata.Device ?? new();
 
-            deviceItem.DeviceType = DeviceType;
-            deviceItem.FixedImage = FixedImage;
-            deviceItem.Interface = Interface;
-            deviceItem.Mandatory = Mandatory;
-            deviceItem.Tag = Tag;
-
             if (Instance is not null)
                 deviceItem.Instance = Instance.GetInternalClone();
 
@@ -132,6 +127,31 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // Everything else fails
             return false;
+        }
+
+        #endregion
+
+        #region Manipulation
+
+        /// <inheritdoc/>
+        public override bool PassesFilter(FilterRunner filterRunner)
+        {
+            if (Machine is not null && !Machine.PassesFilter(filterRunner))
+                return false;
+
+            // TODO: Instance
+            // TODO: Extension
+
+            return filterRunner.Run(_internal);
+        }
+
+        /// <inheritdoc/>
+        public override bool PassesFilterDB(FilterRunner filterRunner)
+        {
+            // TODO: Instance
+            // TODO: Extension
+
+            return filterRunner.Run(_internal);
         }
 
         #endregion

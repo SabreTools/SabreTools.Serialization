@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Metadata.DatItems.Formats
@@ -12,26 +11,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     public sealed class Part : DatItem<Data.Models.Metadata.Part>
     {
         #region Properties
-
-        public DataArea[]? DataArea { get; set; }
-
-        [JsonIgnore]
-        public bool DataAreaSpecified => DataArea is not null && DataArea.Length > 0;
-
-        public DiskArea[]? DiskArea { get; set; }
-
-        [JsonIgnore]
-        public bool DiskAreaSpecified => DiskArea is not null && DiskArea.Length > 0;
-
-        public DipSwitch[]? DipSwitch { get; set; }
-
-        [JsonIgnore]
-        public bool DipSwitchSpecified => DipSwitch is not null && DipSwitch.Length > 0;
-
-        public PartFeature[]? Feature { get; set; }
-
-        [JsonIgnore]
-        public bool FeatureSpecified => Feature is not null && Feature.Length > 0;
 
         public string? Interface
         {
@@ -57,18 +36,13 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Part(Data.Models.Metadata.Part item) : base(item)
         {
-            // Handle subitems
-            if (item.DataArea is not null)
-                DataArea = Array.ConvertAll(item.DataArea, dataArea => new DataArea(dataArea));
+            _internal = item.Clone() as Data.Models.Metadata.Part ?? new();
 
-            if (item.DiskArea is not null)
-                DiskArea = Array.ConvertAll(item.DiskArea, diskArea => new DiskArea(diskArea));
-
-            if (item.DipSwitch is not null)
-                DipSwitch = Array.ConvertAll(item.DipSwitch, dipSwitch => new DipSwitch(dipSwitch));
-
-            if (item.Feature is not null)
-                Feature = Array.ConvertAll(item.Feature, feature => new PartFeature(feature));
+            // Clear all lists
+            _internal.DataArea = null;
+            _internal.DiskArea = null;
+            _internal.DipSwitch = null;
+            _internal.Feature = null;
         }
 
         public Part(Data.Models.Metadata.Part item, Machine machine, Source source) : this(item)
@@ -96,23 +70,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         /// <inheritdoc/>
         public override Data.Models.Metadata.Part GetInternalClone()
-        {
-            var partItem = _internal.Clone() as Data.Models.Metadata.Part ?? new();
-
-            if (DataArea is not null)
-                partItem.DataArea = Array.ConvertAll(DataArea, dataArea => dataArea.GetInternalClone());
-
-            if (DiskArea is not null)
-                partItem.DiskArea = Array.ConvertAll(DiskArea, diskArea => diskArea.GetInternalClone());
-
-            if (DipSwitch is not null)
-                partItem.DipSwitch = Array.ConvertAll(DipSwitch, dipSwitch => dipSwitch.GetInternalClone());
-
-            if (Feature is not null)
-                partItem.Feature = Array.ConvertAll(Feature, feature => feature.GetInternalClone());
-
-            return partItem;
-        }
+            => _internal.Clone() as Data.Models.Metadata.Part ?? new();
 
         #endregion
 

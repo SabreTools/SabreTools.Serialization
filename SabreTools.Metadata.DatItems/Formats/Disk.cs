@@ -2,6 +2,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Metadata;
+using SabreTools.Metadata.Filter;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
@@ -206,6 +207,31 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         /// <returns>True if any hash matches the 0-byte value, false otherwise</returns>
         public bool HasZeroHash() => _internal.HasZeroHash();
+
+        #endregion
+
+        #region Manipulation
+
+        /// <inheritdoc/>
+        public override bool PassesFilter(FilterRunner filterRunner)
+        {
+            if (Machine is not null && !Machine.PassesFilter(filterRunner))
+                return false;
+
+            // TODO: DiskArea
+            // TODO: Part
+
+            return filterRunner.Run(_internal);
+        }
+
+        /// <inheritdoc/>
+        public override bool PassesFilterDB(FilterRunner filterRunner)
+        {
+            // TODO: DiskArea
+            // TODO: Part
+
+            return filterRunner.Run(_internal);
+        }
 
         #endregion
 

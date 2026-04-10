@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Metadata.DatItems.Formats
@@ -12,11 +11,6 @@ namespace SabreTools.Metadata.DatItems.Formats
     public sealed class DiskArea : DatItem<Data.Models.Metadata.DiskArea>
     {
         #region Properties
-
-        public Disk[]? Disk { get; set; }
-
-        [JsonIgnore]
-        public bool DiskSpecified => Disk is not null && Disk.Length > 0;
 
         /// <inheritdoc>/>
         public override Data.Models.Metadata.ItemType ItemType
@@ -36,9 +30,10 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DiskArea(Data.Models.Metadata.DiskArea item) : base(item)
         {
-            // Handle subitems
-            if (item.Disk is not null)
-                Disk = Array.ConvertAll(item.Disk, rom => new Disk(rom));
+            _internal = item.Clone() as Data.Models.Metadata.DiskArea ?? new();
+
+            // Clear all lists
+            _internal.Disk = null;
         }
 
         public DiskArea(Data.Models.Metadata.DiskArea item, Machine machine, Source source) : this(item)
@@ -64,15 +59,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// <inheritdoc/>
         public override object Clone() => new DiskArea(GetInternalClone());
 
+        /// <inheritdoc/>
         public override Data.Models.Metadata.DiskArea GetInternalClone()
-        {
-            var partItem = _internal.Clone() as Data.Models.Metadata.DiskArea ?? new();
-
-            if (Disk is not null)
-                partItem.Disk = Array.ConvertAll(Disk, rom => rom.GetInternalClone());
-
-            return partItem;
-        }
+            => _internal.Clone() as Data.Models.Metadata.DiskArea ?? new();
 
         #endregion
 

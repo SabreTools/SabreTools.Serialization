@@ -1,5 +1,6 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Metadata.Filter;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -96,6 +97,29 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             // Everything else fails
             return false;
+        }
+
+        #endregion
+
+        #region Manipulation
+
+        /// <inheritdoc/>
+        public override bool PassesFilter(FilterRunner filterRunner)
+        {
+            if (Machine is not null && !Machine.PassesFilter(filterRunner))
+                return false;
+
+            // TODO: Condition
+
+            return filterRunner.Run(_internal);
+        }
+
+        /// <inheritdoc/>
+        public override bool PassesFilterDB(FilterRunner filterRunner)
+        {
+            // TODO: Condition
+
+            return filterRunner.Run(_internal);
         }
 
         #endregion
