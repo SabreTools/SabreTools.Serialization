@@ -85,6 +85,30 @@ namespace SabreTools.Wrappers
         }
 
         /// <summary>
+        /// Create an instance of a wrapper based on the disc image type
+        /// </summary>
+        /// <param name="stream">Stream data to parse</param>
+        /// <returns>IWrapper representing the disc image, null on error</returns>
+        /// TODO: Hook this up in place of ISO in CreateWrapper
+        public static IWrapper? CreateDiscImageWrapper(Stream? stream)
+        {
+            // If we have no stream
+            if (stream is null)
+                return null;
+
+            // Cache the current offset
+            long initialOffset = stream.Position;
+
+            // Try to get an ISO-9660 wrapper first
+            var wrapper = ISO9660.Create(stream);
+            if (wrapper is null || wrapper is not ISO9660 iso)
+                return null;
+
+            // TODO: Fill in the rest
+            return wrapper;
+        }
+
+        /// <summary>
         /// Create an instance of a wrapper based on the executable type
         /// </summary>
         /// <param name="stream">Stream data to parse</param>
