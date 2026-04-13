@@ -113,13 +113,13 @@ namespace SabreTools.Wrappers
                 if (model.XGDType < 0)
                     return null;
 
-                long magicOffset = Data.Models.XDVDFS.Constants.SectorSize * Data.Models.XDVDFS.Constants.ReservedSectors;
+                long magicOffset = Constants.XisoOffsets[model.XGDType] + Data.Models.XDVDFS.Constants.SectorSize * Data.Models.XDVDFS.Constants.ReservedSectors;
                 data.SeekIfPossible(currentOffset + magicOffset, SeekOrigin.Begin);
                 var magic = data.ReadBytes(20);
 
                 if (magic is null)
                     return null;
-                if (!magic.StartsWith(Data.Models.XDVDFS.Constants.VolumeDescriptorMagic))
+                if (!magic.EqualsExactly(Data.Models.XDVDFS.Constants.VolumeDescriptorMagic))
                     return null;
 
                 data.SeekIfPossible(currentOffset + Constants.XisoOffsets[model.XGDType], SeekOrigin.Begin);
@@ -129,6 +129,9 @@ namespace SabreTools.Wrappers
 
                 model.GamePartition = gamePartition;
 
+                // Reset stream position
+                data.SeekIfPossible(currentOffset, SeekOrigin.Begin);
+
                 // Parse the Video partition last
                 var videoPartition = new Serialization.Readers.ISO9660().Deserialize(data);
                 if (videoPartition is null)
@@ -136,9 +139,7 @@ namespace SabreTools.Wrappers
 
                 model.VideoPartition = videoPartition;
 
-                var wrapper = new XboxISO(model, data, currentOffset);
-
-                return wrapper;
+                return new XboxISO(model, data, currentOffset);
             }
             catch
             {

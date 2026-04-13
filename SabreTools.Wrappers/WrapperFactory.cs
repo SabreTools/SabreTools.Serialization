@@ -104,6 +104,9 @@ namespace SabreTools.Wrappers
             if (xboxWrapper is not null && xboxWrapper is XboxISO xboxISO)
                 return xboxWrapper;
 
+            // Reset position in stream
+            stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
+
             // Fallback to standard ISO9660 wrapper
             var isoWrapper = ISO9660.Create(stream);
             if (isoWrapper is null || isoWrapper is not ISO9660 iso)

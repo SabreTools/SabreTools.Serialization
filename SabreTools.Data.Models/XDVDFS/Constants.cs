@@ -19,7 +19,7 @@ namespace SabreTools.Data.Models.XDVDFS
         public const int MinimumRecordLength = 14;
 
         /// <summary>
-        /// Volume Descriptor signature at start of sector 32
+        /// Volume Descriptor magic bytes at start of sector 32
         /// </summary>
         public static readonly byte[] VolumeDescriptorMagic = [0x4D, 0x49, 0x43, 0x52, 0x4F, 0x53, 0x4F, 0x46, 0x54, 0x2A, 0x58, 0x42, 0x4F, 0x58, 0x2A, 0x4D, 0x45, 0x44, 0x49, 0x41];
 
