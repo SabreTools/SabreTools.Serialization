@@ -33,7 +33,7 @@ namespace SabreTools.Wrappers
                 WrapperType.InstallShieldArchiveV3 => InstallShieldArchiveV3.Create(data),
                 WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
                 WrapperType.IRD => IRD.Create(data),
-                WrapperType.ISO9660 => ISO9660.Create(data),
+                WrapperType.ISO9660 => CreateDiscImageWrapper(data),
                 WrapperType.LDSCRYPT => LDSCRYPT.Create(data),
                 WrapperType.LZKWAJ => LZKWAJ.Create(data),
                 WrapperType.LZQBasic => LZQBasic.Create(data),
@@ -99,13 +99,17 @@ namespace SabreTools.Wrappers
             // Cache the current offset
             long initialOffset = stream.Position;
 
-            // Try to get an ISO-9660 wrapper first
-            var wrapper = ISO9660.Create(stream);
-            if (wrapper is null || wrapper is not ISO9660 iso)
+            // Try to get an Xbox ISO wrapper first
+            var xboxWrapper = XboxISO.Create(stream);
+            if (xboxWrapper is not null && xboxWrapper is XboxISO xboxISO)
+                return xboxWrapper;
+
+            // Fallback to standard ISO9660 wrapper
+            var isoWrapper = ISO9660.Create(stream);
+            if (isoWrapper is null || isoWrapper is not ISO9660 iso)
                 return null;
 
-            // TODO: Fill in the rest
-            return wrapper;
+            return isoWrapper;
         }
 
         /// <summary>
