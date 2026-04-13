@@ -19,6 +19,20 @@ namespace SabreTools.Wrappers
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
+            // Custom XGD type string
+            string xgdType = "XGD?";
+            if (XGDType == 0)
+                xgdType = "XGD1 (Xbox)";
+            else if (XGDType == 1)
+                xgdType = "XGD2 (Xbox 360)";
+            else if (XGDType == 2)
+                xgdType = "XGD2 (Xbox 360 / DVD-Video Hybrid)";
+            else if (XGDType == 3)
+                xgdType = "XGD3 (Xbox 360)";
+
+            builder.AppendLine(xgdType, "XGD Type");
+            builder.AppendLine();
+
             long initialOffset = _dataSource.Position;
 
             var videoWrapper = new SabreTools.Wrappers.ISO9660(VideoPartition, _dataSource, initialOffset, _dataSource.Length);
