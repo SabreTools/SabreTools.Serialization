@@ -36,13 +36,11 @@ namespace SabreTools.Wrappers
 
             // Print all information of video partition model
             var videoWrapper = new ISO9660(VideoPartition, _dataSource, initialOffset, _dataSource.Length);
-            if (videoWrapper is not null)
-                videoWrapper.PrintInformation(builder);
+            videoWrapper?.PrintInformation(builder);
 
             // Print all information of game partition model
             var gameWrapper = new XDVDFS(GamePartition, _dataSource, initialOffset + Constants.XisoOffsets[XGDType], Constants.XisoLengths[XGDType]);
-            if (gameWrapper is not null)
-                gameWrapper.PrintInformation(builder);
+            gameWrapper?.PrintInformation(builder);
         }
     }
 }
