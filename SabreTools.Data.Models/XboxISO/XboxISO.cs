@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.XboxISO
         /// <summary>
         /// ISO9660 Video parititon, split across start and end of Disc Image
         /// </summary>
-        public SabreTools.Data.Models.ISO9660.Volume VideoPartition { get; set; } = new();
+        public ISO9660.Volume VideoPartition { get; set; } = new();
 
         /// <summary>
         /// XGD type present in game partition
@@ -24,6 +24,6 @@ namespace SabreTools.Data.Models.XboxISO
         /// <summary>
         /// XDVDFS Game partition, present in middle of Disc Image
         /// </summary>
-        public SabreTools.Data.Models.XDVDFS.Volume GamePartition { get; set; } = new();
+        public XDVDFS.Volume GamePartition { get; set; } = new();
     }
 }

@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.XboxISO;
-using SabreTools.IO;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
@@ -21,13 +19,13 @@ namespace SabreTools.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="DiscImage.VideoPartition"/>
-        public SabreTools.Data.Models.ISO9660.Volume VideoPartition => Model.VideoPartition;
+        public Data.Models.ISO9660.Volume VideoPartition => Model.VideoPartition;
 
         /// <inheritdoc cref="DiscImage.XGDType"/>
         public int XGDType => Model.XGDType;
 
         /// <inheritdoc cref="DiscImage.GamePartition"/>
-        public SabreTools.Data.Models.XDVDFS.Volume GamePartition => Model.GamePartition;
+        public Data.Models.XDVDFS.Volume GamePartition => Model.GamePartition;
 
         #endregion
 
@@ -94,12 +92,12 @@ namespace SabreTools.Wrappers
 
                 // Create new model to fill in
                 var model = new DiscImage();
-            
+
                 // Try to detect XDVDFS partition
                 int redumpType = Array.IndexOf(Constants.RedumpIsoLengths, data.Length);
                 if (redumpType < 0)
                     return null;
-                
+
                 // Determine location/size of game partition based on total ISO size
                 model.XGDType = redumpType switch
                 {
@@ -115,7 +113,7 @@ namespace SabreTools.Wrappers
                     return null;
 
                 // Verify that XDVDFS game parition exists
-                long magicOffset = Constants.XisoOffsets[model.XGDType] + Data.Models.XDVDFS.Constants.SectorSize * Data.Models.XDVDFS.Constants.ReservedSectors;
+                long magicOffset = Constants.XisoOffsets[model.XGDType] + (Data.Models.XDVDFS.Constants.SectorSize * Data.Models.XDVDFS.Constants.ReservedSectors);
                 data.SeekIfPossible(currentOffset + magicOffset, SeekOrigin.Begin);
                 var magic = data.ReadBytes(20);
                 if (magic is null)

@@ -89,7 +89,6 @@ namespace SabreTools.Wrappers
         /// </summary>
         /// <param name="stream">Stream data to parse</param>
         /// <returns>IWrapper representing the disc image, null on error</returns>
-        /// TODO: Hook this up in place of ISO in CreateWrapper
         public static IWrapper? CreateDiscImageWrapper(Stream? stream)
         {
             // If we have no stream
@@ -101,7 +100,7 @@ namespace SabreTools.Wrappers
 
             // Try to get an Xbox ISO wrapper first
             var xboxWrapper = XboxISO.Create(stream);
-            if (xboxWrapper is not null && xboxWrapper is XboxISO xboxISO)
+            if (xboxWrapper is not null)
                 return xboxWrapper;
 
             // Reset position in stream
@@ -109,7 +108,7 @@ namespace SabreTools.Wrappers
 
             // Fallback to standard ISO9660 wrapper
             var isoWrapper = ISO9660.Create(stream);
-            if (isoWrapper is null || isoWrapper is not ISO9660 iso)
+            if (isoWrapper is null)
                 return null;
 
             return isoWrapper;

@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using SabreTools.Data.Models.XboxISO;
 using SabreTools.Text.Extensions;
@@ -36,12 +35,12 @@ namespace SabreTools.Wrappers
             long initialOffset = _dataSource.Position;
 
             // Print all information of video partition model
-            var videoWrapper = new SabreTools.Wrappers.ISO9660(VideoPartition, _dataSource, initialOffset, _dataSource.Length);
+            var videoWrapper = new ISO9660(VideoPartition, _dataSource, initialOffset, _dataSource.Length);
             if (videoWrapper is not null)
                 videoWrapper.PrintInformation(builder);
 
             // Print all information of game partition model
-            var gameWrapper = new SabreTools.Wrappers.XDVDFS(GamePartition, _dataSource, initialOffset + Constants.XisoOffsets[XGDType], Constants.XisoLengths[XGDType]);
+            var gameWrapper = new XDVDFS(GamePartition, _dataSource, initialOffset + Constants.XisoOffsets[XGDType], Constants.XisoLengths[XGDType]);
             if (gameWrapper is not null)
                 gameWrapper.PrintInformation(builder);
         }
