@@ -198,7 +198,7 @@ namespace SabreTools.Serialization.Readers
 
             data.SeekIfPossible(initialOffset + (((long)offset) * Constants.SectorSize), SeekOrigin.Begin);
             long curPosition;
-            while (size > data.Position - (((long)offset) * Constants.SectorSize))
+            while (size > data.Position - (initialOffset + ((long)offset) * Constants.SectorSize))
             {
                 curPosition = data.Position;
                 var dr = ParseDirectoryRecord(data);
@@ -206,9 +206,9 @@ namespace SabreTools.Serialization.Readers
                     records.Add(dr);
 
                 // If invalid record read or next descriptor cannot fit in the current sector, skip ahead
-                if (dr is null || data.Position % Constants.SectorSize > (Constants.SectorSize - Constants.MinimumRecordLength))
+                if (dr is null || (data.Position - initialOffset) % Constants.SectorSize > (Constants.SectorSize - Constants.MinimumRecordLength))
                 {
-                    data.Position += Constants.SectorSize - (int)(data.Position % Constants.SectorSize);
+                    data.SeekIfPossible(Constants.SectorSize - (int)((data.Position - initialOffset) % Constants.SectorSize), SeekOrigin.Current);
                     continue;
                 }
 
