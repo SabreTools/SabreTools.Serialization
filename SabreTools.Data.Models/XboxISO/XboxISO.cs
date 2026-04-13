@@ -18,6 +18,7 @@ namespace SabreTools.Data.Models.XboxISO
         /// 2 = XGD2-Hybrid
         /// 3 = XGD3
         /// </summary>
+        /// <remarks>This field is not actually present, but is an abstract representation of the offset/length of the game partition</remarks>
         public int XGDType { get; set; }
 
         /// <summary>

@@ -100,6 +100,7 @@ namespace SabreTools.Wrappers
                 if (redumpType < 0)
                     return null;
                 
+                // Determine location/size of game partition based on total ISO size
                 model.XGDType = redumpType switch
                 {
                     0 => 0, // XGD1
@@ -113,15 +114,16 @@ namespace SabreTools.Wrappers
                 if (model.XGDType < 0)
                     return null;
 
+                // Verify that XDVDFS game parition exists
                 long magicOffset = Constants.XisoOffsets[model.XGDType] + Data.Models.XDVDFS.Constants.SectorSize * Data.Models.XDVDFS.Constants.ReservedSectors;
                 data.SeekIfPossible(currentOffset + magicOffset, SeekOrigin.Begin);
                 var magic = data.ReadBytes(20);
-
                 if (magic is null)
                     return null;
                 if (!magic.EqualsExactly(Data.Models.XDVDFS.Constants.VolumeDescriptorMagic))
                     return null;
 
+                // Parse the game partition first, more likely to fail
                 data.SeekIfPossible(currentOffset + Constants.XisoOffsets[model.XGDType], SeekOrigin.Begin);
                 var gamePartition = new Serialization.Readers.XDVDFS().Deserialize(data);
                 if (gamePartition is null)
@@ -132,7 +134,7 @@ namespace SabreTools.Wrappers
                 // Reset stream position
                 data.SeekIfPossible(currentOffset, SeekOrigin.Begin);
 
-                // Parse the Video partition last
+                // Parse the video partition last, more likely to pass
                 var videoPartition = new Serialization.Readers.ISO9660().Deserialize(data);
                 if (videoPartition is null)
                     return null;
