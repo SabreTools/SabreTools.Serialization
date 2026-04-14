@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using SabreTools.Data.Models.AtariLynx;
-using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -28,43 +26,8 @@ namespace SabreTools.Wrappers
                 // Try to write the data
                 try
                 {
-                    // Open the output file for writing
                     using var fs = File.Open(headerPath, FileMode.Create, FileAccess.Write, FileShare.None);
-
-                    // Bytes 0-3
-                    fs.Write(Header.Magic);
-                    fs.Flush();
-
-                    // Bytes 4-5
-                    fs.Write(Header.Bank0PageSize);
-                    fs.Flush();
-
-                    // Bytes 6-7
-                    fs.Write(Header.Bank0PageSize);
-                    fs.Flush();
-
-                    // Bytes 8-9
-                    fs.Write(Header.Version);
-                    fs.Flush();
-
-                    // Bytes 10-41
-                    fs.Write(Header.CartName);
-                    fs.Flush();
-
-                    // Bytes 42-57
-                    fs.Write(Header.Manufacturer);
-                    fs.Flush();
-
-                    // Byte 58
-                    fs.Write((byte)Header.Rotation);
-                    fs.Flush();
-
-                    // Bytes 59-63
-                    fs.Write(Header.Spare);
-                    fs.Flush();
-
-                    // Header extracted
-                    success = true;
+                    success |= WriteHeader(fs, includeDebug);
                 }
                 catch (Exception ex)
                 {
@@ -81,13 +44,8 @@ namespace SabreTools.Wrappers
                 // Try to write the data
                 try
                 {
-                    // Open the output file for writing
                     using var fs = File.Open(romPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    fs.Write(Model.Data, 0, Model.Data.Length);
-                    fs.Flush();
-
-                    // ROM extracted
-                    success = true;
+                    success |= WriteRom(fs, includeDebug);
                 }
                 catch (Exception ex)
                 {
