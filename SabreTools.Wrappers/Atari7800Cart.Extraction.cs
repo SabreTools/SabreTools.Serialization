@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using SabreTools.Data.Models.Atari7800;
-using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -28,85 +26,8 @@ namespace SabreTools.Wrappers
                 // Try to write the data
                 try
                 {
-                    // Open the output file for writing
                     using var fs = File.Open(headerPath, FileMode.Create, FileAccess.Write, FileShare.None);
-
-                    // Byte 0
-                    fs.Write(Header.HeaderVersion);
-                    fs.Flush();
-
-                    // Bytes 1-16
-                    fs.Write(Header.MagicText);
-                    fs.Flush();
-
-                    // Bytes 17-48
-                    fs.Write(Header.CartTitle);
-                    fs.Flush();
-
-                    // Bytes 49-52
-                    fs.Write(Header.RomSizeWithoutHeader);
-                    fs.Flush();
-
-                    // Bytes 53-54
-                    fs.Write((ushort)Header.CartType);
-                    fs.Flush();
-
-                    // Bytes 55-56
-                    fs.Write((byte)Header.Controller1Type);
-                    fs.Write((byte)Header.Controller2Type);
-                    fs.Flush();
-
-                    // Byte 57
-                    fs.Write((byte)Header.TVType);
-                    fs.Flush();
-
-                    // Byte 58
-                    fs.Write((byte)Header.SaveDevice);
-                    fs.Flush();
-
-                    // Bytes 59-62
-                    fs.Write(Header.Reserved);
-                    fs.Flush();
-
-                    // Byte 63
-                    fs.Write((byte)Header.SlotPassthroughDevice);
-                    fs.Flush();
-
-                    if (HeaderVersion >= 4)
-                    {
-                        // Byte 64
-                        fs.Write((byte)Header.Mapper);
-                        fs.Flush();
-
-                        // Byte 65
-                        fs.Write((byte)Header.MapperOptions);
-                        fs.Flush();
-
-                        // Byte 66-67
-                        fs.Write((ushort)Header.AudioDevice);
-                        fs.Flush();
-
-                        // Byte 68-69
-                        fs.Write((ushort)Header.Interrupt);
-                        fs.Flush();
-
-                        // Bytes 70-99
-                        fs.Write(Header.Padding);
-                        fs.Flush();
-                    }
-                    else
-                    {
-                        // Bytes 64-99
-                        fs.Write(Header.Padding);
-                        fs.Flush();
-                    }
-
-                    // Bytes 100-127
-                    fs.Write(Header.EndMagicText);
-                    fs.Flush();
-
-                    // Header extracted
-                    success = true;
+                    success |= WriteHeader(fs, includeDebug);
                 }
                 catch (Exception ex)
                 {
@@ -123,13 +44,8 @@ namespace SabreTools.Wrappers
                 // Try to write the data
                 try
                 {
-                    // Open the output file for writing
                     using var fs = File.Open(romPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    fs.Write(Model.Data, 0, Model.Data.Length);
-                    fs.Flush();
-
-                    // ROM extracted
-                    success = true;
+                    success |= WriteRom(fs, includeDebug);
                 }
                 catch (Exception ex)
                 {
