@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SabreTools.Wrappers
 {
-    public partial class FDS : IWritable
+    public partial class QD : IWritable
     {
         /// <inheritdoc/>
         public bool Write(string outputPath, bool includeDebug)
@@ -18,14 +18,14 @@ namespace SabreTools.Wrappers
             }
 
             // Check for invalid data
-            if (Header is null || Model.Data is null || Model.Data.Length == 0)
+            if (Model.Data is null || Model.Data.Length == 0)
             {
                 if (includeDebug) Console.WriteLine("Model was invalid, cannot write!");
                 return false;
             }
 
             // Create and use the writer
-            var writer = new Serialization.Writers.FDS { Debug = includeDebug };
+            var writer = new Serialization.Writers.QD { Debug = includeDebug };
             return writer.SerializeFile(Model, outputPath);
         }
     }
