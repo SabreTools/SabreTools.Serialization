@@ -14,10 +14,9 @@ namespace SabreTools.Wrappers
             if (string.IsNullOrEmpty(outputPath))
             {
                 string outputFilename = Filename is null
-                    ? Guid.NewGuid().ToString()
-                    : Path.GetFileName(Filename);
-                outputFilename += ".a78";
-                outputPath = Path.Combine(outputPath, outputFilename);
+                    ? (Guid.NewGuid().ToString() + ".a78")
+                    : (Filename + ".new");
+                outputPath = Path.GetFullPath(outputFilename);
             }
 
             // Check for invalid data
