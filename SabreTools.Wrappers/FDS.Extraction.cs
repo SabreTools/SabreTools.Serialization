@@ -1,12 +1,12 @@
 using System;
 using System.IO;
-using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
     public partial class FDS : IExtractable
     {
         /// <inheritdoc/>
+        /// TODO: Convert to QD as well?
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // Get the base path
@@ -27,23 +27,8 @@ namespace SabreTools.Wrappers
                 // Try to write the data
                 try
                 {
-                    // Open the output file for writing
                     using var fs = File.Open(headerPath, FileMode.Create, FileAccess.Write, FileShare.None);
-
-                    // Bytes 0-3
-                    fs.Write(Header.IdentificationString);
-                    fs.Flush();
-
-                    // Byte 4
-                    fs.Write(Header.DiskSides);
-                    fs.Flush();
-
-                    // Byte 5-15
-                    fs.Write(Header.Padding);
-                    fs.Flush();
-
-                    // Header extracted
-                    success = true;
+                    success |= WriteHeader(fs, includeDebug);
                 }
                 catch (Exception ex)
                 {
@@ -51,23 +36,17 @@ namespace SabreTools.Wrappers
                 }
             }
 
-            // Disk data
-            // TODO: Convert to QD format?
+            // ROM data
             if (Model.Data.Length > 0)
             {
-                string diskPath = $"{basePath}.unh";
-                if (includeDebug) Console.WriteLine($"Attempting to extract disk data to {diskPath}");
+                string romPath = $"{basePath}.bin";
+                if (includeDebug) Console.WriteLine($"Attempting to extract ROM data to {romPath}");
 
                 // Try to write the data
                 try
                 {
-                    // Open the output file for writing
-                    using var fs = File.Open(diskPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    fs.Write(Model.Data, 0, Model.Data.Length);
-                    fs.Flush();
-
-                    // PRG-ROM extracted
-                    success = true;
+                    using var fs = File.Open(romPath, FileMode.Create, FileAccess.Write, FileShare.None);
+                    success |= WriteRom(fs, includeDebug);
                 }
                 catch (Exception ex)
                 {

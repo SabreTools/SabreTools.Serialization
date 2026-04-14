@@ -1,11 +1,10 @@
 using System;
 using System.IO;
-using SabreTools.Data.Models.Atari7800;
 using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
-    public partial class Atari7800Cart : IWritable
+    public partial class FDS : IWritable
     {
         /// <inheritdoc/>
         public bool Write(string outputPath, bool includeDebug)
@@ -14,7 +13,7 @@ namespace SabreTools.Wrappers
             if (string.IsNullOrEmpty(outputPath))
             {
                 string outputFilename = Filename is null
-                    ? (Guid.NewGuid().ToString() + ".a78")
+                    ? (Guid.NewGuid().ToString() + ".fds")
                     : (Filename + ".new");
                 outputPath = Path.GetFullPath(outputFilename);
             }
@@ -59,78 +58,16 @@ namespace SabreTools.Wrappers
             // Try to write the data
             try
             {
-                // Byte 0
-                stream.Write(Header.HeaderVersion);
+                // Bytes 0-3
+                stream.Write(Header.IdentificationString);
                 stream.Flush();
 
-                // Bytes 1-16
-                stream.Write(Header.MagicText);
+                // Byte 4
+                stream.Write(Header.DiskSides);
                 stream.Flush();
 
-                // Bytes 17-48
-                stream.Write(Header.CartTitle);
-                stream.Flush();
-
-                // Bytes 49-52
-                stream.Write(Header.RomSizeWithoutHeader);
-                stream.Flush();
-
-                // Bytes 53-54
-                stream.Write((ushort)Header.CartType);
-                stream.Flush();
-
-                // Bytes 55-56
-                stream.Write((byte)Header.Controller1Type);
-                stream.Write((byte)Header.Controller2Type);
-                stream.Flush();
-
-                // Byte 57
-                stream.Write((byte)Header.TVType);
-                stream.Flush();
-
-                // Byte 58
-                stream.Write((byte)Header.SaveDevice);
-                stream.Flush();
-
-                // Bytes 59-62
-                stream.Write(Header.Reserved);
-                stream.Flush();
-
-                // Byte 63
-                stream.Write((byte)Header.SlotPassthroughDevice);
-                stream.Flush();
-
-                if (HeaderVersion >= 4)
-                {
-                    // Byte 64
-                    stream.Write((byte)Header.Mapper);
-                    stream.Flush();
-
-                    // Byte 65
-                    stream.Write((byte)Header.MapperOptions);
-                    stream.Flush();
-
-                    // Byte 66-67
-                    stream.Write((ushort)Header.AudioDevice);
-                    stream.Flush();
-
-                    // Byte 68-69
-                    stream.Write((ushort)Header.Interrupt);
-                    stream.Flush();
-
-                    // Bytes 70-99
-                    stream.Write(Header.Padding);
-                    stream.Flush();
-                }
-                else
-                {
-                    // Bytes 64-99
-                    stream.Write(Header.Padding);
-                    stream.Flush();
-                }
-
-                // Bytes 100-127
-                stream.Write(Header.EndMagicText);
+                // Byte 5-15
+                stream.Write(Header.Padding);
                 stream.Flush();
 
                 // Header extracted

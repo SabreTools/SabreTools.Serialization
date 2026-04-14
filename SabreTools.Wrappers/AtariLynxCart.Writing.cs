@@ -48,7 +48,7 @@ namespace SabreTools.Wrappers
         /// <returns>True if the writing was successful, false otherwise</returns>
         private bool WriteHeader(Stream stream, bool includeDebug)
         {
-            if (includeDebug) Console.WriteLine("Attempting to extract header data");
+            if (includeDebug) Console.WriteLine("Attempting to write header data");
 
             if (Header is null)
             {
@@ -109,7 +109,7 @@ namespace SabreTools.Wrappers
         /// <returns>True if the writing was successful, false otherwise</returns>
         private bool WriteRom(Stream stream, bool includeDebug)
         {
-            if (includeDebug) Console.WriteLine("Attempting to extract ROM data");
+            if (includeDebug) Console.WriteLine("Attempting to write ROM data");
 
             // Try to write the data
             try
