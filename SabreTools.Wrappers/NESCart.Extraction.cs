@@ -14,6 +14,9 @@ namespace SabreTools.Wrappers
                 : Path.GetFileNameWithoutExtension(Filename);
             string basePath = Path.Combine(outputDirectory, baseFilename);
 
+            // Create the writer
+            var writer = new Serialization.Writers.NESCart { Debug = includeDebug };
+
             // Check if any data was extracted successfully
             bool success = false;
 
@@ -27,7 +30,7 @@ namespace SabreTools.Wrappers
                 try
                 {
                     using var fs = File.Open(headerPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    success |= WriteHeader(fs, includeDebug);
+                    success |= writer.WriteHeader(Header, fs);
                 }
                 catch (Exception ex)
                 {
@@ -45,7 +48,7 @@ namespace SabreTools.Wrappers
                 try
                 {
                     using var fs = File.Open(trainerPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    success |= WriteTrainer(fs, includeDebug);
+                    success |= writer.WriteTrainer(Trainer, fs);
                 }
                 catch (Exception ex)
                 {
@@ -64,7 +67,7 @@ namespace SabreTools.Wrappers
                 {
                     // Open the output file for writing
                     using var fs = File.Open(prgRomPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    success |= WritePrgRom(fs, includeDebug);
+                    success |= writer.WritePrgRom(PrgRomData, fs);
                 }
                 catch (Exception ex)
                 {
@@ -83,7 +86,7 @@ namespace SabreTools.Wrappers
                 {
                     // Open the output file for writing
                     using var fs = File.Open(chrRomPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    success |= WriteChrRom(fs, includeDebug);
+                    success |= writer.WriteChrRom(ChrRomData, fs);
                 }
                 catch (Exception ex)
                 {
@@ -102,8 +105,8 @@ namespace SabreTools.Wrappers
                 {
                     // Open the output file for writing
                     using var fs = File.Open(unheaderedPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    success |= WritePrgRom(fs, includeDebug);
-                    success |= WriteChrRom(fs, includeDebug);
+                    success |= writer.WritePrgRom(PrgRomData, fs);
+                    success |= writer.WriteChrRom(ChrRomData, fs);
 
                     // Unheadered ROM extracted
                     success = true;
@@ -125,7 +128,7 @@ namespace SabreTools.Wrappers
                 {
                     // Open the output file for writing
                     using var fs = File.Open(instRomPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    success |= WritePlayChoiceInstRom(fs, includeDebug);
+                    success |= writer.WritePlayChoiceInstRom(PlayChoiceInstRom, fs);
                 }
                 catch (Exception ex)
                 {

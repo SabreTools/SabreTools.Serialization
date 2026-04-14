@@ -1,56 +1,75 @@
 using System;
 using System.IO;
 using SabreTools.Data.Models.NES;
+using SabreTools.IO.Extensions;
 using SabreTools.Numerics.Extensions;
 
-namespace SabreTools.Wrappers
+namespace SabreTools.Serialization.Writers
 {
-    public partial class NESCart : IWritable
+    public class NESCart : BaseBinaryWriter<Cart>
     {
         /// <inheritdoc/>
-        public bool Write(string outputPath, bool includeDebug)
+        public override Stream? SerializeStream(Cart? obj)
         {
-            // Ensure an output path
-            if (string.IsNullOrEmpty(outputPath))
-            {
-                string outputFilename = Filename is null
-                    ? (Guid.NewGuid().ToString() + ".nes")
-                    : (Filename + ".new");
-                outputPath = Path.GetFullPath(outputFilename);
-            }
+            // If the metadata file is null
+            if (obj is null)
+                return null;
 
-            // Check for invalid data
-            if (Header is null || PrgRomData is null || PrgRomData.Length == 0)
-            {
-                if (includeDebug) Console.WriteLine("Model was invalid, cannot write!");
-                return false;
-            }
+            // Setup the writer and output
+            var stream = new MemoryStream();
 
-            // Create and use the writer
-            var writer = new Serialization.Writers.NESCart { Debug = includeDebug };
-            return writer.SerializeFile(Model, outputPath);
+            // Write header
+            if (!WriteHeader(obj.Header, stream))
+                return null;
+
+            // Trainer data
+            if (obj.Trainer is not null && obj.Trainer.Length > 0 && !WriteTrainer(obj.Trainer, stream))
+                return null;
+
+            // PRG-ROM data
+            if (!WritePrgRom(obj.PrgRomData, stream))
+                return null;
+
+            // CHR-ROM data
+            if (obj.ChrRomData is not null && obj.ChrRomData.Length > 0 && !WriteChrRom(obj.ChrRomData, stream))
+                return null;
+
+            // INST-ROM data
+            if (obj.PlayChoiceInstRom is not null && obj.PlayChoiceInstRom.Length > 0 && !WritePlayChoiceInstRom(obj.PlayChoiceInstRom, stream))
+                return null;
+
+            // TODO: Add PlayChoice-10 PROM data writing
+
+            // Return the stream
+            stream.SeekIfPossible(0, SeekOrigin.Begin);
+            return stream;
         }
 
         /// <summary>
         /// Write CHR-ROM data to the stream
         /// </summary>
         /// <param name="stream">Stream to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the writing was successful, false otherwise</returns>
-        private bool WriteChrRom(Stream stream, bool includeDebug)
+        public bool WriteChrRom(byte[]? obj, Stream stream)
         {
-            if (includeDebug) Console.WriteLine("Attempting to write CHR-ROM data");
+            if (obj is null || obj.Length == 0)
+            {
+                if (Debug) Console.WriteLine("CHR-ROM data was invalid!");
+                return false;
+            }
 
             // Try to write the data
             try
             {
-                stream.Write(ChrRomData, 0, ChrRomData.Length);
+                if (Debug) Console.WriteLine("Attempting to write CHR-ROM data");
+
+                stream.Write(obj, 0, obj.Length);
                 stream.Flush();
                 return true;
             }
             catch (Exception ex)
             {
-                if (includeDebug) Console.Error.WriteLine(ex);
+                if (Debug) Console.Error.WriteLine(ex);
                 return false;
             }
         }
@@ -59,56 +78,55 @@ namespace SabreTools.Wrappers
         /// Write header data to the stream
         /// </summary>
         /// <param name="stream">Stream to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the writing was successful, false otherwise</returns>
-        private bool WriteHeader(Stream stream, bool includeDebug)
+        public bool WriteHeader(CartHeader? obj, Stream stream)
         {
-            if (includeDebug) Console.WriteLine("Attempting to write header data");
-
-            if (Header is null)
+            if (obj is null)
             {
-                if (includeDebug) Console.WriteLine("Header was invalid!");
+                if (Debug) Console.WriteLine("Header was invalid!");
                 return false;
             }
 
             // Try to write the data
             try
             {
+                if (Debug) Console.WriteLine("Attempting to write header data");
+
                 // Bytes 0-3
-                stream.Write(Header.IdentificationString);
+                stream.Write(obj.IdentificationString);
                 stream.Flush();
 
                 // Byte 4
-                stream.Write(Header.PrgRomSize);
+                stream.Write(obj.PrgRomSize);
                 stream.Flush();
 
                 // Byte 5
-                stream.Write(Header.ChrRomSize);
+                stream.Write(obj.ChrRomSize);
                 stream.Flush();
 
                 // Byte 6
                 byte byte6 = 0;
-                byte6 |= (byte)NametableArrangement;
-                if (BatteryBackedPrgRam)
+                byte6 |= (byte)obj.NametableArrangement;
+                if (obj.BatteryBackedPrgRam)
                     byte6 |= 0b00000010;
-                if (TrainerPresent)
+                if (obj.TrainerPresent)
                     byte6 |= 0b00000100;
-                if (AlternativeNametableLayout)
+                if (obj.AlternativeNametableLayout)
                     byte6 |= 0b00001000;
-                byte6 |= (byte)(Header.MapperLowerNibble << 4);
+                byte6 |= (byte)(obj.MapperLowerNibble << 4);
                 stream.Write(byte6);
                 stream.Flush();
 
                 // Byte 7
                 byte byte7 = 0;
-                byte7 |= (byte)ConsoleType;
-                if (NES20)
+                byte7 |= (byte)obj.ConsoleType;
+                if (obj.NES20)
                     byte7 |= 0b00001000;
-                byte7 |= (byte)(Header.MapperUpperNibble << 4);
+                byte7 |= (byte)(obj.MapperUpperNibble << 4);
                 stream.Write(byte7);
                 stream.Flush();
 
-                if (Header is CartHeader1 header1)
+                if (obj is CartHeader1 header1)
                 {
                     // Byte 8
                     stream.Write(header1.PrgRamSize);
@@ -120,11 +138,11 @@ namespace SabreTools.Wrappers
 
                     // Byte 10
                     byte byte10 = 0;
-                    byte10 |= (byte)TVSystemExtended;
+                    byte10 |= (byte)header1.TVSystemExtended;
                     byte10 |= (byte)(header1.Byte10ReservedBits23 << 2);
-                    if (PrgRamPresent)
+                    if (header1.PrgRamPresent)
                         byte10 |= 0b00010000;
-                    if (HasBusConflicts)
+                    if (header1.HasBusConflicts)
                         byte10 |= 0b00100000;
                     byte10 |= (byte)(header1.Byte10ReservedBits67 << 6);
                     stream.Write(byte10);
@@ -134,7 +152,7 @@ namespace SabreTools.Wrappers
                     stream.Write(header1.Padding);
                     stream.Flush();
                 }
-                else if (Header is CartHeader2 header2)
+                else if (obj is CartHeader2 header2)
                 {
                     // Byte 8
                     byte byte8 = 0;
@@ -169,7 +187,7 @@ namespace SabreTools.Wrappers
                     stream.Flush();
 
                     // Byte 13
-                    if (ConsoleType == ConsoleType.VSUnisystem)
+                    if (obj.ConsoleType == ConsoleType.VSUnisystem)
                     {
                         byte byte13 = 0;
                         byte13 |= (byte)header2.VsSystemType;
@@ -177,7 +195,7 @@ namespace SabreTools.Wrappers
                         stream.Write(byte13);
                         stream.Flush();
                     }
-                    else if (ConsoleType == ConsoleType.ExtendedConsoleType)
+                    else if (obj.ConsoleType == ConsoleType.ExtendedConsoleType)
                     {
                         byte byte13 = 0;
                         byte13 |= (byte)header2.ExtendedConsoleType;
@@ -196,12 +214,12 @@ namespace SabreTools.Wrappers
                     stream.Flush();
 
                     // Byte 15
-                    stream.Write((byte)DefaultExpansionDevice);
+                    stream.Write((byte)header2.DefaultExpansionDevice);
                     stream.Flush();
                 }
                 else
                 {
-                    if (includeDebug) Console.Error.WriteLine("Unknown header type, incomplete header data output");
+                    if (Debug) Console.Error.WriteLine("Unknown header type, incomplete header data output");
                 }
 
                 // Header extracted
@@ -209,7 +227,7 @@ namespace SabreTools.Wrappers
             }
             catch (Exception ex)
             {
-                if (includeDebug) Console.Error.WriteLine(ex);
+                if (Debug) Console.Error.WriteLine(ex);
                 return false;
             }
         }
@@ -218,22 +236,27 @@ namespace SabreTools.Wrappers
         /// Write INST-ROM data to the stream
         /// </summary>
         /// <param name="stream">Stream to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the writing was successful, false otherwise</returns>
-        private bool WritePlayChoiceInstRom(Stream stream, bool includeDebug)
+        public bool WritePlayChoiceInstRom(byte[]? obj, Stream stream)
         {
-            if (includeDebug) Console.WriteLine("Attempting to write INST-ROM data");
+            if (obj is null || obj.Length == 0)
+            {
+                if (Debug) Console.WriteLine("INST-ROM data was invalid!");
+                return false;
+            }
 
             // Try to write the data
             try
             {
-                stream.Write(PlayChoiceInstRom, 0, PlayChoiceInstRom.Length);
+                if (Debug) Console.WriteLine("Attempting to write INST-ROM data");
+
+                stream.Write(obj, 0, obj.Length);
                 stream.Flush();
                 return true;
             }
             catch (Exception ex)
             {
-                if (includeDebug) Console.Error.WriteLine(ex);
+                if (Debug) Console.Error.WriteLine(ex);
                 return false;
             }
         }
@@ -242,22 +265,27 @@ namespace SabreTools.Wrappers
         /// Write PRG-ROM data to the stream
         /// </summary>
         /// <param name="stream">Stream to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the writing was successful, false otherwise</returns>
-        private bool WritePrgRom(Stream stream, bool includeDebug)
+        public bool WritePrgRom(byte[]? obj, Stream stream)
         {
-            if (includeDebug) Console.WriteLine("Attempting to write PRG-ROM data");
+            if (obj is null || obj.Length == 0)
+            {
+                if (Debug) Console.WriteLine("PRG-ROM data was invalid!");
+                return false;
+            }
 
             // Try to write the data
             try
             {
-                stream.Write(PrgRomData, 0, PrgRomData.Length);
+                if (Debug) Console.WriteLine("Attempting to write PRG-ROM data");
+
+                stream.Write(obj, 0, obj.Length);
                 stream.Flush();
                 return true;
             }
             catch (Exception ex)
             {
-                if (includeDebug) Console.Error.WriteLine(ex);
+                if (Debug) Console.Error.WriteLine(ex);
                 return false;
             }
         }
@@ -266,22 +294,27 @@ namespace SabreTools.Wrappers
         /// Write trainer data to the stream
         /// </summary>
         /// <param name="stream">Stream to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the writing was successful, false otherwise</returns>
-        private bool WriteTrainer(Stream stream, bool includeDebug)
+        public bool WriteTrainer(byte[]? obj, Stream stream)
         {
-            if (includeDebug) Console.WriteLine("Attempting to write trainer data");
+            if (obj is null || obj.Length == 0)
+            {
+                if (Debug) Console.WriteLine("Trainer data was invalid!");
+                return false;
+            }
 
             // Try to write the data
             try
             {
-                stream.Write(Trainer, 0, Trainer.Length);
+                if (Debug) Console.WriteLine("Attempting to write trainer data");
+
+                stream.Write(obj, 0, obj.Length);
                 stream.Flush();
                 return true;
             }
             catch (Exception ex)
             {
-                if (includeDebug) Console.Error.WriteLine(ex);
+                if (Debug) Console.Error.WriteLine(ex);
                 return false;
             }
         }
