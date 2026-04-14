@@ -15,6 +15,9 @@ namespace SabreTools.Wrappers
                 : Path.GetFileNameWithoutExtension(Filename);
             string basePath = Path.Combine(outputDirectory, baseFilename);
 
+            // Create the writer
+            var writer = new Serialization.Writers.FDS { Debug = includeDebug };
+
             // Check if any data was extracted successfully
             bool success = false;
 
@@ -28,7 +31,7 @@ namespace SabreTools.Wrappers
                 try
                 {
                     using var fs = File.Open(headerPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    success |= WriteHeader(fs, includeDebug);
+                    success |= writer.WriteHeader(Header, fs);
                 }
                 catch (Exception ex)
                 {
@@ -46,7 +49,7 @@ namespace SabreTools.Wrappers
                 try
                 {
                     using var fs = File.Open(romPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    success |= WriteRom(fs, includeDebug);
+                    success |= writer.WriteRom(Model.Data, fs);
                 }
                 catch (Exception ex)
                 {

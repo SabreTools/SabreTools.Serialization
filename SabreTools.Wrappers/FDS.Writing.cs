@@ -25,18 +25,9 @@ namespace SabreTools.Wrappers
                 return false;
             }
 
-            // Open the output file for writing
-            using var fs = File.Open(outputPath, FileMode.Create, FileAccess.Write, FileShare.None);
-
-            // Header data
-            if (!WriteHeader(fs, includeDebug))
-                return false;
-
-            // ROM data
-            if (!WriteRom(fs, includeDebug))
-                return false;
-
-            return true;
+            // Create and use the writer
+            var writer = new Serialization.Writers.FDS { Debug = includeDebug };
+            return writer.SerializeFile(Model, outputPath);
         }
 
         /// <summary>
