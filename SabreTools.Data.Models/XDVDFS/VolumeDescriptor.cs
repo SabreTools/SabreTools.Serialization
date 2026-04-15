@@ -23,6 +23,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// <summary>
         /// UInt32 size of the root directory descriptor in bytes
         /// </summary>
+        /// <remarks>Little-endian</remarks>
         public uint RootSize { get; set; }
 
         /// <summary>
