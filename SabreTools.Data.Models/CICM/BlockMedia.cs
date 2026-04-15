@@ -18,15 +18,12 @@
 
 using System;
 using System.CodeDom.Compiler;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Xml.Serialization;
 
 namespace SabreTools.Data.Models.CICM
 {
     [GeneratedCode("xsd", "0.0.0.0")]
     [Serializable]
-    [DesignerCategory("code")]
     public class BlockMedia
     {
         public Image Image { get; set; }
