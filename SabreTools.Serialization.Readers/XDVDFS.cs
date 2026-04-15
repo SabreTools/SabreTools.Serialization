@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.XDVDFS;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
 
 #pragma warning disable IDE0017 // Simplify object initialization
@@ -94,7 +95,7 @@ namespace SabreTools.Serialization.Readers
             var signature = System.Text.Encoding.ASCII.GetString(obj.Signature);
             if (!signature.Equals(Constants.LayoutDescriptorSignature))
                 return null;
-            obj.Unusued8Bytes = data.ReadBytes(8);
+            obj.Unused8Bytes = data.ReadBytes(8);
 
             obj.XBLayoutVersion = ParseFourPartVersionType(data);
             obj.XBPremasterVersion = ParseFourPartVersionType(data);
@@ -208,7 +209,8 @@ namespace SabreTools.Serialization.Readers
                 // If invalid record read or next descriptor cannot fit in the current sector, skip ahead
                 if (dr is null || (data.Position - initialOffset) % Constants.SectorSize > (Constants.SectorSize - Constants.MinimumRecordLength))
                 {
-                    data.SeekIfPossible(Constants.SectorSize - (int)((data.Position - initialOffset) % Constants.SectorSize), SeekOrigin.Current);
+                    int padding = Constants.SectorSize - (int)((data.Position - initialOffset) % Constants.SectorSize);
+                    obj.Padding = data.ReadBytes(padding);
                     continue;
                 }
 
@@ -219,6 +221,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.DirectoryRecords = [.. records];
 
+            // Previously set padding assumed to be all 0xFF up to sector boundaries 
             int remainder = Constants.SectorSize - (int)(size % Constants.SectorSize);
             if (remainder > 0 && remainder < Constants.SectorSize)
                 obj.Padding = data.ReadBytes(remainder);
@@ -235,11 +238,12 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new DirectoryRecord();
 
-            obj.LeftChildOffset = data.ReadUInt16LittleEndian();
-            obj.RightChildOffset = data.ReadUInt16LittleEndian();
-            if (obj.LeftChildOffset == 0xFFFF && obj.RightChildOffset == 0xFFFF)
+            byte[] start = data.PeekBytes(4);
+            if (start.EqualsExactly([0xFF, 0xFF, 0xFF, 0xFF]))
                 return null;
 
+            obj.LeftChildOffset = data.ReadUInt16LittleEndian();
+            obj.RightChildOffset = data.ReadUInt16LittleEndian();
             obj.ExtentOffset = data.ReadUInt32LittleEndian();
             obj.ExtentSize = data.ReadUInt32LittleEndian();
             obj.FileFlags = (FileFlags)data.ReadByteValue();

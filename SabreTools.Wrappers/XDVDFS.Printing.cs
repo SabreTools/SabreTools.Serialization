@@ -68,7 +68,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine("  -------------------------");
 
             builder.AppendLine(Encoding.ASCII.GetString(ld.Signature), "    Signature");
-            builder.AppendLine(ld.Unusued8Bytes, "    Unusued 8 Bytes");
+            builder.AppendLine(ld.Unused8Bytes, "    Unusued 8 Bytes");
             builder.AppendLine(GetVersionString(ld.XBLayoutVersion), "    xblayout Version");
             builder.AppendLine(GetVersionString(ld.XBPremasterVersion), "    xbpremaster Version");
             builder.AppendLine(GetVersionString(ld.XBGameDiscVersion), "    xbgamedisc Version");

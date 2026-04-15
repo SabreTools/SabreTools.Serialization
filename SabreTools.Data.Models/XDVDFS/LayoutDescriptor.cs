@@ -19,7 +19,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// Seemingly unused 8 bytes after the signature, should be zeroed
         /// </summary>
         /// <remarks>8 bytes</remarks>
-        public byte[] Unusued8Bytes { get; set; } = new byte[8];
+        public byte[] Unused8Bytes { get; set; } = new byte[8];
 
         /// <summary>
         /// Version number of xblayout(?) tool used to master the filesystem
