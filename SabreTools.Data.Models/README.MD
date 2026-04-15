@@ -24,6 +24,7 @@ Below is a list of all existing namespaces with the `SabreTools.Data.Models` pre
 | `CFB` | Microsoft Compound File Binary (CFB) file format |
 | `Charts` | Rhythm game song and career formats |
 | `CHD` | MAME Compressed Hunks of Data (CHD) |
+| `CICM` | Canary Islands Computer Museum (CICM) sidecar |
 | `ClrMamePro` | ClrMamePro (CMP) metadata files |
 | `COFF` | Common Object File Format (COFF) |
 | `CueSheets` | Cuesheet |
@@ -101,7 +102,7 @@ Not all of this information was able to be gathered directly from the files in q
 | Site/Project | Models Directory |
 | --- | --- |
 | [3DBrew](https://www.3dbrew.org/wiki/Main_Page) | N3DS |
-| [Aaru Data Preservation Suite](https://github.com/aaru-dps) | PIC |
+| [Aaru Data Preservation Suite](https://github.com/aaru-dps) | CICM, PIC |
 | [Advanced Access Content System Licensing Administrator (AACS LA)](https://aacsla.com/) | AACS |
 | [Atari 7800 Development Wiki](https://7800.8bitdev.org/index.php/Main_Page) | Atari7800Cart |
 | [BYTE*](https://web.archive.org/web/20240703222951/https://bytepointer.com/index.htm) | NewExecutable |
