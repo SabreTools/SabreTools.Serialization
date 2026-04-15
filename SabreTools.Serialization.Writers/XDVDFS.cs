@@ -2,9 +2,6 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.XDVDFS;
-using SabreTools.IO;
-using SabreTools.IO.Extensions;
-using SabreTools.Numerics;
 using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Serialization.Writers
@@ -20,7 +17,7 @@ namespace SabreTools.Serialization.Writers
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            if(obj is null || !ValidateVolume(obj))
+            if (obj is null || !ValidateVolume(obj))
                 return false;
 
             // Create the file stream

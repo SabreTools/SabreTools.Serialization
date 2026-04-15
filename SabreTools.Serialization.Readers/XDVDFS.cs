@@ -221,7 +221,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.DirectoryRecords = [.. records];
 
-            // Previously set padding assumed to be all 0xFF up to sector boundaries 
+            // Previously set padding assumed to be all 0xFF up to sector boundaries
             int remainder = Constants.SectorSize - (int)(size % Constants.SectorSize);
             if (remainder > 0 && remainder < Constants.SectorSize)
                 obj.Padding = data.ReadBytes(remainder);
