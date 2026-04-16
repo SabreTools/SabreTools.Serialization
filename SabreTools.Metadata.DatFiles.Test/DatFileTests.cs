@@ -2162,8 +2162,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "name",
                 Size = 12345,
                 CRC32 = "crc",
-                Machine = (Machine)machine.Clone(),
-                Source = (Source)source.Clone()
             };
 
             List<KeyValuePair<long, DatItem>> mappings =
@@ -2171,6 +2169,11 @@ namespace SabreTools.Metadata.DatFiles.Test
                 new KeyValuePair<long, DatItem>(0, romA),
             ];
             DatFile datFile = new Logiqx(null, useGame: false);
+
+            long sourceIndex = datFile.AddSourceDB(source);
+            romA.SourceIndex = sourceIndex;
+            long machineIndex = datFile.AddMachineDB(machine);
+            romA.MachineIndex = machineIndex;
 
             List<KeyValuePair<long, DatItem>> actual = datFile.ResolveNamesDB(mappings);
             KeyValuePair<long, DatItem> actualItemA = Assert.Single(actual);
@@ -2193,8 +2196,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "romA",
                 Size = 12345,
                 CRC32 = "crc",
-                Machine = (Machine)machine.Clone(),
-                Source = (Source)source.Clone()
             };
 
             Rom romB = new Rom
@@ -2202,8 +2203,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "romB",
                 Size = 23456,
                 CRC32 = "crc2",
-                Machine = (Machine)machine.Clone(),
-                Source = (Source)source.Clone()
             };
 
             List<KeyValuePair<long, DatItem>> mappings =
@@ -2212,6 +2211,14 @@ namespace SabreTools.Metadata.DatFiles.Test
                 new KeyValuePair<long, DatItem>(1, romB),
             ];
             DatFile datFile = new Logiqx(null, useGame: false);
+
+            long sourceIndex = datFile.AddSourceDB(source);
+            romA.SourceIndex = sourceIndex;
+            romB.SourceIndex = sourceIndex;
+
+            long machineIndex = datFile.AddMachineDB(machine);
+            romA.MachineIndex = machineIndex;
+            romB.MachineIndex = machineIndex;
 
             List<KeyValuePair<long, DatItem>> actual = datFile.ResolveNamesDB(mappings);
             Assert.Equal(2, actual.Count);
@@ -2287,8 +2294,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "rom",
                 Size = 12345,
                 CRC32 = "crc",
-                Machine = (Machine)machine.Clone(),
-                Source = (Source)source.Clone()
             };
 
             Rom romB = new Rom
@@ -2296,8 +2301,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "rom",
                 Size = 23456,
                 CRC32 = "crc2",
-                Machine = (Machine)machine.Clone(),
-                Source = (Source)source.Clone()
             };
 
             List<KeyValuePair<long, DatItem>> mappings =
@@ -2306,6 +2309,14 @@ namespace SabreTools.Metadata.DatFiles.Test
                 new KeyValuePair<long, DatItem>(1, romB),
             ];
             DatFile datFile = new Logiqx(null, useGame: false);
+
+            long sourceIndex = datFile.AddSourceDB(source);
+            romA.SourceIndex = sourceIndex;
+            romB.SourceIndex = sourceIndex;
+
+            long machineIndex = datFile.AddMachineDB(machine);
+            romA.MachineIndex = machineIndex;
+            romB.MachineIndex = machineIndex;
 
             List<KeyValuePair<long, DatItem>> actual = datFile.ResolveNamesDB(mappings);
             Assert.Equal(2, actual.Count);
