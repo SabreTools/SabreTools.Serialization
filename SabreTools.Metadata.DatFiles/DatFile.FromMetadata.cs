@@ -234,7 +234,7 @@ namespace SabreTools.Metadata.DatFiles
 
             // Create an internal machine and add to the dictionary
             var machine = new Machine(item);
-            // long machineIndex = AddMachineDB(machine);
+            long machineIndex = AddMachineDB(machine);
 
             // Convert items in the machine
             if (item.Adjuster is not null)
@@ -243,9 +243,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Adjuster(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Adjuster(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -258,9 +260,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Archive(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Archive(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -273,9 +277,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new BiosSet(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new BiosSet(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -288,9 +294,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Chip(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Chip(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -303,9 +311,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Configuration(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Configuration(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -318,9 +328,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Device(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Device(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -333,9 +345,11 @@ namespace SabreTools.Metadata.DatFiles
                 // Do not filter these due to later use
                 Array.ForEach(items, item =>
                 {
-                    var datItem = new DeviceRef(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new DeviceRef(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -348,9 +362,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new DipSwitch(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new DipSwitch(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -363,9 +379,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Disk(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Disk(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -378,9 +396,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Display(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Display(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -389,9 +409,11 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.Driver is not null && filterRunner?.Run(item.Driver) != false)
             {
-                var datItem = new Driver(item.Driver, machine, source);
-                // datItem.MachineIndex = machineIndex;
-                // datItem.SourceIndex = sourceIndex;
+                var datItem = new Driver(item.Driver, machine, source)
+                {
+                    MachineIndex = machineIndex,
+                    SourceIndex = sourceIndex,
+                };
 
                 AddItem(datItem, statsOnly);
                 // AddItemDB(datItem, statsOnly);
@@ -402,9 +424,11 @@ namespace SabreTools.Metadata.DatFiles
                 var items = item.Dump;
                 for (int i = 0; i < items.Length; i++)
                 {
-                    var datItem = new Rom(items[i], machine, source, i);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Rom(items[i], machine, source, i)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     var original = items[i].Original;
                     if (original is not null)
@@ -430,9 +454,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Feature(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Feature(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -445,9 +471,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Info(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Info(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -456,9 +484,11 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.Input is not null && filterRunner?.Run(item.Input) != false)
             {
-                var datItem = new Input(item.Input, machine, source);
-                // datItem.MachineIndex = machineIndex;
-                // datItem.SourceIndex = sourceIndex;
+                var datItem = new Input(item.Input, machine, source)
+                {
+                    MachineIndex = machineIndex,
+                    SourceIndex = sourceIndex,
+                };
 
                 AddItem(datItem, statsOnly);
                 // AddItemDB(datItem, statsOnly);
@@ -470,9 +500,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Media(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Media(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -491,9 +523,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Port(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Port(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -506,9 +540,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new RamOption(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new RamOption(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -521,9 +557,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Release(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Release(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -536,9 +574,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Rom(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Rom(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -551,9 +591,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Sample(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Sample(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -566,9 +608,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new SharedFeat(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new SharedFeat(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -581,9 +625,11 @@ namespace SabreTools.Metadata.DatFiles
                 // Do not filter these due to later use
                 Array.ForEach(items, item =>
                 {
-                    var datItem = new Slot(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Slot(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -596,9 +642,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new SoftwareList(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new SoftwareList(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -607,7 +655,12 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.Sound is not null && filterRunner?.Run(item.Sound) != false)
             {
-                var datItem = new Sound(item.Sound, machine, source);
+                var datItem = new Sound(item.Sound, machine, source)
+                {
+                    MachineIndex = machineIndex,
+                    SourceIndex = sourceIndex,
+                };
+
                 AddItem(datItem, statsOnly);
                 // AddItemDB(datItem, statsOnly);
             }
@@ -618,9 +671,11 @@ namespace SabreTools.Metadata.DatFiles
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
-                    var datItem = new Display(item, machine, source);
-                    // datItem.MachineIndex = machineIndex;
-                    // datItem.SourceIndex = sourceIndex;
+                    var datItem = new Display(item, machine, source)
+                    {
+                        MachineIndex = machineIndex,
+                        SourceIndex = sourceIndex,
+                    };
 
                     AddItem(datItem, statsOnly);
                     // AddItemDB(datItem, statsOnly);
@@ -672,9 +727,11 @@ namespace SabreTools.Metadata.DatFiles
                                 continue;
 
                             // Convert the item
-                            var romItem = new Rom(rom, machine, source);
-                            // romItem.MachineIndex = machineIndex;
-                            // romItem.SourceIndex = sourceIndex;
+                            var romItem = new Rom(rom, machine, source)
+                            {
+                                MachineIndex = machineIndex,
+                                SourceIndex = sourceIndex,
+                            };
 
                             long? size = romItem.Size;
 
@@ -726,12 +783,12 @@ namespace SabreTools.Metadata.DatFiles
 
                             var diskItem = new Disk(disk, machine, source)
                             {
+                                MachineIndex = machineIndex,
+                                SourceIndex = sourceIndex,
                                 DiskAreaName = diskArea.Name,
                                 PartInterface = item.Interface,
                                 PartName = item.Name,
                             };
-                            // diskItem.MachineIndex = machineIndex;
-                            // diskItem.SourceIndex = sourceIndex;
 
                             AddItem(diskItem, statsOnly);
                             // AddItemDB(diskItem, statsOnly);
@@ -750,11 +807,11 @@ namespace SabreTools.Metadata.DatFiles
 
                         var dipSwitchItem = new DipSwitch(dipSwitch, machine, source)
                         {
+                            MachineIndex = machineIndex,
+                            SourceIndex = sourceIndex,
                             PartInterface = item.Interface,
                             PartName = item.Name,
                         };
-                        // dipSwitchItem.MachineIndex = machineIndex;
-                        // dipSwitchItem.SourceIndex = sourceIndex;
 
                         AddItem(dipSwitchItem, statsOnly);
                         // AddItemDB(dipSwitchItem, statsOnly);
@@ -772,13 +829,13 @@ namespace SabreTools.Metadata.DatFiles
 
                         var partFeatureItem = new PartFeature(partFeature)
                         {
+                            MachineIndex = machineIndex,
+                            SourceIndex = sourceIndex,
                             PartInterface = item.Interface,
                             PartName = item.Name,
                             Source = source,
                         };
                         partFeatureItem.CopyMachineInformation(machine);
-                        // partFeatureItem.MachineIndex = machineIndex;
-                        // partFeatureItem.SourceIndex = sourceIndex;
 
                         AddItem(partFeatureItem, statsOnly);
                         // AddItemDB(partFeatureItem, statsOnly);
