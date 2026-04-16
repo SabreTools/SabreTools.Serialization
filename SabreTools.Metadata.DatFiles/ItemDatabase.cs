@@ -103,16 +103,6 @@ namespace SabreTools.Metadata.DatFiles
 #endif
 
         /// <summary>
-        /// Internal dictionary for item to source mappings
-        /// </summary>
-        [JsonIgnore, XmlIgnore]
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-        private readonly ConcurrentDictionary<long, long> _itemToSourceMapping = [];
-#else
-        private readonly Dictionary<long, long> _itemToSourceMapping = [];
-#endif
-
-        /// <summary>
         /// Internal dictionary representing the current buckets
         /// </summary>
         [JsonIgnore, XmlIgnore]
@@ -463,25 +453,14 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public KeyValuePair<long, Source?> GetSourceForItem(long itemIndex)
         {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            if (!_itemToSourceMapping.TryGetValue(itemIndex, out long sourceIndex))
+            if (!_items.TryGetValue(itemIndex, out var item))
                 return new KeyValuePair<long, Source?>(-1, null);
 
+            long sourceIndex = item.SourceIndex;
             if (!_sources.TryGetValue(sourceIndex, out var source))
                 return new KeyValuePair<long, Source?>(-1, null);
 
             return new KeyValuePair<long, Source?>(sourceIndex, source);
-#else
-            if (!_itemToSourceMapping.ContainsKey(itemIndex))
-                return new KeyValuePair<long, Source?>(-1, null);
-
-            long sourceIndex = _itemToSourceMapping[itemIndex];
-            if (!_sources.ContainsKey(sourceIndex))
-                return new KeyValuePair<long, Source?>(-1, null);
-
-            var source = _sources[sourceIndex];
-            return new KeyValuePair<long, Source?>(sourceIndex, source);
-#endif
         }
 
         /// <summary>
@@ -568,14 +547,6 @@ namespace SabreTools.Metadata.DatFiles
                 _itemToMachineMapping.Remove(itemIndex);
 #endif
 
-            // Remove the source mapping
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            _itemToSourceMapping.TryRemove(itemIndex, out _);
-#else
-            if (_itemToSourceMapping.ContainsKey(itemIndex))
-                _itemToSourceMapping.Remove(itemIndex);
-#endif
-
             return true;
         }
 
@@ -626,6 +597,9 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         internal long AddItem(DatItem item, long machineIndex, long sourceIndex)
         {
+            // Add the source index
+            item.SourceIndex = sourceIndex;
+
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             // Add the item with a new index
             long index = Interlocked.Increment(ref _itemIndex) - 1;
@@ -633,9 +607,6 @@ namespace SabreTools.Metadata.DatFiles
 
             // Add the machine mapping
             _itemToMachineMapping.TryAdd(index, machineIndex);
-
-            // Add the source mapping
-            _itemToSourceMapping.TryAdd(index, sourceIndex);
 #else
             // Add the item with a new index
             long index = _itemIndex++ - 1;
@@ -643,9 +614,6 @@ namespace SabreTools.Metadata.DatFiles
 
             // Add the machine mapping
             _itemToMachineMapping[index] = machineIndex;
-
-            // Add the source mapping
-            _itemToSourceMapping[index] = sourceIndex;
 #endif
 
             // Add the item statistics
@@ -924,8 +892,8 @@ namespace SabreTools.Metadata.DatFiles
                 savedItem.DupeType = dupetype;
 
                 // Get the sources associated with the items
-                var savedSource = _sources[_itemToSourceMapping[savedIndex]];
-                var itemSource = _sources[_itemToSourceMapping[itemIndex]];
+                var savedSource = _sources[GetSourceForItem(savedIndex).Key];
+                var itemSource = _sources[GetSourceForItem(itemIndex).Key];
 
                 // Get the machines associated with the items
                 var savedMachine = _machines[_itemToMachineMapping[savedIndex]];
@@ -934,7 +902,7 @@ namespace SabreTools.Metadata.DatFiles
                 // If the current source has a lower ID than the saved, use the saved source
                 if (itemSource?.Index < savedSource?.Index)
                 {
-                    _itemToSourceMapping[itemIndex] = _itemToSourceMapping[savedIndex];
+                    datItem.SourceIndex = savedItem.SourceIndex;
                     _machines[_itemToMachineMapping[savedIndex]] = (itemMachine.Clone() as Machine)!;
                     savedItem.SetName(datItem.GetName());
                 }
