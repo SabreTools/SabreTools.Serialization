@@ -157,11 +157,9 @@ namespace SabreTools.Metadata.DatFiles
         /// Add a DatItem to the dictionary after validation
         /// </summary>
         /// <param name="item">Item data to validate</param>
-        /// <param name="machineIndex">Index of the machine related to the item</param>
-        /// <param name="sourceIndex">Index of the source related to the item</param>
         /// <param name="statsOnly">True to only add item statistics while parsing, false otherwise</param>
         /// <returns>The index for the added item, -1 on error</returns>
-        public long AddItem(DatItem item, long machineIndex, long sourceIndex, bool statsOnly)
+        public long AddItem(DatItem item, bool statsOnly)
         {
             // If we have a Disk, File, Media, or Rom, clean the hash data
             if (item is Disk disk)
@@ -261,7 +259,7 @@ namespace SabreTools.Metadata.DatFiles
             }
             else
             {
-                return AddItem(item, machineIndex, sourceIndex);
+                return AddItemInternal(item);
             }
         }
 
@@ -517,12 +515,8 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Add an item, returning the insert index
         /// </summary>
-        internal long AddItem(DatItem item, long machineIndex, long sourceIndex)
+        internal long AddItemInternal(DatItem item)
         {
-            // Add the machine and source index
-            item.MachineIndex = machineIndex;
-            item.SourceIndex = sourceIndex;
-
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             // Add the item with a new index
             long index = Interlocked.Increment(ref _itemIndex) - 1;
@@ -586,20 +580,9 @@ namespace SabreTools.Metadata.DatFiles
                 Sort(ref sortedList, false);
                 sortedList = Merge(sortedList);
 
-                // Get all existing mappings
-                List<ItemMappings> currentMappings = sortedList.ConvertAll(item =>
-                {
-                    return new ItemMappings(
-                        item.Value,
-                        GetMachineForItem(item.Key).Key,
-                        GetSourceForItem(item.Key).Key
-                    );
-                });
-
                 // Add the list back to the dictionary
                 RemoveBucket(key);
-                currentMappings.ForEach(map =>
-                    AddItem(map.Item, map.MachineId, map.SourceId));
+                sortedList.ForEach(item => AddItemInternal(item.Value));
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
 #else

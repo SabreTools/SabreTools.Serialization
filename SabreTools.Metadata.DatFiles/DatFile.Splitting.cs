@@ -451,7 +451,8 @@ namespace SabreTools.Metadata.DatFiles
                             .Contains(mergeTag))
                         {
                             item.Value.MachineIndex = cloneOfMachine.Key;
-                            ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
+                            item.Value.SourceIndex = source.Key;
+                            ItemsDB.AddItemInternal(item.Value);
                         }
 
                         // If there is no merge tag, add to parent
@@ -461,7 +462,8 @@ namespace SabreTools.Metadata.DatFiles
                             .Contains(disk.Name))
                         {
                             item.Value.MachineIndex = cloneOfMachine.Key;
-                            ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
+                            item.Value.SourceIndex = source.Key;
+                            ItemsDB.AddItemInternal(item.Value);
                         }
                     }
 
@@ -489,7 +491,8 @@ namespace SabreTools.Metadata.DatFiles
                                 rom.Name = $"{machineName}\\{rom.Name}";
 
                             item.Value.MachineIndex = cloneOfMachine.Key;
-                            ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
+                            item.Value.SourceIndex = source.Key;
+                            ItemsDB.AddItemInternal(item.Value);
                         }
 
                         // If the parent doesn't already contain this item, add to subfolder of parent
@@ -499,7 +502,8 @@ namespace SabreTools.Metadata.DatFiles
                                 rom.Name = $"{machineName}\\{rom.Name}";
 
                             item.Value.MachineIndex = cloneOfMachine.Key;
-                            ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
+                            item.Value.SourceIndex = source.Key;
+                            ItemsDB.AddItemInternal(item.Value);
                         }
                     }
 
@@ -510,7 +514,8 @@ namespace SabreTools.Metadata.DatFiles
                             item.Value.SetName($"{machineName}\\{item.Value.GetName()}");
 
                         item.Value.MachineIndex = cloneOfMachine.Key;
-                        ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
+                        item.Value.SourceIndex = source.Key;
+                        ItemsDB.AddItemInternal(item.Value);
                     }
 
                     // Remove the current item
@@ -609,10 +614,13 @@ namespace SabreTools.Metadata.DatFiles
                 foreach (var item in parentItems)
                 {
                     DatItem datItem = (DatItem)item.Value.Clone();
+                    datItem.MachineIndex = machine.Key;
+                    datItem.SourceIndex = source.Key;
+
                     if (items.Values.Any(i => i.GetName()?.ToLowerInvariant() == datItem.GetName()?.ToLowerInvariant())
                         && items.Values.Any(i => i == datItem))
                     {
-                        ItemsDB.AddItem(datItem, machine.Key, source.Key);
+                        ItemsDB.AddItemInternal(datItem);
                     }
                 }
 
@@ -874,7 +882,10 @@ namespace SabreTools.Metadata.DatFiles
 
                                 // Clone the item and then add it
                                 DatItem datItem = (DatItem)item.Clone();
-                                ItemsDB.AddItem(datItem, machine.Key, source.Key);
+                                datItem.MachineIndex = machine.Key;
+                                datItem.SourceIndex = source.Key;
+
+                                ItemsDB.AddItemInternal(datItem);
                             }
                         }
                     }
@@ -884,8 +895,14 @@ namespace SabreTools.Metadata.DatFiles
                     {
                         if (!deviceReferences.Contains(deviceReference))
                         {
-                            var deviceRef = new DeviceRef { Name = deviceReference };
-                            ItemsDB.AddItem(deviceRef, machine.Key, source.Key);
+                            var deviceRef = new DeviceRef
+                            {
+                                MachineIndex = machine.Key,
+                                SourceIndex = source.Key,
+                                Name = deviceReference,
+                            };
+
+                            ItemsDB.AddItemInternal(deviceRef);
                         }
                     }
                 }
@@ -929,7 +946,10 @@ namespace SabreTools.Metadata.DatFiles
 
                                 // Clone the item and then add it
                                 DatItem datItem = (DatItem)item.Clone();
-                                ItemsDB.AddItem(datItem, machine.Key, source.Key);
+                                datItem.MachineIndex = machine.Key;
+                                datItem.SourceIndex = source.Key;
+
+                                ItemsDB.AddItemInternal(datItem);
                             }
                         }
                     }
@@ -939,11 +959,21 @@ namespace SabreTools.Metadata.DatFiles
                     {
                         if (!slotOptions.Contains(slotOption))
                         {
-                            var slotOptionItem = new SlotOption { DevName = slotOption };
+                            var slotOptionItem = new SlotOption
+                            {
+                                MachineIndex = machine.Key,
+                                SourceIndex = source.Key,
+                                DevName = slotOption,
+                            };
 
-                            var slotItem = new Slot { SlotOption = [slotOptionItem] };
+                            var slotItem = new Slot
+                            {
+                                MachineIndex = machine.Key,
+                                SourceIndex = source.Key,
+                                SlotOption = [slotOptionItem],
+                            };
 
-                            ItemsDB.AddItem(slotItem, machine.Key, source.Key);
+                            ItemsDB.AddItemInternal(slotItem);
                         }
                     }
                 }
@@ -1027,10 +1057,13 @@ namespace SabreTools.Metadata.DatFiles
                 foreach (var item in parentItems)
                 {
                     DatItem datItem = (DatItem)item.Value.Clone();
+                    datItem.MachineIndex = machine.Key;
+                    datItem.SourceIndex = source.Key;
+
                     if (items.Any(i => i.Value.GetName() == datItem.GetName())
                         && items.Any(i => i.Value == datItem))
                     {
-                        ItemsDB.AddItem(datItem, machine.Key, source.Key);
+                        ItemsDB.AddItemInternal(datItem);
                     }
                 }
             }

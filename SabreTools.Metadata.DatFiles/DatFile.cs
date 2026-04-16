@@ -227,7 +227,11 @@ namespace SabreTools.Metadata.DatFiles
         /// <returns>The index for the added item, -1 on error</returns>
         public long AddItemDB(DatItem item, long machineIndex, long sourceIndex, bool statsOnly)
         {
-            return ItemsDB.AddItem(item, machineIndex, sourceIndex, statsOnly);
+            // TODO: Have the callers of this method set them instead
+            item.MachineIndex = machineIndex;
+            item.SourceIndex = sourceIndex;
+
+            return ItemsDB.AddItem(item, statsOnly);
         }
 
         /// <summary>
