@@ -45,8 +45,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             datFile.AddItem(rom, statsOnly: false);
 
             long sourceIndex = datFile.AddSourceDB(source);
+            rom.SourceIndex = sourceIndex;
             long machineIndex = datFile.AddMachineDB(machine);
-            datFile.AddItemDB(rom, machineIndex, sourceIndex, statsOnly: false);
+            rom.MachineIndex = machineIndex;
+
+            datFile.AddItemDB(rom, statsOnly: false);
 
             DatFile created = new Logiqx(datFile, useGame: false);
             created.BucketBy(ItemKey.Machine);
@@ -95,12 +98,16 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Machine machine = new Machine { Name = "game-1" };
 
-            DatItem datItem = new Rom();
+            DatItem item = new Rom();
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
+
             long sourceIndex = datFile.AddSourceDB(source);
+            item.SourceIndex = sourceIndex;
             long machineIndex = datFile.AddMachineDB(machine);
-            _ = datFile.AddItemDB(datItem, machineIndex, sourceIndex, statsOnly: false);
+            item.MachineIndex = machineIndex;
+
+            _ = datFile.AddItemDB(item, statsOnly: false);
 
             datFile.ClearEmpty();
             Assert.Single(datFile.ItemsDB.SortedKeys);
@@ -277,7 +284,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Header.Name = "name";
             datFile.AddItem(new Rom(), statsOnly: false);
-            datFile.AddItemDB(new Rom(), 0, 0, false);
+            datFile.AddItemDB(new Rom(), statsOnly: false);
 
             datFile.ResetDictionary();
 
@@ -2235,19 +2242,23 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom romA = new Rom
             {
+                SourceIndex = sourceIndex,
+                MachineIndex = machineIndex,
                 Name = "rom",
                 Size = 12345,
                 CRC32 = "crc"
             };
-            long romAIndex = datFile.AddItemDB(romA, machineIndex, sourceIndex, statsOnly: false);
+            long romAIndex = datFile.AddItemDB(romA, statsOnly: false);
 
             Rom romB = new Rom
             {
+                SourceIndex = sourceIndex,
+                MachineIndex = machineIndex,
                 Name = "rom",
                 Size = 12345,
                 CRC32 = "crc"
             };
-            long romBIndex = datFile.AddItemDB(romB, machineIndex, sourceIndex, statsOnly: false);
+            long romBIndex = datFile.AddItemDB(romB, statsOnly: false);
 
             List<KeyValuePair<long, DatItem>> mappings =
             [

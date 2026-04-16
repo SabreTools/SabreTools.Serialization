@@ -221,16 +221,10 @@ namespace SabreTools.Metadata.DatFiles
         /// Add a DatItem to the dictionary after validation
         /// </summary>
         /// <param name="item">Item data to validate</param>
-        /// <param name="machineIndex">Index of the machine related to the item</param>
-        /// <param name="sourceIndex">Index of the source related to the item</param>
         /// <param name="statsOnly">True to only add item statistics while parsing, false otherwise</param>
         /// <returns>The index for the added item, -1 on error</returns>
-        public long AddItemDB(DatItem item, long machineIndex, long sourceIndex, bool statsOnly)
+        public long AddItemDB(DatItem item, bool statsOnly)
         {
-            // TODO: Have the callers of this method set them instead
-            item.MachineIndex = machineIndex;
-            item.SourceIndex = sourceIndex;
-
             return ItemsDB.AddItem(item, statsOnly);
         }
 

@@ -155,12 +155,22 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
-            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+
             long sourceIndex = datFile.AddSourceDB(source);
-            _ = datFile.AddItemDB(parentItem, biosMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(matchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(noMatchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
+            parentItem.SourceIndex = sourceIndex;
+            matchChildItem.SourceIndex = sourceIndex;
+            noMatchChildItem.SourceIndex = sourceIndex;
+
+            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
+            parentItem.MachineIndex = biosMachineIndex;
+
+            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+            matchChildItem.MachineIndex = deviceMachineIndex;
+            noMatchChildItem.MachineIndex = deviceMachineIndex;
+
+            _ = datFile.AddItemDB(parentItem, statsOnly: false);
+            _ = datFile.AddItemDB(matchChildItem, statsOnly: false);
+            _ = datFile.AddItemDB(noMatchChildItem, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.AddItemsFromChildren(subfolder: true, skipDedup: false);
@@ -210,12 +220,22 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
-            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+
             long sourceIndex = datFile.AddSourceDB(source);
-            _ = datFile.AddItemDB(parentItem, biosMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(matchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(noMatchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
+            parentItem.SourceIndex = sourceIndex;
+            matchChildItem.SourceIndex = sourceIndex;
+            noMatchChildItem.SourceIndex = sourceIndex;
+
+            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
+            parentItem.MachineIndex = biosMachineIndex;
+
+            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+            matchChildItem.MachineIndex = deviceMachineIndex;
+            noMatchChildItem.MachineIndex = deviceMachineIndex;
+
+            _ = datFile.AddItemDB(parentItem, statsOnly: false);
+            _ = datFile.AddItemDB(matchChildItem, statsOnly: false);
+            _ = datFile.AddItemDB(noMatchChildItem, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.AddItemsFromChildren(subfolder: true, skipDedup: true);
@@ -321,12 +341,22 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
-            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+
             long sourceIndex = datFile.AddSourceDB(source);
-            _ = datFile.AddItemDB(parentItem, biosMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(matchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(noMatchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
+            parentItem.SourceIndex = sourceIndex;
+            matchChildItem.SourceIndex = sourceIndex;
+            noMatchChildItem.SourceIndex = sourceIndex;
+
+            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
+            parentItem.MachineIndex = biosMachineIndex;
+
+            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+            matchChildItem.MachineIndex = deviceMachineIndex;
+            noMatchChildItem.MachineIndex = deviceMachineIndex;
+
+            _ = datFile.AddItemDB(parentItem, statsOnly: false);
+            _ = datFile.AddItemDB(matchChildItem, statsOnly: false);
+            _ = datFile.AddItemDB(noMatchChildItem, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.AddItemsFromCloneOfParent();
@@ -448,15 +478,30 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            long deviceMachineIndex = datFile.AddMachineDB(deviceMachine);
-            long slotOptionMachineIndex = datFile.AddMachineDB(slotOptionMachine);
-            long itemMachineIndex = datFile.AddMachineDB(itemMachine);
+
             long sourceIndex = datFile.AddSourceDB(source);
-            _ = datFile.AddItemDB(deviceItem, deviceMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(slotOptionItem, slotOptionMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(datItem, itemMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(deviceRef, itemMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(slotOption, itemMachineIndex, sourceIndex, statsOnly: false);
+            deviceItem.SourceIndex = sourceIndex;
+            slotOptionItem.SourceIndex = sourceIndex;
+            datItem.SourceIndex = sourceIndex;
+            deviceRef.SourceIndex = sourceIndex;
+            slotOption.SourceIndex = sourceIndex;
+
+            long deviceMachineIndex = datFile.AddMachineDB(deviceMachine);
+            deviceItem.MachineIndex = deviceMachineIndex;
+
+            long slotOptionMachineIndex = datFile.AddMachineDB(slotOptionMachine);
+            slotOptionItem.MachineIndex = slotOptionMachineIndex;
+
+            long itemMachineIndex = datFile.AddMachineDB(itemMachine);
+            datItem.MachineIndex = itemMachineIndex;
+            deviceRef.MachineIndex = itemMachineIndex;
+            slotOption.MachineIndex = itemMachineIndex;
+
+            _ = datFile.AddItemDB(deviceItem, statsOnly: false);
+            _ = datFile.AddItemDB(slotOptionItem, statsOnly: false);
+            _ = datFile.AddItemDB(datItem, statsOnly: false);
+            _ = datFile.AddItemDB(deviceRef, statsOnly: false);
+            _ = datFile.AddItemDB(slotOption, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.AddItemsFromDevices(deviceOnly, useSlotOptions);
@@ -562,12 +607,22 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
-            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+
             long sourceIndex = datFile.AddSourceDB(source);
-            _ = datFile.AddItemDB(parentItem, biosMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(matchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(noMatchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
+            parentItem.SourceIndex = sourceIndex;
+            matchChildItem.SourceIndex = sourceIndex;
+            noMatchChildItem.SourceIndex = sourceIndex;
+
+            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
+            parentItem.MachineIndex = biosMachineIndex;
+
+            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+            matchChildItem.MachineIndex = deviceMachineIndex;
+            noMatchChildItem.MachineIndex = deviceMachineIndex;
+
+            _ = datFile.AddItemDB(parentItem, statsOnly: false);
+            _ = datFile.AddItemDB(matchChildItem, statsOnly: false);
+            _ = datFile.AddItemDB(noMatchChildItem, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.AddItemsFromRomOfParent();
@@ -640,11 +695,19 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem deviceItem = new Rom();
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            long biosMachineIndex = datFile.AddMachineDB(biosMachine);
-            long deviceMachineIndex = datFile.AddMachineDB(deviceMachine);
+
             long sourceIndex = datFile.AddSourceDB(source);
-            _ = datFile.AddItemDB(biosItem, biosMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(deviceItem, deviceMachineIndex, sourceIndex, statsOnly: false);
+            biosItem.SourceIndex = sourceIndex;
+            deviceItem.SourceIndex = sourceIndex;
+
+            long biosMachineIndex = datFile.AddMachineDB(biosMachine);
+            biosItem.MachineIndex = biosMachineIndex;
+
+            long deviceMachineIndex = datFile.AddMachineDB(deviceMachine);
+            deviceItem.MachineIndex = deviceMachineIndex;
+
+            _ = datFile.AddItemDB(biosItem, statsOnly: false);
+            _ = datFile.AddItemDB(deviceItem, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.RemoveBiosAndDeviceSets();
@@ -761,12 +824,22 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
-            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+
             long sourceIndex = datFile.AddSourceDB(source);
-            _ = datFile.AddItemDB(parentItem, biosMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(matchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(noMatchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
+            parentItem.SourceIndex = sourceIndex;
+            matchChildItem.SourceIndex = sourceIndex;
+            noMatchChildItem.SourceIndex = sourceIndex;
+
+            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
+            parentItem.MachineIndex = biosMachineIndex;
+
+            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+            matchChildItem.MachineIndex = deviceMachineIndex;
+            noMatchChildItem.MachineIndex = deviceMachineIndex;
+
+            _ = datFile.AddItemDB(parentItem, statsOnly: false);
+            _ = datFile.AddItemDB(matchChildItem, statsOnly: false);
+            _ = datFile.AddItemDB(noMatchChildItem, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.RemoveItemsFromCloneOfChild();
@@ -881,12 +954,22 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
-            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+
             long sourceIndex = datFile.AddSourceDB(source);
-            _ = datFile.AddItemDB(parentItem, biosMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(matchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(noMatchChildItem, deviceMachineIndex, sourceIndex, statsOnly: false);
+            parentItem.SourceIndex = sourceIndex;
+            matchChildItem.SourceIndex = sourceIndex;
+            noMatchChildItem.SourceIndex = sourceIndex;
+
+            long biosMachineIndex = datFile.AddMachineDB(parentMachine);
+            parentItem.MachineIndex = biosMachineIndex;
+
+            long deviceMachineIndex = datFile.AddMachineDB(childMachine);
+            matchChildItem.MachineIndex = deviceMachineIndex;
+            noMatchChildItem.MachineIndex = deviceMachineIndex;
+
+            _ = datFile.AddItemDB(parentItem, statsOnly: false);
+            _ = datFile.AddItemDB(matchChildItem, statsOnly: false);
+            _ = datFile.AddItemDB(noMatchChildItem, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.RemoveItemsFromRomOfChild();
@@ -915,14 +998,14 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SampleOf = "sampleof"
             };
 
-            DatItem datItem = new Rom
+            DatItem item = new Rom
             {
                 Machine = machine,
                 Source = source
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.AddItem(datItem, statsOnly: false);
+            datFile.AddItem(item, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.RemoveMachineRelationshipTags();
@@ -948,12 +1031,16 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SampleOf = "sampleof"
             };
 
-            DatItem datItem = new Rom();
+            DatItem item = new Rom();
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            long machineIndex = datFile.AddMachineDB(machine);
+
             long sourceIndex = datFile.AddSourceDB(source);
-            _ = datFile.AddItemDB(datItem, machineIndex, sourceIndex, statsOnly: false);
+            item.SourceIndex = sourceIndex;
+            long machineIndex = datFile.AddMachineDB(machine);
+            item.MachineIndex = machineIndex;
+
+            _ = datFile.AddItemDB(item, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.RemoveMachineRelationshipTags();

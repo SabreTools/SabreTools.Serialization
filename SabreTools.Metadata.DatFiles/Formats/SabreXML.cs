@@ -223,9 +223,12 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             }
 
                             item.CopyMachineInformation(machine);
+                            item.MachineIndex = machineIndex;
                             item.Source = source;
+                            item.SourceIndex = sourceIndex;
+
                             AddItem(item, statsOnly);
-                            // AddItemDB(item, machineIndex, sourceIndex, statsOnly);
+                            // AddItemDB(item, statsOnly);
                         }
 
                         xtr.Skip();

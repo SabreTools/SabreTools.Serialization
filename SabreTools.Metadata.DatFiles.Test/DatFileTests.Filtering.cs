@@ -59,9 +59,13 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
+
             long sourceIndex = datFile.AddSourceDB(source);
+            datItem.SourceIndex = sourceIndex;
             long machineIndex = datFile.AddMachineDB(machine);
-            _ = datFile.AddItemDB(datItem, machineIndex, sourceIndex, statsOnly: false);
+            datItem.MachineIndex = machineIndex;
+
+            _ = datFile.AddItemDB(datItem, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.ExecuteFilters(filterRunner);
@@ -182,10 +186,17 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem disk = new Disk { Name = "disk" };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
+
             long sourceIndex = datFile.AddSourceDB(source);
+            rom.SourceIndex = sourceIndex;
+            disk.SourceIndex = sourceIndex;
+
             long machineIndex = datFile.AddMachineDB(machine);
-            _ = datFile.AddItemDB(rom, machineIndex, sourceIndex, statsOnly: false);
-            _ = datFile.AddItemDB(disk, machineIndex, sourceIndex, statsOnly: false);
+            rom.MachineIndex = machineIndex;
+            disk.MachineIndex = machineIndex;
+
+            _ = datFile.AddItemDB(rom, statsOnly: false);
+            _ = datFile.AddItemDB(disk, statsOnly: false);
 
             datFile.BucketBy(ItemKey.Machine);
             datFile.SetOneRomPerGame();
