@@ -44,7 +44,7 @@ namespace SabreTools.Metadata.DatFiles
         /// DatItems and related statistics
         /// </summary>
         [JsonProperty("items"), XmlElement("items")]
-        public ItemDictionaryDB ItemsDB { get; private set; } = new ItemDictionaryDB();
+        public ItemDatabase ItemsDB { get; private set; } = new ItemDatabase();
 
         /// <summary>
         /// DAT statistics
@@ -344,7 +344,7 @@ namespace SabreTools.Metadata.DatFiles
         public void ResetDictionary()
         {
             Items = new ItemDictionary();
-            ItemsDB = new ItemDictionaryDB();
+            ItemsDB = new ItemDatabase();
         }
 
         #endregion

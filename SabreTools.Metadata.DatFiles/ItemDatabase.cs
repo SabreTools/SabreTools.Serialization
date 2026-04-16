@@ -40,7 +40,7 @@ namespace SabreTools.Metadata.DatFiles
     /// Item dictionary with statistics, bucketing, and sorting
     /// </summary>
     [JsonObject("items"), XmlRoot("items")]
-    public class ItemDictionaryDB
+    public class ItemDatabase
     {
         #region Private instance variables
 
@@ -164,7 +164,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Generic constructor
         /// </summary>
-        public ItemDictionaryDB()
+        public ItemDatabase()
         {
             _logger = new Logger(this);
         }

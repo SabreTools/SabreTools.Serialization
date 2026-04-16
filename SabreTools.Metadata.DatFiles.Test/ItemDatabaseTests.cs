@@ -6,7 +6,7 @@ using Xunit;
 
 namespace SabreTools.Metadata.DatFiles.Test
 {
-    public class ItemDictionaryDBTests
+    public class ItemDatabaseTests
     {
         #region AddItem
 
@@ -22,7 +22,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SHA1 = "deadbeef",
             };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(disk, machineIndex, sourceIndex, statsOnly: false);
@@ -41,7 +41,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem disk = new Disk { Name = "item" };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(disk, machineIndex, sourceIndex, statsOnly: false);
@@ -60,7 +60,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             var file = new File { SHA1 = "deadbeef" };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(file, machineIndex, sourceIndex, statsOnly: false);
@@ -78,7 +78,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem file = new File();
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(file, machineIndex, sourceIndex, statsOnly: false);
@@ -100,7 +100,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "item"
             };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(media, machineIndex, sourceIndex, statsOnly: false);
@@ -121,7 +121,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "item"
             };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(media, machineIndex, sourceIndex, statsOnly: false);
@@ -144,7 +144,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SHA1 = "deadbeef"
             };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(rom, machineIndex, sourceIndex, statsOnly: false);
@@ -169,7 +169,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Size = 12345,
             };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(rom, machineIndex, sourceIndex, statsOnly: false);
@@ -194,7 +194,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SHA1 = "deadbeef"
             };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(rom, machineIndex, sourceIndex, statsOnly: false);
@@ -215,7 +215,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem rom = new Rom { Name = "item" };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(rom, machineIndex, sourceIndex, statsOnly: false);
@@ -236,7 +236,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom { Name = "item" };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: true);
@@ -252,7 +252,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom { Name = "item" };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: false);
@@ -268,7 +268,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void AddMachineTest()
         {
             Machine machine = new Machine();
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long machineIndex = dict.AddMachine(machine);
 
             Assert.Equal(0, machineIndex);
@@ -283,7 +283,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void AddSourceTest()
         {
             Source source = new Source(0, source: null);
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
 
             Assert.Equal(0, sourceIndex);
@@ -320,7 +320,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             // Setup the dictionary
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             dict.AddItem(rom1, machineIndex, sourceIndex, statsOnly: false);
@@ -346,7 +346,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom();
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: false);
@@ -365,7 +365,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom();
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: false);
@@ -384,7 +384,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom { RemoveFlag = true };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: false);
@@ -403,7 +403,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom { RemoveFlag = true };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: false);
@@ -422,7 +422,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem item = new Rom();
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: false);
@@ -440,7 +440,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void GetMachineTest()
         {
             Machine machine = new Machine();
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long machineIndex = dict.AddMachine(machine);
 
             Assert.Equal(0, machineIndex);
@@ -459,7 +459,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine machine = new Machine();
             DatItem item = new Rom();
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long machineIndex = dict.AddMachine(machine);
             long sourceIndex = dict.AddSource(source);
             long itemIndex = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: false);
@@ -477,7 +477,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void GetSourceTest()
         {
             Source source = new Source(0, source: null);
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
 
             Assert.Equal(0, sourceIndex);
@@ -496,7 +496,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Machine machine = new Machine();
             DatItem item = new Rom();
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long machineIndex = dict.AddMachine(machine);
             long sourceIndex = dict.AddSource(source);
             long itemIndex = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: false);
@@ -521,7 +521,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem datItem = new Rom();
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long origMachineIndex = dict.AddMachine(origMachine);
             long newMachineIndex = dict.AddMachine(newMachine);
@@ -554,7 +554,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SHA1 = "0000000fbbb37f8488100b1b4697012de631a5e6"
             };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             dict.AddItem(datItem, machineIndex, sourceIndex, statsOnly: false);
@@ -583,7 +583,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SHA1 = "0000000fbbb37f8488100b1b4697012de631a5e6"
             };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             long itemIndex = dict.AddItem(datItem, machineIndex, sourceIndex, statsOnly: false);
@@ -601,7 +601,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void RemoveMachineTest()
         {
             Machine machine = new Machine();
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long machineIndex = dict.AddMachine(machine);
 
             bool actual = dict.RemoveMachine(machineIndex);
@@ -660,7 +660,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             // Setup the dictionary
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machine1Index = dict.AddMachine(machine1);
             long machine2Index = dict.AddMachine(machine2);
@@ -700,7 +700,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             // Setup the dictionary
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             dict.AddItem(rom1, machineIndex, sourceIndex, statsOnly: false);
@@ -717,7 +717,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateStatus_NullOther_NoDupe()
         {
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
 
             Source? selfSource = null;
             Source? lastSource = null;
@@ -732,7 +732,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateStatus_DifferentTypes_NoDupe()
         {
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
 
             Source? selfSource = null;
             Source? lastSource = null;
@@ -746,7 +746,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateStatus_MismatchedHashes_NoDupe()
         {
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
 
             Source? sourceA = new Source(0);
             long sourceAIndex = dict.AddSource(sourceA);
@@ -782,7 +782,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateStatus_DifferentSource_NameMatch_ExternalAll()
         {
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
 
             Source? sourceA = new Source(0);
             long sourceAIndex = dict.AddSource(sourceA);
@@ -818,7 +818,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateStatus_DifferentSource_NoNameMatch_ExternalHash()
         {
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
 
             Source? sourceA = new Source(0);
             long sourceAIndex = dict.AddSource(sourceA);
@@ -854,7 +854,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateStatus_SameSource_NameMatch_InternalAll()
         {
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
 
             Source? sourceA = new Source(0);
             long sourceAIndex = dict.AddSource(sourceA);
@@ -890,7 +890,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void GetDuplicateStatus_SameSource_NoNameMatch_InternalHash()
         {
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
 
             Source? sourceA = new Source(0);
             long sourceAIndex = dict.AddSource(sourceA);
@@ -952,7 +952,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             // Setup the dictionary
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             dict.AddItem(rom1, machineIndex, sourceIndex, statsOnly: false);
@@ -999,7 +999,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             // Setup the dictionary
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             dict.AddItem(rom1, machineIndex, sourceIndex, statsOnly: false);
@@ -1035,7 +1035,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 CRC32 = "deadbeef"
             };
 
-            var dict = new ItemDictionaryDB();
+            var dict = new ItemDatabase();
             long sourceIndex = dict.AddSource(source);
             long machineIndex = dict.AddMachine(machine);
             _ = dict.AddItem(item, machineIndex, sourceIndex, statsOnly: false);
