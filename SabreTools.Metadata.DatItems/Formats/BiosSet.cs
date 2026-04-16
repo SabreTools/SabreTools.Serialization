@@ -47,6 +47,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             CopyMachineInformation(machine);
         }
 
+        public BiosSet(Data.Models.Metadata.BiosSet item, long machineIndex, long sourceIndex) : this(item)
+        {
+            SourceIndex = sourceIndex;
+            MachineIndex = machineIndex;
+        }
+
         #endregion
 
         #region Accessors

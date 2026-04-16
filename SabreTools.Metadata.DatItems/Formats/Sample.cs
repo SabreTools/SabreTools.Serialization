@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SabreTools.Metadata.DatItems.Formats
@@ -33,6 +33,12 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             Source = source;
             CopyMachineInformation(machine);
+        }
+
+        public Sample(Data.Models.Metadata.Sample item, long machineIndex, long sourceIndex) : this(item)
+        {
+            SourceIndex = sourceIndex;
+            MachineIndex = machineIndex;
         }
 
         #endregion

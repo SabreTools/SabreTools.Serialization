@@ -109,6 +109,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             CopyMachineInformation(machine);
         }
 
+        public DipSwitch(Data.Models.Metadata.DipSwitch item, long machineIndex, long sourceIndex) : this(item)
+        {
+            SourceIndex = sourceIndex;
+            MachineIndex = machineIndex;
+        }
+
         #endregion
 
         #region Accessors

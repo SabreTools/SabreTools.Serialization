@@ -77,6 +77,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             CopyMachineInformation(machine);
         }
 
+        public Media(Data.Models.Metadata.Media item, long machineIndex, long sourceIndex) : this(item)
+        {
+            SourceIndex = sourceIndex;
+            MachineIndex = machineIndex;
+        }
+
         #endregion
 
         #region Accessors

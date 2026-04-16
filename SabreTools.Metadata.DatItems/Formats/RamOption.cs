@@ -47,6 +47,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             CopyMachineInformation(machine);
         }
 
+        public RamOption(Data.Models.Metadata.RamOption item, long machineIndex, long sourceIndex) : this(item)
+        {
+            SourceIndex = sourceIndex;
+            MachineIndex = machineIndex;
+        }
+
         #endregion
 
         #region Accessors

@@ -47,6 +47,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             CopyMachineInformation(machine);
         }
 
+        public Slot(Data.Models.Metadata.Slot item, long machineIndex, long sourceIndex) : this(item)
+        {
+            SourceIndex = sourceIndex;
+            MachineIndex = machineIndex;
+        }
+
         #endregion
 
         #region Accessors

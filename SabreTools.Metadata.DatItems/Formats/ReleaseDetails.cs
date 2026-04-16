@@ -124,6 +124,13 @@ namespace SabreTools.Metadata.DatItems.Formats
             Source = source;
             CopyMachineInformation(machine);
         }
+
+        public ReleaseDetails(Data.Models.Metadata.ReleaseDetails item, long machineIndex, long sourceIndex) : this(item)
+        {
+            SourceIndex = sourceIndex;
+            MachineIndex = machineIndex;
+        }
+
         #endregion
 
         #region Accessors

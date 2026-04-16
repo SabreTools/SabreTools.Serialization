@@ -783,6 +783,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             CopyMachineInformation(machine);
         }
 
+        public Rom(Data.Models.Metadata.Rom item, long machineIndex, long sourceIndex) : this(item)
+        {
+            SourceIndex = sourceIndex;
+            MachineIndex = machineIndex;
+        }
+
         /// <summary>
         /// Normalize a hash string and pad to the correct size
         /// </summary>

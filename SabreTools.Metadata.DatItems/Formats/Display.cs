@@ -125,6 +125,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             CopyMachineInformation(machine);
         }
 
+        public Display(Data.Models.Metadata.Display item, long machineIndex, long sourceIndex) : this(item)
+        {
+            SourceIndex = sourceIndex;
+            MachineIndex = machineIndex;
+        }
+
         public Display(Data.Models.Metadata.Video item) : base()
         {
             AspectX = item.AspectX;
@@ -140,6 +146,12 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             Source = source;
             CopyMachineInformation(machine);
+        }
+
+        public Display(Data.Models.Metadata.Video item, long machineIndex, long sourceIndex) : this(item)
+        {
+            SourceIndex = sourceIndex;
+            MachineIndex = machineIndex;
         }
 
         #endregion
