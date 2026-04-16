@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SabreTools.Metadata.DatFiles.Formats;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
@@ -845,8 +846,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             datFile.RemoveItemsFromCloneOfChild();
 
             Assert.Single(datFile.GetItemsForBucketDB("parent"));
-            long actual = Assert.Single(datFile.GetItemsForBucketDB("child")).Key;
-            Machine? actualMachine = datFile.GetMachineForItemDB(actual).Value;
+            KeyValuePair<long, DatItem> actual = Assert.Single(datFile.GetItemsForBucketDB("child"));
+            Machine? actualMachine = datFile.GetMachineDB(actual.Value.MachineIndex).Value;
             Assert.NotNull(actualMachine);
             Assert.Equal("child", actualMachine.Name);
             Assert.Equal("romof", actualMachine.RomOf);
@@ -975,8 +976,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             datFile.RemoveItemsFromRomOfChild();
 
             Assert.Single(datFile.GetItemsForBucketDB("parent"));
-            long actual = Assert.Single(datFile.GetItemsForBucketDB("child")).Key;
-            Machine? actualMachine = datFile.GetMachineForItemDB(actual).Value;
+            KeyValuePair<long, DatItem> actual = Assert.Single(datFile.GetItemsForBucketDB("child"));
+            Machine? actualMachine = datFile.GetMachineDB(actual.Value.MachineIndex).Value;
             Assert.NotNull(actualMachine);
             Assert.Equal("child", actualMachine.Name);
         }

@@ -278,12 +278,6 @@ namespace SabreTools.Metadata.DatFiles
             => ItemsDB.GetMachines();
 
         /// <summary>
-        /// Get the index and machine associated with an item index
-        /// </summary>
-        public KeyValuePair<long, Machine?> GetMachineForItemDB(long itemIndex)
-            => ItemsDB.GetMachineForItem(itemIndex);
-
-        /// <summary>
         /// Get the index and source associated with a source index
         /// </summary>
         public KeyValuePair<long, Source?> GetSourceDB(long sourceIndex)
@@ -1215,8 +1209,8 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // If machine names don't match
-                    string? xMachineName = ItemsDB.GetMachineForItem(x.Key).Value?.Name;
-                    string? yMachineName = ItemsDB.GetMachineForItem(y.Key).Value?.Name;
+                    string? xMachineName = ItemsDB.GetMachine(x.Value.MachineIndex).Value?.Name;
+                    string? yMachineName = ItemsDB.GetMachine(y.Value.MachineIndex).Value?.Name;
                     if (xMachineName != yMachineName)
                         return nc.Compare(xMachineName, yMachineName);
 

@@ -524,31 +524,6 @@ namespace SabreTools.Metadata.DatFiles.Test
 
         #endregion
 
-        #region GetMachineForItem
-
-        [Fact]
-        public void GetMachineForItemTest()
-        {
-            Source source = new Source(0, source: null);
-            Machine machine = new Machine();
-            DatItem item = new Rom();
-
-            var dict = new ItemDatabase();
-
-            long sourceIndex = dict.AddSource(source);
-            item.SourceIndex = sourceIndex;
-            long machineIndex = dict.AddMachine(machine);
-            item.MachineIndex = machineIndex;
-
-            long itemIndex = dict.AddItem(item, statsOnly: false);
-
-            var actual = dict.GetMachineForItem(itemIndex);
-            Assert.Equal(0, actual.Key);
-            Assert.NotNull(actual.Value);
-        }
-
-        #endregion
-
         #region GetSource
 
         [Fact]
@@ -560,7 +535,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.Equal(0, sourceIndex);
             var actual = dict.GetSource(sourceIndex);
-            Assert.NotNull(actual);
+            Assert.NotNull(actual.Value);
         }
 
         #endregion

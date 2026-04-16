@@ -383,21 +383,6 @@ namespace SabreTools.Metadata.DatFiles
         }
 
         /// <summary>
-        /// Get the index and machine associated with an item index
-        /// </summary>
-        public KeyValuePair<long, Machine?> GetMachineForItem(long itemIndex)
-        {
-            if (!_items.TryGetValue(itemIndex, out var item))
-                return new KeyValuePair<long, Machine?>(-1, null);
-
-            long machineIndex = item.MachineIndex;
-            if (!_machines.TryGetValue(machineIndex, out var machine))
-                return new KeyValuePair<long, Machine?>(-1, null);
-
-            return new KeyValuePair<long, Machine?>(machineIndex, machine);
-        }
-
-        /// <summary>
         /// Get all machines and their indicies
         /// </summary>
         public IDictionary<long, Machine> GetMachines() => _machines;
@@ -607,9 +592,9 @@ namespace SabreTools.Metadata.DatFiles
                 return output;
 
             // Get the machines for comparison
-            var selfMachine = GetMachineForItem(selfItem.Value.Key).Value;
+            var selfMachine = GetMachine(selfItem.Value.Value.MachineIndex).Value;
             string? selfMachineName = selfMachine?.Name;
-            var lastMachine = GetMachineForItem(lastItem.Value.Key).Value;
+            var lastMachine = GetMachine(lastItem.Value.Value.MachineIndex).Value;
             string? lastMachineName = lastMachine?.Name;
 
             // If the duplicate is external already
@@ -655,7 +640,7 @@ namespace SabreTools.Metadata.DatFiles
 
             // We want to get the proper key for the DatItem, ignoring the index
             _ = SortAndGetKey(datItem, sorted);
-            var machine = GetMachineForItem(datItem.Key);
+            var machine = GetMachine(datItem.Value.MachineIndex);
             var source = GetSource(datItem.Value.SourceIndex);
             string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source.Value);
 
@@ -698,7 +683,7 @@ namespace SabreTools.Metadata.DatFiles
 
             // We want to get the proper key for the DatItem, ignoring the index
             _ = SortAndGetKey(datItem, sorted);
-            var machine = GetMachineForItem(datItem.Key);
+            var machine = GetMachine(datItem.Value.MachineIndex);
             var source = GetSource(datItem.Value.SourceIndex);
             string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source.Value);
 
@@ -792,8 +777,8 @@ namespace SabreTools.Metadata.DatFiles
                 var itemSource = GetSource(datItem.SourceIndex);
 
                 // Get the machines associated with the items
-                var savedMachine = GetMachineForItem(savedIndex);
-                var itemMachine = GetMachineForItem(itemIndex);
+                var savedMachine = GetMachine(savedItem.MachineIndex);
+                var itemMachine = GetMachine(datItem.MachineIndex);
 
                 // If the current source has a lower ID than the saved, use the saved source
                 if (itemSource.Value?.Index < savedSource.Value?.Index)
@@ -1038,8 +1023,8 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // Get the machines
-                    Machine? xMachine = GetMachineForItem(x.Key).Value;
-                    Machine? yMachine = GetMachineForItem(y.Key).Value;
+                    Machine? xMachine = GetMachine(x.Value.MachineIndex).Value;
+                    Machine? yMachine = GetMachine(y.Value.MachineIndex).Value;
 
                     // If machine names don't match
                     string? xMachineName = xMachine?.Name;

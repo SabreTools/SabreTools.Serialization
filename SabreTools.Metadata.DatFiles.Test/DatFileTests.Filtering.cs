@@ -205,12 +205,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(2, actualDatItems.Count);
 
             var actualRom = Assert.Single(actualDatItems, i => i.Value is Rom);
-            var actualRomMachine = datFile.GetMachineForItemDB(actualRom.Key);
+            var actualRomMachine = datFile.GetMachineDB(actualRom.Value.MachineIndex);
             Assert.NotNull(actualRomMachine.Value);
             Assert.Equal("machine/rom", actualRomMachine.Value.Name);
 
             var actualDisk = Assert.Single(actualDatItems, i => i.Value is Disk);
-            var actualDiskMachine = datFile.GetMachineForItemDB(actualDisk.Key);
+            var actualDiskMachine = datFile.GetMachineDB(actualDisk.Value.MachineIndex);
             Assert.NotNull(actualDiskMachine.Value);
             Assert.Equal("machine/disk", actualDiskMachine.Value.Name);
         }

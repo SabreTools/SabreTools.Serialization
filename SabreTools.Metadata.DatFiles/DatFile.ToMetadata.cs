@@ -424,7 +424,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Create a machine to hold everything
-                var machine = GetMachineForItemDB(items.First().Key).Value!.GetInternalClone();
+                var machine = GetMachineDB(items.First().Value.MachineIndex).Value!.GetInternalClone();
 
                 // Create mapping dictionaries for the Parts, DataAreas, and DiskAreas associated with this machine
                 Dictionary<Data.Models.Metadata.Part, Data.Models.Metadata.DatItem> partMappings = [];

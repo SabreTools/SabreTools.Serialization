@@ -589,7 +589,7 @@ namespace SabreTools.Metadata.DatFiles
                 return;
 
             // Get the current machine
-            var machine = GetMachineForItemDB(datItem.Key);
+            var machine = GetMachineDB(datItem.Value.MachineIndex);
             if (machine.Value is null)
                 return;
 

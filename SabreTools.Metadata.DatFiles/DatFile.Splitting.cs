@@ -403,7 +403,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the machine for the first item
-                var machine = GetMachineForItemDB(items.First().Key);
+                var machine = GetMachineDB(items.First().Value.MachineIndex);
                 if (machine.Value is null)
                     continue;
 
@@ -428,7 +428,7 @@ namespace SabreTools.Metadata.DatFiles
                     if (parentItems.Count == 0)
                         continue;
 
-                    string? machineName = GetMachineForItemDB(item.Key).Value?.Name;
+                    string? machineName = GetMachineDB(item.Value.MachineIndex).Value?.Name;
 
                     // Special disk handling
                     if (item.Value is Disk disk)
@@ -591,7 +591,7 @@ namespace SabreTools.Metadata.DatFiles
                 var source = ItemsDB.GetSource(items.First().Value.SourceIndex);
 
                 // Get the machine for the first item in the list
-                var machine = GetMachineForItemDB(items.First().Key);
+                var machine = GetMachineDB(items.First().Value.MachineIndex);
                 if (machine.Value is null)
                     continue;
 
@@ -620,16 +620,16 @@ namespace SabreTools.Metadata.DatFiles
                 }
 
                 // Get the parent machine
-                var parentMachine = GetMachineForItemDB(GetItemsForBucketDB(cloneOf).First().Key);
+                var parentMachine = GetMachineDB(GetItemsForBucketDB(cloneOf).First().Value.MachineIndex);
                 if (parentMachine.Value is null)
                     continue;
 
                 // Now we want to get the parent romof tag and put it in each of the items
                 items = GetItemsForBucketDB(bucket);
                 string? romof = parentMachine.Value.RomOf;
-                foreach (var key in items.Keys)
+                foreach (var kvp in items)
                 {
-                    var itemMachine = GetMachineForItemDB(key);
+                    var itemMachine = GetMachineDB(kvp.Value.MachineIndex);
                     if (itemMachine.Value is null)
                         continue;
 
@@ -815,7 +815,7 @@ namespace SabreTools.Metadata.DatFiles
                 var source = ItemsDB.GetSource(firstItem.Value.SourceIndex);
 
                 // Get the machine for the first item
-                var machine = GetMachineForItemDB(firstItem.Key);
+                var machine = GetMachineDB(firstItem.Value.MachineIndex);
                 if (machine.Value is null)
                     continue;
 
@@ -863,7 +863,7 @@ namespace SabreTools.Metadata.DatFiles
                             .Select(i => (i as DeviceRef)!.Name!));
 
                         // Set new machine information and add to the current machine
-                        var copyFrom = GetMachineForItemDB(items.First().Key);
+                        var copyFrom = GetMachineDB(items.First().Value.MachineIndex);
                         if (copyFrom.Value is null)
                             continue;
 
@@ -927,7 +927,7 @@ namespace SabreTools.Metadata.DatFiles
                             .Select(o => o.DevName!));
 
                         // Set new machine information and add to the current machine
-                        var copyFrom = GetMachineForItemDB(GetItemsForBucketDB(bucket).First().Key);
+                        var copyFrom = GetMachineDB(GetItemsForBucketDB(bucket).First().Value.MachineIndex);
                         if (copyFrom.Value is null)
                             continue;
 
@@ -1039,7 +1039,7 @@ namespace SabreTools.Metadata.DatFiles
                 var source = ItemsDB.GetSource(items.First().Value.SourceIndex);
 
                 // Get the machine for the first item
-                var machine = GetMachineForItemDB(items.First().Key);
+                var machine = GetMachineDB(items.First().Value.MachineIndex);
                 if (machine.Value is null)
                     continue;
 
@@ -1137,7 +1137,7 @@ namespace SabreTools.Metadata.DatFiles
 #endif
 
                 // Get the machine
-                var machine = GetMachineForItemDB(items.First().Key);
+                var machine = GetMachineDB(items.First().Value.MachineIndex);
                 if (machine.Value is null)
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                     return;
@@ -1235,7 +1235,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the machine for the first item
-                var machine = GetMachineForItemDB(items.First().Key);
+                var machine = GetMachineDB(items.First().Value.MachineIndex);
                 if (machine.Value is null)
                     continue;
 
@@ -1257,14 +1257,14 @@ namespace SabreTools.Metadata.DatFiles
 
                 // Now we want to get the parent romof tag and put it in each of the remaining items
                 items = GetItemsForBucketDB(bucket);
-                machine = GetMachineForItemDB(GetItemsForBucketDB(cloneOf).First().Key);
+                machine = GetMachineDB(GetItemsForBucketDB(cloneOf).First().Value.MachineIndex);
                 if (machine.Value is null)
                     continue;
 
                 string? romof = machine.Value.RomOf;
                 foreach (var item in items)
                 {
-                    machine = GetMachineForItemDB(item.Key);
+                    machine = GetMachineDB(item.Value.MachineIndex);
                     if (machine.Value is null)
                         continue;
 
@@ -1338,7 +1338,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the machine for the item
-                var machine = GetMachineForItemDB(items.First().Key);
+                var machine = GetMachineDB(items.First().Value.MachineIndex);
                 if (machine.Value is null)
                     continue;
 

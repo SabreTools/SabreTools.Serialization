@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -142,7 +142,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         var datItem = new KeyValuePair<long, DatItem>(kvp.Key, ProcessNullifiedItem(kvp.Value));
 
                         // Get the machine for the item
-                        var machine = GetMachineForItemDB(datItem.Key);
+                        var machine = GetMachineDB(datItem.Value.MachineIndex);
 
                         // Write out the item if we're using machine names or we're not ignoring
                         if (!Modifiers.UseRomName || !ShouldIgnore(datItem.Value, ignoreblanks))
@@ -186,7 +186,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="lastgame">The name of the last game to be output</param>
         private void WriteDatItemDB(StreamWriter sw, KeyValuePair<long, DatItem> datItem, string? lastgame)
         {
-            var machine = GetMachineForItemDB(datItem.Key).Value;
+            var machine = GetMachineDB(datItem.Value.MachineIndex).Value;
             WriteDatItemImpl(sw, datItem.Value, machine!, lastgame);
         }
 
