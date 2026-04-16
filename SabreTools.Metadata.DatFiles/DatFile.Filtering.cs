@@ -600,7 +600,7 @@ namespace SabreTools.Metadata.DatFiles
                 return;
 
             // Reassign the item to the new machine
-            ItemsDB.RemapDatItemToMachine(datItem.Key, newMachineIndex);
+            datItem.Value.MachineIndex = newMachineIndex;
 
             // Remove extensions from File and Rom items
             if (datItem.Value is DatItems.Formats.File || datItem.Value is Rom)

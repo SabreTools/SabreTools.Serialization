@@ -508,35 +508,6 @@ namespace SabreTools.Metadata.DatFiles.Test
 
         #endregion
 
-        #region RemapDatItemToMachine
-
-        [Fact]
-        public void RemapDatItemToMachineTest()
-        {
-            Source source = new Source(0, source: null);
-
-            Machine origMachine = new Machine { Name = "original" };
-
-            Machine newMachine = new Machine { Name = "new" };
-
-            DatItem datItem = new Rom();
-
-            var dict = new ItemDatabase();
-            long sourceIndex = dict.AddSource(source);
-            long origMachineIndex = dict.AddMachine(origMachine);
-            long newMachineIndex = dict.AddMachine(newMachine);
-            long itemIndex = dict.AddItem(datItem, origMachineIndex, sourceIndex, statsOnly: false);
-
-            dict.RemapDatItemToMachine(itemIndex, newMachineIndex);
-
-            var actual = dict.GetMachineForItem(itemIndex);
-            Assert.Equal(1, actual.Key);
-            Assert.NotNull(actual.Value);
-            Assert.Equal("new", actual.Value.Name);
-        }
-
-        #endregion
-
         #region RemoveBucket
 
         [Fact]

@@ -448,17 +448,6 @@ namespace SabreTools.Metadata.DatFiles
         public IDictionary<long, Source> GetSources() => _sources;
 
         /// <summary>
-        /// Remap an item to a new machine index without validation
-        /// </summary>
-        /// <param name="itemIndex">Current item index</param>
-        /// <param name="machineIndex">New machine index</param>
-        public void RemapDatItemToMachine(long itemIndex, long machineIndex)
-        {
-            if (_items.TryGetValue(itemIndex, out var item))
-                item.MachineIndex = machineIndex;
-        }
-
-        /// <summary>
         /// Remove a key from the file dictionary if it exists
         /// </summary>
         /// <param name="key">Key in the dictionary to remove</param>

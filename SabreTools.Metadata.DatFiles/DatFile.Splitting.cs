@@ -450,7 +450,7 @@ namespace SabreTools.Metadata.DatFiles
                             .Select(i => (i as Disk)!.Name)
                             .Contains(mergeTag))
                         {
-                            ItemsDB.RemapDatItemToMachine(item.Key, cloneOfMachine.Key);
+                            item.Value.MachineIndex = cloneOfMachine.Key;
                             ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
                         }
 
@@ -460,7 +460,7 @@ namespace SabreTools.Metadata.DatFiles
                             .Select(i => (i as Disk)!.Name)
                             .Contains(disk.Name))
                         {
-                            ItemsDB.RemapDatItemToMachine(item.Key, cloneOfMachine.Key);
+                            item.Value.MachineIndex = cloneOfMachine.Key;
                             ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
                         }
                     }
@@ -488,7 +488,7 @@ namespace SabreTools.Metadata.DatFiles
                             if (subfolder)
                                 rom.Name = $"{machineName}\\{rom.Name}";
 
-                            ItemsDB.RemapDatItemToMachine(item.Key, machineIndex: cloneOfMachine.Key);
+                            item.Value.MachineIndex = cloneOfMachine.Key;
                             ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
                         }
 
@@ -498,7 +498,7 @@ namespace SabreTools.Metadata.DatFiles
                             if (subfolder)
                                 rom.Name = $"{machineName}\\{rom.Name}";
 
-                            ItemsDB.RemapDatItemToMachine(item.Key, cloneOfMachine.Key);
+                            item.Value.MachineIndex = cloneOfMachine.Key;
                             ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
                         }
                     }
@@ -509,7 +509,7 @@ namespace SabreTools.Metadata.DatFiles
                         if (subfolder)
                             item.Value.SetName($"{machineName}\\{item.Value.GetName()}");
 
-                        ItemsDB.RemapDatItemToMachine(item.Key, cloneOfMachine.Key);
+                        item.Value.MachineIndex = cloneOfMachine.Key;
                         ItemsDB.AddItem(item.Value, cloneOfMachine.Key, source.Key);
                     }
 
