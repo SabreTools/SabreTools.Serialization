@@ -332,31 +332,15 @@ namespace SabreTools.Metadata.DatFiles
             if (bucketName is null)
                 return [];
 
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             if (!_buckets.TryGetValue(bucketName, out var itemIds))
                 return [];
-#else
-            if (!_buckets.ContainsKey(bucketName))
-                return [];
-
-            var itemIds = _buckets[bucketName];
-#endif
 
             var datItems = new Dictionary<long, DatItem>();
             foreach (long itemId in itemIds)
             {
                 // Ignore missing IDs
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                 if (!_items.TryGetValue(itemId, out var datItem) || datItem is null)
                     continue;
-#else
-                if (!_items.ContainsKey(itemId))
-                    continue;
-
-                var datItem = _items[itemId];
-                if (datItem is null)
-                    continue;
-#endif
 
                 if (!filter || !datItem.RemoveFlag)
                     datItems[itemId] = datItem;
@@ -370,17 +354,10 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public Machine? GetMachine(long index)
         {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             if (!_machines.TryGetValue(index, out var machine))
                 return null;
 
             return machine;
-#else
-            if (!_machines.ContainsKey(index))
-                return null;
-
-            return _machines[index];
-#endif
         }
 
         /// <summary>
@@ -468,15 +445,8 @@ namespace SabreTools.Metadata.DatFiles
 
             foreach (var index in list)
             {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                 if (!_items.TryGetValue(index, out var datItem) || datItem is null)
                     continue;
-#else
-                if (!_items.ContainsKey(index))
-                    continue;
-
-                var datItem = _items[index];
-#endif
 
                 RemoveItem(index);
             }
@@ -871,20 +841,6 @@ namespace SabreTools.Metadata.DatFiles
         }
 
         /// <summary>
-        /// Ensure the key exists in the items dictionary
-        /// </summary>
-        private void EnsureBucketingKey(string key)
-        {
-            // If the key is missing from the dictionary, add it
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            _buckets.GetOrAdd(key, []);
-#else
-            if (!_buckets.ContainsKey(key))
-                _buckets[key] = [];
-#endif
-        }
-
-        /// <summary>
         /// Get the highest-order Field value that represents the statistics
         /// </summary>
         private ItemKey GetBestAvailable()
@@ -1018,7 +974,13 @@ namespace SabreTools.Metadata.DatFiles
             string? bucketKey = GetBucketKey(itemIndex, bucketBy, lower, norename);
             lock (bucketKey)
             {
-                EnsureBucketingKey(bucketKey);
+                // If the key is missing from the dictionary, add it
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                _buckets.GetOrAdd(bucketKey, []);
+#else
+                if (!_buckets.ContainsKey(bucketKey))
+                    _buckets[bucketKey] = [];
+#endif
 
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                 if (!_buckets.TryGetValue(bucketKey, out var bucket) || bucket is null)
