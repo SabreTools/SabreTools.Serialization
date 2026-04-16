@@ -361,12 +361,12 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Get a machine based on the index
         /// </summary>
-        public Machine? GetMachine(long index)
+        public KeyValuePair<long, Machine?> GetMachine(long index)
         {
             if (!_machines.TryGetValue(index, out var machine))
-                return null;
+                return new KeyValuePair<long, Machine?>(-1, null);
 
-            return machine;
+            return new KeyValuePair<long, Machine?>(index, machine);
         }
 
         /// <summary>
@@ -405,12 +405,12 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Get a source based on the index
         /// </summary>
-        public Source? GetSource(long index)
+        public KeyValuePair<long, Source?> GetSource(long index)
         {
-            if (_sources.TryGetValue(index, out var source))
-                return source;
+            if (!_sources.TryGetValue(index, out var source))
+                return new KeyValuePair<long, Source?>(-1, null);
 
-            return null;
+            return new KeyValuePair<long, Source?>(index, source);
         }
 
         /// <summary>
@@ -657,7 +657,7 @@ namespace SabreTools.Metadata.DatFiles
             _ = SortAndGetKey(datItem, sorted);
             var machine = GetMachineForItem(datItem.Key);
             var source = GetSource(datItem.Value.SourceIndex);
-            string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source);
+            string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source.Value);
 
             // If the key doesn't exist, return the empty list
             var items = GetItemsForBucket(key);
@@ -700,7 +700,7 @@ namespace SabreTools.Metadata.DatFiles
             _ = SortAndGetKey(datItem, sorted);
             var machine = GetMachineForItem(datItem.Key);
             var source = GetSource(datItem.Value.SourceIndex);
-            string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source);
+            string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source.Value);
 
             // If the key doesn't exist
             var roms = GetItemsForBucket(key);
@@ -761,7 +761,7 @@ namespace SabreTools.Metadata.DatFiles
                 int pos = output.FindIndex(lastItem =>
                 {
                     var lastItemSource = GetSource(lastItem.Value.SourceIndex);
-                    return GetDuplicateStatus(kvp, datItemSource, lastItem, lastItemSource) != 0x00;
+                    return GetDuplicateStatus(kvp, datItemSource.Value, lastItem, lastItemSource.Value) != 0x00;
                 });
                 if (pos < 0)
                 {
@@ -773,7 +773,7 @@ namespace SabreTools.Metadata.DatFiles
                 long savedIndex = output[pos].Key;
                 DatItem savedItem = output[pos].Value;
                 var savedItemSource = GetSource(savedItem.SourceIndex);
-                DupeType dupetype = GetDuplicateStatus(kvp, datItemSource, output[pos], savedItemSource);
+                DupeType dupetype = GetDuplicateStatus(kvp, datItemSource.Value, output[pos], savedItemSource.Value);
 
                 // Disks, Media, and Roms have more information to fill
                 if (datItem is Disk diskItem && savedItem is Disk savedDisk)
@@ -796,7 +796,7 @@ namespace SabreTools.Metadata.DatFiles
                 var itemMachine = GetMachineForItem(itemIndex);
 
                 // If the current source has a lower ID than the saved, use the saved source
-                if (itemSource?.Index < savedSource?.Index)
+                if (itemSource.Value?.Index < savedSource.Value?.Index)
                 {
                     datItem.SourceIndex = savedItem.SourceIndex;
                     _machines[savedMachine.Key] = (itemMachine.Value!.Clone() as Machine)!;
@@ -897,7 +897,7 @@ namespace SabreTools.Metadata.DatFiles
                 bucketBy = ItemKey.Machine;
 
             // Get the bucket key
-            return datItem.Value.GetKey(bucketBy, machine, source, lower, norename);
+            return datItem.Value.GetKey(bucketBy, machine.Value, source.Value, lower, norename);
         }
 
         /// <summary>
@@ -1031,8 +1031,8 @@ namespace SabreTools.Metadata.DatFiles
                     // Compare on source if renaming
                     if (!norename)
                     {
-                        int xSourceIndex = GetSource(x.Value.SourceIndex)?.Index ?? 0;
-                        int ySourceIndex = GetSource(y.Value.SourceIndex)?.Index ?? 0;
+                        int xSourceIndex = GetSource(x.Value.SourceIndex).Value?.Index ?? 0;
+                        int ySourceIndex = GetSource(y.Value.SourceIndex).Value?.Index ?? 0;
                         if (xSourceIndex != ySourceIndex)
                             return xSourceIndex - ySourceIndex;
                     }

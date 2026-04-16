@@ -595,7 +595,7 @@ namespace SabreTools.Metadata.DatFiles
 
             // Clone current machine to avoid conflict
             long newMachineIndex = AddMachineDB((Machine)machine.Value.Clone());
-            machine = new KeyValuePair<long, Machine?>(newMachineIndex, ItemsDB.GetMachine(newMachineIndex));
+            machine = GetMachineDB(newMachineIndex);
             if (machine.Value is null)
                 return;
 

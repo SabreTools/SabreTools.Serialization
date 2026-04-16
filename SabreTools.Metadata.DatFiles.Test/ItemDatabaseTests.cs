@@ -519,7 +519,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Assert.Equal(0, machineIndex);
             var actual = dict.GetMachine(machineIndex);
-            Assert.NotNull(actual);
+            Assert.NotNull(actual.Value);
         }
 
         #endregion
