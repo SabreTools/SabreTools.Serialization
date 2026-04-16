@@ -28,7 +28,6 @@ using ItemStatus = SabreTools.Data.Models.Metadata.ItemStatus;
  *
  * Notable changes include:
  * - Separation of Machine from DatItem, leading to a mapping instead
- *      + Should DatItem include an index reference to the machine? Or should that be all external?
  * - Adding machines to the dictionary distinctly from the items
  * - Having a separate "bucketing" system that only reorders indicies and not full items; quicker?
  * - Non-key-based add/remove of values; use explicit methods instead of dictionary-style accessors
