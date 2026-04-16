@@ -65,6 +65,12 @@ namespace SabreTools.Metadata.DatItems
         public Machine? Machine { get; set; }
 
         /// <summary>
+        /// Machine index for a DatItem
+        /// </summary>
+        /// <remarks>0-indexed, a value less than 0 is considered invalid</remarks>
+        public long MachineIndex { get; set; } = -1;
+
+        /// <summary>
         /// Flag if item should be removed
         /// </summary>
         public bool RemoveFlag { get; set; } = false;
@@ -73,6 +79,12 @@ namespace SabreTools.Metadata.DatItems
         /// Source information
         /// </summary>
         public Source? Source { get; set; }
+
+        /// <summary>
+        /// Source index for a DatItem
+        /// </summary>
+        /// <remarks>0-indexed, a value less than 0 is considered invalid</remarks>
+        public long SourceIndex { get; set; } = -1;
 
         #endregion
 
