@@ -93,16 +93,6 @@ namespace SabreTools.Metadata.DatFiles
         private long _sourceIndex = 0;
 
         /// <summary>
-        /// Internal dictionary for item to machine mappings
-        /// </summary>
-        [JsonIgnore, XmlIgnore]
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-        private readonly ConcurrentDictionary<long, long> _itemToMachineMapping = [];
-#else
-        private readonly Dictionary<long, long> _itemToMachineMapping = [];
-#endif
-
-        /// <summary>
         /// Internal dictionary representing the current buckets
         /// </summary>
         [JsonIgnore, XmlIgnore]
@@ -411,25 +401,14 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public KeyValuePair<long, Machine?> GetMachineForItem(long itemIndex)
         {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            if (!_itemToMachineMapping.TryGetValue(itemIndex, out long machineIndex))
+            if (!_items.TryGetValue(itemIndex, out var item))
                 return new KeyValuePair<long, Machine?>(-1, null);
 
+            long machineIndex = item.MachineIndex;
             if (!_machines.TryGetValue(machineIndex, out var machine))
                 return new KeyValuePair<long, Machine?>(-1, null);
 
             return new KeyValuePair<long, Machine?>(machineIndex, machine);
-#else
-            if (!_itemToMachineMapping.ContainsKey(itemIndex))
-                return new KeyValuePair<long, Machine?>(-1, null);
-
-            long machineIndex = _itemToMachineMapping[itemIndex];
-            if (!_machines.ContainsKey(machineIndex))
-                return new KeyValuePair<long, Machine?>(-1, null);
-
-            var machine = _machines[machineIndex];
-            return new KeyValuePair<long, Machine?>(machineIndex, machine);
-#endif
         }
 
         /// <summary>
@@ -475,10 +454,8 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="machineIndex">New machine index</param>
         public void RemapDatItemToMachine(long itemIndex, long machineIndex)
         {
-            lock (_itemToMachineMapping)
-            {
-                _itemToMachineMapping[itemIndex] = machineIndex;
-            }
+            if (_items.TryGetValue(itemIndex, out var item))
+                item.MachineIndex = machineIndex;
         }
 
         /// <summary>
@@ -539,14 +516,6 @@ namespace SabreTools.Metadata.DatFiles
             if (datItem is not null)
                 DatStatistics.RemoveItemStatistics(datItem);
 
-            // Remove the machine mapping
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            _itemToMachineMapping.TryRemove(itemIndex, out _);
-#else
-            if (_itemToMachineMapping.ContainsKey(itemIndex))
-                _itemToMachineMapping.Remove(itemIndex);
-#endif
-
             return true;
         }
 
@@ -564,18 +533,12 @@ namespace SabreTools.Metadata.DatFiles
             _machines.Remove(machineIndex);
 #endif
 
-            var itemIds = _itemToMachineMapping
-                .Where(mapping => mapping.Value == machineIndex)
-                .Select(mapping => mapping.Key);
+            // TODO: Figure out if removing or marking items makes sense here
 
-            foreach (long itemId in itemIds)
-            {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-                _itemToMachineMapping.TryRemove(itemId, out _);
-#else
-                _itemToMachineMapping.Remove(itemId);
-#endif
-            }
+            // The old version of this code removed all items that were associated
+            // with the machine. However, only items with a machine will ever be
+            // written out. The extra processing time to find and remove all
+            // of the related items seems unnecessary with this in mind.
 
             return true;
         }
@@ -597,23 +560,18 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         internal long AddItem(DatItem item, long machineIndex, long sourceIndex)
         {
-            // Add the source index
+            // Add the machine and source index
+            item.MachineIndex = machineIndex;
             item.SourceIndex = sourceIndex;
 
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             // Add the item with a new index
             long index = Interlocked.Increment(ref _itemIndex) - 1;
             _items.TryAdd(index, item);
-
-            // Add the machine mapping
-            _itemToMachineMapping.TryAdd(index, machineIndex);
 #else
             // Add the item with a new index
             long index = _itemIndex++ - 1;
             _items[index] = item;
-
-            // Add the machine mapping
-            _itemToMachineMapping[index] = machineIndex;
 #endif
 
             // Add the item statistics
@@ -896,22 +854,22 @@ namespace SabreTools.Metadata.DatFiles
                 var itemSource = _sources[GetSourceForItem(itemIndex).Key];
 
                 // Get the machines associated with the items
-                var savedMachine = _machines[_itemToMachineMapping[savedIndex]];
-                var itemMachine = _machines[_itemToMachineMapping[itemIndex]];
+                var savedMachine = GetMachineForItem(savedIndex);
+                var itemMachine = GetMachineForItem(itemIndex);
 
                 // If the current source has a lower ID than the saved, use the saved source
                 if (itemSource?.Index < savedSource?.Index)
                 {
                     datItem.SourceIndex = savedItem.SourceIndex;
-                    _machines[_itemToMachineMapping[savedIndex]] = (itemMachine.Clone() as Machine)!;
+                    _machines[savedMachine.Key] = (itemMachine.Value!.Clone() as Machine)!;
                     savedItem.SetName(datItem.GetName());
                 }
 
                 // If the saved machine is a child of the current machine, use the current machine instead
-                if (savedMachine.CloneOf == itemMachine.Name
-                    || savedMachine.RomOf == itemMachine.Name)
+                if (savedMachine.Value!.CloneOf == itemMachine.Value!.Name
+                    || savedMachine.Value!.RomOf == itemMachine.Value!.Name)
                 {
-                    _machines[_itemToMachineMapping[savedIndex]] = (itemMachine.Clone() as Machine)!;
+                    _machines[savedMachine.Key] = (itemMachine.Value!.Clone() as Machine)!;
                     savedItem.SetName(datItem.GetName());
                 }
 
@@ -1154,8 +1112,8 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // Get the machines
-                    Machine? xMachine = _machines[_itemToMachineMapping[x.Key]];
-                    Machine? yMachine = _machines[_itemToMachineMapping[y.Key]];
+                    Machine? xMachine = GetMachineForItem(x.Key).Value;
+                    Machine? yMachine = GetMachineForItem(y.Key).Value;
 
                     // If machine names don't match
                     string? xMachineName = xMachine?.Name;
