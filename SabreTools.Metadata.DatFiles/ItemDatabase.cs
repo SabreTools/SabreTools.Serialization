@@ -471,12 +471,29 @@ namespace SabreTools.Metadata.DatFiles
             _machines.Remove(machineIndex);
 #endif
 
-            // TODO: Figure out if removing or marking items makes sense here
+            // Get the current list of item indicies
+            long[] itemIndicies = [.. _items.Keys];
 
-            // The old version of this code removed all items that were associated
-            // with the machine. However, only items with a machine will ever be
-            // written out. The extra processing time to find and remove all
-            // of the related items seems unnecessary with this in mind.
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+            Parallel.For(0, itemIndicies.Length, i =>
+#else
+            for (int i = 0; i < itemIndicies.Length; i++)
+#endif
+            {
+                var datItem = GetItem(i);
+                if (datItem is null || datItem.MachineIndex != machineIndex)
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                    return;
+#else
+                    continue;
+#endif
+
+                RemoveItem(i);
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+            });
+#else
+            }
+#endif
 
             return true;
         }
