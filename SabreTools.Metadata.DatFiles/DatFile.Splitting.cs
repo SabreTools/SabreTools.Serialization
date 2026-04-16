@@ -421,7 +421,7 @@ namespace SabreTools.Metadata.DatFiles
                 foreach (var item in items)
                 {
                     // Get the source for the current item
-                    var source = GetSourceForItemDB(item.Key);
+                    var source = ItemsDB.GetSource(item.Value.SourceIndex);
 
                     // Get the parent items and current machine name
                     Dictionary<long, DatItem> parentItems = GetItemsForBucketDB(cloneOf);
@@ -451,7 +451,6 @@ namespace SabreTools.Metadata.DatFiles
                             .Contains(mergeTag))
                         {
                             item.Value.MachineIndex = cloneOfMachine.Key;
-                            item.Value.SourceIndex = source.Key;
                             ItemsDB.AddItemInternal(item.Value);
                         }
 
@@ -462,7 +461,6 @@ namespace SabreTools.Metadata.DatFiles
                             .Contains(disk.Name))
                         {
                             item.Value.MachineIndex = cloneOfMachine.Key;
-                            item.Value.SourceIndex = source.Key;
                             ItemsDB.AddItemInternal(item.Value);
                         }
                     }
@@ -491,7 +489,6 @@ namespace SabreTools.Metadata.DatFiles
                                 rom.Name = $"{machineName}\\{rom.Name}";
 
                             item.Value.MachineIndex = cloneOfMachine.Key;
-                            item.Value.SourceIndex = source.Key;
                             ItemsDB.AddItemInternal(item.Value);
                         }
 
@@ -502,7 +499,6 @@ namespace SabreTools.Metadata.DatFiles
                                 rom.Name = $"{machineName}\\{rom.Name}";
 
                             item.Value.MachineIndex = cloneOfMachine.Key;
-                            item.Value.SourceIndex = source.Key;
                             ItemsDB.AddItemInternal(item.Value);
                         }
                     }
@@ -514,7 +510,6 @@ namespace SabreTools.Metadata.DatFiles
                             item.Value.SetName($"{machineName}\\{item.Value.GetName()}");
 
                         item.Value.MachineIndex = cloneOfMachine.Key;
-                        item.Value.SourceIndex = source.Key;
                         ItemsDB.AddItemInternal(item.Value);
                     }
 
@@ -593,7 +588,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the source for the first item
-                var source = GetSourceForItemDB(items.First().Key);
+                var source = ItemsDB.GetSource(items.First().Value.SourceIndex);
 
                 // Get the machine for the first item in the list
                 var machine = GetMachineForItemDB(items.First().Key);
@@ -615,7 +610,7 @@ namespace SabreTools.Metadata.DatFiles
                 {
                     DatItem datItem = (DatItem)item.Value.Clone();
                     datItem.MachineIndex = machine.Key;
-                    datItem.SourceIndex = source.Key;
+                    datItem.SourceIndex = item.Value.SourceIndex;
 
                     if (items.Values.Any(i => i.GetName()?.ToLowerInvariant() == datItem.GetName()?.ToLowerInvariant())
                         && items.Values.Any(i => i == datItem))
@@ -816,10 +811,11 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the source for the first item
-                var source = GetSourceForItemDB(items.First().Key);
+                var firstItem = items.First();
+                var source = ItemsDB.GetSource(firstItem.Value.SourceIndex);
 
                 // Get the machine for the first item
-                var machine = GetMachineForItemDB(items.First().Key);
+                var machine = GetMachineForItemDB(firstItem.Key);
                 if (machine.Value is null)
                     continue;
 
@@ -883,7 +879,7 @@ namespace SabreTools.Metadata.DatFiles
                                 // Clone the item and then add it
                                 DatItem datItem = (DatItem)item.Clone();
                                 datItem.MachineIndex = machine.Key;
-                                datItem.SourceIndex = source.Key;
+                                datItem.SourceIndex = item.SourceIndex;
 
                                 ItemsDB.AddItemInternal(datItem);
                             }
@@ -898,7 +894,7 @@ namespace SabreTools.Metadata.DatFiles
                             var deviceRef = new DeviceRef
                             {
                                 MachineIndex = machine.Key,
-                                SourceIndex = source.Key,
+                                SourceIndex = firstItem.Value.SourceIndex,
                                 Name = deviceReference,
                             };
 
@@ -947,7 +943,7 @@ namespace SabreTools.Metadata.DatFiles
                                 // Clone the item and then add it
                                 DatItem datItem = (DatItem)item.Clone();
                                 datItem.MachineIndex = machine.Key;
-                                datItem.SourceIndex = source.Key;
+                                datItem.SourceIndex = item.SourceIndex;
 
                                 ItemsDB.AddItemInternal(datItem);
                             }
@@ -962,14 +958,14 @@ namespace SabreTools.Metadata.DatFiles
                             var slotOptionItem = new SlotOption
                             {
                                 MachineIndex = machine.Key,
-                                SourceIndex = source.Key,
+                                SourceIndex = firstItem.Value.SourceIndex,
                                 DevName = slotOption,
                             };
 
                             var slotItem = new Slot
                             {
                                 MachineIndex = machine.Key,
-                                SourceIndex = source.Key,
+                                SourceIndex = firstItem.Value.SourceIndex,
                                 SlotOption = [slotOptionItem],
                             };
 
@@ -1040,7 +1036,7 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // Get the source for the first item
-                var source = GetSourceForItemDB(items.First().Key);
+                var source = ItemsDB.GetSource(items.First().Value.SourceIndex);
 
                 // Get the machine for the first item
                 var machine = GetMachineForItemDB(items.First().Key);
@@ -1058,7 +1054,7 @@ namespace SabreTools.Metadata.DatFiles
                 {
                     DatItem datItem = (DatItem)item.Value.Clone();
                     datItem.MachineIndex = machine.Key;
-                    datItem.SourceIndex = source.Key;
+                    datItem.SourceIndex = item.Value.SourceIndex;
 
                     if (items.Any(i => i.Value.GetName() == datItem.GetName())
                         && items.Any(i => i.Value == datItem))

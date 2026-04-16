@@ -1,4 +1,4 @@
-﻿#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.Collections.Concurrent;
 #endif
 using System.Collections.Generic;
@@ -318,6 +318,17 @@ namespace SabreTools.Metadata.DatFiles
         }
 
         /// <summary>
+        /// Get a item based on the index
+        /// </summary>
+        public DatItem? GetItem(long index)
+        {
+            if (_items.TryGetValue(index, out var item))
+                return item;
+
+            return null;
+        }
+
+        /// <summary>
         /// Get all items and their indicies
         /// </summary>
         public IDictionary<long, DatItem> GetItems() => _items;
@@ -400,21 +411,6 @@ namespace SabreTools.Metadata.DatFiles
                 return source;
 
             return null;
-        }
-
-        /// <summary>
-        /// Get the index and source associated with an item index
-        /// </summary>
-        public KeyValuePair<long, Source?> GetSourceForItem(long itemIndex)
-        {
-            if (!_items.TryGetValue(itemIndex, out var item))
-                return new KeyValuePair<long, Source?>(-1, null);
-
-            long sourceIndex = item.SourceIndex;
-            if (!_sources.TryGetValue(sourceIndex, out var source))
-                return new KeyValuePair<long, Source?>(-1, null);
-
-            return new KeyValuePair<long, Source?>(sourceIndex, source);
         }
 
         /// <summary>
@@ -531,7 +527,7 @@ namespace SabreTools.Metadata.DatFiles
             DatStatistics.AddItemStatistics(item);
 
             // Add the item to the default bucket
-            PerformItemBucketing(index, _bucketedBy, lower: true, norename: true);
+            PerformItemBucketing(new KeyValuePair<long, DatItem>(index, item), _bucketedBy, lower: true, norename: true);
 
             // Return the used index
             return index;
@@ -660,8 +656,8 @@ namespace SabreTools.Metadata.DatFiles
             // We want to get the proper key for the DatItem, ignoring the index
             _ = SortAndGetKey(datItem, sorted);
             var machine = GetMachineForItem(datItem.Key);
-            var source = GetSourceForItem(datItem.Key);
-            string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source.Value);
+            var source = GetSource(datItem.Value.SourceIndex);
+            string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source);
 
             // If the key doesn't exist, return the empty list
             var items = GetItemsForBucket(key);
@@ -703,8 +699,8 @@ namespace SabreTools.Metadata.DatFiles
             // We want to get the proper key for the DatItem, ignoring the index
             _ = SortAndGetKey(datItem, sorted);
             var machine = GetMachineForItem(datItem.Key);
-            var source = GetSourceForItem(datItem.Key);
-            string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source.Value);
+            var source = GetSource(datItem.Value.SourceIndex);
+            string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source);
 
             // If the key doesn't exist
             var roms = GetItemsForBucket(key);
@@ -761,11 +757,11 @@ namespace SabreTools.Metadata.DatFiles
                 }
 
                 // Find the index of the first duplicate, if one exists
-                var datItemSource = GetSourceForItem(itemIndex);
+                var datItemSource = GetSource(datItem.SourceIndex);
                 int pos = output.FindIndex(lastItem =>
                 {
-                    var lastItemSource = GetSourceForItem(lastItem.Key);
-                    return GetDuplicateStatus(kvp, datItemSource.Value, lastItem, lastItemSource.Value) != 0x00;
+                    var lastItemSource = GetSource(lastItem.Value.SourceIndex);
+                    return GetDuplicateStatus(kvp, datItemSource, lastItem, lastItemSource) != 0x00;
                 });
                 if (pos < 0)
                 {
@@ -776,8 +772,8 @@ namespace SabreTools.Metadata.DatFiles
                 // Get the duplicate item
                 long savedIndex = output[pos].Key;
                 DatItem savedItem = output[pos].Value;
-                var savedItemSource = GetSourceForItem(savedIndex);
-                DupeType dupetype = GetDuplicateStatus(kvp, datItemSource.Value, output[pos], savedItemSource.Value);
+                var savedItemSource = GetSource(savedItem.SourceIndex);
+                DupeType dupetype = GetDuplicateStatus(kvp, datItemSource, output[pos], savedItemSource);
 
                 // Disks, Media, and Roms have more information to fill
                 if (datItem is Disk diskItem && savedItem is Disk savedDisk)
@@ -792,8 +788,8 @@ namespace SabreTools.Metadata.DatFiles
                 savedItem.DupeType = dupetype;
 
                 // Get the sources associated with the items
-                var savedSource = _sources[GetSourceForItem(savedIndex).Key];
-                var itemSource = _sources[GetSourceForItem(itemIndex).Key];
+                var savedSource = GetSource(savedItem.SourceIndex);
+                var itemSource = GetSource(datItem.SourceIndex);
 
                 // Get the machines associated with the items
                 var savedMachine = GetMachineForItem(savedIndex);
@@ -886,34 +882,22 @@ namespace SabreTools.Metadata.DatFiles
 
         /// <summary>
         /// Get the bucketing key for a given item index
-        /// <param name="itemIndex">Index of the current item</param>
+        /// <param name="datItem">Current item</param>
         /// <param name="bucketBy">ItemKey value representing what key to get</param>
         /// <param name="lower">True if the key should be lowercased, false otherwise</param>
         /// <param name="norename">True if games should only be compared on game and file name, false if system and source are counted</param>
         /// </summary>
-        private string GetBucketKey(long itemIndex, ItemKey bucketBy, bool lower, bool norename)
+        private string GetBucketKey(KeyValuePair<long, DatItem> datItem, ItemKey bucketBy, bool lower, bool norename)
         {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            if (!_items.TryGetValue(itemIndex, out var datItem) || datItem is null)
-                return string.Empty;
-#else
-            if (!_items.ContainsKey(itemIndex))
-                return string.Empty;
-
-            var datItem = _items[itemIndex];
-            if (datItem is null)
-                return string.Empty;
-#endif
-
-            var source = GetSourceForItem(itemIndex);
-            var machine = GetMachineForItem(itemIndex);
+            var source = GetSource(datItem.Value.SourceIndex);
+            var machine = GetMachine(datItem.Value.MachineIndex);
 
             // Treat NULL like machine
             if (bucketBy == ItemKey.NULL)
                 bucketBy = ItemKey.Machine;
 
             // Get the bucket key
-            return datItem.GetKey(bucketBy, machine.Value, source.Value, lower, norename);
+            return datItem.Value.GetKey(bucketBy, machine, source, lower, norename);
         }
 
         /// <summary>
@@ -937,7 +921,15 @@ namespace SabreTools.Metadata.DatFiles
             for (int i = 0; i < itemIndicies.Length; i++)
 #endif
             {
-                PerformItemBucketing(i, bucketBy, lower, norename);
+                var datItem = GetItem(i);
+                if (datItem is null)
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                    return;
+#else
+                    continue;
+#endif
+
+                PerformItemBucketing(new KeyValuePair<long, DatItem>(i, datItem), bucketBy, lower, norename);
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
 #else
@@ -948,13 +940,13 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Bucket a single DatItem
         /// </summary>
-        /// <param name="itemIndex">Index of the item to bucket</param>
+        /// <param name="datItem">Item to bucket</param>
         /// <param name="bucketBy">ItemKey enum representing how to bucket the individual items</param>
         /// <param name="lower">True if the key should be lowercased, false otherwise</param>
         /// <param name="norename">True if games should only be compared on game and file name, false if system and source are counted</param>
-        private void PerformItemBucketing(long itemIndex, ItemKey bucketBy, bool lower, bool norename)
+        private void PerformItemBucketing(KeyValuePair<long, DatItem> datItem, ItemKey bucketBy, bool lower, bool norename)
         {
-            string? bucketKey = GetBucketKey(itemIndex, bucketBy, lower, norename);
+            string? bucketKey = GetBucketKey(datItem, bucketBy, lower, norename);
             lock (bucketKey)
             {
                 // If the key is missing from the dictionary, add it
@@ -969,9 +961,9 @@ namespace SabreTools.Metadata.DatFiles
                 if (!_buckets.TryGetValue(bucketKey, out var bucket) || bucket is null)
                     return;
 
-                bucket.Add(itemIndex);
+                bucket.Add(datItem.Key);
 #else
-                _buckets[bucketKey].Add(itemIndex);
+                _buckets[bucketKey].Add(datItem.Key);
 #endif
             }
         }
@@ -1039,8 +1031,8 @@ namespace SabreTools.Metadata.DatFiles
                     // Compare on source if renaming
                     if (!norename)
                     {
-                        int xSourceIndex = GetSourceForItem(x.Key).Value?.Index ?? 0;
-                        int ySourceIndex = GetSourceForItem(y.Key).Value?.Index ?? 0;
+                        int xSourceIndex = GetSource(x.Value.SourceIndex)?.Index ?? 0;
+                        int ySourceIndex = GetSource(y.Value.SourceIndex)?.Index ?? 0;
                         if (xSourceIndex != ySourceIndex)
                             return xSourceIndex - ySourceIndex;
                     }
@@ -1095,7 +1087,7 @@ namespace SabreTools.Metadata.DatFiles
                 BucketBy(GetBestAvailable());
 
             // Now that we have the sorted type, we get the proper key
-            return GetBucketKey(datItem.Key, _bucketedBy, lower: true, norename: true);
+            return GetBucketKey(datItem, _bucketedBy, lower: true, norename: true);
         }
 
         #endregion

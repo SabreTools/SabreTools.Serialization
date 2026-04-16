@@ -278,12 +278,6 @@ namespace SabreTools.Metadata.DatFiles
             => ItemsDB.GetMachineForItem(itemIndex);
 
         /// <summary>
-        /// Get the index and source associated with an item index
-        /// </summary>
-        public KeyValuePair<long, Source?> GetSourceForItemDB(long itemIndex)
-            => ItemsDB.GetSourceForItem(itemIndex);
-
-        /// <summary>
         /// Remove a key from the file dictionary if it exists
         /// </summary>
         /// <param name="key">Key in the dictionary to remove</param>
@@ -882,14 +876,14 @@ namespace SabreTools.Metadata.DatFiles
                     ?? string.Empty;
 
                 // Get sources for both items
-                var datItemSource = ItemsDB.GetSourceForItem(datItem.Key);
-                var lastItemSource = ItemsDB.GetSourceForItem(lastItem.Value.Key);
+                var datItemSource = ItemsDB.GetSource(datItem.Value.SourceIndex);
+                var lastItemSource = ItemsDB.GetSource(lastItem.Value.Value.SourceIndex);
 
                 // If the current item exactly matches the last item, then we don't add it
 #if NET20 || NET35
-                if ((ItemsDB.GetDuplicateStatus(datItem, datItemSource.Value, lastItem, lastItemSource.Value) & DupeType.All) != 0)
+                if ((ItemsDB.GetDuplicateStatus(datItem, datItemSource, lastItem, lastItemSource) & DupeType.All) != 0)
 #else
-                if (ItemsDB.GetDuplicateStatus(datItem, datItemSource.Value, lastItem, lastItemSource.Value).HasFlag(DupeType.All))
+                if (ItemsDB.GetDuplicateStatus(datItem, datItemSource, lastItem, lastItemSource).HasFlag(DupeType.All))
 #endif
                 {
                     _logger.Verbose($"Exact duplicate found for '{datItemName}'");
@@ -1202,8 +1196,8 @@ namespace SabreTools.Metadata.DatFiles
                     // Compare on source if renaming
                     if (!norename)
                     {
-                        int xSourceIndex = ItemsDB.GetSourceForItem(x.Key).Value?.Index ?? 0;
-                        int ySourceIndex = ItemsDB.GetSourceForItem(y.Key).Value?.Index ?? 0;
+                        int xSourceIndex = ItemsDB.GetSource(x.Value.SourceIndex)?.Index ?? 0;
+                        int ySourceIndex = ItemsDB.GetSource(y.Value.SourceIndex)?.Index ?? 0;
                         if (xSourceIndex != ySourceIndex)
                             return xSourceIndex - ySourceIndex;
                     }
