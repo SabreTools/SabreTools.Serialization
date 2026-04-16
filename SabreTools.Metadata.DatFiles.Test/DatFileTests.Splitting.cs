@@ -133,8 +133,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "parent_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = parentMachine,
-                Source = source
             };
 
             DatItem matchChildItem = new Rom
@@ -142,8 +140,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "match_child_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = childMachine,
-                Source = source
             };
 
             DatItem noMatchChildItem = new Rom
@@ -151,8 +147,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "no_match_child_rom",
                 Size = 12345,
                 CRC32 = "beefdead",
-                Machine = childMachine,
-                Source = source
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
@@ -198,8 +192,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "parent_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = parentMachine,
-                Source = source
             };
 
             DatItem matchChildItem = new Rom
@@ -207,8 +199,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "match_child_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = childMachine,
-                Source = source
             };
 
             DatItem noMatchChildItem = new Rom
@@ -216,8 +206,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "no_match_child_rom",
                 Size = 12345,
                 CRC32 = "beefdead",
-                Machine = childMachine,
-                Source = source
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
@@ -319,8 +307,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "parent_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = parentMachine,
-                Source = source
             };
 
             DatItem matchChildItem = new Rom
@@ -328,8 +314,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "match_child_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = childMachine,
-                Source = source
             };
 
             DatItem noMatchChildItem = new Rom
@@ -337,8 +321,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "no_match_child_rom",
                 Size = 12345,
                 CRC32 = "beefdead",
-                Machine = childMachine,
-                Source = source
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
@@ -585,8 +567,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "parent_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = parentMachine,
-                Source = source
             };
 
             DatItem matchChildItem = new Rom
@@ -594,8 +574,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "match_child_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = childMachine,
-                Source = source
             };
 
             DatItem noMatchChildItem = new Rom
@@ -603,8 +581,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "no_match_child_rom",
                 Size = 12345,
                 CRC32 = "beefdead",
-                Machine = childMachine,
-                Source = source
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
@@ -802,8 +778,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "parent_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = parentMachine,
-                Source = source
             };
 
             DatItem matchChildItem = new Rom
@@ -811,8 +785,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "match_child_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = childMachine,
-                Source = source
             };
 
             DatItem noMatchChildItem = new Rom
@@ -820,8 +792,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "no_match_child_rom",
                 Size = 12345,
                 CRC32 = "beefdead",
-                Machine = childMachine,
-                Source = source
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
@@ -932,8 +902,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "parent_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = parentMachine,
-                Source = source
             };
 
             DatItem matchChildItem = new Rom
@@ -941,8 +909,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "match_child_rom",
                 Size = 12345,
                 CRC32 = "deadbeef",
-                Machine = childMachine,
-                Source = source
             };
 
             DatItem noMatchChildItem = new Rom
@@ -950,8 +916,6 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Name = "no_match_child_rom",
                 Size = 12345,
                 CRC32 = "beefdead",
-                Machine = childMachine,
-                Source = source
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);

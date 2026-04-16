@@ -23,8 +23,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SpamSum = HashType.SpamSum.ZeroString,
                 DupeType = DupeType.All | DupeType.External,
                 Machine = machine,
+                MachineIndex = 1,
                 RemoveFlag = false,
-                Source = source
+                Source = source,
+                SourceIndex = 1,
             };
 
             Rom actual = media.ConvertToRom();
@@ -35,6 +37,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal(HashType.SHA256.ZeroString, actual.SHA256);
             Assert.Equal(HashType.SpamSum.ZeroString, actual.SpamSum);
             Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
+            Assert.Equal(1, actual.MachineIndex);
+            Assert.Equal(1, actual.SourceIndex);
 
             Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);

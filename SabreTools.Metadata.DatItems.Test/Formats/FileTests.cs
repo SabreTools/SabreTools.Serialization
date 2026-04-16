@@ -26,11 +26,11 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 Format = "format",
                 DupeType = DupeType.All | DupeType.External,
                 Machine = machine,
+                MachineIndex = 1,
                 RemoveFlag = false,
-                Source = source
+                Source = source,
+                SourceIndex = 1,
             };
-            file.Machine = machine;
-            file.Source = source;
 
             Rom actual = file.ConvertToRom();
 
@@ -41,6 +41,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal("00000000000000000000000000000000deadbeef", actual.SHA1);
             Assert.Equal("00000000000000000000000000000000000000000000000000000000deadbeef", actual.SHA256);
             Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
+            Assert.Equal(1, actual.MachineIndex);
+            Assert.Equal(1, actual.SourceIndex);
 
             Machine? actualMachine = actual.Machine;
             Assert.NotNull(actualMachine);

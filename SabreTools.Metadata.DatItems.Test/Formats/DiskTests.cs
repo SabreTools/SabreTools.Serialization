@@ -19,6 +19,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 DiskAreaName = "name",
                 DupeType = DupeType.All | DupeType.External,
                 Machine = machine,
+                MachineIndex = 1,
                 MD5 = HashType.MD5.ZeroString,
                 Merge = "merge",
                 Name = "name",
@@ -29,6 +30,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 RemoveFlag = false,
                 SHA1 = HashType.SHA1.ZeroString,
                 Source = source,
+                SourceIndex = 1,
                 Status = Data.Models.Metadata.ItemStatus.Good,
             };
 
@@ -37,6 +39,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal(Data.Models.Metadata.Endianness.Little, actual.DataAreaEndianness);
             Assert.Equal("name", actual.DataAreaName);
             Assert.Equal(DupeType.All | DupeType.External, actual.DupeType);
+            Assert.Equal(1, actual.MachineIndex);
             Assert.Equal(HashType.MD5.ZeroString, actual.MD5);
             Assert.Equal("merge", actual.Merge);
             Assert.Equal("name.chd", actual.Name);
@@ -46,6 +49,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal("region", actual.Region);
             Assert.False(actual.RemoveFlag);
             Assert.Equal(HashType.SHA1.ZeroString, actual.SHA1);
+            Assert.Equal(1, actual.SourceIndex);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, actual.Status);
 
             Machine? actualMachine = actual.Machine;

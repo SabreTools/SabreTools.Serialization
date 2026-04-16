@@ -54,8 +54,6 @@ namespace SabreTools.Metadata.DatFiles.Test
             {
                 Name = "rom.bin",
                 CRC32 = "deadbeef",
-                Machine = machine,
-                Source = source
             };
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);

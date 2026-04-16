@@ -156,10 +156,12 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             rom.DupeType = DupeType;
             rom.Machine = Machine?.Clone() as Machine;
+            rom.MachineIndex = MachineIndex;
             rom.PartInterface = PartInterface;
             rom.PartName = PartName;
             rom.RemoveFlag = RemoveFlag;
             rom.Source = Source?.Clone() as Source;
+            rom.SourceIndex = SourceIndex;
 
             return rom;
         }
