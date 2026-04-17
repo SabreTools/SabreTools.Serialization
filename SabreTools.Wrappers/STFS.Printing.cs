@@ -137,7 +137,7 @@ namespace SabreTools.Wrappers
 
             if (header.AdditionalDisplayNames is not null)
             {
-                for (int i = 0; i < 18; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     byte[] localeString = new byte[128];
                     Array.Copy(header.AdditionalDisplayNames, i * 128, localeString, 0, 128);
@@ -151,7 +151,7 @@ namespace SabreTools.Wrappers
 
             if (header.AdditionalDisplayDescriptions is not null)
             {
-                for (int i = 0; i < 18; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     byte[] localeString = new byte[128];
                     Array.Copy(header.AdditionalDisplayDescriptions, i * 128, localeString, 0, 128);
@@ -259,6 +259,7 @@ namespace SabreTools.Wrappers
                 builder.AppendLine(svod.WorkerThreadProcessor, "    Worker Thread Processor");
                 builder.AppendLine(svod.WorkerThreadPriority, "    Worker Thread Priority");
                 builder.AppendLine(svod.Hash, "    Hash");
+                builder.AppendLine(svod.DeviceFeatures, "    Device Features");
                 builder.AppendLine((uint)svod.DataBlockCount, "    Data Block Count");
                 builder.AppendLine((uint)svod.DataBlockOffset, "    Data Block Offset");
                 builder.AppendLine(svod.Padding, "    Padding");

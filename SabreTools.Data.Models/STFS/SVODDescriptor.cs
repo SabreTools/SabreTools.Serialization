@@ -35,6 +35,11 @@ namespace SabreTools.Data.Models.STFS
         public byte[] Hash { get; set; } = new byte[20];
 
         /// <summary>
+        /// Device features
+        /// </summary>
+        public byte DeviceFeatures { get; set; }
+
+        /// <summary>
         /// Data Block Count
         /// </summary>
         /// <remarks>Little-endian, 3-byte uint24</remarks>
