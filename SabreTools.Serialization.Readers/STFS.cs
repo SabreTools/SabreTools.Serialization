@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.STFS;
@@ -152,7 +153,7 @@ namespace SabreTools.Serialization.Readers
                     cacheHeader.ResumeData = data.ReadBytes(5584);
                     obj.InstallerHeader = cacheHeader;
                 }
-                else if ((installerType[0] | installerType[1] | installerType[2] | installerType[3]) != 0)
+                else if (Array.Exists(installerType, x => x != 0))
                 {
                     var installerHeader = new InstallerHeader();
                     installerHeader.InstallerType = installerType;
