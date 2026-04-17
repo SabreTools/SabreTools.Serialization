@@ -141,6 +141,26 @@ namespace SabreTools.Metadata.DatFiles
             }
 
             /// <summary>
+            /// Remove all values that match a function
+            /// </summary>
+            public void RemoveAll(Func<T, bool> func)
+            {
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                Parallel.For(0, Indexes.Length, i =>
+#else
+                for (int i = 0; i < Indexes.Length; i++)
+#endif
+                {
+                    if (func(_table[i]))
+                        Remove(i);
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                });
+#else
+            }
+#endif
+            }
+
+            /// <summary>
             /// Set an indexed value directly
             /// </summary>
             /// <remarks>This does not increment the index so values may be overwritten</remarks>
@@ -411,20 +431,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Remove all items marked for removal
         /// </summary>
-        public void ClearMarked()
-        {
-            long[] itemIndexes = _items.Indexes;
-            foreach (long itemIndex in itemIndexes)
-            {
-                if (!_items.TryGet(itemIndex, out var datItem) || datItem is null)
-                    continue;
-
-                if (!datItem.RemoveFlag)
-                    continue;
-
-                RemoveItem(itemIndex);
-            }
-        }
+        public void ClearMarked() => _items.RemoveAll(d => d.RemoveFlag);
 
         /// <summary>
         /// Get a item based on the index
@@ -550,30 +557,7 @@ namespace SabreTools.Metadata.DatFiles
             if (!_machines.TryRemove(machineIndex, out _))
                 return false;
 
-            // Get the current list of item indicies
-            long[] itemIndexes = _items.Indexes;
-
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            Parallel.For(0, itemIndexes.Length, i =>
-#else
-            for (int i = 0; i < itemIndexes.Length; i++)
-#endif
-            {
-                var datItem = GetItem(i);
-                if (datItem is null || datItem.MachineIndex != machineIndex)
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-                    return;
-#else
-                    continue;
-#endif
-
-                RemoveItem(i);
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            });
-#else
-            }
-#endif
-
+            _items.RemoveAll(d => d.MachineIndex == machineIndex);
             return true;
         }
 
