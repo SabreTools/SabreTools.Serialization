@@ -1010,7 +1010,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             datFile.BucketBy(ItemKey.Machine);
             datFile.RemoveMachineRelationshipTags();
 
-            Machine actual = Assert.Single(datFile.GetMachinesDB()).Value;
+            Machine actual = Assert.Single(datFile.GetMachinesDB());
             Assert.Null(actual.CloneOf);
             Assert.Null(actual.RomOf);
             Assert.Null(actual.SampleOf);

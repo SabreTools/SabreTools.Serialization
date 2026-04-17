@@ -274,7 +274,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Get all machines and their indicies
         /// </summary>
-        public IDictionary<long, Machine> GetMachinesDB()
+        public Machine[] GetMachinesDB()
             => ItemsDB.GetMachines();
 
         /// <summary>

@@ -121,7 +121,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             datFile.MachineDescriptionToName();
 
-            Machine actualMachine = Assert.Single(datFile.GetMachinesDB()).Value;
+            Machine actualMachine = Assert.Single(datFile.GetMachinesDB());
             Assert.Equal("description", actualMachine.Name);
             Assert.Equal("description", actualMachine.Description);
         }
@@ -275,8 +275,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             datFile.SetOneGamePerRegion(regions);
 
             var actualWorldMachine = Assert.Single(datFile.GetMachinesDB());
-            Assert.NotNull(actualWorldMachine.Value);
-            Assert.Equal("machine (World)", actualWorldMachine.Value.Name);
+            Assert.NotNull(actualWorldMachine);
+            Assert.Equal("machine (World)", actualWorldMachine.Name);
         }
 
         #endregion
@@ -318,7 +318,7 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             datFile.StripSceneDatesFromItems();
 
-            Machine actualMachine = Assert.Single(datFile.GetMachinesDB()).Value;
+            Machine actualMachine = Assert.Single(datFile.GetMachinesDB());
             Assert.Equal("machine-name", actualMachine.Name);
         }
 

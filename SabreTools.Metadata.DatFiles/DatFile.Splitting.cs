@@ -1421,18 +1421,9 @@ namespace SabreTools.Metadata.DatFiles
             foreach (var machine in machines)
 #endif
             {
-                // TODO: Remove merge tags here
-                // Get the machine
-                if (machine.Value is null)
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-                    return;
-#else
-                    continue;
-#endif
-
-                machine.Value.CloneOf = null;
-                machine.Value.RomOf = null;
-                machine.Value.SampleOf = null;
+                machine.CloneOf = null;
+                machine.RomOf = null;
+                machine.SampleOf = null;
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
 #else

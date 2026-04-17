@@ -335,7 +335,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             long sourceIndex = dict.AddSource(source);
 
             Assert.Equal(0, sourceIndex);
-            Assert.Single(dict.GetSources());
+            Assert.NotNull(dict.GetSource(0).Value);
         }
 
         #endregion

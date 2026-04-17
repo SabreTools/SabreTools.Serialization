@@ -1,3 +1,4 @@
+using System;
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.Collections.Concurrent;
 #endif
@@ -41,55 +42,190 @@ namespace SabreTools.Metadata.DatFiles
     [JsonObject("items"), XmlRoot("items")]
     public class ItemDatabase
     {
+        #region Private Classes
+
+        /// <summary>
+        /// Represents a table with an incremental index as the key
+        /// </summary>
+        /// <typeparam name="T">Type of the row values</typeparam>
+        private class IndexedTable<T>
+        {
+            #region Private Fields
+
+            /// <summary>
+            /// Internal dictionary for the table
+            /// </summary>
+            [JsonIgnore, XmlIgnore]
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+            private readonly ConcurrentDictionary<long, T> _table = [];
+#else
+            private readonly Dictionary<long, T> _table = [];
+#endif
+
+            /// <summary>
+            /// Current highest available index
+            /// </summary>
+            [JsonIgnore, XmlIgnore]
+            private long _tableIndex = 0;
+
+            #endregion
+
+            #region Properties
+
+            /// <summary>
+            /// Indicates if the table is empty
+            /// </summary>
+#if NET20 || NET35
+            public bool IsEmpty => _table.Count == 0;
+#else
+            public bool IsEmpty => _table.IsEmpty;
+#endif
+
+            /// <summary>
+            /// Direct access to the internal table
+            /// </summary>
+            /// TODO: Investigate ways of avoiding this being needed
+            public IDictionary<long, T> Table => _table;
+
+            /// <summary>
+            /// All currently used indexes
+            /// </summary>
+            public long[] Indexes => [.. _table.Keys];
+
+            /// <summary>
+            /// All values in the table
+            /// </summary>
+            public T[] Values => [.. _table.Values];
+
+            #endregion
+
+            #region Accessors
+
+            /// <summary>
+            /// Add a value to the table, returning the insert index
+            /// </summary>
+            public long Add(T value)
+            {
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                long index = Interlocked.Increment(ref _tableIndex) - 1;
+                _table.TryAdd(index, value);
+                return index;
+#else
+                long index = _tableIndex++ - 1;
+                _table[index] = value;
+                return index;
+#endif
+            }
+
+            /// <summary>
+            /// Get a value from the table, null on error
+            /// </summary>
+            public T? Get(long index)
+            {
+                if (_table.TryGetValue(index, out var value))
+                    return value;
+
+                return default;
+            }
+
+            /// <summary>
+            /// Remove a value from the table, returning success
+            /// </summary>
+            public bool Remove(long index)
+            {
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                return _table.TryRemove(index, out var _);
+#else
+                return _table.Remove(index);
+#endif
+            }
+
+            /// <summary>
+            /// Set an indexed value directly
+            /// </summary>
+            /// <remarks>This does not increment the index so values may be overwritten</remarks>
+            public bool Set(long index, T value)
+            {
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                return _table.TryAdd(index, value);
+#else
+                _table[index] = value;
+                return true;
+#endif
+            }
+
+            /// <summary>
+            /// Try to get a value by index, returning success
+            /// </summary>
+            public bool TryGet(long index, out T? value)
+                => _table.TryGetValue(index, out value);
+
+            /// <summary>
+            /// Try to get a value by index, returning success
+            /// </summary>
+            public bool TryRemove(long index, out T? value)
+            {
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                return _table.TryRemove(index, out value);
+#else
+                if (!_table.ContainsKey(index))
+                {
+                    value = default;
+                    return false;
+                }
+
+                value = _table[index];
+                return _table.Remove(index);
+#endif
+            }
+
+            #endregion
+
+            #region Search
+
+            /// <summary>
+            /// Indicates if an index is valid
+            /// </summary>
+            public bool ContainsIndex(long index) => _table.ContainsKey(index);
+
+            /// <summary>
+            /// Find an item based on a supplied function
+            /// </summary>
+            public KeyValuePair<long, T?> Find(Func<T, bool> func)
+            {
+                foreach (long i in Indexes)
+                {
+                    if (func(_table[i]))
+                        return new KeyValuePair<long, T?>(i, _table[i]);
+                }
+
+                return new KeyValuePair<long, T?>(-1, default);
+            }
+
+            #endregion
+        }
+
+        #endregion
+
         #region Private instance variables
 
         /// <summary>
-        /// Internal dictionary for all items
+        /// Internal table for all items
         /// </summary>
         [JsonIgnore, XmlIgnore]
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-        private readonly ConcurrentDictionary<long, DatItem> _items = [];
-#else
-        private readonly Dictionary<long, DatItem> _items = [];
-#endif
+        private readonly IndexedTable<DatItem> _items = new();
 
         /// <summary>
-        /// Current highest available item index
+        /// Internal table for all machines
         /// </summary>
         [JsonIgnore, XmlIgnore]
-        private long _itemIndex = 0;
+        private readonly IndexedTable<Machine> _machines = new();
 
         /// <summary>
-        /// Internal dictionary for all machines
+        /// Internal table for all sources
         /// </summary>
         [JsonIgnore, XmlIgnore]
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-        private readonly ConcurrentDictionary<long, Machine> _machines = [];
-#else
-        private readonly Dictionary<long, Machine> _machines = [];
-#endif
-
-        /// <summary>
-        /// Current highest available machine index
-        /// </summary>
-        [JsonIgnore, XmlIgnore]
-        private long _machineIndex = 0;
-
-        /// <summary>
-        /// Internal dictionary for all sources
-        /// </summary>
-        [JsonIgnore, XmlIgnore]
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-        private readonly ConcurrentDictionary<long, Source> _sources = [];
-#else
-        private readonly Dictionary<long, Source> _sources = [];
-#endif
-
-        /// <summary>
-        /// Current highest available source index
-        /// </summary>
-        [JsonIgnore, XmlIgnore]
-        private long _sourceIndex = 0;
+        private readonly IndexedTable<Source> _sources = new();
 
         /// <summary>
         /// Internal dictionary representing the current buckets
@@ -265,49 +401,23 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Add a machine, returning the insert index
         /// </summary>
-        public long AddMachine(Machine machine)
-        {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            long index = Interlocked.Increment(ref _machineIndex) - 1;
-            _machines.TryAdd(index, machine);
-            return index;
-#else
-            long index = _machineIndex++ - 1;
-            _machines[index] = machine;
-            return index;
-#endif
-        }
+        public long AddMachine(Machine machine) => _machines.Add(machine);
 
         /// <summary>
         /// Add a source, returning the insert index
         /// </summary>
-        public long AddSource(Source source)
-        {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            long index = Interlocked.Increment(ref _sourceIndex) - 1;
-            _sources.TryAdd(index, source);
-            return index;
-#else
-            long index = _sourceIndex++ - 1;
-            _sources[index] = source;
-            return index;
-#endif
-        }
+        public long AddSource(Source source) => _sources.Add(source);
 
         /// <summary>
         /// Remove all items marked for removal
         /// </summary>
         public void ClearMarked()
         {
-            long[] itemIndices = [.. _items.Keys];
-            foreach (long itemIndex in itemIndices)
+            long[] itemIndexes = _items.Indexes;
+            foreach (long itemIndex in itemIndexes)
             {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-                if (!_items.TryGetValue(itemIndex, out var datItem) || datItem is null)
+                if (!_items.TryGet(itemIndex, out var datItem) || datItem is null)
                     continue;
-#else
-                var datItem = _items[itemIndex];
-#endif
 
                 if (!datItem.RemoveFlag)
                     continue;
@@ -319,18 +429,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Get a item based on the index
         /// </summary>
-        public DatItem? GetItem(long index)
-        {
-            if (_items.TryGetValue(index, out var item))
-                return item;
-
-            return null;
-        }
-
-        /// <summary>
-        /// Get all items and their indicies
-        /// </summary>
-        public IDictionary<long, DatItem> GetItems() => _items;
+        public DatItem? GetItem(long index) => _items.Get(index);
 
         /// <summary>
         /// Get the indices and items associated with a bucket name
@@ -347,7 +446,7 @@ namespace SabreTools.Metadata.DatFiles
             foreach (long itemId in itemIds)
             {
                 // Ignore missing IDs
-                if (!_items.TryGetValue(itemId, out var datItem) || datItem is null)
+                if (!_items.TryGet(itemId, out var datItem) || datItem is null)
                     continue;
 
                 if (!filter || !datItem.RemoveFlag)
@@ -362,7 +461,7 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public KeyValuePair<long, Machine?> GetMachine(long index)
         {
-            if (!_machines.TryGetValue(index, out var machine))
+            if (!_machines.TryGet(index, out var machine))
                 return new KeyValuePair<long, Machine?>(-1, null);
 
             return new KeyValuePair<long, Machine?>(index, machine);
@@ -377,30 +476,25 @@ namespace SabreTools.Metadata.DatFiles
             if (string.IsNullOrEmpty(name))
                 return new KeyValuePair<long, Machine?>(-1, null);
 
-            var machine = _machines.FirstOrDefault(m => m.Value.Name == name);
+            var machine = _machines.Find(m => m.Name == name);
             return new KeyValuePair<long, Machine?>(machine.Key, machine.Value);
         }
 
         /// <summary>
         /// Get all machines and their indicies
         /// </summary>
-        public IDictionary<long, Machine> GetMachines() => _machines;
+        public Machine[] GetMachines() => _machines.Values;
 
         /// <summary>
         /// Get a source based on the index
         /// </summary>
         public KeyValuePair<long, Source?> GetSource(long index)
         {
-            if (!_sources.TryGetValue(index, out var source))
+            if (!_sources.TryGet(index, out var source))
                 return new KeyValuePair<long, Source?>(-1, null);
 
             return new KeyValuePair<long, Source?>(index, source);
         }
-
-        /// <summary>
-        /// Get all sources and their indicies
-        /// </summary>
-        public IDictionary<long, Source> GetSources() => _sources;
 
         /// <summary>
         /// Remove a key from the file dictionary if it exists
@@ -423,7 +517,7 @@ namespace SabreTools.Metadata.DatFiles
 
             foreach (var index in list)
             {
-                if (!_items.TryGetValue(index, out var datItem) || datItem is null)
+                if (!_items.TryGet(index, out var datItem) || datItem is null)
                     continue;
 
                 RemoveItem(index);
@@ -438,16 +532,8 @@ namespace SabreTools.Metadata.DatFiles
         public bool RemoveItem(long itemIndex)
         {
             // If the key doesn't exist, return
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             if (!_items.TryRemove(itemIndex, out var datItem))
                 return false;
-#else
-            if (!_items.ContainsKey(itemIndex))
-                return false;
-
-            var datItem = _items[itemIndex];
-            _items.Remove(itemIndex);
-#endif
 
             // Remove statistics, if possible
             if (datItem is not null)
@@ -461,22 +547,16 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public bool RemoveMachine(long machineIndex)
         {
-            if (!_machines.ContainsKey(machineIndex))
+            if (!_machines.TryRemove(machineIndex, out _))
                 return false;
 
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            _machines.TryRemove(machineIndex, out _);
-#else
-            _machines.Remove(machineIndex);
-#endif
-
             // Get the current list of item indicies
-            long[] itemIndicies = [.. _items.Keys];
+            long[] itemIndexes = _items.Indexes;
 
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            Parallel.For(0, itemIndicies.Length, i =>
+            Parallel.For(0, itemIndexes.Length, i =>
 #else
-            for (int i = 0; i < itemIndicies.Length; i++)
+            for (int i = 0; i < itemIndexes.Length; i++)
 #endif
             {
                 var datItem = GetItem(i);
@@ -505,7 +585,7 @@ namespace SabreTools.Metadata.DatFiles
             if (string.IsNullOrEmpty(machineName))
                 return false;
 
-            var machine = _machines.FirstOrDefault(m => m.Value.Name == machineName);
+            var machine = _machines.Find(m => m.Name == machineName);
             return RemoveMachine(machine.Key);
         }
 
@@ -514,15 +594,8 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         internal long AddItemInternal(DatItem item)
         {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             // Add the item with a new index
-            long index = Interlocked.Increment(ref _itemIndex) - 1;
-            _items.TryAdd(index, item);
-#else
-            // Add the item with a new index
-            long index = _itemIndex++ - 1;
-            _items[index] = item;
-#endif
+            long index = _items.Add(item);
 
             // Add the item statistics
             DatStatistics.AddItemStatistics(item);
@@ -800,7 +873,7 @@ namespace SabreTools.Metadata.DatFiles
                 if (itemSource.Value?.Index < savedSource.Value?.Index)
                 {
                     datItem.SourceIndex = savedItem.SourceIndex;
-                    _machines[savedMachine.Key] = (itemMachine.Value!.Clone() as Machine)!;
+                    _machines.Set(savedMachine.Key, (itemMachine.Value!.Clone() as Machine)!);
                     savedItem.SetName(datItem.GetName());
                 }
 
@@ -808,7 +881,7 @@ namespace SabreTools.Metadata.DatFiles
                 if (savedMachine.Value!.CloneOf == itemMachine.Value!.Name
                     || savedMachine.Value!.RomOf == itemMachine.Value!.Name)
                 {
-                    _machines[savedMachine.Key] = (itemMachine.Value!.Clone() as Machine)!;
+                    _machines.Set(savedMachine.Key, (itemMachine.Value!.Clone() as Machine)!);
                     savedItem.SetName(datItem.GetName());
                 }
 
@@ -914,12 +987,12 @@ namespace SabreTools.Metadata.DatFiles
             _buckets.Clear();
 
             // Get the current list of item indicies
-            long[] itemIndicies = [.. _items.Keys];
+            long[] itemIndexes = _items.Indexes;
 
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            Parallel.For(0, itemIndicies.Length, i =>
+            Parallel.For(0, itemIndexes.Length, i =>
 #else
-            for (int i = 0; i < itemIndicies.Length; i++)
+            for (int i = 0; i < itemIndexes.Length; i++)
 #endif
             {
                 var datItem = GetItem(i);
@@ -1000,8 +1073,8 @@ namespace SabreTools.Metadata.DatFiles
                 }
 
                 var datItems = itemIndices
-                    .FindAll(i => _items.ContainsKey(i))
-                    .ConvertAll(i => new KeyValuePair<long, DatItem>(i, _items[i]));
+                    .FindAll(i => _items.ContainsIndex(i))
+                    .ConvertAll(i => new KeyValuePair<long, DatItem>(i, _items.Get(i)!));
 
                 Sort(ref datItems, norename);
 
@@ -1104,11 +1177,7 @@ namespace SabreTools.Metadata.DatFiles
             DatStatistics.ResetStatistics();
 
             // If there are no items
-#if NET20 || NET35
-            if (_items is null || _items.Count == 0)
-#else
-            if (_items is null || _items.IsEmpty)
-#endif
+            if (_items.IsEmpty)
                 return;
 
             // Loop through and add
