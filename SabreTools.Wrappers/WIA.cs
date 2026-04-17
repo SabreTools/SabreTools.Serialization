@@ -1,7 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
+#if !NET20
 using System.Security.Cryptography;
+#endif
 using SabreTools.Data.Models.WIA;
 
 namespace SabreTools.Wrappers
@@ -122,11 +123,22 @@ namespace SabreTools.Wrappers
         public NintendoDisc? GetInnerWrapper()
         {
             ulong isoSize = Model.Header1.IsoFileSize;
-            if (isoSize == 0 || isoSize > (ulong)int.MaxValue)
+            if (isoSize == 0)
                 return null;
 
-            var ms = new MemoryStream((int)isoSize);
-            ms.SetLength((long)isoSize);
+            // Wii discs are ~4.38 GB — larger than int.MaxValue.
+            // On .NET 6+ x64 with gcAllowVeryLargeObjects, this will succeed.
+            // On older frameworks it will throw and be caught by the caller's try/catch.
+            MemoryStream ms;
+            try
+            {
+                ms = new MemoryStream();
+                ms.SetLength((long)isoSize);
+            }
+            catch
+            {
+                return null;
+            }
 
             // Write the first 0x80 bytes of the disc header directly from Header2.DiscHeader
             if (Model.Header2.DiscHeader is { Length: > 0 })
@@ -160,7 +172,7 @@ namespace SabreTools.Wrappers
                         if (groupBytes is null)
                             continue;
 
-                        long destOff = adjustedDataOffset + (long)g * chunkSize;
+                        long destOff = adjustedDataOffset + ((long)g * chunkSize);
                         // Clamp to ISO size and to the raw data entry boundary
                         long dataEnd = (long)(rde.DataOffset + rde.DataSize);
                         long writeOff = destOff + skippedData;
@@ -168,7 +180,7 @@ namespace SabreTools.Wrappers
                             continue;
 
                         int writeLen = (int)Math.Min(
-                            Math.Min((long)groupBytes.Length - skippedData, dataEnd - writeOff),
+                            Math.Min(groupBytes.Length - skippedData, dataEnd - writeOff),
                             (long)isoSize - writeOff);
                         if (writeLen <= 0)
                             continue;
@@ -212,9 +224,10 @@ namespace SabreTools.Wrappers
                 uint dataSize = ge.DataSize & 0x7FFFFFFFu;
                 if (dataSize == 0)
                     return new byte[chunkSize];
-                byte[] fileData = ReadRangeFromSource((long)ge.DataOffset, (int)dataSize);
+                byte[] fileData = ReadRangeFromSource(ge.DataOffset, (int)dataSize);
                 return DecompressGroupBytes(fileData, 0, (int)dataSize, comp,
-                    compressorData, compressorDataSize, (int)chunkSize, isRvzCompressed, false);
+                    compressorData, compressorDataSize, (int)chunkSize, Model.IsRvz, isRvzCompressed,
+                    ge.RvzPackedSize, groupIdx * chunkSize, false, chunkSize);
             }
             else
             {
@@ -223,9 +236,10 @@ namespace SabreTools.Wrappers
                 var ge = Model.GroupEntries[groupIdx];
                 if (ge.DataSize == 0)
                     return new byte[chunkSize];
-                byte[] fileData = ReadRangeFromSource((long)ge.DataOffset, (int)ge.DataSize);
+                byte[] fileData = ReadRangeFromSource(ge.DataOffset, (int)ge.DataSize);
                 return DecompressGroupBytes(fileData, 0, (int)ge.DataSize, comp,
-                    compressorData, compressorDataSize, (int)chunkSize, false, false);
+                    compressorData, compressorDataSize, (int)chunkSize, false, false,
+                    0, 0L, false, chunkSize);
             }
         }
 
@@ -246,13 +260,18 @@ namespace SabreTools.Wrappers
             const int WiiBlockDataSize = 0x7C00; // data portion only
 
             int blocksPerGroup = (int)(chunkSize / WiiBlockSize);
-            long isoDataStart = (long)de.FirstSector * WiiBlockSize;
+            long isoDataStart = de.FirstSector * WiiBlockSize;
 
             for (uint g = 0; g < de.NumberOfGroups; g++)
             {
                 uint groupIdx = de.GroupIndex + g;
+                // dataOffsetForLfg is the partition-local decrypted offset of this group.
+                // Mirrors DolphinIsoLib GetDecryptedPartitionOffsetForGroup:
+                //   localGroupIdx * (chunkSize / WiiBlockSize) * WiiBlockDataSize
+                long dataOffsetForLfg = g * blocksPerGroup * WiiBlockDataSize;
                 byte[]? decryptedGroup = ReadDecryptedGroupData(groupIdx, comp,
-                    compressorData, compressorDataSize, blocksPerGroup, WiiBlockDataSize);
+                    compressorData, compressorDataSize, blocksPerGroup, WiiBlockDataSize,
+                    dataOffsetForLfg);
                 if (decryptedGroup is null)
                     continue;
 
@@ -260,11 +279,11 @@ namespace SabreTools.Wrappers
                 // zero IV, extract IV from offset 0x3D0, encrypt data block with that IV.
                 byte[] encryptedGroup = EncryptWiiGroup(decryptedGroup, partitionKey, blocksPerGroup);
 
-                long groupIsoOffset = isoDataStart + (long)g * blocksPerGroup * WiiBlockSize;
-                long isoEnd = isoDataStart + (long)de.NumberOfSectors * WiiBlockSize;
+                long groupIsoOffset = isoDataStart + (g * (blocksPerGroup * WiiBlockSize));
+                long isoEnd = isoDataStart + (de.NumberOfSectors * WiiBlockSize);
 
                 int writeLen = (int)Math.Min(
-                    Math.Min((long)encryptedGroup.Length, isoEnd - groupIsoOffset),
+                    Math.Min(encryptedGroup.Length, isoEnd - groupIsoOffset),
                     (long)isoSize - groupIsoOffset);
                 if (writeLen <= 0)
                     continue;
@@ -278,7 +297,8 @@ namespace SabreTools.Wrappers
         /// Reads and decompresses a Wii partition group, returning the hash-stripped decrypted data.
         /// </summary>
         private byte[]? ReadDecryptedGroupData(uint groupIdx, WiaRvzCompressionType comp,
-            byte[] compressorData, byte compressorDataSize, int blocksPerGroup, int blockDataSize)
+            byte[] compressorData, byte compressorDataSize, int blocksPerGroup, int blockDataSize,
+            long dataOffsetForLfg)
         {
             int decryptedGroupSize = blocksPerGroup * blockDataSize;
 
@@ -291,9 +311,11 @@ namespace SabreTools.Wrappers
                 uint dataSize = ge.DataSize & 0x7FFFFFFFu;
                 if (dataSize == 0)
                     return new byte[decryptedGroupSize];
-                byte[] fileData = ReadRangeFromSource((long)ge.DataOffset, (int)dataSize);
+                byte[] fileData = ReadRangeFromSource(ge.DataOffset, (int)dataSize);
                 return DecompressGroupBytes(fileData, 0, (int)dataSize, comp,
-                    compressorData, compressorDataSize, decryptedGroupSize, isRvzCompressed, true);
+                    compressorData, compressorDataSize, decryptedGroupSize, Model.IsRvz, isRvzCompressed,
+                    ge.RvzPackedSize, dataOffsetForLfg, true,
+                    Model.Header2.ChunkSize);
             }
             else
             {
@@ -302,9 +324,11 @@ namespace SabreTools.Wrappers
                 var ge = Model.GroupEntries[groupIdx];
                 if (ge.DataSize == 0)
                     return new byte[decryptedGroupSize];
-                byte[] fileData = ReadRangeFromSource((long)ge.DataOffset, (int)ge.DataSize);
+                byte[] fileData = ReadRangeFromSource(ge.DataOffset, (int)ge.DataSize);
                 return DecompressGroupBytes(fileData, 0, (int)ge.DataSize, comp,
-                    compressorData, compressorDataSize, decryptedGroupSize, false, true);
+                    compressorData, compressorDataSize, decryptedGroupSize, false, false,
+                    0, 0L, true,
+                    Model.Header2.ChunkSize);
             }
         }
 
@@ -314,55 +338,80 @@ namespace SabreTools.Wrappers
         /// </summary>
         private static byte[]? DecompressGroupBytes(byte[] fileData, int offset, int length,
             WiaRvzCompressionType comp, byte[] compressorData, byte compressorDataSize,
-            int expectedSize, bool isRvzCompressed, bool isWiiPartition)
+            int expectedSize, bool isRvz, bool isRvzCompressed,
+            uint rvzPackedSize, long dataOffsetForLfg, bool isWiiPartition,
+            uint chunkSize = 2 * 1024 * 1024)
         {
             if (fileData is null || fileData.Length < length)
                 return null;
 
-            byte[] data;
-            bool isCompressed = comp > WiaRvzCompressionType.Purge && (!isRvzCompressed || isRvzCompressed);
+            // Mirrors DolphinIsoLib WiaRvzReader::ReadGroupCore logic:
+            // Decompress first (Bzip2/LZMA/LZMA2/Zstd), then RVZ-unpack junk regions if present.
+            bool shouldDecompress = comp > WiaRvzCompressionType.Purge && (!isRvz || isRvzCompressed);
 
             if (comp == WiaRvzCompressionType.None)
             {
                 // NONE: exception lists precede data with 4-byte alignment for Wii partitions
-                int dataStart = isWiiPartition ? SkipExceptionLists(fileData, offset, length) : offset;
+                int dataStart = isWiiPartition ? SkipExceptionLists(fileData, offset, length, chunkSize) : offset;
                 int mainLen = length - (dataStart - offset);
-                data = new byte[expectedSize];
-                Array.Copy(fileData, dataStart, data, 0, Math.Min(mainLen, expectedSize));
-                return data;
+                byte[] noneData = new byte[expectedSize];
+                Array.Copy(fileData, dataStart, noneData, 0, Math.Min(mainLen, expectedSize));
+                return noneData;
             }
             else if (comp == WiaRvzCompressionType.Purge)
             {
-                // Purge: exception list at start, then Purge-compressed payload.
-                // For simplicity fall through to the decompressed path below using zeros.
-                // A full Purge decompressor would be needed here for completeness.
-                data = new byte[expectedSize];
-                return data;
+                // Exception list precedes the Purge payload; capture it for SHA-1, then decompress.
+                int purgeStart = isWiiPartition ? SkipExceptionLists(fileData, offset, length, chunkSize) : offset;
+                int exceptionLen = purgeStart - offset;
+                byte[]? exceptionBytes = exceptionLen > 0
+                    ? new byte[exceptionLen] : null;
+                if (exceptionBytes != null)
+                    Array.Copy(fileData, offset, exceptionBytes, 0, exceptionLen);
+                int purgeLen = length - exceptionLen;
+                return PurgeDecompressor.Decompress(fileData, purgeStart, purgeLen, expectedSize, exceptionBytes);
             }
             else
             {
                 // Bzip2 / LZMA / LZMA2 / Zstd — delegate to WiaRvzCompressionHelper
-                byte[] decompressed;
-                try
+                byte[]? workingData;
+                if (shouldDecompress)
                 {
-                    decompressed = WiaRvzCompressionHelper.Decompress(
-                        comp, fileData, offset, length, compressorData, compressorDataSize);
+                    try
+                    {
+                        workingData = WiaRvzCompressionHelper.Decompress(
+                            comp, fileData, offset, length, compressorData, compressorDataSize);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+
+                    if (workingData is null)
+                        return null;
                 }
-                catch
+                else
                 {
-                    return null;
+                    workingData = fileData;
                 }
 
-                if (decompressed is null)
-                    return null;
+                // RVZ-pack step: junk regions are stored as LFG seeds rather than raw bytes.
+                if (isRvz && rvzPackedSize > 0)
+                {
+                    var rvzDecomp = new RvzPackDecompressor(workingData, rvzPackedSize, dataOffsetForLfg);
+                    byte[] unpacked = new byte[expectedSize];
+                    int bytesRead = rvzDecomp.Decompress(unpacked, 0, expectedSize);
+                    if (bytesRead < expectedSize)
+                        Array.Resize(ref unpacked, bytesRead);
+                    return unpacked;
+                }
 
                 // Skip exception lists that are compressed together with the data
                 int dataStart = isWiiPartition
-                    ? SkipExceptionListsNoAlign(decompressed, 0, decompressed.Length)
+                    ? SkipExceptionListsNoAlign(workingData, 0, workingData.Length, chunkSize)
                     : 0;
-                int mainLen = decompressed.Length - dataStart;
-                data = new byte[expectedSize];
-                Array.Copy(decompressed, dataStart, data, 0, Math.Min(mainLen, expectedSize));
+                int mainLen = workingData.Length - dataStart;
+                byte[] data = new byte[expectedSize];
+                Array.Copy(workingData, dataStart, data, 0, Math.Min(mainLen, expectedSize));
                 return data;
             }
         }
@@ -372,13 +421,13 @@ namespace SabreTools.Wrappers
         /// Exception lists are 4-byte-aligned after the last list.
         /// Returns the offset of the first data byte.
         /// </summary>
-        private static int SkipExceptionLists(byte[] data, int offset, int length)
+        private static int SkipExceptionLists(byte[] data, int offset, int length, uint chunkSize = 2 * 1024 * 1024)
         {
-            // WIA always uses one exception list per 2 MiB Wii group.
-            // For chunk sizes smaller than 2 MiB, there are multiple lists.
-            // The outer wrapper uses the default 2 MiB chunk, so typically 1 list.
-            const int WiiGroupSize = 2 * 1024 * 1024; // 0x200000
-            int numLists = Math.Max(1, (int)(WiiGroupSize / (2 * 1024 * 1024)));
+            // Number of exception lists = max(1, chunkSize / WiiGroupSize).
+            // For WIA chunkSize==2MiB this is always 1.
+            // For RVZ sub-2MiB chunks this is also 1 (chunkSize <= groupSize).
+            const uint WiiGroupSize = 2 * 1024 * 1024; // 0x200000
+            int numLists = Math.Max(1, (int)(chunkSize / WiiGroupSize));
 
             int pos = offset;
             for (int i = 0; i < numLists && pos + 2 <= offset + length; i++)
@@ -399,10 +448,10 @@ namespace SabreTools.Wrappers
         /// Skips exception lists in compressed group data (Bzip2/LZMA/etc.) where
         /// lists are NOT 4-byte aligned.
         /// </summary>
-        private static int SkipExceptionListsNoAlign(byte[] data, int offset, int length)
+        private static int SkipExceptionListsNoAlign(byte[] data, int offset, int length, uint chunkSize = 2 * 1024 * 1024)
         {
-            const int WiiGroupSize = 2 * 1024 * 1024;
-            int numLists = Math.Max(1, (int)(WiiGroupSize / (2 * 1024 * 1024)));
+            const uint WiiGroupSize = 2 * 1024 * 1024;
+            int numLists = Math.Max(1, (int)(chunkSize / WiiGroupSize));
 
             int pos = offset;
             for (int i = 0; i < numLists && pos + 2 <= offset + length; i++)
@@ -442,7 +491,7 @@ namespace SabreTools.Wrappers
                 int blockBase = b * WiiBlockDataSize;
                 for (int h = 0; h < H0Count; h++)
                 {
-                    int src = blockBase + h * 0x400;
+                    int src = blockBase + (h * 0x400);
                     int len = Math.Min(0x400, decryptedData.Length - src);
                     h0[b][h] = ComputeSha1(decryptedData, src < decryptedData.Length ? src : 0, Math.Max(0, len));
                 }
@@ -455,12 +504,13 @@ namespace SabreTools.Wrappers
                 h1[g] = new byte[H1Count][];
                 for (int s = 0; s < H1Count; s++)
                 {
-                    int blockIdx = g * H1Count + s;
+                    int blockIdx = (g * H1Count) + s;
                     if (blockIdx >= blocksPerGroup)
                     {
                         h1[g][s] = new byte[HashLen];
                         continue;
                     }
+
                     byte[] h0Concat = new byte[H0Count * HashLen];
                     for (int i = 0; i < H0Count; i++)
                         Array.Copy(h0[blockIdx][i], 0, h0Concat, i * HashLen, HashLen);
@@ -494,14 +544,20 @@ namespace SabreTools.Wrappers
 
                 // H0 (31 * 20 = 0x26C)
                 for (int i = 0; i < H0Count; i++) { Array.Copy(h0[b][i], 0, hashBlock, off, HashLen); off += HashLen; }
+
                 off += 0x14; // padding0
 
                 // H1 for this block's group (8 * 20 = 0xA0)
                 int h1Grp = b / H1Count;
                 if (h1Grp < h1.Length)
+                {
                     for (int i = 0; i < H1Count; i++) { Array.Copy(h1[h1Grp][i], 0, hashBlock, off, HashLen); off += HashLen; }
+                }
                 else
+                {
                     off += H1Count * HashLen;
+                }
+
                 off += 0x20; // padding1
 
                 // H2 (8 * 20 = 0xA0)
@@ -539,17 +595,16 @@ namespace SabreTools.Wrappers
 #endif
         }
 
+#if !NET20
         private static byte[] ComputeSha1(byte[] data, int offset, int count)
         {
             if (count == 0)
                 return new byte[20];
-#if NET20
-            return new byte[20];
-#else
+
             using var sha1 = SHA1.Create();
             return sha1.ComputeHash(data, offset, count);
-#endif
         }
+#endif
 
         #endregion
     }

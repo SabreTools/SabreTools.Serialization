@@ -101,7 +101,15 @@ namespace SabreTools.Wrappers
             // Cache the current offset
             long initialOffset = stream.Position;
 
-            // Try to get an Xbox ISO wrapper first
+            // Try NintendoDisc (GameCube / Wii) first — detected by magic at 0x018 / 0x01C
+            var nintendoWrapper = NintendoDisc.Create(stream);
+            if (nintendoWrapper is not null)
+                return nintendoWrapper;
+
+            // Reset position in stream
+            stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
+
+            // Try to get an Xbox ISO wrapper
             var xboxWrapper = XboxISO.Create(stream);
             if (xboxWrapper is not null)
                 return xboxWrapper;
@@ -406,6 +414,17 @@ namespace SabreTools.Wrappers
 
             #endregion
 
+            #region GCZ
+
+            // GCZ magic cookie (0xB10BC001 stored little-endian)
+            if (magic.StartsWith([0x01, 0xC0, 0x0B, 0xB1]))
+                return WrapperType.GCZ;
+
+            if (extension.Equals("gcz", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.GCZ;
+
+            #endregion
+
             #region GZip
 
             if (magic.StartsWith(Data.Models.GZIP.Constants.SignatureBytes))
@@ -556,6 +575,14 @@ namespace SabreTools.Wrappers
             // iQue DS cart image
             else if (extension.Equals("ids", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.Nitro;
+
+            #endregion
+
+            #region NintendoDisc
+
+            // NintendoDisc images are detected as .iso and probed in CreateDiscImageWrapper.
+            // No extension-only detection here: .gcm (GameCube Memory Card) and .wbfs
+            // (Wii Backup File System) are separate container formats not yet supported.
 
             #endregion
 
@@ -965,6 +992,24 @@ namespace SabreTools.Wrappers
             // Common extension so this cannot be used accurately
             // if (extension.Equals("wad", StringComparison.OrdinalIgnoreCase))
             //     return WrapperType.WAD;
+
+            #endregion
+
+            #region WIA
+
+            // WIA magic ("WIA\x01" stored little-endian: 0x01414957)
+            if (magic.StartsWith([0x57, 0x49, 0x41, 0x01]))
+                return WrapperType.WIA;
+
+            // RVZ magic ("RVZ\x01" stored little-endian: 0x015A5652)
+            if (magic.StartsWith([0x52, 0x56, 0x5A, 0x01]))
+                return WrapperType.WIA;
+
+            if (extension.Equals("wia", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.WIA;
+
+            if (extension.Equals("rvz", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.WIA;
 
             #endregion
 

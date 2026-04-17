@@ -269,17 +269,15 @@ namespace SabreTools.Wrappers
             int i = start;
             while (i < end)
             {
-                if (i * 12 + 12 > fstData.Length)
+                int fstBase = i * 12;
+                if ((fstBase + 12) > fstData.Length)
                     break;
 
-                byte flags   = fstData[i * 12];
-                bool isDir   = (flags & 1) != 0;
-                uint nameOff = (uint)((fstData[i * 12 + 1] << 16)
-                    | (fstData[i * 12 + 2] << 8) | fstData[i * 12 + 3]);
-                uint fileOffRaw = (uint)((fstData[i * 12 + 4] << 24) | (fstData[i * 12 + 5] << 16)
-                    | (fstData[i * 12 + 6] << 8) | fstData[i * 12 + 7]);
-                uint fileSize   = (uint)((fstData[i * 12 + 8] << 24) | (fstData[i * 12 + 9] << 16)
-                    | (fstData[i * 12 + 10] << 8) | fstData[i * 12 + 11]);
+                byte flags      = fstData[fstBase];
+                bool isDir      = (flags & 1) != 0;
+                uint nameOff    = (uint)((fstData[fstBase + 1] << 16) | (fstData[fstBase + 2] << 8) | fstData[fstBase + 3]);
+                uint fileOffRaw = (uint)((fstData[fstBase + 4] << 24) | (fstData[fstBase + 5] << 16) | (fstData[fstBase + 6] << 8) | fstData[fstBase + 7]);
+                uint fileSize   = (uint)((fstData[fstBase + 8] << 24) | (fstData[fstBase + 9] << 16) | (fstData[fstBase + 10] << 8) | fstData[fstBase + 11]);
 
                 string name = ReadFstString(fstData, stringTableOffset + nameOff);
                 if (string.IsNullOrEmpty(name))
@@ -306,16 +304,17 @@ namespace SabreTools.Wrappers
                     if (discOffset > 0 && fileSize > 0)
                     {
                         byte[]? fileData = readFunc(discOffset, (int)Math.Min(fileSize, int.MaxValue));
-                        if (fileData != null)
-                        {
-                            string outPath = Path.Combine(currentDir, name);
-                            string? outDir = Path.GetDirectoryName(outPath);
-                            if (!string.IsNullOrEmpty(outDir))
-                                Directory.CreateDirectory(outDir);
-                            File.WriteAllBytes(outPath, fileData);
+                             if (fileData != null)
+                            {
+                                string outPath = Path.Combine(currentDir, name);
+                                string? outDir = Path.GetDirectoryName(outPath);
+                                if (!string.IsNullOrEmpty(outDir))
+                                    Directory.CreateDirectory(outDir);
+                                File.WriteAllBytes(outPath, fileData);
+                            }
                         }
-                    }
-                    i++;
+
+                        i++;
                 }
             }
 
@@ -396,16 +395,17 @@ namespace SabreTools.Wrappers
             for (int s = 0; s < 7; s++)
             {
                 int off = (int)ReadBE32(dolHeader, s * 4);
-                int sz  = (int)ReadBE32(dolHeader, 0x90 + s * 4);
+                int sz  = (int)ReadBE32(dolHeader, 0x90 + (s * 4));
                 if (off > 0 && sz > 0) maxEnd = Math.Max(maxEnd, off + sz);
             }
             // Data sections (11): offset table at 0x1C, size table at 0xAC
             for (int s = 0; s < 11; s++)
             {
-                int off = (int)ReadBE32(dolHeader, 0x1C + s * 4);
-                int sz  = (int)ReadBE32(dolHeader, 0xAC + s * 4);
+                int off = (int)ReadBE32(dolHeader, 0x1C + (s * 4));
+                int sz  = (int)ReadBE32(dolHeader, 0xAC + (s * 4));
                 if (off > 0 && sz > 0) maxEnd = Math.Max(maxEnd, off + sz);
             }
+
             return maxEnd;
         }
 
@@ -432,7 +432,7 @@ namespace SabreTools.Wrappers
                 long blockNum = dataOff / Constants.WiiBlockDataSize;
                 int  offsetInBlock = (int)(dataOff % Constants.WiiBlockDataSize);
 
-                long encBlockOffset = absDataOffset + blockNum * Constants.WiiBlockSize;
+                long encBlockOffset = absDataOffset + (blockNum * Constants.WiiBlockSize);
                 byte[]? encBlock = ReadDisc(encBlockOffset, Constants.WiiBlockSize);
                 if (encBlock is null || encBlock.Length < Constants.WiiBlockSize)
                     break;
@@ -478,6 +478,15 @@ namespace SabreTools.Wrappers
             return data.Length == length ? data : null;
         }
 
+        /// <summary>Total byte length of the raw disc image data.</summary>
+        internal long DataLength => _dataSource.Length;
+
+        /// <summary>
+        /// Read <paramref name="length"/> bytes from the disc image at <paramref name="offset"/>.
+        /// Returns null if the range is out of bounds or a short read occurs.
+        /// </summary>
+        internal byte[]? ReadData(long offset, int length) => ReadDisc(offset, length);
+
         private static string GetPartitionName(uint type,
             System.Collections.Generic.Dictionary<uint, int> counters)
         {
@@ -494,9 +503,7 @@ namespace SabreTools.Wrappers
             return $"{prefix}{idx}";
         }
 
-        private static uint ReadBE32(byte[] data, int offset) =>
-            (uint)((data[offset] << 24) | (data[offset + 1] << 16)
-                | (data[offset + 2] << 8) | data[offset + 3]);
+        private static uint ReadBE32(byte[] data, int offset) => (uint)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
     }
 }
 
