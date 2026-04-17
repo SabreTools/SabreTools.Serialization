@@ -691,12 +691,12 @@ namespace SabreTools.Metadata.DatFiles
             // If the sorted type isn't the same, we want to sort the dictionary accordingly
             if (_buckets.GroupedBy != bucketBy && bucketBy != ItemKey.NULL)
             {
-                _logger.User($"Organizing roms by {bucketBy}");
+                _logger.User($"Grouping roms by {bucketBy}");
                 PerformBucketing(bucketBy, lower, norename);
             }
 
-            // Sort the dictionary to be consistent
-            _logger.User($"Sorting roms by {bucketBy}");
+            // Sort the groupings to be consistent
+            _logger.User("Sorting items");
             PerformSorting(norename);
         }
 
