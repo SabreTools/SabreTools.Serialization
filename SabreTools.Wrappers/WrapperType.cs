@@ -82,6 +82,11 @@ namespace SabreTools.Wrappers
         GCF,
 
         /// <summary>
+        /// GCZ compressed GameCube / Wii disc image
+        /// </summary>
+        GCZ,
+
+        /// <summary>
         /// gzip archive
         /// </summary>
         GZip,
@@ -161,6 +166,11 @@ namespace SabreTools.Wrappers
         /// Nintendo DS/DSi cart image
         /// </summary>
         Nitro,
+
+        /// <summary>
+        /// Nintendo GameCube / Wii disc image
+        /// </summary>
+        NintendoDisc,
 
         /// <summary>
         /// Half-Life Package File
@@ -287,6 +297,11 @@ namespace SabreTools.Wrappers
         /// Wise Installer Script File
         /// </summary>
         WiseScript,
+
+        /// <summary>
+        /// WIA / RVZ compressed GameCube / Wii disc image
+        /// </summary>
+        WIA,
 
         /// <summary>
         /// XBox Executable
