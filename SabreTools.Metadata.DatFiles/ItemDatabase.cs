@@ -121,8 +121,16 @@ namespace SabreTools.Metadata.DatFiles
             /// <summary>
             /// Try to get a value by key, returning success
             /// </summary>
-            public bool TryGet(string key, out List<long>? value)
-                => _groupings.TryGetValue(key, out value);
+            public bool TryGet(string? key, out List<long>? value)
+            {
+                if (key is null)
+                {
+                    value = null;
+                    return false;
+                }
+
+                return _groupings.TryGetValue(key, out value);
+            }
 
             /// <summary>
             /// Try to remove a value by key, returning success
@@ -536,12 +544,11 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public Dictionary<long, DatItem> GetItemsForBucket(string? bucketName, bool filter = false)
         {
-            if (bucketName is null)
-                return [];
-
+            // Get item indexes for the bucket
             if (!_buckets.TryGet(bucketName, out var itemIds) || itemIds is null)
                 return [];
 
+            // Get the items based on index
             var datItems = new Dictionary<long, DatItem>();
             foreach (long itemId in itemIds)
             {
@@ -1029,17 +1036,17 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="lower">True if the key should be lowercased, false otherwise</param>
         /// <param name="norename">True if games should only be compared on game and file name, false if system and source are counted</param>
         /// </summary>
-        private string GetBucketKey(KeyValuePair<long, DatItem> datItem, ItemKey bucketBy, bool lower, bool norename)
+        private string GetBucketKey(DatItem datItem, ItemKey bucketBy, bool lower, bool norename)
         {
-            var source = GetSource(datItem.Value.SourceIndex);
-            var machine = GetMachine(datItem.Value.MachineIndex);
+            var source = GetSource(datItem.SourceIndex);
+            var machine = GetMachine(datItem.MachineIndex);
 
             // Treat NULL like machine
             if (bucketBy == ItemKey.NULL)
                 bucketBy = ItemKey.Machine;
 
             // Get the bucket key
-            return datItem.Value.GetKey(bucketBy, machine.Value, source.Value, lower, norename);
+            return datItem.GetKey(bucketBy, machine.Value, source.Value, lower, norename);
         }
 
         /// <summary>
@@ -1088,7 +1095,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="norename">True if games should only be compared on game and file name, false if system and source are counted</param>
         private void PerformItemBucketing(KeyValuePair<long, DatItem> datItem, ItemKey bucketBy, bool lower, bool norename)
         {
-            string? bucketKey = GetBucketKey(datItem, bucketBy, lower, norename);
+            string? bucketKey = GetBucketKey(datItem.Value, bucketBy, lower, norename);
             _buckets.Add(bucketKey, datItem.Key);
         }
 
@@ -1098,7 +1105,7 @@ namespace SabreTools.Metadata.DatFiles
         private void PerformSorting(bool norename)
         {
             // Get the current list of bucket keys
-            string[] bucketKeys = [.. _buckets.Keys];
+            string[] bucketKeys = _buckets.Keys;
 
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             Parallel.For(0, bucketKeys.Length, i =>
@@ -1110,7 +1117,11 @@ namespace SabreTools.Metadata.DatFiles
                 if (itemIndices is null || itemIndices.Count == 0)
                 {
                     _buckets.TryRemove(bucketKeys[i], out _);
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                     return;
+#else
+                    continue;
+#endif
                 }
 
                 var datItems = itemIndices
@@ -1118,7 +1129,6 @@ namespace SabreTools.Metadata.DatFiles
                     .ConvertAll(i => new KeyValuePair<long, DatItem>(i, _items.Get(i)!));
 
                 Sort(ref datItems, norename);
-
                 _buckets.TryAdd(bucketKeys[i], datItems.ConvertAll(kvp => kvp.Key));
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
@@ -1201,7 +1211,7 @@ namespace SabreTools.Metadata.DatFiles
                 BucketBy(GetBestAvailable());
 
             // Now that we have the sorted type, we get the proper key
-            return GetBucketKey(datItem, _buckets.GroupedBy, lower: true, norename: true);
+            return GetBucketKey(datItem.Value, _buckets.GroupedBy, lower: true, norename: true);
         }
 
         #endregion
