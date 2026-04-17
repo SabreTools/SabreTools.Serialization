@@ -48,6 +48,18 @@ namespace SabreTools.Wrappers
             builder.AppendLine(Header2.CompressorData, "  Compressor Data");
             builder.AppendLine();
 
+            var discHeader = DiscHeader;
+            if (discHeader is not null)
+            {
+                builder.AppendLine("Embedded Disc Header:");
+                builder.AppendLine(discHeader.GameId, "  Game ID");
+                builder.AppendLine(discHeader.MakerCode, "  Maker Code");
+                builder.AppendLine(discHeader.DiscNumber, "  Disc Number");
+                builder.AppendLine(discHeader.DiscVersion, "  Disc Version");
+                builder.AppendLine(discHeader.GameTitle, "  Game Title");
+                builder.AppendLine();
+            }
+
             if (PartitionEntries is { Length: > 0 })
             {
                 builder.AppendLine($"Partition Entries ({PartitionEntries.Length}):");

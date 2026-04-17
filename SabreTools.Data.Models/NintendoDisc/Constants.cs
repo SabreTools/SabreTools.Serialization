@@ -4,20 +4,36 @@ namespace SabreTools.Data.Models.NintendoDisc
     {
         // Disc identification magic values
         /// <summary>Magic word present at offset 0x01C on GameCube discs</summary>
-        public const uint GCMagicWord = 0xC23D3C1F;
+        public const uint GCMagicWord = 0xC2339F3D;
 
         /// <summary>Magic word present at offset 0x018 on Wii discs</summary>
         public const uint WiiMagicWord = 0x5D1C9EA3;
 
-        // Disc header layout (offsets within the 0x440-byte boot block)
+        // Disc header layout (offsets within the 0x440-byte boot block).
+        // Layout confirmed against Dolphin source (VolumeDisc.cpp / DiscUtils.h):
+        //   0x000–0x003  Title code (4 chars, e.g. "GAFE")
+        //   0x004–0x005  Maker code (2 chars, e.g. "01") — Dolphin Read(0x4, 2)
+        //   0x006        Disc number           — Dolphin GetDiscNumber() Read(6)
+        //   0x007        Revision              — Dolphin GetRevision()   Read(7)
+        //   0x008        Audio streaming
+        //   0x009        Streaming buffer size
+        //   0x00A–0x017  Unused (14 bytes)
+        //   0x018        Wii magic (0x5D1C9EA3)
+        //   0x01C        GC magic  (0xC2339F3D)
+        //   0x020–0x07F  Game title (0x60 bytes)
+        //   0x080        Disable hash verification
+        //   0x081        Disable disc encryption
+        public const int TitleCodeOffset = 0x000;
+        public const int TitleCodeLength = 4;
+        public const int MakerCodeOffset = 0x004;
+        public const int MakerCodeLength = 2;
+        /// <summary>Full 6-char game ID = TitleCode[4] + MakerCode[2]</summary>
         public const int GameIdOffset = 0x000;
         public const int GameIdLength = 6;
-        public const int MakerCodeOffset = 0x006;
-        public const int MakerCodeLength = 2;
-        public const int DiscNumberOffset = 0x008;
-        public const int DiscVersionOffset = 0x009;
-        public const int AudioStreamingOffset = 0x00A;
-        public const int StreamingBufferSizeOffset = 0x00B;
+        public const int DiscNumberOffset = 0x006;
+        public const int DiscVersionOffset = 0x007;
+        public const int AudioStreamingOffset = 0x008;
+        public const int StreamingBufferSizeOffset = 0x009;
         public const int WiiMagicOffset = 0x018;
         public const int GCMagicOffset = 0x01C;
         public const int GameTitleOffset = 0x020;

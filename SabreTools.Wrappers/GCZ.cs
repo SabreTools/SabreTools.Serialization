@@ -1,7 +1,10 @@
 using System;
 using System.IO;
-using System.IO.Compression;
 using SabreTools.Data.Models.GCZ;
+using SabreTools.Data.Models.NintendoDisc;
+#if !NET20 && !NET35
+using System.IO.Compression;
+#endif
 
 namespace SabreTools.Wrappers
 {
@@ -43,6 +46,24 @@ namespace SabreTools.Wrappers
         /// Adler-32 hashes of each uncompressed block
         /// </summary>
         public uint[] BlockHashes => Model.BlockHashes;
+
+        /// <summary>
+        /// Disc header parsed by decompressing the first block of the GCZ image.
+        /// </summary>
+        public DiscHeader? DiscHeader
+        {
+            get
+            {
+                if (_discHeaderCached)
+                    return _discHeader;
+                _discHeader = ReadDiscHeader();
+                _discHeaderCached = true;
+                return _discHeader;
+            }
+        }
+
+        private DiscHeader? _discHeader;
+        private bool _discHeaderCached;
 
         #endregion
 
@@ -191,14 +212,71 @@ namespace SabreTools.Wrappers
 #endif
                 }
 
-                long destOffset = (long)i * blockSize;
-                int writeLen = (int)Math.Min(block.Length, (long)blockSize);
+                long destOffset = i * (long)blockSize;
+                int writeLen = (int)Math.Min(block.Length, blockSize);
                 ms.Position = destOffset;
                 ms.Write(block, 0, writeLen);
             }
 
             ms.Position = 0;
             return NintendoDisc.Create(ms);
+        }
+
+        /// <summary>
+        /// Decompresses just the first block of the GCZ image to read the disc header,
+        /// without decompressing the entire image.
+        /// </summary>
+        private DiscHeader? ReadDiscHeader()
+        {
+            const ulong UncompressedFlag = 0x8000000000000000UL;
+
+            if (Model.BlockPointers is null || Model.BlockPointers.Length == 0)
+                return null;
+
+            ulong ptr = Model.BlockPointers[0];
+            bool uncompressed = (ptr & UncompressedFlag) != 0;
+            long blockFileOffset = Model.DataOffset + (long)(ptr & ~UncompressedFlag);
+
+            ulong nextRaw = Model.BlockPointers.Length > 1
+                ? Model.BlockPointers[1] & ~UncompressedFlag
+                : Model.Header.CompressedDataSize;
+            int compSize = (int)(nextRaw - (ptr & ~UncompressedFlag));
+
+            if (compSize <= 0)
+                return null;
+
+            byte[] raw = ReadRangeFromSource(blockFileOffset, compSize);
+            if (raw is null || raw.Length != compSize)
+                return null;
+
+            byte[] block;
+            if (uncompressed)
+            {
+                block = raw;
+            }
+            else
+            {
+#if NET20 || NET35
+                return null;
+#else
+                try
+                {
+                    using var cs = new MemoryStream(raw, 2, raw.Length - 6);
+                    using var ds = new DeflateStream(cs, CompressionMode.Decompress);
+                    using var os = new MemoryStream();
+                    ds.CopyTo(os);
+                    block = os.ToArray();
+                }
+                catch
+                {
+                    return null;
+                }
+#endif
+            }
+
+            using var ms = new MemoryStream(block);
+            var disc = new Serialization.Readers.NintendoDisc().Deserialize(ms);
+            return disc?.Header;
         }
 
         #endregion

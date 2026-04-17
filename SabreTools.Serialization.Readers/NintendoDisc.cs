@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.NintendoDisc;
@@ -30,10 +29,14 @@ namespace SabreTools.Serialization.Readers
                 // Parse the disc header
                 disc.Header = ParseDiscHeader(data);
 
-                // Determine platform from magic words
+                // Determine platform from magic words; fall back to GameId prefix for
+                // GC discs that omit the magic word (e.g. some redump/scene ISOs)
                 if (disc.Header.WiiMagic == Constants.WiiMagicWord)
                     disc.Platform = Platform.Wii;
                 else if (disc.Header.GCMagic == Constants.GCMagicWord)
+                    disc.Platform = Platform.GameCube;
+                else if (disc.Header.GameId != null && disc.Header.GameId.Length >= 1
+                    && IsGameCubeTitleType(disc.Header.GameId[0]))
                     disc.Platform = Platform.GameCube;
                 else
                     disc.Platform = Platform.Unknown;
@@ -43,7 +46,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Partition table starts at 0x40000
                     long partTableEnd = initialOffset + Constants.WiiPartitionTableAddress
-                        + Constants.WiiPartitionGroupCount * 8;
+                        + (Constants.WiiPartitionGroupCount * 8);
                     if (data.Length >= partTableEnd)
                         disc.PartitionTableEntries = ParsePartitionTable(data, initialOffset);
 
@@ -66,22 +69,42 @@ namespace SabreTools.Serialization.Readers
 
         #region Header parsing
 
+        /// <summary>
+        /// Parses just the disc header fields from the given stream without requiring
+        /// the full 0x440-byte boot block. Requires at least 0x82 bytes (enough to
+        /// reach AudioStreaming and StreamingBufferSize) to be useful; the DOL/FST
+        /// fields will be zero when the stream is shorter than 0x42B bytes.
+        /// </summary>
+        public static DiscHeader? ParseDiscHeaderOnly(Stream? data)
+        {
+            if (data is null || !data.CanRead || data.Length - data.Position < 6)
+                return null;
+            try { return ParseDiscHeader(data); }
+            catch { return null; }
+        }
+
         private static DiscHeader ParseDiscHeader(Stream data)
         {
             var header = new DiscHeader();
 
+            // 0x000: 4-char title code + 2-char maker code stored as one 6-byte GameId field
             byte[] gameIdBytes = data.ReadBytes(Constants.GameIdLength);
             header.GameId = Encoding.ASCII.GetString(gameIdBytes).TrimEnd('\0');
 
-            byte[] makerBytes = data.ReadBytes(Constants.MakerCodeLength);
-            header.MakerCode = Encoding.ASCII.GetString(makerBytes).TrimEnd('\0');
+            // Maker code is the last 2 chars of the GameId (offsets 0x004–0x005).
+            // Dolphin reads it with Read(0x4, 2) — there is no separate field at 0x006.
+            header.MakerCode = header.GameId != null && header.GameId.Length >= 6
+                ? header.GameId.Substring(4, 2)
+                : string.Empty;
 
+            // 0x006: disc number,  0x007: revision (Dolphin GetDiscNumber/GetRevision)
             header.DiscNumber = data.ReadByteValue();
             header.DiscVersion = data.ReadByteValue();
+            // 0x008: audio streaming,  0x009: streaming buffer size
             header.AudioStreaming = data.ReadByteValue();
             header.StreamingBufferSize = data.ReadByteValue();
 
-            // Skip unused 0x0E bytes (offsets 0x00C–0x019)
+            // Skip unused 0x0E bytes (offsets 0x00A–0x017)
             data.ReadBytes(0x0E);
 
             header.WiiMagic = data.ReadUInt32BigEndian();
@@ -90,13 +113,15 @@ namespace SabreTools.Serialization.Readers
             byte[] titleBytes = data.ReadBytes(Constants.GameTitleLength);
             header.GameTitle = Encoding.ASCII.GetString(titleBytes).TrimEnd('\0');
 
-            header.DisableHashVerification = data.ReadByteValue();
-            header.DisableDiscEncryption = data.ReadByteValue();
+            header.DisableHashVerification = data.Position < data.Length ? data.ReadByteValue() : (byte)0;
+            header.DisableDiscEncryption = data.Position < data.Length ? data.ReadByteValue() : (byte)0;
 
-            // Skip to DOL/FST offset fields at 0x420
-            // We are currently at: 6+2+1+1+1+1+14+4+4+96+1+1 = 132 = 0x84
-            // Need to reach 0x420
-            int skipToBootBlock = Constants.DolOffsetField - 0x84;
+            // Skip to DOL/FST offset fields at 0x420.
+            // Position so far: 6+1+1+1+1+14+4+4+96+1+1 = 130 = 0x82
+            int skipToBootBlock = Constants.DolOffsetField - 0x82;
+            if (data.Length - data.Position < skipToBootBlock + 12)
+                return header;
+
             data.ReadBytes(skipToBootBlock);
 
             header.DolOffset = data.ReadUInt32BigEndian();
@@ -132,7 +157,7 @@ namespace SabreTools.Serialization.Readers
                 long tableOffset = baseOffset + ((long)shiftedOffset << 2);
                 long savedPosition = data.Position;
 
-                if (tableOffset + (long)count * 8 > data.Length)
+                if (tableOffset + ((long)count * 8) > data.Length)
                 {
                     data.Seek(savedPosition, SeekOrigin.Begin);
                     continue;
@@ -167,5 +192,13 @@ namespace SabreTools.Serialization.Readers
         }
 
         #endregion
+            /// <summary>
+            /// Returns true if the GameId first character is a known GameCube title type prefix.
+            /// Used as a fallback when the GC magic word is absent from the disc image.
+            /// </summary>
+            private static bool IsGameCubeTitleType(char c)
+            {
+                return c == 'G' || c == 'D' || c == 'R';
+            }
+        }
     }
-}

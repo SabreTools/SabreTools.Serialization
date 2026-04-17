@@ -3,7 +3,9 @@ using System.IO;
 #if !NET20
 using System.Security.Cryptography;
 #endif
+using SabreTools.Data.Models.NintendoDisc;
 using SabreTools.Data.Models.WIA;
+using WiaConstants = SabreTools.Data.Models.WIA.Constants;
 
 namespace SabreTools.Wrappers
 {
@@ -37,6 +39,26 @@ namespace SabreTools.Wrappers
         /// Total uncompressed ISO size in bytes
         /// </summary>
         public ulong IsoFileSize => Model.Header1.IsoFileSize;
+
+        /// <summary>
+        /// Disc header parsed from the 128-byte raw disc header stored in Header2.
+        /// </summary>
+        public DiscHeader? DiscHeader
+        {
+            get
+            {
+                if (_discHeader is not null)
+                    return _discHeader;
+                byte[]? raw = Header2.DiscHeader;
+                if (raw is null || raw.Length < 0x20)
+                    return null;
+                using var ms = new MemoryStream(raw);
+                _discHeader = Serialization.Readers.NintendoDisc.ParseDiscHeaderOnly(ms);
+                return _discHeader;
+            }
+        }
+
+        private DiscHeader? _discHeader;
 
         #endregion
 
@@ -140,7 +162,7 @@ namespace SabreTools.Wrappers
             {
                 int count = (int)model.Header2.NumberOfRawDataEntries;
                 int compressedSize = (int)model.Header2.RawDataEntriesSize;
-                int expectedSize = count * Constants.RawDataEntrySize;
+                int expectedSize = count * WiaConstants.RawDataEntrySize;
 
                 data.Seek(baseOffset + (long)model.Header2.RawDataEntriesOffset, SeekOrigin.Begin);
                 byte[] buf = new byte[compressedSize];
@@ -163,7 +185,7 @@ namespace SabreTools.Wrappers
             {
                 int count = (int)model.Header2.NumberOfGroupEntries;
                 int compressedSize = (int)model.Header2.GroupEntriesSize;
-                int entrySize = model.IsRvz ? Constants.RvzGroupEntrySize : Constants.WiaGroupEntrySize;
+                int entrySize = model.IsRvz ? WiaConstants.RvzGroupEntrySize : WiaConstants.WiaGroupEntrySize;
                 int expectedSize = count * entrySize;
 
                 data.Seek(baseOffset + (long)model.Header2.GroupEntriesOffset, SeekOrigin.Begin);
@@ -191,7 +213,7 @@ namespace SabreTools.Wrappers
             var entries = new RawDataEntry[count];
             for (int i = 0; i < count; i++)
             {
-                int o = i * Constants.RawDataEntrySize;
+                int o = i * WiaConstants.RawDataEntrySize;
                 var e = new RawDataEntry();
                 e.DataOffset = ReadUInt64BE(plain, o);
                 e.DataSize = ReadUInt64BE(plain, o + 8);
@@ -209,7 +231,7 @@ namespace SabreTools.Wrappers
             var entries = new WiaGroupEntry[count];
             for (int i = 0; i < count; i++)
             {
-                int o = i * Constants.WiaGroupEntrySize;
+                int o = i * WiaConstants.WiaGroupEntrySize;
                 var e = new WiaGroupEntry();
                 e.DataOffset = ReadUInt32BE(plain, o) << 2;
                 e.DataSize = ReadUInt32BE(plain, o + 4);
@@ -225,7 +247,7 @@ namespace SabreTools.Wrappers
             var entries = new RvzGroupEntry[count];
             for (int i = 0; i < count; i++)
             {
-                int o = i * Constants.RvzGroupEntrySize;
+                int o = i * WiaConstants.RvzGroupEntrySize;
                 var e = new RvzGroupEntry();
                 e.DataOffset = ReadUInt32BE(plain, o) << 2;
                 e.DataSize = ReadUInt32BE(plain, o + 4);
@@ -279,7 +301,7 @@ namespace SabreTools.Wrappers
             if (Model.Header2.DiscHeader is { Length: > 0 })
             {
                 ms.Position = 0;
-                int headerLen = Math.Min(Model.Header2.DiscHeader.Length, Constants.DiscHeaderStoredSize);
+                int headerLen = Math.Min(Model.Header2.DiscHeader.Length, WiaConstants.DiscHeaderStoredSize);
                 ms.Write(Model.Header2.DiscHeader, 0, headerLen);
             }
 

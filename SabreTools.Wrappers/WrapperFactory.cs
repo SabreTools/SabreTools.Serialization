@@ -472,6 +472,36 @@ namespace SabreTools.Wrappers
 
             #endregion
 
+            #region NintendoDisc
+
+            // Wii disc magic at offset 0x018 (0x5D1C9EA3 stored big-endian on disc)
+            if (magic.Length > 0x1B && magic[0x18] == 0x5D && magic[0x19] == 0x1C && magic[0x1A] == 0x9E && magic[0x1B] == 0xA3)
+                return WrapperType.NintendoDisc;
+
+            // GameCube disc magic at offset 0x01C (0xC2339F3D stored big-endian on disc)
+            if (magic.Length > 0x1F && magic[0x1C] == 0xC2 && magic[0x1D] == 0x3D && magic[0x1E] == 0x3C && magic[0x1F] == 0x1F)
+                return WrapperType.NintendoDisc;
+
+            // GameCube/Wii disc by GameId prefix: first byte is a known title type code,
+            // bytes 1-2 are ASCII letters (region + developer), bytes 3-4 are ASCII digits or letters (title code),
+            // byte 5 is an ASCII digit (disc number). Covers redump ISOs that lack magic words.
+            if (magic.Length > 5
+                && IsNintendoDiscTitleType(magic[0])
+                && magic[1] >= 0x41 && magic[1] <= 0x5A   // A-Z
+                && magic[2] >= 0x30 && magic[2] <= 0x5A   // 0-9 or A-Z
+                && magic[3] >= 0x30 && magic[3] <= 0x5A   // 0-9 or A-Z
+                && magic[4] >= 0x30 && magic[4] <= 0x5A   // 0-9 or A-Z
+                && magic[5] >= 0x30 && magic[5] <= 0x39   // 0-9
+                && (extension.Equals("iso", StringComparison.OrdinalIgnoreCase)
+                    || extension.Equals("gcm", StringComparison.OrdinalIgnoreCase)))
+                return WrapperType.NintendoDisc;
+
+            // .gcm files are always GameCube disc images
+            if (extension.Equals("gcm", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.NintendoDisc;
+
+            #endregion
+
             #region ISO9660
 
             if (extension.Equals("iso", StringComparison.OrdinalIgnoreCase))
@@ -576,22 +606,6 @@ namespace SabreTools.Wrappers
             // iQue DS cart image
             else if (extension.Equals("ids", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.Nitro;
-
-            #endregion
-
-            #region NintendoDisc
-
-            // Wii disc magic at offset 0x018 (0x5D1C9EA3 stored big-endian on disc)
-            if (magic.Length > 0x1B && magic[0x18] == 0x5D && magic[0x19] == 0x1C && magic[0x1A] == 0x9E && magic[0x1B] == 0xA3)
-                return WrapperType.NintendoDisc;
-
-            // GameCube disc magic at offset 0x01C (0xC23D3C1F stored big-endian on disc)
-            if (magic.Length > 0x1F && magic[0x1C] == 0xC2 && magic[0x1D] == 0x3D && magic[0x1E] == 0x3C && magic[0x1F] == 0x1F)
-                return WrapperType.NintendoDisc;
-
-            // .gcm files are always GameCube disc images
-            if (extension.Equals("gcm", StringComparison.OrdinalIgnoreCase))
-                return WrapperType.NintendoDisc;
 
             #endregion
 
@@ -1092,6 +1106,18 @@ namespace SabreTools.Wrappers
 
             // We couldn't find a supported match
             return WrapperType.UNKNOWN;
+        }
+
+        /// <summary>
+        /// Returns true if the byte is a known Nintendo disc title type code
+        /// (first byte of the 6-char GameId, e.g. 'G'=GameCube, 'R'=GameCube,
+        ///  'D'=GameCube demo, 'S'=Wii, 'F'=Wii channel)
+        /// </summary>
+        private static bool IsNintendoDiscTitleType(byte b)
+        {
+            // Standard GameCube and Wii title type prefixes used by Nintendo and licensees
+            return b == (byte)'G' || b == (byte)'D' || b == (byte)'R'
+                || b == (byte)'S' || b == (byte)'F';
         }
     }
 }
