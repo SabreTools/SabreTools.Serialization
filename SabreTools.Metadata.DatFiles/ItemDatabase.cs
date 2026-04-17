@@ -45,6 +45,108 @@ namespace SabreTools.Metadata.DatFiles
         #region Private Classes
 
         /// <summary>
+        /// Represents a table with a string key and a list of indexes as a value
+        /// </summary>
+        private class GroupingTable
+        {
+            #region Private Fields
+
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+            private readonly ConcurrentDictionary<string, List<long>> _groupings = [];
+#else
+            private readonly Dictionary<string, List<long>> _groupings = [];
+#endif
+
+            #endregion
+
+            #region Properties
+
+            /// <summary>
+            /// Indicates what the grouping keys represent
+            /// </summary>
+            public ItemKey GroupedBy { get; set; } = ItemKey.NULL;
+
+            /// <summary>
+            /// All grouping keys
+            /// </summary>
+            public string[] Keys => [.. _groupings.Keys];
+
+            #endregion
+
+            #region Accessors
+
+            /// <summary>
+            /// Add an index to a grouping
+            /// </summary>
+            public void Add(string key, long index)
+            {
+                lock (key)
+                {
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                    // If the key is missing from the dictionary, add it
+                    _groupings.GetOrAdd(key, []);
+                    if (!_groupings.TryGetValue(key, out var grouping) || grouping is null)
+                        return;
+
+                    grouping.Add(index);
+#else
+                    // If the key is missing from the dictionary, add it
+                    if (!_groupings.ContainsKey(key))
+                        _groupings[key] = [];
+
+                    _groupings[key].Add(index);
+#endif
+                }
+            }
+
+            /// <summary>
+            /// Remove all groupings
+            /// </summary>
+            public void Clear() => _groupings.Clear();
+
+            /// <summary>
+            /// Try to set a grouping by key and list of values
+            /// </summary>
+            /// <remarks>This overwrites anything existing</remarks>
+            public bool TryAdd(string key, List<long> value)
+            {
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                return _groupings.TryAdd(key, value);
+#else
+                _groupings[key] = value;
+                return true;
+#endif
+            }
+
+            /// <summary>
+            /// Try to get a value by key, returning success
+            /// </summary>
+            public bool TryGet(string key, out List<long>? value)
+                => _groupings.TryGetValue(key, out value);
+
+            /// <summary>
+            /// Try to remove a value by key, returning success
+            /// </summary>
+            public bool TryRemove(string key, out List<long>? value)
+            {
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                return _groupings.TryRemove(key, out value);
+#else
+                if (!_groupings.ContainsKey(key))
+                {
+                    value = default;
+                    return false;
+                }
+
+                value = _groupings[key];
+                return _groupings.Remove(key);
+#endif
+            }
+
+            #endregion
+        }
+
+        /// <summary>
         /// Represents a table with an incremental index as the key
         /// </summary>
         /// <typeparam name="T">Type of the row values</typeparam>
@@ -156,7 +258,7 @@ namespace SabreTools.Metadata.DatFiles
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                 });
 #else
-            }
+                }
 #endif
             }
 
@@ -181,7 +283,7 @@ namespace SabreTools.Metadata.DatFiles
                 => _table.TryGetValue(index, out value);
 
             /// <summary>
-            /// Try to get a value by index, returning success
+            /// Try to remove a value by index, returning success
             /// </summary>
             public bool TryRemove(long index, out T? value)
             {
@@ -251,16 +353,7 @@ namespace SabreTools.Metadata.DatFiles
         /// Internal dictionary representing the current buckets
         /// </summary>
         [JsonIgnore, XmlIgnore]
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-        private readonly ConcurrentDictionary<string, List<long>> _buckets = [];
-#else
-        private readonly Dictionary<string, List<long>> _buckets = [];
-#endif
-
-        /// <summary>
-        /// Current bucketed by value
-        /// </summary>
-        private ItemKey _bucketedBy = ItemKey.NULL;
+        private readonly GroupingTable _buckets = new();
 
         /// <summary>
         /// Logging object
@@ -446,7 +539,7 @@ namespace SabreTools.Metadata.DatFiles
             if (bucketName is null)
                 return [];
 
-            if (!_buckets.TryGetValue(bucketName, out var itemIds))
+            if (!_buckets.TryGet(bucketName, out var itemIds) || itemIds is null)
                 return [];
 
             var datItems = new Dictionary<long, DatItem>();
@@ -509,16 +602,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="key">Key in the dictionary to remove</param>
         public bool RemoveBucket(string key)
         {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             bool removed = _buckets.TryRemove(key, out var list);
-#else
-            if (!_buckets.ContainsKey(key))
-                return false;
-
-            bool removed = true;
-            var list = _buckets[key];
-            _buckets.Remove(key);
-#endif
             if (list is null)
                 return removed;
 
@@ -585,7 +669,7 @@ namespace SabreTools.Metadata.DatFiles
             DatStatistics.AddItemStatistics(item);
 
             // Add the item to the default bucket
-            PerformItemBucketing(new KeyValuePair<long, DatItem>(index, item), _bucketedBy, lower: true, norename: true);
+            PerformItemBucketing(new KeyValuePair<long, DatItem>(index, item), _buckets.GroupedBy, lower: true, norename: true);
 
             // Return the used index
             return index;
@@ -605,7 +689,7 @@ namespace SabreTools.Metadata.DatFiles
         public void BucketBy(ItemKey bucketBy, bool lower = true, bool norename = true)
         {
             // If the sorted type isn't the same, we want to sort the dictionary accordingly
-            if (_bucketedBy != bucketBy && bucketBy != ItemKey.NULL)
+            if (_buckets.GroupedBy != bucketBy && bucketBy != ItemKey.NULL)
             {
                 _logger.User($"Organizing roms by {bucketBy}");
                 PerformBucketing(bucketBy, lower, norename);
@@ -715,7 +799,7 @@ namespace SabreTools.Metadata.DatFiles
             _ = SortAndGetKey(datItem, sorted);
             var machine = GetMachine(datItem.Value.MachineIndex);
             var source = GetSource(datItem.Value.SourceIndex);
-            string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source.Value);
+            string key = datItem.Value.GetKey(_buckets.GroupedBy, machine.Value, source.Value);
 
             // If the key doesn't exist, return the empty list
             var items = GetItemsForBucket(key);
@@ -758,7 +842,7 @@ namespace SabreTools.Metadata.DatFiles
             _ = SortAndGetKey(datItem, sorted);
             var machine = GetMachine(datItem.Value.MachineIndex);
             var source = GetSource(datItem.Value.SourceIndex);
-            string key = datItem.Value.GetKey(_bucketedBy, machine.Value, source.Value);
+            string key = datItem.Value.GetKey(_buckets.GroupedBy, machine.Value, source.Value);
 
             // If the key doesn't exist
             var roms = GetItemsForBucket(key);
@@ -967,7 +1051,7 @@ namespace SabreTools.Metadata.DatFiles
         private void PerformBucketing(ItemKey bucketBy, bool lower, bool norename)
         {
             // Reset the bucketing values
-            _bucketedBy = bucketBy;
+            _buckets.GroupedBy = bucketBy;
             _buckets.Clear();
 
             // Get the current list of item indicies
@@ -1005,25 +1089,7 @@ namespace SabreTools.Metadata.DatFiles
         private void PerformItemBucketing(KeyValuePair<long, DatItem> datItem, ItemKey bucketBy, bool lower, bool norename)
         {
             string? bucketKey = GetBucketKey(datItem, bucketBy, lower, norename);
-            lock (bucketKey)
-            {
-                // If the key is missing from the dictionary, add it
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-                _buckets.GetOrAdd(bucketKey, []);
-#else
-                if (!_buckets.ContainsKey(bucketKey))
-                    _buckets[bucketKey] = [];
-#endif
-
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-                if (!_buckets.TryGetValue(bucketKey, out var bucket) || bucket is null)
-                    return;
-
-                bucket.Add(datItem.Key);
-#else
-                _buckets[bucketKey].Add(datItem.Key);
-#endif
-            }
+            _buckets.Add(bucketKey, datItem.Key);
         }
 
         /// <summary>
@@ -1040,20 +1106,11 @@ namespace SabreTools.Metadata.DatFiles
             for (int i = 0; i < bucketKeys.Length; i++)
 #endif
             {
-#if NET452_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-                _buckets.TryGetValue(bucketKeys[i], out var itemIndices);
-#else
-                var itemIndices = _buckets[bucketKeys[i]];
-#endif
+                _buckets.TryGet(bucketKeys[i], out var itemIndices);
                 if (itemIndices is null || itemIndices.Count == 0)
                 {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                     _buckets.TryRemove(bucketKeys[i], out _);
                     return;
-#else
-                    _buckets.Remove(bucketKeys[i]);
-                    continue;
-#endif
                 }
 
                 var datItems = itemIndices
@@ -1062,11 +1119,10 @@ namespace SabreTools.Metadata.DatFiles
 
                 Sort(ref datItems, norename);
 
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                 _buckets.TryAdd(bucketKeys[i], datItems.ConvertAll(kvp => kvp.Key));
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
 #else
-                _buckets[bucketKeys[i]] = datItems.ConvertAll(kvp => kvp.Key);
             }
 #endif
         }
@@ -1145,7 +1201,7 @@ namespace SabreTools.Metadata.DatFiles
                 BucketBy(GetBestAvailable());
 
             // Now that we have the sorted type, we get the proper key
-            return GetBucketKey(datItem, _bucketedBy, lower: true, norename: true);
+            return GetBucketKey(datItem, _buckets.GroupedBy, lower: true, norename: true);
         }
 
         #endregion
