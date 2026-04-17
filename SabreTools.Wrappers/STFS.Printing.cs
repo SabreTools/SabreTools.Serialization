@@ -137,7 +137,7 @@ namespace SabreTools.Wrappers
 
             if (header.AdditionalDisplayNames is not null)
             {
-                for (int i = 0; i < 18; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     byte[] localeString = new byte[128];
                     Array.Copy(header.AdditionalDisplayNames, i * 128, localeString, 0, 128);
@@ -151,7 +151,7 @@ namespace SabreTools.Wrappers
 
             if (header.AdditionalDisplayDescriptions is not null)
             {
-                for (int i = 0; i < 18; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     byte[] localeString = new byte[128];
                     Array.Copy(header.AdditionalDisplayDescriptions, i * 128, localeString, 0, 128);
