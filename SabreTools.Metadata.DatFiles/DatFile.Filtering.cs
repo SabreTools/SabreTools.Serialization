@@ -646,11 +646,13 @@ namespace SabreTools.Metadata.DatFiles
                     string? machineName = machine.Name;
                     string? machineDesc = machine.Description;
 
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
                     if (machineName is not null && Regex.IsMatch(machineName, SceneNamePattern))
                         item.Machine!.Name = Regex.Replace(machineName, SceneNamePattern, "$2");
 
                     if (machineDesc is not null && Regex.IsMatch(machineDesc, SceneNamePattern))
                         item.Machine!.Description = Regex.Replace(machineDesc, SceneNamePattern, "$2");
+#pragma warning restore SYSLIB1045
                 }
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
@@ -676,11 +678,13 @@ namespace SabreTools.Metadata.DatFiles
                 string? machineName = machine.Name;
                 string? machineDesc = machine.Description;
 
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
                 if (machineName is not null && Regex.IsMatch(machineName, SceneNamePattern))
                     machine.Name = Regex.Replace(machineName, SceneNamePattern, "$2");
 
                 if (machineDesc is not null && Regex.IsMatch(machineDesc, SceneNamePattern))
                     machine.Description = Regex.Replace(machineDesc, SceneNamePattern, "$2");
+#pragma warning restore SYSLIB1045
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
 #else

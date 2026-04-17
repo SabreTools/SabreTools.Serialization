@@ -569,7 +569,7 @@ namespace SabreTools.Metadata.DatFiles
             if (string.IsNullOrEmpty(machineName))
                 return false;
 
-            var machine = _machines.Find(m => m.Name == machineName);
+            var machine = _machines.Find(m => string.Equals(m.Name, machineName, StringComparison.OrdinalIgnoreCase));
             return RemoveMachine(machine.Key);
         }
 
