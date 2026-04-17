@@ -104,12 +104,147 @@ namespace SabreTools.Wrappers
                 if (model is null)
                     return null;
 
+                // The reader parsed the compressed table blobs as raw bytes.
+                // Re-read and decompress them here now that we have the compression parameters.
+                DecompressTables(model, data, currentOffset);
+
                 return new WIA(model, data, currentOffset);
             }
             catch
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Re-reads the partition entries, raw data entries, and group entries from the source
+        /// stream, decompresses them using the algorithm specified in Header2, and replaces the
+        /// (garbage) values that the reader left in the model.
+        /// </summary>
+        private static void DecompressTables(Archive model, Stream data, long baseOffset)
+        {
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+            var comp = model.Header2.CompressionType;
+
+            // None / Purge tables are stored as plain big-endian structs — already parsed correctly.
+            if (comp == WiaRvzCompressionType.None || comp == WiaRvzCompressionType.Purge)
+                return;
+
+            var compData = model.Header2.CompressorData ?? new byte[7];
+            byte compDataSize = model.Header2.CompressorDataSize;
+
+            // --- Raw data entries (stored compressed) ---
+            if (model.Header2.NumberOfRawDataEntries > 0 &&
+                model.Header2.RawDataEntriesOffset > 0 &&
+                model.Header2.RawDataEntriesSize > 0)
+            {
+                int count = (int)model.Header2.NumberOfRawDataEntries;
+                int compressedSize = (int)model.Header2.RawDataEntriesSize;
+                int expectedSize = count * Constants.RawDataEntrySize;
+
+                data.Seek(baseOffset + (long)model.Header2.RawDataEntriesOffset, SeekOrigin.Begin);
+                byte[] buf = new byte[compressedSize];
+                int read = data.Read(buf, 0, compressedSize);
+                if (read < compressedSize)
+                    return;
+
+                byte[] plain = WiaRvzCompressionHelper.Decompress(
+                    comp, buf, 0, compressedSize, compData, compDataSize);
+                if (plain is null || plain.Length < expectedSize)
+                    return;
+
+                model.RawDataEntries = ParseRawDataEntries(plain, count);
+            }
+
+            // --- Group entries (stored compressed) ---
+            if (model.Header2.NumberOfGroupEntries > 0 &&
+                model.Header2.GroupEntriesOffset > 0 &&
+                model.Header2.GroupEntriesSize > 0)
+            {
+                int count = (int)model.Header2.NumberOfGroupEntries;
+                int compressedSize = (int)model.Header2.GroupEntriesSize;
+                int entrySize = model.IsRvz ? Constants.RvzGroupEntrySize : Constants.WiaGroupEntrySize;
+                int expectedSize = count * entrySize;
+
+                data.Seek(baseOffset + (long)model.Header2.GroupEntriesOffset, SeekOrigin.Begin);
+                byte[] buf = new byte[compressedSize];
+                int read = data.Read(buf, 0, compressedSize);
+                if (read < compressedSize)
+                    return;
+
+                byte[] plain = WiaRvzCompressionHelper.Decompress(
+                    comp, buf, 0, compressedSize, compData, compDataSize);
+                if (plain is null || plain.Length < expectedSize)
+                    return;
+
+                if (model.IsRvz)
+                    model.RvzGroupEntries = ParseRvzGroupEntries(plain, count);
+                else
+                    model.GroupEntries = ParseWiaGroupEntries(plain, count);
+            }
+#endif
+        }
+
+        /// <summary>Parses raw data entries from a plain (already decompressed) byte array.</summary>
+        private static RawDataEntry[] ParseRawDataEntries(byte[] plain, int count)
+        {
+            var entries = new RawDataEntry[count];
+            for (int i = 0; i < count; i++)
+            {
+                int o = i * Constants.RawDataEntrySize;
+                var e = new RawDataEntry();
+                e.DataOffset = ReadUInt64BE(plain, o);
+                e.DataSize = ReadUInt64BE(plain, o + 8);
+                e.GroupIndex = ReadUInt32BE(plain, o + 16);
+                e.NumberOfGroups = ReadUInt32BE(plain, o + 20);
+                entries[i] = e;
+            }
+
+            return entries;
+        }
+
+        /// <summary>Parses WIA group entries from a plain (already decompressed) byte array.</summary>
+        private static WiaGroupEntry[] ParseWiaGroupEntries(byte[] plain, int count)
+        {
+            var entries = new WiaGroupEntry[count];
+            for (int i = 0; i < count; i++)
+            {
+                int o = i * Constants.WiaGroupEntrySize;
+                var e = new WiaGroupEntry();
+                e.DataOffset = ReadUInt32BE(plain, o) << 2;
+                e.DataSize = ReadUInt32BE(plain, o + 4);
+                entries[i] = e;
+            }
+
+            return entries;
+        }
+
+        /// <summary>Parses RVZ group entries from a plain (already decompressed) byte array.</summary>
+        private static RvzGroupEntry[] ParseRvzGroupEntries(byte[] plain, int count)
+        {
+            var entries = new RvzGroupEntry[count];
+            for (int i = 0; i < count; i++)
+            {
+                int o = i * Constants.RvzGroupEntrySize;
+                var e = new RvzGroupEntry();
+                e.DataOffset = ReadUInt32BE(plain, o) << 2;
+                e.DataSize = ReadUInt32BE(plain, o + 4);
+                e.RvzPackedSize = ReadUInt32BE(plain, o + 8);
+                entries[i] = e;
+            }
+
+            return entries;
+        }
+
+        private static ulong ReadUInt64BE(byte[] b, int o)
+        {
+            return ((ulong)b[o] << 56) | ((ulong)b[o + 1] << 48) | ((ulong)b[o + 2] << 40) | ((ulong)b[o + 3] << 32)
+                | ((ulong)b[o + 4] << 24) | ((ulong)b[o + 5] << 16) | ((ulong)b[o + 6] << 8) | b[o + 7];
+        }
+
+        private static uint ReadUInt32BE(byte[] b, int o)
+        {
+            return ((uint)b[o] << 24) | ((uint)b[o + 1] << 16) | ((uint)b[o + 2] << 8) | b[o + 3];
         }
 
         #endregion

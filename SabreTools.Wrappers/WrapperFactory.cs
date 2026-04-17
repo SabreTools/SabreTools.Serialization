@@ -71,6 +71,7 @@ namespace SabreTools.Wrappers
                 WrapperType.WiseOverlayHeader => WiseOverlayHeader.Create(data),
                 WrapperType.WiseScript => WiseScript.Create(data),
                 WrapperType.WIA => WIA.Create(data),
+                WrapperType.RVZ => WIA.Create(data),
                 WrapperType.XboxExecutable => XboxExecutable.Create(data),
                 WrapperType.XDVDFS => XDVDFS.Create(data),
                 WrapperType.XenonExecutable => XenonExecutable.Create(data),
@@ -580,9 +581,17 @@ namespace SabreTools.Wrappers
 
             #region NintendoDisc
 
-            // NintendoDisc images are detected as .iso and probed in CreateDiscImageWrapper.
-            // No extension-only detection here: .gcm (GameCube Memory Card) and .wbfs
-            // (Wii Backup File System) are separate container formats not yet supported.
+            // Wii disc magic at offset 0x018 (0x5D1C9EA3 stored big-endian on disc)
+            if (magic.Length > 0x1B && magic[0x18] == 0x5D && magic[0x19] == 0x1C && magic[0x1A] == 0x9E && magic[0x1B] == 0xA3)
+                return WrapperType.NintendoDisc;
+
+            // GameCube disc magic at offset 0x01C (0xC23D3C1F stored big-endian on disc)
+            if (magic.Length > 0x1F && magic[0x1C] == 0xC2 && magic[0x1D] == 0x3D && magic[0x1E] == 0x3C && magic[0x1F] == 0x1F)
+                return WrapperType.NintendoDisc;
+
+            // .gcm files are always GameCube disc images
+            if (extension.Equals("gcm", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.NintendoDisc;
 
             #endregion
 
@@ -1003,13 +1012,13 @@ namespace SabreTools.Wrappers
 
             // RVZ magic ("RVZ\x01" stored little-endian: 0x015A5652)
             if (magic.StartsWith([0x52, 0x56, 0x5A, 0x01]))
-                return WrapperType.WIA;
+                return WrapperType.RVZ;
 
             if (extension.Equals("wia", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.WIA;
 
             if (extension.Equals("rvz", StringComparison.OrdinalIgnoreCase))
-                return WrapperType.WIA;
+                return WrapperType.RVZ;
 
             #endregion
 

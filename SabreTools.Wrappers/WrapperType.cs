@@ -299,9 +299,14 @@ namespace SabreTools.Wrappers
         WiseScript,
 
         /// <summary>
-        /// WIA / RVZ compressed GameCube / Wii disc image
+        /// WIA compressed GameCube / Wii disc image
         /// </summary>
         WIA,
+
+        /// <summary>
+        /// RVZ compressed GameCube / Wii disc image
+        /// </summary>
+        RVZ,
 
         /// <summary>
         /// XBox Executable
