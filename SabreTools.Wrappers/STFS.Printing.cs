@@ -259,6 +259,7 @@ namespace SabreTools.Wrappers
                 builder.AppendLine(svod.WorkerThreadProcessor, "    Worker Thread Processor");
                 builder.AppendLine(svod.WorkerThreadPriority, "    Worker Thread Priority");
                 builder.AppendLine(svod.Hash, "    Hash");
+                builder.AppendLine(svod.DeviceFeatures, "    Device Features");
                 builder.AppendLine((uint)svod.DataBlockCount, "    Data Block Count");
                 builder.AppendLine((uint)svod.DataBlockOffset, "    Data Block Offset");
                 builder.AppendLine(svod.Padding, "    Padding");

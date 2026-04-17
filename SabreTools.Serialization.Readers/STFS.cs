@@ -152,7 +152,7 @@ namespace SabreTools.Serialization.Readers
                     cacheHeader.ResumeData = data.ReadBytes(5584);
                     obj.InstallerHeader = cacheHeader;
                 }
-                else
+                else if ((installerType[0] | installerType[1] | installerType[2] | installerType[3]) != 0)
                 {
                     var installerHeader = new InstallerHeader();
                     installerHeader.InstallerType = installerType;
@@ -233,9 +233,10 @@ namespace SabreTools.Serialization.Readers
                 obj.WorkerThreadProcessor = data.ReadByteValue();
                 obj.WorkerThreadPriority = data.ReadByteValue();
                 obj.Hash = data.ReadBytes(20);
+                obj.DeviceFeatures = data.ReadByteValue();
                 obj.DataBlockCount = data.ReadUInt24LittleEndian();
                 obj.DataBlockOffset = data.ReadUInt24LittleEndian();
-                obj.Hash = data.ReadBytes(5);
+                obj.Padding = data.ReadBytes(5);
 
                 return obj;
             }
