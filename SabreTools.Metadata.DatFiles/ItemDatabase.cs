@@ -613,14 +613,7 @@ namespace SabreTools.Metadata.DatFiles
             if (list is null)
                 return removed;
 
-            foreach (var index in list)
-            {
-                if (!_items.TryGet(index, out var datItem) || datItem is null)
-                    continue;
-
-                RemoveItem(index);
-            }
-
+            list.ForEach(index => RemoveItem(index));
             return removed;
         }
 
@@ -1223,21 +1216,8 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public void RecalculateStats()
         {
-            // Wipe out any stats already there
             DatStatistics.ResetStatistics();
-
-            // If there are no items
-            if (_items.IsEmpty)
-                return;
-
-            // Loop through and add
-            foreach (var item in _items.Values)
-            {
-                if (item is null)
-                    continue;
-
-                DatStatistics.AddItemStatistics(item);
-            }
+            Array.ForEach(_items.Values, item => DatStatistics.AddItemStatistics(item));
         }
 
         #endregion
