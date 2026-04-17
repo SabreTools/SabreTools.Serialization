@@ -239,18 +239,6 @@ namespace SabreTools.Metadata.DatFiles
             }
 
             /// <summary>
-            /// Remove a value from the table, returning success
-            /// </summary>
-            public bool Remove(long index)
-            {
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-                return _table.TryRemove(index, out var _);
-#else
-                return _table.Remove(index);
-#endif
-            }
-
-            /// <summary>
             /// Remove all values that match a function
             /// </summary>
             public void RemoveAll(Func<T, bool> func)
@@ -261,8 +249,16 @@ namespace SabreTools.Metadata.DatFiles
                 for (int i = 0; i < Indexes.Length; i++)
 #endif
                 {
-                    if (func(_table[i]))
-                        Remove(i);
+                    var value = Get(i);
+                    if (value is null)
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                        return;
+#else
+                        continue;
+#endif
+
+                    if (func(value))
+                        TryRemove(i, out _);
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                 });
 #else
