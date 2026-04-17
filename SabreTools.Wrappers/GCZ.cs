@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.IO.Compression;
 using SabreTools.Data.Models.GCZ;
 
 namespace SabreTools.Wrappers
@@ -126,11 +128,77 @@ namespace SabreTools.Wrappers
         /// </summary>
         public NintendoDisc? GetInnerWrapper()
         {
-            // TODO: Implement block-by-block zlib decompression into a MemoryStream,
-            // then pass to NintendoDisc.Create(). Each block entry in BlockPointers encodes
-            // the offset and compression flag (top bit). Use DeflateStream to decompress
-            // blocks where the flag is clear, or copy raw bytes where the flag is set.
-            return null;
+            const ulong UncompressedFlag = 0x8000000000000000UL;
+
+            if (Model.BlockPointers is null || Model.BlockPointers.Length == 0)
+                return null;
+
+            ulong isoSize = Model.Header.DataSize;
+            if (isoSize == 0)
+                return null;
+
+            var ms = new MemoryStream();
+            ms.SetLength((long)isoSize);
+
+            uint blockSize = Model.Header.BlockSize;
+            long dataOffset = Model.DataOffset;
+
+            for (int i = 0; i < Model.BlockPointers.Length; i++)
+            {
+                ulong ptr = Model.BlockPointers[i];
+                bool uncompressed = (ptr & UncompressedFlag) != 0;
+                long blockFileOffset = dataOffset + (long)(ptr & ~UncompressedFlag);
+
+                // Compressed size = distance to next block's raw offset
+                ulong nextRaw = (i + 1 < Model.BlockPointers.Length)
+                    ? Model.BlockPointers[i + 1] & ~UncompressedFlag
+                    : Model.Header.CompressedDataSize;
+                int compSize = (int)(nextRaw - (ptr & ~UncompressedFlag));
+
+                if (compSize <= 0)
+                    continue;
+
+                byte[] raw = ReadRangeFromSource(blockFileOffset, compSize);
+                if (raw is null || raw.Length != compSize)
+                    return null;
+
+                byte[] block;
+                if (uncompressed)
+                {
+                    block = raw;
+                }
+                else
+                {
+                    // GCZ uses zlib: skip 2-byte zlib header and 4-byte Adler-32 trailer
+                    if (raw.Length < 6)
+                        return null;
+#if NET20 || NET35
+                    // DeflateStream.CopyTo not available on net20/net35 — return null
+                    return null;
+#else
+                    try
+                    {
+                        using var cs = new MemoryStream(raw, 2, raw.Length - 6);
+                        using var ds = new DeflateStream(cs, CompressionMode.Decompress);
+                        using var os = new MemoryStream();
+                        ds.CopyTo(os);
+                        block = os.ToArray();
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+#endif
+                }
+
+                long destOffset = (long)i * blockSize;
+                int writeLen = (int)Math.Min(block.Length, (long)blockSize);
+                ms.Position = destOffset;
+                ms.Write(block, 0, writeLen);
+            }
+
+            ms.Position = 0;
+            return NintendoDisc.Create(ms);
         }
 
         #endregion
