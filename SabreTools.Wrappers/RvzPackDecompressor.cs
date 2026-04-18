@@ -16,7 +16,6 @@ namespace SabreTools.Wrappers
         private readonly LaggedFibonacciGenerator m_lfg;
 
         private int m_in_position = 0;
-        private int m_out_position = 0;
         private uint m_current_size = 0;
         private bool m_current_is_junk = false;
 
@@ -66,7 +65,6 @@ namespace SabreTools.Wrappers
                 }
 
                 m_current_size   -= (uint)bytesToWrite;
-                m_out_position   += bytesToWrite;
                 totalWritten     += bytesToWrite;
                 m_data_offset    += bytesToWrite;
             }
@@ -96,7 +94,7 @@ namespace SabreTools.Wrappers
 
             if (m_current_is_junk)
             {
-                if (m_in_position + LaggedFibonacciGenerator.SEED_SIZE * 4 > m_packed_data.Length)
+                if (m_in_position + (LaggedFibonacciGenerator.SEED_SIZE * 4) > m_packed_data.Length)
                     return false;
 
                 byte[] seed = new byte[LaggedFibonacciGenerator.SEED_SIZE * 4];
@@ -105,11 +103,11 @@ namespace SabreTools.Wrappers
 
                 m_lfg.SetSeed(seed);
 
-                // Advance LFG to the correct position within the 32 KiB disc block
-                const int BLOCK_SIZE = 0x8000;
-                int offsetInBlock = (int)(m_data_offset % BLOCK_SIZE);
-                if (offsetInBlock > 0)
-                    m_lfg.Forward(offsetInBlock);
+                // Advance LFG to the correct position within the buffer.
+                // Dolphin: lfg.m_position_bytes = data_offset % (LFG_K * sizeof(u32))
+                int offsetInBuffer = (int)(m_data_offset % LaggedFibonacciGenerator.BUFFER_BYTES);
+                if (offsetInBuffer > 0)
+                    m_lfg.Forward(offsetInBuffer);
             }
 
             return true;

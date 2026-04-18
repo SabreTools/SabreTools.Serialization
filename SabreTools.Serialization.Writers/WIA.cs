@@ -1,6 +1,5 @@
 using System.IO;
 using SabreTools.Data.Models.WIA;
-using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -138,21 +137,21 @@ namespace SabreTools.Serialization.Writers
         private static void WriteWiaGroupEntry(Stream s, WiaGroupEntry e)
         {
             // DataOffset stored as actual_offset >> 2
-            WriteUInt32BE(s, e.DataOffset >> 2);
+            WriteUInt32BE(s, (uint)(e.DataOffset >> 2));
             WriteUInt32BE(s, e.DataSize);
         }
 
         private static void WriteRvzGroupEntry(Stream s, RvzGroupEntry e)
         {
             // DataOffset stored as actual_offset >> 2
-            WriteUInt32BE(s, e.DataOffset >> 2);
+            WriteUInt32BE(s, (uint)(e.DataOffset >> 2));
             WriteUInt32BE(s, e.DataSize);
             WriteUInt32BE(s, e.RvzPackedSize);
         }
 
         private static void WriteUInt32LE(Stream s, uint v)
         {
-            s.WriteByte((byte)(v));
+            s.WriteByte((byte)v);
             s.WriteByte((byte)(v >> 8));
             s.WriteByte((byte)(v >> 16));
             s.WriteByte((byte)(v >> 24));
@@ -163,7 +162,7 @@ namespace SabreTools.Serialization.Writers
             s.WriteByte((byte)(v >> 24));
             s.WriteByte((byte)(v >> 16));
             s.WriteByte((byte)(v >> 8));
-            s.WriteByte((byte)(v));
+            s.WriteByte((byte)v);
         }
 
         private static void WriteInt32BE(Stream s, int v) => WriteUInt32BE(s, (uint)v);
@@ -171,7 +170,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteUInt64BE(Stream s, ulong v)
         {
             WriteUInt32BE(s, (uint)(v >> 32));
-            WriteUInt32BE(s, (uint)(v));
+            WriteUInt32BE(s, (uint)v);
         }
 
         #endregion

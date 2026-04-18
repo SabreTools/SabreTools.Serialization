@@ -12,7 +12,9 @@ namespace SabreTools.Wrappers
     {
         private const int LFG_K = 521;
         private const int LFG_J = 32;
-        private const int BUFFER_BYTES = LFG_K * 4; // 2084
+
+        /// <summary>Size of the LFG output buffer in bytes (LFG_K * 4 = 2084).</summary>
+        public const int BUFFER_BYTES = LFG_K * 4;
 
         /// <summary>Size of the seed in 32-bit words (68 bytes total).</summary>
         public const int SEED_SIZE = 17;
@@ -110,6 +112,7 @@ namespace SabreTools.Wrappers
                 ForwardStep();
                 m_position_bytes = 0;
             }
+
             return result;
         }
 
@@ -165,8 +168,8 @@ namespace SabreTools.Wrappers
             for (int i = 0; i < SEED_SIZE; i++)
             {
                 m_buffer[i] = (m_buffer[i] & 0xFF00FFFF)
-                            | (m_buffer[i] << 2 & 0x00FC0000)
-                            | ((m_buffer[i + 16] ^ m_buffer[i + 15]) << 9 & 0x00030000);
+                            | ((m_buffer[i] << 2) & 0x00FC0000)
+                            | (((m_buffer[i + 16] ^ m_buffer[i + 15]) << 9) & 0x00030000);
             }
 
             // Output seed as LE u32 values (swap32 converts BE→LE)
@@ -192,10 +195,11 @@ namespace SabreTools.Wrappers
 
                 if (checkExisting)
                 {
-                    uint actual = (m_buffer[i] & 0xFF00FFFF) | (m_buffer[i] << 2 & 0x00FC0000);
+                    uint actual = (m_buffer[i] & 0xFF00FFFF) | ((m_buffer[i] << 2) & 0x00FC0000);
                     if ((calculated & 0xFFFCFFFF) != actual)
                         return false;
                 }
+
                 m_buffer[i] = calculated;
             }
 
@@ -242,7 +246,7 @@ namespace SabreTools.Wrappers
             // Read disc bytes as LE u32 values (Dolphin: reinterpret_cast<const u32*>)
             uint[] u32Data = new uint[u32Size];
             for (int i = 0; i < u32Size; i++)
-                u32Data[i] = ReadLittleEndianU32(data, u32DataStart + i * 4);
+                u32Data[i] = ReadLittleEndianU32(data, u32DataStart + (i * 4));
 
             LaggedFibonacciGenerator lfg = new LaggedFibonacciGenerator();
             if (!GetSeed_u32(u32Data, u32Size, u32DataOffset, lfg, seedOut))
@@ -304,15 +308,12 @@ namespace SabreTools.Wrappers
         // -------------------------------------------------------------------
 
         internal static uint ReadBigEndianU32(byte[] data, int offset) =>
-            (uint)((data[offset] << 24) | (data[offset + 1] << 16) |
-                   (data[offset + 2] << 8)  |  data[offset + 3]);
+            (uint)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
 
         private static uint ReadLittleEndianU32(byte[] data, int offset) =>
-            (uint)(data[offset] | (data[offset + 1] << 8) |
-                   (data[offset + 2] << 16) | (data[offset + 3] << 24));
+            (uint)(data[offset] | (data[offset + 1] << 8) | (data[offset + 2] << 16) | (data[offset + 3] << 24));
 
         internal static uint SwapU32(uint value) =>
-            (value << 24) | ((value << 8) & 0x00FF0000) |
-            ((value >> 8) & 0x0000FF00) | (value >> 24);
+            (value << 24) | ((value << 8) & 0x00FF0000) | ((value >> 8) & 0x0000FF00) | (value >> 24);
     }
 }

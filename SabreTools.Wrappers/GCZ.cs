@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using SabreTools.Data.Models.GCZ;
 using SabreTools.Data.Models.NintendoDisc;
@@ -144,82 +143,70 @@ namespace SabreTools.Wrappers
         #region Inner Wrapper
 
         /// <summary>
-        /// Decompress the full GCZ image to a MemoryStream and return a NintendoDisc wrapper.
-        /// Returns null if decompression fails or the decompressed data is not a valid disc image.
+        /// Returns a NintendoDisc wrapper backed by a virtual stream that decompresses
+        /// GCZ blocks on demand, avoiding loading the entire ISO into memory.
         /// </summary>
         public NintendoDisc? GetInnerWrapper()
         {
-            const ulong UncompressedFlag = 0x8000000000000000UL;
-
             if (Model.BlockPointers is null || Model.BlockPointers.Length == 0)
                 return null;
 
-            ulong isoSize = Model.Header.DataSize;
-            if (isoSize == 0)
+            if (Model.Header.DataSize == 0)
                 return null;
 
-            var ms = new MemoryStream();
-            ms.SetLength((long)isoSize);
+            var vStream = new GczVirtualStream(this);
+            return NintendoDisc.Create(vStream);
+        }
 
-            uint blockSize = Model.Header.BlockSize;
-            long dataOffset = Model.DataOffset;
+        /// <summary>
+        /// Decompresses a single GCZ block by index and returns its raw bytes.
+        /// Returns null on failure; returns a zero-filled block if the compressed size is zero.
+        /// </summary>
+        internal byte[]? DecompressBlock(int blockIndex)
+        {
+            const ulong UncompressedFlag = 0x8000000000000000UL;
 
-            for (int i = 0; i < Model.BlockPointers.Length; i++)
-            {
-                ulong ptr = Model.BlockPointers[i];
-                bool uncompressed = (ptr & UncompressedFlag) != 0;
-                long blockFileOffset = dataOffset + (long)(ptr & ~UncompressedFlag);
+            if (blockIndex < 0 || blockIndex >= Model.BlockPointers.Length)
+                return null;
 
-                // Compressed size = distance to next block's raw offset
-                ulong nextRaw = (i + 1 < Model.BlockPointers.Length)
-                    ? Model.BlockPointers[i + 1] & ~UncompressedFlag
-                    : Model.Header.CompressedDataSize;
-                int compSize = (int)(nextRaw - (ptr & ~UncompressedFlag));
+            ulong ptr = Model.BlockPointers[blockIndex];
+            bool uncompressed = (ptr & UncompressedFlag) != 0;
+            long blockFileOffset = Model.DataOffset + (long)(ptr & ~UncompressedFlag);
 
-                if (compSize <= 0)
-                    continue;
+            ulong nextRaw = (blockIndex + 1 < Model.BlockPointers.Length)
+                ? Model.BlockPointers[blockIndex + 1] & ~UncompressedFlag
+                : Model.Header.CompressedDataSize;
+            int compSize = (int)(nextRaw - (ptr & ~UncompressedFlag));
 
-                byte[] raw = ReadRangeFromSource(blockFileOffset, compSize);
-                if (raw is null || raw.Length != compSize)
-                    return null;
+            if (compSize <= 0)
+                return new byte[Model.Header.BlockSize];
 
-                byte[] block;
-                if (uncompressed)
-                {
-                    block = raw;
-                }
-                else
-                {
-                    // GCZ uses zlib: skip 2-byte zlib header and 4-byte Adler-32 trailer
-                    if (raw.Length < 6)
-                        return null;
+            byte[] raw = ReadRangeFromSource(blockFileOffset, compSize);
+            if (raw is null || raw.Length != compSize)
+                return null;
+
+            if (uncompressed)
+                return raw;
+
+            if (raw.Length < 6)
+                return null;
+
 #if NET20 || NET35
-                    // DeflateStream.CopyTo not available on net20/net35 — return null
-                    return null;
+            return null;
 #else
-                    try
-                    {
-                        using var cs = new MemoryStream(raw, 2, raw.Length - 6);
-                        using var ds = new DeflateStream(cs, CompressionMode.Decompress);
-                        using var os = new MemoryStream();
-                        ds.CopyTo(os);
-                        block = os.ToArray();
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-#endif
-                }
-
-                long destOffset = i * (long)blockSize;
-                int writeLen = (int)Math.Min(block.Length, blockSize);
-                ms.Position = destOffset;
-                ms.Write(block, 0, writeLen);
+            try
+            {
+                using var cs = new MemoryStream(raw, 2, raw.Length - 6);
+                using var ds = new DeflateStream(cs, CompressionMode.Decompress);
+                using var os = new MemoryStream();
+                ds.CopyTo(os);
+                return os.ToArray();
             }
-
-            ms.Position = 0;
-            return NintendoDisc.Create(ms);
+            catch
+            {
+                return null;
+            }
+#endif
         }
 
         /// <summary>

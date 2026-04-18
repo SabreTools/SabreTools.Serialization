@@ -130,6 +130,7 @@ namespace SabreTools.Serialization.Readers
                 e.DataEntry1 = ParsePartitionDataEntry(data);
                 entries[i] = e;
             }
+
             return entries;
         }
 
@@ -155,6 +156,7 @@ namespace SabreTools.Serialization.Readers
                 e.NumberOfGroups = data.ReadUInt32BigEndian();
                 entries[i] = e;
             }
+
             return entries;
         }
 
@@ -165,10 +167,11 @@ namespace SabreTools.Serialization.Readers
             {
                 var e = new WiaGroupEntry();
                 // DataOffset stored as actual_offset >> 2
-                e.DataOffset = data.ReadUInt32BigEndian() << 2;
+                e.DataOffset = (ulong)data.ReadUInt32BigEndian() << 2;
                 e.DataSize = data.ReadUInt32BigEndian();
                 entries[i] = e;
             }
+
             return entries;
         }
 
@@ -179,11 +182,12 @@ namespace SabreTools.Serialization.Readers
             {
                 var e = new RvzGroupEntry();
                 // DataOffset stored as actual_offset >> 2
-                e.DataOffset = data.ReadUInt32BigEndian() << 2;
+                e.DataOffset = (ulong)data.ReadUInt32BigEndian() << 2;
                 e.DataSize = data.ReadUInt32BigEndian();
                 e.RvzPackedSize = data.ReadUInt32BigEndian();
                 entries[i] = e;
             }
+
             return entries;
         }
 

@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.WIA
         /// Actual byte offset of this group's data within the WIA file.
         /// (On disk this value is stored as <c>offset &gt;&gt; 2</c>.)
         /// </summary>
-        public uint DataOffset { get; set; }
+        public ulong DataOffset { get; set; }
 
         /// <summary>
         /// Compressed size of this group's data in bytes (0 means group contains only zeroes)
@@ -28,7 +28,7 @@ namespace SabreTools.Data.Models.WIA
         /// Actual byte offset of this group's data within the RVZ file.
         /// (On disk this value is stored as <c>offset &gt;&gt; 2</c>.)
         /// </summary>
-        public uint DataOffset { get; set; }
+        public ulong DataOffset { get; set; }
 
         /// <summary>
         /// Total size of this group's data (compressed + any RVZ-pack section) in bytes
