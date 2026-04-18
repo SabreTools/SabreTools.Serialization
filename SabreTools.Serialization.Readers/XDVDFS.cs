@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new VolumeDescriptor();
 
-            temp = data.PeekBytes(20);
+            var temp = data.PeekBytes(20);
             var signature = System.Text.Encoding.ASCII.GetString(temp);
             if (!signature.Equals(Constants.VolumeDescriptorSignature))
                 return null;
@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new LayoutDescriptor();
 
-            temp = data.PeekBytes(24);
+            var temp = data.PeekBytes(24);
             var signature = System.Text.Encoding.ASCII.GetString(temp);
             if (!signature.Equals(Constants.LayoutDescriptorSignature))
                 return null;
