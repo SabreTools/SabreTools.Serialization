@@ -217,13 +217,14 @@ namespace SabreTools.Wrappers
             // FST — stored offset shifted <<2 in Wii partition
             uint fstOffShifted = (uint)((bootBlock[0x424] << 24) | (bootBlock[0x425] << 16)
                 | (bootBlock[0x426] << 8) | bootBlock[0x427]);
-            uint fstSzField = (uint)((bootBlock[0x428] << 24) | (bootBlock[0x429] << 16)
+            uint fstSzShifted = (uint)((bootBlock[0x428] << 24) | (bootBlock[0x429] << 16)
                 | (bootBlock[0x42A] << 8) | bootBlock[0x42B]);
             long fstOff = (long)fstOffShifted << 2;
-            if (fstOff > 0 && fstSzField > 0)
+            long fstSize = (long)fstSzShifted << 2;  // also stored >>2 on Wii
+            if (fstOff > 0 && fstSize > 0)
             {
                 byte[]? fstData = ReadDecryptedPartitionRange(absDataOffset, titleKey,
-                    fstOff, (int)Math.Min(fstSzField, int.MaxValue));
+                    fstOff, (int)Math.Min(fstSize, int.MaxValue));
                 if (fstData != null)
                 {
                     File.WriteAllBytes(Path.Combine(sysDir, "fst.bin"), fstData);
@@ -437,11 +438,12 @@ namespace SabreTools.Wrappers
                 if (encBlock is null || encBlock.Length < Constants.WiiBlockSize)
                     break;
 
-                // IV is last 16 bytes of the hash block (offset 0x3F0 in the encrypted hash block)
+                // IV is at offset 0x3D0 of the raw (still-encrypted) block.
+                // Matches Dolphin / DolphinIsoLib WiiPartitionDecryptor.DecryptBlock.
                 byte[] iv = new byte[16];
-                Array.Copy(encBlock, 0x3F0, iv, 0, 16);
+                Array.Copy(encBlock, 0x3D0, iv, 0, 16);
 
-                // Decrypt the 0x7C00 data portion
+                // Decrypt the 0x7C00 data portion (bytes 0x400–0x7FFF of the raw block)
                 byte[] encData = new byte[Constants.WiiBlockDataSize];
                 Array.Copy(encBlock, Constants.WiiBlockHeaderSize, encData, 0, Constants.WiiBlockDataSize);
 
@@ -490,17 +492,31 @@ namespace SabreTools.Wrappers
         private static string GetPartitionName(uint type,
             System.Collections.Generic.Dictionary<uint, int> counters)
         {
-            string prefix = type switch
+            // Matches DolphinIsoLib WiiDiscExtractor.PartitionFolderName exactly.
+            // Known types: 0→GM+counter, 1→UP+counter, 2→CH+counter.
+            // Unknown: if all 4 bytes are printable ASCII, use the raw 4-char string (no prefix, no counter).
+            // Otherwise fall back to P{globalIndex} — we use the cumulative counter sum as the index.
+            string code;
+            switch (type)
             {
-                0 => "DATA",
-                1 => "UPDATE",
-                2 => "CHANNEL",
-                _ => $"P{type:X}"
-            };
+                case 0: code = "GM"; break;
+                case 1: code = "UP"; break;
+                case 2: code = "CH"; break;
+                default:
+                    byte b0 = (byte)(type >> 24), b1 = (byte)(type >> 16),
+                         b2 = (byte)(type >>  8), b3 = (byte)type;
+                    if (b0 >= 0x20 && b0 <= 0x7E && b1 >= 0x20 && b1 <= 0x7E &&
+                        b2 >= 0x20 && b2 <= 0x7E && b3 >= 0x20 && b3 <= 0x7E)
+                        return System.Text.Encoding.ASCII.GetString(new byte[] { b0, b1, b2, b3 });
+                    // Non-printable: use global partition index (sum of all counter values so far)
+                    int globalIdx = 0;
+                    foreach (var v in counters.Values) globalIdx += v;
+                    return $"P{globalIdx}";
+            }
 
-            int idx = counters.TryGetValue(type, out int v) ? v : 0;
+            int idx = counters.TryGetValue(type, out int cv) ? cv : 0;
             counters[type] = idx + 1;
-            return $"{prefix}{idx}";
+            return $"{code}{idx}";
         }
 
         private static uint ReadBE32(byte[] data, int offset) => (uint)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
