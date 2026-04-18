@@ -274,7 +274,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Get all machines and their indicies
         /// </summary>
-        public Machine[] GetMachinesDB()
+        public IDictionary<long, Machine> GetMachinesDB()
             => ItemsDB.GetMachines();
 
         /// <summary>
@@ -282,6 +282,12 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public KeyValuePair<long, Source?> GetSourceDB(long sourceIndex)
             => ItemsDB.GetSource(sourceIndex);
+
+        /// <summary>
+        /// Get all sources and their indicies
+        /// </summary>
+        public IDictionary<long, Source> GetSourcesDB()
+            => ItemsDB.GetSources();
 
         /// <summary>
         /// Remove a key from the file dictionary if it exists
