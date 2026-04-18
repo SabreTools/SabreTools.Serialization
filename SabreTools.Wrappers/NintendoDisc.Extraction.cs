@@ -301,21 +301,25 @@ namespace SabreTools.Wrappers
                 }
                 else
                 {
-                    long discOffset = (long)fileOffRaw << offsetShift;
-                    if (discOffset > 0 && fileSize > 0)
-                    {
-                        byte[]? fileData = readFunc(discOffset, (int)Math.Min(fileSize, int.MaxValue));
-                             if (fileData != null)
-                            {
-                                string outPath = Path.Combine(currentDir, name);
-                                string? outDir = Path.GetDirectoryName(outPath);
-                                if (!string.IsNullOrEmpty(outDir))
-                                    Directory.CreateDirectory(outDir);
-                                File.WriteAllBytes(outPath, fileData);
-                            }
-                        }
+                    string outPath = Path.Combine(currentDir, name);
+                    string? outDir = Path.GetDirectoryName(outPath);
+                    if (!string.IsNullOrEmpty(outDir))
+                        Directory.CreateDirectory(outDir);
 
-                        i++;
+                    if (fileSize == 0)
+                    {
+                        // Zero-byte file — create empty
+                        File.WriteAllBytes(outPath, new byte[0]);
+                    }
+                    else
+                    {
+                        long discOffset = (long)fileOffRaw << offsetShift;
+                        byte[]? fileData = readFunc(discOffset, (int)Math.Min(fileSize, int.MaxValue));
+                        if (fileData != null)
+                            File.WriteAllBytes(outPath, fileData);
+                    }
+
+                    i++;
                 }
             }
 
