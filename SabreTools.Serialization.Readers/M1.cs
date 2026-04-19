@@ -696,7 +696,10 @@ namespace SabreTools.Serialization.Readers
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {
