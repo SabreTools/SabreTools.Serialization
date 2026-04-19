@@ -487,11 +487,11 @@ namespace SabreTools.Wrappers
             // byte 5 is an ASCII digit (disc number). Covers redump ISOs that lack magic words.
             if (magic.Length > 5
                 && IsNintendoDiscTitleType(magic[0])
-                && magic[1] >= 0x41 && magic[1] <= 0x5A   // A-Z
-                && magic[2] >= 0x30 && magic[2] <= 0x5A   // 0-9 or A-Z
-                && magic[3] >= 0x30 && magic[3] <= 0x5A   // 0-9 or A-Z
-                && magic[4] >= 0x30 && magic[4] <= 0x5A   // 0-9 or A-Z
-                && magic[5] >= 0x30 && magic[5] <= 0x39   // 0-9
+                && magic[1] >= 0x41 && magic[1] <= 0x5A                                                                                    // A-Z
+                && ((magic[2] >= 0x30 && magic[2] <= 0x39) || (magic[2] >= 0x41 && magic[2] <= 0x5A))     // 0-9 or A-Z
+                && ((magic[3] >= 0x30 && magic[3] <= 0x39) || (magic[3] >= 0x41 && magic[3] <= 0x5A))     // 0-9 or A-Z
+                && ((magic[4] >= 0x30 && magic[4] <= 0x39) || (magic[4] >= 0x41 && magic[4] <= 0x5A))     // 0-9 or A-Z
+                && magic[5] >= 0x30 && magic[5] <= 0x39                                                                                    // 0-9
                 && (extension.Equals("iso", StringComparison.OrdinalIgnoreCase)
                     || extension.Equals("gcm", StringComparison.OrdinalIgnoreCase)))
                 return WrapperType.NintendoDisc;

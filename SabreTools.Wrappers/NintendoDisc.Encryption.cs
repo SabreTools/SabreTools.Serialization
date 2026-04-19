@@ -7,6 +7,11 @@ namespace SabreTools.Wrappers
     {
         #region Wii Encryption / Decryption
 
+        // TODO: Replace hardcoded common keys with a caller-supplied key provider and validator.
+        // The intent is for consumers to inject keys (e.g. from a key file or secure store) rather
+        // than having them embedded here, so these constants can be removed once that API exists.
+        #region Common Keys
+
         /// <summary>
         /// Wii retail common key (index 0).
         /// Publicly known; used by Dolphin and other tools to decrypt title keys.
@@ -26,6 +31,8 @@ namespace SabreTools.Wrappers
             0x63, 0xB8, 0x2B, 0xB4, 0xF4, 0x61, 0x4E, 0x2E,
             0x13, 0xF2, 0xFE, 0xFB, 0xBA, 0x4C, 0x9B, 0x7E,
         };
+
+        #endregion
 
         /// <summary>
         /// Decrypt a Wii partition title key from the ticket data.

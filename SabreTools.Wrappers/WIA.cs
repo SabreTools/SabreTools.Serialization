@@ -511,6 +511,9 @@ namespace SabreTools.Wrappers
                 return 0;
 
             const int WiiBlockSize = 0x8000;
+            if (chunkSize == 0)
+                return 0;
+
             int blocksPerGroup = (int)(chunkSize / WiiBlockSize);
             long isoDataStart = (long)de.FirstSector * WiiBlockSize;
             long isoDataEnd = isoDataStart + ((long)de.NumberOfSectors * WiiBlockSize);

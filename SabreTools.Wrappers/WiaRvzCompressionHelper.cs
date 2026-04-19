@@ -140,7 +140,9 @@ namespace SabreTools.Wrappers
         {
             using var outMs = new MemoryStream();
             using (var bz2 = BZip2Stream.Create(outMs, CompressionMode.Compress, false, true))
+            {
                 bz2.Write(data, offset, length);
+            }
             return outMs.ToArray();
         }
 
@@ -158,7 +160,9 @@ namespace SabreTools.Wrappers
             int dictSize = GetDictSize(level);
             using var outMs = new MemoryStream();
             using (var lzma = LzmaStream.Create(new LzmaEncoderProperties(true, dictSize), isLzma2, outMs))
+            {
                 lzma.Write(data, offset, length);
+            }
             return outMs.ToArray();
         }
 
@@ -175,7 +179,9 @@ namespace SabreTools.Wrappers
         {
             using var outMs = new MemoryStream();
             using (var zstd = new ZStandardStream(outMs, CompressionMode.Compress))
+            {
                 zstd.Write(data, offset, length);
+            }
             return outMs.ToArray();
         }
 

@@ -23,8 +23,10 @@ namespace SabreTools.Wrappers
 
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
+                if (includeDebug)
+                    Console.Error.WriteLine(ex);
                 return false;
             }
         }
@@ -285,8 +287,11 @@ namespace SabreTools.Wrappers
                     continue;
                 }
 
-                // Sanitize name
+                // Sanitize name: replace path separators and reject/flatten dot-segments
                 name = name.Replace('/', '_').Replace('\\', '_');
+                if (name == "." || name == "..")
+                    name = "_";
+                name = name.TrimStart('.');
 
                 if (isDir)
                 {
