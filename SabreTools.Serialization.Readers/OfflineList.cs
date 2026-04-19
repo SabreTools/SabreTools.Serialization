@@ -1112,6 +1112,10 @@ namespace SabreTools.Serialization.Readers
             obj.Default = reader.GetAttribute("default").AsYesNo();
             obj.Auto = reader.GetAttribute("auto");
 
+            // Handle uncommon case of no find elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Find> finds = [];
 
             reader.Read();
