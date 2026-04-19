@@ -23,7 +23,10 @@ namespace SabreTools.Serialization.Writers
             // Create the file stream
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
 
-            SerializeHeader(fs, obj);
+            fs.Write(obj.ReservedArea, 0, obj.ReservedArea.Length);
+            SerializeVolumeDescriptor(fs, obj.VolumeDescriptor);
+            if (obj.LayoutDescriptor is not null)
+                SerializeLayoutDescriptor(fs, obj.LayoutDescriptor);
 
             // Loop over all directory descriptors in order of offset
             uint[] keys = new uint[obj.DirectoryDescriptors.Count];
@@ -74,30 +77,28 @@ namespace SabreTools.Serialization.Writers
             return true;
         }
 
-        public static void SerializeHeader(Stream stream, Volume obj)
+        public static void SerializeVolumeDescriptor(Stream stream, VolumeDescriptor obj)
         {
-            stream.Write(obj.ReservedArea, 0, obj.ReservedArea.Length);
+            stream.Write(obj.StartSignature, 0, obj.StartSignature.Length);
+            stream.WriteLittleEndian(obj.RootOffset);
+            stream.WriteLittleEndian(obj.RootSize);
+            stream.WriteLittleEndian(obj.MasteringTimestamp);
+            stream.WriteByte(obj.UnknownByte);
+            stream.Write(obj.Reserved, 0, obj.Reserved.Length);
+            stream.Write(obj.EndSignature, 0, obj.EndSignature.Length);
+        }
 
-            stream.Write(obj.VolumeDescriptor.StartSignature, 0, obj.VolumeDescriptor.StartSignature.Length);
-            stream.WriteLittleEndian(obj.VolumeDescriptor.RootOffset);
-            stream.WriteLittleEndian(obj.VolumeDescriptor.RootSize);
-            stream.WriteLittleEndian(obj.VolumeDescriptor.MasteringTimestamp);
-            stream.WriteByte(obj.VolumeDescriptor.UnknownByte);
-            stream.Write(obj.VolumeDescriptor.Reserved, 0, obj.VolumeDescriptor.Reserved.Length);
-            stream.Write(obj.VolumeDescriptor.EndSignature, 0, obj.VolumeDescriptor.EndSignature.Length);
-
-            if (obj.LayoutDescriptor is not null)
-            {
-                stream.Write(obj.LayoutDescriptor.Signature, 0, obj.LayoutDescriptor.Signature.Length);
-                stream.Write(obj.LayoutDescriptor.Unused8Bytes, 0, obj.LayoutDescriptor.Unused8Bytes.Length);
-                SerializeFourPartVersionType(stream, obj.LayoutDescriptor.XBLayoutVersion);
-                SerializeFourPartVersionType(stream, obj.LayoutDescriptor.XBPremasterVersion);
-                SerializeFourPartVersionType(stream, obj.LayoutDescriptor.XBGameDiscVersion);
-                SerializeFourPartVersionType(stream, obj.LayoutDescriptor.XBOther1Version);
-                SerializeFourPartVersionType(stream, obj.LayoutDescriptor.XBOther2Version);
-                SerializeFourPartVersionType(stream, obj.LayoutDescriptor.XBOther3Version);
-                stream.Write(obj.LayoutDescriptor.Reserved, 0, obj.LayoutDescriptor.Reserved.Length);
-            }
+        public static void SerializeLayoutDescriptor(Stream stream, LayoutDescriptor obj)
+        {
+            stream.Write(obj.Signature, 0, obj.Signature.Length);
+            stream.Write(obj.Unused8Bytes, 0, obj.Unused8Bytes.Length);
+            SerializeFourPartVersionType(stream, obj.XBLayoutVersion);
+            SerializeFourPartVersionType(stream, obj.XBPremasterVersion);
+            SerializeFourPartVersionType(stream, obj.XBGameDiscVersion);
+            SerializeFourPartVersionType(stream, obj.XBOther1Version);
+            SerializeFourPartVersionType(stream, obj.XBOther2Version);
+            SerializeFourPartVersionType(stream, obj.XBOther3Version);
+            stream.Write(obj.Reserved, 0, obj.Reserved.Length);
         }
 
         public static void SerializeFourPartVersionType(Stream stream, FourPartVersionType obj)

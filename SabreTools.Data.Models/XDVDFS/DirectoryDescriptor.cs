@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.XDVDFS
     /// Padded with 0xFF to be a multiple of 2048 bytes
     /// </summary>
     /// <see href="https://multimedia.cx/xdvdfs.html"/>
-    /// <see href="https://github.dev/Deterous/XboxKit/"/>
+    /// <see href="https://github.com/Deterous/XboxKit/"/>
     public class DirectoryDescriptor
     {
         /// <summary>

@@ -79,7 +79,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Certificate? certificate)
+        internal static void Print(StringBuilder builder, Certificate? certificate)
         {
             builder.AppendLine("  Certificate Information:");
             builder.AppendLine("  -------------------------");
