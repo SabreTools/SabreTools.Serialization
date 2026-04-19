@@ -74,6 +74,10 @@ namespace SabreTools.Serialization.Readers
             obj.Name = reader.GetAttribute("name");
             obj.Description = reader.GetAttribute("description");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Software> softwares = [];
 
             reader.Read();
@@ -133,6 +137,10 @@ namespace SabreTools.Serialization.Readers
             obj.Width = reader.GetAttribute("width").AsWidth();
             obj.Endianness = reader.GetAttribute("endianness").AsEndianness();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Rom> roms = [];
 
             reader.Read();
@@ -184,6 +192,10 @@ namespace SabreTools.Serialization.Readers
             obj.Name = reader.GetAttribute("name");
             obj.Tag = reader.GetAttribute("tag");
             obj.Mask = reader.GetAttribute("mask");
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             List<DipValue> dipValues = [];
 
@@ -269,6 +281,10 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Disk> disks = [];
 
             reader.Read();
@@ -349,6 +365,10 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Interface = reader.GetAttribute("interface");
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             List<Feature> features = [];
             List<DataArea> dataAreas = [];
@@ -468,6 +488,10 @@ namespace SabreTools.Serialization.Readers
             obj.Name = reader.GetAttribute("name");
             obj.CloneOf = reader.GetAttribute("cloneof");
             obj.Supported = reader.GetAttribute("supported")?.AsSupported();
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             List<Info> infos = [];
             List<SharedFeat> sharedFeats = [];

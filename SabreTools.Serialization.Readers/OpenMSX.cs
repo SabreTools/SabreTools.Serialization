@@ -72,6 +72,10 @@ namespace SabreTools.Serialization.Readers
 
             obj.Timestamp = reader.GetAttribute("timestamp");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Software> softwares = [];
 
             reader.Read();
@@ -119,6 +123,10 @@ namespace SabreTools.Serialization.Readers
         public Dump ParseDump(XmlTextReader reader)
         {
             var obj = new Dump();
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             reader.Read();
             while (!reader.EOF)
@@ -200,6 +208,10 @@ namespace SabreTools.Serialization.Readers
             else
                 return null;
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             reader.Read();
             while (!reader.EOF)
             {
@@ -259,6 +271,10 @@ namespace SabreTools.Serialization.Readers
         public Software ParseSoftware(XmlTextReader reader)
         {
             var obj = new Software();
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             List<Dump> dumps = [];
 

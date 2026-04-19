@@ -65,6 +65,10 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Files();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<File> files = [];
             while (reader.Read())
             {
@@ -104,6 +108,10 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Source = reader.GetAttribute("source");
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             reader.Read();
             while (!reader.EOF)

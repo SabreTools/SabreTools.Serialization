@@ -73,6 +73,10 @@ namespace SabreTools.Serialization.Readers
 
             obj.Version = reader.GetAttribute("version");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<GameBase> games = [];
             while (reader.Read())
             {
@@ -118,6 +122,10 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Default = reader.GetAttribute("default").AsYesNo();
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             while (reader.Read())
             {
@@ -225,6 +233,10 @@ namespace SabreTools.Serialization.Readers
             obj.Tag = reader.GetAttribute("tag");
             obj.Mask = reader.GetAttribute("mask");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<ConfLocation> confLocations = [];
             List<ConfSetting> confSettings = [];
 
@@ -302,6 +314,10 @@ namespace SabreTools.Serialization.Readers
             obj.Value = reader.GetAttribute("value");
             obj.Default = reader.GetAttribute("default").AsYesNo();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             while (reader.Read())
             {
                 // An ending element means exit
@@ -369,6 +385,10 @@ namespace SabreTools.Serialization.Readers
             obj.FixedImage = reader.GetAttribute("fixed_image");
             obj.Mandatory = reader.GetAttribute("mandatory").AsYesNo();
             obj.Interface = reader.GetAttribute("interface");
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             List<Extension> extensions = [];
 
@@ -452,6 +472,10 @@ namespace SabreTools.Serialization.Readers
             obj.Tag = reader.GetAttribute("tag");
             obj.Mask = reader.GetAttribute("mask");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<DipLocation> dipLocations = [];
             List<DipValue> dipValues = [];
 
@@ -512,6 +536,10 @@ namespace SabreTools.Serialization.Readers
             obj.Name = reader.GetAttribute("name");
             obj.Value = reader.GetAttribute("value");
             obj.Default = reader.GetAttribute("default").AsYesNo();
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             while (reader.Read())
             {
@@ -668,6 +696,10 @@ namespace SabreTools.Serialization.Readers
             obj.CloneOf = reader.GetAttribute("cloneof");
             obj.RomOf = reader.GetAttribute("romof");
             obj.SampleOf = reader.GetAttribute("sampleof");
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             List<BiosSet> biosSets = [];
             List<Rom> roms = [];
@@ -929,6 +961,10 @@ namespace SabreTools.Serialization.Readers
             obj.Buttons = NumberHelper.ConvertToInt64(reader.GetAttribute("buttons"));
             obj.Coins = NumberHelper.ConvertToInt64(reader.GetAttribute("coins"));
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Control> controls = [];
 
             while (reader.Read())
@@ -987,6 +1023,10 @@ namespace SabreTools.Serialization.Readers
             var obj = new Port();
 
             obj.Tag = reader.GetAttribute("tag");
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             List<Analog> analogs = [];
 
@@ -1086,6 +1126,10 @@ namespace SabreTools.Serialization.Readers
             var obj = new Slot();
 
             obj.Name = reader.GetAttribute("name");
+
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
 
             List<SlotOption> slotOptions = [];
 
