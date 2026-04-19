@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -9,6 +10,8 @@ namespace SabreTools.Serialization.Writers
         /// <inheritdoc/>
         public override Stream? SerializeStream(Data.Models.IRD.File? obj)
         {
+            #region Validation
+
             // If the data is invalid
             if (obj?.Magic is null)
                 return null;
@@ -50,79 +53,68 @@ namespace SabreTools.Serialization.Writers
             if (obj.Data2Key.Length != 16)
                 return null;
 
+            #endregion
+
             // Create the output stream
             var stream = new MemoryStream();
 
-            stream.Write(obj.Magic, 0, obj.Magic.Length);
-            stream.WriteByte(obj.Version);
+            stream.Write(obj.Magic);
+            stream.Write(obj.Version);
 
             byte[] titleId = Encoding.ASCII.GetBytes(obj.TitleID);
-            stream.Write(titleId, 0, titleId.Length);
+            stream.Write(titleId);
 
-            stream.WriteByte(obj.TitleLength);
+            stream.Write(obj.TitleLength);
             byte[] title = Encoding.ASCII.GetBytes(obj.Title);
-            stream.Write(title, 0, title.Length);
+            stream.Write(title);
 
             byte[] systemVersion = Encoding.ASCII.GetBytes(obj.SystemVersion);
-            stream.Write(systemVersion, 0, systemVersion.Length);
+            stream.Write(systemVersion);
 
             byte[] gameVersion = Encoding.ASCII.GetBytes(obj.GameVersion);
-            stream.Write(gameVersion, 0, gameVersion.Length);
+            stream.Write(gameVersion);
 
             byte[] appVersion = Encoding.ASCII.GetBytes(obj.AppVersion);
-            stream.Write(appVersion, 0, appVersion.Length);
+            stream.Write(appVersion);
 
             if (obj.Version == 7)
-            {
-                byte[] uid = BitConverter.GetBytes(obj.UID);
-                stream.Write(uid, 0, uid.Length);
-            }
+                stream.WriteLittleEndian(obj.UID);
 
-            byte[] headerLength = BitConverter.GetBytes(obj.HeaderLength);
-            stream.Write(headerLength, 0, headerLength.Length);
-            stream.Write(obj.Header, 0, obj.Header.Length);
+            stream.WriteLittleEndian(obj.HeaderLength);
+            stream.Write(obj.Header);
 
-            byte[] footerLength = BitConverter.GetBytes(obj.FooterLength);
-            stream.Write(footerLength, 0, footerLength.Length);
-            stream.Write(obj.Footer, 0, obj.Footer.Length);
+            stream.WriteLittleEndian(obj.FooterLength);
+            stream.Write(obj.Footer);
 
-            stream.WriteByte(obj.RegionCount);
+            stream.Write(obj.RegionCount);
             for (int i = 0; i < obj.RegionCount; i++)
             {
-                stream.Write(obj.RegionHashes[i], 0, obj.RegionHashes[i].Length);
+                stream.Write(obj.RegionHashes[i]);
             }
 
-            byte[] fileCount = BitConverter.GetBytes(obj.FileCount);
-            stream.Write(fileCount, 0, fileCount.Length);
+            stream.WriteLittleEndian(obj.FileCount);
             for (int i = 0; i < obj.FileCount; i++)
             {
-                byte[] fileKey = BitConverter.GetBytes(obj.FileKeys[i]);
-                stream.Write(fileKey, 0, fileKey.Length);
-                stream.Write(obj.FileHashes[i], 0, obj.FileHashes[i].Length);
+                stream.WriteLittleEndian(obj.FileKeys[i]);
+                stream.Write(obj.FileHashes[i]);
             }
 
-            byte[] extraConfig = BitConverter.GetBytes(obj.ExtraConfig);
-            stream.Write(extraConfig, 0, extraConfig.Length);
-            byte[] attachments = BitConverter.GetBytes(obj.Attachments);
-            stream.Write(attachments, 0, attachments.Length);
+            stream.WriteLittleEndian(obj.ExtraConfig);
+            stream.WriteLittleEndian(obj.Attachments);
 
             if (obj.Version >= 9)
-                stream.Write(obj.PIC, 0, obj.PIC.Length);
+                stream.Write(obj.PIC);
 
-            stream.Write(obj.Data1Key, 0, obj.Data1Key.Length);
-            stream.Write(obj.Data2Key, 0, obj.Data2Key.Length);
+            stream.Write(obj.Data1Key);
+            stream.Write(obj.Data2Key);
 
             if (obj.Version < 9)
-                stream.Write(obj.PIC, 0, obj.PIC.Length);
+                stream.Write(obj.PIC);
 
             if (obj.Version > 7)
-            {
-                byte[] uid = BitConverter.GetBytes(obj.UID);
-                stream.Write(uid, 0, uid.Length);
-            }
+                stream.WriteLittleEndian(obj.UID);
 
-            byte[] crc = BitConverter.GetBytes(obj.CRC);
-            stream.Write(crc, 0, crc.Length);
+            stream.WriteLittleEndian(obj.CRC);
 
             return stream;
         }

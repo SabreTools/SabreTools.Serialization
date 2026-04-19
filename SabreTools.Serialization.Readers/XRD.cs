@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.XRD;
 using SabreTools.IO.Extensions;
@@ -105,7 +104,7 @@ namespace SabreTools.Serialization.Readers
                 var vd = XDVDFS.ParseVolumeDescriptor(data);
                 if (vd is null)
                     return null;
-                
+
                 xrd.VolumeDescriptor = vd;
                 xrd.LayoutDescriptor = XDVDFS.ParseLayoutDescriptor(data);
 

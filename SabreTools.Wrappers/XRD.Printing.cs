@@ -61,10 +61,10 @@ namespace SabreTools.Wrappers
                     builder.AppendLine(Model.SecuritySectors[i], $"Security Sector {i}");
                 }
             }
-            
+
             if (Model.XboxCertificate is not null)
                 XboxExecutable.Print(builder, Model.XboxCertificate);
-            
+
             if (Model.Xbox360Certificate is not null)
                 XenonExecutable.Print(builder, Model.Xbox360Certificate);
 

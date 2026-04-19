@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Writers
             // Create the file stream
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
 
-            fs.Write(obj.ReservedArea, 0, obj.ReservedArea.Length);
+            fs.Write(obj.ReservedArea);
             SerializeVolumeDescriptor(fs, obj.VolumeDescriptor);
             if (obj.LayoutDescriptor is not null)
                 SerializeLayoutDescriptor(fs, obj.LayoutDescriptor);
@@ -79,26 +79,26 @@ namespace SabreTools.Serialization.Writers
 
         public static void SerializeVolumeDescriptor(Stream stream, VolumeDescriptor obj)
         {
-            stream.Write(obj.StartSignature, 0, obj.StartSignature.Length);
+            stream.Write(obj.StartSignature);
             stream.WriteLittleEndian(obj.RootOffset);
             stream.WriteLittleEndian(obj.RootSize);
             stream.WriteLittleEndian(obj.MasteringTimestamp);
-            stream.WriteByte(obj.UnknownByte);
-            stream.Write(obj.Reserved, 0, obj.Reserved.Length);
-            stream.Write(obj.EndSignature, 0, obj.EndSignature.Length);
+            stream.Write(obj.UnknownByte);
+            stream.Write(obj.Reserved);
+            stream.Write(obj.EndSignature);
         }
 
         public static void SerializeLayoutDescriptor(Stream stream, LayoutDescriptor obj)
         {
-            stream.Write(obj.Signature, 0, obj.Signature.Length);
-            stream.Write(obj.Unused8Bytes, 0, obj.Unused8Bytes.Length);
+            stream.Write(obj.Signature);
+            stream.Write(obj.Unused8Bytes);
             SerializeFourPartVersionType(stream, obj.XBLayoutVersion);
             SerializeFourPartVersionType(stream, obj.XBPremasterVersion);
             SerializeFourPartVersionType(stream, obj.XBGameDiscVersion);
             SerializeFourPartVersionType(stream, obj.XBOther1Version);
             SerializeFourPartVersionType(stream, obj.XBOther2Version);
             SerializeFourPartVersionType(stream, obj.XBOther3Version);
-            stream.Write(obj.Reserved, 0, obj.Reserved.Length);
+            stream.Write(obj.Reserved);
         }
 
         public static void SerializeFourPartVersionType(Stream stream, FourPartVersionType obj)
@@ -114,7 +114,7 @@ namespace SabreTools.Serialization.Writers
             foreach (var dr in obj.DirectoryRecords)
                 SerializeDirectoryRecord(stream, dr);
             if (obj.Padding is not null && obj.Padding.Length > 0)
-                stream.Write(obj.Padding, 0, obj.Padding.Length);
+                stream.Write(obj.Padding);
         }
 
         public static void SerializeDirectoryRecord(Stream stream, DirectoryRecord obj)
@@ -123,11 +123,11 @@ namespace SabreTools.Serialization.Writers
             stream.WriteLittleEndian(obj.RightChildOffset);
             stream.WriteLittleEndian(obj.ExtentOffset);
             stream.WriteLittleEndian(obj.ExtentSize);
-            stream.WriteByte((byte)obj.FileFlags);
-            stream.WriteByte(obj.FilenameLength);
-            stream.Write(obj.Filename, 0, obj.Filename.Length);
+            stream.Write((byte)obj.FileFlags);
+            stream.Write(obj.FilenameLength);
+            stream.Write(obj.Filename);
             if (obj.Padding is not null && obj.Padding.Length > 0)
-                stream.Write(obj.Padding, 0, obj.Padding.Length);
+                stream.Write(obj.Padding);
         }
     }
 }

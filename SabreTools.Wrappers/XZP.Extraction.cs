@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -76,7 +77,7 @@ namespace SabreTools.Wrappers
             {
                 // Open the output file for writing
                 using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                fs.Write(data, 0, data.Length);
+                fs.Write(data);
                 fs.Flush();
             }
             catch (Exception ex)

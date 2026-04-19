@@ -237,7 +237,7 @@ namespace SabreTools.Data.Models.XRD
         public int DirectoryCount { get; set; }
 
         /// <summary>
-        /// List of XISO descriptors and their sector offsets and sizes 
+        /// List of XISO descriptors and their sector offsets and sizes
         /// The root directory descriptor is not guaranteed to be the first
         /// </summary>
         public DirectoryEntry[] DirectoryInfo { get; set; } = [];
