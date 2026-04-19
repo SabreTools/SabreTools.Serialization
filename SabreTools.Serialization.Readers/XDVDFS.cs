@@ -161,9 +161,9 @@ namespace SabreTools.Serialization.Readers
                     if (obj.ContainsKey(dr.ExtentOffset))
                         continue;
 
-                // Ensure offset is valid
-                if ((((long)offset) * Constants.SectorSize) + size > data.Length)
-                    return null;
+                    // Ensure offset is valid
+                    if ((((long)offset) * Constants.SectorSize) + size > data.Length)
+                        return null;
 
                     // Get all descriptors from child
                     var descriptors = ParseDirectoryDescriptors(data, initialOffset, dr.ExtentOffset, dr.ExtentSize);
