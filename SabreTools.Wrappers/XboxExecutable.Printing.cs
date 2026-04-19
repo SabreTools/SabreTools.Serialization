@@ -29,7 +29,7 @@ namespace SabreTools.Wrappers
             Print(builder, Model.XAPILibraryVersion, "XAPI ", string.Empty, 2);
         }
 
-        private static void Print(StringBuilder builder, Certificate? certificate)
+        internal static void Print(StringBuilder builder, Certificate? certificate)
         {
             builder.AppendLine("  Certificate Information:");
             builder.AppendLine("  -------------------------");

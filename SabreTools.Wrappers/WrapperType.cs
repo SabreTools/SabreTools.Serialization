@@ -304,6 +304,11 @@ namespace SabreTools.Wrappers
         XenonExecutable,
 
         /// <summary>
+        /// Xbox Rebuild/Recovery/Redump Data
+        /// </summary>
+        XRD,
+
+        /// <summary>
         /// xz archive
         /// </summary>
         XZ,

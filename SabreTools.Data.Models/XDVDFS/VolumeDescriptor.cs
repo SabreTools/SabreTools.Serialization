@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.XDVDFS
     /// Present on XGD1, XGD2, and XGD3 discs
     /// </summary>
     /// <see href="https://multimedia.cx/xdvdfs.html"/>
-    /// <see href="https://github.dev/Deterous/XboxKit/"/>
+    /// <see href="https://github.com/Deterous/XboxKit/"/>
     public class VolumeDescriptor
     {
         /// <summary>

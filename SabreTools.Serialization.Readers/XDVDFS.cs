@@ -162,15 +162,16 @@ namespace SabreTools.Serialization.Readers
                         continue;
 
                     // Ensure offset is valid
-                    if ((((long)offset) * Constants.SectorSize) + size > data.Length)
+                    if ((((long)dr.ExtentOffset) * Constants.SectorSize) + size > data.Length)
                         return null;
+
+                    // Seek to child descriptor
+                    data.SeekIfPossible(initialOffset + (((long)dr.ExtentOffset) * Constants.SectorSize), SeekOrigin.Begin);
 
                     // Get all descriptors from child
                     var descriptors = ParseDirectoryDescriptors(data, initialOffset, dr.ExtentOffset, dr.ExtentSize);
                     if (descriptors is null)
                         continue;
-
-                    data.SeekIfPossible(initialOffset + (((long)offset) * Constants.SectorSize), SeekOrigin.Begin);
 
                     // Merge dictionaries
                     foreach (var kvp in descriptors)
