@@ -1,6 +1,7 @@
 using System;
-using System.IO;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+using System.IO;
+using SabreTools.IO.Extensions;
 using SharpCompress.Compressors;
 using SharpCompress.Compressors.BZip2;
 using SharpCompress.Compressors.LZMA;
@@ -36,7 +37,7 @@ namespace SabreTools.Wrappers
             DictSizes[Math.Max(1, Math.Min(9, level))];
 
         // Returns the raw LZMA2 dict-size property byte for a given dictionary size.
-        private static uint Lzma2DictSize(byte p) => (uint)((2 | (p & 1)) << (p / 2 + 11));
+        private static uint Lzma2DictSize(byte p) => (uint)((2 | (p & 1)) << ((p / 2) + 11));
 
         private static byte EncodeLzma2DictSize(uint d)
         {
@@ -61,7 +62,7 @@ namespace SabreTools.Wrappers
             {
                 case WiaRvzCompressionType.LZMA:
                     propData[0] = 0x5D; // propByte for default pb=2,lp=0,lc=3
-                    propData[1] = (byte)(dictSize);
+                    propData[1] = (byte)dictSize;
                     propData[2] = (byte)(dictSize >> 8);
                     propData[3] = (byte)(dictSize >> 16);
                     propData[4] = (byte)(dictSize >> 24);
@@ -148,7 +149,7 @@ namespace SabreTools.Wrappers
             using var inMs = new MemoryStream(data, offset, length);
             using var bz2 = BZip2Stream.Create(inMs, CompressionMode.Decompress, false, false);
             using var outMs = new MemoryStream();
-            bz2.CopyTo(outMs);
+            bz2.BlockCopy(outMs);
             return outMs.ToArray();
         }
 
@@ -166,7 +167,7 @@ namespace SabreTools.Wrappers
             using var inMs = new MemoryStream(data, offset, length);
             using var lzma = LzmaStream.Create(props, inMs, length, -1, null, isLzma2, false);
             using var outMs = new MemoryStream();
-            lzma.CopyTo(outMs);
+            lzma.BlockCopy(outMs);
             return outMs.ToArray();
         }
 
@@ -183,7 +184,7 @@ namespace SabreTools.Wrappers
             using var inMs = new MemoryStream(data, offset, length);
             using var zstd = new ZStandardStream(inMs);
             using var outMs = new MemoryStream();
-            zstd.CopyTo(outMs);
+            zstd.BlockCopy(outMs);
             return outMs.ToArray();
         }
 

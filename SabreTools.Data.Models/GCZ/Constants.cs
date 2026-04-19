@@ -18,6 +18,6 @@ namespace SabreTools.Data.Models.GCZ
         /// Top bit of a block-pointer value: when CLEAR the block is zlib/deflate compressed;
         /// when SET the block is stored uncompressed.
         /// </summary>
-        public const ulong UncompressedFlag = 0x8000000000000000UL;
+        public const ulong UncompressedFlag = 0x8000000000000000;
     }
 }

@@ -2,14 +2,19 @@ namespace SabreTools.Data.Models.NintendoDisc
 {
     public static class Constants
     {
-        // Disc identification magic values
+        #region Disc identification magic values
+
         /// <summary>Magic word present at offset 0x01C on GameCube discs</summary>
         public const uint GCMagicWord = 0xC2339F3D;
 
         /// <summary>Magic word present at offset 0x018 on Wii discs</summary>
         public const uint WiiMagicWord = 0x5D1C9EA3;
 
-        // Disc header layout (offsets within the 0x440-byte boot block).
+        #endregion
+
+        #region Disc header layout
+
+        // Offsets within the 0x440-byte boot block.
         // Layout confirmed against Dolphin source (VolumeDisc.cpp / DiscUtils.h):
         //   0x000–0x003  Title code (4 chars, e.g. "GAFE")
         //   0x004–0x005  Maker code (2 chars, e.g. "01") — Dolphin Read(0x4, 2)
@@ -45,23 +50,36 @@ namespace SabreTools.Data.Models.NintendoDisc
         public const int FstSizeField = 0x428;
         public const int DiscHeaderSize = 0x440;
 
-        // BI2 data
+        #endregion
+
+        #region BI2 data
+
         public const int Bi2Address = 0x000440;
         public const int Bi2Size = 0x2000;
 
-        // Apploader
+        #endregion
+
+        #region Apploader
+
         public const int ApploaderAddress = 0x002440;
         public const int ApploaderCodeSizeOffset = 0x14;
         public const int ApploaderTrailerSizeOffset = 0x18;
         public const int ApploaderHeaderSize = 0x20;
 
-        // Wii-specific disc layout
+        #endregion
+
+        #region Wii-specific disc layout
+
         public const int WiiPartitionTableAddress = 0x40000;
         public const int WiiPartitionGroupCount = 4;
         public const int WiiRegionDataAddress = 0x04E000;
         public const int WiiRegionDataSize = 0x20;
 
-        // Wii partition header fields (relative to partition start)
+        #endregion
+
+        #region Wii partition header fields
+
+        // Offsets relative to partition start
         public const int WiiTicketSize = 0x2A4;
         public const int WiiTmdSizeAddress = 0x2A4;
         public const int WiiTmdOffsetAddress = 0x2A8;
@@ -71,7 +89,10 @@ namespace SabreTools.Data.Models.NintendoDisc
         public const int WiiH3Size = 0x18000;
         public const int WiiDataOffsetAddress = 0x2B8;
 
-        // Wii block / group structure
+        #endregion
+
+        #region Wii block / group structure
+
         public const int WiiBlockSize = 0x8000;
         public const int WiiBlockHeaderSize = 0x0400;
         public const int WiiBlockDataSize = 0x7C00;
@@ -79,12 +100,21 @@ namespace SabreTools.Data.Models.NintendoDisc
         public const int WiiGroupSize = WiiBlocksPerGroup * WiiBlockSize;
         public const int WiiGroupDataSize = WiiBlocksPerGroup * WiiBlockDataSize;
 
-        // DVD sector size
+        #endregion
+
+        #region DVD sector size
+
         public const int DvdSectorSize = 0x800;
 
-        // Wii ticket fields (relative to ticket start)
+        #endregion
+
+        #region Wii ticket fields
+
+        // Offsets relative to ticket start
         public const int TicketEncryptedTitleKeyOffset = 0x1BF;
         public const int TicketTitleIdOffset = 0x1DC;
         public const int TicketCommonKeyIndexOffset = 0x1F1;
+
+        #endregion
     }
 }

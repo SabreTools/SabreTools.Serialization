@@ -15,7 +15,7 @@ namespace SabreTools.Data.Models.NintendoDisc
         /// <summary>
         /// 2-character ASCII maker / publisher code (e.g. "01")
         /// </summary>
-        /// <remarks>2 bytes at offset 0x006</remarks>
+        /// <remarks>Derived from GameId bytes at offset 0x004–0x005; not a separate on-disc field</remarks>
         public string MakerCode { get; set; } = string.Empty;
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace SabreTools.Data.Models.NintendoDisc
         public uint WiiMagic { get; set; }
 
         /// <summary>
-        /// GameCube magic word at offset 0x01C (0xC23D3C1F for GameCube discs)
+        /// GameCube magic word at offset 0x01C (0xC2339F3D for GameCube discs)
         /// </summary>
         public uint GCMagic { get; set; }
 

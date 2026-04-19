@@ -479,7 +479,7 @@ namespace SabreTools.Wrappers
                 return WrapperType.NintendoDisc;
 
             // GameCube disc magic at offset 0x01C (0xC2339F3D stored big-endian on disc)
-            if (magic.Length > 0x1F && magic[0x1C] == 0xC2 && magic[0x1D] == 0x3D && magic[0x1E] == 0x3C && magic[0x1F] == 0x1F)
+            if (magic.Length > 0x1F && magic[0x1C] == 0xC2 && magic[0x1D] == 0x33 && magic[0x1E] == 0x9F && magic[0x1F] == 0x3D)
                 return WrapperType.NintendoDisc;
 
             // GameCube/Wii disc by GameId prefix: first byte is a known title type code,

@@ -227,7 +227,7 @@ namespace SabreTools.Wrappers
                         var dk = new WiaDedupKey2(0, gi.BytesRead);
                         if (!rawDedupMap.TryGetValue(dk, out var ze))
                         {
-                            ze = new WiaRvzGroupEntry(SwapBE((uint)(bytesWritten >> 2)), 0, 0);
+                            ze = new WiaRvzGroupEntry((uint)(bytesWritten >> 2), 0, 0);
                             rawDedupMap[dk] = ze;
                         }
 
@@ -240,7 +240,7 @@ namespace SabreTools.Wrappers
                             isRvz, compressionType, compressionLevel, propData, propSize);
                         PadTo4Wia(dest, ref bytesWritten);
 
-                        var entry = new WiaRvzGroupEntry(SwapBE(groupOff), SwapBE(storedSz), SwapBE(gi.RvzPackedSize));
+                        var entry = new WiaRvzGroupEntry(groupOff, storedSz, gi.RvzPackedSize);
                         groupEntries[idx] = entry;
                         if (gi.IsAllSame && gi.SameByte != 0)
                             rawDedupMap[new WiaDedupKey2(gi.SameByte, gi.BytesRead)] = entry;
@@ -257,10 +257,10 @@ namespace SabreTools.Wrappers
             ulong rawEntriesOffset = (ulong)tablePos;
             var rawEntry = new WiaRawDataEntry
             {
-                DataOffset     = SwapBE(WiaConst.DiscHeaderStoredSize),
-                DataSize       = SwapBE((ulong)rawDataSize),
+                DataOffset     = WiaConst.DiscHeaderStoredSize,
+                DataSize       = (ulong)rawDataSize,
                 GroupIndex     = 0,
-                NumberOfGroups = SwapBE(numGroups),
+                NumberOfGroups = numGroups,
             };
             byte[] rawEntryBytes    = SerializeRawDataEntry(rawEntry);
             byte[] rawEntryWritten  = CompressTableDataWia(rawEntryBytes, compressionType, compressionLevel, propData, propSize);
@@ -583,8 +583,8 @@ namespace SabreTools.Wrappers
                     {
                         lastValidOff = item.DedupResult.Offset;
                         groupEntries.Add(new WiaRvzGroupEntry(
-                            SwapBE(item.DedupResult.Offset),
-                            SwapBE(item.DedupResult.DataSize),
+                            item.DedupResult.Offset,
+                            item.DedupResult.DataSize,
                             0));
                         currentGrpIdx++;
                         continue;
@@ -603,13 +603,13 @@ namespace SabreTools.Wrappers
                                 wiaZeroDedup[partKeyHash] = firstOff;
                             }
 
-                            groupEntries.Add(new WiaRvzGroupEntry(SwapBE(firstOff), 0, 0));
+                            groupEntries.Add(new WiaRvzGroupEntry(firstOff, 0, 0));
                         }
                         else if (pw.IsDecDedupHit)
                         {
                             groupEntries.Add(new WiaRvzGroupEntry(
-                                SwapBE(pw.DecDedupOffset),
-                                SwapBE(pw.DecDedupDataSize),
+                                pw.DecDedupOffset,
+                                pw.DecDedupDataSize,
                                 0));
                         }
                         else
@@ -619,7 +619,7 @@ namespace SabreTools.Wrappers
                             uint storedSz  = WriteWiiChunkData(dest, ref bytesWritten, pw, isRvz, compressionType);
 
                             groupEntries.Add(new WiaRvzGroupEntry(
-                                SwapBE(groupOff), SwapBE(storedSz), SwapBE(pw.RvzPackedSize)));
+                                groupOff, storedSz, pw.RvzPackedSize));
 
                             if (item.EncAllSame && c == 0)
                                 dedupMap[item.DedupKey] = new WiaDedup2(groupOff, storedSz);
@@ -714,7 +714,7 @@ namespace SabreTools.Wrappers
 
                     if (sameByte == 0)
                     {
-                        var ze = new WiaRvzGroupEntry(SwapBE((uint)(bytesWritten >> 2)), 0, 0);
+                        var ze = new WiaRvzGroupEntry((uint)(bytesWritten >> 2), 0, 0);
                         rawDedupMap[dk] = ze;
                         groupEntries.Add(ze);
                         currentGrpIdx++;
@@ -781,7 +781,7 @@ namespace SabreTools.Wrappers
 
                 PadTo4Wia(dest, ref bytesWritten);
 
-                var entry = new WiaRvzGroupEntry(SwapBE(groupOff), SwapBE(storedSz), SwapBE(rvzPackedSize));
+                var entry = new WiaRvzGroupEntry(groupOff, storedSz, rvzPackedSize);
                 groupEntries.Add(entry);
                 if (isAllSame && sameByte != 0)
                     rawDedupMap[new WiaDedupKey2(sameByte, toRead)] = entry;
@@ -1024,7 +1024,7 @@ namespace SabreTools.Wrappers
 
         private static void WriteGroupEntryWia(Stream s, WiaRvzGroupEntry e, bool isRvz)
         {
-            WriteBE32Wia(s, e.DataOffset >> 2);
+            WriteBE32Wia(s, e.DataOffset);
             WriteBE32Wia(s, e.DataSize);
             if (isRvz) WriteBE32Wia(s, e.RvzPackedSize);
         }
@@ -1040,14 +1040,14 @@ namespace SabreTools.Wrappers
                 dest.Write(p.TitleKey, 0, 16);
 
                 // DataEntry0: all of the partition
-                WriteBE32Wia(ms, SwapBE((uint)(p.DataStart / NdConstants.WiiBlockSize)));
-                WriteBE32Wia(ms, SwapBE((uint)(p.DataSize / NdConstants.WiiBlockSize)));
-                WriteBE32Wia(ms, SwapBE(p.FirstGroupIndex));
-                WriteBE32Wia(ms, SwapBE(p.NumberOfGroups));
-                WriteBE32Wia(dest, SwapBE((uint)(p.DataStart / NdConstants.WiiBlockSize)));
-                WriteBE32Wia(dest, SwapBE((uint)(p.DataSize / NdConstants.WiiBlockSize)));
-                WriteBE32Wia(dest, SwapBE(p.FirstGroupIndex));
-                WriteBE32Wia(dest, SwapBE(p.NumberOfGroups));
+                WriteBE32Wia(ms, (uint)(p.DataStart / NdConstants.WiiBlockSize));
+                WriteBE32Wia(ms, (uint)(p.DataSize / NdConstants.WiiBlockSize));
+                WriteBE32Wia(ms, p.FirstGroupIndex);
+                WriteBE32Wia(ms, p.NumberOfGroups);
+                WriteBE32Wia(dest, (uint)(p.DataStart / NdConstants.WiiBlockSize));
+                WriteBE32Wia(dest, (uint)(p.DataSize / NdConstants.WiiBlockSize));
+                WriteBE32Wia(dest, p.FirstGroupIndex);
+                WriteBE32Wia(dest, p.NumberOfGroups);
 
                 // DataEntry1: zeros
                 byte[] zeroPDE = new byte[WiaConst.PartitionDataEntrySize];
@@ -1065,10 +1065,10 @@ namespace SabreTools.Wrappers
             {
                 var e = new WiaRawDataEntry
                 {
-                    DataOffset     = SwapBE(r.Offset),
-                    DataSize       = SwapBE(r.Size),
-                    GroupIndex     = SwapBE(r.FirstGroupIndex),
-                    NumberOfGroups = SwapBE(r.NumberOfGroups),
+                    DataOffset     = r.Offset,
+                    DataSize       = r.Size,
+                    GroupIndex     = r.FirstGroupIndex,
+                    NumberOfGroups = r.NumberOfGroups,
                 };
                 ms.Write(SerializeRawDataEntry(e), 0, WiaConst.RawDataEntrySize);
             }
@@ -1153,12 +1153,12 @@ namespace SabreTools.Wrappers
             var header1 = new WiaHeader1
             {
                 Magic             = magic,
-                Version           = SwapBE(ver),
-                VersionCompatible = SwapBE(verC),
-                Header2Size       = SwapBE(WiaConst.Header2Size),
+                Version           = ver,
+                VersionCompatible = verC,
+                Header2Size       = WiaConst.Header2Size,
                 Header2Hash       = h2Hash,
-                IsoFileSize       = SwapBE((ulong)isoSize),
-                WiaFileSize       = SwapBE((ulong)fileSize),
+                IsoFileSize       = (ulong)isoSize,
+                WiaFileSize       = (ulong)fileSize,
                 Header1Hash       = new byte[20],
             };
 
@@ -1329,8 +1329,6 @@ namespace SabreTools.Wrappers
         private static long AlignWia(long value, long align) => (value + align - 1) / align * align;
 
         private static uint SwapBE(uint v) => (v << 24) | ((v << 8) & 0x00FF0000u) | ((v >> 8) & 0x0000FF00u) | (v >> 24);
-
-        private static ulong SwapBE(ulong v) => ((ulong)SwapBE((uint)v) << 32) | SwapBE((uint)(v >> 32));
 
         private static uint ReadBE32Wia(byte[] d, int o) => (uint)((d[o] << 24) | (d[o + 1] << 16) | (d[o + 2] << 8) | d[o + 3]);
 

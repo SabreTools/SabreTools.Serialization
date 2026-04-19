@@ -6,10 +6,10 @@ using SabreTools.Numerics.Extensions;
 #pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
-    public class WIA : BaseBinaryReader<Archive>
+    public class WIA : BaseBinaryReader<DiscImage>
     {
         /// <inheritdoc/>
-        public override Archive? Deserialize(Stream? data)
+        public override DiscImage? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data is null || !data.CanRead)
@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Readers
             {
                 long initialOffset = data.Position;
 
-                var archive = new Archive();
+                var archive = new DiscImage();
 
                 // Parse Header1
                 archive.Header1 = ParseHeader1(data);

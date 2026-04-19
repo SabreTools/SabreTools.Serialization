@@ -6,10 +6,10 @@ using SabreTools.Numerics.Extensions;
 #pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
-    public class GCZ : BaseBinaryReader<Archive>
+    public class GCZ : BaseBinaryReader<DiscImage>
     {
         /// <inheritdoc/>
-        public override Archive? Deserialize(Stream? data)
+        public override DiscImage? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data is null || !data.CanRead)
@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Readers
             {
                 long initialOffset = data.Position;
 
-                var archive = new Archive();
+                var archive = new DiscImage();
 
                 // Parse the header
                 archive.Header = ParseGczHeader(data);
@@ -51,7 +51,7 @@ namespace SabreTools.Serialization.Readers
                     archive.BlockHashes[i] = System.BitConverter.ToUInt32(hashBuf, i * 4);
 
                 // Compressed data begins immediately after the tables
-                archive.DataOffset = (initialOffset + Constants.HeaderSize)
+                archive.DataOffset = initialOffset + Constants.HeaderSize
                     + ((long)numBlocks * 8)
                     + ((long)numBlocks * 4);
 

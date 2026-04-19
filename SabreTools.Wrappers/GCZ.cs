@@ -7,7 +7,7 @@ using System.IO.Compression;
 
 namespace SabreTools.Wrappers
 {
-    public partial class GCZ : WrapperBase<Archive>
+    public partial class GCZ : WrapperBase<DiscImage>
     {
         #region Descriptive Properties
 
@@ -18,7 +18,7 @@ namespace SabreTools.Wrappers
 
         #region Extension Properties
 
-        /// <inheritdoc cref="Archive.Header"/>
+        /// <inheritdoc cref="DiscImage.Header"/>
         public GczHeader Header => Model.Header;
 
         /// <summary>
@@ -69,22 +69,22 @@ namespace SabreTools.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public GCZ(Archive model, byte[] data) : base(model, data) { }
+        public GCZ(DiscImage model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public GCZ(Archive model, byte[] data, int offset) : base(model, data, offset) { }
+        public GCZ(DiscImage model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public GCZ(Archive model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public GCZ(DiscImage model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public GCZ(Archive model, Stream data) : base(model, data) { }
+        public GCZ(DiscImage model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public GCZ(Archive model, Stream data, long offset) : base(model, data, offset) { }
+        public GCZ(DiscImage model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public GCZ(Archive model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public GCZ(DiscImage model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

@@ -29,9 +29,7 @@ namespace SabreTools.Wrappers
             }
         }
 
-        // -----------------------------------------------------------------------
-        // GameCube extraction
-        // -----------------------------------------------------------------------
+        #region GameCube extraction
 
         private bool ExtractGameCube(string dest)
         {
@@ -79,9 +77,9 @@ namespace SabreTools.Wrappers
             return true;
         }
 
-        // -----------------------------------------------------------------------
-        // Wii extraction
-        // -----------------------------------------------------------------------
+        #endregion
+
+        #region Wii extraction
 
         private bool ExtractWii(string dest)
         {
@@ -236,9 +234,9 @@ namespace SabreTools.Wrappers
             }
         }
 
-        // -----------------------------------------------------------------------
-        // FST extraction
-        // -----------------------------------------------------------------------
+        #endregion
+
+        #region FST extraction
 
         private void ExtractFstFiles(byte[] fstData, int offsetShift, string filesDir,
             Func<long, int, byte[]?> readFunc)
@@ -339,9 +337,9 @@ namespace SabreTools.Wrappers
             return System.Text.Encoding.ASCII.GetString(fstData, start, end - start);
         }
 
-        // -----------------------------------------------------------------------
-        // Apploader helpers
-        // -----------------------------------------------------------------------
+        #endregion
+
+        #region Apploader helpers
 
         private void WriteApploader(string sysDir)
         {
@@ -383,9 +381,9 @@ namespace SabreTools.Wrappers
                 File.WriteAllBytes(Path.Combine(sysDir, "apploader.img"), apploader);
         }
 
-        // -----------------------------------------------------------------------
-        // DOL size calculation
-        // -----------------------------------------------------------------------
+        #endregion
+
+        #region DOL size calculation
 
         private static int GetDolSize(byte[] dolHeader)
         {
@@ -414,9 +412,9 @@ namespace SabreTools.Wrappers
             return maxEnd;
         }
 
-        // -----------------------------------------------------------------------
-        // Wii partition block decryption helpers
-        // -----------------------------------------------------------------------
+        #endregion
+
+        #region Wii partition block decryption helpers
 
         /// <summary>
         /// Reads <paramref name="length"/> bytes at <paramref name="partitionDataOffset"/> within
@@ -463,9 +461,9 @@ namespace SabreTools.Wrappers
             return produced == length ? result : null;
         }
 
-        // -----------------------------------------------------------------------
-        // Misc helpers
-        // -----------------------------------------------------------------------
+        #endregion
+
+        #region Misc helpers
 
         private void WriteRange(long offset, int length, string filePath)
         {
@@ -524,6 +522,8 @@ namespace SabreTools.Wrappers
         }
 
         private static uint ReadBE32(byte[] data, int offset) => (uint)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
+
+        #endregion
     }
 }
 

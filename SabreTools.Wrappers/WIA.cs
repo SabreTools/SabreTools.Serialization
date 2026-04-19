@@ -10,7 +10,7 @@ using WiaReader = SabreTools.Serialization.Readers.WIA;
 
 namespace SabreTools.Wrappers
 {
-    public partial class WIA : WrapperBase<Archive>
+    public partial class WIA : WrapperBase<DiscImage>
     {
         #region Descriptive Properties
 
@@ -21,19 +21,19 @@ namespace SabreTools.Wrappers
 
         #region Extension Properties
 
-        /// <inheritdoc cref="Archive.Header1"/>
+        /// <inheritdoc cref="DiscImage.Header1"/>
         public WiaHeader1 Header1 => Model.Header1;
 
-        /// <inheritdoc cref="Archive.Header2"/>
+        /// <inheritdoc cref="DiscImage.Header2"/>
         public WiaHeader2 Header2 => Model.Header2;
 
-        /// <inheritdoc cref="Archive.IsRvz"/>
+        /// <inheritdoc cref="DiscImage.IsRvz"/>
         public bool IsRvz => Model.IsRvz;
 
-        /// <inheritdoc cref="Archive.PartitionEntries"/>
+        /// <inheritdoc cref="DiscImage.PartitionEntries"/>
         public PartitionEntry[]? PartitionEntries => Model.PartitionEntries;
 
-        /// <inheritdoc cref="Archive.RawDataEntries"/>
+        /// <inheritdoc cref="DiscImage.RawDataEntries"/>
         public RawDataEntry[] RawDataEntries => Model.RawDataEntries;
 
         /// <summary>
@@ -66,22 +66,22 @@ namespace SabreTools.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public WIA(Archive model, byte[] data) : base(model, data) { }
+        public WIA(DiscImage model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public WIA(Archive model, byte[] data, int offset) : base(model, data, offset) { }
+        public WIA(DiscImage model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public WIA(Archive model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public WIA(DiscImage model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public WIA(Archive model, Stream data) : base(model, data) { }
+        public WIA(DiscImage model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public WIA(Archive model, Stream data, long offset) : base(model, data, offset) { }
+        public WIA(DiscImage model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public WIA(Archive model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public WIA(DiscImage model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 
@@ -144,7 +144,7 @@ namespace SabreTools.Wrappers
         /// stream, decompresses them using the algorithm specified in Header2, and replaces the
         /// (garbage) values that the reader left in the model.
         /// </summary>
-        private static void DecompressTables(Archive model, Stream data, long baseOffset)
+        private static void DecompressTables(DiscImage model, Stream data, long baseOffset)
         {
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             var comp = model.Header2.CompressionType;
@@ -208,6 +208,7 @@ namespace SabreTools.Wrappers
 #endif
         }
 
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
         /// <summary>Parses raw data entries from a plain (already decompressed) byte array.</summary>
         private static RawDataEntry[] ParseRawDataEntries(byte[] plain, int count)
         {
@@ -258,7 +259,9 @@ namespace SabreTools.Wrappers
 
             return entries;
         }
+#endif
 
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
         private static ulong ReadUInt64BE(byte[] b, int o)
         {
             return ((ulong)b[o] << 56) | ((ulong)b[o + 1] << 48) | ((ulong)b[o + 2] << 40) | ((ulong)b[o + 3] << 32)
@@ -269,6 +272,7 @@ namespace SabreTools.Wrappers
         {
             return ((uint)b[o] << 24) | ((uint)b[o + 1] << 16) | ((uint)b[o + 2] << 8) | b[o + 3];
         }
+#endif
 
         #endregion
 

@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.GCZ
     /// Contains header metadata and block lookup tables.
     /// Actual compressed block data is accessed via the source stream.
     /// </summary>
-    public class Archive
+    public class DiscImage
     {
         /// <summary>
         /// GCZ file header
@@ -34,6 +34,7 @@ namespace SabreTools.Data.Models.GCZ
         /// Byte offset within the GCZ file where the compressed block data begins.
         /// Computed as: <c>HeaderSize + (NumBlocks * 8) + (NumBlocks * 4)</c>.
         /// </summary>
+        /// <remarks>Not parsed from stream; computed during deserialization.</remarks>
         public long DataOffset { get; set; }
     }
 }

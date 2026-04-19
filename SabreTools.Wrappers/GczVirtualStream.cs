@@ -28,13 +28,24 @@ namespace SabreTools.Wrappers
         public override long Position
         {
             get => _position;
-            set => _position = value;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value));
+                _position = value;
+            }
         }
 
         public override int Read(byte[] buffer, int offset, int count)
         {
             if (buffer is null)
                 throw new ArgumentNullException(nameof(buffer));
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
+            if (offset + count > buffer.Length)
+                throw new ArgumentException("offset + count exceeds buffer length");
 
             long remaining = Length - _position;
             if (remaining <= 0 || count <= 0)
@@ -88,6 +99,9 @@ namespace SabreTools.Wrappers
                 case SeekOrigin.End:     newPos = Length + offset; break;
                 default: throw new ArgumentOutOfRangeException(nameof(origin));
             }
+
+            if (newPos < 0)
+                throw new IOException("Seek position cannot be negative.");
 
             _position = newPos;
             return _position;

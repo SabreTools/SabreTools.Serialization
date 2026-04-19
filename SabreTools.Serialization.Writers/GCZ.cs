@@ -1,19 +1,18 @@
 using System.IO;
 using SabreTools.Data.Models.GCZ;
-using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
     // TODO: Full round-trip write (including compressed block data) requires a source
     // IBlobReader. This implementation serializes only the structural metadata
     // (header + block pointer table + block hash table) to a stream or file.
-    public class GCZ : IFileWriter<Archive>
+    public class GCZ : IFileWriter<DiscImage>
     {
         /// <inheritdoc/>
         public bool Debug { get; set; } = false;
 
         /// <inheritdoc/>
-        public bool SerializeFile(Archive? obj, string? path)
+        public bool SerializeFile(DiscImage? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -30,7 +29,7 @@ namespace SabreTools.Serialization.Writers
         /// Writes: 32-byte header, block pointer table, block hash table.
         /// The caller is responsible for writing compressed block data afterward.
         /// </summary>
-        public bool SerializeStream(Archive? obj, Stream? stream)
+        public bool SerializeStream(DiscImage? obj, Stream? stream)
         {
             if (stream is null || !stream.CanWrite)
                 return false;
@@ -58,7 +57,7 @@ namespace SabreTools.Serialization.Writers
             return true;
         }
 
-        private static bool ValidateArchive(Archive obj)
+        private static bool ValidateArchive(DiscImage obj)
         {
             if (obj.Header is null)
                 return false;
@@ -77,7 +76,7 @@ namespace SabreTools.Serialization.Writers
 
         private static void WriteUInt32LE(Stream s, uint value)
         {
-            s.WriteByte((byte)(value));
+            s.WriteByte((byte)value);
             s.WriteByte((byte)(value >> 8));
             s.WriteByte((byte)(value >> 16));
             s.WriteByte((byte)(value >> 24));

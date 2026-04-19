@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.WIA
     /// Contains the two headers and all lookup tables.
     /// Actual group (compressed block) data is accessed via the source stream.
     /// </summary>
-    public class Archive
+    public class DiscImage
     {
         /// <summary>
         /// WIA / RVZ primary header (0x48 bytes)

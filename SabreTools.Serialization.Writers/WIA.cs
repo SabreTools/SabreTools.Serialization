@@ -6,13 +6,13 @@ namespace SabreTools.Serialization.Writers
     // TODO: Full round-trip write (including compressed group data) requires a source
     // IBlobReader and compression pipeline. This implementation serializes only
     // the structural metadata (Header1, Header2, and all lookup tables).
-    public class WIA : IFileWriter<Archive>
+    public class WIA : IFileWriter<DiscImage>
     {
         /// <inheritdoc/>
         public bool Debug { get; set; } = false;
 
         /// <inheritdoc/>
-        public bool SerializeFile(Archive? obj, string? path)
+        public bool SerializeFile(DiscImage? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Writers
         /// Writes Header1, Header2, partition entries, raw data entries, and group entries.
         /// The caller is responsible for writing group (compressed block) data.
         /// </summary>
-        public bool SerializeStream(Archive? obj, Stream? stream)
+        public bool SerializeStream(DiscImage? obj, Stream? stream)
         {
             if (stream is null || !stream.CanWrite)
                 return false;
@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Writers
             return true;
         }
 
-        private static bool ValidateArchive(Archive obj)
+        private static bool ValidateArchive(DiscImage obj)
         {
             if (obj.Header1 is null || obj.Header2 is null)
                 return false;

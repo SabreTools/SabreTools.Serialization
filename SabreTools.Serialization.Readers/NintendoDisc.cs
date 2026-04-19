@@ -192,13 +192,14 @@ namespace SabreTools.Serialization.Readers
         }
 
         #endregion
-            /// <summary>
-            /// Returns true if the GameId first character is a known GameCube title type prefix.
-            /// Used as a fallback when the GC magic word is absent from the disc image.
-            /// </summary>
-            private static bool IsGameCubeTitleType(char c)
-            {
-                return c == 'G' || c == 'D' || c == 'R';
-            }
+
+        /// <summary>
+        /// Returns true if the GameId first character is a known GameCube title type prefix.
+        /// Used as a fallback when the GC magic word is absent from the disc image.
+        /// </summary>
+        private static bool IsGameCubeTitleType(char c)
+        {
+            return c == 'G' || c == 'D' || c == 'R';
         }
     }
+}
