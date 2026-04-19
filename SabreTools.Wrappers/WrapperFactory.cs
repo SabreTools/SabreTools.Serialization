@@ -29,6 +29,7 @@ namespace SabreTools.Wrappers
                 WrapperType.Executable => CreateExecutableWrapper(data),
                 WrapperType.FDS => FDS.Create(data),
                 WrapperType.GCF => GCF.Create(data),
+                WrapperType.GCZ => GCZ.Create(data),
                 WrapperType.GZip => GZip.Create(data),
                 WrapperType.InstallShieldArchiveV3 => InstallShieldArchiveV3.Create(data),
                 WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
@@ -44,6 +45,7 @@ namespace SabreTools.Wrappers
                 WrapperType.NCF => NCF.Create(data),
                 WrapperType.NESCart => NESCart.Create(data),
                 WrapperType.Nitro => Nitro.Create(data),
+                WrapperType.NintendoDisc => NintendoDisc.Create(data),
                 WrapperType.PAK => PAK.Create(data),
                 WrapperType.PFF => PFF.Create(data),
                 WrapperType.PIC => PIC.Create(data),
@@ -68,6 +70,8 @@ namespace SabreTools.Wrappers
                 WrapperType.WAD => WAD3.Create(data),
                 WrapperType.WiseOverlayHeader => WiseOverlayHeader.Create(data),
                 WrapperType.WiseScript => WiseScript.Create(data),
+                WrapperType.WIA => WIA.Create(data),
+                WrapperType.RVZ => WIA.Create(data),
                 WrapperType.XboxExecutable => XboxExecutable.Create(data),
                 WrapperType.XDVDFS => XDVDFS.Create(data),
                 WrapperType.XenonExecutable => XenonExecutable.Create(data),
@@ -98,7 +102,15 @@ namespace SabreTools.Wrappers
             // Cache the current offset
             long initialOffset = stream.Position;
 
-            // Try to get an Xbox ISO wrapper first
+            // Try NintendoDisc (GameCube / Wii) first — detected by magic at 0x018 / 0x01C
+            var nintendoWrapper = NintendoDisc.Create(stream);
+            if (nintendoWrapper is not null)
+                return nintendoWrapper;
+
+            // Reset position in stream
+            stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
+
+            // Try to get an Xbox ISO wrapper
             var xboxWrapper = XboxISO.Create(stream);
             if (xboxWrapper is not null)
                 return xboxWrapper;
@@ -403,6 +415,17 @@ namespace SabreTools.Wrappers
 
             #endregion
 
+            #region GCZ
+
+            // GCZ magic cookie (0xB10BC001 stored little-endian)
+            if (magic.StartsWith([0x01, 0xC0, 0x0B, 0xB1]))
+                return WrapperType.GCZ;
+
+            if (extension.Equals("gcz", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.GCZ;
+
+            #endregion
+
             #region GZip
 
             if (magic.StartsWith(Data.Models.GZIP.Constants.SignatureBytes))
@@ -446,6 +469,36 @@ namespace SabreTools.Wrappers
 
             if (extension.Equals("ird", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.IRD;
+
+            #endregion
+
+            #region NintendoDisc
+
+            // Wii disc magic at offset 0x018 (0x5D1C9EA3 stored big-endian on disc)
+            if (magic.Length > 0x1B && magic[0x18] == 0x5D && magic[0x19] == 0x1C && magic[0x1A] == 0x9E && magic[0x1B] == 0xA3)
+                return WrapperType.NintendoDisc;
+
+            // GameCube disc magic at offset 0x01C (0xC2339F3D stored big-endian on disc)
+            if (magic.Length > 0x1F && magic[0x1C] == 0xC2 && magic[0x1D] == 0x33 && magic[0x1E] == 0x9F && magic[0x1F] == 0x3D)
+                return WrapperType.NintendoDisc;
+
+            // GameCube/Wii disc by GameId prefix: first byte is a known title type code,
+            // bytes 1-2 are ASCII letters (region + developer), bytes 3-4 are ASCII digits or letters (title code),
+            // byte 5 is an ASCII digit (disc number). Covers redump ISOs that lack magic words.
+            if (magic.Length > 5
+                && IsNintendoDiscTitleType(magic[0])
+                && magic[1] >= 0x41 && magic[1] <= 0x5A   // A-Z
+                && magic[2] >= 0x30 && magic[2] <= 0x5A   // 0-9 or A-Z
+                && magic[3] >= 0x30 && magic[3] <= 0x5A   // 0-9 or A-Z
+                && magic[4] >= 0x30 && magic[4] <= 0x5A   // 0-9 or A-Z
+                && magic[5] >= 0x30 && magic[5] <= 0x39   // 0-9
+                && (extension.Equals("iso", StringComparison.OrdinalIgnoreCase)
+                    || extension.Equals("gcm", StringComparison.OrdinalIgnoreCase)))
+                return WrapperType.NintendoDisc;
+
+            // .gcm files are always GameCube disc images
+            if (extension.Equals("gcm", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.NintendoDisc;
 
             #endregion
 
@@ -965,6 +1018,24 @@ namespace SabreTools.Wrappers
 
             #endregion
 
+            #region WIA
+
+            // WIA magic ("WIA\x01" stored little-endian: 0x01414957)
+            if (magic.StartsWith([0x57, 0x49, 0x41, 0x01]))
+                return WrapperType.WIA;
+
+            // RVZ magic ("RVZ\x01" stored little-endian: 0x015A5652)
+            if (magic.StartsWith([0x52, 0x56, 0x5A, 0x01]))
+                return WrapperType.RVZ;
+
+            if (extension.Equals("wia", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.WIA;
+
+            if (extension.Equals("rvz", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.RVZ;
+
+            #endregion
+
             #region XboxExecutable
 
             if (magic.StartsWith(Data.Models.XboxExecutable.Constants.MagicBytes))
@@ -1035,6 +1106,18 @@ namespace SabreTools.Wrappers
 
             // We couldn't find a supported match
             return WrapperType.UNKNOWN;
+        }
+
+        /// <summary>
+        /// Returns true if the byte is a known Nintendo disc title type code
+        /// (first byte of the 6-char GameId, e.g. 'G'=GameCube, 'R'=GameCube,
+        ///  'D'=GameCube demo, 'S'=Wii, 'F'=Wii channel)
+        /// </summary>
+        private static bool IsNintendoDiscTitleType(byte b)
+        {
+            // Standard GameCube and Wii title type prefixes used by Nintendo and licensees
+            return b == (byte)'G' || b == (byte)'D' || b == (byte)'R'
+                || b == (byte)'S' || b == (byte)'F';
         }
     }
 }
