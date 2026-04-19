@@ -117,6 +117,7 @@ namespace SabreTools.Serialization.Readers.Test
             var dump_rom = new Data.Models.OpenMSX.Dump
             {
                 Original = original,
+                Boot = "boot",
                 Rom = rom,
             };
 
@@ -131,6 +132,7 @@ namespace SabreTools.Serialization.Readers.Test
             var dump_megarom = new Data.Models.OpenMSX.Dump
             {
                 Original = original,
+                Boot = "boot",
                 Rom = megarom,
             };
 
@@ -145,6 +147,7 @@ namespace SabreTools.Serialization.Readers.Test
             var dump_sccpluscart = new Data.Models.OpenMSX.Dump
             {
                 Original = original,
+                Boot = "boot",
                 Rom = sccpluscart,
             };
 
@@ -193,6 +196,8 @@ namespace SabreTools.Serialization.Readers.Test
         private static void Validate(Data.Models.OpenMSX.Dump? dump)
         {
             Assert.NotNull(dump);
+            Assert.Equal("boot", dump.Boot);
+
             Validate(dump.Original);
             Validate(dump.Rom);
         }

@@ -428,6 +428,7 @@ namespace SabreTools.Metadata.DatFiles
                     {
                         MachineIndex = machineIndex,
                         SourceIndex = sourceIndex,
+                        Comment = items[i].Boot,
                     };
 
                     var original = items[i].Original;

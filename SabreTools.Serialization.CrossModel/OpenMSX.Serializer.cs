@@ -65,6 +65,8 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Original is not null)
                 dump.Original = ConvertToInternalModel(item.Original);
 
+            dump.Boot = item.Boot;
+
             if (item.Rom is not null)
             {
                 switch (item.Rom)

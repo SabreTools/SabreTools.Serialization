@@ -136,6 +136,12 @@ namespace SabreTools.Serialization.Readers
 
                 switch (reader.Name)
                 {
+                    case "boot":
+                        if (obj.Boot is not null && Debug)
+                            Console.WriteLine($"'{reader.Name}' element already found, overwriting");
+
+                        obj.Boot = reader.ReadElementContentAsString();
+                        break;
                     case "original":
                         if (obj.Original is not null && Debug)
                             Console.WriteLine($"'{reader.Name}' element already found, overwriting");
@@ -154,6 +160,7 @@ namespace SabreTools.Serialization.Readers
 
                     default:
                         if (Debug) Console.Error.WriteLine($"Element '{reader.Name}' is not recognized");
+                        reader.Skip();
                         break;
                 }
             }
