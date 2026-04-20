@@ -146,6 +146,10 @@ namespace SabreTools.Serialization.Readers
 
             var obj = new Dictionary<uint, DirectoryDescriptor>();
 
+            // Seek to current descriptor
+            data.SeekIfPossible(initialOffset + (((long)offset) * Constants.SectorSize), SeekOrigin.Begin);
+
+            // Parse current descriptor
             var dd = ParseDirectoryDescriptor(data, initialOffset, offset, size);
             if (dd is null)
                 return null;
