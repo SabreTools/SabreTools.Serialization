@@ -9,7 +9,7 @@ namespace SabreTools.Wrappers
         {
             long initialOffset = _dataSource.Position;
 
-            bool success = ExtractVideoPartition(outputDirectory, includeDebug);
+            bool success = ExtractVideoPartition(outputDirectory, includeDebug, initialOffset);
             success |= ExtractGamePartition(outputDirectory, includeDebug);
 
             return success;
@@ -18,7 +18,7 @@ namespace SabreTools.Wrappers
         /// <summary>
         /// Extract all files from the Video ISO partition only
         /// </summary>
-        public bool ExtractVideoPartition(string outputDirectory, bool includeDebug)
+        public bool ExtractVideoPartition(string outputDirectory, bool includeDebug, long initialOffset = 0)
         {
             // Extract all files from the video partition
             var videoWrapper = new ISO9660(VideoPartition, _dataSource, initialOffset, _dataSource.Length);
@@ -28,7 +28,7 @@ namespace SabreTools.Wrappers
         /// <summary>
         /// Extract all files from the XDVDFS (XISO) game partition only
         /// </summary>
-        public bool ExtractGamePartition(string outputDirectory, bool includeDebug)
+        public bool ExtractGamePartition(string outputDirectory, bool includeDebug, long initialOffset = 0)
         {
             // Extract all files from the game partition
             var gameWrapper = new XDVDFS(GamePartition, _dataSource, initialOffset + Constants.XisoOffsets[XGDType], Constants.XisoLengths[XGDType]);
