@@ -146,6 +146,10 @@ namespace SabreTools.Serialization.Readers
 
             var obj = new Dictionary<uint, DirectoryDescriptor>();
 
+            // Seek to current descriptor
+            data.SeekIfPossible(initialOffset + (((long)offset) * Constants.SectorSize), SeekOrigin.Begin);
+
+            // Parse current descriptor
             var dd = ParseDirectoryDescriptor(data, initialOffset, offset, size);
             if (dd is null)
                 return null;
@@ -160,13 +164,6 @@ namespace SabreTools.Serialization.Readers
                     // Ensure same descriptor is never parsed twice
                     if (obj.ContainsKey(dr.ExtentOffset))
                         continue;
-
-                    // Ensure offset is valid
-                    if ((((long)dr.ExtentOffset) * Constants.SectorSize) + size > data.Length)
-                        return null;
-
-                    // Seek to child descriptor
-                    data.SeekIfPossible(initialOffset + (((long)dr.ExtentOffset) * Constants.SectorSize), SeekOrigin.Begin);
 
                     // Get all descriptors from child
                     var descriptors = ParseDirectoryDescriptors(data, initialOffset, dr.ExtentOffset, dr.ExtentSize);
