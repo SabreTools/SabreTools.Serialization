@@ -6,7 +6,6 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using SabreTools.Metadata.DatItems;
-using SabreTools.Metadata.Filter;
 
 #pragma warning disable IDE0060 // Remove unused parameter
 namespace SabreTools.Metadata.DatFiles.Formats
@@ -39,7 +38,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
             int indexId,
             bool keep,
             bool statsOnly = false,
-            FilterRunner? filterRunner = null,
             bool throwOnError = false)
         {
             // Prepare all internal variables
@@ -84,7 +82,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             break;
 
                         case "directory":
-                            ReadDirectory(xtr.ReadSubtree(), statsOnly, source, sourceIndex, filterRunner);
+                            ReadDirectory(xtr.ReadSubtree(), statsOnly, source, sourceIndex);
 
                             // Skip the directory node now that we've processed it
                             xtr.Read();
@@ -115,12 +113,10 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="statsOnly">True to only add item statistics while parsing, false otherwise</param>
         /// <param name="source">Source representing the DAT</param>
         /// <param name="sourceIndex">Index of the Source representing the DAT</param>
-        /// <param name="filterRunner">Optional FilterRunner to filter items on parse</param>
         private void ReadDirectory(XmlReader xtr,
             bool statsOnly,
             Source source,
-            long sourceIndex,
-            FilterRunner? filterRunner)
+            long sourceIndex)
         {
             // If the reader is invalid, skip
             if (xtr is null)
@@ -146,11 +142,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     case "machine":
                         XmlSerializer xs = new(typeof(Machine));
                         machine = xs?.Deserialize(xtr.ReadSubtree()) as Machine;
-
-                        // If the machine doesn't pass the filter
-                        if (machine is not null && filterRunner is not null && !machine.PassesFilter(filterRunner))
-                            machine = null;
-
                         if (machine is not null)
                             machineIndex = AddMachineDB(machine);
 
@@ -163,8 +154,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             machineIndex,
                             statsOnly,
                             source,
-                            sourceIndex,
-                            filterRunner);
+                            sourceIndex);
 
                         // Skip the directory node now that we've processed it
                         xtr.Read();
@@ -185,14 +175,12 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="statsOnly">True to only add item statistics while parsing, false otherwise</param>
         /// <param name="source">Source representing the DAT</param>
         /// <param name="sourceIndex">Index of the Source representing the DAT</param>
-        /// <param name="filterRunner">Optional FilterRunner to filter items on parse</param>
         private void ReadFiles(XmlReader xtr,
             Machine? machine,
             long machineIndex,
             bool statsOnly,
             Source source,
-            long sourceIndex,
-            FilterRunner? filterRunner)
+            long sourceIndex)
         {
             // If the reader is invalid, skip
             if (xtr is null)
@@ -215,13 +203,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         XmlSerializer xs = new(typeof(DatItem));
                         if (xs.Deserialize(xtr.ReadSubtree()) is DatItem item)
                         {
-                            // If the item doesn't pass the filter
-                            if (filterRunner is not null && !item.PassesFilter(filterRunner))
-                            {
-                                xtr.Skip();
-                                break;
-                            }
-
                             item.CopyMachineInformation(machine);
                             item.MachineIndex = machineIndex;
                             item.Source = source;

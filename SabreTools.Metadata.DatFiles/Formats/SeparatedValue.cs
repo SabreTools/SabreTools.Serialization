@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
-using SabreTools.Metadata.Filter;
 
 #pragma warning disable IDE0290 // Use primary constructor
 namespace SabreTools.Metadata.DatFiles.Formats
@@ -42,7 +41,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
             int indexId,
             bool keep,
             bool statsOnly = false,
-            FilterRunner? filterRunner = null,
             bool throwOnError = false)
         {
             try
@@ -52,7 +50,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 var metadata = new Serialization.CrossModel.SeparatedValue().Serialize(metadataFile);
 
                 // Convert to the internal format
-                ConvertFromMetadata(metadata, filename, indexId, keep, statsOnly, filterRunner);
+                ConvertFromMetadata(metadata, filename, indexId, keep, statsOnly);
             }
             catch (Exception ex) when (!throwOnError)
             {

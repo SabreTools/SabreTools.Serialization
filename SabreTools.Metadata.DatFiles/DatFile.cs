@@ -8,7 +8,6 @@ using SabreTools.Hashing;
 using SabreTools.Logging;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
-using SabreTools.Metadata.Filter;
 using SabreTools.Text.Compare;
 using SabreTools.Text.Extensions;
 
@@ -436,13 +435,11 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="indexId">Index ID for the DAT</param>
         /// <param name="keep">True if full pathnames are to be kept, false otherwise</param>
         /// <param name="statsOnly">True to only add item statistics while parsing, false otherwise</param>
-        /// <param name="filterRunner">Optional FilterRunner to filter items on parse</param>
         /// <param name="throwOnError">True if the error that is thrown should be thrown back to the caller, false otherwise</param>
         public abstract void ParseFile(string filename,
             int indexId,
             bool keep,
             bool statsOnly = false,
-            FilterRunner? filterRunner = null,
             bool throwOnError = false);
 
         #endregion
