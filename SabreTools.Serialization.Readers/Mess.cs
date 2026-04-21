@@ -897,7 +897,6 @@ namespace SabreTools.Serialization.Readers
                         if (ramOption is not null)
                             ramOptions.Add(ramOption);
 
-                        reader.Skip();
                         break;
 
                     default:
