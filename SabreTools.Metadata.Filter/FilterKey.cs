@@ -158,7 +158,8 @@ namespace SabreTools.Metadata.Filter
                 || string.Equals(itemName, "item", StringComparison.OrdinalIgnoreCase))
             {
                 // Handle item type
-                if (string.Equals(fieldName, "type", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(fieldName, "type", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(fieldName, "_type", StringComparison.OrdinalIgnoreCase))
                 {
                     itemName = "item";
                     fieldName = "type";
