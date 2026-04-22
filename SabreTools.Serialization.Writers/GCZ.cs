@@ -1,5 +1,6 @@
 using System.IO;
 using SabreTools.Data.Models.GCZ;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -38,20 +39,20 @@ namespace SabreTools.Serialization.Writers
                 return false;
 
             // Header (32 bytes, little-endian)
-            WriteUInt32LE(stream, obj.Header.MagicCookie);
-            WriteUInt32LE(stream, obj.Header.SubType);
-            WriteUInt64LE(stream, obj.Header.CompressedDataSize);
-            WriteUInt64LE(stream, obj.Header.DataSize);
-            WriteUInt32LE(stream, obj.Header.BlockSize);
-            WriteUInt32LE(stream, obj.Header.NumBlocks);
+            stream.WriteLittleEndian(obj.Header.MagicCookie);
+            stream.WriteLittleEndian(obj.Header.SubType);
+            stream.WriteLittleEndian(obj.Header.CompressedDataSize);
+            stream.WriteLittleEndian(obj.Header.DataSize);
+            stream.WriteLittleEndian(obj.Header.BlockSize);
+            stream.WriteLittleEndian(obj.Header.NumBlocks);
 
             // Block pointer table (8 bytes per block, little-endian)
             foreach (ulong ptr in obj.BlockPointers)
-                WriteUInt64LE(stream, ptr);
+                stream.WriteLittleEndian(ptr);
 
             // Block hash table (4 bytes per block, little-endian)
             foreach (uint hash in obj.BlockHashes)
-                WriteUInt32LE(stream, hash);
+                stream.WriteLittleEndian(hash);
 
             stream.Flush();
             return true;
@@ -71,23 +72,5 @@ namespace SabreTools.Serialization.Writers
                 return false;
             return true;
         }
-
-        #region Little-endian write helpers
-
-        private static void WriteUInt32LE(Stream s, uint value)
-        {
-            s.WriteByte((byte)value);
-            s.WriteByte((byte)(value >> 8));
-            s.WriteByte((byte)(value >> 16));
-            s.WriteByte((byte)(value >> 24));
-        }
-
-        private static void WriteUInt64LE(Stream s, ulong value)
-        {
-            WriteUInt32LE(s, (uint)value);
-            WriteUInt32LE(s, (uint)(value >> 32));
-        }
-
-        #endregion
     }
 }

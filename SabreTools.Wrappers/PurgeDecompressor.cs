@@ -1,5 +1,6 @@
 using System;
-using System.Security.Cryptography;
+using SabreTools.Hashing;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -49,24 +50,21 @@ namespace SabreTools.Wrappers
             int pos = inputOffset;
             int dataEnd = inputOffset + inputLength - SHA1_SIZE;
 
-#if NET20 || NET35
-            using (var sha1 = SHA1.Create())
-#else
-            using (var sha1 = SHA1.Create())
-#endif
+            using (var sha1 = new HashWrapper(HashType.SHA1))
             {
                 if (precedingBytes != null && precedingBytes.Length > 0)
-                    sha1.TransformBlock(precedingBytes, 0, precedingBytes.Length, null, 0);
+                    sha1.Process(precedingBytes, 0, precedingBytes.Length);
 
                 while (pos < dataEnd)
                 {
                     if (pos + SEGMENT_HEADER_SIZE > dataEnd)
                         return null;
 
-                    uint segOffset = ReadUInt32BE(input, pos);
-                    uint segSize   = ReadUInt32BE(input, pos + 4);
+                    int headerPos = pos;
+                    uint segOffset = input.ReadUInt32BigEndian(ref headerPos);
+                    uint segSize   = input.ReadUInt32BigEndian(ref headerPos);
 
-                    sha1.TransformBlock(input, pos, SEGMENT_HEADER_SIZE, null, 0);
+                    sha1.Process(input, pos, SEGMENT_HEADER_SIZE);
                     pos += SEGMENT_HEADER_SIZE;
 
                     if (segSize == 0)
@@ -79,13 +77,13 @@ namespace SabreTools.Wrappers
                         return null;
 
                     Array.Copy(input, pos, output, (int)segOffset, (int)segSize);
-                    sha1.TransformBlock(input, pos, (int)segSize, null, 0);
+                    sha1.Process(input, pos, (int)segSize);
                     pos += (int)segSize;
                 }
 
-                sha1.TransformFinalBlock(new byte[0], 0, 0);
+                sha1.Terminate();
 
-                byte[]? computed = sha1.Hash;
+                byte[]? computed = sha1.CurrentHashBytes;
                 if (computed is null) return null;
                 for (int i = 0; i < SHA1_SIZE; i++)
                 {
@@ -96,7 +94,5 @@ namespace SabreTools.Wrappers
 
             return output;
         }
-
-        private static uint ReadUInt32BE(byte[] data, int offset) => (uint)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
     }
 }

@@ -1,5 +1,6 @@
 using System.IO;
 using SabreTools.Data.Models.WIA;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -80,43 +81,43 @@ namespace SabreTools.Serialization.Writers
 
         private static void WriteHeader1(Stream s, WiaHeader1 h)
         {
-            WriteUInt32LE(s, h.Magic);
-            WriteUInt32BE(s, h.Version);
-            WriteUInt32BE(s, h.VersionCompatible);
-            WriteUInt32BE(s, h.Header2Size);
+            s.WriteLittleEndian(h.Magic);
+            s.WriteBigEndian(h.Version);
+            s.WriteBigEndian(h.VersionCompatible);
+            s.WriteBigEndian(h.Header2Size);
             s.Write(h.Header2Hash, 0, 20);
-            WriteUInt64BE(s, h.IsoFileSize);
-            WriteUInt64BE(s, h.WiaFileSize);
+            s.WriteBigEndian(h.IsoFileSize);
+            s.WriteBigEndian(h.WiaFileSize);
             s.Write(h.Header1Hash, 0, 20);
         }
 
         private static void WriteHeader2(Stream s, WiaHeader2 h)
         {
-            WriteUInt32BE(s, (uint)h.DiscType);
-            WriteUInt32BE(s, (uint)h.CompressionType);
-            WriteInt32BE(s, h.CompressionLevel);
-            WriteUInt32BE(s, h.ChunkSize);
+            s.WriteBigEndian((uint)h.DiscType);
+            s.WriteBigEndian((uint)h.CompressionType);
+            s.WriteBigEndian(h.CompressionLevel);
+            s.WriteBigEndian(h.ChunkSize);
             s.Write(h.DiscHeader, 0, 0x80);
-            WriteUInt32BE(s, h.NumberOfPartitionEntries);
-            WriteUInt32BE(s, h.PartitionEntrySize);
-            WriteUInt64BE(s, h.PartitionEntriesOffset);
+            s.WriteBigEndian(h.NumberOfPartitionEntries);
+            s.WriteBigEndian(h.PartitionEntrySize);
+            s.WriteBigEndian(h.PartitionEntriesOffset);
             s.Write(h.PartitionEntriesHash, 0, 20);
-            WriteUInt32BE(s, h.NumberOfRawDataEntries);
-            WriteUInt64BE(s, h.RawDataEntriesOffset);
-            WriteUInt32BE(s, h.RawDataEntriesSize);
-            WriteUInt32BE(s, h.NumberOfGroupEntries);
-            WriteUInt64BE(s, h.GroupEntriesOffset);
-            WriteUInt32BE(s, h.GroupEntriesSize);
+            s.WriteBigEndian(h.NumberOfRawDataEntries);
+            s.WriteBigEndian(h.RawDataEntriesOffset);
+            s.WriteBigEndian(h.RawDataEntriesSize);
+            s.WriteBigEndian(h.NumberOfGroupEntries);
+            s.WriteBigEndian(h.GroupEntriesOffset);
+            s.WriteBigEndian(h.GroupEntriesSize);
             s.WriteByte(h.CompressorDataSize);
             s.Write(h.CompressorData, 0, 7);
         }
 
         private static void WritePartitionDataEntry(Stream s, PartitionDataEntry e)
         {
-            WriteUInt32BE(s, e.FirstSector);
-            WriteUInt32BE(s, e.NumberOfSectors);
-            WriteUInt32BE(s, e.GroupIndex);
-            WriteUInt32BE(s, e.NumberOfGroups);
+            s.WriteBigEndian(e.FirstSector);
+            s.WriteBigEndian(e.NumberOfSectors);
+            s.WriteBigEndian(e.GroupIndex);
+            s.WriteBigEndian(e.NumberOfGroups);
         }
 
         private static void WritePartitionEntry(Stream s, PartitionEntry e)
@@ -128,49 +129,25 @@ namespace SabreTools.Serialization.Writers
 
         private static void WriteRawDataEntry(Stream s, RawDataEntry e)
         {
-            WriteUInt64BE(s, e.DataOffset);
-            WriteUInt64BE(s, e.DataSize);
-            WriteUInt32BE(s, e.GroupIndex);
-            WriteUInt32BE(s, e.NumberOfGroups);
+            s.WriteBigEndian(e.DataOffset);
+            s.WriteBigEndian(e.DataSize);
+            s.WriteBigEndian(e.GroupIndex);
+            s.WriteBigEndian(e.NumberOfGroups);
         }
 
         private static void WriteWiaGroupEntry(Stream s, WiaGroupEntry e)
         {
             // DataOffset stored as actual_offset >> 2
-            WriteUInt32BE(s, (uint)(e.DataOffset >> 2));
-            WriteUInt32BE(s, e.DataSize);
+            s.WriteBigEndian((uint)(e.DataOffset >> 2));
+            s.WriteBigEndian(e.DataSize);
         }
 
         private static void WriteRvzGroupEntry(Stream s, RvzGroupEntry e)
         {
             // DataOffset stored as actual_offset >> 2
-            WriteUInt32BE(s, (uint)(e.DataOffset >> 2));
-            WriteUInt32BE(s, e.DataSize);
-            WriteUInt32BE(s, e.RvzPackedSize);
-        }
-
-        private static void WriteUInt32LE(Stream s, uint v)
-        {
-            s.WriteByte((byte)v);
-            s.WriteByte((byte)(v >> 8));
-            s.WriteByte((byte)(v >> 16));
-            s.WriteByte((byte)(v >> 24));
-        }
-
-        private static void WriteUInt32BE(Stream s, uint v)
-        {
-            s.WriteByte((byte)(v >> 24));
-            s.WriteByte((byte)(v >> 16));
-            s.WriteByte((byte)(v >> 8));
-            s.WriteByte((byte)v);
-        }
-
-        private static void WriteInt32BE(Stream s, int v) => WriteUInt32BE(s, (uint)v);
-
-        private static void WriteUInt64BE(Stream s, ulong v)
-        {
-            WriteUInt32BE(s, (uint)(v >> 32));
-            WriteUInt32BE(s, (uint)v);
+            s.WriteBigEndian((uint)(e.DataOffset >> 2));
+            s.WriteBigEndian(e.DataSize);
+            s.WriteBigEndian(e.RvzPackedSize);
         }
 
         #endregion

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using SabreTools.Data.Models.NintendoDisc;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -135,12 +136,14 @@ namespace SabreTools.Wrappers
 
             // TMD
             byte[]? tmdSizeBytes = ReadDisc(partOffset + Constants.WiiTmdSizeAddress, 4);
+            int tmdSizePos = 0;
             uint tmdSize = tmdSizeBytes != null
-                ? (uint)((tmdSizeBytes[0] << 24) | (tmdSizeBytes[1] << 16) | (tmdSizeBytes[2] << 8) | tmdSizeBytes[3])
+                ? tmdSizeBytes.ReadUInt32BigEndian(ref tmdSizePos)
                 : 0;
             byte[]? tmdOffBytes = ReadDisc(partOffset + Constants.WiiTmdOffsetAddress, 4);
+            int tmdOffPos = 0;
             uint tmdOffShifted = tmdOffBytes != null
-                ? (uint)((tmdOffBytes[0] << 24) | (tmdOffBytes[1] << 16) | (tmdOffBytes[2] << 8) | tmdOffBytes[3])
+                ? tmdOffBytes.ReadUInt32BigEndian(ref tmdOffPos)
                 : 0;
             long tmdOffset = (long)tmdOffShifted << 2;
             if (tmdSize > 0 && tmdOffset > 0)
@@ -148,12 +151,14 @@ namespace SabreTools.Wrappers
 
             // cert.bin
             byte[]? certSizeBytes = ReadDisc(partOffset + Constants.WiiCertSizeAddress, 4);
+            int certSizePos = 0;
             uint certSize = certSizeBytes != null
-                ? (uint)((certSizeBytes[0] << 24) | (certSizeBytes[1] << 16) | (certSizeBytes[2] << 8) | certSizeBytes[3])
+                ? certSizeBytes.ReadUInt32BigEndian(ref certSizePos)
                 : 0;
             byte[]? certOffBytes = ReadDisc(partOffset + Constants.WiiCertOffsetAddress, 4);
+            int certOffPos = 0;
             uint certOffShifted = certOffBytes != null
-                ? (uint)((certOffBytes[0] << 24) | (certOffBytes[1] << 16) | (certOffBytes[2] << 8) | certOffBytes[3])
+                ? certOffBytes.ReadUInt32BigEndian(ref certOffPos)
                 : 0;
             long certOffset = (long)certOffShifted << 2;
             if (certSize > 0 && certOffset > 0)
@@ -161,8 +166,9 @@ namespace SabreTools.Wrappers
 
             // h3.bin
             byte[]? h3OffBytes = ReadDisc(partOffset + Constants.WiiH3OffsetAddress, 4);
+            int h3OffPos = 0;
             uint h3OffShifted = h3OffBytes != null
-                ? (uint)((h3OffBytes[0] << 24) | (h3OffBytes[1] << 16) | (h3OffBytes[2] << 8) | h3OffBytes[3])
+                ? h3OffBytes.ReadUInt32BigEndian(ref h3OffPos)
                 : 0;
             long h3Offset = (long)h3OffShifted << 2;
             if (h3Offset > 0)
@@ -170,8 +176,9 @@ namespace SabreTools.Wrappers
 
             // Encrypted partition data start
             byte[]? dataOffBytes = ReadDisc(partOffset + Constants.WiiDataOffsetAddress, 4);
+            int dataOffPos = 0;
             uint dataOffShifted = dataOffBytes != null
-                ? (uint)((dataOffBytes[0] << 24) | (dataOffBytes[1] << 16) | (dataOffBytes[2] << 8) | dataOffBytes[3])
+                ? dataOffBytes.ReadUInt32BigEndian(ref dataOffPos)
                 : 0;
             long dataOffset = (long)dataOffShifted << 2;
             if (dataOffset <= 0)
@@ -199,8 +206,8 @@ namespace SabreTools.Wrappers
             WriteWiiApploader(absDataOffset, titleKey, sysDir);
 
             // DOL — stored offset is shifted <<2 in Wii partition
-            uint dolOffShifted = (uint)((bootBlock[0x420] << 24) | (bootBlock[0x421] << 16)
-                | (bootBlock[0x422] << 8) | bootBlock[0x423]);
+            int dolOffPos = 0x420;
+            uint dolOffShifted = bootBlock.ReadUInt32BigEndian(ref dolOffPos);
             long dolOff = (long)dolOffShifted << 2;
             if (dolOff > 0)
             {
@@ -215,10 +222,10 @@ namespace SabreTools.Wrappers
             }
 
             // FST — stored offset shifted <<2 in Wii partition
-            uint fstOffShifted = (uint)((bootBlock[0x424] << 24) | (bootBlock[0x425] << 16)
-                | (bootBlock[0x426] << 8) | bootBlock[0x427]);
-            uint fstSzShifted = (uint)((bootBlock[0x428] << 24) | (bootBlock[0x429] << 16)
-                | (bootBlock[0x42A] << 8) | bootBlock[0x42B]);
+            int fstOffPos = 0x424;
+            int fstSzPos  = 0x428;
+            uint fstOffShifted = bootBlock.ReadUInt32BigEndian(ref fstOffPos);
+            uint fstSzShifted  = bootBlock.ReadUInt32BigEndian(ref fstSzPos);
             long fstOff = (long)fstOffShifted << 2;
             long fstSize = (long)fstSzShifted << 2;  // also stored >>2 on Wii
             if (fstOff > 0 && fstSize > 0)
@@ -247,8 +254,8 @@ namespace SabreTools.Wrappers
                 return;
 
             // Root entry is at offset 0; its fileSize field = total entry count
-            uint rootCount = (uint)((fstData[8] << 24) | (fstData[9] << 16)
-                | (fstData[10] << 8) | fstData[11]);
+            int rootPos = 8;
+            uint rootCount = fstData.ReadUInt32BigEndian(ref rootPos);
             if (rootCount < 1 || rootCount > 1024 * 1024)
                 return;
 
@@ -274,11 +281,14 @@ namespace SabreTools.Wrappers
                 if ((fstBase + 12) > fstData.Length)
                     break;
 
-                byte flags      = fstData[fstBase];
+                // Each FST entry is 12 bytes: [flags(1) | nameOff(3)] [fileOffRaw(4)] [fileSize(4)]
+                int fstEntryPos = fstBase;
+                uint flagsAndNameOff = fstData.ReadUInt32BigEndian(ref fstEntryPos);
+                byte flags      = (byte)(flagsAndNameOff >> 24);
                 bool isDir      = (flags & 1) != 0;
-                uint nameOff    = (uint)((fstData[fstBase + 1] << 16) | (fstData[fstBase + 2] << 8) | fstData[fstBase + 3]);
-                uint fileOffRaw = (uint)((fstData[fstBase + 4] << 24) | (fstData[fstBase + 5] << 16) | (fstData[fstBase + 6] << 8) | fstData[fstBase + 7]);
-                uint fileSize   = (uint)((fstData[fstBase + 8] << 24) | (fstData[fstBase + 9] << 16) | (fstData[fstBase + 10] << 8) | fstData[fstBase + 11]);
+                uint nameOff    = flagsAndNameOff & 0x00FFFFFFu;
+                uint fileOffRaw = fstData.ReadUInt32BigEndian(ref fstEntryPos);
+                uint fileSize   = fstData.ReadUInt32BigEndian(ref fstEntryPos);
 
                 string name = ReadFstString(fstData, stringTableOffset + nameOff);
                 if (string.IsNullOrEmpty(name))
@@ -351,14 +361,10 @@ namespace SabreTools.Wrappers
             byte[]? hdr = ReadDisc(Constants.ApploaderAddress, Constants.ApploaderHeaderSize);
             if (hdr is null) return;
 
-            uint codeSize    = (uint)((hdr[Constants.ApploaderCodeSizeOffset] << 24)
-                | (hdr[Constants.ApploaderCodeSizeOffset + 1] << 16)
-                | (hdr[Constants.ApploaderCodeSizeOffset + 2] << 8)
-                |  hdr[Constants.ApploaderCodeSizeOffset + 3]);
-            uint trailerSize = (uint)((hdr[Constants.ApploaderTrailerSizeOffset] << 24)
-                | (hdr[Constants.ApploaderTrailerSizeOffset + 1] << 16)
-                | (hdr[Constants.ApploaderTrailerSizeOffset + 2] << 8)
-                |  hdr[Constants.ApploaderTrailerSizeOffset + 3]);
+            int codeSizePos    = Constants.ApploaderCodeSizeOffset;
+            int trailerSizePos = Constants.ApploaderTrailerSizeOffset;
+            uint codeSize    = hdr.ReadUInt32BigEndian(ref codeSizePos);
+            uint trailerSize = hdr.ReadUInt32BigEndian(ref trailerSizePos);
 
             int totalSize = Constants.ApploaderHeaderSize + (int)codeSize + (int)trailerSize;
             WriteRange(Constants.ApploaderAddress, totalSize, Path.Combine(sysDir, "apploader.img"));
@@ -370,14 +376,10 @@ namespace SabreTools.Wrappers
                 Constants.ApploaderAddress, Constants.ApploaderHeaderSize);
             if (hdr is null) return;
 
-            uint codeSize    = (uint)((hdr[Constants.ApploaderCodeSizeOffset] << 24)
-                | (hdr[Constants.ApploaderCodeSizeOffset + 1] << 16)
-                | (hdr[Constants.ApploaderCodeSizeOffset + 2] << 8)
-                |  hdr[Constants.ApploaderCodeSizeOffset + 3]);
-            uint trailerSize = (uint)((hdr[Constants.ApploaderTrailerSizeOffset] << 24)
-                | (hdr[Constants.ApploaderTrailerSizeOffset + 1] << 16)
-                | (hdr[Constants.ApploaderTrailerSizeOffset + 2] << 8)
-                |  hdr[Constants.ApploaderTrailerSizeOffset + 3]);
+            int wiiCodeSizePos    = Constants.ApploaderCodeSizeOffset;
+            int wiiTrailerSizePos = Constants.ApploaderTrailerSizeOffset;
+            uint codeSize    = hdr.ReadUInt32BigEndian(ref wiiCodeSizePos);
+            uint trailerSize = hdr.ReadUInt32BigEndian(ref wiiTrailerSizePos);
 
             int totalSize = Constants.ApploaderHeaderSize + (int)codeSize + (int)trailerSize;
             byte[]? apploader = ReadDecryptedPartitionRange(absDataOffset, titleKey,
@@ -402,15 +404,19 @@ namespace SabreTools.Wrappers
             // Text sections (7): offset table at 0x00, size table at 0x90
             for (int s = 0; s < 7; s++)
             {
-                int off = (int)ReadBE32(dolHeader, s * 4);
-                int sz  = (int)ReadBE32(dolHeader, 0x90 + (s * 4));
+                int offPos = s * 4;
+                int szPos  = 0x90 + (s * 4);
+                int off = (int)dolHeader.ReadUInt32BigEndian(ref offPos);
+                int sz  = (int)dolHeader.ReadUInt32BigEndian(ref szPos);
                 if (off > 0 && sz > 0) maxEnd = Math.Max(maxEnd, off + sz);
             }
             // Data sections (11): offset table at 0x1C, size table at 0xAC
             for (int s = 0; s < 11; s++)
             {
-                int off = (int)ReadBE32(dolHeader, 0x1C + (s * 4));
-                int sz  = (int)ReadBE32(dolHeader, 0xAC + (s * 4));
+                int offPos = 0x1C + (s * 4);
+                int szPos  = 0xAC + (s * 4);
+                int off = (int)dolHeader.ReadUInt32BigEndian(ref offPos);
+                int sz  = (int)dolHeader.ReadUInt32BigEndian(ref szPos);
                 if (off > 0 && sz > 0) maxEnd = Math.Max(maxEnd, off + sz);
             }
 
@@ -526,9 +532,6 @@ namespace SabreTools.Wrappers
             return $"{code}{idx}";
         }
 
-        private static uint ReadBE32(byte[] data, int offset) => (uint)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
-
         #endregion
     }
 }
-

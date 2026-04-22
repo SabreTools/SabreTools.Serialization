@@ -1,4 +1,5 @@
 using System;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -83,11 +84,7 @@ namespace SabreTools.Wrappers
                 return false;
 
             // Size field is big-endian u32; high bit signals junk data
-            uint sizeField = (uint)((m_packed_data[m_in_position]     << 24) |
-                                    (m_packed_data[m_in_position + 1] << 16) |
-                                    (m_packed_data[m_in_position + 2] <<  8) |
-                                     m_packed_data[m_in_position + 3]);
-            m_in_position += 4;
+            uint sizeField = m_packed_data.ReadUInt32BigEndian(ref m_in_position);
 
             m_current_is_junk = (sizeField & 0x80000000) != 0;
             m_current_size    = sizeField & 0x7FFFFFFF;

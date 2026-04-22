@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -231,7 +232,7 @@ namespace SabreTools.Wrappers
                 long nonJunkBytes = nextJunkStart - currentOffset;
                 if (nonJunkBytes > 0)
                 {
-                    WriteBeU32(output, (uint)nonJunkBytes);
+                    output.WriteBigEndian((uint)nonJunkBytes);
                     output.Write(data, (int)(dataOffset + currentOffset), (int)nonJunkBytes);
                     packedSize    += 4 + (uint)nonJunkBytes;
                     currentOffset += nonJunkBytes;
@@ -241,7 +242,7 @@ namespace SabreTools.Wrappers
                 long junkBytes = nextJunkEnd - currentOffset;
                 if (junkBytes > 0 && junkSeed != null)
                 {
-                    WriteBeU32(output, 0x80000000u | (uint)junkBytes);
+                    output.WriteBigEndian(0x80000000u | (uint)junkBytes);
                     byte[] seedBytes = new byte[SeedSizeBytes];
                     Buffer.BlockCopy(junkSeed, 0, seedBytes, 0, SeedSizeBytes);
                     output.Write(seedBytes, 0, SeedSizeBytes);
@@ -259,14 +260,6 @@ namespace SabreTools.Wrappers
         // ---------------------------------------------------------------
         // Helpers
         // ---------------------------------------------------------------
-
-        private static void WriteBeU32(Stream s, uint value)
-        {
-            s.WriteByte((byte)(value >> 24));
-            s.WriteByte((byte)(value >> 16));
-            s.WriteByte((byte)(value >> 8));
-            s.WriteByte((byte)value);
-        }
 
         private static long AlignUp(long value, long alignment) => (value + alignment - 1) & ~(alignment - 1);
     }

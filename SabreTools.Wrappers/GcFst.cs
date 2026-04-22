@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -46,7 +47,8 @@ namespace SabreTools.Wrappers
                 return null;
 
             // Root entry (index 0): FILE_SIZE field = total number of FST entries.
-            uint totalEntries = ReadBEU32(fstData, 8);
+            int rootOffset = 8;
+            uint totalEntries = fstData.ReadUInt32BigEndian(ref rootOffset);
             if (totalEntries < 1 || ((long)totalEntries * EntrySize) > fstData.Length)
                 return null;
 
@@ -55,9 +57,12 @@ namespace SabreTools.Wrappers
             for (uint i = 1; i < totalEntries; i++)
             {
                 int  off           = (int)(i * EntrySize);
-                uint nameOffField  = ReadBEU32(fstData, off + 0);
-                uint fileOffField  = ReadBEU32(fstData, off + 4);
-                uint fileSizeField = ReadBEU32(fstData, off + 8);
+                int  nameOffPos    = off;
+                int  fileOffPos    = off + 4;
+                int  fileSizePos   = off + 8;
+                uint nameOffField  = fstData.ReadUInt32BigEndian(ref nameOffPos);
+                uint fileOffField  = fstData.ReadUInt32BigEndian(ref fileOffPos);
+                uint fileSizeField = fstData.ReadUInt32BigEndian(ref fileSizePos);
 
                 if ((nameOffField & 0xFF000000u) != 0) continue; // directory entry
                 if (fileSizeField == 0)                continue; // empty file
@@ -162,6 +167,5 @@ namespace SabreTools.Wrappers
             return best;
         }
 
-        private static uint ReadBEU32(byte[] data, int offset) => ((uint)data[offset] << 24) | ((uint)data[offset + 1] << 16) | ((uint)data[offset + 2] << 8) | data[offset + 3];
-    }
-}
+            }
+        }
