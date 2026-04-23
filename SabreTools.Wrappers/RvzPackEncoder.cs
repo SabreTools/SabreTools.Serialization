@@ -40,9 +40,7 @@ namespace SabreTools.Wrappers
             public uint RvzPackedSize;
         }
 
-        // ---------------------------------------------------------------
-        // Public API
-        // ---------------------------------------------------------------
+        #region Public API
 
         /// <summary>
         /// RVZ-pack a single chunk.
@@ -100,9 +98,9 @@ namespace SabreTools.Wrappers
             return result;
         }
 
-        // ---------------------------------------------------------------
-        // Phase 1 — scan buffer for junk regions
-        // ---------------------------------------------------------------
+        #endregion
+
+        #region Phase 1 — scan buffer for junk regions
 
         private static SortedDictionary<long, JunkRegion> ScanForJunk(
             byte[] data, int dataOffset, int totalSize, long discDataOffset, GcFst? fst)
@@ -179,9 +177,9 @@ namespace SabreTools.Wrappers
             return junkInfo;
         }
 
-        // ---------------------------------------------------------------
-        // Phase 2 — emit packed segments for a single chunk
-        // ---------------------------------------------------------------
+        #endregion
+
+        #region Phase 2 — emit packed segments for a single chunk
 
         private static ChunkResult EmitChunk(
             byte[] data, int dataOffset,
@@ -257,10 +255,12 @@ namespace SabreTools.Wrappers
             return new ChunkResult { Packed = output.ToArray(), RvzPackedSize = packedSize };
         }
 
-        // ---------------------------------------------------------------
-        // Helpers
-        // ---------------------------------------------------------------
+        #endregion
+
+        #region Helpers
 
         private static long AlignUp(long value, long alignment) => (value + alignment - 1) & ~(alignment - 1);
+
+        #endregion
     }
 }

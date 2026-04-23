@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using SabreTools.Data.Models.NintendoDisc;
 
 namespace SabreTools.Wrappers
@@ -35,6 +34,14 @@ namespace SabreTools.Wrappers
         #endregion
 
         /// <summary>
+        /// When set, overrides the built-in common key lookup in <see cref="DecryptTitleKey"/>.
+        /// The delegate receives the common key index (0 = retail, 1 = Korean) and returns a
+        /// 16-byte key, or <see langword="null"/> to fall back to the built-in keys.
+        /// Intended for testing; leave <see langword="null"/> in production.
+        /// </summary>
+        internal static System.Func<byte, byte[]?>? CommonKeyProvider { get; set; }
+
+        /// <summary>
         /// Decrypt a Wii partition title key from the ticket data.
         /// </summary>
         /// <param name="encryptedTitleKey">16-byte encrypted title key from ticket offset 0x1BF</param>
@@ -50,7 +57,8 @@ namespace SabreTools.Wrappers
             if (titleId is null || titleId.Length != 8)
                 return null;
 
-            byte[] commonKey = commonKeyIndex == 1 ? WiiCommonKeyKorean : WiiCommonKeyRetail;
+            byte[] commonKey = CommonKeyProvider?.Invoke(commonKeyIndex)
+                ?? (commonKeyIndex == 1 ? WiiCommonKeyKorean : WiiCommonKeyRetail);
 
             // IV is the 8-byte title ID padded with zeros to 16 bytes
             byte[] iv = new byte[16];
@@ -80,25 +88,7 @@ namespace SabreTools.Wrappers
 
         private static byte[]? DecryptAesCbc(byte[] data, byte[] key, byte[] iv)
         {
-#if NET20
-            return null; // AES not available on net20
-#else
-            try
-            {
-                using var aes = Aes.Create();
-                aes.Key = key;
-                aes.IV = iv;
-                aes.Mode = CipherMode.CBC;
-                aes.Padding = PaddingMode.None;
-
-                using var decryptor = aes.CreateDecryptor();
-                return decryptor.TransformFinalBlock(data, 0, data.Length);
-            }
-            catch
-            {
-                return null;
-            }
-#endif
+            return AesCbc.Decrypt(data, key, iv);
         }
 
         #endregion

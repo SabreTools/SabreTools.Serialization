@@ -1,9 +1,7 @@
 using System.IO;
 using SabreTools.Data.Models.GCZ;
 using SabreTools.Data.Models.NintendoDisc;
-#if !NET20 && !NET35
-using System.IO.Compression;
-#endif
+using SabreTools.IO.Compression.Deflate;
 
 namespace SabreTools.Wrappers
 {
@@ -45,6 +43,14 @@ namespace SabreTools.Wrappers
         /// Adler-32 hashes of each uncompressed block
         /// </summary>
         public uint[] BlockHashes => Model.BlockHashes;
+
+        /// <summary>
+        /// Byte offset within the GCZ file where the compressed block data begins.
+        /// Computed as: <c>HeaderSize + (NumBlocks * 8) + (NumBlocks * 4)</c>.
+        /// </summary>
+        private long DataOffset => Data.Models.GCZ.Constants.HeaderSize
+            + ((long)Model.Header.NumBlocks * 8)
+            + ((long)Model.Header.NumBlocks * 4);
 
         /// <summary>
         /// Disc header parsed by decompressing the first block of the GCZ image.
@@ -171,7 +177,7 @@ namespace SabreTools.Wrappers
 
             ulong ptr = Model.BlockPointers[blockIndex];
             bool uncompressed = (ptr & UncompressedFlag) != 0;
-            long blockFileOffset = Model.DataOffset + (long)(ptr & ~UncompressedFlag);
+            long blockFileOffset = DataOffset + (long)(ptr & ~UncompressedFlag);
 
             ulong nextRaw = (blockIndex + 1 < Model.BlockPointers.Length)
                 ? Model.BlockPointers[blockIndex + 1] & ~UncompressedFlag
@@ -185,28 +191,37 @@ namespace SabreTools.Wrappers
             if (raw is null || raw.Length != compSize)
                 return null;
 
+            // Verify Adler-32 checksum on the compressed (raw) data before decompressing
+            if (Model.BlockHashes != null && blockIndex < Model.BlockHashes.Length)
+            {
+                uint actual = Adler.Adler32(1, raw, 0, raw.Length);
+                if (actual != Model.BlockHashes[blockIndex])
+                    return null;
+            }
+
             if (uncompressed)
                 return raw;
 
+            // GCZ blocks are zlib-framed: 2-byte header + deflate data + 4-byte Adler-32 trailer.
+            // Strip the frame and feed raw deflate data to DeflateStream.
             if (raw.Length < 6)
                 return null;
 
-#if NET20 || NET35
-            return null;
-#else
             try
             {
                 using var cs = new MemoryStream(raw, 2, raw.Length - 6);
                 using var ds = new DeflateStream(cs, CompressionMode.Decompress);
                 using var os = new MemoryStream();
-                ds.CopyTo(os);
+                byte[] buf = new byte[4096];
+                int n;
+                while ((n = ds.Read(buf, 0, buf.Length)) > 0)
+                    os.Write(buf, 0, n);
                 return os.ToArray();
             }
             catch
             {
                 return null;
             }
-#endif
         }
 
         /// <summary>
@@ -222,7 +237,7 @@ namespace SabreTools.Wrappers
 
             ulong ptr = Model.BlockPointers[0];
             bool uncompressed = (ptr & UncompressedFlag) != 0;
-            long blockFileOffset = Model.DataOffset + (long)(ptr & ~UncompressedFlag);
+            long blockFileOffset = DataOffset + (long)(ptr & ~UncompressedFlag);
 
             ulong nextRaw = Model.BlockPointers.Length > 1
                 ? Model.BlockPointers[1] & ~UncompressedFlag
@@ -236,29 +251,31 @@ namespace SabreTools.Wrappers
             if (raw is null || raw.Length != compSize)
                 return null;
 
-            byte[] block;
             if (uncompressed)
             {
-                block = raw;
+                using var ms2 = new MemoryStream(raw);
+                var disc2 = new Serialization.Readers.NintendoDisc().Deserialize(ms2);
+                return disc2?.Header;
             }
-            else
-            {
-#if NET20 || NET35
+
+            if (raw.Length < 6)
                 return null;
-#else
-                try
-                {
-                    using var cs = new MemoryStream(raw, 2, raw.Length - 6);
-                    using var ds = new DeflateStream(cs, CompressionMode.Decompress);
-                    using var os = new MemoryStream();
-                    ds.CopyTo(os);
-                    block = os.ToArray();
-                }
-                catch
-                {
-                    return null;
-                }
-#endif
+
+            byte[] block;
+            try
+            {
+                using var cs = new MemoryStream(raw, 2, raw.Length - 6);
+                using var ds = new DeflateStream(cs, CompressionMode.Decompress);
+                using var os = new MemoryStream();
+                byte[] buf = new byte[4096];
+                int n;
+                while ((n = ds.Read(buf, 0, buf.Length)) > 0)
+                    os.Write(buf, 0, n);
+                block = os.ToArray();
+            }
+            catch
+            {
+                return null;
             }
 
             using var ms = new MemoryStream(block);

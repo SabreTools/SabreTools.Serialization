@@ -7,7 +7,7 @@ namespace SabreTools.Data.Models.NintendoDisc
     public sealed class WiiRegionData
     {
         /// <summary>
-        /// Region setting byte:
+        /// Region setting uint:
         /// 0 = Japan, 1 = USA, 2 = Europe, 3 = Korea,
         /// 4 = China, 5 = Taiwan, 6 = Germany, 7 = France
         /// </summary>

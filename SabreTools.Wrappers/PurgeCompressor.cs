@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-#if !NET20
-using System.Security.Cryptography;
-#endif
+using SabreTools.Hashing;
 
 namespace SabreTools.Wrappers
 {
@@ -116,17 +114,14 @@ namespace SabreTools.Wrappers
 
         private static byte[] ComputeSha1(byte[]? precedingBytes, byte[] segments)
         {
-#if NET20
-            return new byte[20];
-#else
-            using var sha1 = SHA1.Create();
+            using var sha1 = new HashWrapper(HashType.SHA1);
 
             if (precedingBytes != null && precedingBytes.Length > 0)
-                sha1.TransformBlock(precedingBytes, 0, precedingBytes.Length, null, 0);
+                sha1.Process(precedingBytes, 0, precedingBytes.Length);
 
-            sha1.TransformFinalBlock(segments, 0, segments.Length);
-            return sha1.Hash ?? new byte[20];
-#endif
+            sha1.Process(segments, 0, segments.Length);
+            sha1.Terminate();
+            return sha1.CurrentHashBytes ?? new byte[20];
         }
 
         private static void WriteBeU32(Stream s, uint value)

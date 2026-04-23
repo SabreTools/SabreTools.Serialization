@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using SabreTools.Data.Models.NintendoDisc;
 
@@ -40,6 +41,18 @@ namespace SabreTools.Wrappers
 
         /// <inheritdoc cref="Disc.RegionData"/>
         public WiiRegionData? RegionData => Model.RegionData;
+
+        #endregion
+
+        #region Pre-decrypted reader override
+
+        /// <summary>
+        /// When set, <see cref="ReadDecryptedPartitionRange"/> calls this delegate instead of
+        /// performing AES-CBC decryption.  Used by WIA/RVZ extraction, where partition data is
+        /// already stored decrypted and the encrypt-then-decrypt round-trip is unnecessary.
+        /// Signature: (absDataOffset, partitionDataOffset, length) → decrypted bytes or null.
+        /// </summary>
+        internal Func<long, long, int, byte[]?>? _preDecryptedReader;
 
         #endregion
 

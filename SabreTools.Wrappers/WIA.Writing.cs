@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-#if !NET20
-using System.Security.Cryptography;
-#endif
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.Threading.Tasks;
 #endif
+using SabreTools.Hashing;
 using NdConstants = SabreTools.Data.Models.NintendoDisc.Constants;
 using WiaConst = SabreTools.Data.Models.WIA.Constants;
 using SabreTools.Data.Models.NintendoDisc;
 using SabreTools.Data.Models.WIA;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -50,12 +49,63 @@ namespace SabreTools.Wrappers
             }
         }
 
+        /// <summary>
+        /// Compress a <see cref="NintendoDisc"/> wrapper to a WIA or RVZ stream.
+        /// Unlike <see cref="ConvertFromDisc"/>, exceptions are surfaced via
+        /// <paramref name="exception"/> rather than silently swallowed.
+        /// </summary>
+        /// <param name="exception">Set to the exception thrown on failure, or null on success.</param>
+        public static bool ConvertFromDiscToStream(NintendoDisc source, Stream dest,
+            bool isRvz,
+            WiaRvzCompressionType compressionType,
+            int compressionLevel,
+            uint chunkSize,
+            out Exception? exception)
+        {
+            exception = null;
+
+            if (source is null)
+            {
+                exception = new ArgumentNullException(nameof(source));
+                return false;
+            }
+
+            if (dest is null)
+            {
+                exception = new ArgumentNullException(nameof(dest));
+                return false;
+            }
+
+            if (!isRvz && chunkSize != WiaConst.DefaultChunkSize)
+            {
+                exception = new ArgumentException("WIA chunkSize must equal DefaultChunkSize");
+                return false;
+            }
+
+            if (isRvz && compressionType == WiaRvzCompressionType.Purge)
+            {
+                exception = new ArgumentException("RVZ does not support Purge compression");
+                return false;
+            }
+
+            try
+            {
+                return WriteWiaRvz(source, dest, isRvz, compressionType,
+                    Math.Max(1, Math.Min(22, compressionLevel)), chunkSize);
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+                return false;
+            }
+        }
+
         /// <inheritdoc/>
         public bool Write(string outputPath, bool includeDebug)
         {
             if (string.IsNullOrEmpty(outputPath))
             {
-                string ext = (Model?.IsRvz == true) ? ".rvz" : ".wia";
+                string ext = IsRvz ? ".rvz" : ".wia";
                 string outputFilename = Filename is null
                     ? (Guid.NewGuid().ToString() + ext)
                     : (Filename + ".new");
@@ -136,11 +186,7 @@ namespace SabreTools.Wrappers
             long srcOff   = rawDataStart;
             long remaining = rawDataSize;
 
-#if !NET20
-            int batchSize = Math.Max(Environment.ProcessorCount * 4, 64);
-#else
-            int batchSize = 64;
-#endif
+int batchSize = Math.Max(Environment.ProcessorCount * 4, 64);
 
             while (remaining > 0)
             {
@@ -274,13 +320,11 @@ namespace SabreTools.Wrappers
             dest.Write(groupEntryWritten, 0, groupEntryWritten.Length);
             tablePos += groupEntryWritten.Length;
 
-#if !NET20
-            WriteWiaHeaders(dest, discHdr, isRvz, WiaDiscType.GameCube, compressionType, compressionLevel, chunkSize,
-                0, (ulong)tablePos, new byte[20], // no partition entries
-                1u, rawEntriesOffset, (uint)rawEntryWritten.Length,
-                numGroups, groupEntriesOffset, (uint)groupEntryWritten.Length,
-                propData, propSize, isoSize, bytesWritten);
-#endif
+WriteWiaHeaders(dest, discHdr, isRvz, WiaDiscType.GameCube, compressionType, compressionLevel, chunkSize,
+    0, (ulong)tablePos, new byte[20], // no partition entries
+    1u, rawEntriesOffset, (uint)rawEntryWritten.Length,
+    numGroups, groupEntriesOffset, (uint)groupEntryWritten.Length,
+    propData, propSize, isoSize, bytesWritten);
             dest.Flush();
             return true;
         }
@@ -294,9 +338,6 @@ namespace SabreTools.Wrappers
             int compressionLevel, uint chunkSize,
             long isoSize, byte[] discHdr)
         {
-#if NET20
-            return false; // AES not available
-#else
             var partitions = ReadWiiPartitions(source, isoSize);
             if (partitions is null) return false;
 
@@ -381,14 +422,12 @@ namespace SabreTools.Wrappers
 
             dest.Flush();
             return true;
-#endif
         }
 
         // -----------------------------------------------------------------------
         // Wii partition processing
         // -----------------------------------------------------------------------
 
-#if !NET20
         private static void ProcessWiiPartition(NintendoDisc source, Stream dest,
             WiiPartInfo part, ref long bytesWritten,
             List<WiaRvzGroupEntry> groupEntries, ref uint currentGrpIdx,
@@ -668,13 +707,11 @@ namespace SabreTools.Wrappers
             bytesWritten += pw.MainDataBytes.Length;
             return (uint)(pw.ExceptionListBytes.Length + pw.MainDataBytes.Length);
         }
-#endif
 
         // -----------------------------------------------------------------------
         // Raw region processing
         // -----------------------------------------------------------------------
 
-#if !NET20
         private static void ProcessRawRegion(NintendoDisc source, Stream dest,
             RawRegionInfo raw, ref long bytesWritten,
             List<WiaRvzGroupEntry> groupEntries, ref uint currentGrpIdx,
@@ -793,13 +830,11 @@ namespace SabreTools.Wrappers
 
             raw.NumberOfGroups = currentGrpIdx - raw.FirstGroupIndex;
         }
-#endif
 
         // -----------------------------------------------------------------------
         // Wii crypto helpers
         // -----------------------------------------------------------------------
 
-#if !NET20
         private static byte[]? DecryptWiiGroup(byte[] encGroup, int bytesRead, byte[] titleKey)
         {
             int numBlocks = bytesRead / NdConstants.WiiBlockSize;
@@ -839,21 +874,11 @@ namespace SabreTools.Wrappers
                 byte[] encHashBlock = new byte[NdConstants.WiiBlockHeaderSize];
                 Array.Copy(encGroup, blockOff, encHashBlock, 0, NdConstants.WiiBlockHeaderSize);
 
-                using var aes = Aes.Create();
-                aes.Key     = titleKey;
-                aes.IV      = new byte[16];
-                aes.Mode    = CipherMode.CBC;
-                aes.Padding = PaddingMode.None;
-
-                byte[] origHash;
-                using (var dec = aes.CreateDecryptor())
-                    origHash = dec.TransformFinalBlock(encHashBlock, 0, NdConstants.WiiBlockHeaderSize);
+                byte[] origHash = AesCbc.Decrypt(encHashBlock, titleKey, new byte[16]) ?? new byte[NdConstants.WiiBlockHeaderSize];
 
                 byte[] reEncHashBlock = new byte[NdConstants.WiiBlockHeaderSize];
                 Array.Copy(reEncGroup, blockOff, reEncHashBlock, 0, NdConstants.WiiBlockHeaderSize);
-                byte[] recompHash;
-                using (var dec = aes.CreateDecryptor())
-                    recompHash = dec.TransformFinalBlock(reEncHashBlock, 0, NdConstants.WiiBlockHeaderSize);
+                byte[] recompHash = AesCbc.Decrypt(reEncHashBlock, titleKey, new byte[16]) ?? new byte[NdConstants.WiiBlockHeaderSize];
 
                 for (int off = 0; off < NdConstants.WiiBlockHeaderSize; off += 20)
                 {
@@ -892,8 +917,9 @@ namespace SabreTools.Wrappers
                 byte[]? gEntry = source.ReadData(NdConstants.WiiPartitionTableAddress + (group * 8), 8);
                 if (gEntry is null) continue;
 
-                uint count  = ReadBE32Wia(gEntry, 0);
-                uint offset = ReadBE32Wia(gEntry, 4) << 2;
+                int countPos = 0, offsetPos = 4;
+                uint count  = gEntry.ReadUInt32BigEndian(ref countPos);
+                uint offset = gEntry.ReadUInt32BigEndian(ref offsetPos) << 2;
                 if (count == 0 || offset == 0) continue;
 
                 for (int i = 0; i < (int)count; i++)
@@ -901,10 +927,12 @@ namespace SabreTools.Wrappers
                     byte[]? pEntry = source.ReadData(offset + (i * 8), 8);
                     if (pEntry is null) continue;
 
-                    long partOff = (long)ReadBE32Wia(pEntry, 0) << 2;
+                    int partOffPos = 0;
+                    long partOff = (long)pEntry.ReadUInt32BigEndian(ref partOffPos) << 2;
 
                     byte[]? sigType = source.ReadData(partOff, 4);
-                    if (sigType is null || ReadBE32Wia(sigType, 0) != 0x10001U) continue;
+                    int sigTypePos = 0;
+                    if (sigType is null || sigType.ReadUInt32BigEndian(ref sigTypePos) != 0x10001U) continue;
 
                     byte[]? hdr = source.ReadData(partOff, 0x2C0);
                     if (hdr is null) continue;
@@ -918,8 +946,9 @@ namespace SabreTools.Wrappers
                     byte[]? titleKey = NintendoDisc.DecryptTitleKey(encKey, titleId, ckIdx);
                     if (titleKey is null) continue;
 
-                    ulong dataOff  = (ulong)ReadBE32Wia(hdr, 0x2B8) << 2;
-                    ulong dataSize = (ulong)ReadBE32Wia(hdr, 0x2BC) << 2;
+                    int dataOffPos = 0x2B8, dataSzPos = 0x2BC;
+                    ulong dataOff  = (ulong)hdr.ReadUInt32BigEndian(ref dataOffPos) << 2;
+                    ulong dataSize = (ulong)hdr.ReadUInt32BigEndian(ref dataSzPos) << 2;
 
                     result.Add(new WiiPartInfo
                     {
@@ -979,7 +1008,6 @@ namespace SabreTools.Wrappers
             result.Sort((a, b) => a.Offset.CompareTo(b.Offset));
             return result;
         }
-#endif
 
         // -----------------------------------------------------------------------
         // GcFst helper
@@ -990,8 +1018,9 @@ namespace SabreTools.Wrappers
             byte[]? hdr = source.ReadData(0x420, 12);
             if (hdr is null) return null;
 
-            uint fstOff  = ReadBE32Wia(hdr, 4);
-            uint fstSize = ReadBE32Wia(hdr, 8);
+            int fstOffPos = 4, fstSzPos = 8;
+            uint fstOff  = hdr.ReadUInt32BigEndian(ref fstOffPos);
+            uint fstSize = hdr.ReadUInt32BigEndian(ref fstSzPos);
             if (fstOff == 0 || fstSize == 0) return null;
 
             byte[]? fstData = source.ReadData(fstOff, (int)fstSize);
@@ -1007,10 +1036,10 @@ namespace SabreTools.Wrappers
         private static byte[] SerializeRawDataEntry(WiaRawDataEntry e)
         {
             using var ms = new MemoryStream();
-            WriteBE64Wia(ms, e.DataOffset);
-            WriteBE64Wia(ms, e.DataSize);
-            WriteBE32Wia(ms, e.GroupIndex);
-            WriteBE32Wia(ms, e.NumberOfGroups);
+            ms.WriteBigEndian(e.DataOffset);
+            ms.WriteBigEndian(e.DataSize);
+            ms.WriteBigEndian(e.GroupIndex);
+            ms.WriteBigEndian(e.NumberOfGroups);
             return ms.ToArray();
         }
 
@@ -1024,12 +1053,11 @@ namespace SabreTools.Wrappers
 
         private static void WriteGroupEntryWia(Stream s, WiaRvzGroupEntry e, bool isRvz)
         {
-            WriteBE32Wia(s, e.DataOffset);
-            WriteBE32Wia(s, e.DataSize);
-            if (isRvz) WriteBE32Wia(s, e.RvzPackedSize);
+            s.WriteBigEndian(e.DataOffset);
+            s.WriteBigEndian(e.DataSize);
+            if (isRvz) s.WriteBigEndian(e.RvzPackedSize);
         }
 
-#if !NET20
         private static byte[] SerializePartitionEntries(Stream dest, List<WiiPartInfo> partitions)
         {
             using var ms = new MemoryStream();
@@ -1040,14 +1068,14 @@ namespace SabreTools.Wrappers
                 dest.Write(p.TitleKey, 0, 16);
 
                 // DataEntry0: all of the partition
-                WriteBE32Wia(ms, (uint)(p.DataStart / NdConstants.WiiBlockSize));
-                WriteBE32Wia(ms, (uint)(p.DataSize / NdConstants.WiiBlockSize));
-                WriteBE32Wia(ms, p.FirstGroupIndex);
-                WriteBE32Wia(ms, p.NumberOfGroups);
-                WriteBE32Wia(dest, (uint)(p.DataStart / NdConstants.WiiBlockSize));
-                WriteBE32Wia(dest, (uint)(p.DataSize / NdConstants.WiiBlockSize));
-                WriteBE32Wia(dest, p.FirstGroupIndex);
-                WriteBE32Wia(dest, p.NumberOfGroups);
+                ms.WriteBigEndian((uint)(p.DataStart / NdConstants.WiiBlockSize));
+                ms.WriteBigEndian((uint)(p.DataSize / NdConstants.WiiBlockSize));
+                ms.WriteBigEndian(p.FirstGroupIndex);
+                ms.WriteBigEndian(p.NumberOfGroups);
+                dest.WriteBigEndian((uint)(p.DataStart / NdConstants.WiiBlockSize));
+                dest.WriteBigEndian((uint)(p.DataSize / NdConstants.WiiBlockSize));
+                dest.WriteBigEndian(p.FirstGroupIndex);
+                dest.WriteBigEndian(p.NumberOfGroups);
 
                 // DataEntry1: zeros
                 byte[] zeroPDE = new byte[WiaConst.PartitionDataEntrySize];
@@ -1096,7 +1124,6 @@ namespace SabreTools.Wrappers
 
             return ms.ToArray();
         }
-#endif
 
         private static byte[] CompressTableDataWia(byte[] data,
             WiaRvzCompressionType ct, int cl, byte[] propData, byte propSize)
@@ -1112,7 +1139,6 @@ namespace SabreTools.Wrappers
         // Header finalisation
         // -----------------------------------------------------------------------
 
-#if !NET20
         private static void WriteWiaHeaders(Stream dest, byte[] discHdr,
             bool isRvz, WiaDiscType discType,
             WiaRvzCompressionType compressionType, int compressionLevel, uint chunkSize,
@@ -1175,13 +1201,13 @@ namespace SabreTools.Wrappers
         private static byte[] SerializeHeader1Wia(WiaHeader1 h)
         {
             using var ms = new MemoryStream();
-            WriteLE32Wia(ms, h.Magic);
-            WriteBE32Wia(ms, h.Version);
-            WriteBE32Wia(ms, h.VersionCompatible);
-            WriteBE32Wia(ms, h.Header2Size);
+            ms.WriteLittleEndian(h.Magic);
+            ms.WriteBigEndian(h.Version);
+            ms.WriteBigEndian(h.VersionCompatible);
+            ms.WriteBigEndian(h.Header2Size);
             ms.Write(h.Header2Hash, 0, 20);
-            WriteBE64Wia(ms, h.IsoFileSize);
-            WriteBE64Wia(ms, h.WiaFileSize);
+            ms.WriteBigEndian(h.IsoFileSize);
+            ms.WriteBigEndian(h.WiaFileSize);
             ms.Write(h.Header1Hash, 0, 20);
             return ms.ToArray();
         }
@@ -1189,25 +1215,25 @@ namespace SabreTools.Wrappers
         private static byte[] SerializeHeader2Wia(WiaHeader2 h)
         {
             using var ms = new MemoryStream();
-            WriteBE32Wia(ms, (uint)h.DiscType);
-            WriteBE32Wia(ms, (uint)h.CompressionType);
-            WriteBE32Wia(ms, (uint)h.CompressionLevel);
-            WriteBE32Wia(ms, h.ChunkSize);
+            ms.WriteBigEndian((uint)h.DiscType);
+            ms.WriteBigEndian((uint)h.CompressionType);
+            ms.WriteBigEndian((uint)h.CompressionLevel);
+            ms.WriteBigEndian(h.ChunkSize);
             byte[] dh = h.DiscHeader ?? new byte[WiaConst.DiscHeaderStoredSize];
             ms.Write(dh, 0, Math.Min(dh.Length, WiaConst.DiscHeaderStoredSize));
             if (dh.Length < WiaConst.DiscHeaderStoredSize)
                 ms.Write(new byte[WiaConst.DiscHeaderStoredSize - dh.Length], 0,
                     WiaConst.DiscHeaderStoredSize - dh.Length);
-            WriteBE32Wia(ms, h.NumberOfPartitionEntries);
-            WriteBE32Wia(ms, h.PartitionEntrySize);
-            WriteBE64Wia(ms, h.PartitionEntriesOffset);
+            ms.WriteBigEndian(h.NumberOfPartitionEntries);
+            ms.WriteBigEndian(h.PartitionEntrySize);
+            ms.WriteBigEndian(h.PartitionEntriesOffset);
             ms.Write(h.PartitionEntriesHash ?? new byte[20], 0, 20);
-            WriteBE32Wia(ms, h.NumberOfRawDataEntries);
-            WriteBE64Wia(ms, h.RawDataEntriesOffset);
-            WriteBE32Wia(ms, h.RawDataEntriesSize);
-            WriteBE32Wia(ms, h.NumberOfGroupEntries);
-            WriteBE64Wia(ms, h.GroupEntriesOffset);
-            WriteBE32Wia(ms, h.GroupEntriesSize);
+            ms.WriteBigEndian(h.NumberOfRawDataEntries);
+            ms.WriteBigEndian(h.RawDataEntriesOffset);
+            ms.WriteBigEndian(h.RawDataEntriesSize);
+            ms.WriteBigEndian(h.NumberOfGroupEntries);
+            ms.WriteBigEndian(h.GroupEntriesOffset);
+            ms.WriteBigEndian(h.GroupEntriesSize);
             ms.WriteByte(h.CompressorDataSize);
             byte[] prop = h.CompressorData ?? new byte[7];
             ms.Write(prop, 0, Math.Min(prop.Length, 7));
@@ -1219,10 +1245,11 @@ namespace SabreTools.Wrappers
         private static byte[] ComputeSha1Wia(byte[] data, int offset, int count)
         {
             if (count == 0) return new byte[20];
-            using var sha1 = SHA1.Create();
-            return sha1.ComputeHash(data, offset, count);
+            using var sha1 = new HashWrapper(HashType.SHA1);
+            sha1.Process(data, offset, count);
+            sha1.Terminate();
+            return sha1.CurrentHashBytes ?? new byte[20];
         }
-#endif
 
         // -----------------------------------------------------------------------
         // Platform detection
@@ -1328,36 +1355,8 @@ namespace SabreTools.Wrappers
 
         private static long AlignWia(long value, long align) => (value + align - 1) / align * align;
 
-        private static uint SwapBE(uint v) => (v << 24) | ((v << 8) & 0x00FF0000u) | ((v >> 8) & 0x0000FF00u) | (v >> 24);
-
-        private static uint ReadBE32Wia(byte[] d, int o) => (uint)((d[o] << 24) | (d[o + 1] << 16) | (d[o + 2] << 8) | d[o + 3]);
-
-        private static void WriteBE32Wia(Stream s, uint v)
-        {
-            s.WriteByte((byte)(v >> 24));
-            s.WriteByte((byte)(v >> 16));
-            s.WriteByte((byte)(v >> 8));
-            s.WriteByte((byte)v);
-        }
-
-        private static void WriteBE64Wia(Stream s, ulong v)
-        {
-            WriteBE32Wia(s, (uint)(v >> 32));
-            WriteBE32Wia(s, (uint)v);
-        }
-
-        #if !NET20
-        private static void WriteLE32Wia(Stream s, uint v)
-        {
-            s.WriteByte((byte)v);
-            s.WriteByte((byte)(v >> 8));
-            s.WriteByte((byte)(v >> 16));
-            s.WriteByte((byte)(v >> 24));
-        }
-#endif
-
         // -----------------------------------------------------------------------
-        // Inner work types — explicit structs, no ValueTuple (net20 compatibility)
+        // Inner work types
         // -----------------------------------------------------------------------
 
         // Key: (byte sameByte, int bytesRead) — replaces ValueTuple<byte,int>
@@ -1451,7 +1450,6 @@ namespace SabreTools.Wrappers
             public byte[]? CompressedData = null;
         }
 
-#if !NET20
         private sealed class WiiChunkWork
         {
             public bool    IsAllZeros;
@@ -1508,6 +1506,47 @@ namespace SabreTools.Wrappers
             public WiiPartInfo?   PartitionInfo;
             public RawRegionInfo? RawInfo;
         }
-#endif
+
+        /// <summary>
+        /// Converts the WIA/RVZ image to a flat ISO file at <paramref name="outputPath"/>.
+        /// Re-encrypts Wii partition groups on the fly via the virtual stream.
+        /// </summary>
+        /// <param name="outputPath">Destination ISO file path.</param>
+        /// <returns><c>true</c> on success; <c>false</c> on any failure.</returns>
+        public bool DumpIso(string outputPath)
+        {
+            if (string.IsNullOrEmpty(outputPath))
+                return false;
+
+            long isoSize = (long)IsoFileSize;
+            if (isoSize <= 0)
+                return false;
+
+            try
+            {
+                using var vStream = new WiaVirtualStream(this);
+                using var fs = File.Open(outputPath, FileMode.Create, FileAccess.Write, FileShare.None);
+
+                const int BufSize = 2 * 1024 * 1024; // 2 MiB — aligns to WIA default / RVZ max chunk size
+                byte[] buf = new byte[BufSize];
+                long remaining = isoSize;
+
+                while (remaining > 0)
+                {
+                    int toRead = (int)Math.Min(BufSize, remaining);
+                    int read = vStream.Read(buf, 0, toRead);
+                    if (read <= 0)
+                        break;
+                    fs.Write(buf, 0, read);
+                    remaining -= read;
+                }
+
+                return remaining == 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

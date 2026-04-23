@@ -32,8 +32,6 @@ namespace SabreTools.Serialization.Readers
                 if (archive.Header1.Magic != Constants.WiaMagic && archive.Header1.Magic != Constants.RvzMagic)
                     return null;
 
-                archive.IsRvz = archive.Header1.Magic == Constants.RvzMagic;
-
                 // Parse Header2
                 archive.Header2 = ParseHeader2(data);
 
@@ -60,7 +58,7 @@ namespace SabreTools.Serialization.Readers
                     && archive.Header2.GroupEntriesOffset > 0)
                 {
                     data.Seek(initialOffset + (long)archive.Header2.GroupEntriesOffset, SeekOrigin.Begin);
-                    if (archive.IsRvz)
+                    if (archive.Header1.Magic == Constants.RvzMagic)
                         archive.RvzGroupEntries = ParseRvzGroupEntries(
                             data, (int)archive.Header2.NumberOfGroupEntries);
                     else

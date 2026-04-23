@@ -437,6 +437,10 @@ namespace SabreTools.Wrappers
         {
             if (length <= 0) return null;
 
+            // WIA/RVZ fast path: data is already decrypted; skip the AES round-trip.
+            if (_preDecryptedReader is not null)
+                return _preDecryptedReader(absDataOffset, partitionDataOffset, length);
+
             var result = new byte[length];
             int produced = 0;
 

@@ -25,16 +25,9 @@ namespace SabreTools.Data.Models.GCZ
         public ulong[] BlockPointers { get; set; } = [];
 
         /// <summary>
-        /// Adler-32 (stored as CRC32) hashes of the uncompressed block data,
-        /// one per block. Used for integrity verification.
+        /// Adler-32 checksums of the uncompressed block data, one per block.
+        /// Used for integrity verification after decompression.
         /// </summary>
         public uint[] BlockHashes { get; set; } = [];
-
-        /// <summary>
-        /// Byte offset within the GCZ file where the compressed block data begins.
-        /// Computed as: <c>HeaderSize + (NumBlocks * 8) + (NumBlocks * 4)</c>.
-        /// </summary>
-        /// <remarks>Not parsed from stream; computed during deserialization.</remarks>
-        public long DataOffset { get; set; }
     }
 }

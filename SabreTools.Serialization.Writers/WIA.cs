@@ -53,12 +53,12 @@ namespace SabreTools.Serialization.Writers
                 WriteRawDataEntry(stream, re);
 
             // Group entries
-            if (obj.IsRvz && obj.RvzGroupEntries != null)
+            if (obj.Header1.Magic == Constants.RvzMagic && obj.RvzGroupEntries != null)
             {
                 foreach (var ge in obj.RvzGroupEntries)
                     WriteRvzGroupEntry(stream, ge);
             }
-            else if (!obj.IsRvz && obj.GroupEntries != null)
+            else if (obj.Header1.Magic != Constants.RvzMagic && obj.GroupEntries != null)
             {
                 foreach (var ge in obj.GroupEntries)
                     WriteWiaGroupEntry(stream, ge);

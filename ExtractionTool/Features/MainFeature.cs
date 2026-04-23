@@ -118,7 +118,7 @@ namespace ExtractionTool.Features
                 Console.WriteLine($"Attempting to extract all files from {file}");
                 using Stream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-                // Read the first 32 bytes — needed to detect NintendoDisc magic at 0x18/0x1C
+                // Read the first 32 bytes
                 byte[] magic = stream.PeekBytes(32);
 
                 // Get the file type

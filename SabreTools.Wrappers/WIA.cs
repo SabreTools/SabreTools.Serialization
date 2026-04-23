@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-#if !NET20
-using System.Security.Cryptography;
-#endif
+using SabreTools.Hashing;
 using SabreTools.Data.Models.NintendoDisc;
 using SabreTools.Data.Models.WIA;
 using WiaConstants = SabreTools.Data.Models.WIA.Constants;
@@ -27,8 +25,8 @@ namespace SabreTools.Wrappers
         /// <inheritdoc cref="DiscImage.Header2"/>
         public WiaHeader2 Header2 => Model.Header2;
 
-        /// <inheritdoc cref="DiscImage.IsRvz"/>
-        public bool IsRvz => Model.IsRvz;
+        /// <summary>True if this is an RVZ file; false if this is a WIA file.</summary>
+        public bool IsRvz => Model.Header1.Magic == WiaConstants.RvzMagic;
 
         /// <inheritdoc cref="DiscImage.PartitionEntries"/>
         public PartitionEntry[]? PartitionEntries => Model.PartitionEntries;
@@ -186,7 +184,7 @@ namespace SabreTools.Wrappers
             {
                 int count = (int)model.Header2.NumberOfGroupEntries;
                 int compressedSize = (int)model.Header2.GroupEntriesSize;
-                int entrySize = model.IsRvz ? WiaConstants.RvzGroupEntrySize : WiaConstants.WiaGroupEntrySize;
+                int entrySize = model.Header1.Magic == WiaConstants.RvzMagic ? WiaConstants.RvzGroupEntrySize : WiaConstants.WiaGroupEntrySize;
                 int expectedSize = count * entrySize;
 
                 data.Seek(baseOffset + (long)model.Header2.GroupEntriesOffset, SeekOrigin.Begin);
@@ -200,7 +198,7 @@ namespace SabreTools.Wrappers
                 if (plain is null || plain.Length < expectedSize)
                     return;
 
-                if (model.IsRvz)
+                if (model.Header1.Magic == WiaConstants.RvzMagic)
                     model.RvzGroupEntries = ParseRvzGroupEntries(plain, count);
                 else
                     model.GroupEntries = ParseWiaGroupEntries(plain, count);
@@ -294,7 +292,54 @@ namespace SabreTools.Wrappers
                 return null;
 
             var vStream = new WiaVirtualStream(this);
-            return NintendoDisc.Create(vStream);
+            var disc = NintendoDisc.Create(vStream);
+            if (disc is null)
+                return null;
+
+            // For Wii discs: WIA/RVZ stores partition data already decrypted.
+            // Wire a pre-decrypted reader so NintendoDisc.Extraction bypasses its
+            // AES-CBC decrypt pass and reads directly from our decompressed groups.
+            if (Model.PartitionEntries is { Length: > 0 })
+                disc._preDecryptedReader = BuildPreDecryptedReader();
+
+            return disc;
+        }
+
+        /// <summary>
+        /// Builds the delegate used by <see cref="NintendoDisc._preDecryptedReader"/>.
+        /// Matches <paramref name="absDataOffset"/> (absolute ISO offset of the encrypted data
+        /// area) to the corresponding WIA <see cref="PartitionEntry"/> by comparing it with
+        /// <c>de.FirstSector * 0x8000</c>, then delegates to
+        /// <see cref="ReadDecryptedPartitionBytes"/>.
+        /// </summary>
+        private Func<long, long, int, byte[]?> BuildPreDecryptedReader()
+        {
+            const int WiiBlockSize = 0x8000;
+            return (absDataOffset, partitionDataOffset, length) =>
+            {
+                if (Model.PartitionEntries is null)
+                    return null;
+
+                foreach (var pe in Model.PartitionEntries)
+                {
+                    // The data area of this partition starts at de.FirstSector * 0x8000
+                    long deIsoStart = (long)pe.DataEntry0.FirstSector * WiiBlockSize;
+                    long deIsoEnd   = deIsoStart + ((long)pe.DataEntry0.NumberOfSectors * WiiBlockSize);
+
+                    if (absDataOffset >= deIsoStart && absDataOffset < deIsoEnd)
+                        return ReadDecryptedPartitionBytes(pe, partitionDataOffset, length);
+
+                    if (pe.DataEntry1 is { NumberOfSectors: > 0 })
+                    {
+                        long de1Start = (long)pe.DataEntry1.FirstSector * WiiBlockSize;
+                        long de1End   = de1Start + ((long)pe.DataEntry1.NumberOfSectors * WiiBlockSize);
+                        if (absDataOffset >= de1Start && absDataOffset < de1End)
+                            return ReadDecryptedPartitionBytes(pe, partitionDataOffset, length);
+                    }
+                }
+
+                return null;
+            };
         }
 
         /// <summary>
@@ -591,7 +636,7 @@ namespace SabreTools.Wrappers
         private byte[]? ReadGroupRaw(uint groupIdx, WiaRvzCompressionType comp,
             byte[] compressorData, byte compressorDataSize, uint chunkSize)
         {
-            if (Model.IsRvz)
+            if (IsRvz)
             {
                 if (Model.RvzGroupEntries is null || groupIdx >= Model.RvzGroupEntries.Length)
                     return null;
@@ -602,7 +647,7 @@ namespace SabreTools.Wrappers
                     return new byte[chunkSize];
                 byte[] fileData = ReadRangeFromSource((long)ge.DataOffset, (int)dataSize);
                 return DecompressGroupBytes(fileData, 0, (int)dataSize, comp,
-                    compressorData, compressorDataSize, (int)chunkSize, Model.IsRvz, isRvzCompressed,
+                    compressorData, compressorDataSize, (int)chunkSize, IsRvz, isRvzCompressed,
                     ge.RvzPackedSize, groupIdx * chunkSize, false, chunkSize);
             }
             else
@@ -628,7 +673,7 @@ namespace SabreTools.Wrappers
         {
             int decryptedGroupSize = blocksPerGroup * blockDataSize;
 
-            if (Model.IsRvz)
+            if (IsRvz)
             {
                 if (Model.RvzGroupEntries is null || groupIdx >= Model.RvzGroupEntries.Length)
                     return null;
@@ -639,7 +684,7 @@ namespace SabreTools.Wrappers
                     return new byte[decryptedGroupSize];
                 byte[] fileData = ReadRangeFromSource((long)ge.DataOffset, (int)dataSize);
                 return DecompressGroupBytes(fileData, 0, (int)dataSize, comp,
-                    compressorData, compressorDataSize, decryptedGroupSize, Model.IsRvz, isRvzCompressed,
+                    compressorData, compressorDataSize, decryptedGroupSize, IsRvz, isRvzCompressed,
                     ge.RvzPackedSize, dataOffsetForLfg, true,
                     Model.Header2.ChunkSize);
             }
@@ -809,12 +854,8 @@ namespace SabreTools.Wrappers
         /// Re-encrypts one decrypted hash-stripped Wii group back into standard ISO-layout
         /// encrypted 0x8000-byte blocks. Mirrors Dolphin's VolumeWii::EncryptGroup.
         /// </summary>
-        private static byte[] EncryptWiiGroup(byte[] decryptedData, byte[] key, int blocksPerGroup)
+        internal static byte[] EncryptWiiGroup(byte[] decryptedData, byte[] key, int blocksPerGroup)
         {
-#if NET20
-            // AES not available on net20; return a zero buffer so the wrapper can still be created
-            return new byte[blocksPerGroup * 0x8000];
-#else
             const int WiiBlockSize     = 0x8000;
             const int WiiBlockDataSize = 0x7C00;
             const int WiiBlockHashSize = 0x0400;
@@ -824,7 +865,6 @@ namespace SabreTools.Wrappers
             const int HashLen  = 20;
 
             // --- Build H0 / H1 / H2 hash arrays ---
-            // H0[block][h0] = SHA1 of 0x400-byte chunk h0 within data block 'block'
             byte[][][] h0 = new byte[blocksPerGroup][][];
             for (int b = 0; b < blocksPerGroup; b++)
             {
@@ -872,11 +912,6 @@ namespace SabreTools.Wrappers
 
             byte[] result = new byte[blocksPerGroup * WiiBlockSize];
 
-            using var aes = Aes.Create();
-            aes.Key = key;
-            aes.Mode = CipherMode.CBC;
-            aes.Padding = PaddingMode.None;
-
             for (int b = 0; b < blocksPerGroup; b++)
             {
                 // Serialize hash block
@@ -906,10 +941,7 @@ namespace SabreTools.Wrappers
                 // Note: off is now 0x3D4; IV will sit at 0x3D0 after encryption
 
                 // Encrypt hash block with IV = zero
-                aes.IV = new byte[16];
-                byte[] encHashBlock;
-                using (var enc = aes.CreateEncryptor())
-                    encHashBlock = enc.TransformFinalBlock(hashBlock, 0, WiiBlockHashSize);
+                byte[] encHashBlock = AesCbc.Encrypt(hashBlock, key, new byte[16]) ?? new byte[WiiBlockHashSize];
 
                 // Extract IV for data block from offset 0x3D0 of the encrypted hash block
                 byte[] iv = new byte[16];
@@ -922,10 +954,7 @@ namespace SabreTools.Wrappers
                 if (dataLen > 0)
                     Array.Copy(decryptedData, dataSrc, dataBlock, 0, dataLen);
 
-                aes.IV = iv;
-                byte[] encDataBlock;
-                using (var enc = aes.CreateEncryptor())
-                    encDataBlock = enc.TransformFinalBlock(dataBlock, 0, WiiBlockDataSize);
+                byte[] encDataBlock = AesCbc.Encrypt(dataBlock, key, iv) ?? new byte[WiiBlockDataSize];
 
                 int dest = b * WiiBlockSize;
                 Array.Copy(encHashBlock, 0, result, dest, WiiBlockHashSize);
@@ -933,19 +962,18 @@ namespace SabreTools.Wrappers
             }
 
             return result;
-#endif
         }
 
-#if !NET20
-        private static byte[] ComputeSha1(byte[] data, int offset, int count)
-        {
-            if (count == 0)
-                return new byte[20];
+private static byte[] ComputeSha1(byte[] data, int offset, int count)
+{
+    if (count == 0)
+        return new byte[20];
 
-            using var sha1 = SHA1.Create();
-            return sha1.ComputeHash(data, offset, count);
-        }
-#endif
+    using var sha1 = new HashWrapper(HashType.SHA1);
+    sha1.Process(data, offset, count);
+    sha1.Terminate();
+    return sha1.CurrentHashBytes ?? new byte[20];
+}
 
         #endregion
     }

@@ -27,8 +27,6 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the header
                 archive.Header = ParseGczHeader(data);
-
-                // Validate magic
                 if (archive.Header.MagicCookie != Constants.MagicCookie)
                     return null;
 
@@ -49,11 +47,6 @@ namespace SabreTools.Serialization.Readers
                 byte[] hashBuf = data.ReadBytes(numBlocks * 4);
                 for (int i = 0; i < numBlocks; i++)
                     archive.BlockHashes[i] = System.BitConverter.ToUInt32(hashBuf, i * 4);
-
-                // Compressed data begins immediately after the tables
-                archive.DataOffset = initialOffset + Constants.HeaderSize
-                    + ((long)numBlocks * 8)
-                    + ((long)numBlocks * 4);
 
                 return archive;
             }

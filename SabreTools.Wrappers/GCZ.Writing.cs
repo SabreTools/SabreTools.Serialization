@@ -1,4 +1,5 @@
 using System;
+using SabreTools.IO.Compression.Deflate;
 using System.IO;
 using SabreTools.Data.Models.GCZ;
 
@@ -129,13 +130,13 @@ namespace SabreTools.Wrappers
                 {
                     blockPointers[bi] = blockPointer;
                     destination.Write(compressBuf, 0, compressedSize);
-                    blockHashes[bi]   = Adler32(compressBuf, compressedSize);
+                    blockHashes[bi]   = Adler.Adler32(1, compressBuf, 0, compressedSize);
                 }
                 else
                 {
                     blockPointers[bi] = blockPointer | Constants.UncompressedFlag;
                     destination.Write(readBuf, 0, blockDataSize);
-                    blockHashes[bi]   = Adler32(readBuf, blockDataSize);
+                    blockHashes[bi]   = Adler.Adler32(1, readBuf, 0, blockDataSize);
                 }
             }
 
@@ -171,55 +172,30 @@ namespace SabreTools.Wrappers
         /// when the result is smaller than 97 % of the original (Dolphin's threshold).
         /// GCZ uses the zlib framing: 2-byte header (0x78 0x9C) + deflate stream + 4-byte Adler-32 tail.
         /// </summary>
-#if NET20 || NET35 || NET40
-        private static bool TryCompressBlock(byte[] input, int inputSize, byte[] output, out int compressedSize)
+private static bool TryCompressBlock(byte[] input, int inputSize, byte[] output, out int compressedSize)
+{
+    using (var ms = new MemoryStream(output))
+    {
+        ms.WriteByte(0x78);
+        ms.WriteByte(0x9C);
+
+        using (var ds = new DeflateStream(ms, CompressionMode.Compress, leaveOpen: true))
         {
-            // DeflateStream leaveOpen overload and CompressionLevel are not available on net20/net35/net40.
-            // Fall back to storing all blocks uncompressed on those targets.
-            compressedSize = 0;
-            return false;
+            ds.Write(input, 0, inputSize);
         }
-#else
-        private static bool TryCompressBlock(byte[] input, int inputSize, byte[] output, out int compressedSize)
-        {
-            using (var ms = new MemoryStream(output))
-            {
-                ms.WriteByte(0x78);
-                ms.WriteByte(0x9C);
 
-                using (var ds = new System.IO.Compression.DeflateStream(
-                    ms, System.IO.Compression.CompressionLevel.Optimal, leaveOpen: true))
-                {
-                    ds.Write(input, 0, inputSize);
-                }
+        uint adler = Adler.Adler32(1, input, 0, inputSize);
+        ms.WriteByte((byte)(adler >> 24));
+        ms.WriteByte((byte)(adler >> 16));
+        ms.WriteByte((byte)(adler >> 8));
+        ms.WriteByte((byte)adler);
 
-                uint adler = Adler32(input, inputSize);
-                ms.WriteByte((byte)(adler >> 24));
-                ms.WriteByte((byte)(adler >> 16));
-                ms.WriteByte((byte)(adler >> 8));
-                ms.WriteByte((byte)adler);
+        compressedSize = (int)ms.Position;
+    }
 
-                compressedSize = (int)ms.Position;
-            }
-
-            int threshold = inputSize * 97 / 100;
-            return compressedSize < threshold;
-        }
-#endif
-
-        /// <summary>Adler-32 checksum (zlib/deflate standard).</summary>
-        private static uint Adler32(byte[] data, int length)
-        {
-            const uint MOD = 65521;
-            uint a = 1, b = 0;
-            for (int i = 0; i < length; i++)
-            {
-                a = (a + data[i]) % MOD;
-                b = (b + a) % MOD;
-            }
-
-            return (b << 16) | a;
-        }
+    int threshold = inputSize * 97 / 100;
+    return compressedSize < threshold;
+}
 
         // -----------------------------------------------------------------------
         // Little-endian binary write helpers

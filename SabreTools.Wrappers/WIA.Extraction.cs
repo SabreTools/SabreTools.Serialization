@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace SabreTools.Wrappers
 {
     public partial class WIA : IExtractable
