@@ -155,9 +155,15 @@ namespace SabreTools.Wrappers
                 // - 0x00-0x0F - MD5 hash of the internal file
                 // - 0x10-0x13 - CRC-32 checksum of the internal file
                 // - 0x14-0x1B - Little-endian file size of the internal file
-                if (Header.ExtraLength != 0x1C)
+                // The following fields are included for alternate headers:
+                // - 0x1C      - Alternative header type
+                // - 0x1D-0x2C - Alternative MD5 hash
+                // - 0x2D-0x40 - Alternative SHA-1 hash
+                // - 0x41-0x44 - Alternative CRC-32 checksum
+                // - 0x45-0x48 - Alternative little-endian uncompressed file size
+                if (Header.ExtraLength != 0x1C && Header.ExtraLength != 0x4D)
                     return false;
-                if (Header.ExtraFieldBytes is null || Header.ExtraFieldBytes.Length != 0x1C)
+                if (Header.ExtraFieldBytes is null || (Header.ExtraFieldBytes.Length != 0x1C && Header.ExtraFieldBytes.Length != 0x4D))
                     return false;
 
                 return true;
