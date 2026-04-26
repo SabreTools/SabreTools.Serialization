@@ -14,6 +14,7 @@ namespace SabreTools.Wrappers
 
         #endregion
 
+        // TODO: Add alternative Torrent GZip header fields as properties
         #region Extension Properties
 
         /// <summary>
@@ -160,7 +161,7 @@ namespace SabreTools.Wrappers
                 // - 0x1D-0x2C - Alternative MD5 hash
                 // - 0x2D-0x40 - Alternative SHA-1 hash
                 // - 0x41-0x44 - Alternative CRC-32 checksum
-                // - 0x45-0x48 - Alternative little-endian uncompressed file size
+                // - 0x45-0x4C - Alternative little-endian uncompressed file size
                 if (Header.ExtraLength != 0x1C && Header.ExtraLength != 0x4D)
                     return false;
                 if (Header.ExtraFieldBytes is null || (Header.ExtraFieldBytes.Length != 0x1C && Header.ExtraFieldBytes.Length != 0x4D))
