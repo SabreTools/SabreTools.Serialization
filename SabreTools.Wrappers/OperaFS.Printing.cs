@@ -52,7 +52,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine(vd.StructureVersion, "  Structure Version");
 
             builder.AppendLine((byte)vd.VolumeFlags, "  Volume Flags");
-            if ((byte)vd.VolumeFlags != 0)
+            if (vd.VolumeFlags != 0)
             {
                 builder.AppendLine("    Volume Flags (Parsed)");
                 builder.AppendLine((vd.VolumeFlags & VolumeFlags.M2) == VolumeFlags.M2, "      M2 Disc (or M1 Data Disc)");

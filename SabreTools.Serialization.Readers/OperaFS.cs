@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.Readers
         public static VolumeDescriptor ParseVolumeDescriptor(Stream data)
         {
             var volumeDescriptor = new VolumeDescriptor();
-            
+
             volumeDescriptor.RecordType = data.ReadByteValue();
             volumeDescriptor.VolumeSyncBytes = data.ReadBytes(5);
             volumeDescriptor.StructureVersion = data.ReadByteValue();
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Readers
             volumeDescriptor.RootDirectoryBlockCount = data.ReadUInt32BigEndian();
             volumeDescriptor.RootDirectoryBlockSize = data.ReadUInt32BigEndian();
             volumeDescriptor.RootDirectoryLastAvatarIndex = data.ReadUInt32BigEndian();
-            
+
             for (int i = 0; i < 8; i++)
             {
                 volumeDescriptor.RootDirectoryAvatarList[i] = data.ReadUInt32BigEndian();
@@ -107,7 +107,7 @@ namespace SabreTools.Serialization.Readers
         {
             var directories = new Dictionary<uint, DirectoryDescriptor>();
 
-            data.SeekIfPossible(initialOffset + volumeDescriptor.RootDirectoryAvatarList[0] * Constants.SectorSize, SeekOrigin.Begin);
+            data.SeekIfPossible(initialOffset + (volumeDescriptor.RootDirectoryAvatarList[0] * Constants.SectorSize), SeekOrigin.Begin);
             var rootDirectory = ParseDirectory(data);
             for (int i = 0; i <= volumeDescriptor.RootDirectoryLastAvatarIndex; i++)
             {
@@ -139,13 +139,13 @@ namespace SabreTools.Serialization.Readers
                 if ((dr.DirectoryRecordFlags & DirectoryRecordFlags.DIRECTORY) == 0)
                     continue;
 
-                data.SeekIfPossible(initialOffset + dr.AvatarList[0] * Constants.SectorSize, SeekOrigin.Begin);
+                data.SeekIfPossible(initialOffset + (dr.AvatarList[0] * Constants.SectorSize), SeekOrigin.Begin);
                 var directory = ParseDirectory(data);
                 directories.Add(dr.AvatarList[0], directory);
                 for (int i = 1; i <= dr.LastAvatarIndex; i++)
                 {
                     // Read avatar
-                    data.SeekIfPossible(initialOffset + dr.AvatarList[i] * Constants.SectorSize, SeekOrigin.Begin);
+                    data.SeekIfPossible(initialOffset + (dr.AvatarList[i] * Constants.SectorSize), SeekOrigin.Begin);
                     var avatar = ParseDirectory(data);
 
                     // Add reference to original directory if avatar is identical
@@ -200,7 +200,7 @@ namespace SabreTools.Serialization.Readers
                 }
             }
 
-            directory.DirectoryRecords = directoryRecords.ToArray();
+            directory.DirectoryRecords = [.. directoryRecords];
 
             return directory;
         }
@@ -213,7 +213,7 @@ namespace SabreTools.Serialization.Readers
         public static DirectoryRecord ParseDirectoryRecord(Stream data)
         {
             var directoryRecord = new DirectoryRecord();
-            
+
             directoryRecord.DirectoryRecordFlags = (DirectoryRecordFlags)data.ReadUInt32BigEndian();
             directoryRecord.UniqueIdentifier = data.ReadBytes(4);
             directoryRecord.Type = data.ReadBytes(4);
@@ -224,7 +224,7 @@ namespace SabreTools.Serialization.Readers
             directoryRecord.Gap = data.ReadUInt32BigEndian();
             directoryRecord.Filename = data.ReadBytes(32);
             directoryRecord.LastAvatarIndex = data.ReadUInt32BigEndian();
-            
+
             directoryRecord.AvatarList = new uint[directoryRecord.LastAvatarIndex + 1];
             for (int i = 0; i <= directoryRecord.LastAvatarIndex; i++)
             {

@@ -1,6 +1,5 @@
 using SabreTools.Data.Models.OperaFS;
 using SabreTools.Matching;
-using SabreTools.Numerics;
 
 namespace SabreTools.Data.Extensions
 {
@@ -26,7 +25,7 @@ namespace SabreTools.Data.Extensions
                 return false;
             if (dir1.DirectoryRecords.Length != dir2.DirectoryRecords.Length)
                 return false;
-            
+
             for (int i = 0; i < dir1.DirectoryRecords.Length; i++)
             {
                 if (!dir1.DirectoryRecords[i].EqualsExactly(dir2.DirectoryRecords[i]))
@@ -66,7 +65,7 @@ namespace SabreTools.Data.Extensions
                 return false;
             if (dr1.AvatarList.Length != dr2.AvatarList.Length)
                 return false;
-            
+
             for (int i = 0; i < dr1.AvatarList.Length; i++)
             {
                 if (dr1.AvatarList[i] != dr2.AvatarList[i])
