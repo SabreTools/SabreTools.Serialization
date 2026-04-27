@@ -11,7 +11,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             var dir1 = new DirectoryDescriptor();
             var dir2 = new DirectoryDescriptor();
-            short actual = dir1.EqualsExactly(dir2);
+            bool actual = dir1.EqualsExactly(dir2);
             Assert.True(actual);
         }
 
@@ -20,7 +20,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             var dr1 = new DirectoryRecord();
             var dr2 = new DirectoryRecord();
-            short actual = dr1.EqualsExactly(dr2);
+            bool actual = dr1.EqualsExactly(dr2);
             Assert.True(actual);
         }
     }
