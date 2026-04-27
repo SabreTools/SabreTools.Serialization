@@ -11,6 +11,9 @@ namespace SabreTools.Wrappers
 #if NETCOREAPP
         /// <inheritdoc/>
         public string ExportJSON() => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
+#else
+        /// <inheritdoc/>
+        public string ExportJSON() => Newtonsoft.Json.JsonConvert.SerializeObject(Model, _jsonSerializerOptions);
 #endif
 
         /// <inheritdoc/>
