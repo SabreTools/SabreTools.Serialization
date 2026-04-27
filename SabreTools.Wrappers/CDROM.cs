@@ -71,7 +71,7 @@ namespace SabreTools.Wrappers
             try
             {
                 // Create user data sub-stream
-                var userData = new Data.Extensions.CDROMExtensions.ISO9660Stream(data);
+                var userData = new Data.Extensions.CDROMExtensions.UserDataStream(data);
 
                 // Cache the current offset
                 long currentOffset = userData.Position;
