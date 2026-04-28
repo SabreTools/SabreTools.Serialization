@@ -1,5 +1,4 @@
 using System.IO;
-using System.Text;
 using SabreTools.Data.Models.PCEngineCDROM;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
