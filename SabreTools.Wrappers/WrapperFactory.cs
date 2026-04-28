@@ -99,6 +99,14 @@ namespace SabreTools.Wrappers
             // Cache the current offset
             long initialOffset = stream.Position;
 
+            // Attempt to open standard ISO9660 CDROM wrapper
+            var cdromWrapper = CDROM.Create(stream);
+            if (cdromWrapper is not null)
+                return cdromWrapper;
+
+            // Reset position in stream
+            stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
+
             // Try to get a 3DO / M2 disc image wrapper
             var operaDiscImageWrapper = OperaDiscImage.Create(stream);
             if (operaDiscImageWrapper is not null)
@@ -107,12 +115,14 @@ namespace SabreTools.Wrappers
             // Reset position in stream
             stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
 
-            // Fallback to standard CDROM wrapper
-            var cdromWrapper = CDROM.Create(stream);
-            if (cdromWrapper is null)
-                return null;
+            // Try to get a PC Engine CDROM wrapper
+            // This reads a lot for detection, do this step last
+            var pcEngineDiscImageWrapper = PCEngineDiscImage.Create(stream);
+            if (pcEngineDiscImageWrapper is not null)
+                return pcEngineDiscImageWrapper;
 
-            return cdromWrapper;
+            // No known filesystems found
+            return null;
         }
 
         /// <summary>
@@ -129,10 +139,18 @@ namespace SabreTools.Wrappers
             // Cache the current offset
             long initialOffset = stream.Position;
 
-            // Try to get an Xbox disc image wrapper
+            // Try to get an Xbox disc image wrapper (must be before ISO9660)
             var xboxWrapper = XboxISO.Create(stream);
             if (xboxWrapper is not null)
                 return xboxWrapper;
+
+            // Reset position in stream
+            stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
+
+            // Try to standard ISO9660 wrapper
+            var isoWrapper = ISO9660.Create(stream);
+            if (isoWrapper is not null)
+                return isoWrapper;
 
             // Reset position in stream
             stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
@@ -145,12 +163,14 @@ namespace SabreTools.Wrappers
             // Reset position in stream
             stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
 
-            // Fallback to standard ISO9660 wrapper
-            var isoWrapper = ISO9660.Create(stream);
-            if (isoWrapper is null)
-                return null;
+            // Try to get a PC Engine CDROM disc image wrapper
+            // This reads a lot for detection, do this step last
+            var pcEngineCDROMWrapper = PCEngineCDROM.Create(stream);
+            if (pcEngineCDROMWrapper is not null)
+                return pcEngineCDROMWrapper;
 
-            return isoWrapper;
+            // No known filesystems found
+            return null;
         }
 
         /// <summary>
@@ -329,6 +349,14 @@ namespace SabreTools.Wrappers
             // Must come before skeleton extension check for ISO9660
             // CDROM skeletons have same extension as ISO9660 skeletons
             if (magic.StartsWith([0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00])
+                && (extension.Equals("bin", StringComparison.OrdinalIgnoreCase)
+                    || extension.Equals("skeleton", StringComparison.OrdinalIgnoreCase)))
+            {
+                return WrapperType.CDROM;
+            }
+
+            // Some CD-ROM images have no sync bytes in pregap
+            if (magic.StartsWith([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
                 && (extension.Equals("bin", StringComparison.OrdinalIgnoreCase)
                     || extension.Equals("skeleton", StringComparison.OrdinalIgnoreCase)))
             {
