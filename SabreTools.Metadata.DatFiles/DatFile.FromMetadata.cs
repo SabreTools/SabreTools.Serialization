@@ -63,7 +63,6 @@ namespace SabreTools.Metadata.DatFiles
 
             // Create an internal header
             var header = new DatHeader(item);
-            Header.Name = header.Name;
 
             // Convert subheader values
             var canOpen = item.CanOpen;
