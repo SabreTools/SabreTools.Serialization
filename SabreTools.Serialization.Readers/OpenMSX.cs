@@ -29,6 +29,10 @@ namespace SabreTools.Serialization.Readers
                 SoftwareDb? softwareDb = null;
                 while (reader.Read())
                 {
+                    // Comments have to be skipped
+                    if (reader.NodeType == XmlNodeType.Comment)
+                        continue;
+
                     // An ending element means exit
                     if (reader.NodeType == XmlNodeType.EndElement)
                         break;
@@ -72,18 +76,32 @@ namespace SabreTools.Serialization.Readers
 
             obj.Timestamp = reader.GetAttribute("timestamp");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Software> softwares = [];
 
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {
@@ -117,19 +135,39 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Dump();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {
+                    case "boot":
+                        if (obj.Boot is not null && Debug)
+                            Console.WriteLine($"'{reader.Name}' element already found, overwriting");
+
+                        obj.Boot = reader.ReadElementContentAsString();
+                        break;
                     case "original":
                         if (obj.Original is not null && Debug)
                             Console.WriteLine($"'{reader.Name}' element already found, overwriting");
@@ -148,6 +186,7 @@ namespace SabreTools.Serialization.Readers
 
                     default:
                         if (Debug) Console.Error.WriteLine($"Element '{reader.Name}' is not recognized");
+                        reader.Skip();
                         break;
                 }
             }
@@ -187,16 +226,30 @@ namespace SabreTools.Serialization.Readers
             else
                 return null;
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {
@@ -244,18 +297,32 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Software();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Dump> dumps = [];
 
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {

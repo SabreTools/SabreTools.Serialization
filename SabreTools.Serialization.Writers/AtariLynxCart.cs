@@ -109,7 +109,7 @@ namespace SabreTools.Serialization.Writers
             {
                 if (Debug) Console.WriteLine("Attempting to write ROM data");
 
-                stream.Write(obj, 0, obj.Length);
+                stream.Write(obj);
                 stream.Flush();
                 return true;
             }

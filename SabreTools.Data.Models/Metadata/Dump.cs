@@ -9,6 +9,8 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public string? Boot { get; set; }
+
         public Rom? MegaRom { get; set; }
 
         public Original? Original { get; set; }
@@ -26,6 +28,7 @@ namespace SabreTools.Data.Models.Metadata
         {
             var obj = new Dump();
 
+            obj.Boot = Boot;
             if (MegaRom is not null)
                 obj.MegaRom = MegaRom.Clone() as Rom;
             if (Original is not null)
@@ -43,6 +46,11 @@ namespace SabreTools.Data.Models.Metadata
         {
             // Null never matches
             if (other is null)
+                return false;
+
+            if ((Boot is null) ^ (other.Boot is null))
+                return false;
+            else if (Boot is not null && !Boot.Equals(other.Boot, StringComparison.OrdinalIgnoreCase))
                 return false;
 
             // Sub-items

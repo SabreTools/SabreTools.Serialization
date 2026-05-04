@@ -176,7 +176,7 @@ namespace SabreTools.Wrappers
                         if (buffer.Length == 0)
                             break;
 
-                        tempStream.Write(buffer, 0, buffer.Length);
+                        tempStream.Write(buffer);
                         tempStream.Flush();
 
                         currentOffset += bytesToRead;

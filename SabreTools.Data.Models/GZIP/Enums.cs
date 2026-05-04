@@ -66,6 +66,32 @@ namespace SabreTools.Data.Models.GZIP
         RESERVED7 = 0x80,
     }
 
+    /// <summary>
+    /// TorrentGZ alternative header types
+    /// </summary>
+    public enum HeaderFileType
+    {
+        // Archive
+        Nothing = 0x00,
+        ZIP = 0x01,
+        GZ = 0x02,
+        SevenZip = 0x03,
+        RAR = 0x04,
+
+        // Specialty
+        CHD = 0x05,
+
+        // Copier header
+        A7800 = 0x06,
+        Lynx = 0x07,
+        FDS = 0x08,
+        NES = 0x09,
+        PCE = 0x0A,
+        PSID = 0x0B,
+        SNES = 0x0C,
+        SPC = 0x0D,
+    }
+
     /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/>
     public enum OperatingSystem : byte
     {

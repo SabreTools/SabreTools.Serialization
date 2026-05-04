@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.XDVDFS
     /// Only present on XGD1 and XGD2 discs
     /// </summary>
     /// <see href="https://xboxdevwiki.net/XDVDFS"/>
-    /// <see href="https://github.dev/Deterous/XboxKit/"/>
+    /// <see href="https://github.com/Deterous/XboxKit/"/>
     public class LayoutDescriptor
     {
         /// <summary>

@@ -29,6 +29,10 @@ namespace SabreTools.Serialization.Readers
                 Datafile? datafile = null;
                 while (reader.Read())
                 {
+                    // Comments have to be skipped
+                    if (reader.NodeType == XmlNodeType.Comment)
+                        continue;
+
                     // An ending element means exit
                     if (reader.NodeType == XmlNodeType.EndElement)
                         break;
@@ -70,9 +74,17 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Datafile();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Game> games = [];
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -199,6 +211,10 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Media> medias = [];
             List<Source> sources = [];
             List<Release> releases = [];
@@ -206,13 +222,23 @@ namespace SabreTools.Serialization.Readers
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {
@@ -285,18 +311,32 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Release();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Data.Models.NoIntroDatabase.File> files = [];
 
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {
@@ -400,18 +440,32 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Source();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Data.Models.NoIntroDatabase.File> files = [];
 
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {

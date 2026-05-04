@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.Writers
             {
                 if (Debug) Console.WriteLine("Attempting to write CHR-ROM data");
 
-                stream.Write(obj, 0, obj.Length);
+                stream.Write(obj);
                 stream.Flush();
                 return true;
             }
@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.Writers
             {
                 if (Debug) Console.WriteLine("Attempting to write INST-ROM data");
 
-                stream.Write(obj, 0, obj.Length);
+                stream.Write(obj);
                 stream.Flush();
                 return true;
             }
@@ -279,7 +279,7 @@ namespace SabreTools.Serialization.Writers
             {
                 if (Debug) Console.WriteLine("Attempting to write PRG-ROM data");
 
-                stream.Write(obj, 0, obj.Length);
+                stream.Write(obj);
                 stream.Flush();
                 return true;
             }
@@ -308,7 +308,7 @@ namespace SabreTools.Serialization.Writers
             {
                 if (Debug) Console.WriteLine("Attempting to write trainer data");
 
-                stream.Write(obj, 0, obj.Length);
+                stream.Write(obj);
                 stream.Flush();
                 return true;
             }

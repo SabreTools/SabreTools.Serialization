@@ -30,6 +30,10 @@ namespace SabreTools.Serialization.Readers
                 Datafile? datafile = null;
                 while (reader.Read())
                 {
+                    // Comments have to be skipped
+                    if (reader.NodeType == XmlNodeType.Comment)
+                        continue;
+
                     // An ending element means exit
                     if (reader.NodeType == XmlNodeType.EndElement)
                         break;
@@ -77,10 +81,18 @@ namespace SabreTools.Serialization.Readers
             // TODO: Fix this based on No-Intro DATs
             // obj.SchemaLocation = reader.GetAttribute("schemaLocation");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<GameBase> games = [];
             List<Dir> dirs = [];
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -153,16 +165,30 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Header();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {
@@ -372,11 +398,19 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Dir> subdirs = [];
             List<GameBase> games = [];
 
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -484,6 +518,10 @@ namespace SabreTools.Serialization.Readers
             obj.CloneOfId = reader.GetAttribute("cloneofid");
             obj.Runnable = reader.GetAttribute("runnable").AsRunnable();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<string> comments = [];
             List<string> categories = [];
             List<Release> releases = [];
@@ -499,13 +537,23 @@ namespace SabreTools.Serialization.Readers
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {
@@ -781,16 +829,30 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Trurip();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {

@@ -75,6 +75,7 @@ if (!$NO_BUILD.IsPresent) {
         dotnet pack SabreTools.Metadata.DatFiles\SabreTools.Metadata.DatFiles.csproj --output $BUILD_FOLDER
         dotnet pack SabreTools.Metadata.DatItems\SabreTools.Metadata.DatItems.csproj --output $BUILD_FOLDER
         dotnet pack SabreTools.Metadata.Filter\SabreTools.Metadata.Filter.csproj --output $BUILD_FOLDER
+        dotnet pack SabreTools.Metadata.Reports\SabreTools.Metadata.Reports.csproj --output $BUILD_FOLDER
         dotnet pack SabreTools.ObjectIdentifier\SabreTools.ObjectIdentifier.csproj --output $BUILD_FOLDER
         dotnet pack SabreTools.Serialization.CrossModel\SabreTools.Serialization.CrossModel.csproj --output $BUILD_FOLDER
         dotnet pack SabreTools.Serialization.Readers\SabreTools.Serialization.Readers.csproj --output $BUILD_FOLDER

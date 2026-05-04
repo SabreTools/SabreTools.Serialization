@@ -101,10 +101,10 @@ namespace SabreTools.Wrappers
                 // Determine location/size of game partition based on total ISO size
                 model.XGDType = redumpType switch
                 {
-                    0 => 0, // XGD1
-                    1 or 2 or 3 or 4 => 1, // XGD2
-                    5 => 2, // XGD2 (Hybrid)
-                    6 or 7 => 3, // XGD3
+                    0 or 1 => 0, // XGD1
+                    2 or 3 or 4 or 5 => 1, // XGD2
+                    6 => 2, // XGD2 (Hybrid)
+                    7 or 8 => 3, // XGD3
                     _ => -1,
                 };
 

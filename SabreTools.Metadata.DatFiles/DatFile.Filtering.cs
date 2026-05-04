@@ -161,8 +161,8 @@ namespace SabreTools.Metadata.DatFiles
             foreach (var machine in GetMachinesDB())
             {
                 // Get the values to check against
-                string? machineName = machine.Name;
-                string? machineDesc = machine.Description;
+                string? machineName = machine.Value.Name;
+                string? machineDesc = machine.Value.Description;
                 if (machineName is null || machineDesc is null)
                     continue;
 
@@ -398,13 +398,13 @@ namespace SabreTools.Metadata.DatFiles
             foreach (var machine in GetMachinesDB())
             {
                 // Get machine information
-                string? machineName = machine.Name?.ToLowerInvariant();
-                if (machine is null || machineName is null)
+                string? machineName = machine.Value?.Name?.ToLowerInvariant();
+                if (machine.Value is null || machineName is null)
                     continue;
 
                 // Get the string values
-                string? cloneOf = machine.CloneOf?.ToLowerInvariant();
-                string? romOf = machine.RomOf?.ToLowerInvariant();
+                string? cloneOf = machine.Value.CloneOf?.ToLowerInvariant();
+                string? romOf = machine.Value.RomOf?.ToLowerInvariant();
 
                 // Match on CloneOf first
                 if (!string.IsNullOrEmpty(cloneOf))
@@ -675,15 +675,15 @@ namespace SabreTools.Metadata.DatFiles
 #endif
             {
                 // Get the values to check against
-                string? machineName = machine.Name;
-                string? machineDesc = machine.Description;
+                string? machineName = machine.Value.Name;
+                string? machineDesc = machine.Value.Description;
 
 #pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
                 if (machineName is not null && Regex.IsMatch(machineName, SceneNamePattern))
-                    machine.Name = Regex.Replace(machineName, SceneNamePattern, "$2");
+                    machine.Value.Name = Regex.Replace(machineName, SceneNamePattern, "$2");
 
                 if (machineDesc is not null && Regex.IsMatch(machineDesc, SceneNamePattern))
-                    machine.Description = Regex.Replace(machineDesc, SceneNamePattern, "$2");
+                    machine.Value.Description = Regex.Replace(machineDesc, SceneNamePattern, "$2");
 #pragma warning restore SYSLIB1045
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
@@ -757,26 +757,26 @@ namespace SabreTools.Metadata.DatFiles
             foreach (var machine in GetMachinesDB())
             {
                 // Get the values to check against
-                string? machineName = machine.Name;
-                string? cloneOf = machine.CloneOf;
-                string? romOf = machine.RomOf;
-                string? sampleOf = machine.SampleOf;
+                string? machineName = machine.Value.Name;
+                string? cloneOf = machine.Value.CloneOf;
+                string? romOf = machine.Value.RomOf;
+                string? sampleOf = machine.Value.SampleOf;
 
                 // Update machine name
                 if (machineName is not null && mapping.TryGetValue(machineName, out string? mappedMachineName))
-                    machine.Name = mappedMachineName;
+                    machine.Value.Name = mappedMachineName;
 
                 // Update cloneof
                 if (cloneOf is not null && mapping.TryGetValue(cloneOf, out string? mappedCloneOf))
-                    machine.CloneOf = mappedCloneOf;
+                    machine.Value.CloneOf = mappedCloneOf;
 
                 // Update romof
                 if (romOf is not null && mapping.TryGetValue(romOf, out string? mappedRomOf))
-                    machine.RomOf = mappedRomOf;
+                    machine.Value.RomOf = mappedRomOf;
 
                 // Update sampleof
                 if (sampleOf is not null && mapping.TryGetValue(sampleOf, out string? mappedSampleOf))
-                    machine.SampleOf = mappedSampleOf;
+                    machine.Value.SampleOf = mappedSampleOf;
             }
         }
 

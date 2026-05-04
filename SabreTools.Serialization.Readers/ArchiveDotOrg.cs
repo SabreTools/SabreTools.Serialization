@@ -65,6 +65,10 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Files();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<File> files = [];
             while (reader.Read())
             {
@@ -105,16 +109,30 @@ namespace SabreTools.Serialization.Readers
             obj.Name = reader.GetAttribute("name");
             obj.Source = reader.GetAttribute("source");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {

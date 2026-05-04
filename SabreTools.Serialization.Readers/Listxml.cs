@@ -30,6 +30,10 @@ namespace SabreTools.Serialization.Readers
                 Mame? mame = null;
                 while (reader.Read())
                 {
+                    // Comments have to be skipped
+                    if (reader.NodeType == XmlNodeType.Comment)
+                        continue;
+
                     // An ending element means exit
                     if (reader.NodeType == XmlNodeType.EndElement)
                         break;
@@ -75,9 +79,17 @@ namespace SabreTools.Serialization.Readers
             obj.Debug = reader.GetAttribute("debug").AsYesNo();
             obj.MameConfig = reader.GetAttribute("mameconfig");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<GameBase> games = [];
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -121,8 +133,16 @@ namespace SabreTools.Serialization.Readers
             obj.Name = reader.GetAttribute("name");
             obj.Default = reader.GetAttribute("default").AsYesNo();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -227,11 +247,19 @@ namespace SabreTools.Serialization.Readers
             obj.Tag = reader.GetAttribute("tag");
             obj.Mask = reader.GetAttribute("mask");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<ConfLocation> confLocations = [];
             List<ConfSetting> confSettings = [];
 
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -304,8 +332,16 @@ namespace SabreTools.Serialization.Readers
             obj.Value = reader.GetAttribute("value");
             obj.Default = reader.GetAttribute("default").AsYesNo();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -372,10 +408,18 @@ namespace SabreTools.Serialization.Readers
             obj.Mandatory = reader.GetAttribute("mandatory").AsYesNo();
             obj.Interface = reader.GetAttribute("interface");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Extension> extensions = [];
 
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -454,11 +498,19 @@ namespace SabreTools.Serialization.Readers
             obj.Tag = reader.GetAttribute("tag");
             obj.Mask = reader.GetAttribute("mask");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<DipLocation> dipLocations = [];
             List<DipValue> dipValues = [];
 
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -515,8 +567,16 @@ namespace SabreTools.Serialization.Readers
             obj.Value = reader.GetAttribute("value");
             obj.Default = reader.GetAttribute("default").AsYesNo();
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -671,6 +731,10 @@ namespace SabreTools.Serialization.Readers
             obj.RomOf = reader.GetAttribute("romof");
             obj.SampleOf = reader.GetAttribute("sampleof");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<BiosSet> biosSets = [];
             List<Rom> roms = [];
             List<Disk> disks = [];
@@ -692,13 +756,23 @@ namespace SabreTools.Serialization.Readers
             reader.Read();
             while (!reader.EOF)
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
 
                 // Only process starting elements
                 if (!reader.IsStartElement())
+                {
+                    reader.Skip();
                     continue;
+                }
 
                 switch (reader.Name)
                 {
@@ -864,7 +938,6 @@ namespace SabreTools.Serialization.Readers
                         if (ramOption is not null)
                             ramOptions.Add(ramOption);
 
-                        reader.Skip();
                         break;
 
                     default:
@@ -928,10 +1001,18 @@ namespace SabreTools.Serialization.Readers
             obj.Buttons = NumberHelper.ConvertToInt64(reader.GetAttribute("buttons"));
             obj.Coins = NumberHelper.ConvertToInt64(reader.GetAttribute("coins"));
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Control> controls = [];
 
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -987,10 +1068,18 @@ namespace SabreTools.Serialization.Readers
 
             obj.Tag = reader.GetAttribute("tag");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<Analog> analogs = [];
 
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;
@@ -1086,10 +1175,18 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
 
+            // Handle empty elements
+            if (reader.IsEmptyElement)
+                return obj;
+
             List<SlotOption> slotOptions = [];
 
             while (reader.Read())
             {
+                // Comments have to be skipped
+                if (reader.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 // An ending element means exit
                 if (reader.NodeType == XmlNodeType.EndElement)
                     break;

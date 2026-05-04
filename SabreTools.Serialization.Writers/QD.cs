@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -43,7 +44,7 @@ namespace SabreTools.Serialization.Writers
             {
                 if (Debug) Console.WriteLine("Attempting to write ROM data");
 
-                stream.Write(obj, 0, obj.Length);
+                stream.Write(obj);
                 stream.Flush();
                 return true;
             }

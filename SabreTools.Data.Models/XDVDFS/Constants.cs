@@ -1,6 +1,6 @@
 namespace SabreTools.Data.Models.XDVDFS
 {
-    /// <see href="https://github.dev/Deterous/XboxKit/"/>
+    /// <see href="https://github.com/Deterous/XboxKit/"/>
     public static class Constants
     {
         /// <summary>

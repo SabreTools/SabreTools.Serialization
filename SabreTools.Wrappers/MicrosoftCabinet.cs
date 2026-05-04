@@ -3,6 +3,7 @@ using System.IO;
 using SabreTools.Data.Models.MicrosoftCabinet;
 using SabreTools.IO.Compression.MSZIP;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -200,7 +201,7 @@ namespace SabreTools.Wrappers
                         Console.Error.WriteLine($"Data block {blockIndex} in folder {folderIndex} had mismatching sizes. Expected: {block.UncompressedSize}, Got: {stream.Length}");
 
                     byte[] padding = new byte[block.UncompressedSize - stream.Length];
-                    stream.Write(padding, 0, padding.Length);
+                    stream.Write(padding);
                 }
 
                 // Return the byte array data

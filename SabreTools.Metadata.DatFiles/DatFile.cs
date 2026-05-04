@@ -8,7 +8,6 @@ using SabreTools.Hashing;
 using SabreTools.Logging;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
-using SabreTools.Metadata.Filter;
 using SabreTools.Text.Compare;
 using SabreTools.Text.Extensions;
 
@@ -274,7 +273,7 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Get all machines and their indicies
         /// </summary>
-        public Machine[] GetMachinesDB()
+        public IDictionary<long, Machine> GetMachinesDB()
             => ItemsDB.GetMachines();
 
         /// <summary>
@@ -282,6 +281,12 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public KeyValuePair<long, Source?> GetSourceDB(long sourceIndex)
             => ItemsDB.GetSource(sourceIndex);
+
+        /// <summary>
+        /// Get all sources and their indicies
+        /// </summary>
+        public IDictionary<long, Source> GetSourcesDB()
+            => ItemsDB.GetSources();
 
         /// <summary>
         /// Remove a key from the file dictionary if it exists
@@ -430,13 +435,11 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="indexId">Index ID for the DAT</param>
         /// <param name="keep">True if full pathnames are to be kept, false otherwise</param>
         /// <param name="statsOnly">True to only add item statistics while parsing, false otherwise</param>
-        /// <param name="filterRunner">Optional FilterRunner to filter items on parse</param>
         /// <param name="throwOnError">True if the error that is thrown should be thrown back to the caller, false otherwise</param>
         public abstract void ParseFile(string filename,
             int indexId,
             bool keep,
             bool statsOnly = false,
-            FilterRunner? filterRunner = null,
             bool throwOnError = false);
 
         #endregion

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.Threading.Tasks;
 #endif
-using SabreTools.Metadata.Filter;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 using MergingFlag = SabreTools.Data.Models.Metadata.MergingFlag;
@@ -26,13 +25,11 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="indexId">Index ID for the DAT</param>
         /// <param name="keep">True if full pathnames are to be kept, false otherwise</param>
         /// <param name="statsOnly">True to only add item statistics while parsing, false otherwise</param>
-        /// <param name="filterRunner">Optional FilterRunner to filter items on parse</param>
         internal void ConvertFromMetadata(Data.Models.Metadata.MetadataFile? item,
             string filename,
             int indexId,
             bool keep,
-            bool statsOnly,
-            FilterRunner? filterRunner)
+            bool statsOnly)
         {
             // If the metadata file is invalid, we can't do anything
             if (item is null)
@@ -50,7 +47,7 @@ namespace SabreTools.Metadata.DatFiles
             // Get the machines from the metadata
             var machines = item.Machine;
             if (machines is not null)
-                ConvertMachines(machines, source, sourceIndex: 0, statsOnly, filterRunner);
+                ConvertMachines(machines, source, sourceIndex: 0, statsOnly);
         }
 
         /// <summary>
@@ -66,7 +63,6 @@ namespace SabreTools.Metadata.DatFiles
 
             // Create an internal header
             var header = new DatHeader(item);
-            Header.Name = header.Name;
 
             // Convert subheader values
             var canOpen = item.CanOpen;
@@ -184,12 +180,10 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="source">Source to use with the converted items</param>
         /// <param name="sourceIndex">Index of the Source to use with the converted items</param>
         /// <param name="statsOnly">True to only add item statistics while parsing, false otherwise</param>
-        /// <param name="filterRunner">Optional FilterRunner to filter items on parse</param>
         private void ConvertMachines(Data.Models.Metadata.Machine[]? items,
             Source source,
             long sourceIndex,
-            bool statsOnly,
-            FilterRunner? filterRunner)
+            bool statsOnly)
         {
             // If the array is invalid, we can't do anything
             if (items is null || items.Length == 0)
@@ -202,7 +196,7 @@ namespace SabreTools.Metadata.DatFiles
             foreach (var machine in items)
 #endif
             {
-                ConvertMachine(machine, source, sourceIndex, statsOnly, filterRunner);
+                ConvertMachine(machine, source, sourceIndex, statsOnly);
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
 #else
@@ -217,19 +211,13 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="source">Source to use with the converted items</param>
         /// <param name="sourceIndex">Index of the Source to use with the converted items</param>
         /// <param name="statsOnly">True to only add item statistics while parsing, false otherwise</param>
-        /// <param name="filterRunner">Optional FilterRunner to filter items on parse</param>
         private void ConvertMachine(Data.Models.Metadata.Machine? item,
             Source source,
             long sourceIndex,
-            bool statsOnly,
-            FilterRunner? filterRunner)
+            bool statsOnly)
         {
             // If the machine is invalid, we can't do anything
             if (item is null)
-                return;
-
-            // If the machine doesn't pass the filter
-            if (filterRunner is not null && !filterRunner.Run(item))
                 return;
 
             // Create an internal machine and add to the dictionary
@@ -240,8 +228,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Adjuster is not null)
             {
                 var items = item.Adjuster;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Adjuster(item, machine, source)
                     {
@@ -257,8 +244,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Archive is not null)
             {
                 var items = item.Archive;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Archive(item, machine, source)
                     {
@@ -274,8 +260,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.BiosSet is not null)
             {
                 var items = item.BiosSet;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new BiosSet(item, machine, source)
                     {
@@ -291,8 +276,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Chip is not null)
             {
                 var items = item.Chip;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Chip(item, machine, source)
                     {
@@ -308,8 +292,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Configuration is not null)
             {
                 var items = item.Configuration;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Configuration(item, machine, source)
                     {
@@ -325,8 +308,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Device is not null)
             {
                 var items = item.Device;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Device(item, machine, source)
                     {
@@ -359,8 +341,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.DipSwitch is not null)
             {
                 var items = item.DipSwitch;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new DipSwitch(item, machine, source)
                     {
@@ -376,8 +357,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Disk is not null)
             {
                 var items = item.Disk;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Disk(item, machine, source)
                     {
@@ -393,8 +373,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Display is not null)
             {
                 var items = item.Display;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Display(item, machine, source)
                     {
@@ -407,7 +386,7 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.Driver is not null && filterRunner?.Run(item.Driver) != false)
+            if (item.Driver is not null)
             {
                 var datItem = new Driver(item.Driver, machine, source)
                 {
@@ -428,6 +407,7 @@ namespace SabreTools.Metadata.DatFiles
                     {
                         MachineIndex = machineIndex,
                         SourceIndex = sourceIndex,
+                        Comment = items[i].Boot,
                     };
 
                     var original = items[i].Original;
@@ -451,8 +431,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Feature is not null)
             {
                 var items = item.Feature;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Feature(item, machine, source)
                     {
@@ -468,8 +447,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Info is not null)
             {
                 var items = item.Info;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Info(item, machine, source)
                     {
@@ -482,7 +460,7 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.Input is not null && filterRunner?.Run(item.Input) != false)
+            if (item.Input is not null)
             {
                 var datItem = new Input(item.Input, machine, source)
                 {
@@ -497,8 +475,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Media is not null)
             {
                 var items = item.Media;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Media(item, machine, source)
                     {
@@ -514,14 +491,13 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Part is not null)
             {
                 var items = item.Part;
-                ProcessItems(items, machine, machineIndex: 0, source, sourceIndex, statsOnly, filterRunner);
+                ProcessItems(items, machine, machineIndex: 0, source, sourceIndex, statsOnly);
             }
 
             if (item.Port is not null)
             {
                 var items = item.Port;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Port(item, machine, source)
                     {
@@ -537,8 +513,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.RamOption is not null)
             {
                 var items = item.RamOption;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new RamOption(item, machine, source)
                     {
@@ -554,8 +529,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Release is not null)
             {
                 var items = item.Release;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Release(item, machine, source)
                     {
@@ -571,8 +545,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Rom is not null)
             {
                 var items = item.Rom;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Rom(item, machine, source)
                     {
@@ -588,8 +561,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Sample is not null)
             {
                 var items = item.Sample;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Sample(item, machine, source)
                     {
@@ -605,8 +577,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.SharedFeat is not null)
             {
                 var items = item.SharedFeat;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new SharedFeat(item, machine, source)
                     {
@@ -639,8 +610,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.SoftwareList is not null)
             {
                 var items = item.SoftwareList;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new SoftwareList(item, machine, source)
                     {
@@ -653,7 +623,7 @@ namespace SabreTools.Metadata.DatFiles
                 });
             }
 
-            if (item.Sound is not null && filterRunner?.Run(item.Sound) != false)
+            if (item.Sound is not null)
             {
                 var datItem = new Sound(item.Sound, machine, source)
                 {
@@ -668,8 +638,7 @@ namespace SabreTools.Metadata.DatFiles
             if (item.Video is not null)
             {
                 var items = item.Video;
-                var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
-                Array.ForEach(filtered, item =>
+                Array.ForEach(items, item =>
                 {
                     var datItem = new Display(item, machine, source)
                     {
@@ -692,14 +661,12 @@ namespace SabreTools.Metadata.DatFiles
         /// <param name="source">Source to use with the converted items</param>
         /// <param name="sourceIndex">Index of the Source to use with the converted items</param>
         /// <param name="statsOnly">True to only add item statistics while parsing, false otherwise</param>
-        /// <param name="filterRunner">Optional FilterRunner to filter items on parse</param>
         private void ProcessItems(Data.Models.Metadata.Part[] items,
             Machine machine,
             long machineIndex,
             Source source,
             long sourceIndex,
-            bool statsOnly,
-            FilterRunner? filterRunner)
+            bool statsOnly)
         {
             // If the array is null or empty, return without processing
             if (items.Length == 0)
@@ -722,10 +689,6 @@ namespace SabreTools.Metadata.DatFiles
                         List<Rom> addRoms = [];
                         foreach (var rom in roms)
                         {
-                            // If the item doesn't pass the filter
-                            if (filterRunner is not null && !filterRunner.Run(rom))
-                                continue;
-
                             // Convert the item
                             var romItem = new Rom(rom, machine, source)
                             {
@@ -777,10 +740,6 @@ namespace SabreTools.Metadata.DatFiles
 
                         foreach (var disk in disks)
                         {
-                            // If the item doesn't pass the filter
-                            if (filterRunner is not null && !filterRunner.Run(disk))
-                                continue;
-
                             var diskItem = new Disk(disk, machine, source)
                             {
                                 MachineIndex = machineIndex,
@@ -801,10 +760,6 @@ namespace SabreTools.Metadata.DatFiles
                 {
                     foreach (var dipSwitch in dipSwitches)
                     {
-                        // If the item doesn't pass the filter
-                        if (filterRunner is not null && !filterRunner.Run(dipSwitch))
-                            continue;
-
                         var dipSwitchItem = new DipSwitch(dipSwitch, machine, source)
                         {
                             MachineIndex = machineIndex,
@@ -823,10 +778,6 @@ namespace SabreTools.Metadata.DatFiles
                 {
                     foreach (var partFeature in partFeatures)
                     {
-                        // If the item doesn't pass the filter
-                        if (filterRunner is not null && !filterRunner.Run(partFeature))
-                            continue;
-
                         var partFeatureItem = new PartFeature(partFeature)
                         {
                             MachineIndex = machineIndex,

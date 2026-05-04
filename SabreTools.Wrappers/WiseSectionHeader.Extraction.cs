@@ -157,7 +157,7 @@ namespace SabreTools.Wrappers
                     }
                 }
 
-                destination.Write(actual, 0, actual.Length);
+                destination.Write(actual);
                 return ExtractionStatus.GOOD;
             }
             catch
@@ -199,7 +199,7 @@ namespace SabreTools.Wrappers
                 // Debug output
                 if (includeDebug) Console.WriteLine("No CRC-32!");
 
-                destination.Write(actual, 0, actual.Length);
+                destination.Write(actual);
                 return ExtractionStatus.GOOD;
             }
             catch

@@ -96,7 +96,7 @@ namespace SabreTools.Wrappers
 
                     // Write the output file
                     var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                    fs.Write(data, 0, data.Length);
+                    fs.Write(data);
                     fs.Flush();
                 }
 
@@ -151,7 +151,7 @@ namespace SabreTools.Wrappers
 
                 // Write the file data to a temp file
                 var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                tempStream.Write(data, 0, data.Length);
+                tempStream.Write(data);
                 tempStream.Flush();
 
                 return true;
@@ -317,7 +317,7 @@ namespace SabreTools.Wrappers
                         if (buffer.Length == 0)
                             break;
 
-                        tempStream.Write(buffer, 0, buffer.Length);
+                        tempStream.Write(buffer);
                         tempStream.Flush();
 
                         currentOffset += bytesToRead;
@@ -614,7 +614,7 @@ namespace SabreTools.Wrappers
 
                     // Write the output file
                     var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                    fs.Write(data, 0, data.Length);
+                    fs.Write(data);
                     fs.Flush();
                 }
 

@@ -16,7 +16,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.MetadataFile? item = null;
 
             DatFile datFile = new Formats.Logiqx(null, useGame: false);
-            datFile.ConvertFromMetadata(item, "filename", indexId: 0, keep: true, statsOnly: false, filterRunner: null);
+            datFile.ConvertFromMetadata(item, "filename", indexId: 0, keep: true, statsOnly: false);
 
             Assert.Equal(0, datFile.Items.DatStatistics.TotalCount);
             Assert.Equal(0, datFile.ItemsDB.DatStatistics.TotalCount);
@@ -28,7 +28,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.MetadataFile? item = new Data.Models.Metadata.MetadataFile();
 
             DatFile datFile = new Formats.Logiqx(null, useGame: false);
-            datFile.ConvertFromMetadata(item, "filename", indexId: 0, keep: true, statsOnly: false, filterRunner: null);
+            datFile.ConvertFromMetadata(item, "filename", indexId: 0, keep: true, statsOnly: false);
 
             Assert.Equal(0, datFile.Items.DatStatistics.TotalCount);
             Assert.Equal(0, datFile.ItemsDB.DatStatistics.TotalCount);
@@ -46,7 +46,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             DatFile datFile = new Formats.Logiqx(null, useGame: false);
-            datFile.ConvertFromMetadata(item, "filename", indexId: 0, keep: true, statsOnly: false, filterRunner: null);
+            datFile.ConvertFromMetadata(item, "filename", indexId: 0, keep: true, statsOnly: false);
 
             ValidateHeader(datFile.Header);
         }
@@ -64,7 +64,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             };
 
             DatFile datFile = new Formats.Logiqx(null, useGame: false);
-            datFile.ConvertFromMetadata(item, "filename", indexId: 0, keep: true, statsOnly: false, filterRunner: null);
+            datFile.ConvertFromMetadata(item, "filename", indexId: 0, keep: true, statsOnly: false);
 
             // TODO: Reenable when ItemsDB is used again
             // DatItems.Machine actualMachine = Assert.Single(datFile.ItemsDB.GetMachines()).Value;
