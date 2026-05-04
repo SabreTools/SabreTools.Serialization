@@ -7,12 +7,10 @@ namespace SabreTools.Wrappers
     /// </summary>
     public interface IPrintable
     {
-#if NETCOREAPP
         /// <summary>
         /// Export the item information as JSON
         /// </summary>
         public string ExportJSON();
-#endif
 
         /// <summary>
         /// Print information associated with a model

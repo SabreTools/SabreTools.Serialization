@@ -14,7 +14,7 @@ For the latest WIP build here: [Rolling Release](https://github.com/SabreTools/S
 
 ## InfoPrint
 
-**InfoPrint** is a reference implementation for the deserialization and printing features of the library, packaged as a standalone executable for all supported platforms. It will attempt to detect and display information about many supported file types, optionally both hashing the file and outputting the information to a JSON file (.NET Core 3.1 and above only).
+**InfoPrint** is a reference implementation for the deserialization and printing features of the library, packaged as a standalone executable for all supported platforms. It will attempt to detect and display information about many supported file types, optionally both hashing the file and outputting the information to a JSON file.
 
 ```text
 InfoPrint <options> file|directory ...
@@ -85,6 +85,7 @@ Below are a list of the included namespaces with links to their README files:
 - [SabreTools.Metadata.DatFiles](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Metadata.DatFiles)
 - [SabreTools.Metadata.DatItems](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Metadata.Datitems)
 - [SabreTools.Metadata.Filter](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Metadata.Filter)
+- [SabreTools.Metadata.Reports](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Metadata.Reports)
 - [SabreTools.ObjectIdentifier](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.ObjectIdentifier)
 - [SabreTools.Serialization.CrossModel](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Serialization.CrossModel)
 - [SabreTools.Serialization.Readers](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Serialization.Readers)

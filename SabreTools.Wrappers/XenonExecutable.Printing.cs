@@ -9,6 +9,9 @@ namespace SabreTools.Wrappers
 #if NETCOREAPP
         /// <inheritdoc/>
         public string ExportJSON() => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
+#else
+        /// <inheritdoc/>
+        public string ExportJSON() => Newtonsoft.Json.JsonConvert.SerializeObject(Model, _jsonSerializerOptions);
 #endif
 
         /// <inheritdoc/>
@@ -79,7 +82,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Certificate? certificate)
+        internal static void Print(StringBuilder builder, Certificate? certificate)
         {
             builder.AppendLine("  Certificate Information:");
             builder.AppendLine("  -------------------------");

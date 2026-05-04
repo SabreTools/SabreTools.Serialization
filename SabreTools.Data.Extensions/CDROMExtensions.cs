@@ -107,7 +107,7 @@ namespace SabreTools.Data.Extensions
         /// <summary>
         /// Creates a stream that provides only the user data of a CDROM stream
         /// </summary>
-        public class ISO9660Stream : Stream
+        public class UserDataStream : Stream
         {
             // Base CDROM stream (2352-byte sector)
             private readonly Stream _baseStream;
@@ -121,7 +121,7 @@ namespace SabreTools.Data.Extensions
             private long _isoSectorSize = Constants.Mode1DataSize;
 #pragma warning restore IDE0044
 
-            public ISO9660Stream(Stream inputStream)
+            public UserDataStream(Stream inputStream)
             {
                 if (!inputStream.CanSeek || !inputStream.CanRead)
                     throw new ArgumentException("Stream must be readable and seekable.", nameof(inputStream));

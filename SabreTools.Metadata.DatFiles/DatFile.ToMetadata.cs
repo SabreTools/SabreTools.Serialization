@@ -816,7 +816,11 @@ namespace SabreTools.Metadata.DatFiles
                         Start = romItem.Start ?? romItem.Offset,
                     };
 
-                    var dumpRom = new Data.Models.Metadata.Dump { Rom = rom };
+                    var dumpRom = new Data.Models.Metadata.Dump
+                    {
+                        Boot = romItem.Comment,
+                        Rom = rom,
+                    };
                     if (original is not null)
                     {
                         var newOriginal = new Data.Models.Metadata.Original

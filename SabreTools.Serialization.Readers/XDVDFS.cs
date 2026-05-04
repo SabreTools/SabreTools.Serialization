@@ -67,11 +67,12 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new VolumeDescriptor();
 
-            obj.StartSignature = data.ReadBytes(20);
-            var signature = System.Text.Encoding.ASCII.GetString(obj.StartSignature);
+            var temp = data.PeekBytes(20);
+            var signature = System.Text.Encoding.ASCII.GetString(temp);
             if (!signature.Equals(Constants.VolumeDescriptorSignature))
                 return null;
 
+            obj.StartSignature = data.ReadBytes(20);
             obj.RootOffset = data.ReadUInt32LittleEndian();
             obj.RootSize = data.ReadUInt32LittleEndian();
             obj.MasteringTimestamp = data.ReadInt64LittleEndian();
@@ -91,19 +92,19 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new LayoutDescriptor();
 
-            obj.Signature = data.ReadBytes(24);
-            var signature = System.Text.Encoding.ASCII.GetString(obj.Signature);
+            var temp = data.PeekBytes(24);
+            var signature = System.Text.Encoding.ASCII.GetString(temp);
             if (!signature.Equals(Constants.LayoutDescriptorSignature))
                 return null;
-            obj.Unused8Bytes = data.ReadBytes(8);
 
+            obj.Signature = data.ReadBytes(24);
+            obj.Unused8Bytes = data.ReadBytes(8);
             obj.XBLayoutVersion = ParseFourPartVersionType(data);
             obj.XBPremasterVersion = ParseFourPartVersionType(data);
             obj.XBGameDiscVersion = ParseFourPartVersionType(data);
             obj.XBOther1Version = ParseFourPartVersionType(data);
             obj.XBOther2Version = ParseFourPartVersionType(data);
             obj.XBOther3Version = ParseFourPartVersionType(data);
-
             obj.Reserved = data.ReadBytes(1968);
 
             return obj;
@@ -145,6 +146,10 @@ namespace SabreTools.Serialization.Readers
 
             var obj = new Dictionary<uint, DirectoryDescriptor>();
 
+            // Seek to current descriptor
+            data.SeekIfPossible(initialOffset + (((long)offset) * Constants.SectorSize), SeekOrigin.Begin);
+
+            // Parse current descriptor
             var dd = ParseDirectoryDescriptor(data, initialOffset, offset, size);
             if (dd is null)
                 return null;
@@ -190,14 +195,9 @@ namespace SabreTools.Serialization.Readers
             if (size < Constants.MinimumRecordLength)
                 return null;
 
-            // Ensure offset is valid
-            if ((((long)offset) * Constants.SectorSize) + size > data.Length)
-                return null;
-
             var obj = new DirectoryDescriptor();
             var records = new List<DirectoryRecord>();
 
-            data.SeekIfPossible(initialOffset + (((long)offset) * Constants.SectorSize), SeekOrigin.Begin);
             long curPosition;
             while (size > data.Position - (initialOffset + (((long)offset) * Constants.SectorSize)))
             {

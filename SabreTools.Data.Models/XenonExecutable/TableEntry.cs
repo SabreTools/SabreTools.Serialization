@@ -29,6 +29,6 @@ namespace SabreTools.Data.Models.XenonExecutable
         /// <summary>
         /// Table entry data, 20 bytes
         /// </summary>
-        public byte[]? Data { get; set; } = new byte[20];
+        public byte[] Data { get; set; } = new byte[20];
     }
 }

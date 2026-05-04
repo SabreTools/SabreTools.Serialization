@@ -46,6 +46,8 @@
         <Compile Include="..\SabreTools.Metadata.DatItems\*.cs" />
         <Compile Include="..\SabreTools.Metadata.DatItems\Formats\*.cs" />
         <Compile Include="..\SabreTools.Metadata.Filter\*.cs" />
+        <Compile Include="..\SabreTools.Metadata.Reports\*.cs" />
+        <Compile Include="..\SabreTools.Metadata.Reports\Formats\*.cs" />
         <Compile Include="..\SabreTools.ObjectIdentifier\*.cs" />
         <Compile Include="..\SabreTools.Serialization.CrossModel\*.cs" Exclude="..\SabreTools.Serialization.CrossModel\ExtensionAttribute.cs" />
         <Compile Include="..\SabreTools.Serialization.Readers\*.cs" />

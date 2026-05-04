@@ -536,6 +536,12 @@ namespace SabreTools.Metadata.DatFiles
         public DatItem? GetItem(long index) => _items.Get(index);
 
         /// <summary>
+        /// Get the internal item table
+        /// </summary>
+        /// TODO: Figure out if this can be removed
+        public IDictionary<long, DatItem> GetItems() => _items.Table;
+
+        /// <summary>
         /// Get the indices and items associated with a bucket name
         /// </summary>
         public Dictionary<long, DatItem> GetItemsForBucket(string? bucketName, bool filter = false)
@@ -584,9 +590,10 @@ namespace SabreTools.Metadata.DatFiles
         }
 
         /// <summary>
-        /// Get all machines and their indicies
+        /// Get the internal machine table
         /// </summary>
-        public Machine[] GetMachines() => _machines.Values;
+        /// TODO: Figure out if this can be removed
+        public IDictionary<long, Machine> GetMachines() => _machines.Table;
 
         /// <summary>
         /// Get a source based on the index
@@ -598,6 +605,12 @@ namespace SabreTools.Metadata.DatFiles
 
             return new KeyValuePair<long, Source?>(index, source);
         }
+
+        /// <summary>
+        /// Get the internal source table
+        /// </summary>
+        /// TODO: Figure out if this can be removed
+        public IDictionary<long, Source> GetSources() => _sources.Table;
 
         /// <summary>
         /// Remove a key from the file dictionary if it exists

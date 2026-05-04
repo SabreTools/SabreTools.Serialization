@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Metadata.DatItems;
-using SabreTools.Metadata.Filter;
 
 namespace SabreTools.Metadata.DatFiles.Formats
 {
@@ -31,7 +30,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
             int indexId,
             bool keep,
             bool statsOnly = false,
-            FilterRunner? filterRunner = null,
             bool throwOnError = false)
         {
             throw new NotImplementedException();

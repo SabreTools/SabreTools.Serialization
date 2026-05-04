@@ -100,6 +100,8 @@ namespace SabreTools.Serialization.Writers
             if (obj.Original is not null)
                 WriteOriginal(obj.Original, writer);
 
+            writer.WriteOptionalElementString("boot", obj.Boot);
+
             if (obj.Rom is not null)
                 WriteRomBase(obj.Rom, writer);
 

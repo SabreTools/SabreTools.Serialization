@@ -6,6 +6,9 @@ namespace SabreTools.Data.Models.OpenMSX
     [XmlRoot("dump")]
     public class Dump
     {
+        [XmlElement("boot")]
+        public string? Boot { get; set; }
+
         [XmlElement("original")]
         public Original? Original { get; set; }
 

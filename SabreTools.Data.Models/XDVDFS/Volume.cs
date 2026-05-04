@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.XDVDFS
     /// Gaps also include the security sector ranges, 4096 sectors each that cannot be read from discs (usually zeroed)
     /// </summary>
     /// <see href="https://xboxdevwiki.net/XDVDFS"/>
-    /// <see href="https://github.dev/Deterous/XboxKit/"/>
+    /// <see href="https://github.com/Deterous/XboxKit/"/>
     public class Volume
     {
         /// <summary>

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using SabreTools.Data.Models.TAR;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -148,7 +149,7 @@ namespace SabreTools.Wrappers
 
                     // Write the file
                     using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                    fs.Write(dataBytes, 0, dataBytes.Length);
+                    fs.Write(dataBytes);
                     fs.Flush();
                 }
 

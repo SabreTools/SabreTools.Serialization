@@ -1421,9 +1421,9 @@ namespace SabreTools.Metadata.DatFiles
             foreach (var machine in machines)
 #endif
             {
-                machine.CloneOf = null;
-                machine.RomOf = null;
-                machine.SampleOf = null;
+                machine.Value.CloneOf = null;
+                machine.Value.RomOf = null;
+                machine.Value.SampleOf = null;
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
 #else

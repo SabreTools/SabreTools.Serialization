@@ -35,10 +35,8 @@ namespace InfoPrint.Features
         private const string _hashName = "hash";
         internal readonly FlagInput HashInput = new(_hashName, ["-c", "--hash"], "Output file hashes");
 
-#if NETCOREAPP
         private const string _jsonName = "json";
         internal readonly FlagInput JsonInput = new(_jsonName, ["-j", "--json"], "Print info as JSON");
-#endif
 
         #endregion
 
@@ -57,12 +55,10 @@ namespace InfoPrint.Features
         /// </summary>
         public bool Hash { get; private set; }
 
-#if NETCOREAPP
         /// <summary>
         /// Enable JSON output
         /// </summary>
         public bool Json { get; private set; }
-#endif
 
         public MainFeature()
             : base(DisplayName, _flags, _description)
@@ -72,9 +68,7 @@ namespace InfoPrint.Features
             Add(DebugInput);
             Add(HashInput);
             Add(FileOnlyInput);
-#if NETCOREAPP
             Add(JsonInput);
-#endif
         }
 
         /// <inheritdoc/>
@@ -84,9 +78,7 @@ namespace InfoPrint.Features
             Debug = GetBoolean(_debugName);
             Hash = GetBoolean(_hashName);
             FileOnly = GetBoolean(_fileOnlyName);
-#if NETCOREAPP
             Json = GetBoolean(_jsonName);
-#endif
 
             // Loop through the input paths
             for (int i = 0; i < Inputs.Count; i++)
@@ -187,7 +179,6 @@ namespace InfoPrint.Features
                     return;
                 }
 
-#if NETCOREAPP
                 // If we have the JSON flag
                 if (Json)
                 {
@@ -199,7 +190,6 @@ namespace InfoPrint.Features
                     jsw.WriteLine(serializedData);
                     jsw.Flush();
                 }
-#endif
 
                 // Create the output data
                 var builder = new StringBuilder();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -97,7 +98,7 @@ namespace SabreTools.Wrappers
                     if (data.Length == 0)
                         return false;
 
-                    fs.Write(data, 0, data.Length);
+                    fs.Write(data);
                     fs.Flush();
                 }
             }

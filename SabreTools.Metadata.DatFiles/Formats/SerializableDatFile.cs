@@ -1,6 +1,5 @@
 ﻿using System;
 using SabreTools.Data.Models.Metadata;
-using SabreTools.Metadata.Filter;
 using SabreTools.Serialization.CrossModel;
 using SabreTools.Serialization.Readers;
 using SabreTools.Serialization.Writers;
@@ -47,7 +46,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
             int indexId,
             bool keep,
             bool statsOnly = false,
-            FilterRunner? filterRunner = null,
             bool throwOnError = false)
         {
             try
@@ -57,7 +55,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 var internalFormat = CrossModelSerializer.Serialize(specificFormat);
 
                 // Convert to the internal format
-                ConvertFromMetadata(internalFormat, filename, indexId, keep, statsOnly, filterRunner);
+                ConvertFromMetadata(internalFormat, filename, indexId, keep, statsOnly);
             }
             catch (Exception ex) when (!throwOnError)
             {

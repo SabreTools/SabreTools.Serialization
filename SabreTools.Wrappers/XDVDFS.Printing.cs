@@ -10,6 +10,9 @@ namespace SabreTools.Wrappers
 #if NETCOREAPP
         /// <inheritdoc/>
         public string ExportJSON() => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
+#else
+        /// <inheritdoc/>
+        public string ExportJSON() => Newtonsoft.Json.JsonConvert.SerializeObject(Model, _jsonSerializerOptions);
 #endif
 
         /// <inheritdoc/>
@@ -31,7 +34,7 @@ namespace SabreTools.Wrappers
             }
         }
 
-        protected static void Print(StringBuilder builder, byte[] reservedArea)
+        private static void Print(StringBuilder builder, byte[] reservedArea)
         {
             if (reservedArea.Length == 0)
                 builder.AppendLine(reservedArea, "  Reserved Area");
@@ -42,7 +45,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, VolumeDescriptor vd)
+        internal static void Print(StringBuilder builder, VolumeDescriptor vd)
         {
             builder.AppendLine("  Volume Descriptor:");
             builder.AppendLine("  -------------------------");
@@ -62,7 +65,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, LayoutDescriptor ld)
+        internal static void Print(StringBuilder builder, LayoutDescriptor ld)
         {
             builder.AppendLine("  Xbox DVD Layout Descriptor:");
             builder.AppendLine("  -------------------------");
@@ -88,7 +91,7 @@ namespace SabreTools.Wrappers
             return $"{ver.Major}.{ver.Minor}.{ver.Build}.{ver.Revision}";
         }
 
-        private static void Print(StringBuilder builder, DirectoryDescriptor dd, uint sectorNumber)
+        internal static void Print(StringBuilder builder, DirectoryDescriptor dd, uint sectorNumber)
         {
             builder.AppendLine($"  Directory Descriptor (Sector {sectorNumber}):");
             builder.AppendLine("  -------------------------");

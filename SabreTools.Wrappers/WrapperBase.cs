@@ -36,8 +36,8 @@ namespace SabreTools.Wrappers
         /// </summary>
         protected readonly ReadOnlyViewStream _dataSource;
 
-#if NETCOREAPP
 #pragma warning disable IDE1006 // Naming Styles
+#if NETCOREAPP
         /// <summary>
         /// JSON serializer options for output printing
         /// </summary>
@@ -56,8 +56,26 @@ namespace SabreTools.Wrappers
                 return serializer;
             }
         }
-#pragma warning restore IDE1006
+#else
+        /// <summary>
+        /// JSON serializer options for output printing
+        /// </summary>
+        protected static Newtonsoft.Json.JsonSerializerSettings _jsonSerializerOptions
+        {
+            get
+            {
+                var serializer = new Newtonsoft.Json.JsonSerializerSettings
+                {
+                    Formatting = Newtonsoft.Json.Formatting.Indented,
+                };
+                // TODO: Figure out how to port ConcreteAbstractSerializer
+                // TODO: Figure out how to port ConcreteInterfaceSerializer
+                serializer.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                return serializer;
+            }
+        }
 #endif
+#pragma warning restore IDE1006
 
         /// <summary>
         /// Lock for accessing <see cref="_dataSource"/>
