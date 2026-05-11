@@ -6,6 +6,7 @@ using Xunit;
 
 namespace SabreTools.Wrappers.Test
 {
+    [Collection("NintendoDisc")]
     public class WIATests
     {
         // -----------------------------------------------------------------------
