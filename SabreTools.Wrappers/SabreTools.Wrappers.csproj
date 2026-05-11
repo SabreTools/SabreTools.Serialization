@@ -60,8 +60,4 @@
         <ProjectReference Include="..\SabreTools.Serialization.Writers\SabreTools.Serialization.Writers.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Properties\" />
-    </ItemGroup>
-
 </Project>
