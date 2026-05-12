@@ -35,10 +35,16 @@
     </ItemGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="SabreTools.Wrappers.Test" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="BouncyCastle.NetCore" Version="1.9.0" Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`)) OR $(TargetFramework.StartsWith(`net40`))" />
+        <PackageReference Include="BouncyCastle.NetCore" Version="2.2.1" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`))" />
         <PackageReference Include="GrindCore" Version="0.7.0" />
         <PackageReference Include="GrindCore.SharpCompress" Version="0.46.2" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`)) AND !$(TargetFramework.StartsWith(`net452`))" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />

@@ -28,18 +28,13 @@ namespace SabreTools.Data.Models.WIA
         public RawDataEntry[] RawDataEntries { get; set; } = [];
 
         /// <summary>
-        /// WIA group entries (populated when <see cref="IsRvz"/> is false)
+        /// WIA group entries (populated for WIA files)
         /// </summary>
         public WiaGroupEntry[]? GroupEntries { get; set; }
 
         /// <summary>
-        /// RVZ group entries (populated when <see cref="IsRvz"/> is true)
+        /// RVZ group entries (populated for RVZ files)
         /// </summary>
         public RvzGroupEntry[]? RvzGroupEntries { get; set; }
-
-        /// <summary>
-        /// True if this is an RVZ file; false if this is a WIA file
-        /// </summary>
-        public bool IsRvz { get; set; }
     }
 }
