@@ -4,12 +4,19 @@ using System.IO;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace SabreTools.Wrappers.Test
 {
     [Collection("NintendoDisc")]
     public class NintendoDiscEncryptionTests
     {
+        private readonly ITestOutputHelper _output;
+
+        public NintendoDiscEncryptionTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
         // -----------------------------------------------------------------------
         // DecryptTitleKey — no provider set
         // -----------------------------------------------------------------------
@@ -123,27 +130,48 @@ namespace SabreTools.Wrappers.Test
             string keyFile = Path.Combine(
                 AppContext.BaseDirectory, "TestData", "NintendoDisc", "keys.json");
 
-            if (!File.Exists(keyFile))
-                return;
+            _output.WriteLine($"Looking for key file: {keyFile}");
 
+            if (!File.Exists(keyFile))
+            {
+                _output.WriteLine("Key file not found — test skipped.");
+                return;
+            }
+
+            _output.WriteLine("Key file found. Parsing...");
             var provider = LoadKeyProvider(keyFile);
             NintendoDisc.CommonKeyProvider = provider;
             try
             {
-                // index 0 = retail, index 1 = Korean — well-known Wii ticket convention
                 byte[]? retail = provider.Invoke(0);
                 byte[]? korean = provider.Invoke(1);
 
-                // Skip if either key is absent or does not match the hardcoded hash —
-                // the user's file exists but does not contain the real Wii keys.
-                if (retail is null || Sha256Hex(retail) != RetailKeySha256)
-                    return;
-                if (korean is null || Sha256Hex(korean) != KoreanKeySha256)
-                    return;
+                string retailHash = retail is null ? "(missing)" : Sha256Hex(retail);
+                string koreanHash = korean is null ? "(missing)" : Sha256Hex(korean);
 
-                // Both keys are present and verified — assert they are usable.
+                _output.WriteLine($"retail (index 0) SHA256 : {retailHash}");
+                _output.WriteLine($"  expected               : {RetailKeySha256}");
+                _output.WriteLine($"  match                  : {retailHash == RetailKeySha256}");
+
+                _output.WriteLine($"korean (index 1) SHA256 : {koreanHash}");
+                _output.WriteLine($"  expected               : {KoreanKeySha256}");
+                _output.WriteLine($"  match                  : {koreanHash == KoreanKeySha256}");
+
+                if (retail is null || retailHash != RetailKeySha256)
+                {
+                    _output.WriteLine("retail key did not match — integration assertions skipped.");
+                    return;
+                }
+                if (korean is null || koreanHash != KoreanKeySha256)
+                {
+                    _output.WriteLine("korean key did not match — integration assertions skipped.");
+                    return;
+                }
+
+                _output.WriteLine("Both keys verified — running assertions.");
                 Assert.Equal(16, retail.Length);
                 Assert.Equal(16, korean.Length);
+                _output.WriteLine("Assertions passed.");
             }
             finally { NintendoDisc.CommonKeyProvider = null; }
         }
