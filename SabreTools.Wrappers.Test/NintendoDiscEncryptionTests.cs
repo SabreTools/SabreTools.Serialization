@@ -167,8 +167,8 @@ namespace SabreTools.Wrappers.Test
         /// Expected file format:
         /// <code>
         /// [
-        ///   { "name": "retail", "index": 0, "key": "ebe42a225e8593e448d9c5457381aaf7" },
-        ///   { "name": "korean", "index": 1, "key": "63b82bb4f4614e2e13f2fefbba4c9b7e" }
+        ///   { "name": "retail", "index": 0, "key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" },
+        ///   { "name": "korean", "index": 1, "key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" }
         /// ]
         /// </code>
         /// Whitespace inside hex strings is ignored. Returns <see langword="null"/> from the
