@@ -54,6 +54,7 @@
         <Compile Include="..\SabreTools.Serialization.Writers\*.cs" Exclude="..\SabreTools.Serialization.Writers\ExtensionAttribute.cs" />
         <Compile Include="..\SabreTools.Wrappers\*.cs" Exclude="..\SabreTools.Wrappers\ExtensionAttribute.cs" />
         <Compile Include="..\SabreTools.Wrappers\_EXTERNAL\StormLibSharp\**\*.cs" />
+        <Compile Include="..\SabreTools.Wrappers\Helpers\*.cs" />
     </ItemGroup>
 
     <ItemGroup>

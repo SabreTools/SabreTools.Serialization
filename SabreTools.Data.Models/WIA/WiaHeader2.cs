@@ -10,22 +10,26 @@ namespace SabreTools.Data.Models.WIA
         /// <summary>
         /// Disc type: 1 = GameCube, 2 = Wii
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public WiaDiscType DiscType { get; set; }
 
         /// <summary>
         /// Compression algorithm applied to group data
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public WiaRvzCompressionType CompressionType { get; set; }
 
         /// <summary>
-        /// Informational compression level used when writing (1–9)
+        /// Informational compression level used when writing (1-9)
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public int CompressionLevel { get; set; }
 
         /// <summary>
         /// Group / chunk size in bytes.
         /// WIA requires exactly 2 MiB; RVZ accepts powers of 2 between 32 KiB and 2 MiB.
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint ChunkSize { get; set; }
 
         /// <summary>
@@ -37,16 +41,19 @@ namespace SabreTools.Data.Models.WIA
         /// <summary>
         /// Number of PartitionEntry structures that follow the raw-data entries
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint NumberOfPartitionEntries { get; set; }
 
         /// <summary>
         /// Size of each PartitionEntry in bytes
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint PartitionEntrySize { get; set; }
 
         /// <summary>
         /// File offset of the PartitionEntry array
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public ulong PartitionEntriesOffset { get; set; }
 
         /// <summary>
@@ -58,31 +65,37 @@ namespace SabreTools.Data.Models.WIA
         /// <summary>
         /// Number of RawDataEntry structures
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint NumberOfRawDataEntries { get; set; }
 
         /// <summary>
         /// File offset of the RawDataEntry array
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public ulong RawDataEntriesOffset { get; set; }
 
         /// <summary>
         /// Total size in bytes of all RawDataEntry structures
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint RawDataEntriesSize { get; set; }
 
         /// <summary>
         /// Number of group entries (WiaGroupEntry or RvzGroupEntry)
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint NumberOfGroupEntries { get; set; }
 
         /// <summary>
         /// File offset of the group-entry array
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public ulong GroupEntriesOffset { get; set; }
 
         /// <summary>
         /// Total size in bytes of all group entries
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint GroupEntriesSize { get; set; }
 
         /// <summary>

@@ -30,7 +30,7 @@
         public FolderIndex FolderIndex { get; set; }
 
         /// <summary>
-        /// Date of this file, in the format ((year–1980) << 9)+(month << 5)+(day), where
+        /// Date of this file, in the format ((year-1980) << 9)+(month << 5)+(day), where
         /// month={1..12} and day = { 1..31 }. This "date" is typically considered the "last modified" date in local
         /// time, but the actual definition is application-defined.
         /// </summary>

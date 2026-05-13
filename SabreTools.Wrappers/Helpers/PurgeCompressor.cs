@@ -1,7 +1,9 @@
 using System;
 using System.IO;
 using SabreTools.Hashing;
+using SabreTools.Numerics.Extensions;
 
+// TODO: Move to IO
 namespace SabreTools.Wrappers
 {
     /// <summary>
@@ -21,6 +23,11 @@ namespace SabreTools.Wrappers
     internal static class PurgeCompressor
     {
         /// <summary>
+        /// Zero-byte runs of this length or fewer are bridged
+        /// </summary>
+        private const int MaxGap = 8;
+
+        /// <summary>
         /// Compress <paramref name="data"/>[<paramref name="offset"/> ..
         /// <paramref name="offset"/>+<paramref name="count"/>) into PURGE format.
         /// </summary>
@@ -35,8 +42,6 @@ namespace SabreTools.Wrappers
         /// <returns>PURGE-compressed byte array (segments + 20-byte SHA-1).</returns>
         public static byte[] Compress(byte[] data, int offset, int count, byte[]? precedingBytes = null)
         {
-            const int MaxGap = 8; // zero-byte runs of this length or fewer are bridged
-
             var output = new MemoryStream((count / 2) + 32);
 
             int end = offset + count;
@@ -46,42 +51,46 @@ namespace SabreTools.Wrappers
             {
                 // Skip leading zeros
                 while (pos < end && data[pos] == 0)
+                {
                     pos++;
+                }
 
                 if (pos >= end)
                     break;
 
                 // pos is now the start of a non-zero run (segment start)
                 int segStart = pos;
-                int segEnd   = pos;
+                int segEnd = pos;
 
                 // Extend the segment, bridging zero-gaps of <= MaxGap bytes
                 while (segEnd < end)
                 {
                     // advance through non-zero bytes
                     while (segEnd < end && data[segEnd] != 0)
+                    {
                         segEnd++;
+                    }
 
                     // peek ahead: count zero bytes
                     int zeroRun = 0;
                     while (segEnd + zeroRun < end && data[segEnd + zeroRun] == 0)
+                    {
                         zeroRun++;
+                    }
 
                     // If the gap is small enough (and there is more non-zero data after it),
                     // bridge the gap by including it in the segment.
                     if (zeroRun > 0 && zeroRun <= MaxGap && segEnd + zeroRun < end)
-                    {
                         segEnd += zeroRun; // include zeros in segment, keep scanning
-                    }
                     else
-                    {
                         break; // end of segment
-                    }
                 }
 
                 // Trim trailing zeros from segment end
                 while (segEnd > segStart && data[segEnd - 1] == 0)
+                {
                     segEnd--;
+                }
 
                 if (segEnd <= segStart)
                 {
@@ -90,11 +99,10 @@ namespace SabreTools.Wrappers
                 }
 
                 uint segOffset = (uint)(segStart - offset);
-                uint segSize   = (uint)(segEnd - segStart);
+                uint segSize = (uint)(segEnd - segStart);
 
-                // Write {u32 offsetBE, u32 sizeBE, data[segSize]}
-                WriteBeU32(output, segOffset);
-                WriteBeU32(output, segSize);
+                output.WriteBigEndian(segOffset);
+                output.WriteBigEndian(segSize);
                 output.Write(data, segStart, (int)segSize);
 
                 pos = segEnd;
@@ -112,24 +120,23 @@ namespace SabreTools.Wrappers
             return result;
         }
 
+        /// <summary>
+        /// Get the SHA-1 hash of preceeding bytes and segment data
+        /// </summary>
+        /// <param name="precedingBytes">Optional preceeding bytes</param>
+        /// <param name="segments">Segment data</param>
+        /// <returns>SHA-1 hash of the data, all 0x00 on error</returns>
         private static byte[] ComputeSha1(byte[]? precedingBytes, byte[] segments)
         {
             using var sha1 = new HashWrapper(HashType.SHA1);
 
-            if (precedingBytes != null && precedingBytes.Length > 0)
+            if (precedingBytes is not null && precedingBytes.Length > 0)
                 sha1.Process(precedingBytes, 0, precedingBytes.Length);
 
             sha1.Process(segments, 0, segments.Length);
             sha1.Terminate();
-            return sha1.CurrentHashBytes ?? new byte[20];
-        }
 
-        private static void WriteBeU32(Stream s, uint value)
-        {
-            s.WriteByte((byte)(value >> 24));
-            s.WriteByte((byte)(value >> 16));
-            s.WriteByte((byte)(value >> 8));
-            s.WriteByte((byte)value);
+            return sha1.CurrentHashBytes ?? new byte[20];
         }
     }
 }

@@ -10,6 +10,7 @@ namespace SabreTools.Wrappers
     internal sealed class WiaVirtualStream : Stream
     {
         private readonly WIA _wia;
+
         private long _position;
 
         public WiaVirtualStream(WIA wia)
@@ -17,10 +18,19 @@ namespace SabreTools.Wrappers
             _wia = wia ?? throw new ArgumentNullException(nameof(wia));
         }
 
+        /// <inheritdoc/>
         public override bool CanRead => true;
+
+        /// <inheritdoc/>
         public override bool CanSeek => true;
+
+        /// <inheritdoc/>
         public override bool CanWrite => false;
+
+        /// <inheritdoc/>
         public override long Length => (long)_wia.IsoFileSize;
+
+        /// <inheritdoc/>
         public override long Position
         {
             get => _position;
@@ -28,10 +38,12 @@ namespace SabreTools.Wrappers
             {
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(value));
+
                 _position = value;
             }
         }
 
+        /// <inheritdoc/>
         public override int Read(byte[] buffer, int offset, int count)
         {
             if (buffer is null)
@@ -53,14 +65,15 @@ namespace SabreTools.Wrappers
             return read;
         }
 
+        /// <inheritdoc/>
         public override long Seek(long offset, SeekOrigin origin)
         {
             long newPos;
             switch (origin)
             {
-                case SeekOrigin.Begin:   newPos = offset; break;
+                case SeekOrigin.Begin: newPos = offset; break;
                 case SeekOrigin.Current: newPos = _position + offset; break;
-                case SeekOrigin.End:     newPos = Length + offset; break;
+                case SeekOrigin.End: newPos = Length + offset; break;
                 default: throw new ArgumentOutOfRangeException(nameof(origin));
             }
 
@@ -71,10 +84,13 @@ namespace SabreTools.Wrappers
             return _position;
         }
 
+        /// <inheritdoc/>
         public override void Flush() { }
 
+        /// <inheritdoc/>
         public override void SetLength(long value) => throw new NotSupportedException();
 
+        /// <inheritdoc/>
         public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
     }
 }

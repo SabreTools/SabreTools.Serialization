@@ -2,6 +2,7 @@ using System;
 using SabreTools.Hashing;
 using SabreTools.Numerics.Extensions;
 
+// TODO: Move to IO
 namespace SabreTools.Wrappers
 {
     /// <summary>
@@ -21,6 +22,7 @@ namespace SabreTools.Wrappers
     internal static class PurgeDecompressor
     {
         private const int SHA1_SIZE = 20;
+
         private const int SEGMENT_HEADER_SIZE = 8; // u32 offset + u32 size
 
         /// <summary>
@@ -35,16 +37,18 @@ namespace SabreTools.Wrappers
         /// exception-list section for Wii partition groups. Pass null for non-Wii groups.
         /// </param>
         /// <returns>
-        /// The decompressed byte array, or <c>null</c> if the data is malformed or the
+        /// The decompressed byte array, or null if the data is malformed or the
         /// trailing SHA-1 does not match.
         /// </returns>
         public static byte[]? Decompress(
-            byte[] input, int inputOffset, int inputLength,
+            byte[] input,
+            int inputOffset,
+            int inputLength,
             int decompressedSize,
             byte[]? precedingBytes = null)
         {
-            if (input is null) throw new ArgumentNullException(nameof(input));
-            if (inputLength < SHA1_SIZE) return null;
+            if (inputLength < SHA1_SIZE)
+                return null;
 
             byte[] output = new byte[decompressedSize];
             int pos = inputOffset;
@@ -52,7 +56,7 @@ namespace SabreTools.Wrappers
 
             using (var sha1 = new HashWrapper(HashType.SHA1))
             {
-                if (precedingBytes != null && precedingBytes.Length > 0)
+                if (precedingBytes is not null && precedingBytes.Length > 0)
                     sha1.Process(precedingBytes, 0, precedingBytes.Length);
 
                 while (pos < dataEnd)
@@ -62,7 +66,7 @@ namespace SabreTools.Wrappers
 
                     int headerPos = pos;
                     uint segOffset = input.ReadUInt32BigEndian(ref headerPos);
-                    uint segSize   = input.ReadUInt32BigEndian(ref headerPos);
+                    uint segSize = input.ReadUInt32BigEndian(ref headerPos);
 
                     sha1.Process(input, pos, SEGMENT_HEADER_SIZE);
                     pos += SEGMENT_HEADER_SIZE;
@@ -84,7 +88,9 @@ namespace SabreTools.Wrappers
                 sha1.Terminate();
 
                 byte[]? computed = sha1.CurrentHashBytes;
-                if (computed is null) return null;
+                if (computed is null)
+                    return null;
+
                 for (int i = 0; i < SHA1_SIZE; i++)
                 {
                     if (computed[i] != input[dataEnd + i])

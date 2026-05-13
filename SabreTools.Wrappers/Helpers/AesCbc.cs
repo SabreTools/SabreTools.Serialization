@@ -2,19 +2,20 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 
+// TODO: Move to IO
 namespace SabreTools.Wrappers
 {
     /// <summary>
     /// AES-128-CBC encrypt/decrypt helpers used by NintendoDisc and WIA/RVZ.
     /// </summary>
     /// <remarks>
-    /// Implemented directly via BouncyCastle because <c>SabreTools.Security.Cryptography</c>
-    /// currently only exposes AES-CTR.  When an <c>AESCBC</c> wrapper is added to that
+    /// Implemented directly via BouncyCastle because SabreTools.Security.Cryptography
+    /// currently only exposes AES-CTR.  When an AESCBC wrapper is added to that
     /// library, replace the bodies of <see cref="Decrypt"/> and <see cref="Encrypt"/> with
-    /// the equivalent <c>AESCBC.Decrypt</c> / <c>AESCBC.Encrypt</c> calls and remove the
+    /// the equivalent AESCBC.Decrypt / AESCBC.Encrypt calls and remove the
     /// BouncyCastle using directives from this file.
     /// </remarks>
-    internal static class AesCbc
+    public static class AesCbc
     {
         /// <summary>
         /// Decrypts <paramref name="data"/> with AES-128-CBC (no padding).
@@ -60,11 +61,16 @@ namespace SabreTools.Wrappers
             }
         }
 
+        /// <summary>
+        /// Create an AES/CBC cipher with a given key and initial value
+        /// </summary>
         private static IBufferedCipher CreateCipher(bool forEncryption, byte[] key, byte[] iv)
         {
             var keyParam = new KeyParameter(key);
             var cipher = CipherUtilities.GetCipher("AES/CBC/NoPadding");
+
             cipher.Init(forEncryption, new ParametersWithIV(keyParam, iv));
+
             return cipher;
         }
     }

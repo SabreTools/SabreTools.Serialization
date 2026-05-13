@@ -17,10 +17,10 @@ namespace SabreTools.Data.Models.GCZ
         /// Each value encodes both the offset of the block within the compressed data section
         /// and a compression flag in the top bit:
         /// <list type="bullet">
-        ///   <item>Top bit CLEAR → block is zlib/deflate-compressed at that offset.</item>
-        ///   <item>Top bit SET   → block is stored uncompressed at that offset.</item>
+        ///   <item>Top bit CLEAR -> block is zlib/deflate-compressed at that offset.</item>
+        ///   <item>Top bit SET   -> block is stored uncompressed at that offset.</item>
         /// </list>
-        /// Offset is <c>value &amp; ~UncompressedFlag</c>.
+        /// Offset is value &amp; ~UncompressedFlag.
         /// </summary>
         public ulong[] BlockPointers { get; set; } = [];
 

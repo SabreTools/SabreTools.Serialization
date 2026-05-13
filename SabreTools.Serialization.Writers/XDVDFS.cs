@@ -46,6 +46,9 @@ namespace SabreTools.Serialization.Writers
             return true;
         }
 
+        /// <summary>
+        /// Validate that Volume is writable
+        /// </summary>
         public static bool ValidateVolume(Volume? obj)
         {
             // If the data is invalid

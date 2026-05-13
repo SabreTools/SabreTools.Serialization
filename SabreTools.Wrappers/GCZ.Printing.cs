@@ -1,4 +1,6 @@
 using System.Text;
+using SabreTools.Data.Models.GCZ;
+using SabreTools.Data.Models.NintendoDisc;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
@@ -18,25 +20,41 @@ namespace SabreTools.Wrappers
         {
             builder.AppendLine("GCZ Information:");
             builder.AppendLine("-------------------------");
-            builder.AppendLine(Header.MagicCookie, "Magic Cookie");
-            builder.AppendLine(Header.SubType, "Sub-Type");
-            builder.AppendLine(Header.CompressedDataSize, "Compressed Data Size");
-            builder.AppendLine(Header.DataSize, "Uncompressed Data Size");
-            builder.AppendLine(Header.BlockSize, "Block Size");
-            builder.AppendLine(Header.NumBlocks, "Block Count");
-            builder.AppendLine();
 
-            var discHeader = DiscHeader;
-            if (discHeader is not null)
+            Print(builder, Header);
+            Print(builder, DiscHeader);
+        }
+
+        private static void Print(StringBuilder builder, GczHeader header)
+        {
+            builder.AppendLine("  Header:");
+            builder.AppendLine("  -------------------------");
+
+            builder.AppendLine(header.MagicCookie, "Magic Cookie");
+            builder.AppendLine(header.SubType, "Sub-Type");
+            builder.AppendLine(header.CompressedDataSize, "Compressed Data Size");
+            builder.AppendLine(header.DataSize, "Uncompressed Data Size");
+            builder.AppendLine(header.BlockSize, "Block Size");
+            builder.AppendLine(header.NumBlocks, "Block Count");
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, DiscHeader? header)
+        {
+            builder.AppendLine("  Embedded Disc Header:");
+            builder.AppendLine("  -------------------------");
+            if (header is null)
             {
-                builder.AppendLine("Embedded Disc Header:");
-                builder.AppendLine(discHeader.GameId, "  Game ID");
-                builder.AppendLine(discHeader.MakerCode, "  Maker Code");
-                builder.AppendLine(discHeader.DiscNumber, "  Disc Number");
-                builder.AppendLine(discHeader.DiscVersion, "  Disc Version");
-                builder.AppendLine(discHeader.GameTitle, "  Game Title");
+                builder.AppendLine("  No embedded disc header");
                 builder.AppendLine();
+                return;
             }
+
+            builder.AppendLine(header.GameId, "  Game ID");
+            builder.AppendLine(header.DiscNumber, "  Disc Number");
+            builder.AppendLine(header.DiscVersion, "  Disc Version");
+            builder.AppendLine(header.GameTitle, "  Game Title");
+            builder.AppendLine();
         }
     }
 }

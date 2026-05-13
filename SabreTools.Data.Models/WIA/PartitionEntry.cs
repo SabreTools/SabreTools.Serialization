@@ -12,10 +12,14 @@ namespace SabreTools.Data.Models.WIA
         /// <remarks>16 bytes</remarks>
         public byte[] PartitionKey { get; set; } = new byte[16];
 
-        /// <summary>First sector range for this partition (typically encrypted data)</summary>
+        /// <summary>
+        /// First sector range for this partition (typically encrypted data)
+        /// </summary>
         public PartitionDataEntry DataEntry0 { get; set; } = new();
 
-        /// <summary>Second sector range for this partition (typically decrypted/raw data)</summary>
+        /// <summary>
+        /// Second sector range for this partition (typically decrypted/raw data)
+        /// </summary>
         public PartitionDataEntry DataEntry1 { get; set; } = new();
     }
 }

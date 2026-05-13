@@ -8,13 +8,14 @@ namespace SabreTools.Data.Models.WIA
     {
         /// <summary>
         /// Actual byte offset of this group's data within the WIA file.
-        /// (On disk this value is stored as <c>offset &gt;&gt; 2</c>.)
         /// </summary>
-        public ulong DataOffset { get; set; }
+        /// <remarks>Big-endian, requires left bit shift of 2 to get the real value</remarks>
+        public uint DataOffset { get; set; }
 
         /// <summary>
         /// Compressed size of this group's data in bytes (0 means group contains only zeroes)
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint DataSize { get; set; }
     }
 }

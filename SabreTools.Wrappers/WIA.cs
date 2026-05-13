@@ -1,9 +1,10 @@
 using System;
 using System.IO;
-using SabreTools.Hashing;
 using SabreTools.Data.Models.NintendoDisc;
 using SabreTools.Data.Models.WIA;
-using WiaConstants = SabreTools.Data.Models.WIA.Constants;
+using SabreTools.Hashing;
+using static SabreTools.Data.Models.NintendoDisc.Constants;
+using static SabreTools.Data.Models.WIA.Constants;
 using WiaReader = SabreTools.Serialization.Readers.WIA;
 
 namespace SabreTools.Wrappers
@@ -19,6 +20,9 @@ namespace SabreTools.Wrappers
 
         #region Extension Properties
 
+        /// <inheritdoc cref="DiscImage.GroupEntries"/>
+        public WiaGroupEntry[]? GroupEntries => Model.GroupEntries;
+
         /// <inheritdoc cref="DiscImage.Header1"/>
         public WiaHeader1 Header1 => Model.Header1;
 
@@ -26,7 +30,7 @@ namespace SabreTools.Wrappers
         public WiaHeader2 Header2 => Model.Header2;
 
         /// <summary>True if this is an RVZ file; false if this is a WIA file.</summary>
-        public bool IsRvz => Model.Header1.Magic == WiaConstants.RvzMagic;
+        public bool IsRvz => Header1.Magic == RvzMagic;
 
         /// <inheritdoc cref="DiscImage.PartitionEntries"/>
         public PartitionEntry[]? PartitionEntries => Model.PartitionEntries;
@@ -34,10 +38,13 @@ namespace SabreTools.Wrappers
         /// <inheritdoc cref="DiscImage.RawDataEntries"/>
         public RawDataEntry[] RawDataEntries => Model.RawDataEntries;
 
+        /// <inheritdoc cref="DiscImage.RvzGroupEntries"/>
+        public RvzGroupEntry[]? RvzGroupEntries => Model.RvzGroupEntries;
+
         /// <summary>
         /// Total uncompressed ISO size in bytes
         /// </summary>
-        public ulong IsoFileSize => Model.Header1.IsoFileSize;
+        public ulong IsoFileSize => Header1.IsoFileSize;
 
         /// <summary>
         /// Disc header parsed from the 128-byte raw disc header stored in Header2.
@@ -46,18 +53,18 @@ namespace SabreTools.Wrappers
         {
             get
             {
-                if (_discHeader is not null)
-                    return _discHeader;
+                if (field is not null)
+                    return field;
+
                 byte[]? raw = Header2.DiscHeader;
                 if (raw is null || raw.Length < 0x20)
                     return null;
+
                 using var ms = new MemoryStream(raw);
-                _discHeader = Serialization.Readers.NintendoDisc.ParseDiscHeaderOnly(ms);
-                return _discHeader;
+                field = Serialization.Readers.NintendoDisc.ParseDiscHeader(ms);
+                return field;
             }
         }
-
-        private DiscHeader? _discHeader;
 
         #endregion
 
@@ -125,9 +132,11 @@ namespace SabreTools.Wrappers
                 if (model is null)
                     return null;
 
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                 // The reader parsed the compressed table blobs as raw bytes.
                 // Re-read and decompress them here now that we have the compression parameters.
                 DecompressTables(model, data, currentOffset);
+#endif
 
                 return new WIA(model, data, currentOffset);
             }
@@ -137,6 +146,7 @@ namespace SabreTools.Wrappers
             }
         }
 
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
         /// <summary>
         /// Re-reads the partition entries, raw data entries, and group entries from the source
         /// stream, decompresses them using the algorithm specified in Header2, and replaces the
@@ -144,7 +154,6 @@ namespace SabreTools.Wrappers
         /// </summary>
         private static void DecompressTables(DiscImage model, Stream data, long baseOffset)
         {
-#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             var comp = model.Header2.CompressionType;
 
             // None / Purge tables are stored as plain big-endian structs — already parsed correctly.
@@ -155,13 +164,13 @@ namespace SabreTools.Wrappers
             byte compDataSize = model.Header2.CompressorDataSize;
 
             // --- Raw data entries (stored compressed) ---
-            if (model.Header2.NumberOfRawDataEntries > 0 &&
-                model.Header2.RawDataEntriesOffset > 0 &&
-                model.Header2.RawDataEntriesSize > 0)
+            if (model.Header2.NumberOfRawDataEntries > 0
+                && model.Header2.RawDataEntriesOffset > 0
+                && model.Header2.RawDataEntriesSize > 0)
             {
                 int count = (int)model.Header2.NumberOfRawDataEntries;
                 int compressedSize = (int)model.Header2.RawDataEntriesSize;
-                int expectedSize = count * WiaConstants.RawDataEntrySize;
+                int expectedSize = count * RawDataEntrySize;
 
                 data.Seek(baseOffset + (long)model.Header2.RawDataEntriesOffset, SeekOrigin.Begin);
                 byte[] buf = new byte[compressedSize];
@@ -169,8 +178,7 @@ namespace SabreTools.Wrappers
                 if (read < compressedSize)
                     return;
 
-                byte[] plain = WiaRvzCompressionHelper.Decompress(
-                    comp, buf, 0, compressedSize, compData, compDataSize);
+                byte[] plain = WiaRvzCompressionHelper.Decompress(comp, buf, 0, compressedSize, compData, compDataSize);
                 if (plain is null || plain.Length < expectedSize)
                     return;
 
@@ -178,13 +186,13 @@ namespace SabreTools.Wrappers
             }
 
             // --- Group entries (stored compressed) ---
-            if (model.Header2.NumberOfGroupEntries > 0 &&
-                model.Header2.GroupEntriesOffset > 0 &&
-                model.Header2.GroupEntriesSize > 0)
+            if (model.Header2.NumberOfGroupEntries > 0
+                && model.Header2.GroupEntriesOffset > 0
+                && model.Header2.GroupEntriesSize > 0)
             {
                 int count = (int)model.Header2.NumberOfGroupEntries;
                 int compressedSize = (int)model.Header2.GroupEntriesSize;
-                int entrySize = model.Header1.Magic == WiaConstants.RvzMagic ? WiaConstants.RvzGroupEntrySize : WiaConstants.WiaGroupEntrySize;
+                int entrySize = model.Header1.Magic == RvzMagic ? RvzGroupEntrySize : WiaGroupEntrySize;
                 int expectedSize = count * entrySize;
 
                 data.Seek(baseOffset + (long)model.Header2.GroupEntriesOffset, SeekOrigin.Begin);
@@ -193,82 +201,63 @@ namespace SabreTools.Wrappers
                 if (read < compressedSize)
                     return;
 
-                byte[] plain = WiaRvzCompressionHelper.Decompress(
-                    comp, buf, 0, compressedSize, compData, compDataSize);
+                byte[] plain = WiaRvzCompressionHelper.Decompress(comp, buf, 0, compressedSize, compData, compDataSize);
                 if (plain is null || plain.Length < expectedSize)
                     return;
 
-                if (model.Header1.Magic == WiaConstants.RvzMagic)
+                if (model.Header1.Magic == RvzMagic)
                     model.RvzGroupEntries = ParseRvzGroupEntries(plain, count);
                 else
                     model.GroupEntries = ParseWiaGroupEntries(plain, count);
             }
-#endif
         }
 
-#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-        /// <summary>Parses raw data entries from a plain (already decompressed) byte array.</summary>
+        /// <summary>
+        /// Parses raw data entries from a plain (already decompressed) byte array.
+        /// </summary>
         private static RawDataEntry[] ParseRawDataEntries(byte[] plain, int count)
         {
             var entries = new RawDataEntry[count];
+
+            int offset = 0;
             for (int i = 0; i < count; i++)
             {
-                int o = i * WiaConstants.RawDataEntrySize;
-                var e = new RawDataEntry();
-                e.DataOffset = ReadUInt64BE(plain, o);
-                e.DataSize = ReadUInt64BE(plain, o + 8);
-                e.GroupIndex = ReadUInt32BE(plain, o + 16);
-                e.NumberOfGroups = ReadUInt32BE(plain, o + 20);
-                entries[i] = e;
+                entries[i] = WiaReader.ParseRawDataEntry(plain, ref offset);
             }
 
             return entries;
         }
 
-        /// <summary>Parses WIA group entries from a plain (already decompressed) byte array.</summary>
+        /// <summary>
+        /// Parses WIA group entries from a plain (already decompressed) byte array.
+        /// </summary>
         private static WiaGroupEntry[] ParseWiaGroupEntries(byte[] plain, int count)
         {
             var entries = new WiaGroupEntry[count];
+
+            int offset = 0;
             for (int i = 0; i < count; i++)
             {
-                int o = i * WiaConstants.WiaGroupEntrySize;
-                var e = new WiaGroupEntry();
-                e.DataOffset = (ulong)ReadUInt32BE(plain, o) << 2;
-                e.DataSize = ReadUInt32BE(plain, o + 4);
-                entries[i] = e;
+                entries[i] = WiaReader.ParseWiaGroupEntry(plain, ref offset);
             }
 
             return entries;
         }
 
-        /// <summary>Parses RVZ group entries from a plain (already decompressed) byte array.</summary>
+        /// <summary>
+        /// Parses RVZ group entries from a plain (already decompressed) byte array.
+        /// </summary>
         private static RvzGroupEntry[] ParseRvzGroupEntries(byte[] plain, int count)
         {
             var entries = new RvzGroupEntry[count];
+
+            int offset = 0;
             for (int i = 0; i < count; i++)
             {
-                int o = i * WiaConstants.RvzGroupEntrySize;
-                var e = new RvzGroupEntry();
-                e.DataOffset = (ulong)ReadUInt32BE(plain, o) << 2;
-                e.DataSize = ReadUInt32BE(plain, o + 4);
-                e.RvzPackedSize = ReadUInt32BE(plain, o + 8);
-                entries[i] = e;
+                entries[i] = WiaReader.ParseRvzGroupEntry(plain, ref offset);
             }
 
             return entries;
-        }
-#endif
-
-#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-        private static ulong ReadUInt64BE(byte[] b, int o)
-        {
-            return ((ulong)b[o] << 56) | ((ulong)b[o + 1] << 48) | ((ulong)b[o + 2] << 40) | ((ulong)b[o + 3] << 32)
-                | ((ulong)b[o + 4] << 24) | ((ulong)b[o + 5] << 16) | ((ulong)b[o + 6] << 8) | b[o + 7];
-        }
-
-        private static uint ReadUInt32BE(byte[] b, int o)
-        {
-            return ((uint)b[o] << 24) | ((uint)b[o + 1] << 16) | ((uint)b[o + 2] << 8) | b[o + 3];
         }
 #endif
 
@@ -288,7 +277,7 @@ namespace SabreTools.Wrappers
         /// </summary>
         public NintendoDisc? GetInnerWrapper()
         {
-            if (Model.Header1.IsoFileSize == 0)
+            if (Header1.IsoFileSize == 0)
                 return null;
 
             var vStream = new WiaVirtualStream(this);
@@ -299,47 +288,43 @@ namespace SabreTools.Wrappers
             // For Wii discs: WIA/RVZ stores partition data already decrypted.
             // Wire a pre-decrypted reader so NintendoDisc.Extraction bypasses its
             // AES-CBC decrypt pass and reads directly from our decompressed groups.
-            if (Model.PartitionEntries is { Length: > 0 })
-                disc._preDecryptedReader = BuildPreDecryptedReader();
+            if (PartitionEntries is not null && PartitionEntries.Length > 0)
+                disc._preDecryptedReader = PreDecryptedReader;
 
             return disc;
         }
 
         /// <summary>
-        /// Builds the delegate used by <see cref="NintendoDisc._preDecryptedReader"/>.
+        /// Used by <see cref="NintendoDisc._preDecryptedReader"/>.
         /// Matches <paramref name="absDataOffset"/> (absolute ISO offset of the encrypted data
         /// area) to the corresponding WIA <see cref="PartitionEntry"/> by comparing it with
-        /// <c>de.FirstSector * 0x8000</c>, then delegates to
+        /// de.FirstSector * 0x8000, then delegates to
         /// <see cref="ReadDecryptedPartitionBytes"/>.
         /// </summary>
-        private Func<long, long, int, byte[]?> BuildPreDecryptedReader()
+        private byte[]? PreDecryptedReader(long absDataOffset, long partitionDataOffset, int length)
         {
-            const int WiiBlockSize = 0x8000;
-            return (absDataOffset, partitionDataOffset, length) =>
-            {
-                if (Model.PartitionEntries is null)
-                    return null;
-
-                foreach (var pe in Model.PartitionEntries)
-                {
-                    // The data area of this partition starts at de.FirstSector * 0x8000
-                    long deIsoStart = (long)pe.DataEntry0.FirstSector * WiiBlockSize;
-                    long deIsoEnd   = deIsoStart + ((long)pe.DataEntry0.NumberOfSectors * WiiBlockSize);
-
-                    if (absDataOffset >= deIsoStart && absDataOffset < deIsoEnd)
-                        return ReadDecryptedPartitionBytes(pe, partitionDataOffset, length);
-
-                    if (pe.DataEntry1 is { NumberOfSectors: > 0 })
-                    {
-                        long de1Start = (long)pe.DataEntry1.FirstSector * WiiBlockSize;
-                        long de1End   = de1Start + ((long)pe.DataEntry1.NumberOfSectors * WiiBlockSize);
-                        if (absDataOffset >= de1Start && absDataOffset < de1End)
-                            return ReadDecryptedPartitionBytes(pe, partitionDataOffset, length);
-                    }
-                }
-
+            if (PartitionEntries is null)
                 return null;
-            };
+
+            foreach (var entry in PartitionEntries)
+            {
+                // The data area of this partition starts at de.FirstSector * 0x8000
+                long deIsoStart = (long)entry.DataEntry0.FirstSector * WiiBlockSize;
+                long deIsoEnd = deIsoStart + ((long)entry.DataEntry0.NumberOfSectors * WiiBlockSize);
+
+                if (absDataOffset >= deIsoStart && absDataOffset < deIsoEnd)
+                    return ReadDecryptedPartitionBytes(entry, partitionDataOffset, length);
+
+                if (entry.DataEntry1 is { NumberOfSectors: > 0 })
+                {
+                    long de1Start = (long)entry.DataEntry1.FirstSector * WiiBlockSize;
+                    long de1End = de1Start + ((long)entry.DataEntry1.NumberOfSectors * WiiBlockSize);
+                    if (absDataOffset >= de1Start && absDataOffset < de1End)
+                        return ReadDecryptedPartitionBytes(entry, partitionDataOffset, length);
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -349,7 +334,7 @@ namespace SabreTools.Wrappers
         /// </summary>
         internal int ReadVirtual(long offset, byte[] buffer, int bufferOffset, int count)
         {
-            long isoSize = (long)Model.Header1.IsoFileSize;
+            long isoSize = (long)Header1.IsoFileSize;
             if (offset >= isoSize || count <= 0)
                 return 0;
 
@@ -382,32 +367,34 @@ namespace SabreTools.Wrappers
         private int ReadVirtualChunk(long pos, byte[] buffer, int bufferOffset, int count)
         {
             // 1. Disc header (first 0x80 bytes stored verbatim in Header2.DiscHeader)
-            if (pos < WiaConstants.DiscHeaderStoredSize && Model.Header2.DiscHeader is { Length: > 0 })
+            if (pos < DiscHeaderStoredSize && Header2.DiscHeader.Length > 0)
             {
-                int available = (int)Math.Min(WiaConstants.DiscHeaderStoredSize - pos, count);
-                int srcAvail = Math.Min(available, Model.Header2.DiscHeader.Length - (int)pos);
+                int available = (int)Math.Min(DiscHeaderStoredSize - pos, count);
+                int srcAvail = Math.Min(available, Header2.DiscHeader.Length - (int)pos);
                 if (srcAvail > 0)
-                    Array.Copy(Model.Header2.DiscHeader, (int)pos, buffer, bufferOffset, srcAvail);
+                    Array.Copy(Header2.DiscHeader, (int)pos, buffer, bufferOffset, srcAvail);
+
                 if (available > srcAvail)
                     Array.Clear(buffer, bufferOffset + srcAvail, available - srcAvail);
+
                 return available;
             }
 
-            uint chunkSize = Model.Header2.ChunkSize;
-            var comp = Model.Header2.CompressionType;
-            byte[] compData = Model.Header2.CompressorData ?? new byte[7];
-            byte compDataSize = Model.Header2.CompressorDataSize;
+            uint chunkSize = Header2.ChunkSize;
+            var comp = Header2.CompressionType;
+            byte[] compData = Header2.CompressorData;
+            byte compDataSize = Header2.CompressorDataSize;
 
             // 2. Raw data entries (non-partition disc data)
-            if (Model.RawDataEntries is { Length: > 0 })
+            if (RawDataEntries.Length > 0)
             {
-                foreach (var rde in Model.RawDataEntries)
+                foreach (var entry in RawDataEntries)
                 {
-                    if (rde.DataSize == 0 || rde.NumberOfGroups == 0)
+                    if (entry.DataSize == 0 || entry.NumberOfGroups == 0)
                         continue;
 
-                    long rdeStart = (long)rde.DataOffset;
-                    long rdeEnd = rdeStart + (long)rde.DataSize;
+                    long rdeStart = (long)entry.DataOffset;
+                    long rdeEnd = rdeStart + (long)entry.DataSize;
                     if (pos < rdeStart || pos >= rdeEnd)
                         continue;
 
@@ -417,10 +404,10 @@ namespace SabreTools.Wrappers
                     uint g = (uint)(adjustedPos / chunkSize);
                     int offsetInGroup = (int)(adjustedPos % chunkSize);
 
-                    if (g >= rde.NumberOfGroups)
+                    if (g >= entry.NumberOfGroups)
                         continue;
 
-                    uint groupFileIdx = rde.GroupIndex + g;
+                    uint groupFileIdx = entry.GroupIndex + g;
                     byte[]? groupBytes = GetCachedRawGroup(groupFileIdx, comp, compData, compDataSize, chunkSize);
                     if (groupBytes is null)
                         return 0;
@@ -430,6 +417,7 @@ namespace SabreTools.Wrappers
                         return 0;
 
                     int remainingInEntry = (int)Math.Min(rdeEnd - pos, count);
+
                     // Also clamp to the end of this group
                     long groupIsoEnd = adjustedBase + ((long)(g + 1) * chunkSize);
                     int remainingInGroup = (int)Math.Min(groupIsoEnd - pos, remainingInEntry);
@@ -443,16 +431,35 @@ namespace SabreTools.Wrappers
             }
 
             // 3. Partition data entries (Wii encrypted partition data)
-            if (Model.PartitionEntries is { Length: > 0 })
+            if (PartitionEntries is not null && PartitionEntries.Length > 0)
             {
-                foreach (var pe in Model.PartitionEntries)
+                foreach (var pe in PartitionEntries)
                 {
-                    int r = ReadPartitionChunk(pe.DataEntry0, pe.PartitionKey, pos,
-                        buffer, bufferOffset, count, comp, compData, compDataSize, chunkSize);
-                    if (r > 0) return r;
-                    r = ReadPartitionChunk(pe.DataEntry1, pe.PartitionKey, pos,
-                        buffer, bufferOffset, count, comp, compData, compDataSize, chunkSize);
-                    if (r > 0) return r;
+                    int ret = ReadPartitionChunk(pe.DataEntry0,
+                        pe.PartitionKey,
+                        pos,
+                        buffer,
+                        bufferOffset,
+                        count,
+                        comp,
+                        compData,
+                        compDataSize,
+                        chunkSize);
+                    if (ret > 0)
+                        return ret;
+
+                    ret = ReadPartitionChunk(pe.DataEntry1,
+                        pe.PartitionKey,
+                        pos,
+                        buffer,
+                        bufferOffset,
+                        count,
+                        comp,
+                        compData,
+                        compDataSize,
+                        chunkSize);
+                    if (ret > 0)
+                        return ret;
                 }
             }
 
@@ -470,23 +477,21 @@ namespace SabreTools.Wrappers
             if (length <= 0 || pe is null)
                 return null;
 
-            const int WiiBlockSize     = 0x8000;
-            const int WiiBlockDataSize = 0x7C00;
+            uint chunkSize = Header2.ChunkSize;
+            var comp = Header2.CompressionType;
+            byte[] compData = Header2.CompressorData ?? new byte[7];
+            byte compDataSize = Header2.CompressorDataSize;
+            int blocksPerGroup = (int)(chunkSize / WiiBlockSize);
 
-            uint chunkSize      = Model.Header2.ChunkSize;
-            var  comp           = Model.Header2.CompressionType;
-            byte[] compData     = Model.Header2.CompressorData ?? new byte[7];
-            byte   compDataSize = Model.Header2.CompressorDataSize;
-            int blocksPerGroup  = (int)(chunkSize / WiiBlockSize);
+            byte[] result = new byte[length];
+            int produced = 0;
 
-            byte[] result  = new byte[length];
-            int  produced  = 0;
-
-            // DataEntry0 covers [0 .. de0.NumberOfSectors * 0x7C00) in partition-data space.
-            // DataEntry1 (if present) immediately follows.
+            // DataEntry0 covers [0 .. de0.NumberOfSectors * 0x7C00) in partition-data space
             var de0 = pe.DataEntry0;
-            var de1 = pe.DataEntry1;
             long de0DataSize = (long)de0.NumberOfSectors * WiiBlockDataSize;
+
+            // DataEntry1 (if present) immediately follows
+            var de1 = pe.DataEntry1;
             long de1DataSize = de1 is not null ? (long)de1.NumberOfSectors * WiiBlockDataSize : 0;
 
             while (produced < length)
@@ -511,24 +516,29 @@ namespace SabreTools.Wrappers
                     break; // beyond available data
                 }
 
-                long blockNum      = deRelOff / WiiBlockDataSize;
-                int  offsetInBlock = (int)(deRelOff % WiiBlockDataSize);
+                long blockNum = deRelOff / WiiBlockDataSize;
+                int offsetInBlock = (int)(deRelOff % WiiBlockDataSize);
                 long groupRelative = blockNum / blocksPerGroup;
-                int  blockInGroup  = (int)(blockNum % blocksPerGroup);
+                int blockInGroup = (int)(blockNum % blocksPerGroup);
 
                 if (groupRelative >= de.NumberOfGroups)
                     break;
 
-                uint groupFileIdx     = de.GroupIndex + (uint)groupRelative;
+                uint groupFileIdx = de.GroupIndex + (uint)groupRelative;
                 long dataOffsetForLfg = groupRelative * blocksPerGroup * WiiBlockDataSize;
 
-                byte[]? decrypted = ReadDecryptedGroupData(groupFileIdx, comp, compData, compDataSize,
-                    blocksPerGroup, WiiBlockDataSize, dataOffsetForLfg);
+                byte[]? decrypted = ReadDecryptedGroupData(groupFileIdx,
+                    comp,
+                    compData,
+                    compDataSize,
+                    blocksPerGroup,
+                    WiiBlockDataSize,
+                    dataOffsetForLfg);
                 if (decrypted is null)
                     break;
 
-                int offsetInGroup  = (blockInGroup * WiiBlockDataSize) + offsetInBlock;
-                int available      = decrypted.Length - offsetInGroup;
+                int offsetInGroup = (blockInGroup * WiiBlockDataSize) + offsetInBlock;
+                int available = decrypted.Length - offsetInGroup;
                 if (available <= 0)
                     break;
 
@@ -545,17 +555,38 @@ namespace SabreTools.Wrappers
                 return null;
             if (produced < length)
                 Array.Resize(ref result, produced);
+
             return result;
         }
 
-        private int ReadPartitionChunk(PartitionDataEntry de, byte[] partitionKey, long pos,
-            byte[] buffer, int bufferOffset, int count,
-            WiaRvzCompressionType comp, byte[] compData, byte compDataSize, uint chunkSize)
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="de"></param>
+        /// <param name="partitionKey"></param>
+        /// <param name="pos"></param>
+        /// <param name="buffer"></param>
+        /// <param name="bufferOffset"></param>
+        /// <param name="count"></param>
+        /// <param name="comp"></param>
+        /// <param name="compData"></param>
+        /// <param name="compDataSize"></param>
+        /// <param name="chunkSize"></param>
+        /// <returns></returns>
+        private int ReadPartitionChunk(PartitionDataEntry de,
+            byte[] partitionKey,
+            long pos,
+            byte[] buffer,
+            int bufferOffset,
+            int count,
+            WiaRvzCompressionType comp,
+            byte[] compData,
+            byte compDataSize,
+            uint chunkSize)
         {
             if (de.NumberOfSectors == 0 || de.NumberOfGroups == 0)
                 return 0;
 
-            const int WiiBlockSize = 0x8000;
             if (chunkSize == 0)
                 return 0;
 
@@ -577,8 +608,7 @@ namespace SabreTools.Wrappers
                 return 0;
 
             uint groupFileIdx = de.GroupIndex + (uint)groupNum;
-            byte[]? encryptedGroup = GetCachedEncGroup(groupFileIdx, de, partitionKey,
-                comp, compData, compDataSize, blocksPerGroup, chunkSize);
+            byte[]? encryptedGroup = GetCachedEncGroup(groupFileIdx, de, partitionKey, comp, compData, compDataSize, blocksPerGroup);
             if (encryptedGroup is null)
                 return 0;
 
@@ -588,6 +618,7 @@ namespace SabreTools.Wrappers
                 return 0;
 
             long remainingInEntry = isoDataEnd - pos;
+
             // Stay within this group
             long groupIsoEnd = isoDataStart + ((groupNum + 1) * blocksPerGroup * WiiBlockSize);
             long remainingInGroup = groupIsoEnd - pos;
@@ -599,8 +630,20 @@ namespace SabreTools.Wrappers
             return toCopy;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="groupFileIdx"></param>
+        /// <param name="comp"></param>
+        /// <param name="compData"></param>
+        /// <param name="compDataSize"></param>
+        /// <param name="chunkSize"></param>
+        /// <returns></returns>
         private byte[]? GetCachedRawGroup(uint groupFileIdx,
-            WiaRvzCompressionType comp, byte[] compData, byte compDataSize, uint chunkSize)
+            WiaRvzCompressionType comp,
+            byte[] compData,
+            byte compDataSize,
+            uint chunkSize)
         {
             if (_cachedRawGroupIndex == groupFileIdx)
                 return _cachedRawGroup;
@@ -611,15 +654,30 @@ namespace SabreTools.Wrappers
             return group;
         }
 
-        private byte[]? GetCachedEncGroup(uint groupFileIdx, PartitionDataEntry de, byte[] partitionKey,
-            WiaRvzCompressionType comp, byte[] compData, byte compDataSize, int blocksPerGroup, uint chunkSize)
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="groupFileIdx"></param>
+        /// <param name="de"></param>
+        /// <param name="partitionKey"></param>
+        /// <param name="comp"></param>
+        /// <param name="compData"></param>
+        /// <param name="compDataSize"></param>
+        /// <param name="blocksPerGroup"></param>
+        /// <returns></returns>
+        private byte[]? GetCachedEncGroup(uint groupFileIdx,
+            PartitionDataEntry de,
+            byte[] partitionKey,
+            WiaRvzCompressionType comp,
+            byte[] compData,
+            byte compDataSize,
+            int blocksPerGroup)
         {
             if (_cachedEncGroupIndex == groupFileIdx)
                 return _cachedEncGroup;
 
             long dataOffsetForLfg = (groupFileIdx - de.GroupIndex) * blocksPerGroup * 0x7C00;
-            byte[]? decrypted = ReadDecryptedGroupData(groupFileIdx, comp, compData, compDataSize,
-                blocksPerGroup, 0x7C00, dataOffsetForLfg);
+            byte[]? decrypted = ReadDecryptedGroupData(groupFileIdx, comp, compData, compDataSize, blocksPerGroup, 0x7C00, dataOffsetForLfg);
             if (decrypted is null)
                 return null;
 
@@ -631,75 +689,128 @@ namespace SabreTools.Wrappers
 
         /// <summary>
         /// Reads and decompresses one raw (non-partition) group.
-        /// Returns <c>chunkSize</c> bytes of raw ISO data, or null on failure.
+        /// Returns chunkSize bytes of raw ISO data, or null on failure.
         /// </summary>
-        private byte[]? ReadGroupRaw(uint groupIdx, WiaRvzCompressionType comp,
-            byte[] compressorData, byte compressorDataSize, uint chunkSize)
+        private byte[]? ReadGroupRaw(uint groupIdx,
+            WiaRvzCompressionType comp,
+            byte[] compressorData,
+            byte compressorDataSize,
+            uint chunkSize)
         {
             if (IsRvz)
             {
-                if (Model.RvzGroupEntries is null || groupIdx >= Model.RvzGroupEntries.Length)
+                if (RvzGroupEntries is null || groupIdx >= RvzGroupEntries.Length)
                     return null;
-                var ge = Model.RvzGroupEntries[groupIdx];
+
+                var ge = RvzGroupEntries[groupIdx];
                 bool isRvzCompressed = (ge.DataSize & 0x80000000u) != 0;
                 uint dataSize = ge.DataSize & 0x7FFFFFFFu;
                 if (dataSize == 0)
                     return new byte[chunkSize];
-                byte[] fileData = ReadRangeFromSource((long)ge.DataOffset, (int)dataSize);
-                return DecompressGroupBytes(fileData, 0, (int)dataSize, comp,
-                    compressorData, compressorDataSize, (int)chunkSize, IsRvz, isRvzCompressed,
-                    ge.RvzPackedSize, groupIdx * chunkSize, false, chunkSize);
+
+                byte[] fileData = ReadRangeFromSource((long)ge.DataOffset << 2, (int)dataSize);
+                return DecompressGroupBytes(fileData,
+                    0,
+                    (int)dataSize,
+                    comp,
+                    compressorData,
+                    compressorDataSize,
+                    (int)chunkSize,
+                    IsRvz,
+                    isRvzCompressed,
+                    ge.RvzPackedSize,
+                    groupIdx * chunkSize,
+                    isWiiPartition: false,
+                    chunkSize);
             }
             else
             {
-                if (Model.GroupEntries is null || groupIdx >= Model.GroupEntries.Length)
+                if (GroupEntries is null || groupIdx >= GroupEntries.Length)
                     return null;
-                var ge = Model.GroupEntries[groupIdx];
+
+                var ge = GroupEntries[groupIdx];
                 if (ge.DataSize == 0)
                     return new byte[chunkSize];
-                byte[] fileData = ReadRangeFromSource((long)ge.DataOffset, (int)ge.DataSize);
-                return DecompressGroupBytes(fileData, 0, (int)ge.DataSize, comp,
-                    compressorData, compressorDataSize, (int)chunkSize, false, false,
-                    0, 0L, false, chunkSize);
+
+                byte[] fileData = ReadRangeFromSource((long)ge.DataOffset << 2, (int)ge.DataSize);
+                return DecompressGroupBytes(fileData,
+                    0,
+                    (int)ge.DataSize,
+                    comp,
+                    compressorData,
+                    compressorDataSize,
+                    (int)chunkSize,
+                    IsRvz,
+                    false,
+                    0,
+                    0,
+                    false,
+                    chunkSize);
             }
         }
 
         /// <summary>
         /// Reads and decompresses a Wii partition group, returning the hash-stripped decrypted data.
         /// </summary>
-        private byte[]? ReadDecryptedGroupData(uint groupIdx, WiaRvzCompressionType comp,
-            byte[] compressorData, byte compressorDataSize, int blocksPerGroup, int blockDataSize,
+        private byte[]? ReadDecryptedGroupData(uint groupIdx,
+            WiaRvzCompressionType comp,
+            byte[] compressorData,
+            byte compressorDataSize,
+            int blocksPerGroup,
+            int blockDataSize,
             long dataOffsetForLfg)
         {
             int decryptedGroupSize = blocksPerGroup * blockDataSize;
 
             if (IsRvz)
             {
-                if (Model.RvzGroupEntries is null || groupIdx >= Model.RvzGroupEntries.Length)
+                if (RvzGroupEntries is null || groupIdx >= RvzGroupEntries.Length)
                     return null;
-                var ge = Model.RvzGroupEntries[groupIdx];
+
+                var ge = RvzGroupEntries[groupIdx];
                 bool isRvzCompressed = (ge.DataSize & 0x80000000u) != 0;
                 uint dataSize = ge.DataSize & 0x7FFFFFFFu;
                 if (dataSize == 0)
                     return new byte[decryptedGroupSize];
-                byte[] fileData = ReadRangeFromSource((long)ge.DataOffset, (int)dataSize);
-                return DecompressGroupBytes(fileData, 0, (int)dataSize, comp,
-                    compressorData, compressorDataSize, decryptedGroupSize, IsRvz, isRvzCompressed,
-                    ge.RvzPackedSize, dataOffsetForLfg, true,
-                    Model.Header2.ChunkSize);
+
+                byte[] fileData = ReadRangeFromSource((long)ge.DataOffset << 2, (int)dataSize);
+                return DecompressGroupBytes(fileData,
+                    0,
+                    (int)dataSize,
+                    comp,
+                    compressorData,
+                    compressorDataSize,
+                    decryptedGroupSize,
+                    IsRvz,
+                    isRvzCompressed,
+                    ge.RvzPackedSize,
+                    dataOffsetForLfg,
+                    true,
+                    Header2.ChunkSize);
             }
             else
             {
-                if (Model.GroupEntries is null || groupIdx >= Model.GroupEntries.Length)
+                if (GroupEntries is null || groupIdx >= GroupEntries.Length)
                     return null;
-                var ge = Model.GroupEntries[groupIdx];
+
+                var ge = GroupEntries[groupIdx];
                 if (ge.DataSize == 0)
                     return new byte[decryptedGroupSize];
-                byte[] fileData2 = ReadRangeFromSource((long)ge.DataOffset, (int)ge.DataSize);
-                return DecompressGroupBytes(fileData2, 0, (int)ge.DataSize, comp,
-                    compressorData, compressorDataSize, decryptedGroupSize, false, false,
-                    0, 0L, true,
-                    Model.Header2.ChunkSize);
+
+                byte[] fileData2 = ReadRangeFromSource((long)ge.DataOffset << 2, (int)ge.DataSize);
+                return DecompressGroupBytes(fileData2,
+                    0,
+                    (int)ge.DataSize,
+                    comp,
+                    compressorData,
+                    compressorDataSize,
+                    decryptedGroupSize,
+                    IsRvz,
+                    false,
+                    0,
+                    0L,
+                    true,
+                    Header2.ChunkSize);
             }
         }
 
@@ -707,10 +818,18 @@ namespace SabreTools.Wrappers
         /// Decompresses raw group bytes according to the WIA compression type and strips any
         /// exception-list header, returning the plain data payload.
         /// </summary>
-        private static byte[]? DecompressGroupBytes(byte[] fileData, int offset, int length,
-            WiaRvzCompressionType comp, byte[] compressorData, byte compressorDataSize,
-            int expectedSize, bool isRvz, bool isRvzCompressed,
-            uint rvzPackedSize, long dataOffsetForLfg, bool isWiiPartition,
+        private static byte[]? DecompressGroupBytes(byte[] fileData,
+            int offset,
+            int length,
+            WiaRvzCompressionType comp,
+            byte[] compressorData,
+            byte compressorDataSize,
+            int expectedSize,
+            bool isRvz,
+            bool isRvzCompressed,
+            uint rvzPackedSize,
+            long dataOffsetForLfg,
+            bool isWiiPartition,
             uint chunkSize = 2 * 1024 * 1024)
         {
             if (fileData is null || fileData.Length < length)
@@ -734,10 +853,10 @@ namespace SabreTools.Wrappers
                 // Exception list precedes the Purge payload; capture it for SHA-1, then decompress.
                 int purgeStart = isWiiPartition ? SkipExceptionLists(fileData, offset, length, chunkSize) : offset;
                 int exceptionLen = purgeStart - offset;
-                byte[]? exceptionBytes = exceptionLen > 0
-                    ? new byte[exceptionLen] : null;
-                if (exceptionBytes != null)
+                byte[]? exceptionBytes = exceptionLen > 0 ? new byte[exceptionLen] : null;
+                if (exceptionBytes is not null)
                     Array.Copy(fileData, offset, exceptionBytes, 0, exceptionLen);
+
                 int purgeLen = length - exceptionLen;
                 return PurgeDecompressor.Decompress(fileData, purgeStart, purgeLen, expectedSize, exceptionBytes);
             }
@@ -785,6 +904,7 @@ namespace SabreTools.Wrappers
                     int bytesRead = rvzDecomp.Decompress(unpacked, 0, expectedSize);
                     if (bytesRead < expectedSize)
                         Array.Resize(ref unpacked, bytesRead);
+
                     return unpacked;
                 }
 
@@ -820,8 +940,10 @@ namespace SabreTools.Wrappers
             {
                 ushort count = (ushort)((data[pos] << 8) | data[pos + 1]);
                 pos += 2;
+
                 // Each exception entry is 2 + 20 = 22 bytes
                 pos += count * 22;
+
                 // 4-byte alignment after last list
                 if (i == numLists - 1)
                     pos = (pos + 3) & ~3;
@@ -856,13 +978,10 @@ namespace SabreTools.Wrappers
         /// </summary>
         internal static byte[] EncryptWiiGroup(byte[] decryptedData, byte[] key, int blocksPerGroup)
         {
-            const int WiiBlockSize     = 0x8000;
-            const int WiiBlockDataSize = 0x7C00;
-            const int WiiBlockHashSize = 0x0400;
             const int H0Count = 31;
             const int H1Count = 8;
             const int H2Count = 8;
-            const int HashLen  = 20;
+            const int HashLen = 20;
 
             // --- Build H0 / H1 / H2 hash arrays ---
             byte[][][] h0 = new byte[blocksPerGroup][][];
@@ -894,7 +1013,10 @@ namespace SabreTools.Wrappers
 
                     byte[] h0Concat = new byte[H0Count * HashLen];
                     for (int i = 0; i < H0Count; i++)
+                    {
                         Array.Copy(h0[blockIdx][i], 0, h0Concat, i * HashLen, HashLen);
+                    }
+
                     h1[g][s] = ComputeSha1(h0Concat, 0, h0Concat.Length);
                 }
             }
@@ -906,7 +1028,10 @@ namespace SabreTools.Wrappers
                 int grp = Math.Min(i, h1.Length - 1);
                 byte[] h1Concat = new byte[H1Count * HashLen];
                 for (int s = 0; s < H1Count; s++)
+                {
                     Array.Copy(h1[grp][s], 0, h1Concat, s * HashLen, HashLen);
+                }
+
                 h2[i] = ComputeSha1(h1Concat, 0, h1Concat.Length);
             }
 
@@ -919,7 +1044,11 @@ namespace SabreTools.Wrappers
                 int off = 0;
 
                 // H0 (31 * 20 = 0x26C)
-                for (int i = 0; i < H0Count; i++) { Array.Copy(h0[b][i], 0, hashBlock, off, HashLen); off += HashLen; }
+                for (int i = 0; i < H0Count; i++)
+                {
+                    Array.Copy(h0[b][i], 0, hashBlock, off, HashLen);
+                    off += HashLen;
+                }
 
                 off += 0x14; // padding0
 
@@ -927,7 +1056,11 @@ namespace SabreTools.Wrappers
                 int h1Grp = b / H1Count;
                 if (h1Grp < h1.Length)
                 {
-                    for (int i = 0; i < H1Count; i++) { Array.Copy(h1[h1Grp][i], 0, hashBlock, off, HashLen); off += HashLen; }
+                    for (int i = 0; i < H1Count; i++)
+                    {
+                        Array.Copy(h1[h1Grp][i], 0, hashBlock, off, HashLen);
+                        off += HashLen;
+                    }
                 }
                 else
                 {
@@ -964,16 +1097,19 @@ namespace SabreTools.Wrappers
             return result;
         }
 
-private static byte[] ComputeSha1(byte[] data, int offset, int count)
-{
-    if (count == 0)
-        return new byte[20];
+        /// <summary>
+        /// Get a segmented SHA-1 hash for input data
+        /// </summary>
+        private static byte[] ComputeSha1(byte[] data, int offset, int count)
+        {
+            if (count == 0)
+                return new byte[20];
 
-    using var sha1 = new HashWrapper(HashType.SHA1);
-    sha1.Process(data, offset, count);
-    sha1.Terminate();
-    return sha1.CurrentHashBytes ?? new byte[20];
-}
+            using var sha1 = new HashWrapper(HashType.SHA1);
+            sha1.Process(data, offset, count);
+            sha1.Terminate();
+            return sha1.CurrentHashBytes ?? new byte[20];
+        }
 
         #endregion
     }

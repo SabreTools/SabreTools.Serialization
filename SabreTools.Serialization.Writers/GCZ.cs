@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Writers
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            if (obj is null || !ValidateArchive(obj))
+            if (obj is null || !ValidateDiscImage(obj))
                 return false;
 
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -35,41 +35,56 @@ namespace SabreTools.Serialization.Writers
             if (stream is null || !stream.CanWrite)
                 return false;
 
-            if (obj is null || !ValidateArchive(obj))
+            if (obj is null || !ValidateDiscImage(obj))
                 return false;
 
             // Header (32 bytes, little-endian)
-            stream.WriteLittleEndian(obj.Header.MagicCookie);
-            stream.WriteLittleEndian(obj.Header.SubType);
-            stream.WriteLittleEndian(obj.Header.CompressedDataSize);
-            stream.WriteLittleEndian(obj.Header.DataSize);
-            stream.WriteLittleEndian(obj.Header.BlockSize);
-            stream.WriteLittleEndian(obj.Header.NumBlocks);
+            WriteHeader(stream, obj.Header);
 
             // Block pointer table (8 bytes per block, little-endian)
-            foreach (ulong ptr in obj.BlockPointers)
-                stream.WriteLittleEndian(ptr);
+            foreach (ulong pointer in obj.BlockPointers)
+            {
+                stream.WriteLittleEndian(pointer);
+            }
 
             // Block hash table (4 bytes per block, little-endian)
             foreach (uint hash in obj.BlockHashes)
+            {
                 stream.WriteLittleEndian(hash);
+            }
 
             stream.Flush();
             return true;
         }
 
-        private static bool ValidateArchive(DiscImage obj)
+        /// <summary>
+        /// Write GczHeader data to the stream
+        /// </summary>
+        /// <param name="stream">Stream to write to</param>
+        public static void WriteHeader(Stream stream, GczHeader obj)
         {
-            if (obj.Header is null)
-                return false;
+            stream.WriteLittleEndian(obj.MagicCookie);
+            stream.WriteLittleEndian(obj.SubType);
+            stream.WriteLittleEndian(obj.CompressedDataSize);
+            stream.WriteLittleEndian(obj.DataSize);
+            stream.WriteLittleEndian(obj.BlockSize);
+            stream.WriteLittleEndian(obj.NumBlocks);
+        }
+
+        /// <summary>
+        /// Validate that disc image is writable
+        /// </summary>
+        private static bool ValidateDiscImage(DiscImage obj)
+        {
             if (obj.Header.MagicCookie != Constants.MagicCookie)
                 return false;
             if (obj.Header.NumBlocks == 0)
                 return false;
-            if (obj.BlockPointers is null || obj.BlockPointers.Length != (int)obj.Header.NumBlocks)
+            if (obj.BlockPointers.Length != obj.Header.NumBlocks)
                 return false;
-            if (obj.BlockHashes is null || obj.BlockHashes.Length != (int)obj.Header.NumBlocks)
+            if (obj.BlockHashes.Length != obj.Header.NumBlocks)
                 return false;
+
             return true;
         }
     }

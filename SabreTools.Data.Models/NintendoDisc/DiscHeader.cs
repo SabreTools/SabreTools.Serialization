@@ -13,12 +13,6 @@ namespace SabreTools.Data.Models.NintendoDisc
         public string GameId { get; set; } = string.Empty;
 
         /// <summary>
-        /// 2-character ASCII maker / publisher code (e.g. "01")
-        /// </summary>
-        /// <remarks>Derived from GameId bytes at offset 0x004–0x005; not a separate on-disc field</remarks>
-        public string MakerCode { get; set; } = string.Empty;
-
-        /// <summary>
         /// Zero-based disc number for multi-disc games
         /// </summary>
         public byte DiscNumber { get; set; }
@@ -37,6 +31,11 @@ namespace SabreTools.Data.Models.NintendoDisc
         /// Audio streaming buffer size (in 16 KiB units)
         /// </summary>
         public byte StreamingBufferSize { get; set; }
+
+        /// <summary>
+        /// Unused 0x0E bytes (offsets 0x00A-0x017)
+        /// </summary>
+        public byte[] Padding00A { get; set; } = [];
 
         /// <summary>
         /// Wii magic word at offset 0x018 (0x5D1C9EA3 for Wii discs, 0 for GameCube)
@@ -64,6 +63,11 @@ namespace SabreTools.Data.Models.NintendoDisc
         public byte DisableDiscEncryption { get; set; }
 
         /// <summary>
+        /// Unused padding until DOL/FST offset fields at 0x420
+        /// </summary>
+        public byte[] Padding082 { get; set; } = [];
+
+        /// <summary>
         /// Offset of the main DOL executable (no shift for GameCube; &lt;&lt;2 for Wii)
         /// </summary>
         public uint DolOffset { get; set; }
@@ -77,5 +81,10 @@ namespace SabreTools.Data.Models.NintendoDisc
         /// Maximum size of the File System Table in bytes
         /// </summary>
         public uint FstSize { get; set; }
+
+        /// <summary>
+        /// Remaining bytes to complete the 0x440 header
+        /// </summary>
+        public byte[] Padding42C { get; set; } = [];
     }
 }

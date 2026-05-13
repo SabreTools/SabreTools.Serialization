@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Numerics.Extensions;
 
+// TODO: Move to IO
 namespace SabreTools.Wrappers
 {
     /// <summary>
@@ -10,7 +11,7 @@ namespace SabreTools.Wrappers
     /// (Lagged Fibonacci Generator) junk regions with compact seed descriptors.
     ///
     /// This is the exact inverse of <see cref="RvzPackDecompressor"/> and mirrors
-    /// Dolphin's <c>RVZPack()</c> in <c>WIABlob.cpp</c>.
+    /// Dolphin's RVZPack() in WIABlob.cpp.
     ///
     /// Two-phase algorithm:
     /// <list type="number">
@@ -22,34 +23,51 @@ namespace SabreTools.Wrappers
     /// </summary>
     internal static class RvzPackEncoder
     {
-        // 17 u32s × 4 bytes = 68 bytes — minimum size to record a seed
+        /// <remarks>
+        /// 17 u32s × 4 bytes = 68 bytes — minimum size to record a seed
+        /// </remarks>
         private const int SeedSizeBytes = LaggedFibonacciGenerator.SEED_SIZE * 4;
 
+        /// <summary>
+        ///
+        /// </summary>
         private sealed class JunkRegion
         {
-            public long    StartOffset;
+            public long StartOffset;
+
             public uint[]? Seed;
         }
 
-        /// <summary>Result of packing a single chunk: compressed payload and its logical size.</summary>
+        /// <summary>
+        /// Result of packing a single chunk: compressed payload and its logical size.
+        /// </summary>
         internal struct ChunkResult
         {
-            /// <summary>Packed payload, or <c>null</c> if the chunk contains no junk.</summary>
+            /// <summary>
+            /// Packed payload, or null if the chunk contains no junk.
+            /// </summary>
             public byte[]? Packed;
-            /// <summary>Number of bytes the decompressor needs to consume from <see cref="Packed"/>.</summary>
+
+            /// <summary>
+            /// Number of bytes the decompressor needs to consume from <see cref="Packed"/>.
+            /// </summary>
             public uint RvzPackedSize;
         }
 
-        #region Public API
-
         /// <summary>
         /// RVZ-pack a single chunk.
-        /// Returns <c>null</c> if the chunk contains no junk (write raw instead).
+        /// Returns null if the chunk contains no junk (write raw instead).
         /// <paramref name="rvzPackedSize"/> is the number of bytes actually needed
         /// by the decompressor (may be &lt; packed.Length due to alignment).
         /// </summary>
-        public static byte[]? Pack(byte[] data, int dataOffset, int size,
-            long discDataOffset, out uint rvzPackedSize, GcFst? fst = null)
+        /// <param name="data">Source buffer</param>
+        /// <param name="dataOffset">Start of data within <paramref name="data"/></param>
+        public static byte[]? Pack(byte[] data,
+            int dataOffset,
+            int size,
+            long discDataOffset,
+            out uint rvzPackedSize,
+            FileSystemTableReader? fst = null)
         {
             rvzPackedSize = 0;
             if (size <= 0)
@@ -59,9 +77,9 @@ namespace SabreTools.Wrappers
             if (junkInfo.Count == 0)
                 return null;
 
-            ChunkResult r = EmitChunk(data, dataOffset, 0L, size, size, junkInfo);
-            rvzPackedSize = r.RvzPackedSize;
-            return r.Packed;
+            ChunkResult result = EmitChunk(data, dataOffset, 0L, size, junkInfo);
+            rvzPackedSize = result.RvzPackedSize;
+            return result.Packed;
         }
 
         /// <summary>
@@ -69,101 +87,114 @@ namespace SabreTools.Wrappers
         /// Performs one Phase-1 scan over the entire buffer, then calls
         /// <see cref="EmitChunk"/> per chunk.
         /// </summary>
-        /// <param name="data">Source buffer.</param>
-        /// <param name="dataOffset">Start of data within <paramref name="data"/>.</param>
-        /// <param name="totalSize">Total number of bytes to process.</param>
-        /// <param name="bytesPerChunk">Size of each individual chunk.</param>
-        /// <param name="numChunks">Number of chunks.</param>
-        /// <param name="discDataOffset">Disc-partition byte offset of the first byte.</param>
-        /// <param name="fst">Optional FST for file-boundary optimisation.</param>
+        /// <param name="data">Source buffer</param>
+        /// <param name="dataOffset">Start of data within <paramref name="data"/></param>
+        /// <param name="totalSize">Total number of bytes to process</param>
+        /// <param name="bytesPerChunk">Size of each individual chunk</param>
+        /// <param name="numChunks">Number of chunks</param>
+        /// <param name="discDataOffset">Disc-partition byte offset of the first byte</param>
+        /// <param name="fst">Optional FST for file-boundary optimisation</param>
         /// <returns>
         /// One <see cref="ChunkResult"/> per chunk;
-        /// <c>Packed == null</c> means the chunk has no junk and should be written raw.
+        /// Packed == null means the chunk has no junk and should be written raw.
         /// </returns>
-        public static ChunkResult[] PackGroup(
-            byte[] data, int dataOffset, int totalSize,
-            int bytesPerChunk, int numChunks,
-            long discDataOffset, GcFst? fst = null)
+        public static ChunkResult[] PackGroup(byte[] data,
+            int dataOffset,
+            int totalSize,
+            int bytesPerChunk,
+            int numChunks,
+            long discDataOffset,
+            FileSystemTableReader? fst = null)
         {
             var junkInfo = ScanForJunk(data, dataOffset, totalSize, discDataOffset, fst);
 
             var result = new ChunkResult[numChunks];
-            for (int c = 0; c < numChunks; c++)
+            for (int i = 0; i < numChunks; i++)
             {
-                long chunkStart = (long)c * bytesPerChunk;
-                long chunkEnd   = Math.Min(chunkStart + bytesPerChunk, totalSize);
-                result[c] = EmitChunk(data, dataOffset, chunkStart, chunkEnd, totalSize, junkInfo);
+                long chunkStart = (long)i * bytesPerChunk;
+                long chunkEnd = Math.Min(chunkStart + bytesPerChunk, totalSize);
+
+                result[i] = EmitChunk(data, dataOffset, chunkStart, chunkEnd, junkInfo);
             }
 
             return result;
         }
 
-        #endregion
-
-        #region Phase 1 — scan buffer for junk regions
-
+        /// <summary>
+        /// Scan buffer for junk regions
+        /// </summary>
+        /// <param name="data">Source buffer</param>
+        /// <param name="dataOffset">Start of data within <paramref name="data"/></param>
+        /// <param name="totalSize">Total number of bytes to process</param>
+        /// <param name="discDataOffset">Disc-partition byte offset of the first byte</param>
+        /// <param name="fst">Optional FST for file-boundary optimisation</param>
+        /// <returns></returns>
         private static SortedDictionary<long, JunkRegion> ScanForJunk(
-            byte[] data, int dataOffset, int totalSize, long discDataOffset, GcFst? fst)
+            byte[] data,
+            int dataOffset,
+            int totalSize,
+            long discDataOffset,
+            FileSystemTableReader? fst)
         {
             var junkInfo = new SortedDictionary<long, JunkRegion>();
 
             long position = 0;
-            long dataOff  = discDataOffset;
+            long dataOff = discDataOffset;
 
             while (position < totalSize)
             {
                 // Step 1: count and advance past leading zeros
                 long zeroes = 0;
-                while ((position + zeroes) < totalSize &&
-                       data[dataOffset + position + zeroes] == 0)
+                while ((position + zeroes) < totalSize && data[dataOffset + position + zeroes] == 0)
+                {
                     zeroes++;
+                }
 
                 if (zeroes > SeedSizeBytes)
                 {
                     junkInfo[position + zeroes] = new JunkRegion
                     {
                         StartOffset = position,
-                        Seed        = new uint[LaggedFibonacciGenerator.SEED_SIZE]
+                        Seed = new uint[LaggedFibonacciGenerator.SEED_SIZE]
                     };
                 }
 
                 position += zeroes;
-                dataOff  += zeroes;
+                dataOff += zeroes;
 
                 if (position >= totalSize)
                     break;
 
                 // Step 2: compute aligned read window (next 0x8000 boundary)
                 long nextBoundary = AlignUp(dataOff + 1, 0x8000);
-                long bytesToRead  = Math.Min(nextBoundary - dataOff, totalSize - position);
-                int  dataOffMod   = (int)(dataOff % 0x8000);
+                long bytesToRead = Math.Min(nextBoundary - dataOff, totalSize - position);
+                int dataOffMod = (int)(dataOff % 0x8000);
 
                 // Step 3: ALWAYS call GetSeed unconditionally — no FST pre-check
-                var seed          = new uint[LaggedFibonacciGenerator.SEED_SIZE];
-                int reconstructed = LaggedFibonacciGenerator.GetSeed(
-                    data, (int)(dataOffset + position), (int)bytesToRead, dataOffMod, seed);
+                var seed = new uint[LaggedFibonacciGenerator.SEED_SIZE];
+                int reconstructed = LaggedFibonacciGenerator.GetSeed(data, (int)(dataOffset + position), (int)bytesToRead, dataOffMod, seed);
 
                 if (reconstructed > 0)
                 {
                     junkInfo[position + reconstructed] = new JunkRegion
                     {
                         StartOffset = position,
-                        Seed        = seed
+                        Seed = seed
                     };
                 }
 
                 // Step 4: FST skip AFTER GetSeed
-                if (fst != null)
+                if (fst is not null)
                 {
                     long queryOff = dataOff + reconstructed;
-                    GcFst.FileEntry? fileInfo = fst.FindFileInfo(queryOff);
-                    if (fileInfo.HasValue)
+                    FileSystemTableReader.FileEntry? fileInfo = fst.FindFileInfo(queryOff);
+                    if (fileInfo is not null)
                     {
                         long fileEnd = fileInfo.Value.FileEnd;
                         if (fileEnd < (dataOff + bytesToRead))
                         {
                             position += fileEnd - dataOff;
-                            dataOff   = fileEnd;
+                            dataOff = fileEnd;
                             continue;
                         }
                     }
@@ -171,33 +202,40 @@ namespace SabreTools.Wrappers
 
                 // Step 5: normal advance by block window
                 position += bytesToRead;
-                dataOff  += bytesToRead;
+                dataOff += bytesToRead;
             }
 
             return junkInfo;
         }
 
-        #endregion
-
-        #region Phase 2 — emit packed segments for a single chunk
-
+        /// <summary>
+        /// Emit packed segments for a single chunk
+        /// </summary>
+        /// <param name="data">Source buffer</param>
+        /// <param name="dataOffset">Start of data within <paramref name="data"/></param>
+        /// <param name="chunkStart"></param>
+        /// <param name="chunkEnd"></param>
+        /// <param name="junkInfo"></param>
+        /// <returns></returns>
         private static ChunkResult EmitChunk(
-            byte[] data, int dataOffset,
-            long chunkStart, long chunkEnd, long totalSize,
+            byte[] data,
+            int dataOffset,
+            long chunkStart,
+            long chunkEnd,
             SortedDictionary<long, JunkRegion> junkInfo)
         {
-            long currentOffset  = chunkStart;
+            long currentOffset = chunkStart;
             bool firstIteration = true;
 
-            var  output     = new MemoryStream((int)(chunkEnd - chunkStart));
+            var output = new MemoryStream((int)(chunkEnd - chunkStart));
             uint packedSize = 0;
 
             while (currentOffset < chunkEnd)
             {
-                long    remaining     = chunkEnd - currentOffset;
-                long    nextJunkStart = chunkEnd;
-                long    nextJunkEnd   = chunkEnd;
-                uint[]? junkSeed      = null;
+                long remaining = chunkEnd - currentOffset;
+                long nextJunkStart = chunkEnd;
+                long nextJunkEnd = chunkEnd;
+                uint[]? junkSeed = null;
 
                 if (remaining > SeedSizeBytes)
                 {
@@ -206,12 +244,11 @@ namespace SabreTools.Wrappers
                         // Dolphin Phase-2 condition:
                         //   key > currentOffset + SEED_SIZE_BYTES  AND
                         //   startOffset + SEED_SIZE_BYTES < chunkEnd
-                        if ((kvp.Key > (currentOffset + SeedSizeBytes)) &&
-                            ((kvp.Value.StartOffset + SeedSizeBytes) < chunkEnd))
+                        if ((kvp.Key > (currentOffset + SeedSizeBytes)) && ((kvp.Value.StartOffset + SeedSizeBytes) < chunkEnd))
                         {
                             nextJunkStart = Math.Max(currentOffset, kvp.Value.StartOffset);
-                            nextJunkEnd   = Math.Min(chunkEnd, kvp.Key);
-                            junkSeed      = kvp.Value.Seed;
+                            nextJunkEnd = Math.Min(chunkEnd, kvp.Key);
+                            junkSeed = kvp.Value.Seed;
                             break;
                         }
                     }
@@ -232,19 +269,21 @@ namespace SabreTools.Wrappers
                 {
                     output.WriteBigEndian((uint)nonJunkBytes);
                     output.Write(data, (int)(dataOffset + currentOffset), (int)nonJunkBytes);
-                    packedSize    += 4 + (uint)nonJunkBytes;
+                    packedSize += 4 + (uint)nonJunkBytes;
                     currentOffset += nonJunkBytes;
                 }
 
                 // Emit junk-seed segment
                 long junkBytes = nextJunkEnd - currentOffset;
-                if (junkBytes > 0 && junkSeed != null)
+                if (junkBytes > 0 && junkSeed is not null)
                 {
                     output.WriteBigEndian(0x80000000u | (uint)junkBytes);
+
                     byte[] seedBytes = new byte[SeedSizeBytes];
                     Buffer.BlockCopy(junkSeed, 0, seedBytes, 0, SeedSizeBytes);
                     output.Write(seedBytes, 0, SeedSizeBytes);
-                    packedSize    += 4 + (uint)SeedSizeBytes;
+
+                    packedSize += 4 + (uint)SeedSizeBytes;
                     currentOffset += junkBytes;
                 }
 
@@ -255,10 +294,12 @@ namespace SabreTools.Wrappers
             return new ChunkResult { Packed = output.ToArray(), RvzPackedSize = packedSize };
         }
 
-        #endregion
-
         #region Helpers
 
+        /// <summary>
+        /// Align a value to a boundary
+        /// </summary>
+        /// TODO: Figure out how to use buffer alignment helpers here
         private static long AlignUp(long value, long alignment) => (value + alignment - 1) & ~(alignment - 1);
 
         #endregion

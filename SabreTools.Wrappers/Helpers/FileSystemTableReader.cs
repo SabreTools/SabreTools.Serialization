@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -7,31 +6,33 @@ namespace SabreTools.Wrappers
     /// Lightweight GameCube / Wii File-System Table (FST) reader used by
     /// <see cref="RvzPackEncoder"/> to distinguish real-file regions from junk.
     ///
-    /// Mirrors Dolphin's <c>FileSystemGCWii</c> offset-to-file-info cache
-    /// (<c>m_offset_file_info_cache</c>).
+    /// Mirrors Dolphin's FileSystemGCWii offset-to-file-info cache
+    /// (m_offset_file_info_cache).
     /// </summary>
-    internal sealed class GcFst
+    public sealed class FileSystemTableReader
     {
-        private const int EntrySize = 12;
-
-        /// <summary>File entry with start and end byte offsets on disc.</summary>
-        internal struct FileEntry
+        /// <summary>
+        /// File entry with start and end byte offsets on disc
+        /// </summary>
+        public struct FileEntry
         {
             public long FileStart;
             public long FileEnd;
         }
 
-        // Sorted ascending by FileEnd for O(log n) upper_bound queries.
+        /// <remarks>
+        /// Sorted ascending by FileEnd for O(log n) upper_bound queries.
+        /// </remarks>
         private readonly List<FileEntry> _files;
 
-        private GcFst(List<FileEntry> files)
+        private FileSystemTableReader(List<FileEntry> files)
         {
             _files = files;
         }
 
         /// <summary>
-        /// Parses a raw FST binary blob and returns a <see cref="GcFst"/>,
-        /// or <c>null</c> if the data is too short or structurally invalid.
+        /// Parses a raw FST binary blob and returns a <see cref="FileSystemTableReader"/>,
+        /// or null if the data is too short or structurally invalid.
         /// </summary>
         /// <param name="fstData">
         /// Raw FST bytes exactly as stored on disc (GameCube) or in decrypted
@@ -41,50 +42,50 @@ namespace SabreTools.Wrappers
         /// Bit-shift to convert raw file-offset fields to byte addresses.
         /// 0 for GameCube (direct bytes); 2 for Wii (offset × 4).
         /// </param>
-        public static GcFst? TryParse(byte[] fstData, int offsetShift)
+        public static FileSystemTableReader? TryParse(byte[] fstData, int offsetShift)
         {
-            if (fstData == null || fstData.Length < EntrySize)
+            // Read the file system table
+            var table = Serialization.Readers.NintendoDisc.ParseFileSystemTable(fstData);
+            if (table is null)
                 return null;
 
-            // Root entry (index 0): FILE_SIZE field = total number of FST entries.
-            int rootOffset = 8;
-            uint totalEntries = fstData.ReadUInt32BigEndian(ref rootOffset);
-            if (totalEntries < 1 || ((long)totalEntries * EntrySize) > fstData.Length)
-                return null;
-
-            var files = new List<FileEntry>((int)(totalEntries - 1));
-
-            for (uint i = 1; i < totalEntries; i++)
+            // Filter out the entries to non-empty files only
+            var filtered = new List<FileEntry>();
+            foreach (var entry in table.Entries)
             {
-                int  off           = (int)(i * EntrySize);
-                int  nameOffPos    = off;
-                int  fileOffPos    = off + 4;
-                int  fileSizePos   = off + 8;
-                uint nameOffField  = fstData.ReadUInt32BigEndian(ref nameOffPos);
-                uint fileOffField  = fstData.ReadUInt32BigEndian(ref fileOffPos);
-                uint fileSizeField = fstData.ReadUInt32BigEndian(ref fileSizePos);
+                // Directory entry
+                if ((entry.NameOffset & 0xFF000000) != 0)
+                    continue;
 
-                if ((nameOffField & 0xFF000000u) != 0) continue; // directory entry
-                if (fileSizeField == 0)                continue; // empty file
+                // Empty file
+                if (entry.FileSize == 0)
+                    continue;
 
-                long fileStart = (long)fileOffField << offsetShift;
-                long fileEnd   = fileStart + fileSizeField;
-                files.Add(new FileEntry { FileStart = fileStart, FileEnd = fileEnd });
+                long fileStart = entry.FileOffset << offsetShift;
+                long fileEnd = fileStart + entry.FileSize;
+
+                var fileEntry = new FileEntry
+                {
+                    FileStart = fileStart,
+                    FileEnd = fileEnd,
+                };
+                filtered.Add(fileEntry);
             }
 
             // Sort ascending by FileEnd so binary-search upper_bound works correctly.
-            files.Sort(delegate(FileEntry a, FileEntry b)
+            filtered.Sort(delegate (FileEntry a, FileEntry b)
             {
                 return a.FileEnd.CompareTo(b.FileEnd);
             });
 
-            return new GcFst(files);
+            return new FileSystemTableReader(filtered);
         }
 
         /// <summary>
         /// Returns the file entry whose byte range contains <paramref name="discOffset"/>,
-        /// or <c>null</c> if no file does.
+        /// or null if no file does.
         /// </summary>
+        /// TODO: Determine how to use List<T>.BinarySearch here
         public FileEntry? FindFileInfo(long discOffset)
         {
             if (_files.Count == 0)
@@ -104,7 +105,7 @@ namespace SabreTools.Wrappers
             if (lo >= _files.Count)
                 return null;
 
-            FileEntry e = _files[lo];
+            var e = _files[lo];
             if (e.FileStart <= discOffset)
                 return e;
 
@@ -113,7 +114,7 @@ namespace SabreTools.Wrappers
 
         /// <summary>
         /// Returns the smallest FileEnd value strictly greater than
-        /// <paramref name="discOffset"/>, or <c>null</c> if there is none.
+        /// <paramref name="discOffset"/>, or null if there is none.
         /// </summary>
         public long? FindNextFileEnd(long discOffset)
         {
@@ -135,7 +136,7 @@ namespace SabreTools.Wrappers
 
         /// <summary>
         /// Returns the smallest FileStart value strictly greater than
-        /// <paramref name="discOffset"/>, or <c>null</c> if there is none.
+        /// <paramref name="discOffset"/>, or null if there is none.
         /// </summary>
         public long? FindNextFileStart(long discOffset)
         {
@@ -166,6 +167,5 @@ namespace SabreTools.Wrappers
 
             return best;
         }
-
-            }
-        }
+    }
+}

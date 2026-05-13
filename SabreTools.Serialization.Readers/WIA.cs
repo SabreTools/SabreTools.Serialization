@@ -26,44 +26,57 @@ namespace SabreTools.Serialization.Readers
                 var archive = new DiscImage();
 
                 // Parse Header1
-                archive.Header1 = ParseHeader1(data);
-
-                // Validate magic
+                archive.Header1 = ParseWiaHeader1(data);
                 if (archive.Header1.Magic != Constants.WiaMagic && archive.Header1.Magic != Constants.RvzMagic)
                     return null;
 
                 // Parse Header2
-                archive.Header2 = ParseHeader2(data);
+                archive.Header2 = ParseWiaHeader2(data);
 
                 // Parse partition entries (Wii discs only)
-                if (archive.Header2.NumberOfPartitionEntries > 0
-                    && archive.Header2.PartitionEntriesOffset > 0)
+                if (archive.Header2.NumberOfPartitionEntries > 0 && archive.Header2.PartitionEntriesOffset > 0)
                 {
                     data.Seek(initialOffset + (long)archive.Header2.PartitionEntriesOffset, SeekOrigin.Begin);
-                    archive.PartitionEntries = ParsePartitionEntries(
-                        data, (int)archive.Header2.NumberOfPartitionEntries);
+
+                    archive.PartitionEntries = new PartitionEntry[archive.Header2.NumberOfPartitionEntries];
+                    for (int i = 0; i < archive.PartitionEntries.Length; i++)
+                    {
+                        archive.PartitionEntries[i] = ParsePartitionEntry(data); ;
+                    }
                 }
 
                 // Parse raw data entries
-                if (archive.Header2.NumberOfRawDataEntries > 0
-                    && archive.Header2.RawDataEntriesOffset > 0)
+                if (archive.Header2.NumberOfRawDataEntries > 0 && archive.Header2.RawDataEntriesOffset > 0)
                 {
                     data.Seek(initialOffset + (long)archive.Header2.RawDataEntriesOffset, SeekOrigin.Begin);
-                    archive.RawDataEntries = ParseRawDataEntries(
-                        data, (int)archive.Header2.NumberOfRawDataEntries);
+
+                    archive.RawDataEntries = new RawDataEntry[archive.Header2.NumberOfRawDataEntries];
+                    for (int i = 0; i < archive.Header2.NumberOfRawDataEntries; i++)
+                    {
+                        archive.RawDataEntries[i] = ParseRawDataEntry(data);
+                    }
                 }
 
                 // Parse group entries
-                if (archive.Header2.NumberOfGroupEntries > 0
-                    && archive.Header2.GroupEntriesOffset > 0)
+                if (archive.Header2.NumberOfGroupEntries > 0 && archive.Header2.GroupEntriesOffset > 0)
                 {
                     data.Seek(initialOffset + (long)archive.Header2.GroupEntriesOffset, SeekOrigin.Begin);
                     if (archive.Header1.Magic == Constants.RvzMagic)
-                        archive.RvzGroupEntries = ParseRvzGroupEntries(
-                            data, (int)archive.Header2.NumberOfGroupEntries);
+                    {
+                        archive.RvzGroupEntries = new RvzGroupEntry[archive.Header2.NumberOfGroupEntries];
+                        for (int i = 0; i < archive.Header2.NumberOfGroupEntries; i++)
+                        {
+                            archive.RvzGroupEntries[i] = ParseRvzGroupEntry(data);
+                        }
+                    }
                     else
-                        archive.GroupEntries = ParseWiaGroupEntries(
-                            data, (int)archive.Header2.NumberOfGroupEntries);
+                    {
+                        archive.GroupEntries = new WiaGroupEntry[archive.Header2.NumberOfGroupEntries];
+                        for (int i = 0; i < archive.Header2.NumberOfGroupEntries; i++)
+                        {
+                            archive.GroupEntries[i] = ParseWiaGroupEntry(data); ;
+                        }
+                    }
                 }
 
                 return archive;
@@ -74,121 +87,184 @@ namespace SabreTools.Serialization.Readers
             }
         }
 
-        #region Header parsing
-
-        private static WiaHeader1 ParseHeader1(Stream data)
+        /// <summary>
+        /// Parse a Stream into a PartitionDataEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled PartitionDataEntry on success, null on error</returns>
+        public static PartitionDataEntry ParsePartitionDataEntry(Stream data)
         {
-            var h = new WiaHeader1();
-            h.Magic = data.ReadUInt32LittleEndian();
-            h.Version = data.ReadUInt32BigEndian();
-            h.VersionCompatible = data.ReadUInt32BigEndian();
-            h.Header2Size = data.ReadUInt32BigEndian();
-            h.Header2Hash = data.ReadBytes(20);
-            h.IsoFileSize = data.ReadUInt64BigEndian();
-            h.WiaFileSize = data.ReadUInt64BigEndian();
-            h.Header1Hash = data.ReadBytes(20);
-            return h;
+            var obj = new PartitionDataEntry();
+
+            obj.FirstSector = data.ReadUInt32BigEndian();
+            obj.NumberOfSectors = data.ReadUInt32BigEndian();
+            obj.GroupIndex = data.ReadUInt32BigEndian();
+            obj.NumberOfGroups = data.ReadUInt32BigEndian();
+
+            return obj;
         }
 
-        private static WiaHeader2 ParseHeader2(Stream data)
+        /// <summary>
+        /// Parse a Stream into a PartitionEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled PartitionEntry on success, null on error</returns>
+        public static PartitionEntry ParsePartitionEntry(Stream data)
         {
-            var h = new WiaHeader2();
-            h.DiscType = (WiaDiscType)data.ReadUInt32BigEndian();
-            h.CompressionType = (WiaRvzCompressionType)data.ReadUInt32BigEndian();
-            h.CompressionLevel = data.ReadInt32BigEndian();
-            h.ChunkSize = data.ReadUInt32BigEndian();
-            h.DiscHeader = data.ReadBytes(0x80);
-            h.NumberOfPartitionEntries = data.ReadUInt32BigEndian();
-            h.PartitionEntrySize = data.ReadUInt32BigEndian();
-            h.PartitionEntriesOffset = data.ReadUInt64BigEndian();
-            h.PartitionEntriesHash = data.ReadBytes(20);
-            h.NumberOfRawDataEntries = data.ReadUInt32BigEndian();
-            h.RawDataEntriesOffset = data.ReadUInt64BigEndian();
-            h.RawDataEntriesSize = data.ReadUInt32BigEndian();
-            h.NumberOfGroupEntries = data.ReadUInt32BigEndian();
-            h.GroupEntriesOffset = data.ReadUInt64BigEndian();
-            h.GroupEntriesSize = data.ReadUInt32BigEndian();
-            h.CompressorDataSize = data.ReadByteValue();
-            h.CompressorData = data.ReadBytes(7);
-            return h;
+            var obj = new PartitionEntry();
+
+            obj.PartitionKey = data.ReadBytes(16);
+            obj.DataEntry0 = ParsePartitionDataEntry(data);
+            obj.DataEntry1 = ParsePartitionDataEntry(data);
+
+            return obj;
         }
 
-        #endregion
-
-        #region Table parsing
-
-        private static PartitionEntry[] ParsePartitionEntries(Stream data, int count)
+        /// <summary>
+        /// Parse a Stream into a RawDataEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled RawDataEntry on success, null on error</returns>
+        public static RawDataEntry ParseRawDataEntry(Stream data)
         {
-            var entries = new PartitionEntry[count];
-            for (int i = 0; i < count; i++)
-            {
-                var e = new PartitionEntry();
-                e.PartitionKey = data.ReadBytes(16);
-                e.DataEntry0 = ParsePartitionDataEntry(data);
-                e.DataEntry1 = ParsePartitionDataEntry(data);
-                entries[i] = e;
-            }
+            var obj = new RawDataEntry();
 
-            return entries;
+            obj.DataOffset = data.ReadUInt64BigEndian();
+            obj.DataSize = data.ReadUInt64BigEndian();
+            obj.GroupIndex = data.ReadUInt32BigEndian();
+            obj.NumberOfGroups = data.ReadUInt32BigEndian();
+
+            return obj;
         }
 
-        private static PartitionDataEntry ParsePartitionDataEntry(Stream data)
+        /// <summary>
+        /// Parse a byte array into a RawDataEntry
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <returns>Filled RawDataEntry on success, null on error</returns>
+        public static RawDataEntry ParseRawDataEntry(byte[] data, ref int offset)
         {
-            var e = new PartitionDataEntry();
-            e.FirstSector = data.ReadUInt32BigEndian();
-            e.NumberOfSectors = data.ReadUInt32BigEndian();
-            e.GroupIndex = data.ReadUInt32BigEndian();
-            e.NumberOfGroups = data.ReadUInt32BigEndian();
-            return e;
+            var obj = new RawDataEntry();
+
+            obj.DataOffset = data.ReadUInt64BigEndian(ref offset);
+            obj.DataSize = data.ReadUInt64BigEndian(ref offset);
+            obj.GroupIndex = data.ReadUInt32BigEndian(ref offset);
+            obj.NumberOfGroups = data.ReadUInt32BigEndian(ref offset);
+
+            return obj;
         }
 
-        private static RawDataEntry[] ParseRawDataEntries(Stream data, int count)
+        /// <summary>
+        /// Parse a Stream into a RvzGroupEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled RvzGroupEntry on success, null on error</returns>
+        public static RvzGroupEntry ParseRvzGroupEntry(Stream data)
         {
-            var entries = new RawDataEntry[count];
-            for (int i = 0; i < count; i++)
-            {
-                var e = new RawDataEntry();
-                e.DataOffset = data.ReadUInt64BigEndian();
-                e.DataSize = data.ReadUInt64BigEndian();
-                e.GroupIndex = data.ReadUInt32BigEndian();
-                e.NumberOfGroups = data.ReadUInt32BigEndian();
-                entries[i] = e;
-            }
+            var obj = new RvzGroupEntry();
 
-            return entries;
+            obj.DataOffset = data.ReadUInt32BigEndian();
+            obj.DataSize = data.ReadUInt32BigEndian();
+            obj.RvzPackedSize = data.ReadUInt32BigEndian();
+
+            return obj;
         }
 
-        private static WiaGroupEntry[] ParseWiaGroupEntries(Stream data, int count)
+        /// <summary>
+        /// Parse a byte array into a RvzGroupEntry
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <returns>Filled RvzGroupEntry on success, null on error</returns>
+        public static RvzGroupEntry ParseRvzGroupEntry(byte[] data, ref int offset)
         {
-            var entries = new WiaGroupEntry[count];
-            for (int i = 0; i < count; i++)
-            {
-                var e = new WiaGroupEntry();
-                // DataOffset stored as actual_offset >> 2
-                e.DataOffset = (ulong)data.ReadUInt32BigEndian() << 2;
-                e.DataSize = data.ReadUInt32BigEndian();
-                entries[i] = e;
-            }
+            var obj = new RvzGroupEntry();
 
-            return entries;
+            obj.DataOffset = data.ReadUInt32BigEndian(ref offset);
+            obj.DataSize = data.ReadUInt32BigEndian(ref offset);
+            obj.RvzPackedSize = data.ReadUInt32BigEndian(ref offset);
+
+            return obj;
         }
 
-        private static RvzGroupEntry[] ParseRvzGroupEntries(Stream data, int count)
+        /// <summary>
+        /// Parse a Stream into a WiaGroupEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled WiaGroupEntry on success, null on error</returns>
+        public static WiaGroupEntry ParseWiaGroupEntry(Stream data)
         {
-            var entries = new RvzGroupEntry[count];
-            for (int i = 0; i < count; i++)
-            {
-                var e = new RvzGroupEntry();
-                // DataOffset stored as actual_offset >> 2
-                e.DataOffset = (ulong)data.ReadUInt32BigEndian() << 2;
-                e.DataSize = data.ReadUInt32BigEndian();
-                e.RvzPackedSize = data.ReadUInt32BigEndian();
-                entries[i] = e;
-            }
+            var obj = new WiaGroupEntry();
 
-            return entries;
+            obj.DataOffset = data.ReadUInt32BigEndian();
+            obj.DataSize = data.ReadUInt32BigEndian();
+
+            return obj;
         }
 
-        #endregion
+        /// <summary>
+        /// Parse a byte array into a WiaGroupEntry
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <returns>Filled WiaGroupEntry on success, null on error</returns>
+        public static WiaGroupEntry ParseWiaGroupEntry(byte[] data, ref int offset)
+        {
+            var obj = new WiaGroupEntry();
+
+            obj.DataOffset = data.ReadUInt32BigEndian(ref offset);
+            obj.DataSize = data.ReadUInt32BigEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a WiaHeader1
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled WiaHeader1 on success, null on error</returns>
+        public static WiaHeader1 ParseWiaHeader1(Stream data)
+        {
+            var obj = new WiaHeader1();
+
+            obj.Magic = data.ReadUInt32LittleEndian();
+            obj.Version = data.ReadUInt32BigEndian();
+            obj.VersionCompatible = data.ReadUInt32BigEndian();
+            obj.Header2Size = data.ReadUInt32BigEndian();
+            obj.Header2Hash = data.ReadBytes(20);
+            obj.IsoFileSize = data.ReadUInt64BigEndian();
+            obj.WiaFileSize = data.ReadUInt64BigEndian();
+            obj.Header1Hash = data.ReadBytes(20);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a WiaHeader2
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled WiaHeader2 on success, null on error</returns>
+        public static WiaHeader2 ParseWiaHeader2(Stream data)
+        {
+            var obj = new WiaHeader2();
+
+            obj.DiscType = (WiaDiscType)data.ReadUInt32BigEndian();
+            obj.CompressionType = (WiaRvzCompressionType)data.ReadUInt32BigEndian();
+            obj.CompressionLevel = data.ReadInt32BigEndian();
+            obj.ChunkSize = data.ReadUInt32BigEndian();
+            obj.DiscHeader = data.ReadBytes(0x80);
+            obj.NumberOfPartitionEntries = data.ReadUInt32BigEndian();
+            obj.PartitionEntrySize = data.ReadUInt32BigEndian();
+            obj.PartitionEntriesOffset = data.ReadUInt64BigEndian();
+            obj.PartitionEntriesHash = data.ReadBytes(20);
+            obj.NumberOfRawDataEntries = data.ReadUInt32BigEndian();
+            obj.RawDataEntriesOffset = data.ReadUInt64BigEndian();
+            obj.RawDataEntriesSize = data.ReadUInt32BigEndian();
+            obj.NumberOfGroupEntries = data.ReadUInt32BigEndian();
+            obj.GroupEntriesOffset = data.ReadUInt64BigEndian();
+            obj.GroupEntriesSize = data.ReadUInt32BigEndian();
+            obj.CompressorDataSize = data.ReadByteValue();
+            obj.CompressorData = data.ReadBytes(7);
+
+            return obj;
+        }
     }
 }

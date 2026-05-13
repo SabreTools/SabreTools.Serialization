@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using SabreTools.Data.Models.NintendoDisc;
 using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -15,11 +18,9 @@ namespace SabreTools.Wrappers
 
             try
             {
-                Directory.CreateDirectory(outputDirectory);
-
-                if (Model.Platform == Platform.GameCube)
+                if (Platform == Platform.GameCube)
                     return ExtractGameCube(outputDirectory);
-                else if (Model.Platform == Platform.Wii)
+                else if (Platform == Platform.Wii)
                     return ExtractWii(outputDirectory);
 
                 return false;
@@ -28,52 +29,72 @@ namespace SabreTools.Wrappers
             {
                 if (includeDebug)
                     Console.Error.WriteLine(ex);
+
                 return false;
             }
         }
 
+        #region Pre-decrypted reader override
+
+        /// <summary>
+        /// When set, <see cref="ReadDecryptedPartitionRange"/> calls this delegate instead of
+        /// performing AES-CBC decryption.  Used by WIA/RVZ extraction, where partition data is
+        /// already stored decrypted and the encrypt-then-decrypt round-trip is unnecessary.
+        /// Signature: (absDataOffset, partitionDataOffset, length) -> decrypted bytes or null.
+        /// </summary>
+        internal Func<long, long, int, byte[]?>? _preDecryptedReader;
+
+        #endregion
+
         #region GameCube extraction
 
-        private bool ExtractGameCube(string dest)
+        /// <summary>
+        /// Extract GameCube data from a disc
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <returns>True if the extraction was successful, false otherwise</returns>
+        private bool ExtractGameCube(string outputDirectory)
         {
-            string sysDir = Path.Combine(dest, "sys");
+            string sysDir = Path.Combine(outputDirectory, "sys");
             Directory.CreateDirectory(sysDir);
 
-            // sys/boot.bin (disc header, 0x000 – 0x43F)
+            // sys/boot.bin (disc header, 0x000 - 0x43F)
             WriteRange(0, Constants.DiscHeaderSize, Path.Combine(sysDir, "boot.bin"));
 
-            // sys/bi2.bin  (0x440 – 0x243F)
+            // sys/bi2.bin  (0x440 - 0x243F)
             WriteRange(Constants.Bi2Address, Constants.Bi2Size, Path.Combine(sysDir, "bi2.bin"));
 
             // sys/apploader.img
-            WriteApploader(sysDir);
+            WriteGCApploader(sysDir);
 
             // DOL offset stored without shift on GameCube
-            long dolOffset = Model.Header.DolOffset;
+            long dolOffset = Header.DolOffset;
             if (dolOffset > 0)
             {
-                byte[]? dolHeader = ReadDisc(dolOffset, 0xE0);
-                if (dolHeader != null)
+                byte[] dolHeaderBytes = ReadRangeFromSource(dolOffset, 0xE0);
+                if (dolHeaderBytes.Length > 0)
                 {
+                    int dolHeaderOffset = 0;
+                    var dolHeader = Serialization.Readers.NintendoDisc.ParseDOLHeader(dolHeaderBytes, ref dolHeaderOffset);
+
                     int dolSize = GetDolSize(dolHeader);
                     WriteRange(dolOffset, dolSize, Path.Combine(sysDir, "main.dol"));
                 }
             }
 
             // FST offset stored without shift on GameCube
-            long fstOffset = Model.Header.FstOffset;
-            long fstSize   = Model.Header.FstSize;
+            long fstOffset = Header.FstOffset;
+            long fstSize = Header.FstSize;
             if (fstOffset > 0 && fstSize > 0)
             {
-                WriteRange(fstOffset, (int)Math.Min(fstSize, int.MaxValue),
-                    Path.Combine(sysDir, "fst.bin"));
+                WriteRange(fstOffset, (int)Math.Min(fstSize, int.MaxValue), Path.Combine(sysDir, "fst.bin"));
 
-                byte[]? fstData = ReadDisc(fstOffset, (int)Math.Min(fstSize, int.MaxValue));
-                if (fstData != null)
+                byte[] fstData = ReadRangeFromSource(fstOffset, (int)Math.Min(fstSize, int.MaxValue));
+                if (fstData.Length > 0)
                 {
-                    string filesDir = Path.Combine(dest, "files");
+                    string filesDir = Path.Combine(outputDirectory, "files");
                     Directory.CreateDirectory(filesDir);
-                    ExtractFstFiles(fstData, offsetShift: 0, filesDir, ReadDisc);
+                    ExtractFstFiles(fstData, offsetShift: 0, filesDir, ReadRangeFromSource);
                 }
             }
 
@@ -84,28 +105,33 @@ namespace SabreTools.Wrappers
 
         #region Wii extraction
 
-        private bool ExtractWii(string dest)
+        /// <summary>
+        /// Extract Wii data from a disc
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <returns>True if the extraction was successful, false otherwise</returns>
+        private bool ExtractWii(string outputDirectory)
         {
             // Unencrypted disc header area
-            string discDir = Path.Combine(dest, "disc");
+            string discDir = Path.Combine(outputDirectory, "disc");
             Directory.CreateDirectory(discDir);
+
             WriteRange(0, 0x100, Path.Combine(discDir, "header.bin"));
-            WriteRange(Constants.WiiRegionDataAddress, Constants.WiiRegionDataSize,
-                Path.Combine(discDir, "region.bin"));
+            WriteRange(Constants.WiiRegionDataAddress, Constants.WiiRegionDataSize, Path.Combine(discDir, "region.bin"));
 
             if (Model.PartitionTableEntries is null)
                 return true;
 
-            var typeCounters = new System.Collections.Generic.Dictionary<uint, int>();
+            var typeCounters = new Dictionary<uint, int>();
 
             foreach (var pte in Model.PartitionTableEntries)
             {
-                long partOffset = pte.Offset;
+                long partOffset = pte.Offset << 2;
                 if (partOffset <= 0 || partOffset >= _dataSource.Length)
                     continue;
 
                 string partName = GetPartitionName(pte.Type, typeCounters);
-                string partDir  = Path.Combine(dest, partName);
+                string partDir = Path.Combine(outputDirectory, partName);
                 Directory.CreateDirectory(partDir);
 
                 ExtractWiiPartition(partOffset, partDir);
@@ -114,14 +140,21 @@ namespace SabreTools.Wrappers
             return true;
         }
 
-        private void ExtractWiiPartition(long partOffset, string partDir)
+        /// <summary>
+        /// Extract a Wii partition
+        /// </summary>
+        /// <param name="partitionOffset">Offset to the partition</param>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        private void ExtractWiiPartition(long partitionOffset, string outputDirectory)
         {
             // ticket.bin (unencrypted, 0x2A4 bytes at partition start)
-            WriteRange(partOffset, Constants.WiiTicketSize, Path.Combine(partDir, "ticket.bin"));
+            WriteRange(partitionOffset, Constants.WiiTicketSize, Path.Combine(outputDirectory, "ticket.bin"));
 
-            byte[]? ticketData = ReadDisc(partOffset, Constants.WiiTicketSize);
+            byte[]? ticketData = ReadRangeFromSource(partitionOffset, Constants.WiiTicketSize);
             if (ticketData is null || ticketData.Length < Constants.TicketCommonKeyIndexOffset + 1)
                 return;
+
+            #region Title Key
 
             // Decrypt title key
             byte[] encTitleKey = new byte[16];
@@ -134,59 +167,76 @@ namespace SabreTools.Wrappers
             if (titleKey is null)
                 return;
 
-            // TMD
-            byte[]? tmdSizeBytes = ReadDisc(partOffset + Constants.WiiTmdSizeAddress, 4);
+            #endregion
+
+            #region TMD
+
+            byte[] tmdSizeBytes = ReadRangeFromSource(partitionOffset + Constants.WiiTmdSizeAddress, 4);
             int tmdSizePos = 0;
-            uint tmdSize = tmdSizeBytes != null
+            uint tmdSize = tmdSizeBytes.Length > 0
                 ? tmdSizeBytes.ReadUInt32BigEndian(ref tmdSizePos)
                 : 0;
-            byte[]? tmdOffBytes = ReadDisc(partOffset + Constants.WiiTmdOffsetAddress, 4);
+
+            byte[] tmdOffBytes = ReadRangeFromSource(partitionOffset + Constants.WiiTmdOffsetAddress, 4);
             int tmdOffPos = 0;
-            uint tmdOffShifted = tmdOffBytes != null
+            uint tmdOffShifted = tmdOffBytes.Length > 0
                 ? tmdOffBytes.ReadUInt32BigEndian(ref tmdOffPos)
                 : 0;
+
             long tmdOffset = (long)tmdOffShifted << 2;
             if (tmdSize > 0 && tmdOffset > 0)
-                WriteRange(partOffset + tmdOffset, (int)tmdSize, Path.Combine(partDir, "tmd.bin"));
+                WriteRange(partitionOffset + tmdOffset, (int)tmdSize, Path.Combine(outputDirectory, "tmd.bin"));
 
-            // cert.bin
-            byte[]? certSizeBytes = ReadDisc(partOffset + Constants.WiiCertSizeAddress, 4);
+            #endregion
+
+            #region cert.bin
+
+            byte[] certSizeBytes = ReadRangeFromSource(partitionOffset + Constants.WiiCertSizeAddress, 4);
             int certSizePos = 0;
-            uint certSize = certSizeBytes != null
+            uint certSize = certSizeBytes.Length > 0
                 ? certSizeBytes.ReadUInt32BigEndian(ref certSizePos)
                 : 0;
-            byte[]? certOffBytes = ReadDisc(partOffset + Constants.WiiCertOffsetAddress, 4);
+
+            byte[] certOffBytes = ReadRangeFromSource(partitionOffset + Constants.WiiCertOffsetAddress, 4);
             int certOffPos = 0;
-            uint certOffShifted = certOffBytes != null
+            uint certOffShifted = certOffBytes.Length > 0
                 ? certOffBytes.ReadUInt32BigEndian(ref certOffPos)
                 : 0;
+
             long certOffset = (long)certOffShifted << 2;
             if (certSize > 0 && certOffset > 0)
-                WriteRange(partOffset + certOffset, (int)certSize, Path.Combine(partDir, "cert.bin"));
+                WriteRange(partitionOffset + certOffset, (int)certSize, Path.Combine(outputDirectory, "cert.bin"));
 
-            // h3.bin
-            byte[]? h3OffBytes = ReadDisc(partOffset + Constants.WiiH3OffsetAddress, 4);
+            #endregion
+
+            #region h3.bin
+
+            byte[] h3OffBytes = ReadRangeFromSource(partitionOffset + Constants.WiiH3OffsetAddress, 4);
             int h3OffPos = 0;
-            uint h3OffShifted = h3OffBytes != null
+            uint h3OffShifted = h3OffBytes.Length > 0
                 ? h3OffBytes.ReadUInt32BigEndian(ref h3OffPos)
                 : 0;
+
             long h3Offset = (long)h3OffShifted << 2;
             if (h3Offset > 0)
-                WriteRange(partOffset + h3Offset, Constants.WiiH3Size, Path.Combine(partDir, "h3.bin"));
+                WriteRange(partitionOffset + h3Offset, Constants.WiiH3Size, Path.Combine(outputDirectory, "h3.bin"));
+
+            #endregion
 
             // Encrypted partition data start
-            byte[]? dataOffBytes = ReadDisc(partOffset + Constants.WiiDataOffsetAddress, 4);
+            byte[] dataOffBytes = ReadRangeFromSource(partitionOffset + Constants.WiiDataOffsetAddress, 4);
             int dataOffPos = 0;
-            uint dataOffShifted = dataOffBytes != null
+            uint dataOffShifted = dataOffBytes.Length > 0
                 ? dataOffBytes.ReadUInt32BigEndian(ref dataOffPos)
                 : 0;
+
             long dataOffset = (long)dataOffShifted << 2;
             if (dataOffset <= 0)
                 return;
 
-            long absDataOffset = partOffset + dataOffset;
+            long absDataOffset = partitionOffset + dataOffset;
 
-            string sysDir = Path.Combine(partDir, "sys");
+            string sysDir = Path.Combine(outputDirectory, "sys");
             Directory.CreateDirectory(sysDir);
 
             // Read boot block from decrypted partition (block 0, offset 0 within data)
@@ -197,57 +247,79 @@ namespace SabreTools.Wrappers
             File.WriteAllBytes(Path.Combine(sysDir, "boot.bin"), bootBlock);
 
             // bi2.bin
-            byte[]? bi2 = ReadDecryptedPartitionRange(absDataOffset, titleKey,
-                Constants.Bi2Address, Constants.Bi2Size);
-            if (bi2 != null)
+            byte[]? bi2 = ReadDecryptedPartitionRange(absDataOffset, titleKey, Constants.Bi2Address, Constants.Bi2Size);
+            if (bi2 is not null)
                 File.WriteAllBytes(Path.Combine(sysDir, "bi2.bin"), bi2);
 
             // apploader
             WriteWiiApploader(absDataOffset, titleKey, sysDir);
 
-            // DOL — stored offset is shifted <<2 in Wii partition
+            #region DOL
+
+            // Stored offset is shifted <<2 in Wii partition
             int dolOffPos = 0x420;
             uint dolOffShifted = bootBlock.ReadUInt32BigEndian(ref dolOffPos);
             long dolOff = (long)dolOffShifted << 2;
             if (dolOff > 0)
             {
-                byte[]? dolHdr = ReadDecryptedPartitionRange(absDataOffset, titleKey, dolOff, 0xE0);
-                if (dolHdr != null)
+                byte[]? dolHeaderBytes = ReadDecryptedPartitionRange(absDataOffset, titleKey, dolOff, 0xE0);
+                if (dolHeaderBytes is not null)
                 {
-                    int dolSize = GetDolSize(dolHdr);
+                    int dolHeaderOffset = 0;
+                    var dolHeader = Serialization.Readers.NintendoDisc.ParseDOLHeader(dolHeaderBytes, ref dolHeaderOffset);
+
+                    int dolSize = GetDolSize(dolHeader);
                     byte[]? dol = ReadDecryptedPartitionRange(absDataOffset, titleKey, dolOff, dolSize);
-                    if (dol != null)
+                    if (dol is not null)
                         File.WriteAllBytes(Path.Combine(sysDir, "main.dol"), dol);
                 }
             }
 
-            // FST — stored offset shifted <<2 in Wii partition
+            #endregion
+
+            #region FST
+
+            // Stored offset shifted <<2 in Wii partition
             int fstOffPos = 0x424;
-            int fstSzPos  = 0x428;
             uint fstOffShifted = bootBlock.ReadUInt32BigEndian(ref fstOffPos);
-            uint fstSzShifted  = bootBlock.ReadUInt32BigEndian(ref fstSzPos);
             long fstOff = (long)fstOffShifted << 2;
+
+            int fstSzPos = 0x428;
+            uint fstSzShifted = bootBlock.ReadUInt32BigEndian(ref fstSzPos);
             long fstSize = (long)fstSzShifted << 2;  // also stored >>2 on Wii
+
             if (fstOff > 0 && fstSize > 0)
             {
-                byte[]? fstData = ReadDecryptedPartitionRange(absDataOffset, titleKey,
-                    fstOff, (int)Math.Min(fstSize, int.MaxValue));
-                if (fstData != null)
+                byte[]? fstData = ReadDecryptedPartitionRange(absDataOffset, titleKey, fstOff, (int)Math.Min(fstSize, int.MaxValue));
+                if (fstData is not null)
                 {
                     File.WriteAllBytes(Path.Combine(sysDir, "fst.bin"), fstData);
-                    string filesDir = Path.Combine(partDir, "files");
+                    string filesDir = Path.Combine(outputDirectory, "files");
                     Directory.CreateDirectory(filesDir);
-                    ExtractFstFiles(fstData, offsetShift: 2, filesDir,
+                    ExtractFstFiles(fstData,
+                        offsetShift: 2,
+                        filesDir,
                         (offset, length) => ReadDecryptedPartitionRange(absDataOffset, titleKey, offset, length));
                 }
             }
+
+            #endregion
         }
 
         #endregion
 
-        #region FST extraction
+        #region FST Extraction
 
-        private void ExtractFstFiles(byte[] fstData, int offsetShift, string filesDir,
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="fstData"></param>
+        /// <param name="offsetShift"></param>
+        /// <param name="filesDir"></param>
+        /// <param name="readFunc"></param>
+        private void ExtractFstFiles(byte[] fstData,
+            int offsetShift,
+            string filesDir,
             Func<long, int, byte[]?> readFunc)
         {
             if (fstData is null || fstData.Length < 12)
@@ -260,18 +332,21 @@ namespace SabreTools.Wrappers
                 return;
 
             // String table immediately follows all entries
-            long stringTableOffset = rootCount * 12;
+            int stringTableOffset = (int)(rootCount * 12);
 
-            ExtractFstDirectory(fstData, 1, (int)rootCount, stringTableOffset,
-                filesDir, offsetShift, readFunc);
+            ExtractFstDirectory(fstData, 1, (int)rootCount, stringTableOffset, filesDir, offsetShift, readFunc);
         }
 
         /// <summary>
         /// Recursively extracts FST entries [start, end) into <paramref name="currentDir"/>.
         /// Returns the index of the next entry after this directory.
         /// </summary>
-        private int ExtractFstDirectory(byte[] fstData, int start, int end,
-            long stringTableOffset, string currentDir, int offsetShift,
+        private int ExtractFstDirectory(byte[] fstData,
+            int start,
+            int end,
+            int stringTableOffset,
+            string currentDir,
+            int offsetShift,
             Func<long, int, byte[]?> readFunc)
         {
             int i = start;
@@ -283,14 +358,10 @@ namespace SabreTools.Wrappers
 
                 // Each FST entry is 12 bytes: [flags(1) | nameOff(3)] [fileOffRaw(4)] [fileSize(4)]
                 int fstEntryPos = fstBase;
-                uint flagsAndNameOff = fstData.ReadUInt32BigEndian(ref fstEntryPos);
-                byte flags      = (byte)(flagsAndNameOff >> 24);
-                bool isDir      = (flags & 1) != 0;
-                uint nameOff    = flagsAndNameOff & 0x00FFFFFFu;
-                uint fileOffRaw = fstData.ReadUInt32BigEndian(ref fstEntryPos);
-                uint fileSize   = fstData.ReadUInt32BigEndian(ref fstEntryPos);
+                var entry = Serialization.Readers.NintendoDisc.ParseFileSystemTableEntry(fstData, ref fstEntryPos);
 
-                string name = ReadFstString(fstData, stringTableOffset + nameOff);
+                int nameOffset = stringTableOffset + (int)(entry.NameOffset & 0x00FFFFFF);
+                string? name = fstData.ReadNullTerminatedAnsiString(ref nameOffset);
                 if (string.IsNullOrEmpty(name))
                 {
                     i++;
@@ -298,19 +369,21 @@ namespace SabreTools.Wrappers
                 }
 
                 // Sanitize name: replace path separators and reject/flatten dot-segments
-                name = name.Replace('/', '_').Replace('\\', '_');
+                name = name!.Replace('/', '_').Replace('\\', '_');
                 if (name == "." || name == "..")
                     name = "_";
+
                 name = name.TrimStart('.');
 
+                byte flags = (byte)(entry.NameOffset >> 24);
+                bool isDir = (flags & 1) != 0;
                 if (isDir)
                 {
                     // fileOffRaw = parent entry index; fileSize = last entry index in this dir
-                    int nextEntry = (int)fileSize;
+                    int nextEntry = (int)entry.FileSize;
                     string subDir = Path.Combine(currentDir, name);
                     Directory.CreateDirectory(subDir);
-                    i = ExtractFstDirectory(fstData, i + 1, nextEntry, stringTableOffset,
-                        subDir, offsetShift, readFunc);
+                    i = ExtractFstDirectory(fstData, i + 1, nextEntry, stringTableOffset, subDir, offsetShift, readFunc);
                 }
                 else
                 {
@@ -319,16 +392,16 @@ namespace SabreTools.Wrappers
                     if (!string.IsNullOrEmpty(outDir))
                         Directory.CreateDirectory(outDir);
 
-                    if (fileSize == 0)
+                    if (entry.FileSize == 0)
                     {
                         // Zero-byte file — create empty
-                        File.WriteAllBytes(outPath, new byte[0]);
+                        File.WriteAllBytes(outPath, []);
                     }
                     else
                     {
-                        long discOffset = (long)fileOffRaw << offsetShift;
-                        byte[]? fileData = readFunc(discOffset, (int)Math.Min(fileSize, int.MaxValue));
-                        if (fileData != null)
+                        long discOffset = (long)entry.FileOffset << offsetShift;
+                        byte[]? fileData = readFunc(discOffset, (int)Math.Min(entry.FileSize, int.MaxValue));
+                        if (fileData is not null)
                             File.WriteAllBytes(outPath, fileData);
                     }
 
@@ -339,103 +412,155 @@ namespace SabreTools.Wrappers
             return i;
         }
 
-        private static string ReadFstString(byte[] fstData, long offset)
-        {
-            if (offset < 0 || offset >= fstData.Length)
-                return string.Empty;
-
-            int start = (int)offset;
-            int end = start;
-            while (end < fstData.Length && fstData[end] != 0)
-                end++;
-
-            return System.Text.Encoding.ASCII.GetString(fstData, start, end - start);
-        }
-
         #endregion
 
-        #region Apploader helpers
+        #region Apploader Writing
 
-        private void WriteApploader(string sysDir)
+        /// <summary>
+        /// Write GameCube apploader.img to the output directory, if possible
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        private bool WriteGCApploader(string outputDirectory)
         {
-            byte[]? hdr = ReadDisc(Constants.ApploaderAddress, Constants.ApploaderHeaderSize);
-            if (hdr is null) return;
+            byte[] header = ReadRangeFromSource(Constants.ApploaderAddress, Constants.ApploaderHeaderSize);
+            if (header.Length == 0)
+                return false;
 
-            int codeSizePos    = Constants.ApploaderCodeSizeOffset;
-            int trailerSizePos = Constants.ApploaderTrailerSizeOffset;
-            uint codeSize    = hdr.ReadUInt32BigEndian(ref codeSizePos);
-            uint trailerSize = hdr.ReadUInt32BigEndian(ref trailerSizePos);
+            int index = Constants.ApploaderCodeSizeOffset;
+            uint codeSize = header.ReadUInt32BigEndian(ref index);
+
+            index = Constants.ApploaderTrailerSizeOffset;
+            uint trailerSize = header.ReadUInt32BigEndian(ref index);
 
             int totalSize = Constants.ApploaderHeaderSize + (int)codeSize + (int)trailerSize;
-            WriteRange(Constants.ApploaderAddress, totalSize, Path.Combine(sysDir, "apploader.img"));
+            WriteRange(Constants.ApploaderAddress, totalSize, Path.Combine(outputDirectory, "apploader.img"));
+            return true;
         }
 
+        /// <summary>
+        /// Write Wii apploader.img to the output directory, if possible
+        /// </summary>
+        /// <param name="absDataOffset"></param>
+        /// <param name="titleKey"></param>
+        /// <param name="sysDir"></param>
         private void WriteWiiApploader(long absDataOffset, byte[] titleKey, string sysDir)
         {
-            byte[]? hdr = ReadDecryptedPartitionRange(absDataOffset, titleKey,
-                Constants.ApploaderAddress, Constants.ApploaderHeaderSize);
-            if (hdr is null) return;
+            byte[]? header = ReadDecryptedPartitionRange(absDataOffset, titleKey, Constants.ApploaderAddress, Constants.ApploaderHeaderSize);
+            if (header is null)
+                return;
 
-            int wiiCodeSizePos    = Constants.ApploaderCodeSizeOffset;
-            int wiiTrailerSizePos = Constants.ApploaderTrailerSizeOffset;
-            uint codeSize    = hdr.ReadUInt32BigEndian(ref wiiCodeSizePos);
-            uint trailerSize = hdr.ReadUInt32BigEndian(ref wiiTrailerSizePos);
+            int index = Constants.ApploaderCodeSizeOffset;
+            uint codeSize = header.ReadUInt32BigEndian(ref index);
+
+            index = Constants.ApploaderTrailerSizeOffset;
+            uint trailerSize = header.ReadUInt32BigEndian(ref index);
 
             int totalSize = Constants.ApploaderHeaderSize + (int)codeSize + (int)trailerSize;
-            byte[]? apploader = ReadDecryptedPartitionRange(absDataOffset, titleKey,
-                Constants.ApploaderAddress, totalSize);
-            if (apploader != null)
+            byte[]? apploader = ReadDecryptedPartitionRange(absDataOffset, titleKey, Constants.ApploaderAddress, totalSize);
+            if (apploader is not null)
                 File.WriteAllBytes(Path.Combine(sysDir, "apploader.img"), apploader);
         }
 
         #endregion
 
-        #region DOL size calculation
+        #region Helpers
 
-        private static int GetDolSize(byte[] dolHeader)
+        /// <summary>
+        /// Total byte length of the raw disc image data
+        /// </summary>
+        internal long DataLength => _dataSource.Length;
+
+        /// <summary>
+        /// Read <paramref name="length"/> bytes from the disc image at <paramref name="offset"/>.
+        /// </summary>
+        internal byte[] ReadData(long offset, int length) => ReadRangeFromSource(offset, length);
+
+        /// <summary>
+        /// Get the size of the DOL based on the header
+        /// </summary>
+        /// <param name="dolHeader">DOL header to retrieve the size for</param>
+        /// <returns>The size of the DOL on success, 0 otherwise</returns>
+        private static int GetDolSize(DOLHeader dolHeader)
         {
-            // DOL header: 7 text section offsets (0x00), 11 data section offsets (0x1C),
-            // 7 text sizes (0x90), 11 data sizes (0xAC), BSS offset (0xD8), BSS size (0xDC),
-            // entry point (0xE0). Max (offset + size) over all sections gives the DOL size.
-            if (dolHeader is null || dolHeader.Length < 0xE0)
+            if (dolHeader.SectionOffsetTable.Length != 18)
+                return 0;
+            if (dolHeader.SectionLengthsTable.Length != 18)
                 return 0;
 
             int maxEnd = 0;
-            // Text sections (7): offset table at 0x00, size table at 0x90
-            for (int s = 0; s < 7; s++)
+
+            // Loop through the 18 offset and size entries
+            for (int i = 0; i < 18; i++)
             {
-                int offPos = s * 4;
-                int szPos  = 0x90 + (s * 4);
-                int off = (int)dolHeader.ReadUInt32BigEndian(ref offPos);
-                int sz  = (int)dolHeader.ReadUInt32BigEndian(ref szPos);
-                if (off > 0 && sz > 0) maxEnd = Math.Max(maxEnd, off + sz);
-            }
-            // Data sections (11): offset table at 0x1C, size table at 0xAC
-            for (int s = 0; s < 11; s++)
-            {
-                int offPos = 0x1C + (s * 4);
-                int szPos  = 0xAC + (s * 4);
-                int off = (int)dolHeader.ReadUInt32BigEndian(ref offPos);
-                int sz  = (int)dolHeader.ReadUInt32BigEndian(ref szPos);
-                if (off > 0 && sz > 0) maxEnd = Math.Max(maxEnd, off + sz);
+                uint offset = dolHeader.SectionOffsetTable[i];
+                uint size = dolHeader.SectionLengthsTable[i];
+                if (offset > 0 && size > 0)
+                    maxEnd = (int)Math.Max(maxEnd, offset + size);
             }
 
             return maxEnd;
         }
 
-        #endregion
+        /// <summary>
+        /// Get the name of a given partition type
+        /// </summary>
+        /// <param name="type">Parition type</param>
+        /// <param name="counters">Dictionary of counters used for global indexing</param>
+        /// <returns>String representing the partition name</returns>
+        private static string GetPartitionName(uint type, Dictionary<uint, int> counters)
+        {
+            string code;
+            switch (type)
+            {
+                // GM + counter
+                case 0: code = "GM"; break;
 
-        #region Wii partition block decryption helpers
+                // UP + counter
+                case 1: code = "UP"; break;
+
+                // CH + counter
+                case 2: code = "CH"; break;
+
+                // Unknown: if all 4 bytes are printable ASCII, use the raw 4-char string (no prefix, no counter).
+                // Otherwise fall back to P{globalIndex} — we use the cumulative counter sum as the index.
+                default:
+                    byte b0 = (byte)(type >> 24),
+                        b1 = (byte)(type >> 16),
+                        b2 = (byte)(type >> 8),
+                        b3 = (byte)type;
+
+                    if (b0 >= 0x20 && b0 <= 0x7E
+                        && b1 >= 0x20 && b1 <= 0x7E
+                        && b2 >= 0x20 && b2 <= 0x7E
+                        && b3 >= 0x20 && b3 <= 0x7E)
+                    {
+                        return Encoding.ASCII.GetString([b0, b1, b2, b3]);
+                    }
+
+                    // Non-printable: use global partition index (sum of all counter values so far)
+                    int globalIndex = 0;
+                    foreach (var v in counters.Values)
+                    {
+                        globalIndex += v;
+                    }
+
+                    return $"P{globalIndex}";
+            }
+
+            int index = counters.TryGetValue(type, out int cv) ? cv : 0;
+            counters[type] = index + 1;
+            return $"{code}{index}";
+        }
 
         /// <summary>
         /// Reads <paramref name="length"/> bytes at <paramref name="partitionDataOffset"/> within
         /// the decrypted partition data, decrypting 0x8000-byte blocks as needed.
         /// <paramref name="absDataOffset"/> is the absolute ISO offset where the encrypted data begins.
         /// </summary>
-        private byte[]? ReadDecryptedPartitionRange(long absDataOffset, byte[] titleKey,
-            long partitionDataOffset, int length)
+        private byte[]? ReadDecryptedPartitionRange(long absDataOffset, byte[] titleKey, long partitionDataOffset, int length)
         {
-            if (length <= 0) return null;
+            if (length <= 0)
+                return null;
 
             // WIA/RVZ fast path: data is already decrypted; skip the AES round-trip.
             if (_preDecryptedReader is not null)
@@ -448,11 +573,11 @@ namespace SabreTools.Wrappers
             {
                 long dataOff = partitionDataOffset + produced;
                 long blockNum = dataOff / Constants.WiiBlockDataSize;
-                int  offsetInBlock = (int)(dataOff % Constants.WiiBlockDataSize);
+                int offsetInBlock = (int)(dataOff % Constants.WiiBlockDataSize);
 
                 long encBlockOffset = absDataOffset + (blockNum * Constants.WiiBlockSize);
-                byte[]? encBlock = ReadDisc(encBlockOffset, Constants.WiiBlockSize);
-                if (encBlock is null || encBlock.Length < Constants.WiiBlockSize)
+                byte[] encBlock = ReadRangeFromSource(encBlockOffset, Constants.WiiBlockSize);
+                if (encBlock.Length < Constants.WiiBlockSize)
                     break;
 
                 // IV is at offset 0x3D0 of the raw (still-encrypted) block.
@@ -460,7 +585,7 @@ namespace SabreTools.Wrappers
                 byte[] iv = new byte[16];
                 Array.Copy(encBlock, 0x3D0, iv, 0, 16);
 
-                // Decrypt the 0x7C00 data portion (bytes 0x400–0x7FFF of the raw block)
+                // Decrypt the 0x7C00 data portion (bytes 0x400-0x7FFF of the raw block)
                 byte[] encData = new byte[Constants.WiiBlockDataSize];
                 Array.Copy(encBlock, Constants.WiiBlockHeaderSize, encData, 0, Constants.WiiBlockDataSize);
 
@@ -476,64 +601,26 @@ namespace SabreTools.Wrappers
             return produced == length ? result : null;
         }
 
-        #endregion
-
-        #region Misc helpers
-
+        /// <summary>
+        /// Write a range from the underlying data source to a file
+        /// </summary>
+        /// <param name="offset">Offset into the data source</param>
+        /// <param name="length">Length of the data to read and write</param>
+        /// <param name="filePath">Full path to the expected output file</param>
         private void WriteRange(long offset, int length, string filePath)
         {
-            if (length <= 0) return;
-            byte[]? data = ReadDisc(offset, length);
-            if (data is null) return;
-            string? dir = Path.GetDirectoryName(filePath);
-            if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
-            File.WriteAllBytes(filePath, data);
-        }
+            if (length <= 0)
+                return;
 
-        private byte[]? ReadDisc(long offset, int length)
-        {
-            if (length <= 0 || offset < 0) return null;
             byte[] data = ReadRangeFromSource(offset, length);
-            return data.Length == length ? data : null;
-        }
+            if (data.Length == 0)
+                return;
 
-        /// <summary>Total byte length of the raw disc image data.</summary>
-        internal long DataLength => _dataSource.Length;
+            string? dir = Path.GetDirectoryName(filePath);
+            if (!string.IsNullOrEmpty(dir))
+                Directory.CreateDirectory(dir);
 
-        /// <summary>
-        /// Read <paramref name="length"/> bytes from the disc image at <paramref name="offset"/>.
-        /// Returns null if the range is out of bounds or a short read occurs.
-        /// </summary>
-        internal byte[]? ReadData(long offset, int length) => ReadDisc(offset, length);
-
-        private static string GetPartitionName(uint type,
-            System.Collections.Generic.Dictionary<uint, int> counters)
-        {
-            // Matches DolphinIsoLib WiiDiscExtractor.PartitionFolderName exactly.
-            // Known types: 0→GM+counter, 1→UP+counter, 2→CH+counter.
-            // Unknown: if all 4 bytes are printable ASCII, use the raw 4-char string (no prefix, no counter).
-            // Otherwise fall back to P{globalIndex} — we use the cumulative counter sum as the index.
-            string code;
-            switch (type)
-            {
-                case 0: code = "GM"; break;
-                case 1: code = "UP"; break;
-                case 2: code = "CH"; break;
-                default:
-                    byte b0 = (byte)(type >> 24), b1 = (byte)(type >> 16),
-                         b2 = (byte)(type >>  8), b3 = (byte)type;
-                    if (b0 >= 0x20 && b0 <= 0x7E && b1 >= 0x20 && b1 <= 0x7E &&
-                        b2 >= 0x20 && b2 <= 0x7E && b3 >= 0x20 && b3 <= 0x7E)
-                        return System.Text.Encoding.ASCII.GetString(new byte[] { b0, b1, b2, b3 });
-                    // Non-printable: use global partition index (sum of all counter values so far)
-                    int globalIdx = 0;
-                    foreach (var v in counters.Values) globalIdx += v;
-                    return $"P{globalIdx}";
-            }
-
-            int idx = counters.TryGetValue(type, out int cv) ? cv : 0;
-            counters[type] = idx + 1;
-            return $"{code}{idx}";
+            File.WriteAllBytes(filePath, data);
         }
 
         #endregion

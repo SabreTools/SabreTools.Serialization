@@ -1,44 +1,62 @@
+using System;
 using SabreTools.Data.Models.NintendoDisc;
+using SabreTools.Hashing;
 
+// TODO: Move to IO
 namespace SabreTools.Wrappers
 {
     public partial class NintendoDisc
     {
-        #region Wii Encryption / Decryption
+        /// <summary>
+        /// Retail common key
+        /// </summary>
+        public static byte[] KoreanCommonKey = [];
 
         /// <summary>
-        /// Resolves a Wii common key by its ticket index (0 = retail, 1 = Korean).
-        /// Must be set by the caller before invoking <see cref="DecryptTitleKey"/>.
-        /// If <see langword="null"/>, or the delegate returns <see langword="null"/> for a given
-        /// index, decryption will return <see langword="null"/>.
+        /// Korean common key SHA-256 hash
         /// </summary>
-        public static System.Func<byte, byte[]?>? CommonKeyProvider { get; set; }
+        private const string KoreanCommonKeySHA256 = "b9f42ca27a1e178f0f14ebf1a05d486fa8db8d08875336c4e6e8dfae29f2901c";
+
+        /// <summary>
+        /// Retail common key
+        /// </summary>
+        public static byte[] RetailCommonKey = [];
+
+        /// <summary>
+        /// Retail common key SHA-256 hash
+        /// </summary>
+        private const string RetailCommonKeySHA256 = "de38aeab4fe0c36d828a47e6fd315100e7ce234d3b00aa25e6ad6f5ff2824af8";
 
         /// <summary>
         /// Decrypt a Wii partition title key from the ticket data.
         /// </summary>
         /// <param name="encryptedTitleKey">16-byte encrypted title key from ticket offset 0x1BF</param>
         /// <param name="titleId">8-byte title ID from ticket offset 0x1DC (big-endian)</param>
-        /// <param name="commonKeyIndex">
-        /// Common key index from ticket offset 0x1F1: 0 = retail, 1 = Korean
-        /// </param>
+        /// <param name="commonKeyIndex">Common key index to use for decryption</param>
         /// <returns>Decrypted 16-byte title key, or null if no key is available for the given index</returns>
-        public static byte[]? DecryptTitleKey(byte[] encryptedTitleKey, byte[] titleId, byte commonKeyIndex)
+        public static byte[]? DecryptTitleKey(byte[]? encryptedTitleKey, byte[]? titleId, int commonKeyIndex)
         {
             if (encryptedTitleKey is null || encryptedTitleKey.Length != 16)
                 return null;
             if (titleId is null || titleId.Length != 8)
                 return null;
 
-            byte[]? commonKey = CommonKeyProvider?.Invoke(commonKeyIndex);
-            if (commonKey is null || commonKey.Length != 16)
+            byte[] commonKey;
+            if (commonKeyIndex == 0)
+                commonKey = RetailCommonKey;
+            else if (commonKeyIndex == 1)
+                commonKey = KoreanCommonKey;
+            else
+                return null;
+
+            if (commonKey.Length != 16)
                 return null;
 
             // IV is the 8-byte title ID padded with zeros to 16 bytes
             byte[] iv = new byte[16];
-            System.Array.Copy(titleId, 0, iv, 0, 8);
+            Array.Copy(titleId, 0, iv, 0, 8);
 
-            return DecryptAesCbc(encryptedTitleKey, commonKey, iv);
+            return AesCbc.Decrypt(encryptedTitleKey, commonKey, iv);
         }
 
         /// <summary>
@@ -57,14 +75,39 @@ namespace SabreTools.Wrappers
             if (iv is null || iv.Length != 16)
                 return null;
 
-            return DecryptAesCbc(encryptedData, titleKey, iv);
+            return AesCbc.Decrypt(encryptedData, titleKey, iv);
         }
 
-        private static byte[]? DecryptAesCbc(byte[] data, byte[] key, byte[] iv)
+        /// <summary>
+        /// Validate the Korean common key based on hash and length
+        /// </summary>
+        /// <param name="commonKey">Korean common key to validate</param>
+        /// <returns>True if the key was valid, false otherwise</returns>
+        public static bool ValidateKoreanCommonKey(byte[]? commonKey)
         {
-            return AesCbc.Decrypt(data, key, iv);
+            // Ignore invalid values
+            if (commonKey is null || commonKey.Length != 16)
+                return false;
+
+            // Hash the key and compare
+            string? actualHash = HashTool.GetByteArrayHash(commonKey, HashType.SHA256);
+            return string.Equals(actualHash, KoreanCommonKeySHA256, StringComparison.OrdinalIgnoreCase);
         }
 
-        #endregion
+        /// <summary>
+        /// Validate the retail common key based on hash and length
+        /// </summary>
+        /// <param name="commonKey">Retail common key to validate</param>
+        /// <returns>True if the key was valid, false otherwise</returns>
+        public static bool ValidateRetailCommonKey(byte[]? commonKey)
+        {
+            // Ignore invalid values
+            if (commonKey is null || commonKey.Length != 16)
+                return false;
+
+            // Hash the key and compare
+            string? actualHash = HashTool.GetByteArrayHash(commonKey, HashType.SHA256);
+            return string.Equals(actualHash, RetailCommonKeySHA256, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

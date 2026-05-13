@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.OLE
     /// VT_STORAGE (0x0043), VT_STREAMED_OBJECT (0x0044), VT_STORED_OBJECT (0x0044), and
     /// VT_VERSIONED_STREAM (0x0049). It MUST be represented as a CodePageString, and its value MUST
     /// be derived from the property identifier of the property represented according to the following
-    /// Augmented Backus–Naur Form (ABNF) [RFC4234] syntax.
+    /// Augmented Backus-Naur Form (ABNF) [RFC4234] syntax.
     ///
     /// Indirectproperty = "prop" propertyIdentifier
     ///

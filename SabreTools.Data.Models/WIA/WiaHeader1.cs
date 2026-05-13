@@ -15,16 +15,19 @@ namespace SabreTools.Data.Models.WIA
         /// <summary>
         /// Format version (e.g. 0x01000000)
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint Version { get; set; }
 
         /// <summary>
         /// Minimum version required to read this file
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint VersionCompatible { get; set; }
 
         /// <summary>
         /// Size of WiaHeader2 in bytes
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public uint Header2Size { get; set; }
 
         /// <summary>
@@ -36,11 +39,13 @@ namespace SabreTools.Data.Models.WIA
         /// <summary>
         /// Total size of the equivalent uncompressed ISO image in bytes
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public ulong IsoFileSize { get; set; }
 
         /// <summary>
         /// Total size of this WIA / RVZ file in bytes
         /// </summary>
+        /// <remarks>Big-endian</remarks>
         public ulong WiaFileSize { get; set; }
 
         /// <summary>

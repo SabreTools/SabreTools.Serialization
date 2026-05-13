@@ -1,5 +1,5 @@
-using System;
 using System.IO;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.NintendoDisc;
 
 namespace SabreTools.Wrappers
@@ -18,14 +18,19 @@ namespace SabreTools.Wrappers
         /// <inheritdoc cref="Disc.Header"/>
         public DiscHeader Header => Model.Header;
 
-        /// <inheritdoc cref="Disc.Platform"/>
-        public Platform Platform => Model.Platform;
+        /// <summary>
+        /// Detected platform (GameCube or Wii)
+        /// </summary>
+        public Platform Platform => Header.GetPlatform();
 
         /// <inheritdoc cref="DiscHeader.GameId"/>
         public string GameId => Model.Header.GameId;
 
-        /// <inheritdoc cref="DiscHeader.MakerCode"/>
-        public string MakerCode => Model.Header.MakerCode;
+        /// <summary>
+        /// 2-character ASCII maker / publisher code (e.g. "01")
+        /// </summary>
+        public string MakerCode
+            => GameId.Length >= 6 ? GameId.Substring(4, 2) : string.Empty;
 
         /// <inheritdoc cref="DiscHeader.GameTitle"/>
         public string GameTitle => Model.Header.GameTitle;
@@ -41,18 +46,6 @@ namespace SabreTools.Wrappers
 
         /// <inheritdoc cref="Disc.RegionData"/>
         public WiiRegionData? RegionData => Model.RegionData;
-
-        #endregion
-
-        #region Pre-decrypted reader override
-
-        /// <summary>
-        /// When set, <see cref="ReadDecryptedPartitionRange"/> calls this delegate instead of
-        /// performing AES-CBC decryption.  Used by WIA/RVZ extraction, where partition data is
-        /// already stored decrypted and the encrypt-then-decrypt round-trip is unnecessary.
-        /// Signature: (absDataOffset, partitionDataOffset, length) → decrypted bytes or null.
-        /// </summary>
-        internal Func<long, long, int, byte[]?>? _preDecryptedReader;
 
         #endregion
 
