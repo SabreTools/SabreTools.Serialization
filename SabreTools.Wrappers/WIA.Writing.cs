@@ -4,6 +4,7 @@ using System.IO;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.Threading.Tasks;
 #endif
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.NintendoDisc;
 using SabreTools.Data.Models.WIA;
 using SabreTools.Hashing;
@@ -136,7 +137,7 @@ namespace SabreTools.Wrappers
             if (discHdr is null)
                 return false;
 
-            Platform platform = DetectWiaPlatform(discHdr);
+            Platform platform = discHdr.GetPlatform();
             return platform switch
             {
                 Platform.GameCube => WriteGameCube(source, dest, isRvz, compressionType, compressionLevel, chunkSize, isoSize, discHdr),
@@ -1561,41 +1562,6 @@ namespace SabreTools.Wrappers
         #endregion
 
         #region Helpers
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="header"></param>
-        /// <returns></returns>
-        /// TODO: Can this be replaced by <see cref="NintendoDiscExtensions.GetPlatform"/>
-        private static Platform DetectWiaPlatform(byte[] header)
-        {
-            if (header.Length >= 0x1C)
-            {
-                uint wiiMagic = (uint)((header[0x18] << 24) | (header[0x19] << 16) | (header[0x1A] << 8) | header[0x1B]);
-                if (wiiMagic == WiiMagicWord)
-                    return Platform.Wii;
-            }
-
-            if (header.Length >= 4)
-            {
-                bool valid = true;
-                for (int i = 0; i < 4; i++)
-                {
-                    char c = (char)header[i];
-                    if (!((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')))
-                    {
-                        valid = false;
-                        break;
-                    }
-                }
-
-                if (valid)
-                    return Platform.GameCube;
-            }
-
-            return Platform.Unknown;
-        }
 
         /// <summary>
         ///

@@ -1,8 +1,8 @@
 using SabreTools.Data.Models.NintendoDisc;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Data.Extensions
 {
-    // TODO: Write tests for these
     public static class NintendoDiscExtensions
     {
         /// <summary>
@@ -14,10 +14,49 @@ namespace SabreTools.Data.Extensions
                 return Platform.Wii;
             else if (header.GCMagic == Constants.GCMagicWord)
                 return Platform.GameCube;
-            else if (header.GameId is not null && header.GameId.Length >= 1 && IsGameCubeTitleType(header.GameId[0]))
+            else if (header.GameId.Length >= 1 && IsGameCubeTitleType(header.GameId[0]))
                 return Platform.GameCube;
             else
                 return Platform.Unknown;
+        }
+
+        /// <summary>
+        /// Get the platform associated with a disc header
+        /// </summary>
+        public static Platform GetPlatform(this byte[] header)
+        {
+            // Check for Wii magic bytes
+            if (header.Length >= 0x1C)
+            {
+                int offset = 0x18;
+                uint magic = header.ReadUInt32BigEndian(ref offset);
+                if (magic == Constants.WiiMagicWord)
+                    return Platform.Wii;
+            }
+
+            // Check for GameCube magic bytes
+            if (header.Length >= 0x20)
+            {
+                int offset = 0x1C;
+                uint magic = header.ReadUInt32BigEndian(ref offset);
+                if (magic == Constants.GCMagicWord)
+                    return Platform.GameCube;
+            }
+
+            // Check for a valid game ID
+            if (header.Length >= 4)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    byte c = header[i];
+                    if (!((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')))
+                        return Platform.Unknown;
+                }
+
+                return Platform.GameCube;
+            }
+
+            return Platform.Unknown;
         }
 
         /// <summary>
