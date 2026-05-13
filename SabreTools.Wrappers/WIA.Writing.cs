@@ -189,7 +189,7 @@ namespace SabreTools.Wrappers
             var rawDedupMap = new Dictionary<WiaDedupKey2, RvzGroupEntry>();
             FileSystemTableReader? gcFst = isRvz ? BuildFileSystemTableReader(source) : null;
 
-            WiaRvzCompressionHelper.GetCompressorData(compressionType, compressionLevel, out byte[] propData, out byte propSize);
+            GetCompressorData(compressionType, compressionLevel, out byte[] propData, out byte propSize);
 
             uint groupIdx = 0;
             long srcOff = rawDataStart;
@@ -264,7 +264,7 @@ namespace SabreTools.Wrappers
                     {
                         var gi = work[w];
                         if (gi.MainData is not null && !gi.IsDedupHit)
-                            gi.CompressedData = WiaRvzCompressionHelper.Compress(ct, gi.MainData, 0, gi.MainData.Length, cl, pd, ps);
+                            gi.CompressedData = Compress(ct, gi.MainData, 0, gi.MainData.Length, cl, pd, ps);
                     });
                 }
 #endif
@@ -391,7 +391,7 @@ namespace SabreTools.Wrappers
 
             var rawRegions = BuildRawRegions(partitions, isoSize);
 
-            WiaRvzCompressionHelper.GetCompressorData(compressionType, compressionLevel, out byte[] propData, out byte propSize);
+            GetCompressorData(compressionType, compressionLevel, out byte[] propData, out byte propSize);
 
             int groupEntrySize = isRvz ? RvzGroupEntrySize : WiaGroupEntrySize;
             uint totalGroups = CalcTotalGroups(partitions, rawRegions, chunkSize);
@@ -717,7 +717,7 @@ namespace SabreTools.Wrappers
                                 pw.MainDataBytes,
                                 0,
                                 pw.MainDataBytes.Length);
-                            pw.CompressedData = WiaRvzCompressionHelper.Compress(compressionType, toCompress, 0, toCompress.Length, cl, pd, ps);
+                            pw.CompressedData = Compress(compressionType, toCompress, 0, toCompress.Length, cl, pd, ps);
                         }
                         else if (compressionType == WiaRvzCompressionType.Purge)
                         {
@@ -942,7 +942,7 @@ namespace SabreTools.Wrappers
                 byte[]? compressed = null;
                 if (compressionType > WiaRvzCompressionType.Purge)
                 {
-                    byte[] c2 = WiaRvzCompressionHelper.Compress(compressionType, mainData, 0, mainData.Length, compressionLevel, propData, propSize);
+                    byte[] c2 = Compress(compressionType, mainData, 0, mainData.Length, compressionLevel, propData, propSize);
                     if (!isRvz || c2.Length < mainData.Length)
                         compressed = c2;
                 }
@@ -1023,7 +1023,7 @@ namespace SabreTools.Wrappers
                 byte[] encData = new byte[WiiBlockDataSize];
                 Array.Copy(encGroup, off + WiiBlockHeaderSize, encData, 0, WiiBlockDataSize);
 
-                byte[]? dec = NintendoDisc.DecryptBlock(encData, titleKey, iv);
+                byte[]? dec = WiiDecrypter.DecryptBlock(encData, titleKey, iv);
                 if (dec is null)
                     return null;
 
@@ -1139,7 +1139,7 @@ namespace SabreTools.Wrappers
                     Array.Copy(hdr, 0x1DC, titleId, 0, 8);
                     byte ckIdx = hdr[0x1F1];
 
-                    byte[]? titleKey = NintendoDisc.DecryptTitleKey(encKey, titleId, ckIdx);
+                    byte[]? titleKey = source.WiiDecrypter.DecryptTitleKey(encKey, titleId, ckIdx);
                     if (titleKey is null)
                         continue;
 
@@ -1412,7 +1412,7 @@ namespace SabreTools.Wrappers
             if (compressionType == WiaRvzCompressionType.Purge)
                 return PurgeCompressor.Compress(data, 0, data.Length);
             if (compressionType > WiaRvzCompressionType.Purge)
-                return WiaRvzCompressionHelper.Compress(compressionType, data, 0, data.Length, compressionLevel, propData, propSize);
+                return Compress(compressionType, data, 0, data.Length, compressionLevel, propData, propSize);
 
             return data;
         }

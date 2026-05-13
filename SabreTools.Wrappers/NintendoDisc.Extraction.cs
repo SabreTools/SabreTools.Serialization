@@ -10,6 +10,12 @@ namespace SabreTools.Wrappers
 {
     public partial class NintendoDisc : IExtractable
     {
+        /// <summary>
+        /// Wii decrypter required for title key and block processing
+        /// </summary>
+        /// <remarks>Both keys should be set before using</remarks>
+        public readonly WiiDecrypter WiiDecrypter = new();
+
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
@@ -163,7 +169,7 @@ namespace SabreTools.Wrappers
             Array.Copy(ticketData, Constants.TicketTitleIdOffset, titleId, 0, 8);
             byte commonKeyIdx = ticketData[Constants.TicketCommonKeyIndexOffset];
 
-            byte[]? titleKey = DecryptTitleKey(encTitleKey, titleId, commonKeyIdx);
+            byte[]? titleKey = WiiDecrypter.DecryptTitleKey(encTitleKey, titleId, commonKeyIdx);
             if (titleKey is null)
                 return;
 
@@ -589,7 +595,7 @@ namespace SabreTools.Wrappers
                 byte[] encData = new byte[Constants.WiiBlockDataSize];
                 Array.Copy(encBlock, Constants.WiiBlockHeaderSize, encData, 0, Constants.WiiBlockDataSize);
 
-                byte[]? decData = DecryptBlock(encData, titleKey, iv);
+                byte[]? decData = WiiDecrypter.DecryptBlock(encData, titleKey, iv);
                 if (decData is null)
                     break;
 

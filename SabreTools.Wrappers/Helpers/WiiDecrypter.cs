@@ -1,16 +1,38 @@
 using System;
-using SabreTools.Data.Models.NintendoDisc;
 using SabreTools.Hashing;
 
-// TODO: Move to IO
+// TODO: Remove when IO is updated
 namespace SabreTools.Wrappers
 {
-    public partial class NintendoDisc
+    public class WiiDecrypter
     {
         /// <summary>
-        /// Retail common key
+        /// Retail common key (index 0)
         /// </summary>
-        public static byte[] KoreanCommonKey = [];
+        public byte[] RetailCommonKey
+        {
+            get;
+            set
+            {
+                if (ValidateRetailCommonKey(value))
+                    field = value;
+            }
+        } = [];
+
+        /// <summary>
+        /// Korean common key (index 1)
+        /// </summary>
+        public byte[] KoreanCommonKey
+        {
+            get;
+            set
+            {
+                if (ValidateKoreanCommonKey(value))
+                    field = value;
+            }
+        } = [];
+
+        #region Internal Test Values
 
         /// <summary>
         /// Korean common key SHA-256 hash
@@ -18,14 +40,13 @@ namespace SabreTools.Wrappers
         private const string KoreanCommonKeySHA256 = "b9f42ca27a1e178f0f14ebf1a05d486fa8db8d08875336c4e6e8dfae29f2901c";
 
         /// <summary>
-        /// Retail common key
-        /// </summary>
-        public static byte[] RetailCommonKey = [];
-
-        /// <summary>
         /// Retail common key SHA-256 hash
         /// </summary>
         private const string RetailCommonKeySHA256 = "de38aeab4fe0c36d828a47e6fd315100e7ce234d3b00aa25e6ad6f5ff2824af8";
+
+        #endregion
+
+        #region Decryption
 
         /// <summary>
         /// Decrypt a Wii partition title key from the ticket data.
@@ -34,7 +55,7 @@ namespace SabreTools.Wrappers
         /// <param name="titleId">8-byte title ID from ticket offset 0x1DC (big-endian)</param>
         /// <param name="commonKeyIndex">Common key index to use for decryption</param>
         /// <returns>Decrypted 16-byte title key, or null if no key is available for the given index</returns>
-        public static byte[]? DecryptTitleKey(byte[]? encryptedTitleKey, byte[]? titleId, int commonKeyIndex)
+        public byte[]? DecryptTitleKey(byte[]? encryptedTitleKey, byte[]? titleId, int commonKeyIndex)
         {
             if (encryptedTitleKey is null || encryptedTitleKey.Length != 16)
                 return null;
@@ -47,6 +68,23 @@ namespace SabreTools.Wrappers
             else if (commonKeyIndex == 1)
                 commonKey = KoreanCommonKey;
             else
+                return null;
+
+            return DecryptTitleKey(encryptedTitleKey, titleId, commonKey);
+        }
+
+        /// <summary>
+        /// Decrypt a Wii partition title key from the ticket data.
+        /// </summary>
+        /// <param name="encryptedTitleKey">16-byte encrypted title key from ticket offset 0x1BF</param>
+        /// <param name="titleId">8-byte title ID from ticket offset 0x1DC (big-endian)</param>
+        /// <param name="commonKey">Common key to use for decryption</param>
+        /// <returns>Decrypted 16-byte title key, or null if no key is available for the given index</returns>
+        public static byte[]? DecryptTitleKey(byte[]? encryptedTitleKey, byte[]? titleId, byte[] commonKey)
+        {
+            if (encryptedTitleKey is null || encryptedTitleKey.Length != 16)
+                return null;
+            if (titleId is null || titleId.Length != 8)
                 return null;
 
             if (commonKey.Length != 16)
@@ -68,7 +106,7 @@ namespace SabreTools.Wrappers
         /// <returns>Decrypted 0x7C00-byte block data, or null on error</returns>
         public static byte[]? DecryptBlock(byte[] encryptedData, byte[] titleKey, byte[] iv)
         {
-            if (encryptedData is null || encryptedData.Length != Constants.WiiBlockDataSize)
+            if (encryptedData is null || encryptedData.Length != 0x7C00)
                 return null;
             if (titleKey is null || titleKey.Length != 16)
                 return null;
@@ -77,6 +115,10 @@ namespace SabreTools.Wrappers
 
             return AesCbc.Decrypt(encryptedData, titleKey, iv);
         }
+
+        #endregion
+
+        #region Validation Methods
 
         /// <summary>
         /// Validate the Korean common key based on hash and length
@@ -109,5 +151,7 @@ namespace SabreTools.Wrappers
             string? actualHash = HashTool.GetByteArrayHash(commonKey, HashType.SHA256);
             return string.Equals(actualHash, RetailCommonKeySHA256, StringComparison.OrdinalIgnoreCase);
         }
+
+        #endregion
     }
 }

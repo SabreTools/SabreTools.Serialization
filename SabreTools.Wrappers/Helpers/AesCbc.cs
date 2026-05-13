@@ -2,7 +2,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 
-// TODO: Move to IO
+// TODO: Remove when IO is updated
 namespace SabreTools.Wrappers
 {
     /// <summary>

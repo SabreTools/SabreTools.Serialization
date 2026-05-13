@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Numerics.Extensions;
 
-// TODO: Move to IO
+// TODO: Remove when IO is updated
 namespace SabreTools.Wrappers
 {
     /// <summary>
