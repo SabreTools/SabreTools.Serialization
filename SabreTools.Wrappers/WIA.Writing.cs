@@ -9,6 +9,7 @@ using SabreTools.Data.Models.NintendoDisc;
 using SabreTools.Data.Models.WIA;
 using SabreTools.Hashing;
 using SabreTools.Numerics.Extensions;
+using SabreTools.Security.Cryptography;
 using static SabreTools.Data.Models.NintendoDisc.Constants;
 using static SabreTools.Data.Models.WIA.Constants;
 
@@ -188,7 +189,7 @@ namespace SabreTools.Wrappers
 
             var groupEntries = new RvzGroupEntry[numGroups];
             var rawDedupMap = new Dictionary<WiaDedupKey2, RvzGroupEntry>();
-            FileSystemTableReader? gcFst = isRvz ? BuildFileSystemTableReader(source) : null;
+            IO.Compression.RVZPack.FileSystemTableReader? gcFst = isRvz ? BuildFileSystemTableReader(source) : null;
 
             GetCompressorData(compressionType, compressionLevel, out byte[] propData, out byte propSize);
 
@@ -240,7 +241,7 @@ namespace SabreTools.Wrappers
 
                     if (isRvz)
                     {
-                        byte[]? packed = RvzPackEncoder.Pack(raw, 0, toRead, srcOff - toRead, out gi.RvzPackedSize, gcFst);
+                        byte[]? packed = IO.Compression.RVZPack.Compressor.Pack(raw, 0, toRead, srcOff - toRead, out gi.RvzPackedSize, gcFst);
                         gi.MainData = packed ?? raw;
                         if (packed is null)
                             gi.RvzPackedSize = 0;
@@ -673,7 +674,7 @@ namespace SabreTools.Wrappers
                         if (isRvz)
                         {
                             long baseDecOff = regionDecOff + ((long)c * (blocksPerChunk * WiiBlockDataSize));
-                            byte[]? packed = RvzPackEncoder.Pack(procData, 0, procData.Length, baseDecOff, out rvzPackedSize);
+                            byte[]? packed = IO.Compression.RVZPack.Compressor.Pack(procData, 0, procData.Length, baseDecOff, out rvzPackedSize);
                             mainData = packed ?? procData;
                             if (packed is null)
                                 rvzPackedSize = 0;
@@ -722,7 +723,7 @@ namespace SabreTools.Wrappers
                         }
                         else if (compressionType == WiaRvzCompressionType.Purge)
                         {
-                            pw.CompressedData = PurgeCompressor.Compress(pw.MainDataBytes, 0, pw.MainDataBytes.Length, pw.ExceptionListBytes);
+                            pw.CompressedData = IO.Compression.PURGE.Compressor.Compress(pw.MainDataBytes, 0, pw.MainDataBytes.Length, pw.ExceptionListBytes);
                         }
                     });
                 }
@@ -930,7 +931,7 @@ namespace SabreTools.Wrappers
                 uint rvzPackedSize = 0;
                 if (isRvz)
                 {
-                    byte[]? packed = RvzPackEncoder.Pack(data, 0, toRead, srcOff, out rvzPackedSize);
+                    byte[]? packed = IO.Compression.RVZPack.Compressor.Pack(data, 0, toRead, srcOff, out rvzPackedSize);
                     mainData = packed ?? data;
                     if (packed is null)
                         rvzPackedSize = 0;
@@ -949,7 +950,7 @@ namespace SabreTools.Wrappers
                 }
                 else if (compressionType == WiaRvzCompressionType.Purge)
                 {
-                    compressed = PurgeCompressor.Compress(mainData, 0, mainData.Length);
+                    compressed = IO.Compression.PURGE.Compressor.Compress(mainData, 0, mainData.Length);
                 }
 
                 uint groupOff = (uint)(bytesWritten >> 2);
@@ -1061,11 +1062,11 @@ namespace SabreTools.Wrappers
                 byte[] encHashBlock = new byte[WiiBlockHeaderSize];
                 Array.Copy(encGroup, blockOff, encHashBlock, 0, WiiBlockHeaderSize);
 
-                byte[] origHash = AesCbc.Decrypt(encHashBlock, titleKey, new byte[16]) ?? new byte[WiiBlockHeaderSize];
+                byte[] origHash = AESCBC.Decrypt(encHashBlock, titleKey, new byte[16]) ?? new byte[WiiBlockHeaderSize];
 
                 byte[] reEncHashBlock = new byte[WiiBlockHeaderSize];
                 Array.Copy(reEncGroup, blockOff, reEncHashBlock, 0, WiiBlockHeaderSize);
-                byte[] recompHash = AesCbc.Decrypt(reEncHashBlock, titleKey, new byte[16]) ?? new byte[WiiBlockHeaderSize];
+                byte[] recompHash = AESCBC.Decrypt(reEncHashBlock, titleKey, new byte[16]) ?? new byte[WiiBlockHeaderSize];
 
                 for (int off = 0; off < WiiBlockHeaderSize; off += 20)
                 {
@@ -1243,7 +1244,7 @@ namespace SabreTools.Wrappers
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        private static FileSystemTableReader? BuildFileSystemTableReader(NintendoDisc source)
+        private static IO.Compression.RVZPack.FileSystemTableReader? BuildFileSystemTableReader(NintendoDisc source)
         {
             byte[]? hdr = source.ReadData(0x420, 12);
             if (hdr is null)
@@ -1259,7 +1260,7 @@ namespace SabreTools.Wrappers
             if (fstData is null)
                 return null;
 
-            return FileSystemTableReader.TryParse(fstData, offsetShift: 0);
+            return IO.Compression.RVZPack.FileSystemTableReader.TryParse(fstData, offsetShift: 0);
         }
 
         #region Serialization - TODO: MOVE TO WRITER
@@ -1411,7 +1412,7 @@ namespace SabreTools.Wrappers
             byte propSize)
         {
             if (compressionType == WiaRvzCompressionType.Purge)
-                return PurgeCompressor.Compress(data, 0, data.Length);
+                return IO.Compression.PURGE.Compressor.Compress(data, 0, data.Length);
             if (compressionType > WiaRvzCompressionType.Purge)
                 return Compress(compressionType, data, 0, data.Length, compressionLevel, propData, propSize);
 
@@ -1593,7 +1594,7 @@ namespace SabreTools.Wrappers
 
             if (compressionType == WiaRvzCompressionType.Purge && gi.MainData is not null)
             {
-                byte[] comp = PurgeCompressor.Compress(gi.MainData, 0, gi.MainData.Length);
+                byte[] comp = IO.Compression.PURGE.Compressor.Compress(gi.MainData, 0, gi.MainData.Length);
                 dest.Write(comp, 0, comp.Length);
                 bytesWritten += comp.Length;
                 return (uint)comp.Length;

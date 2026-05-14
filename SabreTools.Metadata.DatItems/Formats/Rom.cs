@@ -670,19 +670,17 @@ namespace SabreTools.Metadata.DatItems.Formats
             CopyMachineInformation(machine);
 
             // Process hash values
-            // TODO: This should be normalized to CRC-16
             string? crc16 = CRC16;
             if (crc16 is not null)
-                CRC16 = NormalizeHashData(crc16, 4);
+                CRC16 = TextHelper.NormalizeCRC16(crc16);
 
             string? crc32 = CRC32;
             if (crc32 is not null)
                 CRC32 = TextHelper.NormalizeCRC32(crc32);
 
-            // TODO: This should be normalized to CRC-64
             string? crc64 = CRC64;
             if (crc64 is not null)
-                CRC64 = NormalizeHashData(crc64, 16);
+                CRC64 = TextHelper.NormalizeCRC64(crc64);
 
             string? md2 = MD2;
             if (md2 is not null)
@@ -726,19 +724,17 @@ namespace SabreTools.Metadata.DatItems.Formats
             DupeType = 0x00;
 
             // Process hash values
-            // TODO: This should be normalized to CRC-16
             string? crc16 = CRC16;
             if (crc16 is not null)
-                CRC16 = NormalizeHashData(crc16, 4);
+                CRC16 = TextHelper.NormalizeCRC16(crc16);
 
             string? crc32 = CRC32;
             if (crc32 is not null)
                 CRC32 = TextHelper.NormalizeCRC32(crc32);
 
-            // TODO: This should be normalized to CRC-64
             string? crc64 = CRC64;
             if (crc64 is not null)
-                CRC64 = NormalizeHashData(crc64, 16);
+                CRC64 = TextHelper.NormalizeCRC64(crc64);
 
             string? md2 = MD2;
             if (md2 is not null)
@@ -788,87 +784,6 @@ namespace SabreTools.Metadata.DatItems.Formats
             SourceIndex = sourceIndex;
             MachineIndex = machineIndex;
         }
-
-        /// <summary>
-        /// Normalize a hash string and pad to the correct size
-        /// </summary>
-        /// TODO: Remove when IO is updated
-        private static string? NormalizeHashData(string? hash, int expectedLength)
-        {
-            // If we have a known blank hash, return blank
-            if (hash is null)
-                return null;
-            else if (hash == string.Empty || hash == "-" || hash == "_")
-                return string.Empty;
-
-            // Check to see if it's a "hex" hash
-            hash = hash!.Trim().Replace("0x", string.Empty);
-
-            // If we have a blank hash now, return blank
-            if (string.IsNullOrEmpty(hash))
-                return string.Empty;
-
-            // If the hash shorter than the required length, pad it
-            if (hash.Length < expectedLength)
-                hash = hash.PadLeft(expectedLength, '0');
-
-            // If the hash is longer than the required length, it's invalid
-            else if (hash.Length > expectedLength)
-                return string.Empty;
-
-            // Now normalize the hash
-            hash = hash.ToLowerInvariant();
-
-            // Otherwise, make sure that every character is a proper match
-            for (int i = 0; i < hash.Length; i++)
-            {
-                char c = hash[i];
-#if NET7_0_OR_GREATER
-                if (!char.IsAsciiHexDigit(c))
-#else
-                if (!IsAsciiHexDigit(c))
-#endif
-                {
-                    hash = string.Empty;
-                    break;
-                }
-            }
-
-            return hash;
-        }
-
-#if NETFRAMEWORK || NETCOREAPP3_1 || NET5_0 || NET6_0 || NETSTANDARD2_0_OR_GREATER
-        /// <summary>
-        /// Indicates whether a character is categorized as an ASCII hexademical digit.
-        /// </summary>
-        /// <param name="c">The character to evaluate.</param>
-        /// <returns>true if c is a hexademical digit; otherwise, false.</returns>
-        /// <remarks>This method determines whether the character is in the range '0' through '9', inclusive, 'A' through 'F', inclusive, or 'a' through 'f', inclusive.</remarks>
-        /// TODO: Remove when IO is updated
-        internal static bool IsAsciiHexDigit(char c)
-        {
-            return char.ToLowerInvariant(c) switch
-            {
-                '0' => true,
-                '1' => true,
-                '2' => true,
-                '3' => true,
-                '4' => true,
-                '5' => true,
-                '6' => true,
-                '7' => true,
-                '8' => true,
-                '9' => true,
-                'a' => true,
-                'b' => true,
-                'c' => true,
-                'd' => true,
-                'e' => true,
-                'f' => true,
-                _ => false,
-            };
-        }
-#endif
 
         #endregion
 

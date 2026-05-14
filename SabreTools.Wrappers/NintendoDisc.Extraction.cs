@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.NintendoDisc;
 using SabreTools.Numerics.Extensions;
+using SabreTools.Security.Cryptography;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers

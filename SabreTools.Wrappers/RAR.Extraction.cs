@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using SharpCompress.Archives;
 using SharpCompress.Archives.Rar;
+using SharpCompress.Common;
 using SharpCompress.Readers;
 #endif
 
@@ -31,12 +32,7 @@ namespace SabreTools.Wrappers
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             try
             {
-                var readerOptions = new ReaderOptions()
-                {
-                    LookForHeader = lookForHeader,
-                    ExtractFullPath = true,
-                    Overwrite = true
-                };
+                var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
                 var rarFile = (RarArchive)RarArchive.OpenArchive(_dataSource, readerOptions);
 
                 // If the file exists
@@ -216,7 +212,7 @@ namespace SabreTools.Wrappers
         /// Extraction method for non-solid archives. This iterates over each entry in the archive to extract every
         /// file individually, in order to extract all valid files from the archive.
         /// </summary>
-        private static bool ExtractNonSolid(RarArchive rarFile, string outDir, bool includeDebug)
+        private static bool ExtractNonSolid(RarArchive rarFile, string outputDirectory, bool includeDebug)
         {
             foreach (var entry in rarFile.Entries)
             {
@@ -250,12 +246,17 @@ namespace SabreTools.Wrappers
                         filename = filename.Replace('\\', '/');
 
                     // Ensure the full output directory exists
-                    filename = Path.Combine(outDir, filename);
+                    filename = Path.Combine(outputDirectory, filename);
                     var directoryName = Path.GetDirectoryName(filename);
                     if (directoryName is not null && !Directory.Exists(directoryName))
                         Directory.CreateDirectory(directoryName);
 
-                    entry.WriteToFile(filename);
+                    var options = new ExtractionOptions
+                    {
+                        ExtractFullPath = true,
+                        Overwrite = true,
+                    };
+                    entry.WriteToFile(filename, options);
                 }
                 catch (Exception ex)
                 {
@@ -270,14 +271,19 @@ namespace SabreTools.Wrappers
         /// Extraction method for solid archives. Uses ExtractAllEntries because extraction for solid archives must be
         /// done sequentially, and files beyond a corrupted point in a solid archive will be unreadable anyways.
         /// </summary>
-        private static bool ExtractSolid(RarArchive rarFile, string outDir, bool includeDebug)
+        private static bool ExtractSolid(RarArchive rarFile, string outputDirectory, bool includeDebug)
         {
             try
             {
-                if (!Directory.Exists(outDir))
-                    Directory.CreateDirectory(outDir);
+                if (!Directory.Exists(outputDirectory))
+                    Directory.CreateDirectory(outputDirectory);
 
-                rarFile.WriteToDirectory(outDir);
+                var options = new ExtractionOptions
+                {
+                    ExtractFullPath = true,
+                    Overwrite = true,
+                };
+                rarFile.WriteToDirectory(outputDirectory, options);
 
             }
             catch (Exception ex)

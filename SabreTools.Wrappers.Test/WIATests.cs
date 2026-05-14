@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Numerics.Extensions;
+using SabreTools.Security.Cryptography;
 using Xunit;
 using static SabreTools.Data.Models.NintendoDisc.Constants;
 
@@ -120,7 +121,7 @@ namespace SabreTools.Wrappers.Test
         /// Anti-bias: the final decryption uses <see cref="WiiDecrypter.DecryptBlock"/> — a single-block
         /// AES-CBC call that is completely independent of EncryptWiiGroup — so a symmetric bug
         /// (broken encrypt paired with broken decrypt) would still fail the plaintext comparison.
-        /// The title key is encrypted via <see cref="AesCbc.Encrypt"/> (BouncyCastle), while the
+        /// The title key is encrypted via <see cref="AESCBC.Encrypt"/> (BouncyCastle), while the
         /// verification uses <see cref="WiiDecrypter.DecryptBlock"/> — a different code path.
         /// </summary>
         [Fact(Skip = "Common keys are validated so this cannot pass")]
@@ -375,14 +376,14 @@ namespace SabreTools.Wrappers.Test
 
         /// <summary>
         /// Encrypts a Wii title key with the given <paramref name="commonKey"/> using
-        /// <see cref="AesCbc.Encrypt"/>.
+        /// <see cref="AESCBC.Encrypt"/>.
         /// </summary>
         private static byte[] EncryptTitleKeyIndependent(byte[] titleKey, byte[] titleId, byte[] commonKey)
         {
             byte[] iv = new byte[16];
             Array.Copy(titleId, 0, iv, 0, 8);
-            return AesCbc.Encrypt(titleKey, commonKey, iv)
-                ?? throw new InvalidOperationException("AesCbc.Encrypt returned null");
+            return AESCBC.Encrypt(titleKey, commonKey, iv)
+                ?? throw new InvalidOperationException("AESCBC.Encrypt returned null");
         }
 
         #endregion

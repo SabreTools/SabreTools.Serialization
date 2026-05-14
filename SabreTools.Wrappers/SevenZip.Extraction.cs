@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;
+using SharpCompress.Common;
 using SharpCompress.Readers;
 #endif
 
@@ -31,12 +32,7 @@ namespace SabreTools.Wrappers
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             try
             {
-                var readerOptions = new ReaderOptions()
-                {
-                    LookForHeader = lookForHeader,
-                    ExtractFullPath = true,
-                    Overwrite = true
-                };
+                var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
                 var sevenZip = (SevenZipArchive)SevenZipArchive.OpenArchive(_dataSource, readerOptions);
                 if (sevenZip is null)
                     return false;
@@ -226,7 +222,12 @@ namespace SabreTools.Wrappers
                     if (directoryName is not null && !Directory.Exists(directoryName))
                         Directory.CreateDirectory(directoryName);
 
-                    entry.WriteToFile(filename);
+                    var options = new ExtractionOptions
+                    {
+                        ExtractFullPath = true,
+                        Overwrite = true,
+                    };
+                    entry.WriteToFile(filename, options);
                 }
                 catch (Exception ex)
                 {
@@ -248,35 +249,13 @@ namespace SabreTools.Wrappers
                 if (!Directory.Exists(outputDirectory))
                     Directory.CreateDirectory(outputDirectory);
 
-                int index = 0;
-                var entries = sevenZip.ExtractAllEntries();
-                while (entries.MoveToNextEntry())
+                var options = new ExtractionOptions
                 {
-                    var entry = entries.Entry;
-                    if (entry.IsDirectory)
-                        continue;
+                    ExtractFullPath = true,
+                    Overwrite = true,
+                };
+                sevenZip.WriteToDirectory(outputDirectory, options);
 
-                    // Ensure directory separators are consistent
-                    string filename = entry.Key ?? $"extracted_file_{index}";
-                    if (Path.DirectorySeparatorChar == '\\')
-                        filename = filename.Replace('/', '\\');
-                    else if (Path.DirectorySeparatorChar == '/')
-                        filename = filename.Replace('\\', '/');
-
-                    // Ensure the full output directory exists
-                    filename = Path.Combine(outputDirectory, filename);
-                    var directoryName = Path.GetDirectoryName(filename);
-                    if (directoryName is not null && !Directory.Exists(directoryName))
-                        Directory.CreateDirectory(directoryName);
-
-                    // Write to file
-                    using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                    entries.WriteEntryTo(fs);
-                    fs.Flush();
-
-                    // Increment the index
-                    index++;
-                }
             }
             catch (Exception ex)
             {

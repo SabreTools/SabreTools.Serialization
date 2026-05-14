@@ -5,6 +5,9 @@ using SabreTools.Data.Models.WIA;
 using SabreTools.Hashing;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using SabreTools.IO.Extensions;
+#endif
+using SabreTools.Security.Cryptography;
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using SharpCompress.Compressors;
 using SharpCompress.Compressors.BZip2;
 using SharpCompress.Compressors.LZMA;
@@ -1143,7 +1146,7 @@ namespace SabreTools.Wrappers
                     Array.Copy(fileData, offset, exceptionBytes, 0, exceptionLen);
 
                 int purgeLen = length - exceptionLen;
-                return PurgeDecompressor.Decompress(fileData, purgeStart, purgeLen, expectedSize, exceptionBytes);
+                return IO.Compression.PURGE.Decompressor.Decompress(fileData, purgeStart, purgeLen, expectedSize, exceptionBytes);
             }
             else
             {
@@ -1183,7 +1186,7 @@ namespace SabreTools.Wrappers
                     byte[] rvzPayload = new byte[rvzDataLen];
                     Array.Copy(workingData, rvzDataStart, rvzPayload, 0, rvzDataLen);
 
-                    var rvzDecomp = new RvzPackDecompressor(rvzPayload, rvzPackedSize, dataOffsetForLfg);
+                    var rvzDecomp = new IO.Compression.RVZPack.Decompressor(rvzPayload, rvzPackedSize, dataOffsetForLfg);
                     byte[] unpacked = new byte[expectedSize];
                     int bytesRead = rvzDecomp.Decompress(unpacked, 0, expectedSize);
                     if (bytesRead < expectedSize)
@@ -1358,7 +1361,7 @@ namespace SabreTools.Wrappers
                 // Note: off is now 0x3D4; IV will sit at 0x3D0 after encryption
 
                 // Encrypt hash block with IV = zero
-                byte[] encHashBlock = AesCbc.Encrypt(hashBlock, key, new byte[16]) ?? new byte[WiiBlockHashSize];
+                byte[] encHashBlock = AESCBC.Encrypt(hashBlock, key, new byte[16]) ?? new byte[WiiBlockHashSize];
 
                 // Extract IV for data block from offset 0x3D0 of the encrypted hash block
                 byte[] iv = new byte[16];
@@ -1371,7 +1374,7 @@ namespace SabreTools.Wrappers
                 if (dataLen > 0)
                     Array.Copy(decryptedData, dataSrc, dataBlock, 0, dataLen);
 
-                byte[] encDataBlock = AesCbc.Encrypt(dataBlock, key, iv) ?? new byte[WiiBlockDataSize];
+                byte[] encDataBlock = AESCBC.Encrypt(dataBlock, key, iv) ?? new byte[WiiBlockDataSize];
 
                 int dest = b * WiiBlockSize;
                 Array.Copy(encHashBlock, 0, result, dest, WiiBlockHashSize);
