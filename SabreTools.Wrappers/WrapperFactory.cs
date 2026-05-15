@@ -144,14 +144,6 @@ namespace SabreTools.Wrappers
             // Cache the current offset
             long initialOffset = stream.Position;
 
-            // Try NintendoDisc (GameCube / Wii) first — detected by magic at 0x018 / 0x01C
-            var nintendoWrapper = NintendoDisc.Create(stream);
-            if (nintendoWrapper is not null)
-                return nintendoWrapper;
-
-            // Reset position in stream
-            stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
-
             // Try to get an Xbox disc image wrapper (must be before ISO9660)
             var xboxWrapper = XboxISO.Create(stream);
             if (xboxWrapper is not null)
@@ -177,10 +169,19 @@ namespace SabreTools.Wrappers
             stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
 
             // Try to get a PC Engine CDROM disc image wrapper
-            // This reads a lot for detection, do this step last
+            // This reads a lot for detection, do this step later
             var pcEngineCDROMWrapper = PCEngineCDROM.Create(stream);
             if (pcEngineCDROMWrapper is not null)
                 return pcEngineCDROMWrapper;
+
+            // Reset position in stream
+            stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
+
+            // Try NintendoDisc (GameCube / Wii)
+            // This has to be later due to slight possibility of false positives
+            var nintendoWrapper = NintendoDisc.Create(stream);
+            if (nintendoWrapper is not null)
+                return nintendoWrapper;
 
             // No known filesystems found
             return null;
