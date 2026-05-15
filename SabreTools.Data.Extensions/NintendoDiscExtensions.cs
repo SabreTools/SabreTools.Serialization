@@ -65,5 +65,13 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         public static bool IsGameCubeTitleType(this char c)
             => c == 'G' || c == 'D' || c == 'R';
+
+        /// <summary>
+        /// Returns true if the byte is a known Nintendo disc title type code
+        /// (first byte of the 6-char GameId, e.g. 'G'=GameCube, 'R'=GameCube,
+        ///  'D'=GameCube demo, 'S'=Wii, 'F'=Wii channel)
+        /// </summary>
+        public static bool IsNintendoDiscTitleType(this byte b)
+            => b == 'G' || b == 'D' || b == 'R' || b == 'S' || b == 'F';
     }
 }

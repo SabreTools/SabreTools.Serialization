@@ -34,6 +34,8 @@ namespace SabreTools.Serialization.Readers
                 // Determine platform from magic words; fall back to GameId prefix for
                 // GC discs that omit the magic word (e.g. some redump/scene ISOs)
                 Platform platform = disc.Header.GetPlatform();
+                if (platform == Platform.Unknown)
+                    return null;
 
                 // Parse Wii-specific structures
                 if (platform == Platform.Wii)
