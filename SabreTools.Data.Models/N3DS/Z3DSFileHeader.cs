@@ -30,7 +30,7 @@ namespace SabreTools.Data.Models.N3DS
         public byte Reserved { get; set; }
 
         /// <summary>
-        /// Header size
+        /// Header size, usually 0x20 bytes
         /// </summary>
         public ushort HeaderSize { get; set; }
 
