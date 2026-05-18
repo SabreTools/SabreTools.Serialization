@@ -22,5 +22,9 @@ namespace SabreTools.Data.Models.N3DS
         public static byte[] RomfsCounter = [0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
 
         public const int CXTExtendedDataHeaderLength = 0x800;
+
+        // Z3DS
+
+        public const string Z3DSMagicNumber = "Z3DS";
     }
 }
