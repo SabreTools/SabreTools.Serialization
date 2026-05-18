@@ -226,4 +226,18 @@ namespace SabreTools.Data.Models.N3DS
         Optional = 0x4000,
         Shared = 0x8000,
     }
+
+    /// <see href="https://github.com/azahar-emu/azahar/blob/master/src/common/zstd_compression.h"/>
+    public enum Z3DSMetadataItemType : byte
+    {
+        /// <summary>
+        /// End marker
+        /// </summary>
+        End = 0,
+
+        /// <summary>
+        /// Binary metadata
+        /// </summary>
+        Binary = 1,
+    }
 }
