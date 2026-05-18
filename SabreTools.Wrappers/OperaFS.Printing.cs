@@ -10,10 +10,10 @@ namespace SabreTools.Wrappers
     {
 #if NETCOREAPP
         /// <inheritdoc/>
-        public string ExportJSON() => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
+        public string ExportJSON(bool recursive) => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
 #else
         /// <inheritdoc/>
-        public string ExportJSON() => Newtonsoft.Json.JsonConvert.SerializeObject(Model, _jsonSerializerOptions);
+        public string ExportJSON(bool recursive) => Newtonsoft.Json.JsonConvert.SerializeObject(Model, _jsonSerializerOptions);
 #endif
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace SabreTools.Wrappers
         private readonly Dictionary<DirectoryDescriptor, uint> printedDirectories = [];
 
         /// <inheritdoc/>
-        public void PrintInformation(StringBuilder builder)
+        public void PrintInformation(StringBuilder builder, bool recursive)
         {
             builder.AppendLine("3DO / M2 (Opera) Filesystem Information:");
             builder.AppendLine("-------------------------");

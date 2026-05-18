@@ -7,7 +7,7 @@ namespace SabreTools.Wrappers
     public partial class Skeleton : IPrintable
     {
         /// <inheritdoc/>
-        public new void PrintInformation(StringBuilder builder)
+        public new void PrintInformation(StringBuilder builder, bool recursive)
         {
             builder.AppendLine("Redumper Skeleton Information:");
             builder.AppendLine("-------------------------");

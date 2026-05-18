@@ -8,14 +8,14 @@ namespace SabreTools.Wrappers
     {
 #if NETCOREAPP
         /// <inheritdoc/>
-        public string ExportJSON() => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
+        public string ExportJSON(bool recursive) => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
 #else
         /// <inheritdoc/>
-        public string ExportJSON() => Newtonsoft.Json.JsonConvert.SerializeObject(Model, _jsonSerializerOptions);
+        public string ExportJSON(bool recursive) => Newtonsoft.Json.JsonConvert.SerializeObject(Model, _jsonSerializerOptions);
 #endif
 
         /// <inheritdoc/>
-        public void PrintInformation(StringBuilder builder)
+        public void PrintInformation(StringBuilder builder, bool recursive)
         {
             builder.AppendLine("Xbox / Xbox 360 Disc Image Information:");
             builder.AppendLine("-------------------------");
@@ -39,11 +39,11 @@ namespace SabreTools.Wrappers
 
             // Print all information of video partition model
             var videoWrapper = new ISO9660(VideoPartition, _dataSource, initialOffset, _dataSource.Length);
-            videoWrapper?.PrintInformation(builder);
+            videoWrapper?.PrintInformation(builder, recursive);
 
             // Print all information of game partition model
             var gameWrapper = new XDVDFS(GamePartition, _dataSource, initialOffset + Constants.XisoOffsets[XGDType], Constants.XisoLengths[XGDType]);
-            gameWrapper?.PrintInformation(builder);
+            gameWrapper?.PrintInformation(builder, recursive);
         }
     }
 }

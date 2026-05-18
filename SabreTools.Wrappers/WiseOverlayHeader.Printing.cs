@@ -8,14 +8,14 @@ namespace SabreTools.Wrappers
     {
 #if NETCOREAPP
         /// <inheritdoc/>
-        public string ExportJSON() => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
+        public string ExportJSON(bool recursive) => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
 #else
         /// <inheritdoc/>
-        public string ExportJSON() => Newtonsoft.Json.JsonConvert.SerializeObject(Model, _jsonSerializerOptions);
+        public string ExportJSON(bool recursive) => Newtonsoft.Json.JsonConvert.SerializeObject(Model, _jsonSerializerOptions);
 #endif
 
         /// <inheritdoc/>
-        public void PrintInformation(StringBuilder builder)
+        public void PrintInformation(StringBuilder builder, bool recursive)
         {
 #if NET20 || NET35
             bool pkzip = (Model.Flags & OverlayHeaderFlags.WISE_FLAG_PK_ZIP) != 0;

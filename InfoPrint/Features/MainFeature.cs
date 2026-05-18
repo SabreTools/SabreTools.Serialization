@@ -60,6 +60,11 @@ namespace InfoPrint.Features
         /// </summary>
         public bool Json { get; private set; }
 
+        /// <summary>
+        /// Enable outputting subfile information
+        /// </summary>
+        public bool Recursive { get; private set; }
+
         public MainFeature()
             : base(DisplayName, _flags, _description)
         {
@@ -79,6 +84,9 @@ namespace InfoPrint.Features
             Hash = GetBoolean(_hashName);
             FileOnly = GetBoolean(_fileOnlyName);
             Json = GetBoolean(_jsonName);
+
+            // TODO: Add flag for this once there are examples of it
+            Recursive = false;
 
             // Loop through the input paths
             for (int i = 0; i < Inputs.Count; i++)
@@ -183,7 +191,7 @@ namespace InfoPrint.Features
                 if (Json)
                 {
                     // Create the output data
-                    string serializedData = printable.ExportJSON();
+                    string serializedData = printable.ExportJSON(Recursive);
 
                     // Write the output data
                     using var jsw = new StreamWriter(File.OpenWrite($"{filenameBase}.json"));
@@ -193,7 +201,7 @@ namespace InfoPrint.Features
 
                 // Create the output data
                 var builder = new StringBuilder();
-                printable.PrintInformation(builder);
+                printable.PrintInformation(builder, Recursive);
 
                 // Only print to console if enabled
                 if (!FileOnly)
