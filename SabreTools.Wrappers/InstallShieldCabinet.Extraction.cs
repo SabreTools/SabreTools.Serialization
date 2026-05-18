@@ -55,6 +55,11 @@ namespace SabreTools.Wrappers
         /// </summary>
         private const int MAX_WBITS = 15;
 
+        /// <summary>
+        /// Characters that should be replaced by an underscore for filenames
+        /// </summary>
+        private static readonly char[] PathReplacementCharacters = [' ', '<', '>', '[', ']'];
+
         #endregion
 
         #region Cabinet Set
@@ -236,12 +241,23 @@ namespace SabreTools.Wrappers
                         if (!cabinet.FileIsValid(i))
                             continue;
 
-                        // Ensure directory separators are consistent
+                        // Build the full path from the cabinet
                         string filename = cabinet.GetFileName(i) ?? $"BAD_FILENAME{i}";
+                        uint dirIndex = cabinet.GetDirectoryIndexFromFile(i);
+                        string dir = cabinet.GetDirectoryName((int)dirIndex) ?? $"BAD_DIRNAME{dirIndex}";
+                        filename = Path.Combine(dir, filename);
+
+                        // Ensure directory separators are consistent
                         if (Path.DirectorySeparatorChar == '\\')
                             filename = filename.Replace('/', '\\');
                         else if (Path.DirectorySeparatorChar == '/')
                             filename = filename.Replace('\\', '/');
+
+                        // Consistently replace problematic path characters
+                        foreach (char c in PathReplacementCharacters)
+                        {
+                            filename = filename.Replace(c, '_');
+                        }
 
                         // Ensure the full output directory exists
                         filename = Path.Combine(outputDirectory, filename);
