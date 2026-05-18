@@ -345,14 +345,14 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Component();
 
-            obj.IdentifierOffset = data.ReadUInt32LittleEndian();
-            obj.DescriptorOffset = data.ReadUInt32LittleEndian();
-            obj.DisplayNameOffset = data.ReadUInt32LittleEndian();
+            obj.NameOffset = data.ReadUInt32LittleEndian();
+            obj.DescriptionOffset = data.ReadUInt32LittleEndian();
+            obj.StatusTextOffset = data.ReadUInt32LittleEndian();
             obj.Status = (ComponentStatus)data.ReadUInt16LittleEndian();
             obj.PasswordOffset = data.ReadUInt32LittleEndian();
             obj.MiscOffset = data.ReadUInt32LittleEndian();
             obj.ComponentIndex = data.ReadUInt16LittleEndian();
-            obj.NameOffset = data.ReadUInt32LittleEndian();
+            obj.DisplayNameOffset = data.ReadUInt32LittleEndian();
             obj.CDRomFolderOffset = data.ReadUInt32LittleEndian();
             obj.HTTPLocationOffset = data.ReadUInt32LittleEndian();
             obj.FTPLocationOffset = data.ReadUInt32LittleEndian();
@@ -382,17 +382,43 @@ namespace SabreTools.Serialization.Readers
             // Cache the current position
             long currentPosition = data.Position;
 
-            // Read the identifier, if possible
-            if (obj.IdentifierOffset != 0)
+            // Read the name, if possible
+            if (obj.NameOffset != 0)
             {
-                // Seek to the identifier
-                data.SeekIfPossible(descriptorOffset + obj.IdentifierOffset, SeekOrigin.Begin);
+                // Seek to the string
+                data.SeekIfPossible(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
-                    obj.Identifier = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                    obj.Name = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
                 else
-                    obj.Identifier = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+                    obj.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+            }
+
+            // Read the description, if possible
+            if (obj.DescriptionOffset != 0)
+            {
+                // Seek to the string
+                data.SeekIfPossible(descriptorOffset + obj.DescriptionOffset, SeekOrigin.Begin);
+
+                // Read the string
+                if (majorVersion >= 17)
+                    obj.Description = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                else
+                    obj.Description = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+            }
+
+            // Read the status text, if possible
+            if (obj.StatusTextOffset != 0)
+            {
+                // Seek to the string
+                data.SeekIfPossible(descriptorOffset + obj.StatusTextOffset, SeekOrigin.Begin);
+
+                // Read the string
+                if (majorVersion >= 17)
+                    obj.StatusText = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                else
+                    obj.StatusText = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Read the display name, if possible
@@ -408,17 +434,43 @@ namespace SabreTools.Serialization.Readers
                     obj.DisplayName = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
-            // Read the name, if possible
-            if (obj.NameOffset != 0)
+            // Read the CD-ROM folder, if possible
+            if (obj.CDRomFolderOffset != 0)
             {
                 // Seek to the string
-                data.SeekIfPossible(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(descriptorOffset + obj.CDRomFolderOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
-                    obj.Name = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                    obj.CDRomFolder = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
                 else
-                    obj.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+                    obj.CDRomFolder = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+            }
+
+            // Read the HTTP location, if possible
+            if (obj.HTTPLocationOffset != 0)
+            {
+                // Seek to the string
+                data.SeekIfPossible(descriptorOffset + obj.HTTPLocationOffset, SeekOrigin.Begin);
+
+                // Read the string
+                if (majorVersion >= 17)
+                    obj.HTTPLocation = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                else
+                    obj.HTTPLocation = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+            }
+
+            // Read the FTP location, if possible
+            if (obj.FTPLocationOffset != 0)
+            {
+                // Seek to the string
+                data.SeekIfPossible(descriptorOffset + obj.FTPLocationOffset, SeekOrigin.Begin);
+
+                // Read the string
+                if (majorVersion >= 17)
+                    obj.FTPLocation = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                else
+                    obj.FTPLocation = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Read the CLSID, if possible

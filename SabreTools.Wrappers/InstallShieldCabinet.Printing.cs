@@ -260,10 +260,14 @@ namespace SabreTools.Wrappers
                 builder.AppendLine(entry.UnknownStringOffset, "    Unknown string offset");
                 builder.AppendLine(entry.OperatingSystemOffset, "    Operating system offset");
                 builder.AppendLine(entry.LanguageOffset, "    Language offset");
+                builder.AppendLine(entry.Language, "    Language");
                 builder.AppendLine(entry.HTTPLocationOffset, "    HTTP location offset");
+                builder.AppendLine(entry.HTTPLocation, "    HTTP location");
                 builder.AppendLine(entry.FTPLocationOffset, "    FTP location offset");
+                builder.AppendLine(entry.FTPLocation, "    FTP location");
                 builder.AppendLine(entry.MiscOffset, "    Misc. offset");
                 builder.AppendLine(entry.TargetDirectoryOffset, "    Target directory offset");
+                builder.AppendLine(entry.TargetDirectory, "    Target directory");
                 builder.AppendLine($"    Overwrite flags: {entry.OverwriteFlags} (0x{entry.OverwriteFlags:X})");
                 builder.AppendLine(entry.Reserved, "    Reserved");
             }
@@ -287,20 +291,24 @@ namespace SabreTools.Wrappers
                 var entry = entries[i];
 
                 builder.AppendLine($"  Component {i}:");
-                builder.AppendLine(entry.IdentifierOffset, "    Identifier offset");
-                builder.AppendLine(entry.Identifier, "    Identifier");
-                builder.AppendLine(entry.DescriptorOffset, "    Descriptor offset");
-                builder.AppendLine(entry.DisplayNameOffset, "    Display name offset");
-                builder.AppendLine(entry.DisplayName, "    Display name");
+                builder.AppendLine(entry.NameOffset, "    Name offset");
+                builder.AppendLine(entry.Name, "    Name");
+                builder.AppendLine(entry.DescriptionOffset, "    Description offset");
+                builder.AppendLine(entry.Description, "    Description");
+                builder.AppendLine(entry.StatusTextOffset, "    Status text offset");
+                builder.AppendLine(entry.StatusText, "    Status text");
                 builder.AppendLine($"    Status: {entry.Status} (0x{entry.Status:X})");
                 builder.AppendLine(entry.PasswordOffset, "    Password offset");
                 builder.AppendLine(entry.MiscOffset, "    Misc. offset");
                 builder.AppendLine(entry.ComponentIndex, "    Component index");
-                builder.AppendLine(entry.NameOffset, "    Name offset");
-                builder.AppendLine(entry.Name, "    Name");
+                builder.AppendLine(entry.DisplayNameOffset, "    Display name offset");
+                builder.AppendLine(entry.DisplayName, "    Display name");
                 builder.AppendLine(entry.CDRomFolderOffset, "    CD-ROM folder offset");
+                builder.AppendLine(entry.CDRomFolder, "    CD-ROM folder");
                 builder.AppendLine(entry.HTTPLocationOffset, "    HTTP location offset");
+                builder.AppendLine(entry.HTTPLocation, "    HTTP location");
                 builder.AppendLine(entry.FTPLocationOffset, "    FTP location offset");
+                builder.AppendLine(entry.FTPLocation, "    FTP location");
                 builder.AppendLine(entry.Guid, "    GUIDs");
                 builder.AppendLine(entry.CLSIDOffset, "    CLSID offset");
                 builder.AppendLine(entry.CLSID, "    CLSID");

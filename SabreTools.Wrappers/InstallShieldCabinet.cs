@@ -155,10 +155,10 @@ namespace SabreTools.Wrappers
                 return null;
 
             var component = Components[index];
-            if (component?.Identifier is null)
+            if (component?.Name is null)
                 return null;
 
-            return component.Identifier.Replace('\\', '/');
+            return component.Name.Replace('\\', '/');
         }
 
         #endregion

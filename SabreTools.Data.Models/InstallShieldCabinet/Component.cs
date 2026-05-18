@@ -6,29 +6,34 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
     public sealed class Component
     {
         /// <summary>
-        /// Offset to the component identifier
+        /// Offset to the component name
         /// </summary>
-        public uint IdentifierOffset { get; set; }
+        public uint NameOffset { get; set; }
 
         /// <summary>
-        /// Component identifier
+        /// Component name
         /// </summary>
-        public string Identifier { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Offset to the component descriptor
+        /// Offset to the component description
         /// </summary>
-        public uint DescriptorOffset { get; set; }
+        public uint DescriptionOffset { get; set; }
 
         /// <summary>
-        /// Offset to the display name
+        /// Component description
         /// </summary>
-        public uint DisplayNameOffset { get; set; }
+        public string Description { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Offset to the status text
+        /// </summary>
+        public uint StatusTextOffset { get; set; }
 
         /// <summary>
         /// Display name
         /// </summary>
-        public string DisplayName { get; set; } = string.Empty;
+        public string StatusText { get; set; } = string.Empty;
 
         /// <summary>
         /// Component status
@@ -51,14 +56,14 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         public ushort ComponentIndex { get; set; }
 
         /// <summary>
-        /// Offset to the component name
+        /// Offset to the display name
         /// </summary>
-        public uint NameOffset { get; set; }
+        public uint DisplayNameOffset { get; set; }
 
         /// <summary>
-        /// Component name
+        /// Display name
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
 
         /// <summary>
         /// Offset to the CD-ROM folder
@@ -66,14 +71,29 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         public uint CDRomFolderOffset { get; set; }
 
         /// <summary>
+        /// CD-ROM folder
+        /// </summary>
+        public string CDRomFolder { get; set; } = string.Empty;
+
+        /// <summary>
         /// Offset to the HTTP location
         /// </summary>
         public uint HTTPLocationOffset { get; set; }
 
         /// <summary>
+        /// HTTP location
+        /// </summary>
+        public string HTTPLocation { get; set; } = string.Empty;
+
+        /// <summary>
         /// Offset to the FTP location
         /// </summary>
         public uint FTPLocationOffset { get; set; }
+
+        /// <summary>
+        /// FTP location
+        /// </summary>
+        public string FTPLocation { get; set; } = string.Empty;
 
         /// <summary>
         /// Unknown GUIDs

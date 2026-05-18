@@ -1,7 +1,6 @@
 namespace SabreTools.Data.Models.InstallShieldCabinet
 {
     /// <see href="https://github.com/twogood/unshield/blob/main/lib/cabfile.h"/>
-    /// TODO: Should standard and high values be combined?
     public sealed class VolumeHeader
     {
         /// <remarks>32-bit in versions 5 and below</remarks>
