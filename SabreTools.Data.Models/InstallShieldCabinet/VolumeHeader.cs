@@ -4,36 +4,29 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
     /// TODO: Should standard and high values be combined?
     public sealed class VolumeHeader
     {
-        public uint DataOffset { get; set; }
-
-        public uint DataOffsetHigh { get; set; }
+        /// <remarks>32-bit in versions 5 and below</remarks>
+        public ulong DataOffset { get; set; }
 
         public uint FirstFileIndex { get; set; }
 
         public uint LastFileIndex { get; set; }
 
-        public uint FirstFileOffset { get; set; }
+        /// <remarks>32-bit in versions 5 and below</remarks>
+        public ulong FirstFileOffset { get; set; }
 
-        public uint FirstFileOffsetHigh { get; set; }
+        /// <remarks>32-bit in versions 5 and below</remarks>
+        public ulong FirstFileSizeExpanded { get; set; }
 
-        public uint FirstFileSizeExpanded { get; set; }
+        /// <remarks>32-bit in versions 5 and below</remarks>
+        public ulong FirstFileSizeCompressed { get; set; }
 
-        public uint FirstFileSizeExpandedHigh { get; set; }
+        /// <remarks>32-bit in versions 5 and below</remarks>
+        public ulong LastFileOffset { get; set; }
 
-        public uint FirstFileSizeCompressed { get; set; }
+        /// <remarks>32-bit in versions 5 and below</remarks>
+        public ulong LastFileSizeExpanded { get; set; }
 
-        public uint FirstFileSizeCompressedHigh { get; set; }
-
-        public uint LastFileOffset { get; set; }
-
-        public uint LastFileOffsetHigh { get; set; }
-
-        public uint LastFileSizeExpanded { get; set; }
-
-        public uint LastFileSizeExpandedHigh { get; set; }
-
-        public uint LastFileSizeCompressed { get; set; }
-
-        public uint LastFileSizeCompressedHigh { get; set; }
+        /// <remarks>32-bit in versions 5 and below</remarks>
+        public ulong LastFileSizeCompressed { get; set; }
     }
 }

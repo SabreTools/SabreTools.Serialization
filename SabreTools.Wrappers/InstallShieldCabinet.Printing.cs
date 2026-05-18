@@ -24,7 +24,7 @@ namespace SabreTools.Wrappers
 
             // Headers
             Print(builder, Model.CommonHeader, MajorVersion);
-            Print(builder, Model.VolumeHeader, MajorVersion);
+            Print(builder, Model.VolumeHeader);
             Print(builder, Model.Descriptor);
 
             // File Descriptors
@@ -53,42 +53,19 @@ namespace SabreTools.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, VolumeHeader header, int majorVersion)
+        private static void Print(StringBuilder builder, VolumeHeader header)
         {
             builder.AppendLine("  Volume Header Information:");
             builder.AppendLine("  -------------------------");
-            if (majorVersion <= 5)
-            {
-                builder.AppendLine(header.DataOffset, "  Data offset");
-                builder.AppendLine(header.FirstFileIndex, "  First file index");
-                builder.AppendLine(header.LastFileIndex, "  Last file index");
-                builder.AppendLine(header.FirstFileOffset, "  First file offset");
-                builder.AppendLine(header.FirstFileSizeExpanded, "  First file size expanded");
-                builder.AppendLine(header.FirstFileSizeCompressed, "  First file size compressed");
-                builder.AppendLine(header.LastFileOffset, "  Last file offset");
-                builder.AppendLine(header.LastFileSizeExpanded, "  Last file size expanded");
-                builder.AppendLine(header.LastFileSizeCompressed, "  Last file size compressed");
-            }
-            else
-            {
-                builder.AppendLine(header.DataOffset, "  Data offset");
-                builder.AppendLine(header.DataOffsetHigh, "  Data offset high");
-                builder.AppendLine(header.FirstFileIndex, "  First file index");
-                builder.AppendLine(header.LastFileIndex, "  Last file index");
-                builder.AppendLine(header.FirstFileOffset, "  First file offset");
-                builder.AppendLine(header.FirstFileOffsetHigh, "  First file offset high");
-                builder.AppendLine(header.FirstFileSizeExpanded, "  First file size expanded");
-                builder.AppendLine(header.FirstFileSizeExpandedHigh, "  First file size expanded high");
-                builder.AppendLine(header.FirstFileSizeCompressed, "  First file size compressed");
-                builder.AppendLine(header.FirstFileSizeCompressedHigh, "  First file size compressed high");
-                builder.AppendLine(header.LastFileOffset, "  Last file offset");
-                builder.AppendLine(header.LastFileOffsetHigh, "  Last file offset high");
-                builder.AppendLine(header.LastFileSizeExpanded, "  Last file size expanded");
-                builder.AppendLine(header.LastFileSizeExpandedHigh, "  Last file size expanded high");
-                builder.AppendLine(header.LastFileSizeCompressed, "  Last file size compressed");
-                builder.AppendLine(header.LastFileSizeCompressedHigh, "  Last file size compressed high");
-            }
-
+            builder.AppendLine(header.DataOffset, "  Data offset");
+            builder.AppendLine(header.FirstFileIndex, "  First file index");
+            builder.AppendLine(header.LastFileIndex, "  Last file index");
+            builder.AppendLine(header.FirstFileOffset, "  First file offset");
+            builder.AppendLine(header.FirstFileSizeExpanded, "  First file size expanded");
+            builder.AppendLine(header.FirstFileSizeCompressed, "  First file size compressed");
+            builder.AppendLine(header.LastFileOffset, "  Last file offset");
+            builder.AppendLine(header.LastFileSizeExpanded, "  Last file size expanded");
+            builder.AppendLine(header.LastFileSizeCompressed, "  Last file size compressed");
             builder.AppendLine();
         }
 

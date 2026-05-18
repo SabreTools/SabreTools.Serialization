@@ -70,6 +70,8 @@ namespace SabreTools.Serialization.Readers
 
                 #endregion
 
+                // TODO: Read the setup types table (SETUPTYPEHEADER and SETUPTYPEDESC)
+
                 #region File Descriptor Offsets
 
                 // Get the file table offset
@@ -163,7 +165,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Create and fill the file group offsets
                 cabinet.FileGroupOffsets = [];
-                for (int i = 0; i < (cabinet.Descriptor.FileGroupOffsets?.Length ?? 0); i++)
+                for (int i = 0; i < cabinet.Descriptor.FileGroupOffsets.Length; i++)
                 {
                     // Get the file group offset
                     long offset = cabinet.Descriptor.FileGroupOffsets![i];
@@ -215,17 +217,11 @@ namespace SabreTools.Serialization.Readers
                     // Get the offset
                     OffsetList? list = kvp.Value;
                     if (list is null)
-                    {
-                        fileGroupId++;
                         continue;
-                    }
 
                     // If we have an invalid offset
                     if (list.DescriptorOffset <= 0)
-                    {
-                        fileGroupId++;
                         continue;
-                    }
 
                     /// Seek to the file group
                     data.SeekIfPossible(descriptorOffset + list.DescriptorOffset, SeekOrigin.Begin);
@@ -234,13 +230,16 @@ namespace SabreTools.Serialization.Readers
                     cabinet.FileGroups[fileGroupId++] = ParseFileGroup(data, majorVersion, descriptorOffset);
                 }
 
+                // Order the groups by first file index
+                Array.Sort(cabinet.FileGroups, (a, b) => (int)a.FirstFile - (int)b.FirstFile);
+
                 #endregion
 
                 #region Component Offsets
 
                 // Create and fill the component offsets
                 cabinet.ComponentOffsets = [];
-                for (int i = 0; i < (cabinet.Descriptor.ComponentOffsets?.Length ?? 0); i++)
+                for (int i = 0; i < cabinet.Descriptor.ComponentOffsets.Length; i++)
                 {
                     // Get the component offset
                     long offset = cabinet.Descriptor.ComponentOffsets![i];
@@ -292,17 +291,11 @@ namespace SabreTools.Serialization.Readers
                     // Get the offset
                     OffsetList? list = kvp.Value;
                     if (list is null)
-                    {
-                        componentId++;
                         continue;
-                    }
 
                     // If we have an invalid offset
                     if (list.DescriptorOffset <= 0)
-                    {
-                        componentId++;
                         continue;
-                    }
 
                     // Seek to the component
                     data.SeekIfPossible(descriptorOffset + list.DescriptorOffset, SeekOrigin.Begin);
@@ -312,8 +305,6 @@ namespace SabreTools.Serialization.Readers
                 }
 
                 #endregion
-
-                // TODO: Parse setup types
 
                 return cabinet;
             }
@@ -407,7 +398,7 @@ namespace SabreTools.Serialization.Readers
             // Read the display name, if possible
             if (obj.DisplayNameOffset != 0)
             {
-                // Seek to the name
+                // Seek to the string
                 data.SeekIfPossible(descriptorOffset + obj.DisplayNameOffset, SeekOrigin.Begin);
 
                 // Read the string
@@ -420,7 +411,7 @@ namespace SabreTools.Serialization.Readers
             // Read the name, if possible
             if (obj.NameOffset != 0)
             {
-                // Seek to the name
+                // Seek to the string
                 data.SeekIfPossible(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
                 // Read the string
@@ -456,7 +447,7 @@ namespace SabreTools.Serialization.Readers
                     // Cache the current offset
                     long preNameOffset = data.Position;
 
-                    // Seek to the name offset
+                    // Seek to the string offset
                     data.SeekIfPossible(descriptorOffset + nameOffset, SeekOrigin.Begin);
 
                     if (majorVersion >= 17)
@@ -501,6 +492,7 @@ namespace SabreTools.Serialization.Readers
             obj.ComponentTableOffset = data.ReadUInt32LittleEndian();
             obj.Reserved5 = data.ReadUInt32LittleEndian();
             obj.Reserved6 = data.ReadUInt32LittleEndian();
+
             obj.FileGroupOffsets = new uint[71];
             for (int i = 0; i < 71; i++)
             {
@@ -569,10 +561,23 @@ namespace SabreTools.Serialization.Readers
                 obj.CompressedSize = data.ReadUInt64LittleEndian();
                 obj.DataOffset = data.ReadUInt64LittleEndian();
                 obj.MD5 = data.ReadBytes(0x10);
+
+                // TODO: This is actually 3 fields
+                // - DWORD dwVerMS;
+                // - DWORD dwVerLS;
+                // - DWORD junk1[2];
                 _ = data.ReadBytes(0x10); // Skip 0x10 bytes, unknown data?
+
                 obj.NameOffset = data.ReadUInt32LittleEndian();
                 obj.DirectoryIndex = data.ReadUInt16LittleEndian();
+
+                // TODO: This is actually 4 fields
+                // - DWORD Attrs;
+                // - WORD FatDate
+                // - WORD FatTime;
+                // - DWORD junk2;
                 _ = data.ReadBytes(0x0C); // Skip 0x0C bytes, unknown data?
+
                 obj.LinkPrevious = data.ReadUInt32LittleEndian();
                 obj.LinkNext = data.ReadUInt32LittleEndian();
                 obj.LinkFlags = (LinkFlags)data.ReadByteValue();
@@ -585,7 +590,7 @@ namespace SabreTools.Serialization.Readers
             // Read the name, if possible
             if (obj.NameOffset != 0)
             {
-                // Seek to the name
+                // Seek to the string
                 data.SeekIfPossible(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
                 // Read the string
@@ -613,8 +618,18 @@ namespace SabreTools.Serialization.Readers
             var obj = new FileGroup();
 
             obj.NameOffset = data.ReadUInt32LittleEndian();
-            obj.ExpandedSize = data.ReadUInt32LittleEndian();
-            obj.CompressedSize = data.ReadUInt32LittleEndian();
+
+            if (majorVersion <= 5)
+            {
+                obj.ExpandedSize = data.ReadUInt32LittleEndian();
+                obj.CompressedSize = data.ReadUInt32LittleEndian();
+            }
+            else
+            {
+                obj.ExpandedSize = data.ReadUInt64LittleEndian();
+                obj.CompressedSize = data.ReadUInt64LittleEndian();
+            }
+
             obj.Attributes = (FileGroupAttributes)data.ReadUInt16LittleEndian();
 
             // TODO: Figure out what data lives in this area for V5 and below
@@ -643,7 +658,7 @@ namespace SabreTools.Serialization.Readers
             // Read the name, if possible
             if (obj.NameOffset != 0)
             {
-                // Seek to the name
+                // Seek to the string
                 data.SeekIfPossible(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
                 // Read the string
@@ -651,6 +666,71 @@ namespace SabreTools.Serialization.Readers
                     obj.Name = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
                 else
                     obj.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+            }
+
+            // Read the language, if possible
+            if (obj.LanguageOffset != 0)
+            {
+                // Seek to the string
+                data.SeekIfPossible(descriptorOffset + obj.LanguageOffset, SeekOrigin.Begin);
+
+                // Read the string
+                if (majorVersion >= 17)
+                    obj.Language = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                else
+                    obj.Language = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+            }
+
+            // Read the HTTP location, if possible
+            if (obj.HTTPLocationOffset != 0)
+            {
+                // Seek to the string
+                data.SeekIfPossible(descriptorOffset + obj.HTTPLocationOffset, SeekOrigin.Begin);
+
+                // Read the string
+                if (majorVersion >= 17)
+                    obj.HTTPLocation = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                else
+                    obj.HTTPLocation = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+            }
+
+            // Read the FTP location, if possible
+            if (obj.FTPLocationOffset != 0)
+            {
+                // Seek to the string
+                data.SeekIfPossible(descriptorOffset + obj.FTPLocationOffset, SeekOrigin.Begin);
+
+                // Read the string
+                if (majorVersion >= 17)
+                    obj.FTPLocation = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                else
+                    obj.FTPLocation = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+            }
+
+            // Read the target directory, if possible
+            if (obj.MiscOffset != 0)
+            {
+                // Seek to the string
+                data.SeekIfPossible(descriptorOffset + obj.MiscOffset, SeekOrigin.Begin);
+
+                // Read the string
+                if (majorVersion >= 17)
+                    obj.Misc = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                else
+                    obj.Misc = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+            }
+
+            // Read the target directory, if possible
+            if (obj.TargetDirectoryOffset != 0)
+            {
+                // Seek to the string
+                data.SeekIfPossible(descriptorOffset + obj.TargetDirectoryOffset, SeekOrigin.Begin);
+
+                // Read the string
+                if (majorVersion >= 17)
+                    obj.TargetDirectory = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                else
+                    obj.TargetDirectory = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Seek back to the correct offset
@@ -677,7 +757,7 @@ namespace SabreTools.Serialization.Readers
             // Cache the current offset
             long currentOffset = data.Position;
 
-            // Seek to the name offset
+            // Seek to the string offset
             data.SeekIfPossible(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
             // Read the string
@@ -718,22 +798,15 @@ namespace SabreTools.Serialization.Readers
             }
             else
             {
-                obj.DataOffset = data.ReadUInt32LittleEndian();
-                obj.DataOffsetHigh = data.ReadUInt32LittleEndian();
+                obj.DataOffset = data.ReadUInt64LittleEndian();
                 obj.FirstFileIndex = data.ReadUInt32LittleEndian();
                 obj.LastFileIndex = data.ReadUInt32LittleEndian();
-                obj.FirstFileOffset = data.ReadUInt32LittleEndian();
-                obj.FirstFileOffsetHigh = data.ReadUInt32LittleEndian();
-                obj.FirstFileSizeExpanded = data.ReadUInt32LittleEndian();
-                obj.FirstFileSizeExpandedHigh = data.ReadUInt32LittleEndian();
-                obj.FirstFileSizeCompressed = data.ReadUInt32LittleEndian();
-                obj.FirstFileSizeCompressedHigh = data.ReadUInt32LittleEndian();
-                obj.LastFileOffset = data.ReadUInt32LittleEndian();
-                obj.LastFileOffsetHigh = data.ReadUInt32LittleEndian();
-                obj.LastFileSizeExpanded = data.ReadUInt32LittleEndian();
-                obj.LastFileSizeExpandedHigh = data.ReadUInt32LittleEndian();
-                obj.LastFileSizeCompressed = data.ReadUInt32LittleEndian();
-                obj.LastFileSizeCompressedHigh = data.ReadUInt32LittleEndian();
+                obj.FirstFileOffset = data.ReadUInt64LittleEndian();
+                obj.FirstFileSizeExpanded = data.ReadUInt64LittleEndian();
+                obj.FirstFileSizeCompressed = data.ReadUInt64LittleEndian();
+                obj.LastFileOffset = data.ReadUInt64LittleEndian();
+                obj.LastFileSizeExpanded = data.ReadUInt64LittleEndian();
+                obj.LastFileSizeCompressed = data.ReadUInt64LittleEndian();
             }
 
             return obj;

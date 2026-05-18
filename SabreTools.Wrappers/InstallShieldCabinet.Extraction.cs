@@ -241,23 +241,35 @@ namespace SabreTools.Wrappers
                         if (!cabinet.FileIsValid(i))
                             continue;
 
-                        // Build the full path from the cabinet
+                        // Retrieve all output file pieces
                         string filename = cabinet.GetFileName(i) ?? $"BAD_FILENAME{i}";
                         uint dirIndex = cabinet.GetDirectoryIndexFromFile(i);
                         string dir = cabinet.GetDirectoryName((int)dirIndex) ?? $"BAD_DIRNAME{dirIndex}";
-                        filename = Path.Combine(dir, filename);
+                        string group = cabinet.GetFileGroupNameFromFile(i) ?? $"BAD_GROUPNAME{dirIndex}";
+
+                        // Consistently replace problematic path characters
+                        foreach (char c in PathReplacementCharacters)
+                        {
+                            dir = dir.Replace(c, '_');
+                        }
+
+                        foreach (char c in PathReplacementCharacters)
+                        {
+                            group = group.Replace(c, '_');
+                        }
+
+                        // Build the full path
+#if NET20 || NET35
+                        filename = Path.Combine(Path.Combine(group, dir), filename);
+#else
+                        filename = Path.Combine(group, dir, filename);
+#endif
 
                         // Ensure directory separators are consistent
                         if (Path.DirectorySeparatorChar == '\\')
                             filename = filename.Replace('/', '\\');
                         else if (Path.DirectorySeparatorChar == '/')
                             filename = filename.Replace('\\', '/');
-
-                        // Consistently replace problematic path characters
-                        foreach (char c in PathReplacementCharacters)
-                        {
-                            filename = filename.Replace(c, '_');
-                        }
 
                         // Ensure the full output directory exists
                         filename = Path.Combine(outputDirectory, filename);
