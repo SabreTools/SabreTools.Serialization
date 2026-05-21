@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
-using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
 using SabreTools.Text.Extensions;
@@ -18,7 +17,7 @@ namespace SabreTools.Wrappers
         /// <summary>
         /// List of printed embedded files by their sector offset
         /// </summary>
-        private readonly HashSet<int> printedFiles = [];
+        private readonly HashSet<int> _printedFiles = [];
 
         #endregion
 
@@ -33,7 +32,7 @@ namespace SabreTools.Wrappers
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder, bool recursive)
         {
-            printedFiles.Clear();
+            _printedFiles.Clear();
 
             builder.AppendLine("ISO 9660 Information:");
             builder.AppendLine("-------------------------");
@@ -71,7 +70,7 @@ namespace SabreTools.Wrappers
                         rootDirectoryRecord = svd.RootDirectoryRecord;
                     else
                         continue;
-                    
+
                     var blockLength = vd.GetLogicalBlockSize(sectorLength);
 
                     // TODO: Better encoding detection (EscapeSequences)
@@ -95,7 +94,7 @@ namespace SabreTools.Wrappers
             // Expect a directory
             if (value is not DirectoryExtent dir)
                 return;
-            
+
             foreach (var dr in dir.DirectoryRecords)
             {
                 string filename = encoding.GetString(dr.FileIdentifier);
@@ -111,17 +110,17 @@ namespace SabreTools.Wrappers
                     // Don't recurse up or self
                     if (dr.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || dr.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
                         continue;
-                    
+
                     // Add extent before recursion
-                    if (!printedFiles.Contains(dr.ExtentLocation.LittleEndian))
+                    if (!_printedFiles.Contains(dr.ExtentLocation.LittleEndian))
                     {
-                        printedFiles.Add(dr.ExtentLocation.LittleEndian);
+                        _printedFiles.Add(dr.ExtentLocation.LittleEndian);
                         RecursivePrint(builder, dr.ExtentLocation.LittleEndian, path, encoding, blockLength, initialOffset);
                     }
 
-                    if (!dr.ExtentLocation.IsValid && !printedFiles.Contains(dr.ExtentLocation.BigEndian))
+                    if (!dr.ExtentLocation.IsValid && !_printedFiles.Contains(dr.ExtentLocation.BigEndian))
                     {
-                        printedFiles.Add(dr.ExtentLocation.BigEndian);
+                        _printedFiles.Add(dr.ExtentLocation.BigEndian);
                         RecursivePrint(builder, dr.ExtentLocation.BigEndian, path, encoding, blockLength, initialOffset);
                     }
                 }
@@ -132,11 +131,11 @@ namespace SabreTools.Wrappers
                         continue;
 
                     // Print embedded file from LittleEndian location
-                    if (!printedFiles.Contains(dr.ExtentLocation.LittleEndian))
+                    if (!_printedFiles.Contains(dr.ExtentLocation.LittleEndian))
                     {
                         try
                         {
-                            long offset = initialOffset + ((long)dr.ExtentLocation.LittleEndian + (long)dr.ExtendedAttributeRecordLength) * (long)blockLength;
+                            long offset = initialOffset + ((dr.ExtentLocation.LittleEndian + (long)dr.ExtendedAttributeRecordLength) * blockLength);
                             var wrapper = GetFileWrapper(offset, filename);
                             if (wrapper is not null && wrapper is IPrintable printable)
                             {
@@ -145,7 +144,7 @@ namespace SabreTools.Wrappers
                                 builder.AppendLine("-------------------------");
                                 printable.PrintInformation(builder, true);
 
-                                printedFiles.Add(dr.ExtentLocation.LittleEndian);
+                                _printedFiles.Add(dr.ExtentLocation.LittleEndian);
                             }
                         }
                         catch
@@ -156,11 +155,11 @@ namespace SabreTools.Wrappers
                     }
 
                     // Print embedded file from BigEndian location
-                    if (!dr.ExtentLocation.IsValid && !printedFiles.Contains(dr.ExtentLocation.BigEndian))
+                    if (!dr.ExtentLocation.IsValid && !_printedFiles.Contains(dr.ExtentLocation.BigEndian))
                     {
                         try
                         {
-                            long offset = initialOffset + (dr.ExtentLocation.BigEndian + dr.ExtendedAttributeRecordLength) * blockLength;
+                            long offset = initialOffset + ((dr.ExtentLocation.BigEndian + dr.ExtendedAttributeRecordLength) * blockLength);
                             var wrapper = GetFileWrapper(offset, filename);
                             if (wrapper is not null && wrapper is IPrintable printable)
                             {
@@ -169,7 +168,7 @@ namespace SabreTools.Wrappers
                                 builder.AppendLine("-------------------------");
                                 printable.PrintInformation(builder, true);
 
-                                printedFiles.Add(dr.ExtentLocation.BigEndian);
+                                _printedFiles.Add(dr.ExtentLocation.BigEndian);
                             }
                         }
                         catch
@@ -185,8 +184,10 @@ namespace SabreTools.Wrappers
         private IWrapper? GetFileWrapper(long offset, string filename)
         {
             _dataSource.Seek(offset, SeekOrigin.Begin);
+
             byte[] magic = _dataSource.PeekBytes(16);
             string extension = Path.GetExtension(filename).TrimStart('.');
+
             WrapperType ft = WrapperFactory.GetFileType(magic, extension);
             return WrapperFactory.CreateWrapper(ft, _dataSource);
         }

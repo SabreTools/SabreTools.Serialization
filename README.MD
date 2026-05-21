@@ -25,6 +25,7 @@ Options:
 -c, --hash               Output file hashes
 -f, --file               Print to file only
 -j, --json               Print info as JSON
+-r, --recursive          Recursively print info from embedded files
 ```
 
 ## ExtractionTool

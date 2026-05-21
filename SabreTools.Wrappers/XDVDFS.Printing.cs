@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.XDVDFS;
-using SabreTools.IO.Extensions;
 using SabreTools.Numerics.Extensions;
 using SabreTools.Text.Extensions;
 
@@ -16,7 +15,7 @@ namespace SabreTools.Wrappers
         /// <summary>
         /// List of printed embedded files by their sector offset
         /// </summary>
-        private readonly HashSet<uint> printedFiles = [];
+        private readonly HashSet<uint> _printedFiles = [];
 
         #endregion
 
@@ -31,7 +30,7 @@ namespace SabreTools.Wrappers
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder, bool recursive)
         {
-            printedFiles.Clear();
+            _printedFiles.Clear();
 
             builder.AppendLine("Xbox DVD Filesystem Information:");
             builder.AppendLine("-------------------------");
@@ -57,23 +56,23 @@ namespace SabreTools.Wrappers
 
         private void RecursivePrint(StringBuilder builder, uint sectorNumber, string filePath, long initialOffset)
         {
-            if (!Model.DirectoryDescriptors.ContainsKey(sectorNumber))
+            if (!Model.DirectoryDescriptors.TryGetValue(sectorNumber, out DirectoryDescriptor? dd))
                 return;
 
-            foreach (DirectoryRecord dr in Model.DirectoryDescriptors[sectorNumber].DirectoryRecords)
+            foreach (DirectoryRecord dr in dd.DirectoryRecords)
             {
                 string filename = Encoding.UTF8.GetString(dr.Filename);
                 string path = Path.Combine(filePath, filename);
 
                 // Skip already printed files
-                if (printedFiles.Contains(dr.ExtentOffset))
+                if (_printedFiles.Contains(dr.ExtentOffset))
                     continue;
 
                 // Recurse into directory
                 if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
                 {
                     // Add directory extent before recursing
-                    printedFiles.Add(dr.ExtentOffset);
+                    _printedFiles.Add(dr.ExtentOffset);
 
                     RecursivePrint(builder, dr.ExtentOffset, path, initialOffset);
                     continue;
@@ -82,20 +81,22 @@ namespace SabreTools.Wrappers
                 // Parse embedded file
                 try
                 {
-                    _dataSource.Seek(initialOffset + Constants.SectorSize * dr.ExtentOffset, SeekOrigin.Begin);
+                    _dataSource.Seek(initialOffset + (Constants.SectorSize * dr.ExtentOffset), SeekOrigin.Begin);
+
                     byte[] magic = _dataSource.PeekBytes(16);
                     string extension = Path.GetExtension(filename).TrimStart('.');
+
                     WrapperType ft = WrapperFactory.GetFileType(magic, extension);
                     var wrapper = WrapperFactory.CreateWrapper(ft, _dataSource);
                     if (wrapper is null || wrapper is not IPrintable printable)
                         continue;
-                    
+
                     // Print info for embedded file
                     builder.AppendLine($"Information for {path}");
                     builder.AppendLine("-------------------------");
                     printable.PrintInformation(builder, true);
 
-                    printedFiles.Add(dr.ExtentOffset);
+                    _printedFiles.Add(dr.ExtentOffset);
                 }
                 catch
                 {
