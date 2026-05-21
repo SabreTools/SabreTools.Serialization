@@ -46,6 +46,9 @@ namespace SabreTools.Wrappers
 
         private void RecursivePrint(StringBuilder builder, uint sectorNumber, string filePath, long initialOffset)
         {
+            if (!Model.DirectoryDescriptors.ContainsKey(sectorNumber))
+                return;
+
             foreach (DirectoryRecord dr in Model.DirectoryDescriptors[sectorNumber].DirectoryRecords)
             {
                 string filename = Encoding.UTF8.GetString(dr.Filename);
@@ -59,18 +62,26 @@ namespace SabreTools.Wrappers
                 }
 
                 // Parse embedded file
-                _dataSource.Seek(initialOffset + Constants.SectorSize * dr.ExtentOffset, SeekOrigin.Begin);
-                byte[] magic = _dataSource.PeekBytes(16);
-                string extension = Path.GetExtension(filename).TrimStart('.');
-                WrapperType ft = WrapperFactory.GetFileType(magic, extension);
-                var wrapper = WrapperFactory.CreateWrapper(ft, _dataSource);
-                if (wrapper is null || wrapper is not IPrintable printable)
+                try
+                {
+                    _dataSource.Seek(initialOffset + Constants.SectorSize * dr.ExtentOffset, SeekOrigin.Begin);
+                    byte[] magic = _dataSource.PeekBytes(16);
+                    string extension = Path.GetExtension(filename).TrimStart('.');
+                    WrapperType ft = WrapperFactory.GetFileType(magic, extension);
+                    var wrapper = WrapperFactory.CreateWrapper(ft, _dataSource);
+                    if (wrapper is null || wrapper is not IPrintable printable)
+                        continue;
+                    
+                    // Print info for embedded file
+                    builder.AppendLine($"Information for {path}");
+                    builder.AppendLine("-------------------------");
+                    printable.PrintInformation(builder, true);
+                }
+                catch
+                {
+                    // Ignore the actual error
                     continue;
-                
-                // Print info for embedded file
-                builder.AppendLine($"Information for {path}");
-                builder.AppendLine("-------------------------");
-                printable.PrintInformation(builder, true);
+                }
             }
         }
 
