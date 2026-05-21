@@ -59,7 +59,7 @@ namespace SabreTools.Wrappers
 
                 // Loop through all Volume Descriptors to print files from each directory hierarchy
                 // Note: This will prioritize the last volume descriptor directory hierarchies first (prioritises those filenames)
-                // This is useful as the Unicode filenames are in the 
+                // This is useful as ASCII filenames are usually in the first VD
                 for (int i = VolumeDescriptorSet.Length - 1; i >= 0; i--)
                 {
                     var vd = VolumeDescriptorSet[i];
