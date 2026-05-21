@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
+using SabreTools.IO.Extensions;
+using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
 using SabreTools.Text.Extensions;
 
@@ -9,6 +13,15 @@ namespace SabreTools.Wrappers
 {
     public partial class ISO9660 : IPrintable
     {
+        #region Printing State
+
+        /// <summary>
+        /// List of printed embedded files by their sector offset
+        /// </summary>
+        private readonly HashSet<int> printedFiles = [];
+
+        #endregion
+
 #if NETCOREAPP
         /// <inheritdoc/>
         public string ExportJSON(bool recursive) => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
@@ -20,6 +33,8 @@ namespace SabreTools.Wrappers
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder, bool recursive)
         {
+            printedFiles.Clear();
+
             builder.AppendLine("ISO 9660 Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
@@ -32,6 +47,148 @@ namespace SabreTools.Wrappers
             Encoding encoding = Encoding.UTF8;
             Print(builder, Model.PathTableGroups);
             Print(builder, Model.DirectoryDescriptors, encoding);
+
+            if (recursive)
+            {
+                long initialOffset = _dataSource.Position;
+
+                // Determine and validate sector length, default to 2048
+                short sectorLength = (short)(Model.SystemArea.Length / 16);
+                if (sectorLength < 2048 || (sectorLength & (sectorLength - 1)) != 0)
+                    sectorLength = 2048;
+
+                // Loop through all Volume Descriptors to print files from each directory hierarchy
+                // Note: This will prioritize the last volume descriptor directory hierarchies first (prioritises those filenames)
+                // This is useful as the Unicode filenames are in the 
+                for (int i = VolumeDescriptorSet.Length - 1; i >= 0; i--)
+                {
+                    var vd = VolumeDescriptorSet[i];
+
+                    DirectoryRecord rootDirectoryRecord;
+                    if (vd is PrimaryVolumeDescriptor pvd)
+                        rootDirectoryRecord = pvd.RootDirectoryRecord;
+                    else if (vd is SupplementaryVolumeDescriptor svd)
+                        rootDirectoryRecord = svd.RootDirectoryRecord;
+                    else
+                        continue;
+                    
+                    var blockLength = vd.GetLogicalBlockSize(sectorLength);
+
+                    // TODO: Better encoding detection (EscapeSequences)
+                    encoding = Encoding.UTF8;
+                    if (vd is SupplementaryVolumeDescriptor)
+                        encoding = Encoding.BigEndianUnicode;
+
+                    RecursivePrint(builder, rootDirectoryRecord.ExtentLocation.LittleEndian, "\\", encoding, blockLength, initialOffset);
+                    if (!rootDirectoryRecord.ExtentLocation.IsValid)
+                        RecursivePrint(builder, rootDirectoryRecord.ExtentLocation.BigEndian, "\\", encoding, blockLength, initialOffset);
+                }
+            }
+        }
+
+        private void RecursivePrint(StringBuilder builder, int sectorNumber, string filePath, Encoding encoding, short blockLength, long initialOffset)
+        {
+            // Check that directory exists in model
+            if (!Model.DirectoryDescriptors.TryGetValue(sectorNumber, out FileExtent? value))
+                return;
+
+            // Expect a directory
+            if (value is not DirectoryExtent dir)
+                return;
+            
+            foreach (var dr in dir.DirectoryRecords)
+            {
+                string filename = encoding.GetString(dr.FileIdentifier);
+                string path = Path.Combine(filePath, filename);
+
+                // Recurse if record is directory
+#if NET20 || NET35
+                if ((dr.FileFlags & FileFlags.DIRECTORY) != 0)
+#else
+                if (dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
+#endif
+                {
+                    // Don't recurse up or self
+                    if (dr.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || dr.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
+                        continue;
+                    
+                    // Add extent before recursion
+                    if (!printedFiles.Contains(dr.ExtentLocation.LittleEndian))
+                    {
+                        printedFiles.Add(dr.ExtentLocation.LittleEndian);
+                        RecursivePrint(builder, dr.ExtentLocation.LittleEndian, path, encoding, blockLength, initialOffset);
+                    }
+
+                    if (!dr.ExtentLocation.IsValid && !printedFiles.Contains(dr.ExtentLocation.BigEndian))
+                    {
+                        printedFiles.Add(dr.ExtentLocation.BigEndian);
+                        RecursivePrint(builder, dr.ExtentLocation.BigEndian, path, encoding, blockLength, initialOffset);
+                    }
+                }
+                else
+                {
+                    // Skip multi-extent and interleaved files
+                    if ((dr.FileFlags & FileFlags.MULTI_EXTENT) != 0 || dr.FileUnitSize != 0 || dr.InterleaveGapSize != 0)
+                        continue;
+
+                    // Print embedded file from LittleEndian location
+                    if (!printedFiles.Contains(dr.ExtentLocation.LittleEndian))
+                    {
+                        try
+                        {
+                            long offset = initialOffset + ((long)dr.ExtentLocation.LittleEndian + (long)dr.ExtendedAttributeRecordLength) * (long)blockLength;
+                            var wrapper = GetFileWrapper(offset, filename);
+                            if (wrapper is not null && wrapper is IPrintable printable)
+                            {
+                                // Print info for embedded file
+                                builder.AppendLine($"Information for {path}");
+                                builder.AppendLine("-------------------------");
+                                printable.PrintInformation(builder, true);
+
+                                printedFiles.Add(dr.ExtentLocation.LittleEndian);
+                            }
+                        }
+                        catch
+                        {
+                            // Ignore the actual error
+                            continue;
+                        }
+                    }
+
+                    // Print embedded file from BigEndian location
+                    if (!dr.ExtentLocation.IsValid && !printedFiles.Contains(dr.ExtentLocation.BigEndian))
+                    {
+                        try
+                        {
+                            long offset = initialOffset + (dr.ExtentLocation.BigEndian + dr.ExtendedAttributeRecordLength) * blockLength;
+                            var wrapper = GetFileWrapper(offset, filename);
+                            if (wrapper is not null && wrapper is IPrintable printable)
+                            {
+                                // Print info for embedded file
+                                builder.AppendLine($"Information for {path}");
+                                builder.AppendLine("-------------------------");
+                                printable.PrintInformation(builder, true);
+
+                                printedFiles.Add(dr.ExtentLocation.BigEndian);
+                            }
+                        }
+                        catch
+                        {
+                            // Ignore the actual error
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+
+        private IWrapper? GetFileWrapper(long offset, string filename)
+        {
+            _dataSource.Seek(offset, SeekOrigin.Begin);
+            byte[] magic = _dataSource.PeekBytes(16);
+            string extension = Path.GetExtension(filename).TrimStart('.');
+            WrapperType ft = WrapperFactory.GetFileType(magic, extension);
+            return WrapperFactory.CreateWrapper(ft, _dataSource);
         }
 
         protected static void Print(StringBuilder builder, byte[] systemArea)

@@ -11,6 +11,15 @@ namespace SabreTools.Wrappers
 {
     public partial class XDVDFS : IPrintable
     {
+        #region Printing State
+
+        /// <summary>
+        /// List of printed embedded files by their sector offset
+        /// </summary>
+        private readonly HashSet<uint> printedFiles = [];
+
+        #endregion
+
 #if NETCOREAPP
         /// <inheritdoc/>
         public string ExportJSON(bool recursive) => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
@@ -22,6 +31,8 @@ namespace SabreTools.Wrappers
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder, bool recursive)
         {
+            printedFiles.Clear();
+
             builder.AppendLine("Xbox DVD Filesystem Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
@@ -54,9 +65,16 @@ namespace SabreTools.Wrappers
                 string filename = Encoding.UTF8.GetString(dr.Filename);
                 string path = Path.Combine(filePath, filename);
 
+                // Skip already printed files
+                if (printedFiles.Contains(dr.ExtentOffset))
+                    continue;
+
                 // Recurse into directory
                 if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
                 {
+                    // Add directory extent before recursing
+                    printedFiles.Add(dr.ExtentOffset);
+
                     RecursivePrint(builder, dr.ExtentOffset, path, initialOffset);
                     continue;
                 }
@@ -76,6 +94,8 @@ namespace SabreTools.Wrappers
                     builder.AppendLine($"Information for {path}");
                     builder.AppendLine("-------------------------");
                     printable.PrintInformation(builder, true);
+
+                    printedFiles.Add(dr.ExtentOffset);
                 }
                 catch
                 {
