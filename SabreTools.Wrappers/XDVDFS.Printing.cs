@@ -1,12 +1,25 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using SabreTools.Data.Models.XDVDFS;
+using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
 {
     public partial class XDVDFS : IPrintable
     {
+        #region Printing State
+
+        /// <summary>
+        /// List of printed embedded files by their sector offset
+        /// </summary>
+        private readonly HashSet<uint> printedFiles = [];
+
+        #endregion
+
 #if NETCOREAPP
         /// <inheritdoc/>
         public string ExportJSON(bool recursive) => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
@@ -18,6 +31,8 @@ namespace SabreTools.Wrappers
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder, bool recursive)
         {
+            printedFiles.Clear();
+
             builder.AppendLine("Xbox DVD Filesystem Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
@@ -31,6 +46,62 @@ namespace SabreTools.Wrappers
             foreach (var kvp in Model.DirectoryDescriptors)
             {
                 Print(builder, kvp.Value, kvp.Key);
+            }
+
+            if (recursive)
+            {
+                long initialOffset = _dataSource.Position;
+                RecursivePrint(builder, Model.VolumeDescriptor.RootOffset, "\\", initialOffset);
+            }
+        }
+
+        private void RecursivePrint(StringBuilder builder, uint sectorNumber, string filePath, long initialOffset)
+        {
+            if (!Model.DirectoryDescriptors.ContainsKey(sectorNumber))
+                return;
+
+            foreach (DirectoryRecord dr in Model.DirectoryDescriptors[sectorNumber].DirectoryRecords)
+            {
+                string filename = Encoding.UTF8.GetString(dr.Filename);
+                string path = Path.Combine(filePath, filename);
+
+                // Skip already printed files
+                if (printedFiles.Contains(dr.ExtentOffset))
+                    continue;
+
+                // Recurse into directory
+                if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
+                {
+                    // Add directory extent before recursing
+                    printedFiles.Add(dr.ExtentOffset);
+
+                    RecursivePrint(builder, dr.ExtentOffset, path, initialOffset);
+                    continue;
+                }
+
+                // Parse embedded file
+                try
+                {
+                    _dataSource.Seek(initialOffset + Constants.SectorSize * dr.ExtentOffset, SeekOrigin.Begin);
+                    byte[] magic = _dataSource.PeekBytes(16);
+                    string extension = Path.GetExtension(filename).TrimStart('.');
+                    WrapperType ft = WrapperFactory.GetFileType(magic, extension);
+                    var wrapper = WrapperFactory.CreateWrapper(ft, _dataSource);
+                    if (wrapper is null || wrapper is not IPrintable printable)
+                        continue;
+                    
+                    // Print info for embedded file
+                    builder.AppendLine($"Information for {path}");
+                    builder.AppendLine("-------------------------");
+                    printable.PrintInformation(builder, true);
+
+                    printedFiles.Add(dr.ExtentOffset);
+                }
+                catch
+                {
+                    // Ignore the actual error
+                    continue;
+                }
             }
         }
 
