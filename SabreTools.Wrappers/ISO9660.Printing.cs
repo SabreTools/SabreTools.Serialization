@@ -325,7 +325,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
 
             builder.AppendLine("    Root Directory Record:");
-            Print(builder, vd.RootDirectoryRecord);
+            Print(builder, vd.RootDirectoryRecord, encoding);
 
             builder.AppendLine(encoding.GetString(vd.VolumeSetIdentifier), "    Volume Set Identifier");
             builder.AppendLine(encoding.GetString(vd.PublisherIdentifier), "    Publisher Identifier");
@@ -542,7 +542,7 @@ namespace SabreTools.Wrappers
                 {
                     builder.AppendLine($"      Directory Record {recordNum}:");
                     builder.AppendLine("      -------------------------");
-                    Print(builder, dir.DirectoryRecords[recordNum]);
+                    Print(builder, dir.DirectoryRecords[recordNum], encoding);
                     builder.AppendLine();
                 }
             }
@@ -555,7 +555,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryRecord dr)
+        private static void Print(StringBuilder builder, DirectoryRecord dr, Encoding encoding)
         {
             builder.AppendLine(dr.DirectoryRecordLength, "      Directory Record Length");
             builder.AppendLine(dr.ExtendedAttributeRecordLength, "      Extended Attribute Record Length");
@@ -582,6 +582,9 @@ namespace SabreTools.Wrappers
 
             builder.AppendLine(dr.FileIdentifierLength, "      File Identifier Length");
             builder.AppendLine(dr.FileIdentifier, "      File Identifier");
+            if (dr.FileIdentifier is not null && dr.FileIdentifier.Length > 0)
+                builder.AppendLine(encoding.GetString(dr.FileIdentifier), "      File Identifier (Decoded)");
+
             builder.AppendLine(dr.PaddingField, "      Padding Field");
 
             if (dr.SystemUse.Length == 0)
