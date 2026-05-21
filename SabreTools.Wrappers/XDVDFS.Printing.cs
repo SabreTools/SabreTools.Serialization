@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using SabreTools.Data.Models.XDVDFS;
+using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
@@ -28,9 +32,34 @@ namespace SabreTools.Wrappers
             if (Model.LayoutDescriptor is not null)
                 Print(builder, Model.LayoutDescriptor);
 
+            List<DirectoryRecord> subFiles = [];
             foreach (var kvp in Model.DirectoryDescriptors)
             {
-                Print(builder, kvp.Value, kvp.Key);
+                var files = Print(builder, kvp.Value, kvp.Key);
+                if (recursive)
+                    subFiles.AddRange(files);
+            }
+
+            if (recursive)
+            {
+                long initialOffset = _dataSource.Position;
+                foreach (DirectoryRecord dr in subFiles)
+                {
+                    // Parse embedded file
+                    _dataSource.Seek(initialOffset + Constants.SectorSize * dr.ExtentOffset, SeekOrigin.Begin);
+                    byte[] magic = _dataSource.PeekBytes(16);
+                    string filename = Encoding.UTF8.GetString(dr.Filename);
+                    string extension = Path.GetExtension(filename).TrimStart('.');
+                    WrapperType ft = WrapperFactory.GetFileType(magic, extension);
+                    var wrapper = WrapperFactory.CreateWrapper(ft, _dataSource);
+                    if (wrapper is null || wrapper is not IPrintable printable)
+                        continue;
+                    
+                    // Print info for embedded file
+                    builder.AppendLine($"Information for {filename}");
+                    builder.AppendLine("-------------------------");
+                    printable.PrintInformation(builder, recursive);
+                }
             }
         }
 
@@ -91,13 +120,20 @@ namespace SabreTools.Wrappers
             return $"{ver.Major}.{ver.Minor}.{ver.Build}.{ver.Revision}";
         }
 
-        internal static void Print(StringBuilder builder, DirectoryDescriptor dd, uint sectorNumber)
+        internal static List<DirectoryRecord> Print(StringBuilder builder, DirectoryDescriptor dd, uint sectorNumber)
         {
             builder.AppendLine($"  Directory Descriptor (Sector {sectorNumber}):");
             builder.AppendLine("  -------------------------");
 
+            List<DirectoryRecord> files = [];
             foreach (DirectoryRecord dr in dd.DirectoryRecords)
+            {
                 Print(builder, dr);
+
+                // Append files to queue for recursive printing
+                if ((dr.FileFlags & FileFlags.DIRECTORY) != FileFlags.DIRECTORY)
+                    files.Add(dr);
+            }
 
             if (dd.Padding is null)
                 builder.AppendLine("None", "    Padding");
@@ -107,6 +143,8 @@ namespace SabreTools.Wrappers
                 builder.AppendLine("Not all 0xFF", "    Padding");
 
             builder.AppendLine();
+
+            return files;
         }
 
         private static void Print(StringBuilder builder, DirectoryRecord dr)

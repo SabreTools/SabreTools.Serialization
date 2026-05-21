@@ -38,6 +38,9 @@ namespace InfoPrint.Features
         private const string _jsonName = "json";
         internal readonly FlagInput JsonInput = new(_jsonName, ["-j", "--json"], "Print info as JSON");
 
+        private const string _recursiveName = "recursive";
+        internal readonly FlagInput RecursiveInput = new(_recursiveName, ["-r", "--recursive"], "Recursively print info from embedded files");
+
         #endregion
 
         /// <summary>
@@ -74,6 +77,7 @@ namespace InfoPrint.Features
             Add(HashInput);
             Add(FileOnlyInput);
             Add(JsonInput);
+            Add(RecursiveInput);
         }
 
         /// <inheritdoc/>
@@ -84,9 +88,7 @@ namespace InfoPrint.Features
             Hash = GetBoolean(_hashName);
             FileOnly = GetBoolean(_fileOnlyName);
             Json = GetBoolean(_jsonName);
-
-            // TODO: Add flag for this once there are examples of it
-            Recursive = false;
+            Recursive = GetBoolean(_recursiveName);
 
             // Loop through the input paths
             for (int i = 0; i < Inputs.Count; i++)
