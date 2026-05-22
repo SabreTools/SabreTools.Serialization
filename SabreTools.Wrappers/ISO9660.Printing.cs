@@ -136,7 +136,7 @@ namespace SabreTools.Wrappers
                         try
                         {
                             long offset = initialOffset + ((dr.ExtentLocation.LittleEndian + (long)dr.ExtendedAttributeRecordLength) * blockLength);
-                            var wrapper = GetFileWrapper(offset, filename);
+                            var wrapper = WrapperFactory.GetFileWrapper(_dataSource, offset, filename);
                             if (wrapper is not null && wrapper is IPrintable printable)
                             {
                                 // Print info for embedded file
@@ -160,7 +160,7 @@ namespace SabreTools.Wrappers
                         try
                         {
                             long offset = initialOffset + ((dr.ExtentLocation.BigEndian + dr.ExtendedAttributeRecordLength) * blockLength);
-                            var wrapper = GetFileWrapper(offset, filename);
+                            var wrapper = WrapperFactory.GetFileWrapper(_dataSource, offset, filename);
                             if (wrapper is not null && wrapper is IPrintable printable)
                             {
                                 // Print info for embedded file
@@ -179,17 +179,6 @@ namespace SabreTools.Wrappers
                     }
                 }
             }
-        }
-
-        private IWrapper? GetFileWrapper(long offset, string filename)
-        {
-            _dataSource.Seek(offset, SeekOrigin.Begin);
-
-            byte[] magic = _dataSource.PeekBytes(16);
-            string extension = Path.GetExtension(filename).TrimStart('.');
-
-            WrapperType ft = WrapperFactory.GetFileType(magic, extension);
-            return WrapperFactory.CreateWrapper(ft, _dataSource);
         }
 
         protected static void Print(StringBuilder builder, byte[] systemArea)

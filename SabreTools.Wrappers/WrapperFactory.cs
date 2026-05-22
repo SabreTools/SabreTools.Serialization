@@ -1190,5 +1190,23 @@ namespace SabreTools.Wrappers
             // We couldn't find a supported match
             return WrapperType.UNKNOWN;
         }
+
+        /// <summary>
+        /// Get a file wrapper based on an offset within a stream
+        /// </summary>
+        public static IWrapper? GetFileWrapper(Stream? data, long offset, string filename)
+        {
+            // Null streams can't create wrappers
+            if (data is null)
+                return null;
+
+            data.Seek(offset, SeekOrigin.Begin);
+
+            byte[] magic = data.PeekBytes(16);
+            string extension = Path.GetExtension(filename).TrimStart('.');
+
+            WrapperType ft = GetFileType(magic, extension);
+            return CreateWrapper(ft, data);
+        }
     }
 }

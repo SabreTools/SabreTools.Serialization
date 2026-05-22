@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.XDVDFS;
-using SabreTools.Numerics.Extensions;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
@@ -81,13 +80,7 @@ namespace SabreTools.Wrappers
                 // Parse embedded file
                 try
                 {
-                    _dataSource.Seek(initialOffset + (Constants.SectorSize * dr.ExtentOffset), SeekOrigin.Begin);
-
-                    byte[] magic = _dataSource.PeekBytes(16);
-                    string extension = Path.GetExtension(filename).TrimStart('.');
-
-                    WrapperType ft = WrapperFactory.GetFileType(magic, extension);
-                    var wrapper = WrapperFactory.CreateWrapper(ft, _dataSource);
+                    IWrapper? wrapper = WrapperFactory.GetFileWrapper(_dataSource, initialOffset + (Constants.SectorSize * dr.ExtentOffset), filename);
                     if (wrapper is null || wrapper is not IPrintable printable)
                         continue;
 
