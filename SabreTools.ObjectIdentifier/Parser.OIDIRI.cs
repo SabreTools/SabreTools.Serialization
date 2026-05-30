@@ -12,7 +12,6 @@ namespace SabreTools.ObjectIdentifier
         /// Parse an OID in separated-value notation into OID-IRI notation
         /// </summary>
         /// <param name="values">List of values to check against</param>
-        /// <param name="index">Current index into the list</param>
         /// <returns>OID-IRI formatted string, if possible</returns>
         /// <see href="https://oid-base.com/"/>
         public static string? ParseOIDToOIDIRINotation(ulong[]? values)
