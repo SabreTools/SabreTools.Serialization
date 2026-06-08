@@ -1798,7 +1798,7 @@ namespace SabreTools.Wrappers
                 // Search the resource table data for the offset
                 long resourceOffset = -1;
                 _dataSource.SeekIfPossible(resourceTableOffset, SeekOrigin.Begin);
-                while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length)
+                while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length - 1)
                 {
                     ushort possibleSignature = _dataSource.ReadUInt16LittleEndian();
                     if (possibleSignature == Data.Models.MSDOS.Constants.SignatureUInt16)
