@@ -587,6 +587,18 @@ namespace SabreTools.Serialization.Readers
 
                         obj.Publisher = reader.ReadElementContentAsString();
                         break;
+                    case "serial":
+                        if (obj.Serial is not null && Debug)
+                            Console.WriteLine($"'{reader.Name}' element already found, overwriting");
+
+                        obj.Serial = reader.ReadElementContentAsString();
+                        break;
+                    case "version":
+                        if (obj.Version is not null && Debug)
+                            Console.WriteLine($"'{reader.Name}' element already found, overwriting");
+
+                        obj.Version = reader.ReadElementContentAsString();
+                        break;
                     case "category":
                         var category = reader.ReadElementContentAsString();
                         if (category is not null)

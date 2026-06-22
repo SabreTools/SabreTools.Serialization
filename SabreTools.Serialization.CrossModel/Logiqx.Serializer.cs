@@ -144,6 +144,8 @@ namespace SabreTools.Serialization.CrossModel
                 Name = machineName,
                 Players = item.Trurip?.Players,
                 Publisher = item.Publisher ?? item.Trurip?.Publisher,
+                Serial = item.Serial,
+                Version = item.Version,
                 Ratings = item.Trurip?.Ratings,
                 RebuildTo = item.RebuildTo,
                 RelatedTo = item.Trurip?.RelatedTo,

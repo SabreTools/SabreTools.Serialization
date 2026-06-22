@@ -314,6 +314,12 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.Score = value;
         }
 
+        public string? Serial
+        {
+            get => _internal.Serial;
+            set => _internal.Serial = value;
+        }
+
         public string? Source
         {
             get => _internal.Source;
@@ -372,6 +378,12 @@ namespace SabreTools.Metadata.DatItems
         {
             get => _internal.Url;
             set => _internal.Url = value;
+        }
+
+        public string? Version
+        {
+            get => _internal.Version;
+            set => _internal.Version = value;
         }
 
         public string? Year

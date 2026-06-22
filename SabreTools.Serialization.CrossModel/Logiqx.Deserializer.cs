@@ -135,6 +135,8 @@ namespace SabreTools.Serialization.CrossModel
             gameBase.Year = item.Year;
             gameBase.Manufacturer = item.Manufacturer;
             gameBase.Publisher = item.Publisher;
+            gameBase.Serial = item.Serial;
+            gameBase.Version = item.Version;
             gameBase.Category = item.Category;
 
             if (item.TitleID is not null

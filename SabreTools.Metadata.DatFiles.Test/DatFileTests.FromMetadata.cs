@@ -326,6 +326,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SampleOf = "sampleof",
                 SaveType = "savetype",
                 Score = "score",
+                Serial = "serial",
                 SharedFeat = [CreateMetadataSharedFeat()],
                 Slot = [CreateMetadataSlot()],
                 SoftwareList = [CreateMetadataSoftwareList()],
@@ -340,6 +341,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 Tags = "tags",
                 TitleID = "titleid",
                 Url = "url",
+                Version = "version",
                 Video = [CreateMetadataVideo()],
                 Year = "year",
             };

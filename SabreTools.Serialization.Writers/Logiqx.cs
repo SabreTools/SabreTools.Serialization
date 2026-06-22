@@ -373,6 +373,8 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalElementString("year", obj.Year);
             writer.WriteOptionalElementString("manufacturer", obj.Manufacturer);
             writer.WriteOptionalElementString("publisher", obj.Publisher);
+            writer.WriteOptionalElementString("serial", obj.Serial);
+            writer.WriteOptionalElementString("version", obj.Version);
 
             if (obj.Category is not null && obj.Category.Length > 0)
             {

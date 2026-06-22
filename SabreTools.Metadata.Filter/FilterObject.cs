@@ -1600,6 +1600,9 @@ namespace SabreTools.Metadata.Filter
                 case "score":
                     checkValue = obj.Score;
                     return true;
+                case "serial":
+                    checkValue = obj.Serial;
+                    return true;
                 case "source":
                     checkValue = obj.Source;
                     return true;
@@ -1629,6 +1632,9 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case "url":
                     checkValue = obj.Url;
+                    return true;
+                case "version":
+                    checkValue = obj.Version;
                     return true;
                 case "year":
                     checkValue = obj.Year;

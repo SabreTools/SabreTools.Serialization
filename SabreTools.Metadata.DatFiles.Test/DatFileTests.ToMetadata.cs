@@ -435,6 +435,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("sampleof", machine.SampleOf);
             Assert.Equal("savetype", machine.SaveType);
             Assert.Equal("score", machine.Score);
+            Assert.Equal("serial", machine.Serial);
             Assert.Equal("source", machine.Source);
             Assert.Equal("sourcefile", machine.SourceFile);
             Assert.Equal("sourcerom", machine.SourceRom);
@@ -444,6 +445,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("system", machine.System);
             Assert.Equal("tags", machine.Tags);
             Assert.Equal("titleid", machine.TitleID);
+            Assert.Equal("version", machine.Version);
             Assert.Equal("year", machine.Year);
 
             Data.Models.Metadata.Adjuster[]? adjusters = machine.Adjuster;

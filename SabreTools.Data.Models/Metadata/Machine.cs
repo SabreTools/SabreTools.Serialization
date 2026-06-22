@@ -157,6 +157,8 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Score { get; set; }
 
+        public string? Serial { get; set; }
+
         public SharedFeat[]? SharedFeat { get; set; }
 
         public Slot[]? Slot { get; set; }
@@ -185,6 +187,8 @@ namespace SabreTools.Data.Models.Metadata
         public string? TitleID { get; set; }
 
         public string? Url { get; set; }
+
+        public string? Version { get; set; }
 
         public Video[]? Video { get; set; }
 
@@ -293,6 +297,7 @@ namespace SabreTools.Data.Models.Metadata
             obj.SampleOf = SampleOf;
             obj.SaveType = SaveType;
             obj.Score = Score;
+            obj.Serial = Serial;
             if (SharedFeat is not null)
                 obj.SharedFeat = Array.ConvertAll(SharedFeat, i => (SharedFeat)i.Clone());
             if (Slot is not null)
@@ -311,6 +316,7 @@ namespace SabreTools.Data.Models.Metadata
             obj.Tags = Tags;
             obj.TitleID = TitleID;
             obj.Url = Url;
+            obj.Version = Version;
             if (Video is not null)
                 obj.Video = Array.ConvertAll(Video, i => (Video)i.Clone());
             obj.Year = Year;
@@ -558,6 +564,11 @@ namespace SabreTools.Data.Models.Metadata
             else if (Score is not null && !Score.Equals(other.Score, StringComparison.OrdinalIgnoreCase))
                 return false;
 
+            if ((Serial is null) ^ (other.Serial is null))
+                return false;
+            else if (Serial is not null && !Serial.Equals(other.Serial, StringComparison.OrdinalIgnoreCase))
+                return false;
+
             if ((Source is null) ^ (other.Source is null))
                 return false;
             else if (Source is not null && !Source.Equals(other.Source, StringComparison.OrdinalIgnoreCase))
@@ -604,6 +615,11 @@ namespace SabreTools.Data.Models.Metadata
             if ((Url is null) ^ (other.Url is null))
                 return false;
             else if (Url is not null && !Url.Equals(other.Url, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((Version is null) ^ (other.Version is null))
+                return false;
+            else if (Version is not null && !Version.Equals(other.Version, StringComparison.OrdinalIgnoreCase))
                 return false;
 
             if ((Year is null) ^ (other.Year is null))

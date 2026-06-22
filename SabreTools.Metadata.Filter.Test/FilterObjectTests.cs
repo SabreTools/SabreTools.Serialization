@@ -1359,6 +1359,7 @@ namespace SabreTools.Metadata.Filter.Test
                 SampleOf = "sampleof",
                 SaveType = "savetype",
                 Score = "score",
+                Serial = "serial",
                 Source = "source",
                 SourceFile = "sourcefile",
                 SourceRom = "sourcerom",
@@ -1369,6 +1370,7 @@ namespace SabreTools.Metadata.Filter.Test
                 Tags = "tags",
                 TitleID = "titleid",
                 Url = "url",
+                Version = "version",
                 Year = "year",
             };
 

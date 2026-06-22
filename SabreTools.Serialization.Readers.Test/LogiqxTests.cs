@@ -322,6 +322,8 @@ namespace SabreTools.Serialization.Readers.Test
             gameBase.Year = "year";
             gameBase.Manufacturer = "manufacturer";
             gameBase.Publisher = "publisher";
+            gameBase.Serial = "serial";
+            gameBase.Version = "version";
             gameBase.Category = ["category"];
             gameBase.Trurip = trurip;
             gameBase.Release = [release];
@@ -437,6 +439,8 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("year", gb.Year);
             Assert.Equal("manufacturer", gb.Manufacturer);
             Assert.Equal("publisher", gb.Publisher);
+            Assert.Equal("serial", gb.Serial);
+            Assert.Equal("version", gb.Version);
 
             Assert.NotNull(gb.Category);
             string category = Assert.Single(gb.Category);

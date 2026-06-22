@@ -71,6 +71,12 @@ namespace SabreTools.Data.Models.Logiqx
         [XmlElement("publisher")]
         public string? Publisher { get; set; }
 
+        [XmlElement("serial")]
+        public string? Serial { get; set; }
+
+        [XmlElement("version")]
+        public string? Version { get; set; }
+
         /// <remarks>No-Intro extension includes more than 1 instance</remarks>
         [XmlElement("category")]
         public string[]? Category { get; set; }
