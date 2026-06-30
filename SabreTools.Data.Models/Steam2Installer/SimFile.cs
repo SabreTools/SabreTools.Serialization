@@ -20,21 +20,8 @@ namespace SabreTools.Data.Models.Steam2Installer
         /// </summary>
         public Header Header { get; set; } = new();
 
-        /// <summary>
-        /// Byte array containing the null-terminated strings for file paths and names
-        /// </summary>
-        /// <remarks>Seems to usually start with two null bytes, not that it matters with how this gets parsed.</remarks>
-        public byte[] StringsBytes { get; set; } = [];
-
-        /// <summary>
-        /// Size of the file entries section
-        /// </summary>
-        public uint FileEntriesSize { get; set; }
-
-        /// <summary>
-        /// Number of entries in the file entries section
-        /// </summary>
-        public uint FileEntriesCount { get; set; }
+        // The string bytes array would go here, but it gets parsed out into FileEntries during deserialization,
+        // so there's no point storing it in the model. Same with the file entries size and count.
 
         /// <summary>
         /// Array of file entries

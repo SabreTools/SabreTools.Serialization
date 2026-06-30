@@ -26,7 +26,7 @@ namespace SabreTools.Data.Models.Steam2Installer
         public ulong Offset { get; set; }
 
         /// <summary>
-        /// Size of the file
+        /// Size of the file, in bytes
         /// </summary>
         public ulong Size { get; set; }
 

@@ -64,6 +64,7 @@ namespace SabreTools.Wrappers
                 WrapperType.SkuSis => SkuSis.Create(data),
                 WrapperType.SFFS => SFFS.Create(data),
                 WrapperType.SGA => SGA.Create(data),
+                WrapperType.Steam2Installer => Steam2Installer.Create(data),
                 WrapperType.STFS => STFS.Create(data),
                 WrapperType.TapeArchive => TapeArchive.Create(data),
                 WrapperType.VBSP => VBSP.Create(data),
@@ -935,6 +936,13 @@ namespace SabreTools.Wrappers
 
             if (extension.Equals("skeleton", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.Skeleton;
+
+            #endregion
+
+            #region Steam2Installer
+
+            if (magic.StartsWith(Data.Models.Steam2Installer.Constants.SimSignatureBytes))
+                return WrapperType.Steam2Installer;
 
             #endregion
 

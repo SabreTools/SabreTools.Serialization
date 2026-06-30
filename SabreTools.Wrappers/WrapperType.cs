@@ -258,6 +258,11 @@ namespace SabreTools.Wrappers
         SkuSis,
 
         /// <summary>
+        /// Steam2 Installer set (sim/sid)
+        /// </summary>
+        Steam2Installer,
+
+        /// <summary>
         /// Secure Transacted File System
         /// </summary>
         STFS,
