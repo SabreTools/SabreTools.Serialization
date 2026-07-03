@@ -20,6 +20,7 @@ namespace SabreTools.Serialization.Readers
             {
                 // Cache the current offset
                 long initialOffset = data.Position;
+
                 // Create a new Steam2 Installer set to populate
                 var si = new Steam2InstallerSet();
 
@@ -42,6 +43,11 @@ namespace SabreTools.Serialization.Readers
             }
         }
 
+        /// <summary>
+        /// Parse a Sim file
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Sim on success, null on error</returns>
         public static SimFile? ParseSim(Stream data)
         {
             // Create a new Sim file to populate
@@ -78,7 +84,7 @@ namespace SabreTools.Serialization.Readers
 
             // Try to parse the entry table
             var table = ParseTable(data, fileEntriesCount, stringsBytes);
-            if (table == null || table.Length != fileEntriesCount)
+            if (table is null || table.Length != fileEntriesCount)
                 return null;
 
             // Set the entry table
@@ -119,7 +125,7 @@ namespace SabreTools.Serialization.Readers
             for (uint i = 0; i < count; i++)
             {
                 var fileEntry = ParseFileEntry(data, stringsBytes);
-                if (fileEntry == null)
+                if (fileEntry is null)
                     return null;
 
                 obj[i] = fileEntry;
@@ -149,14 +155,14 @@ namespace SabreTools.Serialization.Readers
 
             // Read file path and name strings
             int nameOffset = (int)obj.NameOffset;
-            int pathOffset = (int)obj.PathOffset;
             string? name = stringsBytes.ReadNullTerminatedAnsiString(ref nameOffset); // Unsure on encoding, assumed ascii/ansi
-            if (name == null)
+            if (name is null)
                 return null;
 
             obj.Name = name;
+            int pathOffset = (int)obj.PathOffset;
             string? path = stringsBytes.ReadNullTerminatedAnsiString(ref pathOffset); // Unsure on encoding, assumed ascii/ansi
-            if (path == null)
+            if (path is null)
                 return null;
 
             obj.Path = path;

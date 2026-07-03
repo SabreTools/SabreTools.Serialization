@@ -10,6 +10,6 @@ namespace SabreTools.Data.Models.Steam2Installer
         /// <summary>
         /// The set of sid file volumes
         /// </summary>
-        // public SidFile[] Sid { get; set; } = new();
+        // public SidFile[] Sid { get; set; } = [];
     }
 }
