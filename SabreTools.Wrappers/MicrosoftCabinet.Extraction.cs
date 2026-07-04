@@ -371,6 +371,9 @@ namespace SabreTools.Wrappers
             /// <returns>Filestream opened for the file</returns>
             private FileStream GetFileStream(string filename, string outputDirectory)
             {
+                // Trim directory separators from the start
+                filename = filename.TrimStart(['\\', '/']);
+
                 // Ensure directory separators are consistent
                 if (Path.DirectorySeparatorChar == '\\')
                     filename = filename.Replace('/', '\\');
