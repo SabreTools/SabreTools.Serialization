@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <!-- Assembly Properties -->
@@ -31,7 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="SabreTools.Hashing" Version="[2.0.0]" />
+        <PackageReference Include="SabreTools.Hashing" Version="2.0.0" />
      </ItemGroup>
 
     <ItemGroup>
