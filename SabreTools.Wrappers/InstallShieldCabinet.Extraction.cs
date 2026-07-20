@@ -245,7 +245,7 @@ namespace SabreTools.Wrappers
                         string filename = cabinet.GetFileName(i) ?? $"BAD_FILENAME{i}";
                         uint dirIndex = cabinet.GetDirectoryIndexFromFile(i);
                         string dir = cabinet.GetDirectoryName((int)dirIndex) ?? $"BAD_DIRNAME{dirIndex}";
-                        string group = cabinet.GetFileGroupNameFromFile(i) ?? $"BAD_GROUPNAME{dirIndex}";
+                        string? group = cabinet.GetFileGroupNameFromFile(i);
 
                         // Consistently replace problematic path characters
                         foreach (char c in PathReplacementCharacters)
@@ -253,17 +253,19 @@ namespace SabreTools.Wrappers
                             dir = dir.Replace(c, '_');
                         }
 
-                        foreach (char c in PathReplacementCharacters)
+                        // Only process the group if it's valid
+                        if (group is not null)
                         {
-                            group = group.Replace(c, '_');
+                            foreach (char c in PathReplacementCharacters)
+                            {
+                                group = group.Replace(c, '_');
+                            }
                         }
 
                         // Build the full path
-#if NET20 || NET35
-                        filename = Path.Combine(Path.Combine(group, dir), filename);
-#else
-                        filename = Path.Combine(group, dir, filename);
-#endif
+                        filename = Path.Combine(dir, filename);
+                        if (group is not null)
+                            filename = Path.Combine(group, filename);
 
                         // Ensure directory separators are consistent
                         filename = filename.TrimStart(['\\', '/']);
