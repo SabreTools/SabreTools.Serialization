@@ -66,6 +66,7 @@ namespace SabreTools.Serialization.CrossModel
                 Url = item.Url,
                 Comment = item.Comment,
                 Type = item.Type,
+                Subset = item.Subset,
             };
 
             if (item.ClrMamePro is not null)

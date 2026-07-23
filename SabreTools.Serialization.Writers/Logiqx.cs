@@ -158,6 +158,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalElementString("url", obj.Url);
             writer.WriteOptionalElementString("comment", obj.Comment);
             writer.WriteOptionalElementString("type", obj.Type);
+            writer.WriteOptionalElementString("subset", obj.Subset);
 
             if (obj.RomVault is not null)
                 WriteRomVault(obj.RomVault, writer);

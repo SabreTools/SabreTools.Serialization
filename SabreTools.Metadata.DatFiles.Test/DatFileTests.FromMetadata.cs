@@ -243,6 +243,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 ScreenshotsHeight = "screenshotsheight",
                 ScreenshotsWidth = "screenshotsWidth",
                 Search = search,
+                Subset = "subset",
                 System = "system",
                 Timestamp = "timestamp",
                 Type = "type",
@@ -1034,6 +1035,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("screenshotsheight", datHeader.ScreenshotsHeight);
             Assert.Equal("screenshotsWidth", datHeader.ScreenshotsWidth);
             Assert.NotNull(datHeader.Search);
+            Assert.Equal("subset", datHeader.Subset);
             Assert.Equal("system", datHeader.System);
             Assert.Equal("timestamp", datHeader.Timestamp);
             Assert.Equal("type", datHeader.Type);

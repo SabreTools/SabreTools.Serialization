@@ -282,6 +282,12 @@ namespace SabreTools.Metadata.DatFiles
         [JsonIgnore]
         public bool SearchSpecified => Search is not null;
 
+        public string? Subset
+        {
+            get => _internal.Subset;
+            set => _internal.Subset = value;
+        }
+
         public string? System
         {
             get => _internal.System;

@@ -374,6 +374,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("screenshotsheight", header.ScreenshotsHeight);
             Assert.Equal("screenshotsWidth", header.ScreenshotsWidth);
             Assert.NotNull(header.Search);
+            Assert.Equal("subset", header.Subset);
             Assert.Equal("system", header.System);
             Assert.Equal("timestamp", header.Timestamp);
             Assert.Equal("type", header.Type);

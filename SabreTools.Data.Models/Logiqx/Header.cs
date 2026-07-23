@@ -48,6 +48,10 @@ namespace SabreTools.Data.Models.Logiqx
         [XmlElement("comment")]
         public string? Comment { get; set; }
 
+        /// <remarks>RomVault extension</remarks>
+        [XmlElement("subset")]
+        public string? Subset { get; set; }
+
         /// <remarks>Trurip extension</remarks>
         [XmlElement("type")]
         public string? Type { get; set; }

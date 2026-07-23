@@ -180,6 +180,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Url = "url",
                 Comment = "comment",
                 Type = "type",
+                Subset = "subset",
                 RomVault = romvault,
                 ClrMamePro = clrmamepro,
                 RomCenter = romcenter,
@@ -368,6 +369,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("url", header.Url);
             Assert.Equal("comment", header.Comment);
             Assert.Equal("type", header.Type);
+            Assert.Equal("subset", header.Subset);
             Validate(header.RomVault);
             Validate(header.ClrMamePro);
             Validate(header.RomCenter);

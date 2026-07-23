@@ -1365,6 +1365,9 @@ namespace SabreTools.Metadata.Filter
                     checkValue = obj.ScreenshotsWidth;
                     return true;
                 // Header.Search is intentionally skipped
+                case "subset":
+                    checkValue = obj.Subset;
+                    return true;
                 case "system":
                     checkValue = obj.System;
                     return true;

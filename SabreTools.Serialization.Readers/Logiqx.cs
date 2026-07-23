@@ -270,6 +270,12 @@ namespace SabreTools.Serialization.Readers
 
                         obj.Type = reader.ReadElementContentAsString();
                         break;
+                    case "subset":
+                        if (obj.Subset is not null && Debug)
+                            Console.WriteLine($"'{reader.Name}' element already found, overwriting");
+
+                        obj.Subset = reader.ReadElementContentAsString();
+                        break;
                     case "romvault":
                         if (obj.RomVault is not null && Debug)
                             Console.WriteLine($"'{reader.Name}' element already found, overwriting");

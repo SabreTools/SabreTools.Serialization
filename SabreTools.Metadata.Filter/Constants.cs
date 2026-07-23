@@ -337,6 +337,7 @@ namespace SabreTools.Metadata.Filter
             "screenshotsheight",
             "screenshotswidth",
             "skipper",
+            "subset",
             "system",
             "timestamp",
             "type",

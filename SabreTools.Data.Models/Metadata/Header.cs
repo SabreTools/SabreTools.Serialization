@@ -108,6 +108,8 @@ namespace SabreTools.Data.Models.Metadata
         /// TODO: This needs an internal model OR mapping to fields
         public OfflineList.Search? Search { get; set; }
 
+        public string? Subset { get; set; }
+
         public string? System { get; set; }
 
         public string? Timestamp { get; set; }
@@ -166,6 +168,7 @@ namespace SabreTools.Data.Models.Metadata
             obj.ScreenshotsHeight = ScreenshotsHeight;
             obj.ScreenshotsWidth = ScreenshotsWidth;
             obj.Search = Search;
+            obj.Subset = Subset;
             obj.System = System;
             obj.Timestamp = Timestamp;
             obj.Type = Type;
@@ -334,6 +337,11 @@ namespace SabreTools.Data.Models.Metadata
             if ((ScreenshotsWidth is null) ^ (other.ScreenshotsWidth is null))
                 return false;
             else if (ScreenshotsWidth is not null && !ScreenshotsWidth.Equals(other.ScreenshotsWidth, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((Subset is null) ^ (other.Subset is null))
+                return false;
+            else if (Subset is not null && !Subset.Equals(other.Subset, StringComparison.OrdinalIgnoreCase))
                 return false;
 
             if ((System is null) ^ (other.System is null))

@@ -1131,6 +1131,7 @@ namespace SabreTools.Metadata.Filter.Test
         [InlineData("header.schemalocation", "schemalocation")]
         [InlineData("header.screenshotsheight", "screenshotsheight")]
         [InlineData("header.screenshotswidth", "screenshotswidth")]
+        [InlineData("header.subset", "subset")]
         [InlineData("header.system", "system")]
         [InlineData("header.timestamp", "timestamp")]
         [InlineData("header.type", "type")]
@@ -1176,6 +1177,7 @@ namespace SabreTools.Metadata.Filter.Test
                 SchemaLocation = "schemalocation",
                 ScreenshotsHeight = "screenshotsheight",
                 ScreenshotsWidth = "screenshotswidth",
+                Subset = "subset",
                 System = "system",
                 Timestamp = "timestamp",
                 Type = "type",

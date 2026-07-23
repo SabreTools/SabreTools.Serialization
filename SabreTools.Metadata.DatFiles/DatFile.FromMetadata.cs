@@ -156,6 +156,8 @@ namespace SabreTools.Metadata.DatFiles
                 Header.ScreenshotsWidth = header.ScreenshotsWidth;
             if (Header.System is null)
                 Header.System = header.System;
+            if (Header.Subset is null)
+                Header.Subset = header.Subset;
             if (Header.Timestamp is null)
                 Header.Timestamp = header.Timestamp;
             if (Header.Type is null)
