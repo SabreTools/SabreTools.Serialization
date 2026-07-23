@@ -362,6 +362,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("id", obj.Id);
             writer.WriteOptionalAttributeString("cloneofid", obj.CloneOfId);
             writer.WriteOptionalAttributeString("runnable", obj.Runnable?.AsStringValue());
+            writer.WriteOptionalAttributeString("type", obj.SetType);
 
             if (obj.Comment is not null && obj.Comment.Length > 0)
             {

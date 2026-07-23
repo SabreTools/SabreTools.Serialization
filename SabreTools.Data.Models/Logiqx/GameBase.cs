@@ -55,6 +55,11 @@ namespace SabreTools.Data.Models.Logiqx
         [XmlAttribute("runnable")]
         public Runnable? Runnable { get; set; }
 
+        /// <remarks>(dir|zip|7z), RomVault extension</remarks>
+        /// TODO: Turn this into an enum like the other flags
+        [XmlAttribute("type")]
+        public string? SetType { get; set; }
+
         [XmlElement("comment")]
         public string[]? Comment { get; set; }
 

@@ -320,6 +320,12 @@ namespace SabreTools.Metadata.DatItems
             set => _internal.Serial = value;
         }
 
+        public string? SetType
+        {
+            get => _internal.SetType;
+            set => _internal.SetType = value;
+        }
+
         public string? Source
         {
             get => _internal.Source;

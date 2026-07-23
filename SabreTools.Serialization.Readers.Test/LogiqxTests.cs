@@ -320,6 +320,7 @@ namespace SabreTools.Serialization.Readers.Test
             gameBase.Id = "id";
             gameBase.CloneOfId = "cloneofid";
             gameBase.Runnable = Data.Models.Metadata.Runnable.Yes;
+            gameBase.SetType = "dir";
             gameBase.Comment = ["comment"];
             gameBase.Description = "description";
             gameBase.Year = "year";
@@ -435,6 +436,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("id", gb.Id);
             Assert.Equal("cloneofid", gb.CloneOfId);
             Assert.Equal(Data.Models.Metadata.Runnable.Yes, gb.Runnable);
+            Assert.Equal("dir", gb.SetType);
 
             Assert.NotNull(gb.Comment);
             string comment = Assert.Single(gb.Comment);

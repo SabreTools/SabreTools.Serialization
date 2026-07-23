@@ -1294,6 +1294,8 @@ namespace SabreTools.Metadata.Filter.Test
         [InlineData("machine.sampleof", "sampleof")]
         [InlineData("machine.savetype", "savetype")]
         [InlineData("machine.score", "score")]
+        [InlineData("machine.serial", "serial")]
+        [InlineData("machine.settype", "dir")]
         [InlineData("machine.source", "source")]
         [InlineData("machine.sourcefile", "sourcefile")]
         [InlineData("machine.sourcerom", "sourcerom")]
@@ -1364,6 +1366,7 @@ namespace SabreTools.Metadata.Filter.Test
                 SaveType = "savetype",
                 Score = "score",
                 Serial = "serial",
+                SetType = "dir",
                 Source = "source",
                 SourceFile = "sourcefile",
                 SourceRom = "sourcerom",

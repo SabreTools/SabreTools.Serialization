@@ -133,6 +133,7 @@ namespace SabreTools.Serialization.CrossModel
             gameBase.Id = item.Id;
             gameBase.CloneOfId = item.CloneOfId;
             gameBase.Runnable = item.Runnable;
+            gameBase.SetType = item.SetType;
             gameBase.Comment = item.Comment;
             gameBase.Description = item.Description;
             gameBase.Year = item.Year;

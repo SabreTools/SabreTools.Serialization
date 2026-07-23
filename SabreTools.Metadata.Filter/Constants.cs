@@ -424,6 +424,8 @@ namespace SabreTools.Metadata.Filter
             "sampleof",
             "savetype",
             "score",
+            "serial",
+            "settype",
             "source",
             "sourcefile",
             "sourcerom",

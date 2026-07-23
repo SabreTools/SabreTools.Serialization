@@ -329,6 +329,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SaveType = "savetype",
                 Score = "score",
                 Serial = "serial",
+                SetType = "dir",
                 SharedFeat = [CreateMetadataSharedFeat()],
                 Slot = [CreateMetadataSlot()],
                 SoftwareList = [CreateMetadataSoftwareList()],
@@ -1095,6 +1096,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("sampleof", machine.SampleOf);
             Assert.Equal("savetype", machine.SaveType);
             Assert.Equal("score", machine.Score);
+            Assert.Equal("serial", machine.Serial);
+            Assert.Equal("dir", machine.SetType);
             Assert.Equal("source", machine.Source);
             Assert.Equal("sourcefile", machine.SourceFile);
             Assert.Equal("sourcerom", machine.SourceRom);

@@ -524,6 +524,7 @@ namespace SabreTools.Serialization.Readers
             obj.Id = reader.GetAttribute("id");
             obj.CloneOfId = reader.GetAttribute("cloneofid");
             obj.Runnable = reader.GetAttribute("runnable").AsRunnable();
+            obj.SetType = reader.GetAttribute("type");
 
             // Handle empty elements
             if (reader.IsEmptyElement)

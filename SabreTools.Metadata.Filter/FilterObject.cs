@@ -1610,6 +1610,9 @@ namespace SabreTools.Metadata.Filter
                 case "serial":
                     checkValue = obj.Serial;
                     return true;
+                case "settype":
+                    checkValue = obj.SetType;
+                    return true;
                 case "source":
                     checkValue = obj.Source;
                     return true;

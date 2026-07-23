@@ -159,6 +159,9 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Serial { get; set; }
 
+        /// <remarks>(dir|zip|7z), RomVault extension</remarks>
+        public string? SetType { get; set; }
+
         public SharedFeat[]? SharedFeat { get; set; }
 
         public Slot[]? Slot { get; set; }
@@ -298,6 +301,7 @@ namespace SabreTools.Data.Models.Metadata
             obj.SaveType = SaveType;
             obj.Score = Score;
             obj.Serial = Serial;
+            obj.SetType = SetType;
             if (SharedFeat is not null)
                 obj.SharedFeat = Array.ConvertAll(SharedFeat, i => (SharedFeat)i.Clone());
             if (Slot is not null)
@@ -567,6 +571,11 @@ namespace SabreTools.Data.Models.Metadata
             if ((Serial is null) ^ (other.Serial is null))
                 return false;
             else if (Serial is not null && !Serial.Equals(other.Serial, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((SetType is null) ^ (other.SetType is null))
+                return false;
+            else if (SetType is not null && !SetType.Equals(other.SetType, StringComparison.OrdinalIgnoreCase))
                 return false;
 
             if ((Source is null) ^ (other.Source is null))

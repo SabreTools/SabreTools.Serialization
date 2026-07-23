@@ -163,6 +163,7 @@ namespace SabreTools.Serialization.CrossModel
                 Runnable = item.Runnable,
                 SampleOf = item.SampleOf,
                 Score = item.Trurip?.Score,
+                SetType = item.SetType,
                 Source = item.Trurip?.Source,
                 SourceFile = item.SourceFile,
                 Subgenre = item.Trurip?.Subgenre,

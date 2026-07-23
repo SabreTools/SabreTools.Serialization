@@ -438,6 +438,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("savetype", machine.SaveType);
             Assert.Equal("score", machine.Score);
             Assert.Equal("serial", machine.Serial);
+            Assert.Equal("dir", machine.SetType);
             Assert.Equal("source", machine.Source);
             Assert.Equal("sourcefile", machine.SourceFile);
             Assert.Equal("sourcerom", machine.SourceRom);
