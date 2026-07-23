@@ -212,6 +212,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteOptionalAttributeString("forcenodump", obj.ForceNodump.AsStringValue());
             if (obj.ForcePacking != Data.Models.Metadata.PackingFlag.None)
                 writer.WriteOptionalAttributeString("forcepacking", obj.ForcePacking.AsStringValue());
+            writer.WriteOptionalAttributeString("dir", obj.Dir);
 
             writer.WriteEndElement();
         }

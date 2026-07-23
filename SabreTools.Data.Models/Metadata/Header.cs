@@ -33,6 +33,8 @@ namespace SabreTools.Data.Models.Metadata
 
         public string? Description { get; set; }
 
+        public string? DirHandling { get; set; }
+
         public string? Email { get; set; }
 
         public string? EmulatorVersion { get; set; }
@@ -137,6 +139,7 @@ namespace SabreTools.Data.Models.Metadata
             obj.DatVersion = DatVersion;
             obj.Debug = Debug;
             obj.Description = Description;
+            obj.DirHandling = DirHandling;
             obj.Email = Email;
             obj.EmulatorVersion = EmulatorVersion;
             obj.FileName = FileName;
@@ -225,6 +228,11 @@ namespace SabreTools.Data.Models.Metadata
             if ((Description is null) ^ (other.Description is null))
                 return false;
             else if (Description is not null && !Description.Equals(other.Description, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if ((DirHandling is null) ^ (other.DirHandling is null))
+                return false;
+            else if (DirHandling is not null && !DirHandling.Equals(other.DirHandling, StringComparison.OrdinalIgnoreCase))
                 return false;
 
             if ((Email is null) ^ (other.Email is null))

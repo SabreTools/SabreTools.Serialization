@@ -84,6 +84,12 @@ namespace SabreTools.Metadata.DatFiles
             set => _internal.Description = value;
         }
 
+        public string? DirHandling
+        {
+            get => _internal.DirHandling;
+            set => _internal.DirHandling = value;
+        }
+
         public string? Email
         {
             get => _internal.Email;

@@ -104,6 +104,8 @@ namespace SabreTools.Metadata.DatFiles
                 Header.Debug = header.Debug;
             if (Header.Description is null)
                 Header.Description = header.Description;
+            if (Header.DirHandling is null)
+                Header.DirHandling = header.DirHandling;
             if (Header.Email is null)
                 Header.Email = header.Email;
             if (Header.EmulatorVersion is null)

@@ -21,5 +21,10 @@ namespace SabreTools.Data.Models.Logiqx
         /// <remarks>(zip|unzip) "zip"</remarks>
         [XmlAttribute("forcepacking")]
         public PackingFlag ForcePacking { get; set; }
+
+        /// <remarks>(noautodir|nogame)</remarks>
+        /// TODO: Turn this into an enum like the other flags
+        [XmlAttribute("dir")]
+        public string? Dir { get; set; }
     }
 }

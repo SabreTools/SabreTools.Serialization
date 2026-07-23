@@ -344,6 +344,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("datversion", header.DatVersion);
             Assert.True(header.Debug);
             Assert.Equal("description", header.Description);
+            Assert.Equal("noautodir", header.DirHandling);
             Assert.Equal("email", header.Email);
             Assert.Equal("emulatorversion", header.EmulatorVersion);
             Assert.Equal("filename", header.FileName);

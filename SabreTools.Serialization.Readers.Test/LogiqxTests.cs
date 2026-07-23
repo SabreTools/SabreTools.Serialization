@@ -144,6 +144,7 @@ namespace SabreTools.Serialization.Readers.Test
                 ForceMerging = Data.Models.Metadata.MergingFlag.Merged,
                 ForceNodump = Data.Models.Metadata.NodumpFlag.Required,
                 ForcePacking = Data.Models.Metadata.PackingFlag.Zip,
+                Dir = "noautodir",
             };
 
             var clrmamepro = new Data.Models.Logiqx.ClrMamePro
@@ -385,6 +386,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, rv.ForceMerging);
             Assert.Equal(Data.Models.Metadata.NodumpFlag.Required, rv.ForceNodump);
             Assert.Equal(Data.Models.Metadata.PackingFlag.Zip, rv.ForcePacking);
+            Assert.Equal("noautodir", rv.Dir);
         }
 
         /// <summary>

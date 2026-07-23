@@ -1280,6 +1280,10 @@ namespace SabreTools.Metadata.Filter
                 case "description":
                     checkValue = obj.Description;
                     return true;
+                case "dir":
+                case "dirhandling":
+                    checkValue = obj.DirHandling;
+                    return true;
                 case "email":
                     checkValue = obj.Email;
                     return true;

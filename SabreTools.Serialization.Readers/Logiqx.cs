@@ -341,6 +341,7 @@ namespace SabreTools.Serialization.Readers
             obj.ForceMerging = reader.GetAttribute("forcemerging").AsMergingFlag();
             obj.ForceNodump = reader.GetAttribute("forcenodump").AsNodumpFlag();
             obj.ForcePacking = reader.GetAttribute("forcepacking").AsPackingFlag();
+            obj.Dir = reader.GetAttribute("dir");
 
             return obj;
         }

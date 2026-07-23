@@ -309,6 +309,8 @@ namespace SabreTools.Metadata.Filter
             "datversion",
             "debug",
             "description",
+            "dir",
+            "dirhandling",
             "email",
             "emulatorversion",
             "filename",

@@ -71,6 +71,8 @@ namespace SabreTools.Serialization.CrossModel
                     header.RomVault.ForceNodump = item.ForceNodump;
                 if (item.ForcePacking is not Data.Models.Metadata.PackingFlag.None)
                     header.RomVault.ForcePacking = item.ForcePacking;
+                if (item.DirHandling is not null)
+                    header.RomVault.Dir = item.DirHandling;
 
                 header.ClrMamePro = new Data.Models.Logiqx.ClrMamePro();
                 if (item.HeaderSkipper is not null)

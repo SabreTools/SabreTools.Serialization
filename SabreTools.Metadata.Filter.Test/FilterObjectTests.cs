@@ -1103,6 +1103,7 @@ namespace SabreTools.Metadata.Filter.Test
         [InlineData("header.datversion", "datversion")]
         [InlineData("header.debug", "yes")]
         [InlineData("header.description", "description")]
+        [InlineData("header.dir", "noautodir")]
         [InlineData("header.email", "email")]
         [InlineData("header.emulatorversion", "emulatorversion")]
         [InlineData("header.filename", "filename")]
@@ -1151,6 +1152,7 @@ namespace SabreTools.Metadata.Filter.Test
                 DatVersion = "datversion",
                 Debug = true,
                 Description = "description",
+                DirHandling = "noautodir",
                 Email = "email",
                 EmulatorVersion = "emulatorversion",
                 FileName = "filename",

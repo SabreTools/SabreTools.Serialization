@@ -212,6 +212,7 @@ namespace SabreTools.Metadata.DatFiles.Test
                 DatVersion = "datversion",
                 Debug = true,
                 Description = "description",
+                DirHandling = "noautodir",
                 Email = "email",
                 EmulatorVersion = "emulatorversion",
                 FileName = "filename",
@@ -1006,6 +1007,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("datversion", datHeader.DatVersion);
             Assert.True(datHeader.Debug);
             Assert.Equal("description", datHeader.Description);
+            Assert.Equal("noautodir", datHeader.DirHandling);
             Assert.Equal("email", datHeader.Email);
             Assert.Equal("emulatorversion", datHeader.EmulatorVersion);
             Assert.Equal(Data.Models.Metadata.MergingFlag.Merged, datHeader.ForceMerging);

@@ -69,6 +69,15 @@ namespace SabreTools.Serialization.CrossModel
                 Subset = item.Subset,
             };
 
+            if (item.RomVault is not null)
+            {
+                header.HeaderSkipper = item.RomVault.Header;
+                header.ForceMerging = item.RomVault.ForceMerging;
+                header.ForceNodump = item.RomVault.ForceNodump;
+                header.ForcePacking = item.RomVault.ForcePacking;
+                header.DirHandling = item.RomVault.Dir;
+            }
+
             if (item.ClrMamePro is not null)
             {
                 header.HeaderSkipper = item.ClrMamePro.Header;
