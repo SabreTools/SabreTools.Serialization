@@ -91,6 +91,13 @@ namespace SabreTools.Serialization.Readers
                 return DeserializeSHA512(data);
             else if (hash == HashType.SpamSum)
                 return DeserializeSpamSum(data);
+#if NET7_0_OR_GREATER
+            else if (hash == HashType.BLAKE3)
+#else
+            // HACK because BLAKE3 is not supported below .NET 7
+            else if (hash == HashType.CRC1_ZERO)
+#endif
+                return DeserializeBLAKE3(data);
             else
                 return null;
         }
@@ -548,6 +555,50 @@ namespace SabreTools.Serialization.Readers
                 // Assign the hashes to the hashfile and return
                 if (spamsumList.Count > 0)
                     return new Data.Models.Hashfile.Hashfile { SpamSum = [.. spamsumList] };
+
+                return null;
+            }
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
+        }
+
+        /// <inheritdoc cref="Deserialize(Stream)"/>
+        public Data.Models.Hashfile.Hashfile? DeserializeBLAKE3(Stream? data)
+        {
+            // If the data is invalid
+            if (data is null || !data.CanRead)
+                return default;
+
+            try
+            {
+                // Setup the reader and output
+                var reader = new StreamReader(data);
+                var blake3List = new List<BLAKE3>();
+
+                // Loop through the rows and parse out values
+                while (!reader.EndOfStream)
+                {
+                    // Read and split the line
+                    string? line = reader.ReadLine();
+                    string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                    if (lineParts is null || lineParts.Length < 2)
+                        continue;
+
+                    // Parse the line into a hash
+                    var blake3 = new BLAKE3
+                    {
+                        Hash = lineParts[0],
+                        File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                    };
+                    blake3List.Add(blake3);
+                }
+
+                // Assign the hashes to the hashfile and return
+                if (blake3List.Count > 0)
+                    return new Data.Models.Hashfile.Hashfile { BLAKE3 = [.. blake3List] };
 
                 return null;
             }

@@ -290,6 +290,10 @@ namespace SabreTools.Metadata.DatItems.Test
         [InlineData(ItemKey.SpamSum, false, true, "3::")]
         [InlineData(ItemKey.SpamSum, true, false, "3::")]
         [InlineData(ItemKey.SpamSum, true, true, "3::")]
+        [InlineData(ItemKey.BLAKE3, false, false, "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262")]
+        [InlineData(ItemKey.BLAKE3, false, true, "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262")]
+        [InlineData(ItemKey.BLAKE3, true, false, "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262")]
+        [InlineData(ItemKey.BLAKE3, true, true, "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262")]
         public void GetKeyDB_DefaultImplementation(ItemKey bucketedBy, bool lower, bool norename, string expected)
         {
             Source source = new Source(0);
@@ -363,6 +367,10 @@ namespace SabreTools.Metadata.DatItems.Test
         [InlineData(ItemKey.SpamSum, false, true, "BASE64")]
         [InlineData(ItemKey.SpamSum, true, false, "base64")]
         [InlineData(ItemKey.SpamSum, true, true, "base64")]
+        [InlineData(ItemKey.BLAKE3, false, false, "DEADBEEF")]
+        [InlineData(ItemKey.BLAKE3, false, true, "DEADBEEF")]
+        [InlineData(ItemKey.BLAKE3, true, false, "deadbeef")]
+        [InlineData(ItemKey.BLAKE3, true, true, "deadbeef")]
         public void GetKeyDB_CustomImplementation(ItemKey bucketedBy, bool lower, bool norename, string expected)
         {
             Source source = new Source(0);
@@ -383,7 +391,8 @@ namespace SabreTools.Metadata.DatItems.Test
                 SHA256 = "DEADBEEF",
                 SHA384 = "DEADBEEF",
                 SHA512 = "DEADBEEF",
-                SpamSum = "BASE64"
+                SpamSum = "BASE64",
+                BLAKE3 = "DEADBEEF",
             };
 
             string actual = datItem.GetKey(bucketedBy, machine, source, lower, norename);

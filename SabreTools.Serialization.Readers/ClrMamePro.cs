@@ -568,6 +568,9 @@ namespace SabreTools.Serialization.Readers
                     case "spamsum":
                         rom.SpamSum = kvp.Value;
                         break;
+                    case "blake3":
+                        rom.BLAKE3 = kvp.Value;
+                        break;
                     case "xxh3_64":
                         rom.xxHash364 = kvp.Value;
                         break;

@@ -352,6 +352,7 @@ namespace SabreTools.Serialization.CrossModel
                 SHA384 = item.SHA384,
                 SHA512 = item.SHA512,
                 SpamSum = item.SpamSum,
+                BLAKE3 = item.BLAKE3,
                 xxHash364 = item.xxHash364,
                 xxHash3128 = item.xxHash3128,
                 Merge = item.Merge,

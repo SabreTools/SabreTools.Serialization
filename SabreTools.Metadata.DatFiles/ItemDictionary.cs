@@ -163,6 +163,7 @@ namespace SabreTools.Metadata.DatFiles
                     rom.SHA384 = null; // HashType.SHA384.ZeroString;
                     rom.SHA512 = null; // HashType.SHA512.ZeroString;
                     rom.SpamSum = null; // HashType.SpamSum.ZeroString;
+                    rom.BLAKE3 = null; // HashType.BLAKE3.ZeroString;
                 }
 
                 // If the file has no size and it's not the above case, skip and log

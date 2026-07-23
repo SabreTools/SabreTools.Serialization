@@ -1005,6 +1005,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("bios", rom.Bios);
             Assert.Equal("bitrate", rom.Bitrate);
             Assert.Equal("btih", rom.BitTorrentMagnetHash);
+            Assert.Equal(HashType.BLAKE3.ZeroString, rom.BLAKE3);
             Assert.Equal("cloth_cover_detection_module_version", rom.ClothCoverDetectionModuleVersion);
             Assert.Equal("collection-catalog-number", rom.CollectionCatalogNumber);
             Assert.Equal("comment", rom.Comment);

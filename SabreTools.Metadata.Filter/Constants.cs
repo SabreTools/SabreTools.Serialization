@@ -540,6 +540,7 @@ namespace SabreTools.Metadata.Filter
             "bitrate",
             "bittorrentmagnethash",
             "btih",
+            "blake3",
             "cloth_cover_detection_module_version",
             "clothcoverdetectionmoduleversion",
             "collection-catalog-number",

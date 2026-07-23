@@ -330,6 +330,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [InlineData(ItemKey.SpamSum, false, true, "DEADBEEF")]
         [InlineData(ItemKey.SpamSum, true, false, "deadbeef")]
         [InlineData(ItemKey.SpamSum, true, true, "deadbeef")]
+        [InlineData(ItemKey.BLAKE3, false, false, "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262")]
+        [InlineData(ItemKey.BLAKE3, false, true, "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262")]
+        [InlineData(ItemKey.BLAKE3, true, false, "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262")]
+        [InlineData(ItemKey.BLAKE3, true, true, "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262")]
         public void GetKeyDBTest(ItemKey bucketedBy, bool lower, bool norename, string expected)
         {
             Source source = new Source(0);

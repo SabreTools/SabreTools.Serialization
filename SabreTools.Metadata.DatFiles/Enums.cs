@@ -169,6 +169,11 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         RedumpSpamSum,
 
+        /// <summary>
+        /// BLAKE3 hash list
+        /// </summary>
+        RedumpBLAKE3,
+
         #endregion
     }
 }

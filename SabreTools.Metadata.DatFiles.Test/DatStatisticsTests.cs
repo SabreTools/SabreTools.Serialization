@@ -60,6 +60,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(0, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(0, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(0, stats.GetHashCount(HashType.SpamSum));
+            Assert.Equal(0, stats.GetHashCount(HashType.BLAKE3));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
@@ -88,6 +89,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(1, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(1, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(2, stats.GetHashCount(HashType.SpamSum));
+            Assert.Equal(1, stats.GetHashCount(HashType.BLAKE3));
             Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
             Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
             Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
@@ -116,6 +118,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(0, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(0, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(0, stats.GetHashCount(HashType.SpamSum));
+            Assert.Equal(0, stats.GetHashCount(HashType.BLAKE3));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
@@ -151,6 +154,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(0, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(0, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(0, stats.GetHashCount(HashType.SpamSum));
+            Assert.Equal(0, stats.GetHashCount(HashType.BLAKE3));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
@@ -179,6 +183,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(1, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(1, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(2, stats.GetHashCount(HashType.SpamSum));
+            Assert.Equal(1, stats.GetHashCount(HashType.BLAKE3));
             Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
             Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
             Assert.Equal(1, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
@@ -203,6 +208,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(0, stats.GetHashCount(HashType.SHA384));
             Assert.Equal(0, stats.GetHashCount(HashType.SHA512));
             Assert.Equal(0, stats.GetHashCount(HashType.SpamSum));
+            Assert.Equal(0, stats.GetHashCount(HashType.BLAKE3));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Disk));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.File));
             Assert.Equal(0, stats.GetItemCount(Data.Models.Metadata.ItemType.Media));
@@ -238,6 +244,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(1, newStats.GetHashCount(HashType.SHA384));
             Assert.Equal(1, newStats.GetHashCount(HashType.SHA512));
             Assert.Equal(1, newStats.GetHashCount(HashType.SpamSum));
+            Assert.Equal(1, newStats.GetHashCount(HashType.BLAKE3));
             Assert.Equal(1, newStats.GetItemCount(Data.Models.Metadata.ItemType.Rom));
             Assert.Equal(1, newStats.GetStatusCount(ItemStatus.Good));
         }
@@ -317,6 +324,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             rom.SHA384 = HashType.SHA384.ZeroString;
             rom.SHA512 = HashType.SHA512.ZeroString;
             rom.SpamSum = HashType.SpamSum.ZeroString;
+            rom.BLAKE3 = HashType.BLAKE3.ZeroString;
 
             return rom;
         }

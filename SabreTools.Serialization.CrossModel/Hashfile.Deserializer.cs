@@ -36,6 +36,7 @@ namespace SabreTools.Serialization.CrossModel
             var sha384s = new List<SHA384>();
             var sha512s = new List<SHA512>();
             var spamsums = new List<SpamSum>();
+            var blake3s = new List<BLAKE3>();
 
             foreach (var hashfile in hashfiles)
             {
@@ -61,6 +62,8 @@ namespace SabreTools.Serialization.CrossModel
                     sha512s.AddRange(hashfile.SHA512);
                 if (hashfile.SpamSum is not null && hashfile.SpamSum.Length > 0)
                     spamsums.AddRange(hashfile.SpamSum);
+                if (hashfile.BLAKE3 is not null && hashfile.BLAKE3.Length > 0)
+                    blake3s.AddRange(hashfile.BLAKE3);
             }
 
             var hashfileItem = new Data.Models.Hashfile.Hashfile();
@@ -87,6 +90,8 @@ namespace SabreTools.Serialization.CrossModel
                 hashfileItem.SHA512 = [.. sha512s];
             if (spamsums.Count > 0)
                 hashfileItem.SpamSum = [.. spamsums];
+            if (blake3s.Count > 0)
+                hashfileItem.BLAKE3 = [.. blake3s];
 
             return hashfileItem;
         }
@@ -134,6 +139,14 @@ namespace SabreTools.Serialization.CrossModel
                     : null,
                 SpamSum = hash == HashType.SpamSum
                     ? Array.ConvertAll(roms, ConvertToSpamSum)
+                    : null,
+#if NET7_0_OR_GREATER
+                BLAKE3 = hash == HashType.BLAKE3
+#else
+                // HACK because BLAKE3 is not supported below .NET 7
+                BLAKE3 = hash == HashType.CRC1_ZERO
+#endif
+                    ? Array.ConvertAll(roms, ConvertToBLAKE3)
                     : null,
             };
         }
@@ -276,6 +289,19 @@ namespace SabreTools.Serialization.CrossModel
             var spamsum = new SpamSum
             {
                 Hash = item.SpamSum,
+                File = item.Name,
+            };
+            return spamsum;
+        }
+
+        /// <summary>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="BLAKE3"/>
+        /// </summary>
+        private static BLAKE3 ConvertToBLAKE3(Data.Models.Metadata.Rom item)
+        {
+            var spamsum = new BLAKE3
+            {
+                Hash = item.BLAKE3,
                 File = item.Name,
             };
             return spamsum;

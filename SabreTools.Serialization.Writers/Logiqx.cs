@@ -528,6 +528,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("sha384", obj.SHA384);
             writer.WriteOptionalAttributeString("sha512", obj.SHA512);
             writer.WriteOptionalAttributeString("spamsum", obj.SpamSum);
+            writer.WriteOptionalAttributeString("blake3", obj.BLAKE3);
             writer.WriteOptionalAttributeString("xxh3_64", obj.xxHash364);
             writer.WriteOptionalAttributeString("xxh3_128", obj.xxHash3128);
             writer.WriteOptionalAttributeString("merge", obj.Merge);

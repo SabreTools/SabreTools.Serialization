@@ -1396,7 +1396,8 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SHA256 = "sha256",
                 SHA384 = "sha384",
                 SHA512 = "sha512",
-                SpamSum = "spamsum"
+                SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             string actual = DatFile.FormatPrefixPostfix(item, machine, fix);
@@ -1514,7 +1515,8 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SHA256 = "sha256",
                 SHA384 = "sha384",
                 SHA512 = "sha512",
-                SpamSum = "spamsum"
+                SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             string actual = DatFile.FormatPrefixPostfix(item, machine, fix);
@@ -1550,6 +1552,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Null(rom.SHA384);
             Assert.Null(rom.SHA512);
             Assert.Null(rom.SpamSum);
+            Assert.Null(rom.BLAKE3);
         }
 
         [Fact]
@@ -1575,6 +1578,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Null(rom.SHA384);
             Assert.Null(rom.SHA512);
             Assert.Null(rom.SpamSum);
+            Assert.Null(rom.BLAKE3);
         }
 
         [Fact]
@@ -1594,7 +1598,8 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SHA256 = "null",
                 SHA384 = "null",
                 SHA512 = "null",
-                SpamSum = "null"
+                SpamSum = "null",
+                BLAKE3 = "null",
             };
 
             DatItem actual = DatFile.ProcessNullifiedItem(item);
@@ -1614,6 +1619,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.SHA384.ZeroString, rom.SHA384);
             Assert.Equal(HashType.SHA512.ZeroString, rom.SHA512);
             Assert.Equal(HashType.SpamSum.ZeroString, rom.SpamSum);
+            Assert.Equal(HashType.BLAKE3.ZeroString, rom.BLAKE3);
         }
 
         #endregion
@@ -1949,6 +1955,19 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem datItem = new Rom
             {
                 SpamSum = hash
+            };
+
+            string actual = DatFile.GetDuplicateSuffix(datItem);
+            Assert.Equal($"_{hash}", actual);
+        }
+
+        [Fact]
+        public void GetDuplicateSuffix_Rom_BLAKE3()
+        {
+            string hash = "hash";
+            DatItem datItem = new Rom
+            {
+                BLAKE3 = hash
             };
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
@@ -2434,7 +2453,8 @@ namespace SabreTools.Metadata.DatFiles.Test
                 SHA256 = "crc",
                 SHA384 = "crc",
                 SHA512 = "crc",
-                SpamSum = "crc"
+                SpamSum = "crc",
+                BLAKE3 = "crc",
             };
             DatFile datFile = new Logiqx(null, useGame: false);
 

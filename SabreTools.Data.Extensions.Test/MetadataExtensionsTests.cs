@@ -361,6 +361,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -380,6 +381,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.PartialEquals(other);
@@ -406,6 +408,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = string.Empty,
                 SpamSum = "spamsum",
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -424,6 +427,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = "sha512",
                 SpamSum = string.Empty,
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -449,6 +453,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
             var other = new Rom
             {
@@ -467,6 +472,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -493,6 +499,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
             var other = new Rom
             {
@@ -510,6 +517,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -536,6 +544,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -554,6 +563,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -580,6 +590,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -598,6 +609,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -624,6 +636,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -642,6 +655,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -668,6 +682,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -686,6 +701,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -712,6 +728,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -730,6 +747,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -756,6 +774,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -774,6 +793,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -800,6 +820,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -818,6 +839,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -844,6 +866,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -862,6 +885,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -888,6 +912,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -906,6 +931,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -932,6 +958,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -950,6 +977,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -976,6 +1004,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -994,6 +1023,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -1020,6 +1050,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = "sha512",
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -1038,6 +1069,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -1064,6 +1096,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = "spamsum",
+                BLAKE3 = string.Empty,
             };
             var other = new Rom
             {
@@ -1082,6 +1115,53 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
+            };
+
+            bool actual = self.PartialEquals(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void PartialEquals_Rom_PartialBLAKE3_True()
+        {
+            var self = new Rom
+            {
+                Name = "name1",
+                Size = 12345,
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+                BLAKE3 = "blake3",
+            };
+            var other = new Rom
+            {
+                Name = "name2",
+                Size = 12345,
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -1108,6 +1188,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
             var other = new Rom
             {
@@ -1126,6 +1207,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.PartialEquals(other);
@@ -1392,6 +1474,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = string.Empty,
                 SpamSum = "spamsum",
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1408,6 +1491,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = "sha512",
                 SpamSum = string.Empty,
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1432,6 +1516,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1448,6 +1533,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1472,6 +1558,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1488,6 +1575,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1512,6 +1600,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1528,6 +1617,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1552,6 +1642,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1568,6 +1659,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1592,6 +1684,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1608,6 +1701,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1632,6 +1726,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1648,6 +1743,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1672,6 +1768,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1688,6 +1785,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1712,6 +1810,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1728,6 +1827,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1752,6 +1852,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1768,6 +1869,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1792,6 +1894,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1808,6 +1911,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1832,6 +1936,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1848,6 +1953,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1872,6 +1978,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = "sha512",
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1888,6 +1995,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1912,6 +2020,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = "spamsum",
+                BLAKE3 = string.Empty,
             };
             Rom other = new Rom
             {
@@ -1928,6 +2037,49 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
+            };
+
+            bool actual = self.HashMatch(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void HashMatch_Rom_PartialBLAKE3_True()
+        {
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+                BLAKE3 = "blake3",
+            };
+            Rom other = new Rom
+            {
+                CRC16 = "crc16",
+                CRC32 = "crc32",
+                CRC64 = "crc64",
+                MD2 = "md2",
+                MD4 = "md4",
+                MD5 = "md5",
+                RIPEMD128 = "ripemd128",
+                RIPEMD160 = "ripemd160",
+                SHA1 = "sha1",
+                SHA256 = "sha256",
+                SHA384 = "sha384",
+                SHA512 = "sha512",
+                SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -1952,6 +2104,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
             Rom other = new Rom
             {
@@ -1968,6 +2121,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HashMatch(other);
@@ -2162,6 +2316,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HasZeroHash();
@@ -2186,6 +2341,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2210,6 +2366,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2234,6 +2391,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2258,6 +2416,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2282,6 +2441,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2306,6 +2466,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2330,6 +2491,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2354,6 +2516,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2378,6 +2541,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2402,6 +2566,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2426,6 +2591,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = HashType.SHA384.ZeroString,
                 SHA512 = string.Empty,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2450,6 +2616,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = HashType.SHA512.ZeroString,
                 SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -2474,6 +2641,32 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
                 SpamSum = HashType.SpamSum.ZeroString,
+                BLAKE3 = string.Empty,
+            };
+
+            bool actual = self.HasZeroHash();
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void HasZeroHash_Rom_ZeroBLAKE3_True()
+        {
+            var self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+                BLAKE3 = HashType.BLAKE3.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -2498,6 +2691,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = HashType.SHA384.ZeroString,
                 SHA512 = HashType.SHA512.ZeroString,
                 SpamSum = HashType.SpamSum.ZeroString,
+                BLAKE3 = HashType.BLAKE3.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -2583,6 +2777,7 @@ namespace SabreTools.Data.Extensions.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             self.FillMissingHashes(other);

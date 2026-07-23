@@ -1901,6 +1901,9 @@ namespace SabreTools.Metadata.Filter
                 case "bittorrentmagnethash":
                     checkValue = obj.BitTorrentMagnetHash;
                     return true;
+                case "blake3":
+                    checkValue = obj.BLAKE3;
+                    return true;
                 case "cloth_cover_detection_module_version":
                 case "clothcoverdetectionmoduleversion":
                     checkValue = obj.ClothCoverDetectionModuleVersion;

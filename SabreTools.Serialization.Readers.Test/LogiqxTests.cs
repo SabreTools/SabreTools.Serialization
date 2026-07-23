@@ -236,6 +236,7 @@ namespace SabreTools.Serialization.Readers.Test
                 SHA384 = "sha384",
                 SHA512 = "sha512",
                 SpamSum = "spamsum",
+                BLAKE3 = "blake3",
                 xxHash364 = "xxhash364",
                 xxHash3128 = "xxhash3128",
                 Merge = "merge",
@@ -552,6 +553,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("sha384", rom.SHA384);
             Assert.Equal("sha512", rom.SHA512);
             Assert.Equal("spamsum", rom.SpamSum);
+            Assert.Equal("blake3", rom.BLAKE3);
             Assert.Equal("xxhash364", rom.xxHash364);
             Assert.Equal("xxhash3128", rom.xxHash3128);
             Assert.Equal("merge", rom.Merge);

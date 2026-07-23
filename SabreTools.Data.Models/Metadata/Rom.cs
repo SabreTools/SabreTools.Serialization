@@ -39,6 +39,8 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? BitTorrentMagnetHash { get; set; }
 
+        public string? BLAKE3 { get; set; }
+
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? ClothCoverDetectionModuleVersion { get; set; }
 
@@ -293,6 +295,7 @@ namespace SabreTools.Data.Models.Metadata
             obj.Bios = Bios;
             obj.Bitrate = Bitrate;
             obj.BitTorrentMagnetHash = BitTorrentMagnetHash;
+            obj.BLAKE3 = BLAKE3;
             obj.ClothCoverDetectionModuleVersion = ClothCoverDetectionModuleVersion;
             obj.CollectionCatalogNumber = CollectionCatalogNumber;
             obj.Comment = Comment;

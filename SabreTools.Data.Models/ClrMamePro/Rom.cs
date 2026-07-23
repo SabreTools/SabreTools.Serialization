@@ -68,6 +68,9 @@ namespace SabreTools.Data.Models.ClrMamePro
         /// <remarks>spamsum; Appears after SHA512</remarks>
         public string? SpamSum { get; set; }
 
+        /// <remarks>blake3; Appears after SHA512</remarks>
+        public string? BLAKE3 { get; set; }
+
         #endregion
 
         #region DiscImgeCreator Extensions

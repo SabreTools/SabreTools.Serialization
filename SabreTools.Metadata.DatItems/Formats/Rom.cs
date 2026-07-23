@@ -74,6 +74,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => _internal.BitTorrentMagnetHash = value;
         }
 
+        public string? BLAKE3
+        {
+            get => _internal.BLAKE3;
+            set => _internal.BLAKE3 = value;
+        }
+
         public string? ClothCoverDetectionModuleVersion
         {
             get => _internal.ClothCoverDetectionModuleVersion;
@@ -858,6 +864,10 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Now determine what the key should be based on the bucketedBy value
             switch (bucketedBy)
             {
+                case ItemKey.BLAKE3:
+                    key = BLAKE3;
+                    break;
+
                 case ItemKey.CRC16:
                     key = CRC16;
                     break;

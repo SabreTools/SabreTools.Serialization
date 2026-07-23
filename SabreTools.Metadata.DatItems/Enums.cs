@@ -26,6 +26,7 @@ namespace SabreTools.Metadata.DatItems
 
         Machine,
 
+        BLAKE3,
         CRC16,
         CRC32,
         CRC64,

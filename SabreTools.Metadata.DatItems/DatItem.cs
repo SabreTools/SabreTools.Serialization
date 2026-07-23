@@ -191,6 +191,14 @@ namespace SabreTools.Metadata.DatItems
             // Now determine what the key should be based on the bucketedBy value
             switch (bucketedBy)
             {
+                case ItemKey.BLAKE3:
+#if NET7_0_OR_GREATER
+                    key = HashType.BLAKE3.ZeroString;
+#else
+                    key = "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262";
+#endif
+                    break;
+
                 case ItemKey.CRC16:
                     key = HashType.CRC16.ZeroString;
                     break;

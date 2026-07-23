@@ -593,7 +593,8 @@ namespace SabreTools.Metadata.DatFiles
                 sha384 = string.Empty,
                 sha512 = string.Empty,
                 size = string.Empty,
-                spamsum = string.Empty;
+                spamsum = string.Empty,
+                blake3 = string.Empty;
 
             // Ensure we have the proper values for replacement
             if (item is Disk disk)
@@ -633,6 +634,7 @@ namespace SabreTools.Metadata.DatFiles
                 sha512 = rom.SHA512 ?? string.Empty;
                 size = rom.Size.ToString() ?? string.Empty;
                 spamsum = rom.SpamSum ?? string.Empty;
+                blake3 = rom.BLAKE3 ?? string.Empty;
             }
 
             // Now do bulk replacement where possible
@@ -657,7 +659,8 @@ namespace SabreTools.Metadata.DatFiles
                 .Replace("%sha384%", sha384)
                 .Replace("%sha512%", sha512)
                 .Replace("%size%", size)
-                .Replace("%spamsum%", spamsum);
+                .Replace("%spamsum%", spamsum)
+                .Replace("%blake3%", blake3);
 
             return fix;
         }
@@ -697,6 +700,11 @@ namespace SabreTools.Metadata.DatFiles
             rom.SHA384 = rom.SHA384 == "null" ? HashType.SHA384.ZeroString : null;
             rom.SHA512 = rom.SHA512 == "null" ? HashType.SHA512.ZeroString : null;
             rom.SpamSum = rom.SpamSum == "null" ? HashType.SpamSum.ZeroString : null;
+#if NET7_0_OR_GREATER
+            rom.BLAKE3 = rom.BLAKE3 == "null" ? HashType.BLAKE3.ZeroString : null;
+#else
+            rom.BLAKE3 = rom.BLAKE3 == "null" ? "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262" : null;
+#endif
 
             return rom;
         }
@@ -1126,6 +1134,10 @@ namespace SabreTools.Metadata.DatFiles
             string? spamSum = datItem.SpamSum;
             if (!string.IsNullOrEmpty(spamSum))
                 return $"_{spamSum}";
+
+            string? blake3 = datItem.BLAKE3;
+            if (!string.IsNullOrEmpty(blake3))
+                return $"_{blake3}";
 
             return "_1";
         }

@@ -700,6 +700,31 @@ namespace SabreTools.Metadata.DatFiles.Test
             ]));
         }
 
+        [Fact]
+        public void Blake3File_SupportedTypes()
+        {
+            var datFile = new Blake3File(null);
+            var actual = datFile.SupportedTypes;
+            Assert.True(actual.SequenceEqual([
+                Data.Models.Metadata.ItemType.Rom,
+            ]));
+        }
+
+        [Fact]
+        public void Blake3File_GetMissingRequiredFields_Rom()
+        {
+            var datItem = new Rom();
+            var datFile = new Blake3File(null);
+
+            var actual = datFile.GetMissingRequiredFields(datItem);
+
+            Assert.NotNull(actual);
+            Assert.True(actual.SequenceEqual([
+                nameof(Data.Models.Metadata.Rom.Name),
+                nameof(Data.Models.Metadata.Rom.BLAKE3),
+            ]));
+        }
+
         #endregion
 
         #region Listrom

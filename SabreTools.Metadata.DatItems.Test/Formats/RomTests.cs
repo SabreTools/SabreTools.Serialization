@@ -28,6 +28,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Null(self.SHA384);
             Assert.Null(self.SHA512);
             Assert.Null(self.SpamSum);
+            Assert.Null(self.BLAKE3);
         }
 
         [Fact]
@@ -49,7 +50,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = "sha256",
                 SHA384 = "sha384",
                 SHA512 = "sha512",
-                SpamSum = "spamsum"
+                SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             self.FillMissingInformation(other);
@@ -67,6 +69,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Assert.Equal("sha384", self.SHA384);
             Assert.Equal("sha512", self.SHA512);
             Assert.Equal("spamsum", self.SpamSum);
+            Assert.Equal("blake3", self.BLAKE3);
         }
 
         #endregion
@@ -98,7 +101,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -122,7 +126,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -146,7 +151,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -170,7 +176,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -194,7 +201,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -218,7 +226,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -242,7 +251,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -266,7 +276,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -290,7 +301,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -314,7 +326,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = "sha256",
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -338,7 +351,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = "sha384",
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -362,7 +376,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = "sha512",
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasHashes();
@@ -386,7 +401,33 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = "spamsum"
+                SpamSum = "spamsum",
+                BLAKE3 = string.Empty,
+            };
+
+            bool actual = self.HasHashes();
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void HasHashes_BLAKE3_True()
+        {
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HasHashes();
@@ -410,7 +451,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = "sha256",
                 SHA384 = "sha384",
                 SHA512 = "sha512",
-                SpamSum = "spamsum"
+                SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HasHashes();
@@ -446,7 +488,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = "sha256",
                 SHA384 = "sha384",
                 SHA512 = "sha512",
-                SpamSum = "spamsum"
+                SpamSum = "spamsum",
+                BLAKE3 = "blake3",
             };
 
             bool actual = self.HasZeroHash();
@@ -470,7 +513,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -494,7 +538,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -518,7 +563,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -542,7 +588,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -566,7 +613,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -590,7 +638,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -614,7 +663,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -638,7 +688,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -662,7 +713,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -686,7 +738,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = HashType.SHA256.ZeroString,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -710,7 +763,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = HashType.SHA384.ZeroString,
                 SHA512 = string.Empty,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -734,7 +788,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = HashType.SHA512.ZeroString,
-                SpamSum = string.Empty
+                SpamSum = string.Empty,
+                BLAKE3 = string.Empty,
             };
 
             bool actual = self.HasZeroHash();
@@ -758,7 +813,33 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = string.Empty,
                 SHA384 = string.Empty,
                 SHA512 = string.Empty,
-                SpamSum = HashType.SpamSum.ZeroString
+                SpamSum = HashType.SpamSum.ZeroString,
+                BLAKE3 = string.Empty,
+            };
+
+            bool actual = self.HasZeroHash();
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void HasZeroHash_ZeroBLAKE3_True()
+        {
+            Rom self = new Rom
+            {
+                CRC16 = string.Empty,
+                CRC32 = string.Empty,
+                CRC64 = string.Empty,
+                MD2 = string.Empty,
+                MD4 = string.Empty,
+                MD5 = string.Empty,
+                RIPEMD128 = string.Empty,
+                RIPEMD160 = string.Empty,
+                SHA1 = string.Empty,
+                SHA256 = string.Empty,
+                SHA384 = string.Empty,
+                SHA512 = string.Empty,
+                SpamSum = string.Empty,
+                BLAKE3 = HashType.BLAKE3.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -782,7 +863,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = HashType.SHA256.ZeroString,
                 SHA384 = HashType.SHA384.ZeroString,
                 SHA512 = HashType.SHA512.ZeroString,
-                SpamSum = HashType.SpamSum.ZeroString
+                SpamSum = HashType.SpamSum.ZeroString,
+                BLAKE3 = HashType.BLAKE3.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -855,6 +937,10 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         [InlineData(ItemKey.SpamSum, false, true, "DEADBEEF")]
         [InlineData(ItemKey.SpamSum, true, false, "deadbeef")]
         [InlineData(ItemKey.SpamSum, true, true, "deadbeef")]
+        [InlineData(ItemKey.BLAKE3, false, false, "DEADBEEF")]
+        [InlineData(ItemKey.BLAKE3, false, true, "DEADBEEF")]
+        [InlineData(ItemKey.BLAKE3, true, false, "deadbeef")]
+        [InlineData(ItemKey.BLAKE3, true, true, "deadbeef")]
         public void GetKeyDBTest(ItemKey bucketedBy, bool lower, bool norename, string expected)
         {
             Source source = new Source(0);
@@ -875,7 +961,8 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = "DEADBEEF",
                 SHA384 = "DEADBEEF",
                 SHA512 = "DEADBEEF",
-                SpamSum = "DEADBEEF"
+                SpamSum = "DEADBEEF",
+                BLAKE3 = "DEADBEEF",
             };
 
             string actual = datItem.GetKey(bucketedBy, machine, source, lower, norename);

@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header
             {
-                Name =  "Hashfile",
+                Name = "Hashfile",
             };
             return header;
         }
@@ -63,6 +63,8 @@ namespace SabreTools.Serialization.CrossModel
                 machine.Rom = Array.ConvertAll(item.SHA512, ConvertToInternalModel);
             else if (item.SpamSum is not null && item.SpamSum.Length > 0)
                 machine.Rom = Array.ConvertAll(item.SpamSum, ConvertToInternalModel);
+            else if (item.BLAKE3 is not null && item.BLAKE3.Length > 0)
+                machine.Rom = Array.ConvertAll(item.BLAKE3, ConvertToInternalModel);
 
             return machine;
         }
@@ -205,6 +207,19 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Data.Models.Metadata.Rom
             {
                 SpamSum = item.Hash,
+                Name = item.File,
+            };
+            return rom;
+        }
+
+        /// <summary>
+        /// Convert from <see cref="BLAKE3"/> to <see cref="Models.Metadata.Rom"/>
+        /// </summary>
+        private static Data.Models.Metadata.Rom ConvertToInternalModel(BLAKE3 item)
+        {
+            var rom = new Data.Models.Metadata.Rom
+            {
+                BLAKE3 = item.Hash,
                 Name = item.File,
             };
             return rom;

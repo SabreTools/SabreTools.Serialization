@@ -24,5 +24,7 @@ namespace SabreTools.Data.Models.Hashfile
         public SHA512[]? SHA512 { get; set; }
 
         public SpamSum[]? SpamSum { get; set; }
+
+        public BLAKE3[]? BLAKE3 { get; set; }
     }
 }

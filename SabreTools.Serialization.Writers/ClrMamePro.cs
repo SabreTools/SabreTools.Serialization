@@ -275,6 +275,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteOptionalAttributeString("sha384", rom.SHA384);
                 writer.WriteOptionalAttributeString("sha512", rom.SHA512);
                 writer.WriteOptionalAttributeString("spamsum", rom.SpamSum);
+                writer.WriteOptionalAttributeString("blake3", rom.BLAKE3);
                 writer.WriteOptionalAttributeString("xxh3_64", rom.xxHash364);
                 writer.WriteOptionalAttributeString("xxh3_128", rom.xxHash3128);
                 writer.WriteOptionalAttributeString("merge", rom.Merge);

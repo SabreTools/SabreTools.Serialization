@@ -353,6 +353,12 @@ namespace SabreTools.Metadata.DatFiles
                 ModifyHashCount(HashType.SHA384, string.IsNullOrEmpty(rom.SHA384) ? 0 : 1);
                 ModifyHashCount(HashType.SHA512, string.IsNullOrEmpty(rom.SHA512) ? 0 : 1);
                 ModifyHashCount(HashType.SpamSum, string.IsNullOrEmpty(rom.SpamSum) ? 0 : 1);
+#if NET7_0_OR_GREATER
+                ModifyHashCount(HashType.BLAKE3, string.IsNullOrEmpty(rom.BLAKE3) ? 0 : 1);
+#else
+                // HACK because BLAKE3 is not supported below .NET 7
+                ModifyHashCount(HashType.CRC1_ZERO, string.IsNullOrEmpty(rom.BLAKE3) ? 0 : 1);
+#endif
             }
 
             ModifyStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? 1 : 0);
@@ -430,6 +436,12 @@ namespace SabreTools.Metadata.DatFiles
                 ModifyHashCount(HashType.SHA384, string.IsNullOrEmpty(rom.SHA384) ? 0 : -1);
                 ModifyHashCount(HashType.SHA512, string.IsNullOrEmpty(rom.SHA512) ? 0 : -1);
                 ModifyHashCount(HashType.SpamSum, string.IsNullOrEmpty(rom.SpamSum) ? 0 : -1);
+#if NET7_0_OR_GREATER
+                ModifyHashCount(HashType.BLAKE3, string.IsNullOrEmpty(rom.BLAKE3) ? 0 : -1);
+#else
+                // HACK because BLAKE3 is not supported below .NET 7
+                ModifyHashCount(HashType.CRC1_ZERO, string.IsNullOrEmpty(rom.BLAKE3) ? 0 : -1);
+#endif
             }
 
             ModifyStatusCount(ItemStatus.BadDump, status == ItemStatus.BadDump ? -1 : 0);

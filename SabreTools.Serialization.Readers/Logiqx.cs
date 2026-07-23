@@ -788,6 +788,7 @@ namespace SabreTools.Serialization.Readers
             obj.SHA384 = reader.GetAttribute("sha384");
             obj.SHA512 = reader.GetAttribute("sha512");
             obj.SpamSum = reader.GetAttribute("spamsum");
+            obj.BLAKE3 = reader.GetAttribute("blake3");
             obj.xxHash364 = reader.GetAttribute("xxh3_64");
             obj.xxHash3128 = reader.GetAttribute("xxh3_128");
             obj.Merge = reader.GetAttribute("merge");

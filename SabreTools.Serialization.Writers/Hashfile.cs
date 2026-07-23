@@ -101,6 +101,13 @@ namespace SabreTools.Serialization.Writers
                 WriteSHA512(obj.SHA512, writer);
             else if (hash == HashType.SpamSum)
                 WriteSpamSum(obj.SpamSum, writer);
+#if NET7_0_OR_GREATER
+            else if (hash == HashType.BLAKE3)
+#else
+            // HACK because BLAKE3 is not supported below .NET 7
+            else if (hash == HashType.CRC1_ZERO)
+#endif
+                WriteBLAKE3(obj.BLAKE3, writer);
             else
                 throw new ArgumentOutOfRangeException(nameof(hash));
 
@@ -347,6 +354,28 @@ namespace SabreTools.Serialization.Writers
                     continue;
 
                 writer.WriteValues([spamsum.Hash!, spamsum.File!]);
+                writer.Flush();
+            }
+        }
+
+        /// <summary>
+        /// Write BLAKE3 information to the current writer
+        /// </summary>
+        /// <param name="blake3s">Array of BLAKE3 objects representing the files</param>
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteBLAKE3(BLAKE3[]? blake3s, Writer writer)
+        {
+            // If the item information is missing, we can't do anything
+            if (blake3s is null || blake3s.Length == 0)
+                return;
+
+            // Loop through and write out the items
+            foreach (var blake3 in blake3s)
+            {
+                if (string.IsNullOrEmpty(blake3.Hash) || string.IsNullOrEmpty(blake3.File))
+                    continue;
+
+                writer.WriteValues([blake3.Hash!, blake3.File!]);
                 writer.Flush();
             }
         }

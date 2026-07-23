@@ -296,6 +296,10 @@ namespace SabreTools.Data.Extensions
             string? otherSpamSum = other.SpamSum;
             bool conditionalSpamSum = ConditionalHashEquals(selfSpamSum, otherSpamSum);
 
+            string? selfBlake3 = self.BLAKE3;
+            string? otherBlake3 = other.BLAKE3;
+            bool conditionalBlake3 = ConditionalHashEquals(selfBlake3, otherBlake3);
+
             return conditionalCrc16
                 && conditionalCrc
                 && conditionalCrc64
@@ -308,7 +312,8 @@ namespace SabreTools.Data.Extensions
                 && conditionalSha256
                 && conditionalSha384
                 && conditionalSha512
-                && conditionalSpamSum;
+                && conditionalSpamSum
+                && conditionalBlake3;
         }
 
         /// <summary>
@@ -357,6 +362,7 @@ namespace SabreTools.Data.Extensions
             bool sha384Null = string.IsNullOrEmpty(rom.SHA384);
             bool sha512Null = string.IsNullOrEmpty(rom.SHA512);
             bool spamsumNull = string.IsNullOrEmpty(rom.SpamSum);
+            bool blake3Null = string.IsNullOrEmpty(rom.BLAKE3);
 
             return !crc16Null
                 || !crc32Null
@@ -370,7 +376,8 @@ namespace SabreTools.Data.Extensions
                 || !sha256Null
                 || !sha384Null
                 || !sha512Null
-                || !spamsumNull;
+                || !spamsumNull
+                || !blake3Null;
         }
 
         /// <summary>
@@ -455,6 +462,13 @@ namespace SabreTools.Data.Extensions
             string? spamsum = rom.SpamSum;
             bool spamsumNull = string.IsNullOrEmpty(spamsum) || string.Equals(spamsum, HashType.SpamSum.ZeroString, StringComparison.OrdinalIgnoreCase);
 
+            string? blake3 = rom.BLAKE3;
+#if NET7_0_OR_GREATER
+            bool blake3Null = string.IsNullOrEmpty(blake3) || string.Equals(blake3, HashType.BLAKE3.ZeroString, StringComparison.OrdinalIgnoreCase);
+#else
+            bool blake3Null = string.IsNullOrEmpty(blake3) || string.Equals(blake3, "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262", StringComparison.OrdinalIgnoreCase);
+#endif
+
             return crc16Null
                 && crc32Null
                 && crc64Null
@@ -467,7 +481,8 @@ namespace SabreTools.Data.Extensions
                 && sha256Null
                 && sha384Null
                 && sha512Null
-                && spamsumNull;
+                && spamsumNull
+                && blake3Null;
         }
 
         /// <summary>
@@ -552,6 +567,9 @@ namespace SabreTools.Data.Extensions
             bool spamsumNull = string.IsNullOrEmpty(self.SpamSum);
             spamsumNull ^= string.IsNullOrEmpty(other.SpamSum);
 
+            bool blake3Null = string.IsNullOrEmpty(self.BLAKE3);
+            blake3Null ^= string.IsNullOrEmpty(other.BLAKE3);
+
             return !crc16Null
                 || !crc32Null
                 || !crc64Null
@@ -564,7 +582,8 @@ namespace SabreTools.Data.Extensions
                 || !sha256Null
                 || !sha384Null
                 || !sha512Null
-                || !spamsumNull;
+                || !spamsumNull
+                || !blake3Null;
         }
 
         #endregion
@@ -696,6 +715,11 @@ namespace SabreTools.Data.Extensions
             string? otherSpamSum = other.SpamSum;
             if (string.IsNullOrEmpty(selfSpamSum) && !string.IsNullOrEmpty(otherSpamSum))
                 self.SpamSum = otherSpamSum;
+
+            string? selfBlake3 = self.BLAKE3;
+            string? otherBlake3 = other.BLAKE3;
+            if (string.IsNullOrEmpty(selfBlake3) && !string.IsNullOrEmpty(otherBlake3))
+                self.BLAKE3 = otherBlake3;
         }
 
         #endregion

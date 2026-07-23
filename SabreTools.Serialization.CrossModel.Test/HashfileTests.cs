@@ -213,6 +213,29 @@ namespace SabreTools.Serialization.CrossModel.Test
             Validate(newSpamsum);
         }
 
+        [Fact]
+        public void RoundTripBLAKE3Test()
+        {
+            // Get the cross-model serializer
+            var serializer = new Hashfile();
+
+            // Build the data
+            Data.Models.Hashfile.Hashfile hf = Build(HashType.BLAKE3);
+
+            // Serialize to generic model
+            Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(hf);
+            Assert.NotNull(metadata);
+
+            // Serialize back to original model
+            Data.Models.Hashfile.Hashfile? newHf = serializer.Deserialize(metadata, HashType.BLAKE3);
+
+            // Validate the data
+            Assert.NotNull(newHf);
+            Assert.NotNull(newHf.BLAKE3);
+            var newBlake3 = Assert.Single(newHf.BLAKE3);
+            Validate(newBlake3);
+        }
+
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
@@ -236,6 +259,8 @@ namespace SabreTools.Serialization.CrossModel.Test
                 return new Data.Models.Hashfile.Hashfile { SHA512 = [new Data.Models.Hashfile.SHA512 { Hash = "hash", File = "file" }] };
             else if (hashType == HashType.SpamSum)
                 return new Data.Models.Hashfile.Hashfile { SpamSum = [new Data.Models.Hashfile.SpamSum { Hash = "hash", File = "file" }] };
+            else if (hashType == HashType.BLAKE3)
+                return new Data.Models.Hashfile.Hashfile { BLAKE3 = [new Data.Models.Hashfile.BLAKE3 { Hash = "hash", File = "file" }] };
             else
                 throw new ArgumentOutOfRangeException(nameof(hashType));
         }
@@ -328,6 +353,16 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(spamsum);
             Assert.Equal("hash", spamsum.Hash);
             Assert.Equal("file", spamsum.File);
+        }
+
+        /// <summary>
+        /// Validate a BLAKE3
+        /// </summary>
+        private static void Validate(Data.Models.Hashfile.BLAKE3? blake3)
+        {
+            Assert.NotNull(blake3);
+            Assert.Equal("hash", blake3.Hash);
+            Assert.Equal("file", blake3.File);
         }
     }
 }

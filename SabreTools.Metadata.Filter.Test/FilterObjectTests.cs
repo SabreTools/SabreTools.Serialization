@@ -1582,6 +1582,7 @@ namespace SabreTools.Metadata.Filter.Test
         [InlineData("rom.bitrate", "bitrate")]
         [InlineData("rom.bittorrentmagnethash", "btih")]
         [InlineData("rom.btih", "btih")]
+        [InlineData("rom.blake3", "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262")]
         [InlineData("rom.cloth_cover_detection_module_version", "cloth_cover_detection_module_version")]
         [InlineData("rom.clothcoverdetectionmoduleversion", "cloth_cover_detection_module_version")]
         [InlineData("rom.collection-catalog-number", "collection-catalog-number")]
@@ -1719,6 +1720,7 @@ namespace SabreTools.Metadata.Filter.Test
                 Bios = "bios",
                 Bitrate = "bitrate",
                 BitTorrentMagnetHash = "btih",
+                BLAKE3 = HashType.BLAKE3.ZeroString,
                 ClothCoverDetectionModuleVersion = "cloth_cover_detection_module_version",
                 CollectionCatalogNumber = "collection-catalog-number",
                 Comment = "comment",

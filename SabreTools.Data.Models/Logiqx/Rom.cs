@@ -65,6 +65,10 @@ namespace SabreTools.Data.Models.Logiqx
         [XmlAttribute("spamsum")]
         public string? SpamSum { get; set; }
 
+        /// <remarks>Hash extension</remarks>
+        [XmlAttribute("blake3")]
+        public string? BLAKE3 { get; set; }
+
         /// <remarks>DiscImgeCreator extension</remarks>
         [XmlAttribute("xxh3_64")]
         public string? xxHash364 { get; set; }
