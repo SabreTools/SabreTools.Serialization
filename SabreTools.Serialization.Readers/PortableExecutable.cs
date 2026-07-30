@@ -749,7 +749,7 @@ namespace SabreTools.Serialization.Readers
             var table = new List<Data.Models.PortableExecutable.DebugData.Entry>();
 
             int offset = 0;
-            while (offset < data.Length)
+            while (offset < data.Length && data.Length - offset >= 28)
             {
                 var entry = ParseDebugDirectoryEntry(data, ref offset);
                 table.Add(entry);
