@@ -41,6 +41,15 @@ namespace SabreTools.Metadata.DatFiles
 #endif
 
         /// <summary>
+        /// Internal dictionary for the class
+        /// </summary>
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+        private readonly ConcurrentDictionary<string, object> _itemsLocks = [];
+#else
+        private readonly Dictionary<string, object> _itemsLocks = [];
+#endif
+
+        /// <summary>
         /// Logging object
         /// </summary>
         private readonly Logger _logger;
@@ -191,7 +200,14 @@ namespace SabreTools.Metadata.DatFiles
             // If only adding statistics, we add an empty key for games and then just item stats
             if (statsOnly)
             {
-                EnsureBucketingKey(key);
+                // Add an empty key
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                _items.GetOrAdd(key, []);
+#else
+                if (!_items.ContainsKey(key))
+                    _items[key] = [];
+#endif
+
                 DatStatistics.AddItemStatistics(item);
             }
             else
@@ -294,7 +310,16 @@ namespace SabreTools.Metadata.DatFiles
         public bool RemoveItem(string key, DatItem value, int index)
         {
             // Explicit lock for some weird corner cases
-            lock (key)
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+            object lockObj = _itemsLocks.GetOrAdd(key, _ => new object());
+#else
+            if (!_itemsLocks.ContainsKey(key))
+                _itemsLocks[key] = new object();
+
+            object lockObj = _itemsLocks[key];
+#endif
+
+            lock (lockObj)
             {
                 // If the key doesn't exist, return
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
@@ -338,10 +363,24 @@ namespace SabreTools.Metadata.DatFiles
         internal void AddItem(string key, DatItem value)
         {
             // Explicit lock for some weird corner cases
-            lock (key)
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+            object lockObj = _itemsLocks.GetOrAdd(key, _ => new object());
+#else
+            if (!_itemsLocks.ContainsKey(key))
+                _itemsLocks[key] = new object();
+
+            object lockObj = _itemsLocks[key];
+#endif
+
+            lock (lockObj)
             {
                 // Ensure the key exists
-                EnsureBucketingKey(key);
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+                _items.GetOrAdd(key, []);
+#else
+                if (!_items.ContainsKey(key))
+                    _items[key] = [];
+#endif
 
                 // If item is null, don't add it
                 if (value is null)
@@ -638,21 +677,6 @@ namespace SabreTools.Metadata.DatFiles
                 return false;
 
             return roms.FindIndex(datItem.Equals) > -1;
-        }
-
-        /// <summary>
-        /// Ensure the key exists in the items dictionary
-        /// </summary>
-        /// <param name="key">Key to ensure</param>
-        private void EnsureBucketingKey(string key)
-        {
-            // If the key is missing from the dictionary, add it
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            _items.GetOrAdd(key, []);
-#else
-            if (!_items.ContainsKey(key))
-                _items[key] = [];
-#endif
         }
 
         /// <summary>
