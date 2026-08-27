@@ -1,9 +1,10 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using Nanook.GrindCore;
+using Nanook.GrindCore.DeflateZLib;
 using SabreTools.Data.Models.InstallShieldCabinet;
 using SabreTools.Hashing;
-using SabreTools.IO.Compression.zlib;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.InstallShieldCabinet.Constants;
 
@@ -49,11 +50,6 @@ namespace SabreTools.Wrappers
         /// Default buffer size
         /// </summary>
         private const int BUFFER_SIZE = 64 * 1024;
-
-        /// <summary>
-        /// Maximum size of the window in bits
-        /// </summary>
-        private const int MAX_WBITS = 15;
 
         /// <summary>
         /// Characters that should be replaced by an underscore for filenames
@@ -317,7 +313,7 @@ namespace SabreTools.Wrappers
 
             // Create the output file and hasher
             using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-            var md5 = new HashWrapper(HashType.MD5);
+            var md5 = new HashWrapper(Hashing.HashType.MD5);
 
             ulong readBytesLeft = GetReadableBytes(fileDescriptor);
             ulong writeBytesLeft = GetWritableBytes(fileDescriptor);
@@ -331,7 +327,7 @@ namespace SabreTools.Wrappers
             while (readBytesLeft > 0 && readBytesLeft <= storedSize)
             {
                 uint bytesToWrite = BUFFER_SIZE;
-                int result;
+                bool result;
 
                 // Handle compressed files
 #if NET20 || NET35
@@ -368,9 +364,9 @@ namespace SabreTools.Wrappers
                         result = Uncompress(outputBuffer, ref bytesToWrite, inputBuffer, ref bytesToRead);
 
                     // If we didn't get a positive result that's not a data error (false positives)
-                    if (result != zlibConst.Z_OK && result != zlibConst.Z_DATA_ERROR)
+                    if (!result)
                     {
-                        Console.Error.WriteLine($"Decompression failed with code {result.ToZlibConstName()}. bytes_to_read={bytesToRead}, volume={fileDescriptor.Volume}, read_bytes={bytesToRead}");
+                        Console.Error.WriteLine($"Decompression failed. bytes_to_read={bytesToRead}, volume={fileDescriptor.Volume}, read_bytes={bytesToRead}");
                         reader.Dispose();
                         fs?.Close();
                         return false;
@@ -484,73 +480,42 @@ namespace SabreTools.Wrappers
         /// <summary>
         /// Uncompress a source byte array to a destination
         /// </summary>
-        private static unsafe int Uncompress(byte[] dest, ref uint destLen, byte[] source, ref uint sourceLen)
+        private static bool Uncompress(byte[] dest, ref uint destLen, byte[] source, ref uint sourceLen)
         {
-            fixed (byte* sourcePtr = source, destPtr = dest)
-            {
-                var stream = new ZLib.z_stream_s
-                {
-                    next_in = sourcePtr,
-                    avail_in = sourceLen,
-                    next_out = destPtr,
-                    avail_out = destLen,
-                };
+            // Prepare the streams
+            using var sourceStream = new MemoryStream(source, index: 0, (int)sourceLen, false);
+            using var deflateStream = new DeflateStream(sourceStream, new CompressionOptions { Type = CompressionType.Decompress });
+            using var destStream = new MemoryStream(dest);
 
-                // make second parameter negative to disable checksum verification
-                int err = ZLib.inflateInit2_(stream, -MAX_WBITS, ZLib.zlibVersion(), source.Length);
-                if (err != zlibConst.Z_OK)
-                    return err;
+            // Copy the source to the destination
+            bool copied = deflateStream.BlockCopy(destStream);
 
-                err = ZLib.inflate(stream, zlibConst.Z_FINISH);
-                if (err != zlibConst.Z_OK && err != zlibConst.Z_STREAM_END)
-                {
-                    ZLib.inflateEnd(stream);
-                    return err;
-                }
-
-                destLen = stream.total_out;
-                sourceLen = stream.total_in;
-                return ZLib.inflateEnd(stream);
-            }
+            destLen = (uint)destStream.Position;
+            sourceLen = (uint)deflateStream.Position;
+            return copied;
         }
 
         /// <summary>
         /// Uncompress a source byte array to a destination (old version)
         /// </summary>
-        private static unsafe int UncompressOld(byte[] dest, ref uint destLen, byte[] source, ref uint sourceLen)
+        private static bool UncompressOld(byte[] dest, ref uint destLen, byte[] source, ref uint sourceLen)
         {
-            fixed (byte* sourcePtr = source, destPtr = dest)
+            // Prepare the streams
+            using var sourceStream = new MemoryStream(source, 0, (int)sourceLen, false);
+            using var deflateStream = new DeflateStream(sourceStream, new CompressionOptions { Type = CompressionType.Decompress });
+            using var destStream = new MemoryStream(dest);
+
+            // Copy the source to the destination
+            while (deflateStream.Position < sourceLen)
             {
-                var stream = new ZLib.z_stream_s
-                {
-                    next_in = sourcePtr,
-                    avail_in = sourceLen,
-                    next_out = destPtr,
-                    avail_out = destLen,
-                };
-
-                destLen = 0;
-                sourceLen = 0;
-
-                // make second parameter negative to disable checksum verification
-                int err = ZLib.inflateInit2_(stream, -MAX_WBITS, ZLib.zlibVersion(), source.Length);
-                if (err != zlibConst.Z_OK)
-                    return err;
-
-                while (stream.avail_in > 1)
-                {
-                    err = ZLib.inflate(stream, zlibConst.Z_BLOCK);
-                    if (err != zlibConst.Z_OK)
-                    {
-                        ZLib.inflateEnd(stream);
-                        return err;
-                    }
-                }
-
-                destLen = stream.total_out;
-                sourceLen = stream.total_in;
-                return ZLib.inflateEnd(stream);
+                bool copied = deflateStream.BlockCopy(destStream);
+                if (!copied)
+                    return false;
             }
+
+            destLen = (uint)destStream.Position;
+            sourceLen = (uint)deflateStream.Position;
+            return true;
         }
 
         #endregion
