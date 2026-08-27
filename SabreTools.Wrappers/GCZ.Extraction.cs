@@ -1,5 +1,6 @@
 using System.IO;
-using SabreTools.IO.Compression.Deflate;
+using Nanook.GrindCore;
+using Nanook.GrindCore.DeflateZLib;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.GCZ.Constants;
 
@@ -61,7 +62,8 @@ namespace SabreTools.Wrappers
             // Verify Adler-32 checksum on the compressed (raw) data before decompressing
             if (BlockHashes is not null && blockIndex < BlockHashes.Length)
             {
-                uint actual = Adler.Adler32(1, raw, 0, raw.Length);
+                // TODO: Replace with call to Hashing library
+                uint actual = IO.Compression.Deflate.Adler.Adler32(1, raw, 0, raw.Length);
                 if (actual != BlockHashes[blockIndex])
                     return null;
             }
@@ -78,7 +80,7 @@ namespace SabreTools.Wrappers
             try
             {
                 using var cs = new MemoryStream(raw, 2, raw.Length - 6);
-                using var ds = new DeflateStream(cs, CompressionMode.Decompress);
+                using var ds = new DeflateStream(cs, new CompressionOptions { Type = CompressionType.Decompress });
                 using var os = new MemoryStream();
 
                 ds.BlockCopy(os, blockSize: 4096);
