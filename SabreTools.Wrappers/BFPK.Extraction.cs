@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-using SabreTools.IO.Compression.Deflate;
+using Nanook.GrindCore;
+using Nanook.GrindCore.ZLib;
 using SabreTools.IO.Extensions;
 
 namespace SabreTools.Wrappers
@@ -95,7 +96,7 @@ namespace SabreTools.Wrappers
                 else
                 {
                     using var ms = new MemoryStream(data);
-                    using var zs = new ZlibStream(ms, CompressionMode.Decompress);
+                    using var zs = new ZLibStream(ms, new CompressionOptions { Type = CompressionType.Decompress });
                     zs.BlockCopy(fs);
                     fs.Flush();
                 }
