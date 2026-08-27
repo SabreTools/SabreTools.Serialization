@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using SabreTools.IO.Compression.zlib;
+using Nanook.GrindCore;
+using Nanook.GrindCore.ZLib;
+using SabreTools.IO.Extensions;
 using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
@@ -94,25 +96,14 @@ namespace SabreTools.Wrappers
             }
             else
             {
-                // Inflate the data into the buffer
-                var zstream = new ZLib.z_stream_s();
-                data = new byte[outputFileSize];
-                unsafe
-                {
-                    fixed (byte* payloadPtr = compressedData, dataPtr = data)
-                    {
-                        zstream.next_in = payloadPtr;
-                        zstream.avail_in = (uint)compressedData.Length;
-                        zstream.total_in = (uint)compressedData.Length;
-                        zstream.next_out = dataPtr;
-                        zstream.avail_out = (uint)data.Length;
-                        zstream.total_out = 0;
+                // Open the input stream as ZLib-compressed
+                using var inputStream = new MemoryStream(compressedData);
+                var zlibStream = new ZLibStream(inputStream, new CompressionOptions { Type = CompressionType.Decompress });
 
-                        ZLib.inflateInit_(zstream, ZLib.zlibVersion(), compressedData.Length);
-                        int zret = ZLib.inflate(zstream, 1);
-                        ZLib.inflateEnd(zstream);
-                    }
-                }
+                // Inflate the data into the buffer
+                using var outputStream = new MemoryStream();
+                zlibStream.BlockCopy(outputStream);
+                data = outputStream.ToArray();
             }
 
             // If we have an invalid output directory
