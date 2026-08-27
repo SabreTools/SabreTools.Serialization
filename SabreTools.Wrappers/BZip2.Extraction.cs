@@ -1,6 +1,7 @@
 using System;
 using System.IO;
-using SabreTools.IO.Compression.BZip2;
+using Nanook.GrindCore;
+using Nanook.GrindCore.BZip2;
 using SabreTools.IO.Extensions;
 
 namespace SabreTools.Wrappers
@@ -21,7 +22,7 @@ namespace SabreTools.Wrappers
             try
             {
                 // Try opening the stream
-                using var bz2File = new BZip2InputStream(_dataSource, true);
+                using var bz2File = new BZip2Stream(_dataSource, new CompressionOptions { LeaveOpen = true, Type = CompressionType.Decompress});
 
                 // Ensure directory separators are consistent
                 string filename = Guid.NewGuid().ToString();

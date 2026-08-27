@@ -43,10 +43,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="GrindCore" Version="0.7.1" />
-        <PackageReference Include="GrindCore.SharpCompress" Version="0.48.0" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`)) AND !$(TargetFramework.StartsWith(`net452`))" />
+        <PackageReference Include="GrindCore" Version="0.9.0" />
+        <PackageReference Include="GrindCore.SharpCompress" Version="0.50.5" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`)) AND !$(TargetFramework.StartsWith(`net452`))" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-        <PackageReference Include="SabreTools.Hashing" Version="2.0.0" />
+        <PackageReference Include="SabreTools.Hashing" Version="2.1.0" />
         <PackageReference Include="SabreTools.IO" Version="2.2.0" />
      </ItemGroup>
 

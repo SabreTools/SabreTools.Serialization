@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-using SabreTools.IO.Compression.BZip2;
+using Nanook.GrindCore;
+using Nanook.GrindCore.BZip2;
 using SabreTools.IO.Compression.zlib;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
@@ -595,7 +596,7 @@ namespace SabreTools.Wrappers
 
                     // Try opening the stream
                     using var ms = new MemoryStream(bz2Data);
-                    using var bz2File = new BZip2InputStream(ms, false);
+                    using var bz2File = new BZip2Stream(ms, new CompressionOptions { LeaveOpen = false, Type = CompressionType.Decompress});
 
                     // Try to read the decompressed data
                     byte[] data = bz2File.ReadBytes(extracted);
