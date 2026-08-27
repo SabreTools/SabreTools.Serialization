@@ -1,7 +1,8 @@
 using System;
 using System.IO;
+using Nanook.GrindCore;
+using Nanook.GrindCore.DeflateZLib;
 using SabreTools.Data.Models.GZIP;
-using SabreTools.IO.Compression.Deflate;
 using SabreTools.IO.Extensions;
 
 namespace SabreTools.Wrappers
@@ -53,7 +54,7 @@ namespace SabreTools.Wrappers
                     Directory.CreateDirectory(directoryName);
 
                 // Open the source as a DEFLATE stream
-                var deflateStream = new DeflateStream(_dataSource, CompressionMode.Decompress, leaveOpen: true);
+                var deflateStream = new DeflateStream(_dataSource, new CompressionOptions { LeaveOpen = true, Type = CompressionType.Decompress});
 
                 // Write the file
                 using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
