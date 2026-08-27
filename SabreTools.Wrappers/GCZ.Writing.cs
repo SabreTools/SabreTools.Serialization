@@ -1,7 +1,8 @@
 using System;
 using System.IO;
+using Nanook.GrindCore;
+using Nanook.GrindCore.DeflateZLib;
 using SabreTools.Data.Models.GCZ;
-using SabreTools.IO.Compression.Deflate;
 using SabreTools.IO.Extensions;
 using SabreTools.Numerics.Extensions;
 
@@ -122,13 +123,13 @@ namespace SabreTools.Wrappers
                 {
                     blockPointers[i] = blockPointer;
                     destination.Write(compressBuf, 0, compressedSize);
-                    blockHashes[i] = Adler.Adler32(1, compressBuf, 0, compressedSize);
+                    blockHashes[i] = IO.Compression.Deflate.Adler.Adler32(1, compressBuf, 0, compressedSize);
                 }
                 else
                 {
                     blockPointers[i] = blockPointer | Constants.UncompressedFlag;
                     destination.Write(readBuf, 0, blockDataSize);
-                    blockHashes[i] = Adler.Adler32(1, readBuf, 0, blockDataSize);
+                    blockHashes[i] = IO.Compression.Deflate.Adler.Adler32(1, readBuf, 0, blockDataSize);
                 }
             }
 
@@ -175,12 +176,12 @@ namespace SabreTools.Wrappers
                 ms.WriteByte(0x78);
                 ms.WriteByte(0x9C);
 
-                using (var ds = new DeflateStream(ms, CompressionMode.Compress, leaveOpen: true))
+                using (var ds = new DeflateStream(ms, new CompressionOptions { LeaveOpen = true, Type = CompressionType.Level5 }))
                 {
                     ds.Write(input, 0, inputSize);
                 }
 
-                uint adler = Adler.Adler32(1, input, 0, inputSize);
+                uint adler = IO.Compression.Deflate.Adler.Adler32(1, input, 0, inputSize);
                 ms.WriteByte((byte)(adler >> 24));
                 ms.WriteByte((byte)(adler >> 16));
                 ms.WriteByte((byte)(adler >> 8));
