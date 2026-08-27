@@ -2,7 +2,7 @@
 using System.IO;
 using Nanook.GrindCore;
 using Nanook.GrindCore.BZip2;
-using SabreTools.IO.Compression.zlib;
+using Nanook.GrindCore.ZLib;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
@@ -737,35 +737,15 @@ namespace SabreTools.Wrappers
         {
             try
             {
+                 // Open the input stream as ZLib-compressed
+                using var inputStream = new MemoryStream(resource);
+                var zlibStream = new ZLibStream(inputStream, new CompressionOptions { Type = CompressionType.Decompress });
+
                 // Inflate the data into the buffer
-                var zstream = new ZLib.z_stream_s();
-                byte[] data = new byte[resource.Length * 4];
-                unsafe
-                {
-                    fixed (byte* payloadPtr = resource, dataPtr = data)
-                    {
-                        zstream.next_in = payloadPtr;
-                        zstream.avail_in = (uint)resource.Length;
-                        zstream.total_in = (uint)resource.Length;
-                        zstream.next_out = dataPtr;
-                        zstream.avail_out = (uint)data.Length;
-                        zstream.total_out = 0;
+                using var outputStream = new MemoryStream();
+                zlibStream.BlockCopy(outputStream);
+                byte[] data = outputStream.ToArray();
 
-                        ZLib.inflateInit_(zstream, ZLib.zlibVersion(), resource.Length);
-                        int zret = ZLib.inflate(zstream, 1);
-                        ZLib.inflateEnd(zstream);
-                    }
-                }
-
-                // Trim the buffer to the proper size
-                uint read = zstream.total_out;
-#if NETFRAMEWORK
-                var temp = new byte[read];
-                Array.Copy(data, temp, read);
-                data = temp;
-#else
-                data = new ReadOnlySpan<byte>(data, 0, (int)read).ToArray();
-#endif
                 return data;
             }
             catch
