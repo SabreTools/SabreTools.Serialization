@@ -700,11 +700,7 @@ namespace SabreTools.Metadata.DatFiles
             rom.SHA384 = rom.SHA384 == "null" ? HashType.SHA384.ZeroString : null;
             rom.SHA512 = rom.SHA512 == "null" ? HashType.SHA512.ZeroString : null;
             rom.SpamSum = rom.SpamSum == "null" ? HashType.SpamSum.ZeroString : null;
-#if NET7_0_OR_GREATER
             rom.BLAKE3 = rom.BLAKE3 == "null" ? HashType.BLAKE3.ZeroString : null;
-#else
-            rom.BLAKE3 = rom.BLAKE3 == "null" ? "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262" : null;
-#endif
 
             return rom;
         }

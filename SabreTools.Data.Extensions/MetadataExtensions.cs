@@ -463,11 +463,7 @@ namespace SabreTools.Data.Extensions
             bool spamsumNull = string.IsNullOrEmpty(spamsum) || string.Equals(spamsum, HashType.SpamSum.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? blake3 = rom.BLAKE3;
-#if NET7_0_OR_GREATER
             bool blake3Null = string.IsNullOrEmpty(blake3) || string.Equals(blake3, HashType.BLAKE3.ZeroString, StringComparison.OrdinalIgnoreCase);
-#else
-            bool blake3Null = string.IsNullOrEmpty(blake3) || string.Equals(blake3, "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262", StringComparison.OrdinalIgnoreCase);
-#endif
 
             return crc16Null
                 && crc32Null
