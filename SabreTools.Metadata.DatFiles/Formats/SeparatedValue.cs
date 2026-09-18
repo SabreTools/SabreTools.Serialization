@@ -93,7 +93,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 case Rom rom:
                     if (string.IsNullOrEmpty(rom.Name))
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Name));
-                    if (rom.Size is null || rom.Size < 0)
+                    if ((rom.Size is null || rom.Size < 0) && rom.SHA1 is null && rom.SHA256 is null)
                         missingFields.Add(nameof(Data.Models.Metadata.Rom.Size));
                     if (string.IsNullOrEmpty(rom.CRC32)
                         && string.IsNullOrEmpty(rom.MD5)
