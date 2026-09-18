@@ -11,19 +11,27 @@ namespace SabreTools.Data.Models.OpenMSX
         /// <remarks>
         /// "hash" in older versions, "sha1" in newer versions
         /// </remarks>
+        [XmlAttribute("sha1")]
         [XmlElement("hash")]
-        [XmlElement("sha1")]
         public string? SHA1 { get; set; }
 
+        /// <remarks>
+        /// Element in older versions and DTD, attribute in newer versions
+        /// </remarks>
+        [XmlAttribute("type")]
         [XmlElement("type")]
         public string? Type { get; set; }
 
         /// <remarks>
         /// Only present in newer versions
         /// </remarks>
-        [XmlElement("status")]
+        [XmlAttribute("status")]
         public string? Status { get; set; }
 
+        /// <remarks>
+        /// Element in older versions and DTD, attribute in newer versions
+        /// </remarks>
+        [XmlAttribute("remark")]
         [XmlElement("remark")]
         public string? Remark { get; set; }
 

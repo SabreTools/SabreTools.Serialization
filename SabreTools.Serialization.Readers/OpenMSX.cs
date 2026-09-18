@@ -226,6 +226,11 @@ namespace SabreTools.Serialization.Readers
             else
                 return null;
 
+            obj.SHA1 = reader.GetAttribute("sha1");
+            obj.Type = reader.GetAttribute("type");
+            obj.Status = reader.GetAttribute("status");
+            obj.Remark = reader.GetAttribute("remark");
+
             // Handle empty elements
             if (reader.IsEmptyElement)
                 return obj;
