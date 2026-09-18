@@ -685,11 +685,11 @@ namespace SabreTools.Metadata.DatFiles
                 return rom;
 
             // If the item has a SHA-1 but no size
-            if (rom.Size is null && rom.SHA1 is not null)
+            if (rom.Size is null && rom.SHA1 is not null && rom.SHA1 != "null")
                 return rom;
 
             // If the item has a SHA-256 but no size
-            if (rom.Size is null && rom.SHA256 is not null)
+            if (rom.Size is null && rom.SHA256 is not null && rom.SHA256 != "null")
                 return rom;
 
             // If the Rom has "null" characteristics, ensure all fields
