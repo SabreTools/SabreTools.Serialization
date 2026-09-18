@@ -684,6 +684,14 @@ namespace SabreTools.Metadata.DatFiles
             if (rom.CRC32 != "null")
                 return rom;
 
+            // If the item has a SHA-1 but no size
+            if (rom.Size is null && rom.SHA1 is not null)
+                return rom;
+
+            // If the item has a SHA-256 but no size
+            if (rom.Size is null && rom.SHA256 is not null)
+                return rom;
+
             // If the Rom has "null" characteristics, ensure all fields
             rom.Name = rom.Name == "null" ? "-" : rom.Name;
             rom.Size = 0;
