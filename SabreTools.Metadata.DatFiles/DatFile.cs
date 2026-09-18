@@ -991,7 +991,7 @@ namespace SabreTools.Metadata.DatFiles
             {
                 // If we have a 0-size or blank rom, then we ignore
                 long? size = rom.Size;
-                if (size == 0 || size is null)
+                if ((size == 0 || size is null) && rom.SHA1 is null && rom.SHA256 is null)
                 {
                     string itemString = JsonConvert.SerializeObject(datItem, Formatting.None);
                     _logger.Verbose($"Item '{itemString}' was skipped because it had an invalid size");
