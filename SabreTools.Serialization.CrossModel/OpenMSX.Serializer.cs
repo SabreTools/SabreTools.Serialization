@@ -115,6 +115,8 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
+                // TODO: Figure out a better placeholder
+                Name = item.SHA1,
                 SHA1 = item.SHA1,
                 OpenMSXType = item.Type,
                 StatusMisc = item.Status,
