@@ -442,6 +442,12 @@ namespace SabreTools.Metadata.DatItems.Formats
             set => _internal.Status = value;
         }
 
+        public string? StatusMisc
+        {
+            get => _internal.StatusMisc;
+            set => _internal.StatusMisc = value;
+        }
+
         public string? Summation
         {
             get => _internal.Summation;

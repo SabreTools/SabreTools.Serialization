@@ -52,6 +52,9 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Dump is not null && item.Dump.Length > 0)
                 machine.Dump = Array.ConvertAll(item.Dump, ConvertToInternalModel);
 
+            if (item.Rom is not null && item.Rom.Length > 0)
+                machine.Rom = Array.ConvertAll(item.Rom, ConvertToInternalModel);
+
             return machine;
         }
 
@@ -112,10 +115,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Data.Models.Metadata.Rom
             {
-                Start = item.Start,
+                SHA1 = item.SHA1,
                 OpenMSXType = item.Type,
-                SHA1 = item.Hash,
+                StatusMisc = item.Status,
                 Remark = item.Remark,
+                Start = item.Start,
             };
             return rom;
         }

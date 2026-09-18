@@ -141,10 +141,11 @@ namespace SabreTools.Serialization.Writers
             else
                 return;
 
-            writer.WriteOptionalElementString("start", obj.Start);
+            writer.WriteOptionalElementString("sha1", obj.SHA1);
             writer.WriteOptionalElementString("type", obj.Type);
-            writer.WriteOptionalElementString("hash", obj.Hash);
+            writer.WriteOptionalElementString("status", obj.Status);
             writer.WriteOptionalElementString("remark", obj.Remark);
+            writer.WriteOptionalElementString("start", obj.Start);
 
             writer.WriteEndElement();
         }
@@ -158,18 +159,26 @@ namespace SabreTools.Serialization.Writers
         {
             writer.WriteStartElement("software");
 
-            writer.WriteRequiredElementString("title", obj.Title);
-            writer.WriteOptionalElementString("genmsxid", obj.GenMSXID);
-            writer.WriteRequiredElementString("system", obj.System);
-            writer.WriteRequiredElementString("company", obj.Company);
-            writer.WriteRequiredElementString("year", obj.Year);
-            writer.WriteRequiredElementString("country", obj.Country);
+            writer.WriteRequiredAttributeString("title", obj.Title);
+            writer.WriteRequiredAttributeString("system", obj.System);
+            writer.WriteRequiredAttributeString("company", obj.Company);
+            writer.WriteRequiredAttributeString("country", obj.Country);
+            writer.WriteRequiredAttributeString("year", obj.Year);
+            writer.WriteOptionalAttributeString("genmsxid", obj.GenMSXID);
 
             if (obj.Dump is not null && obj.Dump.Length > 0)
             {
                 foreach (var dump in obj.Dump)
                 {
                     WriteDump(dump, writer);
+                }
+            }
+
+            if (obj.Rom is not null && obj.Rom.Length > 0)
+            {
+                foreach (var rom in obj.Rom)
+                {
+                    WriteRomBase(rom, writer);
                 }
             }
 

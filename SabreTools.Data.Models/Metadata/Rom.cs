@@ -192,6 +192,9 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>(baddump|nodump|good|verified) "good"</remarks>
         public ItemStatus? Status { get; set; }
 
+        /// <remarks>Possibly enum; OpenMSX.RomBase</remarks>
+        public string? StatusMisc { get; set; }
+
         /// <remarks>ArchiveDotOrg.File</remarks>
         public string? Summation { get; set; }
 
@@ -353,6 +356,7 @@ namespace SabreTools.Data.Models.Metadata
             obj.SpamSum = SpamSum;
             obj.Start = Start;
             obj.Status = Status;
+            obj.StatusMisc = StatusMisc;
             obj.Summation = Summation;
             obj.TesseractOCR = TesseractOCR;
             obj.TesseractOCRConverted = TesseractOCRConverted;

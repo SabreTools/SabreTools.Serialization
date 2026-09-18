@@ -253,11 +253,12 @@ namespace SabreTools.Serialization.Readers
 
                 switch (reader.Name)
                 {
-                    case "start":
-                        if (obj.Start is not null && Debug)
+                    case "hash":
+                    case "sha1":
+                        if (obj.SHA1 is not null && Debug)
                             Console.WriteLine($"'{reader.Name}' element already found, overwriting");
 
-                        obj.Start = reader.ReadElementContentAsString();
+                        obj.SHA1 = reader.ReadElementContentAsString();
                         break;
                     case "type":
                         if (obj.Type is not null && Debug)
@@ -265,17 +266,23 @@ namespace SabreTools.Serialization.Readers
 
                         obj.Type = reader.ReadElementContentAsString();
                         break;
-                    case "hash":
-                        if (obj.Hash is not null && Debug)
+                    case "status":
+                        if (obj.Status is not null && Debug)
                             Console.WriteLine($"'{reader.Name}' element already found, overwriting");
 
-                        obj.Hash = reader.ReadElementContentAsString();
+                        obj.Status = reader.ReadElementContentAsString();
                         break;
                     case "remark":
                         if (obj.Remark is not null && Debug)
                             Console.WriteLine($"'{reader.Name}' element already found, overwriting");
 
                         obj.Remark = reader.ReadElementContentAsString();
+                        break;
+                    case "start":
+                        if (obj.Start is not null && Debug)
+                            Console.WriteLine($"'{reader.Name}' element already found, overwriting");
+
+                        obj.Start = reader.ReadElementContentAsString();
                         break;
 
                     default:
@@ -297,11 +304,19 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new Software();
 
+            obj.Title = reader.GetAttribute("title");
+            obj.System = reader.GetAttribute("system");
+            obj.Company = reader.GetAttribute("company");
+            obj.Year = reader.GetAttribute("year");
+            obj.Country = reader.GetAttribute("country");
+            obj.GenMSXID = reader.GetAttribute("genmsxid");
+
             // Handle empty elements
             if (reader.IsEmptyElement)
                 return obj;
 
             List<Dump> dumps = [];
+            List<RomBase> roms = [];
 
             reader.Read();
             while (!reader.EOF)
@@ -369,6 +384,13 @@ namespace SabreTools.Serialization.Readers
 
                         reader.Skip();
                         break;
+                    case "rom":
+                        var rom = ParseRomBase(reader);
+                        if (rom is not null)
+                            roms.Add(rom);
+
+                        reader.Skip();
+                        break;
 
                     default:
                         if (Debug) Console.Error.WriteLine($"Element '{reader.Name}' is not recognized");
@@ -379,6 +401,8 @@ namespace SabreTools.Serialization.Readers
 
             if (dumps.Count > 0)
                 obj.Dump = [.. dumps];
+            if (roms.Count > 0)
+                obj.Rom = [.. roms];
 
             return obj;
         }

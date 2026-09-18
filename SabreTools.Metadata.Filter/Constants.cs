@@ -625,6 +625,7 @@ namespace SabreTools.Metadata.Filter
             "spamsum",
             "start",
             "status",
+            "status_misc",
             "summation",
             "tesseractocr",
             "tesseractocrconverted",

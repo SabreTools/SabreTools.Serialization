@@ -1661,6 +1661,7 @@ namespace SabreTools.Metadata.Filter.Test
         [InlineData("rom.spamsum", "3::")]
         [InlineData("rom.start", "start")]
         [InlineData("rom.status", "good")]
+        [InlineData("rom.status_misc", "status")]
         [InlineData("rom.summation", "summation")]
         [InlineData("rom.ocr", "ocr")]
         [InlineData("rom.tesseractocr", "ocr")]
@@ -1785,6 +1786,7 @@ namespace SabreTools.Metadata.Filter.Test
                 SpamSum = HashType.SpamSum.ZeroString,
                 Start = "start",
                 Status = ItemStatus.Good,
+                StatusMisc = "status",
                 Summation = "summation",
                 TesseractOCR = "ocr",
                 TesseractOCRConverted = "ocr_converted",

@@ -106,11 +106,19 @@ namespace SabreTools.Serialization.Readers.Test
                 Content = "content",
             };
 
+            var standalone_rom = new Data.Models.OpenMSX.Rom
+            {
+                SHA1 = "sha1",
+                Type = "type",
+                Status = "status",
+                Remark = "remark",
+            };
+
             var rom = new Data.Models.OpenMSX.Rom
             {
                 Start = "start",
                 Type = "type",
-                Hash = "hash",
+                SHA1 = "hash",
                 Remark = "remark",
             };
 
@@ -125,7 +133,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Start = "start",
                 Type = "type",
-                Hash = "hash",
+                SHA1 = "hash",
                 Remark = "remark",
             };
 
@@ -140,7 +148,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Start = "start",
                 Type = "type",
-                Hash = "hash",
+                SHA1 = "hash",
                 Remark = "remark",
             };
 
@@ -160,6 +168,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Year = "year",
                 Country = "country",
                 Dump = [dump_rom, dump_megarom, dump_sccpluscart],
+                Rom = [standalone_rom],
             };
 
             return new Data.Models.OpenMSX.SoftwareDb
@@ -188,6 +197,10 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Validate(dump);
             }
+
+            Assert.NotNull(software.Rom);
+            var rom = Assert.Single(software.Rom);
+            ValidateStandalone(rom);
         }
 
         /// <summary>
@@ -220,7 +233,19 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(rombase);
             Assert.Equal("start", rombase.Start);
             Assert.Equal("type", rombase.Type);
-            Assert.Equal("hash", rombase.Hash);
+            Assert.Equal("hash", rombase.SHA1);
+            Assert.Equal("remark", rombase.Remark);
+        }
+
+        /// <summary>
+        /// Validate a RomBase
+        /// </summary>
+        private static void ValidateStandalone(Data.Models.OpenMSX.RomBase? rombase)
+        {
+            Assert.NotNull(rombase);
+            Assert.Equal("sha1", rombase.SHA1);
+            Assert.Equal("type", rombase.Type);
+            Assert.Equal("status", rombase.Status);
             Assert.Equal("remark", rombase.Remark);
         }
     }

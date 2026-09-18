@@ -2099,6 +2099,9 @@ namespace SabreTools.Metadata.Filter
                 case "status":
                     checkValue = obj.Status?.AsStringValue();
                     return true;
+                case "status_misc":
+                    checkValue = obj.StatusMisc;
+                    return true;
                 case "summation":
                     checkValue = obj.Summation;
                     return true;

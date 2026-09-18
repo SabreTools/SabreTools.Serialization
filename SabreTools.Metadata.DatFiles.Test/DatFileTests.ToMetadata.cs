@@ -1066,6 +1066,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(HashType.SpamSum.ZeroString, rom.SpamSum);
             Assert.Equal("start", rom.Start);
             Assert.Equal(Data.Models.Metadata.ItemStatus.Good, rom.Status);
+            Assert.Equal("status", rom.StatusMisc);
             Assert.Equal("summation", rom.Summation);
             Assert.Equal("ocr", rom.TesseractOCR);
             Assert.Equal("ocr_converted", rom.TesseractOCRConverted);

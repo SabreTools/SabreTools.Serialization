@@ -41,16 +41,20 @@ namespace SabreTools.Serialization.CrossModel
             var game = new Software
             {
                 Title = item.Name,
-                GenMSXID = item.GenMSXID,
                 System = item.System,
                 Company = item.Company,
                 Year = item.Year,
                 Country = item.Country,
+                GenMSXID = item.GenMSXID,
             };
 
             var dumps = item.Dump;
             if (dumps is not null && dumps.Length > 0)
                 game.Dump = Array.ConvertAll(dumps, ConvertFromInternalModel);
+
+            var roms = item.Rom;
+            if (roms is not null && roms.Length > 0)
+                game.Rom = Array.ConvertAll(roms, ConvertRomFromInternalModel);
 
             return game;
         }
@@ -90,10 +94,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var megaRom = new MegaRom
             {
-                Start = item.Start,
+                SHA1 = item.SHA1,
                 Type = item.OpenMSXType,
-                Hash = item.SHA1,
+                Status = item.StatusMisc,
                 Remark = item.Remark,
+                Start = item.Start,
             };
             return megaRom;
         }
@@ -118,10 +123,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var rom = new Rom
             {
-                Start = item.Start,
+                SHA1 = item.SHA1,
                 Type = item.OpenMSXType,
-                Hash = item.SHA1,
+                Status = item.StatusMisc,
                 Remark = item.Remark,
+                Start = item.Start,
             };
             return rom;
         }
@@ -133,10 +139,11 @@ namespace SabreTools.Serialization.CrossModel
         {
             var sccPlusCart = new SCCPlusCart
             {
-                Start = item.Start,
+                SHA1 = item.SHA1,
                 Type = item.OpenMSXType,
-                Hash = item.SHA1,
+                Status = item.StatusMisc,
                 Remark = item.Remark,
+                Start = item.Start,
             };
             return sccPlusCart;
         }
