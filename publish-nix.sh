@@ -14,7 +14,9 @@ INCLUDE_DEBUG=false
 INCLUDE_UNPUBLISHED=false
 NO_BUILD=false
 NO_ARCHIVE=false
-while getopts "udpba" OPTION; do
+HAS_VERSION=false
+VERSION="NONE"
+while getopts "udpbav:" OPTION; do
     case $OPTION in
     u)
         USE_ALL=true
@@ -30,6 +32,10 @@ while getopts "udpba" OPTION; do
         ;;
     a)
         NO_ARCHIVE=true
+        ;;
+    v)
+        HAS_VERSION=true
+        VERSION=${OPTARG}
         ;;
     *)
         echo "Invalid option provided"
@@ -51,6 +57,7 @@ echo "  Include debug builds (-d)             $INCLUDE_DEBUG"
 echo "  Include unpublished packages (-p)     $INCLUDE_UNPUBLISHED"
 echo "  No build (-b)                         $NO_BUILD"
 echo "  No archive (-a)                       $NO_ARCHIVE"
+echo "  Version (-v)                          $HAS_VERSION ($VERSION)"
 echo " "
 
 # Create the build matrix arrays
@@ -198,10 +205,18 @@ if [ $NO_ARCHIVE = false ]; then
             # Only include Debug if set
             if [ $INCLUDE_DEBUG = true ]; then
                 cd $BUILD_FOLDER/ExtractionTool/bin/Debug/${FRAMEWORK}/${RUNTIME}/publish/
-                zip -r $BUILD_FOLDER/ExtractionTool_${FRAMEWORK}_${RUNTIME}_debug.zip .
+                if [ $HAS_VERSION = true ]; then
+                    zip -r $BUILD_FOLDER/ExtractionTool_${VERSION}_${FRAMEWORK}_${RUNTIME}_debug.zip .
+                else
+                    zip -r $BUILD_FOLDER/ExtractionTool_${FRAMEWORK}_${RUNTIME}_debug.zip .
+                fi
             fi
             cd $BUILD_FOLDER/ExtractionTool/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
-            zip -r $BUILD_FOLDER/ExtractionTool_${FRAMEWORK}_${RUNTIME}_release.zip .
+            if [ $HAS_VERSION = true ]; then
+                zip -r $BUILD_FOLDER/ExtractionTool_${VERSION}_${FRAMEWORK}_${RUNTIME}_release.zip .
+            else
+                zip -r $BUILD_FOLDER/ExtractionTool_${FRAMEWORK}_${RUNTIME}_release.zip .
+            fi
         done
     done
 
@@ -230,10 +245,18 @@ if [ $NO_ARCHIVE = false ]; then
             # Only include Debug if set
             if [ $INCLUDE_DEBUG = true ]; then
                 cd $BUILD_FOLDER/InfoPrint/bin/Debug/${FRAMEWORK}/${RUNTIME}/publish/
-                zip -r $BUILD_FOLDER/InfoPrint_${FRAMEWORK}_${RUNTIME}_debug.zip .
+                if [ $HAS_VERSION = true ]; then
+                    zip -r $BUILD_FOLDER/InfoPrint_${VERSION}_${FRAMEWORK}_${RUNTIME}_debug.zip .
+                else
+                    zip -r $BUILD_FOLDER/InfoPrint_${FRAMEWORK}_${RUNTIME}_debug.zip .
+                fi
             fi
             cd $BUILD_FOLDER/InfoPrint/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
-            zip -r $BUILD_FOLDER/InfoPrint_${FRAMEWORK}_${RUNTIME}_release.zip .
+            if [ $HAS_VERSION = true ]; then
+                zip -r $BUILD_FOLDER/InfoPrint_${VERSION}_${FRAMEWORK}_${RUNTIME}_release.zip .
+            else
+                zip -r $BUILD_FOLDER/InfoPrint_${FRAMEWORK}_${RUNTIME}_release.zip .
+            fi
         done
     done
 

@@ -26,7 +26,11 @@ param(
 
     [Parameter(Mandatory = $false)]
     [Alias("NoArchive")]
-    [switch]$NO_ARCHIVE
+    [switch]$NO_ARCHIVE,
+
+    [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+    [Alias("BuildVersion")]
+    [string]$BUILD_VERSION
 )
 
 # Set the current directory as a variable
@@ -42,6 +46,7 @@ Write-Host "  Include debug builds (-IncludeDebug)                $INCLUDE_DEBUG
 Write-Host "  Include unpublished packages (-IncludeUnpublished)  $INCLUDE_DEBUG"
 Write-Host "  No build (-NoBuild)                                 $NO_BUILD"
 Write-Host "  No archive (-NoArchive)                             $NO_ARCHIVE"
+Write-Host "  Version (-BuildVersion)               $BUILD_VERSION"
 Write-Host " "
 
 # Create the build matrix arrays
@@ -179,11 +184,21 @@ if (!$NO_ARCHIVE.IsPresent) {
             # Only include Debug if set
             if ($INCLUDE_DEBUG.IsPresent) {
                 Set-Location -Path $BUILD_FOLDER\ExtractionTool\bin\Debug\${FRAMEWORK}\${RUNTIME}\publish\
-                7z a -tzip $BUILD_FOLDER\ExtractionTool_${FRAMEWORK}_${RUNTIME}_debug.zip *
+                if ($BUILD_VERSION -ne $null) {
+                    7z a -tzip $BUILD_FOLDER\ExtractionTool_${BUILD_VERSION}_${FRAMEWORK}_${RUNTIME}_debug.zip *
+                }
+                else {
+                    7z a -tzip $BUILD_FOLDER\ExtractionTool_${FRAMEWORK}_${RUNTIME}_debug.zip *
+                }
             }
         
             Set-Location -Path $BUILD_FOLDER\ExtractionTool\bin\Release\${FRAMEWORK}\${RUNTIME}\publish\
-            7z a -tzip $BUILD_FOLDER\ExtractionTool_${FRAMEWORK}_${RUNTIME}_release.zip *
+            if ($BUILD_VERSION -ne $null) {
+                7z a -tzip $BUILD_FOLDER\ExtractionTool_${BUILD_VERSION}_${FRAMEWORK}_${RUNTIME}_release.zip *
+            }
+            else {
+                7z a -tzip $BUILD_FOLDER\ExtractionTool_${FRAMEWORK}_${RUNTIME}_release.zip *
+            }
         }
     }
 
@@ -208,11 +223,21 @@ if (!$NO_ARCHIVE.IsPresent) {
             # Only include Debug if set
             if ($INCLUDE_DEBUG.IsPresent) {
                 Set-Location -Path $BUILD_FOLDER\InfoPrint\bin\Debug\${FRAMEWORK}\${RUNTIME}\publish\
-                7z a -tzip $BUILD_FOLDER\InfoPrint_${FRAMEWORK}_${RUNTIME}_debug.zip *
+                if ($BUILD_VERSION -ne $null) {
+                    7z a -tzip $BUILD_FOLDER\InfoPrint_${BUILD_VERSION}_${FRAMEWORK}_${RUNTIME}_debug.zip *
+                }
+                else {
+                    7z a -tzip $BUILD_FOLDER\InfoPrint_${FRAMEWORK}_${RUNTIME}_debug.zip *
+                }
             }
         
             Set-Location -Path $BUILD_FOLDER\InfoPrint\bin\Release\${FRAMEWORK}\${RUNTIME}\publish\
-            7z a -tzip $BUILD_FOLDER\InfoPrint_${FRAMEWORK}_${RUNTIME}_release.zip *
+            if ($BUILD_VERSION -ne $null) {
+                7z a -tzip $BUILD_FOLDER\InfoPrint_${BUILD_VERSION}_${FRAMEWORK}_${RUNTIME}_release.zip *
+            }
+            else {
+                7z a -tzip $BUILD_FOLDER\InfoPrint_${FRAMEWORK}_${RUNTIME}_release.zip *
+            }
         }
     }
 
