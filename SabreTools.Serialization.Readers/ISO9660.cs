@@ -770,7 +770,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // If the extent location field is ambiguous, also parse the big-endian directory extent
-            if (!bigEndian && dr.ExtentLocation.IsValid)
+            if (!bigEndian && !dr.ExtentLocation.IsValid)
             {
                 var bigEndianDir = ParseDirectory(data, sectorLength, blockLength, dr, true);
                 if (bigEndianDir is not null)
