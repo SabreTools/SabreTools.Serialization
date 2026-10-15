@@ -10,6 +10,11 @@ namespace SabreTools.Serialization.Readers.Test
 {
     public class ISO9660Tests
     {
+        /// <summary>
+        /// File flags of a plain file record
+        /// </summary>
+        private const FileFlags NoFlags = 0;
+
         [Fact]
         public void NullArray_Null()
         {
@@ -135,6 +140,66 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(actual);
             Assert.Equal(new[] { 20, 21, 22, 30 }, actual.Keys.OrderBy(k => k));
             Assert.Equal(new long[] { 20 * 2048, 22 * 2048, 30 * 2048, 21 * 2048 }, stream.SeekOrder);
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_NestedPath_ReadsOnlyDirectoriesOnPath()
+        {
+            // Root at sector 20 holds OTHER at sector 22 and SUB at sector 30, SUB holds FILE.TXT;1 at sector 25
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("OTHER", 22, FileFlags.DIRECTORY), ("SUB", 30, FileFlags.DIRECTORY));
+            WriteDirectory(image, 22);
+            WriteDirectory(image, 30, ("FILE.TXT;1", 25, NoFlags));
+            var stream = new SeekCountingStream(image);
+
+            var actual = ISO9660.FindDirectoryRecords(stream, 2048, CreatePrimaryVolumeDescriptor(20), "sub/file.txt");
+
+            Assert.NotNull(actual);
+            Assert.Equal(25, Assert.Single(actual).ExtentLocation.LittleEndian);
+            Assert.Equal(new long[] { 20 * 2048, 30 * 2048 }, stream.SeekOrder);
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_MissingPath_Null()
+        {
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("SUB", 30, FileFlags.DIRECTORY));
+            WriteDirectory(image, 30);
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, CreatePrimaryVolumeDescriptor(20), "SUB/MISSING.TXT");
+
+            Assert.Null(actual);
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_MultiExtentFile_ReturnsAllRecords()
+        {
+            // BIG.BIN;1 is recorded in two extents, at sectors 25 and 26
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("BIG.BIN;1", 25, FileFlags.MULTI_EXTENT), ("BIG.BIN;1", 26, NoFlags), ("NEXT.BIN;1", 27, NoFlags));
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, CreatePrimaryVolumeDescriptor(20), "BIG.BIN");
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 25, 26 }, actual.Select(r => r.ExtentLocation.LittleEndian));
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_SupplementaryVolumeDescriptor_UsesUnicodeNames()
+        {
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, Encoding.BigEndianUnicode, ("Sub", 30, FileFlags.DIRECTORY));
+            WriteDirectory(image, 30, Encoding.BigEndianUnicode, ("File.txt;1", 25, NoFlags));
+            var svd = new SupplementaryVolumeDescriptor
+            {
+                LogicalBlockSize = 2048,
+                RootDirectoryRecord = CreatePrimaryVolumeDescriptor(20).RootDirectoryRecord,
+            };
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, svd, "Sub/File.txt");
+
+            Assert.NotNull(actual);
+            Assert.Equal(25, Assert.Single(actual).ExtentLocation.LittleEndian);
         }
 
         /// <summary>

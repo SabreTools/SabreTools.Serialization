@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.IO.Extensions;
@@ -849,6 +851,125 @@ namespace SabreTools.Serialization.Readers
             }
 
             return records;
+        }
+
+        /// <summary>
+        /// Find the directory records of one path, reading only the directories along the path
+        /// </summary>
+        /// <remarks>
+        /// Names are compared case-insensitively and without a version suffix (";1") or a trailing period.
+        /// A file recorded in several extents returns one directory record per extent, in recorded order.
+        /// </remarks>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="vd">Primary or supplementary volume descriptor whose directory hierarchy is searched</param>
+        /// <param name="path">Path from the root directory, separated by '/' or '\'</param>
+        /// <returns>Filled array of DirectoryRecord on success, null if the path was not found</returns>
+        public static DirectoryRecord[]? FindDirectoryRecords(Stream data, short sectorLength, VolumeDescriptor vd, string path)
+        {
+            DirectoryRecord current;
+            if (vd is PrimaryVolumeDescriptor pvd)
+                current = pvd.RootDirectoryRecord;
+            else if (vd is SupplementaryVolumeDescriptor svd)
+                current = svd.RootDirectoryRecord;
+            else
+                return null;
+
+            // Determine logical block size
+            short blockLength = vd.GetLogicalBlockSize(sectorLength);
+
+            // TODO: Better encoding detection (EscapeSequences)
+            var encoding = vd is SupplementaryVolumeDescriptor ? Encoding.BigEndianUnicode : Encoding.UTF8;
+
+            string[] names = path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries);
+            if (names.Length == 0)
+                return [current];
+
+            for (int i = 0; i < names.Length; i++)
+            {
+                // Only a directory can contain the next name
+                if ((current.FileFlags & FileFlags.DIRECTORY) != FileFlags.DIRECTORY)
+                    return null;
+
+                // If the extent location field is ambiguous, also search the big-endian directory extent
+                var found = FindInDirectory(data, sectorLength, blockLength, current, false, encoding, names[i]);
+                if (found is null && !current.ExtentLocation.IsValid)
+                    found = FindInDirectory(data, sectorLength, blockLength, current, true, encoding, names[i]);
+
+                if (found is null)
+                    return null;
+
+                if (i == names.Length - 1)
+                    return found;
+
+                current = found[0];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Find the directory records of one name in one directory
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="dr">Directory record pointing to the directory extent</param>
+        /// <param name="bigEndian">True if the Big Endian extent location/length should be used</param>
+        /// <param name="encoding">Encoding of the file identifiers</param>
+        /// <param name="name">Name to find</param>
+        /// <returns>Filled array of DirectoryRecord on success, null if the name was not found</returns>
+        private static DirectoryRecord[]? FindInDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr, bool bigEndian, Encoding encoding, string name)
+        {
+            if (!TryGetExtent(data, blockLength, dr, bigEndian, out _, out long extentOffset, out uint extentLength))
+                return null;
+
+            // Move stream to directory location
+            data.SeekIfPossible(extentOffset, SeekOrigin.Begin);
+
+            var records = ParseDirectoryRecords(data, sectorLength, extentLength);
+            if (records is null)
+                return null;
+
+            string wanted = TrimIdentifier(name);
+            for (int i = 0; i < records.Count; i++)
+            {
+                // Don't match parent or self
+                if (records[i].FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || records[i].FileIdentifier.EqualsExactly(Constants.ParentDirectory))
+                    continue;
+
+                if (!string.Equals(TrimIdentifier(encoding.GetString(records[i].FileIdentifier)), wanted, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                // A multi-extent file continues in the following records, up to the final one
+                var matches = new List<DirectoryRecord> { records[i] };
+                while ((records[i].FileFlags & FileFlags.MULTI_EXTENT) == FileFlags.MULTI_EXTENT && i + 1 < records.Count)
+                {
+                    i++;
+                    matches.Add(records[i]);
+                }
+
+                return [.. matches];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Remove the version suffix and a trailing period from a file identifier
+        /// </summary>
+        /// <param name="identifier">File identifier as recorded or requested</param>
+        /// <returns>File identifier without version suffix and trailing period</returns>
+        private static string TrimIdentifier(string identifier)
+        {
+            int versionSeparator = identifier.LastIndexOf(';');
+            if (versionSeparator >= 0)
+                identifier = identifier.Substring(0, versionSeparator);
+
+            if (identifier.EndsWith("."))
+                identifier = identifier.Substring(0, identifier.Length - 1);
+
+            return identifier;
         }
 
         /// <summary>
