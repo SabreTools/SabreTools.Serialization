@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Metadata;
@@ -1134,7 +1135,7 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case "refresh":
                 case "freq":
-                    checkValue = obj.Refresh?.ToString();
+                    checkValue = obj.Refresh?.ToString(CultureInfo.InvariantCulture);
                     return true;
                 case "rotate":
                 case "orientation":
@@ -2512,7 +2513,7 @@ namespace SabreTools.Metadata.Filter
                     return true;
                 case "refresh":
                 case "freq":
-                    checkValue = obj.Refresh?.ToString();
+                    checkValue = obj.Refresh?.ToString(CultureInfo.InvariantCulture);
                     return true;
                 case "displaytype":
                 case "screen":

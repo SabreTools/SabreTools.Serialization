@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Extensions;
@@ -419,7 +420,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteOptionalAttributeString("y", video.Y.ToString());
                 writer.WriteOptionalAttributeString("aspectx", video.AspectX.ToString());
                 writer.WriteOptionalAttributeString("aspecty", video.AspectY.ToString());
-                writer.WriteOptionalAttributeString("freq", video.Freq?.ToString("0.000000"));
+                writer.WriteOptionalAttributeString("freq", video.Freq?.ToString("0.000000", CultureInfo.InvariantCulture));
                 writer.WriteEndElement(); // video
             }
         }
