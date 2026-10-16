@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using SabreTools.Data.Models.Metadata;
 using SabreTools.Hashing;
 using Xunit;
@@ -1017,6 +1018,20 @@ namespace SabreTools.Metadata.Filter.Test
                 VTotal = 12345,
                 Width = 12345,
             };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        [Theory]
+        [InlineData("en-US")]
+        [InlineData("de-DE")]
+        [InlineData("fr-FR")]
+        public void Matches_DisplayRefresh_CurrentCultureIgnored(string culture)
+        {
+            CultureInfo.CurrentCulture = new CultureInfo(culture);
+            var filter = new FilterObject("display.refresh", "123.45", Operation.Equals);
+            Display obj = new Display { Refresh = 123.45 };
 
             bool actual = filter.Matches(obj);
             Assert.True(actual);
@@ -2080,6 +2095,20 @@ namespace SabreTools.Metadata.Filter.Test
                 Screen = DisplayType.Vector,
                 Width = 12345,
             };
+
+            bool actual = filter.Matches(obj);
+            Assert.True(actual);
+        }
+
+        [Theory]
+        [InlineData("en-US")]
+        [InlineData("de-DE")]
+        [InlineData("fr-FR")]
+        public void Matches_VideoRefresh_CurrentCultureIgnored(string culture)
+        {
+            CultureInfo.CurrentCulture = new CultureInfo(culture);
+            var filter = new FilterObject("video.refresh", "123.45", Operation.Equals);
+            Video obj = new Video { Refresh = 123.45 };
 
             bool actual = filter.Matches(obj);
             Assert.True(actual);

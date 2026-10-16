@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -393,7 +394,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("flipx", obj.FlipX.FromYesNo());
             writer.WriteOptionalAttributeString("width", obj.Width?.ToString());
             writer.WriteOptionalAttributeString("height", obj.Height?.ToString());
-            writer.WriteRequiredAttributeString("refresh", obj.Refresh?.ToString("0.000000"));
+            writer.WriteRequiredAttributeString("refresh", obj.Refresh?.ToString("0.000000", CultureInfo.InvariantCulture));
             writer.WriteOptionalAttributeString("pixclock", obj.PixClock?.ToString());
             writer.WriteOptionalAttributeString("htotal", obj.HTotal?.ToString());
             writer.WriteOptionalAttributeString("hbend", obj.HBEnd?.ToString());
@@ -841,7 +842,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("height", obj.Height.ToString());
             writer.WriteOptionalAttributeString("aspectx", obj.AspectX.ToString());
             writer.WriteOptionalAttributeString("aspecty", obj.AspectY.ToString());
-            writer.WriteRequiredAttributeString("refresh", obj.Refresh?.ToString("0.000000"));
+            writer.WriteRequiredAttributeString("refresh", obj.Refresh?.ToString("0.000000", CultureInfo.InvariantCulture));
 
             writer.WriteEndElement();
         }

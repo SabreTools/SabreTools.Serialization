@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -169,6 +170,25 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(newMf.Game);
             var newGame = Assert.Single(newMf.Game);
             Validate(newGame);
+        }
+
+        [Theory]
+        [InlineData("en-US")]
+        [InlineData("de-DE")]
+        [InlineData("fr-FR")]
+        public void SerializeFreq_CurrentCultureIgnored(string culture)
+        {
+            CultureInfo.CurrentCulture = new CultureInfo(culture);
+            var serializer = new Writers.ClrMamePro();
+
+            // Serialize to stream
+            Stream? actual = serializer.SerializeStream(Build(game: false));
+            Assert.NotNull(actual);
+
+            // Validate the freq value
+            string dat = new StreamReader(actual).ReadToEnd();
+            Assert.Contains("123.450000", dat);
+            Assert.DoesNotContain("123,45", dat);
         }
 
         /// <summary>

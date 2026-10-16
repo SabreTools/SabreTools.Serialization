@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -119,6 +120,25 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(newM1.Game);
             var newGame = Assert.Single(newM1.Game);
             Validate(newGame);
+        }
+
+        [Theory]
+        [InlineData("en-US")]
+        [InlineData("de-DE")]
+        [InlineData("fr-FR")]
+        public void SerializeRefresh_CurrentCultureIgnored(string culture)
+        {
+            CultureInfo.CurrentCulture = new CultureInfo(culture);
+            var serializer = new Writers.M1();
+
+            // Serialize to stream
+            Stream? actual = serializer.SerializeStream(Build(game: false));
+            Assert.NotNull(actual);
+
+            // Validate the refresh values
+            string xml = new StreamReader(actual).ReadToEnd();
+            Assert.Contains("refresh=\"123.450000\"", xml);
+            Assert.DoesNotContain("123,45", xml);
         }
 
         /// <summary>
