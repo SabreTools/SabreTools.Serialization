@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.UDF;
+using SabreTools.IO;
 
 namespace SabreTools.Wrappers
 {
@@ -80,7 +81,7 @@ namespace SabreTools.Wrappers
         /// <summary>
         /// Create a UDF Volume from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the UDF Volume, starting at the beginning of the stream</param>
+        /// <param name="data">Stream representing the UDF Volume</param>
         /// <returns>A UDF Volume wrapper on success, null on failure</returns>
         public static UDF? Create(Stream? data)
         {
@@ -90,11 +91,15 @@ namespace SabreTools.Wrappers
 
             try
             {
-                var model = new Serialization.Readers.UDF().Deserialize(data);
+                // Cache the current offset
+                long currentOffset = data.Position;
+
+                // The reader addresses logical sectors from the start of the stream, so it reads a view that starts here
+                var model = new Serialization.Readers.UDF().Deserialize(new ReadOnlyViewStream(data, currentOffset));
                 if (model is null)
                     return null;
 
-                return new UDF(model, data, 0);
+                return new UDF(model, data, currentOffset);
             }
             catch
             {

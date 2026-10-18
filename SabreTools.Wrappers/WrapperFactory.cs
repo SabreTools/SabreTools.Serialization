@@ -162,15 +162,12 @@ namespace SabreTools.Wrappers
             stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
 
             // Try to get a UDF wrapper (discs without an ISO9660 file system)
-            if (initialOffset == 0)
-            {
-                var udfWrapper = UDF.Create(stream);
-                if (udfWrapper is not null)
-                    return udfWrapper;
+            var udfWrapper = UDF.Create(stream);
+            if (udfWrapper is not null)
+                return udfWrapper;
 
-                // Reset position in stream
-                stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
-            }
+            // Reset position in stream
+            stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
 
             // Try to get a 3DO / M2 disc image wrapper
             var operaFSWrapper = OperaFS.Create(stream);

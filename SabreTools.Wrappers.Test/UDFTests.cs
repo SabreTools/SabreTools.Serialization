@@ -136,5 +136,40 @@ namespace SabreTools.Wrappers.Test
                     Directory.Delete(output, true);
             }
         }
+
+        [Fact]
+        public void StreamAtOffset_VolumeAtOffsetExtracted()
+        {
+            // Another volume comes first, so reading from the start of the stream would find "Outer" instead of "Inner"
+            var stream = new MemoryStream([.. UDFImageBuilder.Build(subName: "Outer"), .. UDFImageBuilder.Build(subName: "Inner")]);
+            stream.Position = UDFImageBuilder.Sectors * UDFImageBuilder.SectorSize;
+
+            var wrapper = UDF.Create(stream);
+            Assert.NotNull(wrapper);
+
+            string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            try
+            {
+                Directory.CreateDirectory(output);
+                Assert.True(wrapper.Extract(output, false));
+                Assert.Equal(UDFImageBuilder.DataBinLength, new FileInfo(Path.Combine(output, "Inner", "data.bin")).Length);
+                Assert.False(Directory.Exists(Path.Combine(output, "Outer")));
+            }
+            finally
+            {
+                if (Directory.Exists(output))
+                    Directory.Delete(output, true);
+            }
+        }
+
+        [Fact]
+        public void StreamAtOffset_WrapperFactoryUDF()
+        {
+            var stream = new MemoryStream([.. new byte[3 * UDFImageBuilder.SectorSize], .. UDFImageBuilder.Build()]);
+            stream.Position = 3 * UDFImageBuilder.SectorSize;
+
+            var wrapper = WrapperFactory.CreateDiscImageWrapper(stream);
+            Assert.IsType<UDF>(wrapper);
+        }
     }
 }
