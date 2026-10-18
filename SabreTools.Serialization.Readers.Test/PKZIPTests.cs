@@ -1,4 +1,5 @@
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using Xunit;
 
@@ -67,6 +68,50 @@ namespace SabreTools.Serialization.Readers.Test
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
+        }
+
+        [Fact]
+        public void ValidStream_FileDataLocated()
+        {
+            Stream? data = CreateArchive();
+            var deserializer = new PKZIP();
+
+            var actual = deserializer.Deserialize(data);
+            Assert.NotNull(actual);
+
+            var localFile = Assert.Single(actual.LocalFiles!);
+            var header = localFile.LocalFileHeader;
+            Assert.Equal(30 + header.FileNameLength + header.ExtraFieldLength, localFile.FileDataOffset);
+            Assert.Equal(header.CompressedSize, localFile.FileDataLength);
+            Assert.Single(actual.CentralDirectoryHeaders!);
+        }
+
+        [Fact]
+        public void TruncatedFileData_Null()
+        {
+            byte[] archive = CreateArchive().ToArray();
+            Stream? data = new MemoryStream(archive, 0, 512);
+            var deserializer = new PKZIP();
+
+            var actual = deserializer.Deserialize(data);
+            Assert.Null(actual);
+        }
+
+        /// <summary>
+        /// Create an archive with one stored file of 1000 bytes
+        /// </summary>
+        private static MemoryStream CreateArchive()
+        {
+            var stream = new MemoryStream();
+            using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true))
+            {
+                var entry = archive.CreateEntry("file.bin", CompressionLevel.NoCompression);
+                using var entryStream = entry.Open();
+                entryStream.Write([.. Enumerable.Range(0, 1000).Select(i => (byte)i)], 0, 1000);
+            }
+
+            stream.Position = 0;
+            return stream;
         }
     }
 }

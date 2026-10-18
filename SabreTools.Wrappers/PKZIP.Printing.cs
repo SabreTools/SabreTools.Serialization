@@ -89,16 +89,8 @@ namespace SabreTools.Wrappers
 
             #region File Data
 
-            var fileData = localFile.FileData;
-            if (fileData is null)
-            {
-                builder.AppendLine("    [File Data]: [NULL]");
-            }
-            else
-            {
-                builder.AppendLine(fileData.Length, "    [File Data] Length");
-                //builder.AppendLine(fileData, "    [File Data] Data");
-            }
+            builder.AppendLine(localFile.FileDataOffset, "    [File Data] Offset");
+            builder.AppendLine(localFile.FileDataLength, "    [File Data] Length");
 
             #endregion
 
