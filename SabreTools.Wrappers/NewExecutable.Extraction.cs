@@ -222,6 +222,9 @@ namespace SabreTools.Wrappers
                     source = temp;
             }
 
+            // Close the multipart file again on return
+            using var multipart = source == _dataSource ? null : source;
+
             return ExtractWiseOverlay(outputDirectory, includeDebug, source, offset);
         }
 
@@ -253,7 +256,7 @@ namespace SabreTools.Wrappers
             }
 
             // Open the script file from the output directory
-            var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
+            using var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
             var script = WiseScript.Create(scriptStream);
             if (script is null)
             {
