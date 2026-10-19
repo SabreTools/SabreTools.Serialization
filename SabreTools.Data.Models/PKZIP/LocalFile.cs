@@ -25,11 +25,6 @@ namespace SabreTools.Data.Models.PKZIP
         public long FileDataOffset { get; set; }
 
         /// <summary>
-        /// Length of the file data
-        /// </summary>
-        public long FileDataLength { get; set; }
-
-        /// <summary>
         /// Data descriptors, appears after the file data
         /// </summary>
         /// <remarks>Cannot exist if <see cref="ZIP64DataDescriptor"/> is populated</remarks>

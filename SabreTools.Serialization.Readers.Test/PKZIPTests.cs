@@ -82,7 +82,6 @@ namespace SabreTools.Serialization.Readers.Test
             var localFile = Assert.Single(actual.LocalFiles!);
             var header = localFile.LocalFileHeader;
             Assert.Equal(30 + header.FileNameLength + header.ExtraFieldLength, localFile.FileDataOffset);
-            Assert.Equal(header.CompressedSize, localFile.FileDataLength);
             Assert.Single(actual.CentralDirectoryHeaders!);
         }
 

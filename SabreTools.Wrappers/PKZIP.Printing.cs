@@ -90,7 +90,6 @@ namespace SabreTools.Wrappers
             #region File Data
 
             builder.AppendLine(localFile.FileDataOffset, "    [File Data] Offset");
-            builder.AppendLine(localFile.FileDataLength, "    [File Data] Length");
 
             #endregion
 

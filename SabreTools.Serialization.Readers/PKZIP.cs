@@ -478,8 +478,7 @@ namespace SabreTools.Serialization.Readers
 
             // Set the location of the file data
             obj.FileDataOffset = data.Position;
-            obj.FileDataLength = (long)compressedSize;
-            data.SeekIfPossible(obj.FileDataLength, SeekOrigin.Current);
+            data.SeekIfPossible((long)compressedSize, SeekOrigin.Current);
 
             #endregion
 
