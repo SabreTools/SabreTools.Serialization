@@ -69,8 +69,10 @@ namespace SabreTools.Wrappers
                 if (prev?.Header is null)
                     break;
 
-                // Assign previous as new current, the next parts are opened again below
+                // Close this part, it is opened again below
                 current._setFile?.Dispose();
+
+                // Assign previous as new current
                 current = prev;
             }
 
@@ -229,6 +231,7 @@ namespace SabreTools.Wrappers
                     {
                         string firstCabName = Path.GetFileName(cabinet.Filename) ?? string.Empty;
                         if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
+
                         cabinet.CloseSetFiles();
                         return false;
                     }
