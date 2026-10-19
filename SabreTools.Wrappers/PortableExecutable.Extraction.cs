@@ -643,13 +643,17 @@ namespace SabreTools.Wrappers
             if (offset <= 0 || offset > Length)
                 return false;
 
-            // Try to open a multipart file, which is closed again on return
-            using var multipart = Filename is not null && WiseOverlayHeader.OpenFile(Filename, includeDebug, out var temp)
-                ? temp
-                : null;
-
             // Get the source data for reading
-            Stream source = multipart is not null ? multipart : _dataSource;
+            Stream source = _dataSource;
+            if (Filename is not null)
+            {
+                // Try to open a multipart file
+                if (WiseOverlayHeader.OpenFile(Filename, includeDebug, out var temp) && temp is not null)
+                    source = temp;
+            }
+
+            // Close the multipart file again on return
+            using var multipart = source == _dataSource ? null : source;
 
             // Seek to the overlay and parse
             source.SeekIfPossible(offset, SeekOrigin.Begin);
