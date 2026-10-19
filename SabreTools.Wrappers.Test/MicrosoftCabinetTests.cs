@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -56,5 +57,50 @@ namespace SabreTools.Wrappers.Test
             var actual = MicrosoftCabinet.Create(data);
             Assert.Null(actual);
         }
+
+        #region Extract
+
+        [Theory]
+        [InlineData("single.cab", null)]
+        [InlineData("part1.cab", null)]
+        [InlineData("part2.cab", null)]
+        [InlineData("part1.cab", "part2.cab")]
+        public void Extract_FilesNotKeptOpen(string filename, string? invalidPart)
+        {
+            // Copy of the test cabinets, so they can be checked and deleted afterwards
+            string directory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            string outputDirectory = Path.Combine(directory, "output");
+            Directory.CreateDirectory(directory);
+            foreach (string file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "TestData", "MicrosoftCabinet")))
+            {
+                File.Copy(file, Path.Combine(directory, Path.GetFileName(file)));
+            }
+
+            if (invalidPart is not null)
+                File.WriteAllBytes(Path.Combine(directory, invalidPart), [.. Enumerable.Repeat<byte>(0xFF, 1024)]);
+
+            try
+            {
+                using (var stream = File.Open(Path.Combine(directory, filename), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    var cabinet = MicrosoftCabinet.Create(stream);
+                    Assert.NotNull(cabinet);
+                    cabinet.Extract(outputDirectory, includeDebug: false);
+                }
+
+                // Opening a file exclusively fails while another handle to it is still open
+                foreach (string file in Directory.GetFiles(directory))
+                {
+                    using var exclusive = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.None);
+                    Assert.True(exclusive.CanRead);
+                }
+            }
+            finally
+            {
+                Directory.Delete(directory, recursive: true);
+            }
+        }
+
+        #endregion
     }
 }
