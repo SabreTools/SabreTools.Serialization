@@ -638,6 +638,11 @@ namespace SabreTools.Wrappers
         /// <returns>True if extraction succeeded, false otherwise</returns>
         public bool ExtractWiseOverlay(string outputDirectory, bool includeDebug)
         {
+            // Try to find the overlay header
+            long offset = FindWiseOverlayHeader();
+            if (offset <= 0 || offset > Length)
+                return false;
+
             // Get the source data for reading
             Stream source = _dataSource;
             if (Filename is not null)
@@ -646,11 +651,6 @@ namespace SabreTools.Wrappers
                 if (WiseOverlayHeader.OpenFile(Filename, includeDebug, out var temp) && temp is not null)
                     source = temp;
             }
-
-            // Try to find the overlay header
-            long offset = FindWiseOverlayHeader();
-            if (offset <= 0 || offset > Length)
-                return false;
 
             // Seek to the overlay and parse
             source.SeekIfPossible(offset, SeekOrigin.Begin);
