@@ -19,8 +19,14 @@ namespace SabreTools.Data.Models.PKZIP
         public byte[] EncryptionHeaders { get; set; } = [];
 
         /// <summary>
-        /// Offset of the file data in the stream, appears after the encryption
-        /// header if it exists or after the local file header otherwise
+        /// File data, appears after the encryption header
+        /// if it exists or after the local file header otherwise
+        /// </summary>
+        /// Not read into the model, see <see cref="FileDataOffset"/>
+        // public byte[] FileData { get; set; } = [];
+
+        /// <summary>
+        /// Offset of the file data in the stream
         /// </summary>
         public long FileDataOffset { get; set; }
 
