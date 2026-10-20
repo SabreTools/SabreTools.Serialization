@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -56,5 +57,39 @@ namespace SabreTools.Wrappers.Test
             var actual = MicrosoftCabinet.Create(data);
             Assert.Null(actual);
         }
+
+        #region Extract
+
+        [Fact]
+        public void Extract_LastBlockEndsTwoFiles()
+        {
+            // One MS-ZIP block that holds both files
+            string path = Path.Combine(Environment.CurrentDirectory, "TestData", "MicrosoftCabinet", "mszip.cab");
+            var cabinet = MicrosoftCabinet.Create(File.ReadAllBytes(path), 0);
+            Assert.NotNull(cabinet);
+
+            // Errors during extraction are only written to the console
+            string outputDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var originalError = Console.Error;
+            var error = new StringWriter();
+            Console.SetError(error);
+            try
+            {
+                cabinet.Extract(outputDirectory, includeDebug: true);
+
+                Assert.Equal("Hello, ", File.ReadAllText(Path.Combine(outputDirectory, "a.txt")));
+                Assert.Equal("World!", File.ReadAllText(Path.Combine(outputDirectory, "b.txt")));
+            }
+            finally
+            {
+                Console.SetError(originalError);
+                if (Directory.Exists(outputDirectory))
+                    Directory.Delete(outputDirectory, recursive: true);
+            }
+
+            Assert.DoesNotContain(nameof(ObjectDisposedException), error.ToString());
+        }
+
+        #endregion
     }
 }
