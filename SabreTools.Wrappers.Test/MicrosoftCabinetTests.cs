@@ -60,6 +60,22 @@ namespace SabreTools.Wrappers.Test
 
         #region Extract
 
+        [Fact]
+        public void Extract_LastBlockEndsTwoFiles()
+        {
+            // One MS-ZIP block that holds both files
+            string path = Path.Combine(Environment.CurrentDirectory, "TestData", "MicrosoftCabinet", "mszip.cab");
+            var cabinet = MicrosoftCabinet.Create(File.ReadAllBytes(path), 0);
+            Assert.NotNull(cabinet);
+
+            string outputDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            cabinet.Extract(outputDirectory, includeDebug: true);
+
+            Assert.Equal("Hello, ", File.ReadAllText(Path.Combine(outputDirectory, "a.txt")));
+            Assert.Equal("World!", File.ReadAllText(Path.Combine(outputDirectory, "b.txt")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
         [Theory]
         [InlineData("single.cab", null)]
         [InlineData("part1.cab", null)]

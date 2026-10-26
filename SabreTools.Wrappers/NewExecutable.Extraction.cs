@@ -208,6 +208,11 @@ namespace SabreTools.Wrappers
         /// <returns>True if extraction succeeded, false otherwise</returns>
         public bool ExtractWise(string outputDirectory, bool includeDebug)
         {
+            // Try to find the overlay header
+            long offset = FindWiseOverlayHeader();
+            if (offset <= 0 || offset >= Length)
+                return false;
+
             // Get the source data for reading
             Stream source = _dataSource;
             if (Filename is not null)
@@ -217,13 +222,10 @@ namespace SabreTools.Wrappers
                     source = temp;
             }
 
-            // Try to find the overlay header
-            long offset = FindWiseOverlayHeader();
-            if (offset > 0 && offset < Length)
-                return ExtractWiseOverlay(outputDirectory, includeDebug, source, offset);
+            // Close the multipart file again on return
+            using var multipart = source == _dataSource ? null : source;
 
-            // Everything else could not extract
-            return false;
+            return ExtractWiseOverlay(outputDirectory, includeDebug, source, offset);
         }
 
         /// <summary>
@@ -254,7 +256,7 @@ namespace SabreTools.Wrappers
             }
 
             // Open the script file from the output directory
-            var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
+            using var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
             var script = WiseScript.Create(scriptStream);
             if (script is null)
             {

@@ -56,5 +56,32 @@ namespace SabreTools.Wrappers.Test
             var actual = PortableExecutable.Create(data);
             Assert.Null(actual);
         }
+
+        [Fact]
+        public void ExtractWiseOverlay_NotWise_FileNotKeptOpen()
+        {
+            // Any executable that is not a Wise installer, here a copy of this test assembly
+            string path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            string outputDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            File.Copy(typeof(PortableExecutableTests).Assembly.Location, path);
+
+            try
+            {
+                using (var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    var pe = PortableExecutable.Create(stream);
+                    Assert.NotNull(pe);
+                    Assert.False(pe.ExtractWiseOverlay(outputDirectory, includeDebug: false));
+                }
+
+                // Opening the file exclusively fails while another handle to it is still open
+                using var exclusive = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.None);
+                Assert.True(exclusive.CanRead);
+            }
+            finally
+            {
+                File.Delete(path);
+            }
+        }
     }
 }
