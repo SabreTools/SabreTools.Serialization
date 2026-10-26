@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.Numerics;
 using Xunit;
@@ -9,6 +10,11 @@ namespace SabreTools.Serialization.Readers.Test
 {
     public class ISO9660Tests
     {
+        /// <summary>
+        /// File flags of a plain file record
+        /// </summary>
+        private const FileFlags NoFlags = 0;
+
         [Fact]
         public void NullArray_Null()
         {
@@ -98,8 +104,8 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Sector 1 holds directory A at sector 2, which holds directory B at sector 3
             byte[] image = new byte[5 * 2048];
-            WriteDirectory(image, 1, "A", 2);
-            WriteDirectory(image, 2, "B", 3);
+            WriteDirectory(image, 1, ("A", 2, FileFlags.DIRECTORY));
+            WriteDirectory(image, 2, ("B", 3, FileFlags.DIRECTORY));
             WriteDirectory(image, 3);
             var dr = new DirectoryRecord
             {
@@ -118,28 +124,131 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal(1, stream.SeeksTo(3 * 2048));
         }
 
-        /// <summary>
-        /// Write a one-sector directory extent with self and parent records and an optional child directory
-        /// </summary>
-        private static void WriteDirectory(byte[] image, int sector, string? childName = null, int childSector = 0)
+        [Fact]
+        public void ParseDirectoryDescriptors_ReadsExtentsInVolumeOrder()
         {
-            int offset = sector * 2048;
-            offset = WriteRecord(image, offset, Constants.CurrentDirectory, sector);
-            offset = WriteRecord(image, offset, Constants.ParentDirectory, sector);
-            if (childName is not null)
-                WriteRecord(image, offset, System.Text.Encoding.ASCII.GetBytes(childName), childSector);
+            // Root at sector 20 holds A at sector 30 and B at sector 22, A holds C at sector 21
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("A", 30, FileFlags.DIRECTORY), ("B", 22, FileFlags.DIRECTORY));
+            WriteDirectory(image, 30, ("C", 21, FileFlags.DIRECTORY));
+            WriteDirectory(image, 22);
+            WriteDirectory(image, 21);
+            var stream = new SeekCountingStream(image);
+
+            var actual = ISO9660.ParseDirectoryDescriptors(stream, 2048, [CreatePrimaryVolumeDescriptor(20)]);
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 20, 21, 22, 30 }, actual.Keys.OrderBy(k => k));
+            Assert.Equal(new long[] { 20 * 2048, 22 * 2048, 30 * 2048, 21 * 2048 }, stream.SeekOrder);
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_NestedPath_ReadsOnlyDirectoriesOnPath()
+        {
+            // Root at sector 20 holds OTHER at sector 22 and SUB at sector 30, SUB holds FILE.TXT;1 at sector 25
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("OTHER", 22, FileFlags.DIRECTORY), ("SUB", 30, FileFlags.DIRECTORY));
+            WriteDirectory(image, 22);
+            WriteDirectory(image, 30, ("FILE.TXT;1", 25, NoFlags));
+            var stream = new SeekCountingStream(image);
+
+            var actual = ISO9660.FindDirectoryRecords(stream, 2048, CreatePrimaryVolumeDescriptor(20), "sub/file.txt");
+
+            Assert.NotNull(actual);
+            Assert.Equal(25, Assert.Single(actual).ExtentLocation.LittleEndian);
+            Assert.Equal(new long[] { 20 * 2048, 30 * 2048 }, stream.SeekOrder);
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_MissingPath_Null()
+        {
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("SUB", 30, FileFlags.DIRECTORY));
+            WriteDirectory(image, 30);
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, CreatePrimaryVolumeDescriptor(20), "SUB/MISSING.TXT");
+
+            Assert.Null(actual);
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_MultiExtentFile_ReturnsAllRecords()
+        {
+            // BIG.BIN;1 is recorded in two extents, at sectors 25 and 26
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("BIG.BIN;1", 25, FileFlags.MULTI_EXTENT), ("BIG.BIN;1", 26, NoFlags), ("NEXT.BIN;1", 27, NoFlags));
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, CreatePrimaryVolumeDescriptor(20), "BIG.BIN");
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 25, 26 }, actual.Select(r => r.ExtentLocation.LittleEndian));
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_SupplementaryVolumeDescriptor_UsesUnicodeNames()
+        {
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, Encoding.BigEndianUnicode, ("Sub", 30, FileFlags.DIRECTORY));
+            WriteDirectory(image, 30, Encoding.BigEndianUnicode, ("File.txt;1", 25, NoFlags));
+            var svd = new SupplementaryVolumeDescriptor
+            {
+                LogicalBlockSize = 2048,
+                RootDirectoryRecord = CreatePrimaryVolumeDescriptor(20).RootDirectoryRecord,
+            };
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, svd, "Sub/File.txt");
+
+            Assert.NotNull(actual);
+            Assert.Equal(25, Assert.Single(actual).ExtentLocation.LittleEndian);
         }
 
         /// <summary>
-        /// Write a directory record for a one-sector directory extent, returns the offset after the record
+        /// Create a primary volume descriptor with 2048-byte blocks and a one-sector root directory
         /// </summary>
-        private static int WriteRecord(byte[] image, int offset, byte[] identifier, int location)
+        private static PrimaryVolumeDescriptor CreatePrimaryVolumeDescriptor(int rootSector)
+        {
+            return new PrimaryVolumeDescriptor
+            {
+                LogicalBlockSize = 2048,
+                RootDirectoryRecord = new DirectoryRecord
+                {
+                    ExtentLocation = rootSector,
+                    ExtentLength = 2048,
+                    FileFlags = FileFlags.DIRECTORY,
+                },
+            };
+        }
+
+        /// <summary>
+        /// Write a one-sector directory extent with self and parent records and the given entries
+        /// </summary>
+        private static void WriteDirectory(byte[] image, int sector, params (string Name, int Location, FileFlags Flags)[] entries)
+            => WriteDirectory(image, sector, Encoding.ASCII, entries);
+
+        /// <summary>
+        /// Write a one-sector directory extent with self and parent records and the given entries
+        /// </summary>
+        private static void WriteDirectory(byte[] image, int sector, Encoding encoding, params (string Name, int Location, FileFlags Flags)[] entries)
+        {
+            int offset = sector * 2048;
+            offset = WriteRecord(image, offset, Constants.CurrentDirectory, sector, FileFlags.DIRECTORY);
+            offset = WriteRecord(image, offset, Constants.ParentDirectory, sector, FileFlags.DIRECTORY);
+            foreach (var (name, location, flags) in entries)
+            {
+                offset = WriteRecord(image, offset, encoding.GetBytes(name), location, flags);
+            }
+        }
+
+        /// <summary>
+        /// Write a directory record for a one-sector extent, returns the offset after the record
+        /// </summary>
+        private static int WriteRecord(byte[] image, int offset, byte[] identifier, int location, FileFlags flags)
         {
             int length = 33 + identifier.Length + (identifier.Length % 2 == 0 ? 1 : 0);
             image[offset] = (byte)length;
             WriteBothEndian(image, offset + 2, location);
             WriteBothEndian(image, offset + 10, 2048);
-            image[offset + 25] = (byte)FileFlags.DIRECTORY;
+            image[offset + 25] = (byte)flags;
             image[offset + 28] = 1;
             image[offset + 31] = 1;
             image[offset + 32] = (byte)identifier.Length;
@@ -160,11 +269,16 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         /// <summary>
-        /// Memory stream that counts absolute seeks per offset
+        /// Memory stream that records absolute seeks
         /// </summary>
         private sealed class SeekCountingStream : MemoryStream
         {
             private readonly Dictionary<long, int> _seeks = [];
+
+            /// <summary>
+            /// Offsets of all absolute seeks, in order
+            /// </summary>
+            public List<long> SeekOrder { get; } = [];
 
             public SeekCountingStream(byte[] buffer) : base(buffer) { }
 
@@ -174,7 +288,10 @@ namespace SabreTools.Serialization.Readers.Test
             public override long Seek(long offset, SeekOrigin loc)
             {
                 if (loc == SeekOrigin.Begin)
+                {
                     _seeks[offset] = SeeksTo(offset) + 1;
+                    SeekOrder.Add(offset);
+                }
 
                 return base.Seek(offset, loc);
             }

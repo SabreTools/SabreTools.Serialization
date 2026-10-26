@@ -22,7 +22,13 @@ namespace SabreTools.Data.Models.PKZIP
         /// File data, appears after the encryption header
         /// if it exists or after the local file header otherwise
         /// </summary>
-        public byte[] FileData { get; set; } = [];
+        /// Not read into the model, see <see cref="FileDataOffset"/>
+        // public byte[] FileData { get; set; } = [];
+
+        /// <summary>
+        /// Offset of the file data in the stream
+        /// </summary>
+        public long FileDataOffset { get; set; }
 
         /// <summary>
         /// Data descriptors, appears after the file data

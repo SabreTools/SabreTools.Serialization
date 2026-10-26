@@ -200,6 +200,12 @@ namespace SabreTools.Wrappers
             string filename = $"CustomDialogSet_{obj.DisplayVariable}-{obj.Name}";
             filename = filename.Replace("%", string.Empty);
 
+            // The dialog name is free text, so replace characters that are invalid in a filename
+            foreach (char invalid in Path.GetInvalidFileNameChars())
+            {
+                filename = filename.Replace(invalid, '_');
+            }
+
             lock (_dataSourceLock)
             {
                 _dataSource.SeekIfPossible(InstallerDataOffset + obj.DeflateStart, SeekOrigin.Begin);

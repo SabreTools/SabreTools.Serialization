@@ -548,7 +548,7 @@ namespace SabreTools.Wrappers
                         _fileStream.Write(data, (int)tempBytesLeft, (int)_bytesLeft);
                         tempBytesLeft += _bytesLeft;
                         if (EndFile(outputDirectory))
-                            break;
+                            return;
                     }
 
                     _fileStream.Write(data, (int)tempBytesLeft, data.Length - (int)tempBytesLeft);

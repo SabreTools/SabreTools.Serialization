@@ -472,13 +472,13 @@ namespace SabreTools.Serialization.Readers
 
             #region File Data
 
-            // Try to read the file data
-            var fileData = data.ReadBytes((int)compressedSize);
-            if (fileData.Length < (long)compressedSize)
+            // The file data is skipped, so a large archive is not read into memory
+            if (compressedSize > (ulong)(data.Length - data.Position))
                 return null;
 
-            // Set the file data
-            obj.FileData = fileData;
+            // Set the location of the file data
+            obj.FileDataOffset = data.Position;
+            data.SeekIfPossible((long)compressedSize, SeekOrigin.Current);
 
             #endregion
 

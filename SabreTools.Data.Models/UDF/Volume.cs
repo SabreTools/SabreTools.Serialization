@@ -4,10 +4,12 @@ namespace SabreTools.Data.Models.UDF
 {
     /// <summary>
     /// A volume (or disc image) with a UDF / ECMA-167 file system
+    /// </summary>
+    /// <remarks>
     /// Logical sectors and logical blocks are 2048 bytes on optical media
     /// File system structures are addressed by logical block address (partition reference number + logical block);
     /// dictionaries are keyed by ((long)PartitionReferenceNumber &lt;&lt; 32) | LogicalBlockNumber
-    /// </summary>
+    /// </remarks>
     /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-167_3rd_edition_june_1997.pdf"/>
     /// <see href="http://www.osta.org/specs/pdf/udf260.pdf"/>
     public sealed class Volume
