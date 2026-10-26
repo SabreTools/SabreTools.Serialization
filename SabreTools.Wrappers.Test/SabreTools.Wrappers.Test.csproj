@@ -40,6 +40,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Include="..\SabreTools.Serialization.Readers.Test\UDFImageBuilder.cs" Link="UDFImageBuilder.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\SabreTools.Wrappers\SabreTools.Wrappers.csproj" />
     </ItemGroup>
 
