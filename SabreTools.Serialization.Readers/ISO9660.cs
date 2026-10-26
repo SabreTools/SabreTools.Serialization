@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.IO.Extensions;
@@ -589,6 +591,10 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Parse a Stream into a map of sector numbers to Directory
         /// </summary>
+        /// <remarks>
+        /// The directory trees of all volume descriptors are read together, in the order of their extents on the volume:
+        /// always the next known extent at or after the last one read, wrapping around to the lowest one at the end
+        /// </remarks>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="vd">Set of volume descriptors for a volume</param>
@@ -596,6 +602,8 @@ namespace SabreTools.Serialization.Readers
         public static Dictionary<int, FileExtent>? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
         {
             var directories = new Dictionary<int, FileExtent>();
+            var parsed = new Dictionary<long, bool>();
+            var pending = new List<PendingExtent>();
             foreach (VolumeDescriptor vd in vdSet)
             {
                 DirectoryRecord rootDirectoryRecord;
@@ -609,17 +617,25 @@ namespace SabreTools.Serialization.Readers
                 // Determine logical block size
                 short blockLength = vd.GetLogicalBlockSize(sectorLength);
 
-                // Parse the root directory pointed to from the base volume descriptor
-                var descriptors = ParseDirectory(data, sectorLength, blockLength, rootDirectoryRecord, false);
-                if (descriptors is null || descriptors.Count == 0)
+                // Queue the root directory pointed to from the base volume descriptor
+                QueueExtent(data, blockLength, rootDirectoryRecord, pending);
+            }
+
+            // Read the queued extents in volume order
+            long position = 0;
+            while (pending.Count > 0)
+            {
+                int index = FindNextExtent(pending, position);
+                var extent = pending[index];
+                pending.RemoveAt(index);
+                position = extent.Offset + extent.Length;
+
+                // Each extent is read once
+                if (parsed.ContainsKey(extent.Offset))
                     continue;
 
-                // Merge dictionaries
-                foreach (var kvp in descriptors)
-                {
-                    if (!directories.ContainsKey(kvp.Key))
-                        directories.Add(kvp.Key, kvp.Value);
-                }
+                parsed[extent.Offset] = true;
+                ParseExtent(data, sectorLength, extent, directories, pending);
             }
 
             // Return error (null) if no valid directory descriptors were found
@@ -627,6 +643,333 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             return directories;
+        }
+
+        /// <summary>
+        /// Queue the extent a directory record points to, if it needs to be read
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="dr">Directory record pointing to the extent</param>
+        /// <param name="pending">Queued extents, sorted by offset</param>
+        private static void QueueExtent(Stream data, short blockLength, DirectoryRecord dr, List<PendingExtent> pending)
+        {
+            // Only directories and files with an extended attribute record are read
+            if ((dr.FileFlags & FileFlags.DIRECTORY) != FileFlags.DIRECTORY && dr.ExtendedAttributeRecordLength == 0)
+                return;
+
+            QueueExtent(data, blockLength, dr, false, pending);
+
+            // If the extent location field is ambiguous, also queue the big-endian extent
+            if (!dr.ExtentLocation.IsValid)
+                QueueExtent(data, blockLength, dr, true, pending);
+        }
+
+        /// <summary>
+        /// Queue the extent a directory record points to, using one endianness
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="dr">Directory record pointing to the extent</param>
+        /// <param name="bigEndian">True if the Big Endian extent location/length should be used</param>
+        /// <param name="pending">Queued extents, sorted by offset</param>
+        private static void QueueExtent(Stream data, short blockLength, DirectoryRecord dr, bool bigEndian, List<PendingExtent> pending)
+        {
+            if (!TryGetExtent(data, blockLength, dr, bigEndian, out int extentLocation, out long extentOffset, out uint extentLength))
+                return;
+
+            var extent = new PendingExtent(extentLocation, extentOffset, extentLength, blockLength, dr);
+            int index = pending.BinarySearch(extent, PendingExtentComparer.Instance);
+            pending.Insert(index < 0 ? ~index : index, extent);
+        }
+
+        /// <summary>
+        /// Find the first queued extent at or after a position, or the first one if there is none
+        /// </summary>
+        /// <param name="pending">Queued extents, sorted by offset</param>
+        /// <param name="position">Offset just after the last extent read</param>
+        /// <returns>Index of the next extent to read</returns>
+        private static int FindNextExtent(List<PendingExtent> pending, long position)
+        {
+            var probe = new PendingExtent(0, position, 0, 0, null);
+            int index = pending.BinarySearch(probe, PendingExtentComparer.Instance);
+            if (index < 0)
+            {
+                index = ~index;
+            }
+            else
+            {
+                while (index > 0 && pending[index - 1].Offset == position)
+                {
+                    index--;
+                }
+            }
+
+            return index < pending.Count ? index : 0;
+        }
+
+        /// <summary>
+        /// Parse one queued extent and queue the extents its directory records point to
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="extent">Extent to parse</param>
+        /// <param name="directories">Map of sector numbers to parsed extents</param>
+        /// <param name="pending">Queued extents, sorted by offset</param>
+        private static void ParseExtent(Stream data, short sectorLength, PendingExtent extent, Dictionary<int, FileExtent> directories, List<PendingExtent> pending)
+        {
+            var dr = extent.Record!;
+
+            // Move stream to extent location
+            data.SeekIfPossible(extent.Offset, SeekOrigin.Begin);
+
+            // Check if the current extent is a directory
+            if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
+            {
+                // Read all directory records in this directory
+                var records = ParseDirectoryRecords(data, sectorLength, extent.Length);
+                if (records is null)
+                    return;
+
+                // Add current directory to dictionary
+                var currentDirectory = new DirectoryExtent();
+                currentDirectory.DirectoryRecords = [.. records];
+                if (!directories.ContainsKey(extent.Location))
+                    directories.Add(extent.Location, currentDirectory);
+
+                // Queue all child extents
+                foreach (var record in records)
+                {
+                    // Don't traverse to parent or self
+                    if (record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
+                        continue;
+
+                    QueueExtent(data, extent.BlockLength, record, pending);
+                }
+            }
+            else if (dr.ExtendedAttributeRecordLength > 0)
+            {
+                // Extent is a file, parse the Extended Attribute Record
+                var fileExtent = new FileExtent();
+                var ear = ParseExtendedAttributeRecord(data);
+                if (ear is not null)
+                    fileExtent.ExtendedAttributeRecord = ear;
+
+                // Put the file extent is the dictionary
+                if (!directories.ContainsKey(extent.Location))
+                    directories.Add(extent.Location, fileExtent);
+            }
+        }
+
+        /// <summary>
+        /// Get the extent a directory record points to, using one endianness
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="dr">Directory record pointing to the extent</param>
+        /// <param name="bigEndian">True if the Big Endian extent location/length should be used</param>
+        /// <param name="extentLocation">Logical block number of the extent</param>
+        /// <param name="extentOffset">Offset of the extent in the stream</param>
+        /// <param name="extentLength">Number of bytes in the extent</param>
+        /// <returns>True if the extent is valid, false otherwise</returns>
+        private static bool TryGetExtent(Stream data, short blockLength, DirectoryRecord dr, bool bigEndian, out int extentLocation, out long extentOffset, out uint extentLength)
+        {
+            // Use provided extent endinanness
+            extentLocation = bigEndian ? dr.ExtentLocation.BigEndian : dr.ExtentLocation.LittleEndian;
+            extentLength = bigEndian ? dr.ExtentLength.BigEndian : dr.ExtentLength.LittleEndian;
+            extentOffset = extentLocation * (long)blockLength;
+            long extentFinal = extentOffset + extentLength;
+
+            // Deal with extent length ambiguity
+            if (!dr.ExtentLength.IsValid)
+            {
+                // If provided extent length is invalid, use the other value
+                if (extentLength <= 0 || extentFinal > data.Length)
+                    extentLength = bigEndian ? dr.ExtentLength.LittleEndian : dr.ExtentLength.BigEndian;
+            }
+
+            // Validate extent length
+            return extentLength > 0 && extentFinal <= data.Length;
+        }
+
+        /// <summary>
+        /// Parse the directory records of one directory extent
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned at the start of the directory extent</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="extentLength">Number of bytes in the directory extent</param>
+        /// <returns>Filled list of DirectoryRecord on success, null if the directory is invalid</returns>
+        private static List<DirectoryRecord>? ParseDirectoryRecords(Stream data, short sectorLength, uint extentLength)
+        {
+            // Start of directory should not be 0
+            int firstRecordLength = data.PeekByteValue();
+            if (firstRecordLength == 0)
+                return null;
+
+            // Read all directory records in this directory
+            var records = new List<DirectoryRecord>();
+            uint pos = 0;
+            while (pos < extentLength)
+            {
+                // Peek next byte to check whether the next record length is not greater than the end of the dir extent
+                var recordLength = data.PeekByteValue();
+
+                // If record length of 0x00, next record begins in next sector
+                if (recordLength == 0)
+                {
+                    int paddingLength = (int)((uint)sectorLength - (pos % (uint)sectorLength));
+                    pos += (uint)paddingLength;
+                    _ = data.ReadBytes(paddingLength);
+
+                    // Finish parsing records if end reached
+                    if (pos >= extentLength)
+                        break;
+
+                    // Start of sector should not be 0, ignore entire directory
+                    int nextRecordLength = data.PeekByteValue();
+                    if (nextRecordLength <= 0)
+                        return null;
+
+                    continue;
+                }
+
+                // Ensure record will end in this extent
+                // TODO: Smartly detect record length for invalid record lengths
+                pos += recordLength;
+                if (pos > extentLength)
+                    break;
+
+                // Get the next directory record
+                var directoryRecord = ParseDirectoryRecord(data, false);
+
+                // Compare recordLength with number of bytes in directoryRecord and ignore the directory if mismatch
+                var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField is null ? 0 : 1) + directoryRecord.SystemUse.Length;
+                if (readLength != recordLength)
+                    return null;
+
+                records.Add(directoryRecord);
+            }
+
+            return records;
+        }
+
+        /// <summary>
+        /// Find the directory records of one path, reading only the directories along the path
+        /// </summary>
+        /// <remarks>
+        /// Names are compared case-insensitively and without a version suffix (";1") or a trailing period.
+        /// A file recorded in several extents returns one directory record per extent, in recorded order.
+        /// </remarks>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="vd">Primary or supplementary volume descriptor whose directory hierarchy is searched</param>
+        /// <param name="path">Path from the root directory, separated by '/' or '\'</param>
+        /// <returns>Filled array of DirectoryRecord on success, null if the path was not found</returns>
+        public static DirectoryRecord[]? FindDirectoryRecords(Stream data, short sectorLength, VolumeDescriptor vd, string path)
+        {
+            DirectoryRecord current;
+            if (vd is PrimaryVolumeDescriptor pvd)
+                current = pvd.RootDirectoryRecord;
+            else if (vd is SupplementaryVolumeDescriptor svd)
+                current = svd.RootDirectoryRecord;
+            else
+                return null;
+
+            // Determine logical block size
+            short blockLength = vd.GetLogicalBlockSize(sectorLength);
+
+            // TODO: Better encoding detection (EscapeSequences)
+            var encoding = vd is SupplementaryVolumeDescriptor ? Encoding.BigEndianUnicode : Encoding.UTF8;
+
+            string[] names = path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries);
+            if (names.Length == 0)
+                return [current];
+
+            for (int i = 0; i < names.Length; i++)
+            {
+                // Only a directory can contain the next name
+                if ((current.FileFlags & FileFlags.DIRECTORY) != FileFlags.DIRECTORY)
+                    return null;
+
+                // If the extent location field is ambiguous, also search the big-endian directory extent
+                var found = FindInDirectory(data, sectorLength, blockLength, current, false, encoding, names[i]);
+                if (found is null && !current.ExtentLocation.IsValid)
+                    found = FindInDirectory(data, sectorLength, blockLength, current, true, encoding, names[i]);
+
+                if (found is null)
+                    return null;
+
+                if (i == names.Length - 1)
+                    return found;
+
+                current = found[0];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Find the directory records of one name in one directory
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="dr">Directory record pointing to the directory extent</param>
+        /// <param name="bigEndian">True if the Big Endian extent location/length should be used</param>
+        /// <param name="encoding">Encoding of the file identifiers</param>
+        /// <param name="name">Name to find</param>
+        /// <returns>Filled array of DirectoryRecord on success, null if the name was not found</returns>
+        private static DirectoryRecord[]? FindInDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr, bool bigEndian, Encoding encoding, string name)
+        {
+            if (!TryGetExtent(data, blockLength, dr, bigEndian, out _, out long extentOffset, out uint extentLength))
+                return null;
+
+            // Move stream to directory location
+            data.SeekIfPossible(extentOffset, SeekOrigin.Begin);
+
+            var records = ParseDirectoryRecords(data, sectorLength, extentLength);
+            if (records is null)
+                return null;
+
+            string wanted = TrimIdentifier(name);
+            for (int i = 0; i < records.Count; i++)
+            {
+                // Don't match parent or self
+                if (records[i].FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || records[i].FileIdentifier.EqualsExactly(Constants.ParentDirectory))
+                    continue;
+
+                if (!string.Equals(TrimIdentifier(encoding.GetString(records[i].FileIdentifier)), wanted, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                // A multi-extent file continues in the following records, up to the final one
+                var matches = new List<DirectoryRecord> { records[i] };
+                while ((records[i].FileFlags & FileFlags.MULTI_EXTENT) == FileFlags.MULTI_EXTENT && i + 1 < records.Count)
+                {
+                    i++;
+                    matches.Add(records[i]);
+                }
+
+                return [.. matches];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Remove the version suffix and a trailing period from a file identifier
+        /// </summary>
+        /// <param name="identifier">File identifier as recorded or requested</param>
+        /// <returns>File identifier without version suffix and trailing period</returns>
+        private static string TrimIdentifier(string identifier)
+        {
+            int versionSeparator = identifier.LastIndexOf(';');
+            if (versionSeparator >= 0)
+                identifier = identifier.Substring(0, versionSeparator);
+
+            if (identifier.EndsWith("."))
+                identifier = identifier.Substring(0, identifier.Length - 1);
+
+            return identifier;
         }
 
         /// <summary>
@@ -671,54 +1014,10 @@ namespace SabreTools.Serialization.Readers
             if (dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
 #endif
             {
-                // Start of directory should not be 0
-                int firstRecordLength = data.PeekByteValue();
-                if (firstRecordLength == 0)
-                    return null;
-
                 // Read all directory records in this directory
-                var records = new List<DirectoryRecord>();
-                uint pos = 0;
-                while (pos < extentLength)
-                {
-                    // Peek next byte to check whether the next record length is not greater than the end of the dir extent
-                    var recordLength = data.PeekByteValue();
-
-                    // If record length of 0x00, next record begins in next sector
-                    if (recordLength == 0)
-                    {
-                        int paddingLength = (int)((uint)sectorLength - (pos % (uint)sectorLength));
-                        pos += (uint)paddingLength;
-                        _ = data.ReadBytes(paddingLength);
-
-                        // Finish parsing records if end reached
-                        if (pos >= extentLength)
-                            break;
-
-                        // Start of sector should not be 0, ignore entire directory
-                        int nextRecordLength = data.PeekByteValue();
-                        if (nextRecordLength <= 0)
-                            return null;
-
-                        continue;
-                    }
-
-                    // Ensure record will end in this extent
-                    // TODO: Smartly detect record length for invalid record lengths
-                    pos += recordLength;
-                    if (pos > extentLength)
-                        break;
-
-                    // Get the next directory record
-                    var directoryRecord = ParseDirectoryRecord(data, false);
-
-                    // Compare recordLength with number of bytes in directoryRecord and return null if mismatch
-                    var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField is null ? 0 : 1) + directoryRecord.SystemUse.Length;
-                    if (readLength != recordLength)
-                        return null;
-
-                    records.Add(directoryRecord);
-                }
+                var records = ParseDirectoryRecords(data, sectorLength, extentLength);
+                if (records is null)
+                    return null;
 
                 // Add current directory to dictionary
                 var currentDirectory = new DirectoryExtent();
@@ -935,6 +1234,61 @@ namespace SabreTools.Serialization.Readers
             obj.TimezoneOffset = data.ReadByteValue();
 
             return obj;
+        }
+
+        /// <summary>
+        /// Extent queued for reading
+        /// </summary>
+        private sealed class PendingExtent
+        {
+            /// <summary>
+            /// Logical block number of the extent
+            /// </summary>
+            public int Location { get; }
+
+            /// <summary>
+            /// Byte offset of the extent
+            /// </summary>
+            public long Offset { get; }
+
+            /// <summary>
+            /// Length of the extent in bytes
+            /// </summary>
+            public uint Length { get; }
+
+            /// <summary>
+            /// Number of bytes in a logical block of the volume
+            /// </summary>
+            public short BlockLength { get; }
+
+            /// <summary>
+            /// Directory record pointing to the extent
+            /// </summary>
+            public DirectoryRecord? Record { get; }
+
+            public PendingExtent(int location, long offset, uint length, short blockLength, DirectoryRecord? record)
+            {
+                Location = location;
+                Offset = offset;
+                Length = length;
+                BlockLength = blockLength;
+                Record = record;
+            }
+        }
+
+        /// <summary>
+        /// Orders queued extents by offset
+        /// </summary>
+        private sealed class PendingExtentComparer : IComparer<PendingExtent>
+        {
+            /// <summary>
+            /// Shared instance
+            /// </summary>
+            public static readonly PendingExtentComparer Instance = new();
+
+            /// <inheritdoc/>
+            public int Compare(PendingExtent? x, PendingExtent? y)
+                => (x?.Offset ?? 0).CompareTo(y?.Offset ?? 0);
         }
     }
 }
