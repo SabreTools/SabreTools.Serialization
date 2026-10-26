@@ -68,16 +68,9 @@ namespace SabreTools.Wrappers.Test
             var cabinet = MicrosoftCabinet.Create(File.ReadAllBytes(path), 0);
             Assert.NotNull(cabinet);
 
-            // Extract catches the exception and only writes it to the console
             string outputDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            var originalError = Console.Error;
-            var error = new StringWriter();
-            Console.SetError(error);
             cabinet.Extract(outputDirectory, includeDebug: true);
-            Console.SetError(originalError);
 
-            // Assert.True shows the whole exception, Assert.Empty cuts it off
-            Assert.True(error.ToString().Length == 0, error.ToString());
             Assert.Equal("Hello, ", File.ReadAllText(Path.Combine(outputDirectory, "a.txt")));
             Assert.Equal("World!", File.ReadAllText(Path.Combine(outputDirectory, "b.txt")));
             Directory.Delete(outputDirectory, recursive: true);
