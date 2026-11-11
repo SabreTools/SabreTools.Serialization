@@ -27,6 +27,16 @@ namespace SabreTools.Wrappers
 
         #endregion
 
+        #region Instance Variables
+
+        /// <summary>
+        /// File opened for this cabinet as part of a cabinet set
+        /// </summary>
+        /// <remarks>Only used in multi-file</remarks>
+        private Stream? _setFile;
+
+        #endregion
+
         #region Cabinet Set
 
         /// <summary>
@@ -47,8 +57,7 @@ namespace SabreTools.Wrappers
             filename = Path.GetFullPath(filename);
 
             // Read in the current file and try to parse
-            var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            var current = Create(stream);
+            var current = OpenSetFile(filename);
             if (current?.Header is null)
                 return null;
 
@@ -59,6 +68,9 @@ namespace SabreTools.Wrappers
                 var prev = current.OpenPrevious(filename, includeDebug);
                 if (prev?.Header is null)
                     break;
+
+                // Close this part, it is opened again below
+                current._setFile?.Dispose();
 
                 // Assign previous as new current
                 current = prev;
@@ -116,8 +128,7 @@ namespace SabreTools.Wrappers
             // Open and return the next cabinet
             try
             {
-                var fs = File.Open(next, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                return Create(fs);
+                return OpenSetFile(next!);
             }
             catch
             {
@@ -153,13 +164,42 @@ namespace SabreTools.Wrappers
             // Open and return the previous cabinet
             try
             {
-                var fs = File.Open(prev, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                return Create(fs);
+                return OpenSetFile(prev!);
             }
             catch
             {
                 if (includeDebug) Console.WriteLine($"Error: Cabinet set part {prev} could not be opened!");
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Open a cabinet file as part of a cabinet set
+        /// </summary>
+        /// <param name="filename">Full path to the cabinet file</param>
+        /// <returns>Wrapper representing the cabinet, null on error</returns>
+        private static MicrosoftCabinet? OpenSetFile(string filename)
+        {
+            var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            var cabinet = Create(stream);
+            if (cabinet is null)
+            {
+                stream.Dispose();
+                return null;
+            }
+
+            cabinet._setFile = stream;
+            return cabinet;
+        }
+
+        /// <summary>
+        /// Close the files opened for this cabinet and all following parts of the set
+        /// </summary>
+        private void CloseSetFiles()
+        {
+            for (var cabinet = this; cabinet is not null; cabinet = cabinet.Next)
+            {
+                cabinet._setFile?.Dispose();
             }
         }
 
@@ -191,6 +231,8 @@ namespace SabreTools.Wrappers
                     {
                         string firstCabName = Path.GetFileName(cabinet.Filename) ?? string.Empty;
                         if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
+
+                        cabinet.CloseSetFiles();
                         return false;
                     }
                 }
@@ -201,11 +243,18 @@ namespace SabreTools.Wrappers
                 cabinet = this;
             }
 
-            // If the archive is invalid
-            if (cabinet.Folders.Length == 0)
-                return false;
+            try
+            {
+                // If the archive is invalid
+                if (cabinet.Folders.Length == 0)
+                    return false;
 
-            return cabinet.ExtractSet(Filename, outputDirectory, includeDebug);
+                return cabinet.ExtractSet(Filename, outputDirectory, includeDebug);
+            }
+            finally
+            {
+                cabinet.CloseSetFiles();
+            }
         }
 
         /// <summary>
