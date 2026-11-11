@@ -379,6 +379,7 @@ namespace SabreTools.Data.Extensions
             return builder.ToString();
         }
 
+        // TODO: Replace with CRC-16/XMODEM from Hashing once its CRC code is faster
         /// <summary>
         /// Compute the CRC-ITU-T of a range of bytes
         /// </summary>
