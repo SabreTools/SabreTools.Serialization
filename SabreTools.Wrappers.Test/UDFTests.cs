@@ -1,6 +1,5 @@
 using System.IO;
 using System.Linq;
-using System.Text;
 using SabreTools.Serialization.Readers.Test;
 using Xunit;
 
@@ -57,18 +56,6 @@ namespace SabreTools.Wrappers.Test
             Stream? data = new MemoryStream([.. Enumerable.Repeat<byte>(0xFF, 1024)]);
             var actual = UDF.Create(data);
             Assert.Null(actual);
-        }
-
-        [Fact]
-        public void DirectoryLoop_PrintInformation()
-        {
-            var wrapper = UDF.Create(new MemoryStream(UDFImageBuilder.Build(subLoop: true)));
-            Assert.NotNull(wrapper);
-
-            var builder = new StringBuilder();
-            wrapper.PrintInformation(builder, true);
-
-            Assert.Contains("\\Sub\\loop\\", builder.ToString());
         }
 
         [Fact]

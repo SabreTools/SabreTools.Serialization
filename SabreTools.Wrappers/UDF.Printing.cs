@@ -245,7 +245,7 @@ namespace SabreTools.Wrappers
                 {
                     builder.AppendLine($"  {childPath}\\ ({location}{hidden})");
                     if (visited.Add(childKey))
-                        PrintDirectory(builder, childKey, childPath + "\\", visited);
+                        PrintDirectory(builder, childKey, $"{childPath}\\", visited);
                 }
                 else
                 {
@@ -268,18 +268,15 @@ namespace SabreTools.Wrappers
 
         private static void Print(StringBuilder builder, LongAllocationDescriptor ad, string label)
         {
-            builder.AppendLine($"partition {ad.ExtentLocation.PartitionReferenceNumber}, block {ad.ExtentLocation.LogicalBlockNumber}, "
-                + $"{UDFExtensions.GetExtentLength(ad.ExtentLength)} bytes", label);
+            uint length = UDFExtensions.GetExtentLength(ad.ExtentLength);
+            builder.AppendLine($"partition {ad.ExtentLocation.PartitionReferenceNumber}, block {ad.ExtentLocation.LogicalBlockNumber}, {length} bytes", label);
         }
 
         private static void Print(StringBuilder builder, EntityIdentifier identifier, string label)
         {
-            int length = System.Array.IndexOf(identifier.Identifier, (byte)0);
-            if (length < 0)
-                length = identifier.Identifier.Length;
-
-            string text = Encoding.ASCII.GetString(identifier.Identifier, 0, length);
-            builder.AppendLine($"{text} (flags {identifier.Flags}, suffix {BytesToHex(identifier.IdentifierSuffix)})", label);
+            builder.AppendLine(identifier.Identifier, label, Encoding.ASCII);
+            builder.AppendLine(identifier.Flags, $"{label} Flags");
+            builder.AppendLine(identifier.IdentifierSuffix, $"{label} Suffix");
         }
 
         private static string Format(Timestamp timestamp)
@@ -294,17 +291,6 @@ namespace SabreTools.Wrappers
 
             string zone = offset == -2047 ? string.Empty : $" UTC{(offset < 0 ? "-" : "+")}{System.Math.Abs(offset) / 60:D2}:{System.Math.Abs(offset) % 60:D2}";
             return $"{timestamp.Year:D4}-{timestamp.Month:D2}-{timestamp.Day:D2} {timestamp.Hour:D2}:{timestamp.Minute:D2}:{timestamp.Second:D2}.{timestamp.Centiseconds:D2}{zone}";
-        }
-
-        private static string BytesToHex(byte[] data)
-        {
-            var builder = new StringBuilder(data.Length * 2);
-            foreach (byte b in data)
-            {
-                builder.Append(b.ToString("X2"));
-            }
-
-            return builder.ToString();
         }
     }
 }

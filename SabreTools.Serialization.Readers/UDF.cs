@@ -6,6 +6,7 @@ using SabreTools.Data.Models.UDF;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 
 #pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
@@ -16,11 +17,6 @@ namespace SabreTools.Serialization.Readers
         /// Maximum number of Volume Descriptor Pointers followed in a Volume Descriptor Sequence
         /// </summary>
         private const int MaximumVolumeDescriptorPointers = 16;
-
-        /// <summary>
-        /// CRC-ITU-T (CCITT, polynomial 0x1021) table for descriptor CRCs
-        /// </summary>
-        private static readonly ushort[] CrcTable = CreateCrcTable();
 
         /// <inheritdoc/>
         public override Volume? Deserialize(Stream? data)
@@ -110,9 +106,11 @@ namespace SabreTools.Serialization.Readers
 
         /// <summary>
         /// Find the File Entry of a path by walking the directories on the path only
-        /// Names are compared exactly first, then case-insensitively; deleted entries are ignored
-        /// File Entries and directories read on the way are added to the volume (reused by later lookups)
         /// </summary>
+        /// <remarks>
+        /// Names are compared exactly first, then case-insensitively; deleted entries are ignored;
+        /// File Entries and directories read on the way are added to the volume (reused by later lookups)
+        /// </remarks>
         /// <param name="data">Stream containing the volume</param>
         /// <param name="volume">Volume parsed by Deserialize (directories may be excluded)</param>
         /// <param name="path">Path from the root directory, separated by '/' or '\'</param>
@@ -204,7 +202,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Volume Structure Descriptors up to the first unknown one</returns>
         public static VolumeStructureDescriptor[] ParseVolumeRecognitionSequence(Stream data)
         {
-            var obj = new List<VolumeStructureDescriptor>();
+            List<VolumeStructureDescriptor> obj = [];
 
             long sector = Constants.VolumeRecognitionSequenceSector;
             while (true)
@@ -212,11 +210,7 @@ namespace SabreTools.Serialization.Readers
                 byte[] block = ReadSectors(data, sector, 1);
 
                 int offset = 0;
-                var vsd = new VolumeStructureDescriptor();
-                vsd.StructureType = block.ReadByteValue(ref offset);
-                vsd.StandardIdentifier = block.ReadBytes(ref offset, 5);
-                vsd.StructureVersion = block.ReadByteValue(ref offset);
-                vsd.StructureData = block.ReadBytes(ref offset, Constants.SectorSize - 7);
+                var vsd = ParseVolumeStructureDescriptor(block, ref offset);
 
                 if (!IsKnownStandardIdentifier(vsd.StandardIdentifier))
                     break;
@@ -233,6 +227,21 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
+        /// Parse a Volume Structure Descriptor
+        /// </summary>
+        public static VolumeStructureDescriptor ParseVolumeStructureDescriptor(byte[] data, ref int offset)
+        {
+            var obj = new VolumeStructureDescriptor();
+
+            obj.StructureType = data.ReadByteValue(ref offset);
+            obj.StandardIdentifier = data.ReadBytes(ref offset, 5);
+            obj.StructureVersion = data.ReadByteValue(ref offset);
+            obj.StructureData = data.ReadBytes(ref offset, Constants.SectorSize - 7);
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse an Anchor Volume Descriptor Pointer
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -241,7 +250,7 @@ namespace SabreTools.Serialization.Readers
         public static AnchorVolumeDescriptorPointer? ParseAnchorVolumeDescriptorPointer(Stream data, long sector)
         {
             byte[] block = ReadSectors(data, sector, 1);
-            if (!IsValidDescriptor(block, 0, block.Length, (uint)sector))
+            if (!block.IsValidDescriptor(0, block.Length, (uint)sector))
                 return null;
 
             int offset = 0;
@@ -265,7 +274,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Descriptors up to the Terminating Descriptor or the first invalid descriptor</returns>
         public static Descriptor[] ParseVolumeDescriptorSequence(Stream data, ExtentDescriptor extent)
         {
-            var obj = new List<Descriptor>();
+            List<Descriptor> obj = [];
 
             long sector = extent.ExtentLocation;
             long end = sector + (extent.ExtentLength / Constants.SectorSize);
@@ -273,7 +282,7 @@ namespace SabreTools.Serialization.Readers
             while (sector < end)
             {
                 byte[] block = ReadSectors(data, sector, 1);
-                if (!IsValidDescriptor(block, 0, block.Length, (uint)sector))
+                if (!block.IsValidDescriptor(0, block.Length, (uint)sector))
                     break;
 
                 var descriptor = ParseVolumeDescriptor(block);
@@ -442,7 +451,7 @@ namespace SabreTools.Serialization.Readers
             obj.IntegritySequenceExtent = ParseExtentDescriptor(data, ref offset);
 
             // Partition maps, bounded by the map table length and the logical sector
-            var maps = new List<PartitionMap>();
+            List<PartitionMap> maps = [];
             int end = Math.Min(data.Length, offset + (int)Math.Min(obj.MapTableLength, (uint)data.Length));
             for (uint i = 0; i < obj.NumberOfPartitionMaps && offset + 2 <= end; i++)
             {
@@ -485,7 +494,8 @@ namespace SabreTools.Serialization.Readers
                 var identifier = ParseEntityIdentifier(data, ref offset);
                 offset = start;
 
-                string? name = DecodeIdentifier(identifier.Identifier);
+                int identifierOffset = 0;
+                string? name = identifier.Identifier.ReadNullTerminatedAnsiString(ref identifierOffset);
                 Type2PartitionMap type2 = name == Constants.MetadataPartitionIdentifier
                     ? new MetadataPartitionMap()
                     : new Type2PartitionMap();
@@ -539,7 +549,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             byte[] block = ReadSectors(data, sector, 1);
-            if (!IsValidDescriptor(block, 0, block.Length, location.LogicalBlockNumber))
+            if (!block.IsValidDescriptor(0, block.Length, location.LogicalBlockNumber))
                 return null;
 
             int offset = 0;
@@ -580,7 +590,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled FileEntry on success, null on error</returns>
         public static FileEntry? ParseFileEntry(byte[] block, uint logicalBlockNumber)
         {
-            if (!IsValidDescriptor(block, 0, block.Length, logicalBlockNumber))
+            if (!block.IsValidDescriptor(0, block.Length, logicalBlockNumber))
                 return null;
 
             int offset = 0;
@@ -650,7 +660,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled AllocationExtentDescriptor on success, null on error</returns>
         public static AllocationExtentDescriptor? ParseAllocationExtentDescriptor(byte[] block, uint logicalBlockNumber)
         {
-            if (!IsValidDescriptor(block, 0, block.Length, logicalBlockNumber))
+            if (!block.IsValidDescriptor(0, block.Length, logicalBlockNumber))
                 return null;
 
             int offset = 0;
@@ -676,7 +686,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>File Identifier Descriptors on success, null if the directory is invalid</returns>
         public static FileIdentifierDescriptor[]? ParseDirectory(byte[] data, int length)
         {
-            var obj = new List<FileIdentifierDescriptor>();
+            List<FileIdentifierDescriptor> obj = [];
 
             int offset = 0;
             while (offset < length)
@@ -830,77 +840,6 @@ namespace SabreTools.Serialization.Readers
         #region Helpers
 
         /// <summary>
-        /// Check a descriptor tag: checksum, version, CRC (when it fits into the data) and location
-        /// </summary>
-        /// <remarks>ECMA-167 3/7.2; receiving systems allow descriptor version 2 or 3 (3/7.2.2)</remarks>
-        /// <param name="data">Data holding the descriptor</param>
-        /// <param name="offset">Offset of the descriptor</param>
-        /// <param name="available">Number of bytes of the descriptor available from the offset</param>
-        /// <param name="location">Expected tag location (logical sector or logical block number)</param>
-        /// <returns>True if the tag is valid, false otherwise</returns>
-        public static bool IsValidDescriptor(byte[] data, int offset, int available, uint location)
-        {
-            byte checksum = 0;
-            for (int i = 0; i < 16; i++)
-            {
-                if (i != 4)
-                    checksum += data[offset + i];
-            }
-
-            if (checksum != data[offset + 4])
-                return false;
-
-            int version = data[offset + 2] | (data[offset + 3] << 8);
-            if (version != 2 && version != 3)
-                return false;
-
-            int crcLength = data[offset + 10] | (data[offset + 11] << 8);
-            if (16 + crcLength <= available)
-            {
-                int crc = data[offset + 8] | (data[offset + 9] << 8);
-                if (ComputeCrc(data, offset + 16, crcLength) != crc)
-                    return false;
-            }
-
-            uint tagLocation = (uint)(data[offset + 12] | (data[offset + 13] << 8) | (data[offset + 14] << 16) | (data[offset + 15] << 24));
-            return tagLocation == location;
-        }
-
-        /// <summary>
-        /// Compute the CRC-ITU-T of a range of bytes
-        /// </summary>
-        private static ushort ComputeCrc(byte[] data, int offset, int length)
-        {
-            ushort crc = 0;
-            for (int i = offset; i < offset + length; i++)
-            {
-                crc = (ushort)(CrcTable[((crc >> 8) ^ data[i]) & 0xFF] ^ (crc << 8));
-            }
-
-            return crc;
-        }
-
-        /// <summary>
-        /// Create the CRC-ITU-T table
-        /// </summary>
-        private static ushort[] CreateCrcTable()
-        {
-            var table = new ushort[256];
-            for (int i = 0; i < 256; i++)
-            {
-                ushort crc = (ushort)(i << 8);
-                for (int bit = 0; bit < 8; bit++)
-                {
-                    crc = (crc & 0x8000) != 0 ? (ushort)((crc << 1) ^ 0x1021) : (ushort)(crc << 1);
-                }
-
-                table[i] = crc;
-            }
-
-            return table;
-        }
-
-        /// <summary>
         /// Check whether the volume has a Logical Volume Descriptor with a supported logical block size
         /// </summary>
         private static bool HasLogicalVolume(Volume volume)
@@ -921,24 +860,6 @@ namespace SabreTools.Serialization.Readers
                 || identifier.EqualsExactly(Constants.CD001)
                 || identifier.EqualsExactly(Constants.BOOT2)
                 || identifier.EqualsExactly(Constants.CDW02);
-        }
-
-        /// <summary>
-        /// Decode an Entity Identifier's identifier field (ASCII, padded with 0x00)
-        /// </summary>
-        private static string? DecodeIdentifier(byte[] identifier)
-        {
-            int length = Array.IndexOf(identifier, (byte)0);
-            if (length < 0)
-                length = identifier.Length;
-
-            var chars = new char[length];
-            for (int i = 0; i < length; i++)
-            {
-                chars[i] = (char)identifier[i];
-            }
-
-            return new string(chars);
         }
 
         /// <summary>
@@ -1252,7 +1173,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Queue the recorded extents; extents that are not recorded read as zeros
                 var directory = new DirectoryContents { Key = key, Data = new byte[length] };
-                var reads = new List<PendingRead>();
+                List<PendingRead> reads = [];
                 int offset = 0;
                 foreach (var ad in descriptors)
                 {

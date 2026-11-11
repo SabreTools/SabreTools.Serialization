@@ -161,6 +161,81 @@ namespace SabreTools.Data.Extensions.Test
 
         #endregion
 
+        #region IsValidDescriptor
+
+        [Theory]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void IsValidDescriptor_Valid_True(byte version)
+        {
+            byte[] data = CreateDescriptor(version);
+            Assert.True(data.IsValidDescriptor(0, data.Length, 20));
+        }
+
+        [Fact]
+        public void IsValidDescriptor_WrongChecksum_False()
+        {
+            byte[] data = CreateDescriptor(2);
+            data[4]++;
+            Assert.False(data.IsValidDescriptor(0, data.Length, 20));
+        }
+
+        [Fact]
+        public void IsValidDescriptor_UnknownVersion_False()
+        {
+            byte[] data = CreateDescriptor(4);
+            Assert.False(data.IsValidDescriptor(0, data.Length, 20));
+        }
+
+        [Fact]
+        public void IsValidDescriptor_WrongCrc_False()
+        {
+            byte[] data = CreateDescriptor(2);
+            data[16] ^= 0x01;
+            Assert.False(data.IsValidDescriptor(0, data.Length, 20));
+        }
+
+        [Fact]
+        public void IsValidDescriptor_CrcPastAvailable_NotChecked()
+        {
+            byte[] data = CreateDescriptor(2);
+            data[16] ^= 0x01;
+            Assert.True(data.IsValidDescriptor(0, 16, 20));
+        }
+
+        [Fact]
+        public void IsValidDescriptor_WrongLocation_False()
+        {
+            byte[] data = CreateDescriptor(2);
+            Assert.False(data.IsValidDescriptor(0, data.Length, 21));
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Descriptor with tag location 20 whose 3 bytes after the tag have the CRC #3299 (ECMA-167 3/7.2.6)
+        /// </summary>
+        private static byte[] CreateDescriptor(byte version)
+        {
+            byte[] data = new byte[19];
+            data[0] = 1;
+            data[2] = version;
+            data[8] = 0x99;
+            data[9] = 0x32;
+            data[10] = 3;
+            data[12] = 20;
+            data[16] = 0x70;
+            data[17] = 0x6A;
+            data[18] = 0x77;
+            for (int i = 0; i < 16; i++)
+            {
+                if (i != 4)
+                    data[4] += data[i];
+            }
+
+            return data;
+        }
+
         /// <summary>
         /// Volume with partition 0 at sector 1000 (length 50) and the given partition maps
         /// </summary>

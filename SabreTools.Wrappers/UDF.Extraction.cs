@@ -11,7 +11,7 @@ namespace SabreTools.Wrappers
     public partial class UDF : IExtractable
     {
         /// <inheritdoc/>
-        public virtual bool Extract(string outputDirectory, bool includeDebug)
+        public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no file set or directories, there is nothing to extract
             if (FileSetDescriptor is null || Directories.Count == 0)
@@ -160,9 +160,9 @@ namespace SabreTools.Wrappers
                 return false;
 
             char[] invalid = Path.GetInvalidFileNameChars();
-            foreach (char c in name!)
+            foreach (char ch in name!)
             {
-                if (c == '/' || c == '\\' || c == '\0' || Array.IndexOf(invalid, c) >= 0)
+                if (ch == '/' || ch == '\\' || ch == '\0' || Array.Exists(invalid, x => x == ch))
                     return false;
             }
 

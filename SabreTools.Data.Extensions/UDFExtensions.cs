@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using SabreTools.Data.Models.UDF;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Data.Extensions
 {
@@ -10,6 +11,11 @@ namespace SabreTools.Data.Extensions
         /// Maximum number of Allocation Extent Descriptors followed for one File Entry
         /// </summary>
         private const int MaximumAllocationExtents = 1024;
+
+        /// <summary>
+        /// CRC-ITU-T (CCITT, polynomial 0x1021) table for descriptor CRCs
+        /// </summary>
+        private static readonly ushort[] CrcTable = CreateCrcTable();
 
         /// <summary>
         /// Get the dictionary key of a logical block address
@@ -221,7 +227,7 @@ namespace SabreTools.Data.Extensions
             if (type != AllocationDescriptorType.SHORT && type != AllocationDescriptorType.LONG)
                 return null;
 
-            var result = new List<LongAllocationDescriptor>();
+            List<LongAllocationDescriptor> result = [];
             ushort partition = (ushort)(key >> 32);
             byte[] descriptors = fileEntry.AllocationDescriptors;
             int length = descriptors.Length;
@@ -233,16 +239,16 @@ namespace SabreTools.Data.Extensions
                 for (int offset = 0; offset + size <= length; offset += size)
                 {
                     var ad = new LongAllocationDescriptor();
-                    ad.ExtentLength = ReadUInt32(descriptors, offset);
+                    ad.ExtentLength = descriptors.ToUInt32LittleEndian(offset);
                     if (type == AllocationDescriptorType.SHORT)
                     {
-                        ad.ExtentLocation.LogicalBlockNumber = ReadUInt32(descriptors, offset + 4);
+                        ad.ExtentLocation.LogicalBlockNumber = descriptors.ToUInt32LittleEndian(offset + 4);
                         ad.ExtentLocation.PartitionReferenceNumber = partition;
                     }
                     else
                     {
-                        ad.ExtentLocation.LogicalBlockNumber = ReadUInt32(descriptors, offset + 4);
-                        ad.ExtentLocation.PartitionReferenceNumber = (ushort)(descriptors[offset + 8] | (descriptors[offset + 9] << 8));
+                        ad.ExtentLocation.LogicalBlockNumber = descriptors.ToUInt32LittleEndian(offset + 4);
+                        ad.ExtentLocation.PartitionReferenceNumber = descriptors.ToUInt16LittleEndian(offset + 8);
                         for (int i = 0; i < 6; i++)
                         {
                             ad.ImplementationUse[i] = descriptors[offset + 10 + i];
@@ -278,6 +284,41 @@ namespace SabreTools.Data.Extensions
 
             // Too many continuation extents, assume a loop
             return null;
+        }
+
+        /// <summary>
+        /// Check a descriptor tag: checksum, version, CRC (when it fits into the data) and location
+        /// </summary>
+        /// <remarks>ECMA-167 3/7.2; receiving systems allow descriptor version 2 or 3 (3/7.2.2)</remarks>
+        /// <param name="data">Data holding the descriptor</param>
+        /// <param name="offset">Offset of the descriptor</param>
+        /// <param name="available">Number of bytes of the descriptor available from the offset</param>
+        /// <param name="location">Expected tag location (logical sector or logical block number)</param>
+        /// <returns>True if the tag is valid, false otherwise</returns>
+        public static bool IsValidDescriptor(this byte[] data, int offset, int available, uint location)
+        {
+            byte checksum = 0;
+            for (int i = 0; i < 16; i++)
+            {
+                if (i != 4)
+                    checksum += data[offset + i];
+            }
+
+            if (checksum != data[offset + 4])
+                return false;
+
+            ushort version = data.ToUInt16LittleEndian(offset + 2);
+            if (version != 2 && version != 3)
+                return false;
+
+            ushort crcLength = data.ToUInt16LittleEndian(offset + 10);
+            if (16 + crcLength <= available)
+            {
+                if (ComputeCrc(data, offset + 16, crcLength) != data.ToUInt16LittleEndian(offset + 8))
+                    return false;
+            }
+
+            return data.ToUInt32LittleEndian(offset + 12) == location;
         }
 
         /// <summary>
@@ -327,7 +368,7 @@ namespace SabreTools.Data.Extensions
             {
                 for (int i = 1; i + 1 < length; i += 2)
                 {
-                    builder.Append((char)((data[i] << 8) | data[i + 1]));
+                    builder.Append((char)data.ToUInt16BigEndian(i));
                 }
             }
             else
@@ -339,9 +380,37 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
-        /// Read a little-endian UInt32 from a byte array
+        /// Compute the CRC-ITU-T of a range of bytes
         /// </summary>
-        private static uint ReadUInt32(byte[] data, int offset)
-            => (uint)(data[offset] | (data[offset + 1] << 8) | (data[offset + 2] << 16) | (data[offset + 3] << 24));
+        private static ushort ComputeCrc(byte[] data, int offset, int length)
+        {
+            ushort crc = 0;
+            for (int i = offset; i < offset + length; i++)
+            {
+                crc = (ushort)(CrcTable[((crc >> 8) ^ data[i]) & 0xFF] ^ (crc << 8));
+            }
+
+            return crc;
+        }
+
+        /// <summary>
+        /// Create the CRC-ITU-T table
+        /// </summary>
+        private static ushort[] CreateCrcTable()
+        {
+            var table = new ushort[256];
+            for (int i = 0; i < 256; i++)
+            {
+                ushort crc = (ushort)(i << 8);
+                for (int bit = 0; bit < 8; bit++)
+                {
+                    crc = (crc & 0x8000) != 0 ? (ushort)((crc << 1) ^ 0x1021) : (ushort)(crc << 1);
+                }
+
+                table[i] = crc;
+            }
+
+            return table;
+        }
     }
 }
