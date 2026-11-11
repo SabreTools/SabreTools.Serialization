@@ -695,25 +695,35 @@ namespace SabreTools.Serialization.Readers
                 if (tag.TagIdentifier != TagIdentifier.FILE_IDENTIFIER_DESCRIPTOR)
                     return null;
 
-                var fid = new FileIdentifierDescriptor();
-                fid.DescriptorTag = tag;
-                fid.FileVersionNumber = data.ReadUInt16LittleEndian(ref offset);
-                fid.FileCharacteristics = (FileCharacteristics)data.ReadByteValue(ref offset);
-                fid.LengthOfFileIdentifier = data.ReadByteValue(ref offset);
-                fid.ICB = ParseLongAllocationDescriptor(data, ref offset);
-                fid.LengthOfImplementationUse = data.ReadUInt16LittleEndian(ref offset);
-
-                // The descriptor is padded to 4 bytes
-                int used = 38 + fid.LengthOfImplementationUse + fid.LengthOfFileIdentifier;
-                int padded = (used + 3) & ~3;
-                fid.ImplementationUse = data.ReadBytes(ref offset, fid.LengthOfImplementationUse);
-                fid.FileIdentifier = data.ReadBytes(ref offset, fid.LengthOfFileIdentifier);
-                fid.Padding = data.ReadBytes(ref offset, padded - used);
-
+                var fid = ParseFileIdentifierDescriptor(data, ref offset, tag);
                 obj.Add(fid);
             }
 
             return [.. obj];
+        }
+
+        /// <summary>
+        /// Parse a File Identifier Descriptor
+        /// </summary>
+        private static FileIdentifierDescriptor ParseFileIdentifierDescriptor(byte[] data, ref int offset, DescriptorTag tag)
+        {
+            var obj = new FileIdentifierDescriptor();
+
+            obj.DescriptorTag = tag;
+            obj.FileVersionNumber = data.ReadUInt16LittleEndian(ref offset);
+            obj.FileCharacteristics = (FileCharacteristics)data.ReadByteValue(ref offset);
+            obj.LengthOfFileIdentifier = data.ReadByteValue(ref offset);
+            obj.ICB = ParseLongAllocationDescriptor(data, ref offset);
+            obj.LengthOfImplementationUse = data.ReadUInt16LittleEndian(ref offset);
+
+            // The descriptor is padded to 4 bytes
+            int used = 38 + obj.LengthOfImplementationUse + obj.LengthOfFileIdentifier;
+            int padded = (used + 3) & ~3;
+            obj.ImplementationUse = data.ReadBytes(ref offset, obj.LengthOfImplementationUse);
+            obj.FileIdentifier = data.ReadBytes(ref offset, obj.LengthOfFileIdentifier);
+            obj.Padding = data.ReadBytes(ref offset, padded - used);
+
+            return obj;
         }
 
         #endregion
