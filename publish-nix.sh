@@ -104,11 +104,11 @@ if [ $NO_BUILD = false ]; then
         dotnet pack SabreTools.Wrappers/SabreTools.Wrappers.csproj --output $BUILD_FOLDER
     fi
 
-    # Build ExtractionTool
+    # Build ExtractionTool and InfoPrint
     for FRAMEWORK in "${FRAMEWORKS[@]}"; do
         for RUNTIME in "${RUNTIMES[@]}"; do
             # Output the current build
-            echo "===== Build ExtractionTool - $FRAMEWORK, $RUNTIME ====="
+            echo "===== Build ExtractionTool and InfoPrint - $FRAMEWORK, $RUNTIME ====="
 
             # If we have an invalid combination of framework and runtime
             if [[ ! $(echo ${VALID_CROSS_PLATFORM_FRAMEWORKS[@]} | fgrep -w $FRAMEWORK) ]]; then
@@ -134,49 +134,12 @@ if [ $NO_BUILD = false ]; then
             # Only include Debug if set
             if [ $INCLUDE_DEBUG = true ]; then
                 dotnet publish ExtractionTool/ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT $EXTRA_OPTS
-            fi
-
-            # Only include Release if set
-            if [ $INCLUDE_RELEASE = true ]; then
-                dotnet publish ExtractionTool/ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false $EXTRA_OPTS
-            fi
-        done
-    done
-
-    # Build InfoPrint
-    for FRAMEWORK in "${FRAMEWORKS[@]}"; do
-        for RUNTIME in "${RUNTIMES[@]}"; do
-            # Output the current build
-            echo "===== Build InfoPrint - $FRAMEWORK, $RUNTIME ====="
-
-            # If we have an invalid combination of framework and runtime
-            if [[ ! $(echo ${VALID_CROSS_PLATFORM_FRAMEWORKS[@]} | fgrep -w $FRAMEWORK) ]]; then
-                if [[ $(echo ${VALID_CROSS_PLATFORM_RUNTIMES[@]} | fgrep -w $RUNTIME) ]]; then
-                    echo "Skipped due to invalid combination"
-                    continue
-                fi
-            fi
-
-            # If we have Apple silicon but an unsupported framework
-            if [[ ! $(echo ${VALID_APPLE_FRAMEWORKS[@]} | fgrep -w $FRAMEWORK) ]]; then
-                if [ $RUNTIME = "osx-arm64" ]; then
-                    echo "Skipped due to no Apple Silicon support"
-                    continue
-                fi
-            fi
-
-            # Only .NET 5 and above can publish to a single file
-            if [[ $(echo ${SINGLE_FILE_CAPABLE[@]} | fgrep -w $FRAMEWORK) ]]; then
-                EXTRA_OPTS="-p:PublishSingleFile=true"
-            fi
-
-             # Only include Debug if set
-            if [ $INCLUDE_DEBUG = true ]; then
                 dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT $EXTRA_OPTS
             fi
 
             # Only include Release if set
             if [ $INCLUDE_RELEASE = true ]; then
+                dotnet publish ExtractionTool/ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false $EXTRA_OPTS
                 dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false $EXTRA_OPTS
             fi
         done
@@ -190,11 +153,11 @@ if [ $NO_ARCHIVE = false ]; then
         VERSION_STRING="_$BUILD_VERSION"
     fi
 
-    # Create ExtractionTool archives
+    # Create ExtractionTool and InfoPrint archives
     for FRAMEWORK in "${FRAMEWORKS[@]}"; do
         for RUNTIME in "${RUNTIMES[@]}"; do
             # Output the current build
-            echo "===== Archive ExtractionTool - $FRAMEWORK, $RUNTIME ====="
+            echo "===== Archive ExtractionTool and InfoPrint - $FRAMEWORK, $RUNTIME ====="
 
             # If we have an invalid combination of framework and runtime
             if [[ ! $(echo ${VALID_CROSS_PLATFORM_FRAMEWORKS[@]} | fgrep -w $FRAMEWORK) ]]; then
@@ -216,46 +179,16 @@ if [ $NO_ARCHIVE = false ]; then
             if [ $INCLUDE_DEBUG = true ]; then
                 cd $BUILD_FOLDER/ExtractionTool/bin/Debug/${FRAMEWORK}/${RUNTIME}/publish/
                 zip -r $BUILD_FOLDER/ExtractionTool${VERSION_STRING}_${FRAMEWORK}_${RUNTIME}_debug.zip .
-            fi
 
-            # Only include Release if set
-            if [ $INCLUDE_RELEASE = true ]; then
-                cd $BUILD_FOLDER/ExtractionTool/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
-                zip -r $BUILD_FOLDER/ExtractionTool${VERSION_STRING}_${FRAMEWORK}_${RUNTIME}_release.zip .
-            fi
-        done
-    done
-
-    # Create InfoPrint archives
-    for FRAMEWORK in "${FRAMEWORKS[@]}"; do
-        for RUNTIME in "${RUNTIMES[@]}"; do
-            # Output the current build
-            echo "===== Archive InfoPrint - $FRAMEWORK, $RUNTIME ====="
-
-            # If we have an invalid combination of framework and runtime
-            if [[ ! $(echo ${VALID_CROSS_PLATFORM_FRAMEWORKS[@]} | fgrep -w $FRAMEWORK) ]]; then
-                if [[ $(echo ${VALID_CROSS_PLATFORM_RUNTIMES[@]} | fgrep -w $RUNTIME) ]]; then
-                    echo "Skipped due to invalid combination"
-                    continue
-                fi
-            fi
-
-            # If we have Apple silicon but an unsupported framework
-            if [[ ! $(echo ${VALID_APPLE_FRAMEWORKS[@]} | fgrep -w $FRAMEWORK) ]]; then
-                if [ $RUNTIME = "osx-arm64" ]; then
-                    echo "Skipped due to no Apple Silicon support"
-                    continue
-                fi
-            fi
-
-            # Only include Debug if set
-            if [ $INCLUDE_DEBUG = true ]; then
                 cd $BUILD_FOLDER/InfoPrint/bin/Debug/${FRAMEWORK}/${RUNTIME}/publish/
                 zip -r $BUILD_FOLDER/InfoPrint${VERSION_STRING}_${FRAMEWORK}_${RUNTIME}_debug.zip .
             fi
 
             # Only include Release if set
             if [ $INCLUDE_RELEASE = true ]; then
+                cd $BUILD_FOLDER/ExtractionTool/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
+                zip -r $BUILD_FOLDER/ExtractionTool${VERSION_STRING}_${FRAMEWORK}_${RUNTIME}_release.zip .
+
                 cd $BUILD_FOLDER/InfoPrint/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
                 zip -r $BUILD_FOLDER/InfoPrint${VERSION_STRING}_${FRAMEWORK}_${RUNTIME}_release.zip .
             fi

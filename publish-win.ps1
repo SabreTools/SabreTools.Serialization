@@ -93,11 +93,11 @@ if (!$NO_BUILD.IsPresent) {
         dotnet pack SabreTools.Wrappers\SabreTools.Wrappers.csproj --output $BUILD_FOLDER
     }
 
-    # Build ExtractionTool
+    # Build ExtractionTool and InfoPrint
     foreach ($FRAMEWORK in $FRAMEWORKS) {
         foreach ($RUNTIME in $RUNTIMES) {
             # Output the current build
-            Write-Host "===== Build ExtractionTool - $FRAMEWORK, $RUNTIME ====="
+            Write-Host "===== Build ExtractionTool and InfoPrint - $FRAMEWORK, $RUNTIME ====="
 
             # If we have an invalid combination of framework and runtime
             if ($VALID_CROSS_PLATFORM_FRAMEWORKS -notcontains $FRAMEWORK -and $VALID_CROSS_PLATFORM_RUNTIMES -contains $RUNTIME) {
@@ -119,45 +119,12 @@ if (!$NO_BUILD.IsPresent) {
             # Only include Debug if set
             if ($INCLUDE_DEBUG.IsPresent) {
                 dotnet publish ExtractionTool\ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT $EXTRA_OPTS
-            }
-
-            # Only include Release if set
-            if ($INCLUDE_RELEASE.IsPresent) {
-                dotnet publish ExtractionTool\ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false $EXTRA_OPTS
-            }
-        }
-    }
-
-    # Build InfoPrint
-    foreach ($FRAMEWORK in $FRAMEWORKS) {
-        foreach ($RUNTIME in $RUNTIMES) {
-            # Output the current build
-            Write-Host "===== Build InfoPrint - $FRAMEWORK, $RUNTIME ====="
-
-            # If we have an invalid combination of framework and runtime
-            if ($VALID_CROSS_PLATFORM_FRAMEWORKS -notcontains $FRAMEWORK -and $VALID_CROSS_PLATFORM_RUNTIMES -contains $RUNTIME) {
-                Write-Host "Skipped due to invalid combination"
-                continue
-            }
-
-            # If we have Apple silicon but an unsupported framework
-            if ($VALID_APPLE_FRAMEWORKS -notcontains $FRAMEWORK -and $RUNTIME -eq 'osx-arm64') {
-                Write-Host "Skipped due to no Apple Silicon support"
-                continue
-            }
-
-            # Only .NET 5 and above can publish to a single file
-            if ($SINGLE_FILE_CAPABLE -contains $FRAMEWORK) {
-                $EXTRA_OPTS = "-p:PublishSingleFile=true"
-            }
-
-            # Only include Debug if set
-            if ($INCLUDE_DEBUG.IsPresent) {
                 dotnet publish InfoPrint\InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT $EXTRA_OPTS
             }
 
             # Only include Release if set
             if ($INCLUDE_RELEASE.IsPresent) {
+                dotnet publish ExtractionTool\ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false $EXTRA_OPTS
                 dotnet publish InfoPrint\InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false $EXTRA_OPTS
             }
         }
@@ -171,11 +138,11 @@ if (!$NO_ARCHIVE.IsPresent) {
         $VERSION_STRING = "_$BUILD_VERSION"
     }
 
-    # Create ExtractionTool archives
+    # Create ExtractionTool and InfoPrint archives
     foreach ($FRAMEWORK in $FRAMEWORKS) {
         foreach ($RUNTIME in $RUNTIMES) {
             # Output the current build
-            Write-Host "===== Archive ExtractionTool - $FRAMEWORK, $RUNTIME ====="
+            Write-Host "===== Archive ExtractionTool and InfoPrint - $FRAMEWORK, $RUNTIME ====="
 
             # If we have an invalid combination of framework and runtime
             if ($VALID_CROSS_PLATFORM_FRAMEWORKS -notcontains $FRAMEWORK -and $VALID_CROSS_PLATFORM_RUNTIMES -contains $RUNTIME) {
@@ -193,42 +160,16 @@ if (!$NO_ARCHIVE.IsPresent) {
             if ($INCLUDE_DEBUG.IsPresent) {
                 Set-Location -Path $BUILD_FOLDER\ExtractionTool\bin\Debug\${FRAMEWORK}\${RUNTIME}\publish\
                 7z a -tzip $BUILD_FOLDER\ExtractionTool${VERSION_STRING}_${FRAMEWORK}_${RUNTIME}_debug.zip *
-            }
-        
-            # Only include Release if set
-            if ($INCLUDE_RELEASE.IsPresent) {
-                Set-Location -Path $BUILD_FOLDER\ExtractionTool\bin\Release\${FRAMEWORK}\${RUNTIME}\publish\
-                7z a -tzip $BUILD_FOLDER\ExtractionTool${VERSION_STRING}_${FRAMEWORK}_${RUNTIME}_release.zip *
-            }
-        }
-    }
 
-    # Create InfoPrint archives
-    foreach ($FRAMEWORK in $FRAMEWORKS) {
-        foreach ($RUNTIME in $RUNTIMES) {
-            # Output the current build
-            Write-Host "===== Archive InfoPrint - $FRAMEWORK, $RUNTIME ====="
-
-            # If we have an invalid combination of framework and runtime
-            if ($VALID_CROSS_PLATFORM_FRAMEWORKS -notcontains $FRAMEWORK -and $VALID_CROSS_PLATFORM_RUNTIMES -contains $RUNTIME) {
-                Write-Host "Skipped due to invalid combination"
-                continue
-            }
-
-            # If we have Apple silicon but an unsupported framework
-            if ($VALID_APPLE_FRAMEWORKS -notcontains $FRAMEWORK -and $RUNTIME -eq 'osx-arm64') {
-                Write-Host "Skipped due to no Apple Silicon support"
-                continue
-            }
-
-            # Only include Debug if set
-            if ($INCLUDE_DEBUG.IsPresent) {
                 Set-Location -Path $BUILD_FOLDER\InfoPrint\bin\Debug\${FRAMEWORK}\${RUNTIME}\publish\
                 7z a -tzip $BUILD_FOLDER\InfoPrint${VERSION_STRING}_${FRAMEWORK}_${RUNTIME}_debug.zip *
             }
         
             # Only include Release if set
             if ($INCLUDE_RELEASE.IsPresent) {
+                Set-Location -Path $BUILD_FOLDER\ExtractionTool\bin\Release\${FRAMEWORK}\${RUNTIME}\publish\
+                7z a -tzip $BUILD_FOLDER\ExtractionTool${VERSION_STRING}_${FRAMEWORK}_${RUNTIME}_release.zip *
+
                 Set-Location -Path $BUILD_FOLDER\InfoPrint\bin\Release\${FRAMEWORK}\${RUNTIME}\publish\
                 7z a -tzip $BUILD_FOLDER\InfoPrint${VERSION_STRING}_${FRAMEWORK}_${RUNTIME}_release.zip *
             }
