@@ -11,18 +11,22 @@
 # Optional parameters
 USE_ALL=false
 INCLUDE_DEBUG=false
+INCLUDE_RELEASE=false
 INCLUDE_UNPUBLISHED=false
 NO_BUILD=false
 NO_ARCHIVE=false
 HAS_VERSION=false
 VERSION="NONE"
-while getopts "udpbav:" OPTION; do
+while getopts "udrpbav:" OPTION; do
     case $OPTION in
     u)
         USE_ALL=true
         ;;
     d)
         INCLUDE_DEBUG=true
+        ;;
+    r)
+        INCLUDE_RELEASE=true
         ;;
     p)
         INCLUDE_UNPUBLISHED=true
@@ -54,6 +58,7 @@ COMMIT=$(git log --pretty=%H -1)
 echo "Selected Options:"
 echo "  Use all frameworks (-u)               $USE_ALL"
 echo "  Include debug builds (-d)             $INCLUDE_DEBUG"
+echo "  Include release builds (-r)           $INCLUDE_RELEASE"
 echo "  Include unpublished packages (-p)     $INCLUDE_UNPUBLISHED"
 echo "  No build (-b)                         $NO_BUILD"
 echo "  No archive (-a)                       $NO_ARCHIVE"
@@ -127,13 +132,21 @@ if [ $NO_BUILD = false ]; then
                 if [ $INCLUDE_DEBUG = true ]; then
                     dotnet publish ExtractionTool/ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true
                 fi
-                dotnet publish ExtractionTool/ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
+
+                # Only include Release if set
+                if [ $INCLUDE_RELEASE = true ]; then
+                    dotnet publish ExtractionTool/ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
+                fi
             else
                 # Only include Debug if set
                 if [ $INCLUDE_DEBUG = true ]; then
                     dotnet publish ExtractionTool/ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT
                 fi
-                dotnet publish ExtractionTool/ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
+
+                # Only include Release if set
+                if [ $INCLUDE_RELEASE = true ]; then
+                    dotnet publish ExtractionTool/ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
+                fi
             fi
         done
     done
@@ -166,13 +179,21 @@ if [ $NO_BUILD = false ]; then
                 if [ $INCLUDE_DEBUG = true ]; then
                     dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true
                 fi
-                dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
+
+                # Only include Release if set
+                if [ $INCLUDE_RELEASE = true ]; then
+                    dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
+                fi
             else
                 # Only include Debug if set
                 if [ $INCLUDE_DEBUG = true ]; then
                     dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT
                 fi
-                dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
+
+                # Only include Release if set
+                if [ $INCLUDE_RELEASE = true ]; then
+                    dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
+                fi
             fi
         done
     done
@@ -211,11 +232,15 @@ if [ $NO_ARCHIVE = false ]; then
                     zip -r $BUILD_FOLDER/ExtractionTool_${FRAMEWORK}_${RUNTIME}_debug.zip .
                 fi
             fi
-            cd $BUILD_FOLDER/ExtractionTool/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
-            if [ $HAS_VERSION = true ]; then
-                zip -r $BUILD_FOLDER/ExtractionTool_${VERSION}_${FRAMEWORK}_${RUNTIME}_release.zip .
-            else
-                zip -r $BUILD_FOLDER/ExtractionTool_${FRAMEWORK}_${RUNTIME}_release.zip .
+
+            # Only include Release if set
+            if [ $INCLUDE_RELEASE = true ]; then
+                cd $BUILD_FOLDER/ExtractionTool/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
+                if [ $HAS_VERSION = true ]; then
+                    zip -r $BUILD_FOLDER/ExtractionTool_${VERSION}_${FRAMEWORK}_${RUNTIME}_release.zip .
+                else
+                    zip -r $BUILD_FOLDER/ExtractionTool_${FRAMEWORK}_${RUNTIME}_release.zip .
+                fi
             fi
         done
     done
@@ -251,11 +276,15 @@ if [ $NO_ARCHIVE = false ]; then
                     zip -r $BUILD_FOLDER/InfoPrint_${FRAMEWORK}_${RUNTIME}_debug.zip .
                 fi
             fi
-            cd $BUILD_FOLDER/InfoPrint/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
-            if [ $HAS_VERSION = true ]; then
-                zip -r $BUILD_FOLDER/InfoPrint_${VERSION}_${FRAMEWORK}_${RUNTIME}_release.zip .
-            else
-                zip -r $BUILD_FOLDER/InfoPrint_${FRAMEWORK}_${RUNTIME}_release.zip .
+
+            # Only include Release if set
+            if [ $INCLUDE_RELEASE = true ]; then
+                cd $BUILD_FOLDER/InfoPrint/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
+                if [ $HAS_VERSION = true ]; then
+                    zip -r $BUILD_FOLDER/InfoPrint_${VERSION}_${FRAMEWORK}_${RUNTIME}_release.zip .
+                else
+                    zip -r $BUILD_FOLDER/InfoPrint_${FRAMEWORK}_${RUNTIME}_release.zip .
+                fi
             fi
         done
     done
