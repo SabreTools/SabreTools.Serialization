@@ -17,6 +17,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// 5-byte magic
         /// Set to Constants.StandardIdentifier ("CD001")
         /// On non-ISO9660 CD-i discs, set to Constants.StandardIdentifierCDI ("CD-I ")
+        /// On High Sierra discs, set to Constants.HighSierraIdentifier ("CDROM")
         /// </summary>
         public byte[] Identifier { get; set; } = new byte[5];
 

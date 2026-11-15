@@ -121,6 +121,9 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled VolumeDescriptor on success, null on error</returns>
         public static VolumeDescriptor? ParseVolumeDescriptor(Stream data, short sectorLength)
         {
+            if (IsHighSierraVolumeDescriptor(data))
+                return ParseHighSierraVolumeDescriptor(data, sectorLength);
+
             var type = (VolumeDescriptorType)data.ReadByteValue();
 
             return type switch
@@ -135,6 +138,203 @@ namespace SabreTools.Serialization.Readers
                 // Unknown Volume Descriptor
                 _ => ParseGenericVolumeDescriptor(data, sectorLength, type),
             };
+        }
+
+        /// <summary>
+        /// Check whether a Stream is positioned at a High Sierra volume descriptor
+        /// </summary>
+        /// <remarks>A volume descriptor with the ISO 9660 identifier is never read as a High Sierra one</remarks>
+        /// <param name="data">Stream to check, positioned at the start of a volume descriptor</param>
+        /// <returns>True if the volume descriptor has the High Sierra identifier, false otherwise</returns>
+        private static bool IsHighSierraVolumeDescriptor(Stream data)
+        {
+            if (data.Length - data.Position < 14)
+                return false;
+
+            byte[] header = data.PeekBytes(14);
+            return !HasIdentifier(header, 1, Constants.StandardIdentifier)
+                && HasIdentifier(header, 9, Constants.HighSierraIdentifier);
+        }
+
+        /// <summary>
+        /// Check whether a volume descriptor was read from a High Sierra volume
+        /// </summary>
+        /// <param name="vd">Volume descriptor to check</param>
+        /// <returns>True if the volume descriptor has the High Sierra identifier, false otherwise</returns>
+        private static bool IsHighSierra(VolumeDescriptor vd)
+            => vd.Identifier.EqualsExactly(Constants.HighSierraIdentifier);
+
+        /// <summary>
+        /// Check whether a volume descriptor header holds an identifier at an offset
+        /// </summary>
+        /// <param name="header">Start of the volume descriptor</param>
+        /// <param name="offset">Offset of the identifier in the header</param>
+        /// <param name="identifier">Identifier to compare with</param>
+        /// <returns>True if the identifier is present at the offset, false otherwise</returns>
+        private static bool HasIdentifier(byte[] header, int offset, byte[] identifier)
+        {
+            for (int i = 0; i < identifier.Length; i++)
+            {
+                if (header[offset + i] != identifier[i])
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a High Sierra VolumeDescriptor
+        /// </summary>
+        /// <remarks>
+        /// High Sierra volume descriptors start with their own logical block number, which is not kept.
+        /// The standard file structure volume descriptor is read into a PrimaryVolumeDescriptor.
+        /// </remarks>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <returns>Filled VolumeDescriptor</returns>
+        public static VolumeDescriptor ParseHighSierraVolumeDescriptor(Stream data, short sectorLength)
+        {
+            _ = data.ReadBytes(8);
+            var type = (VolumeDescriptorType)data.ReadByteValue();
+
+            return type switch
+            {
+                // High Sierra Volume Descriptors with an ISO9660 model
+                VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR => ParseHighSierraPrimaryVolumeDescriptor(data, sectorLength),
+                VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR => ParseHighSierraVolumeDescriptorSetTerminator(data, sectorLength),
+
+                // Other and unknown High Sierra Volume Descriptors
+                VolumeDescriptorType.BOOT_RECORD_VOLUME_DESCRIPTOR => ParseHighSierraGenericVolumeDescriptor(data, sectorLength, type),
+                VolumeDescriptorType.SUPPLEMENTARY_VOLUME_DESCRIPTOR => ParseHighSierraGenericVolumeDescriptor(data, sectorLength, type),
+                VolumeDescriptorType.VOLUME_PARTITION_DESCRIPTOR => ParseHighSierraGenericVolumeDescriptor(data, sectorLength, type),
+                _ => ParseHighSierraGenericVolumeDescriptor(data, sectorLength, type),
+            };
+        }
+
+        /// <summary>
+        /// Parse a Stream into a PrimaryVolumeDescriptor from a High Sierra standard file structure volume descriptor
+        /// </summary>
+        /// <remarks>
+        /// High Sierra records two more optional path tables of each byte order, which are not kept.
+        /// It has no bibliographic file identifier, and its dates have no time zone offset.
+        /// </remarks>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <returns>Filled PrimaryVolumeDescriptor</returns>
+        public static PrimaryVolumeDescriptor ParseHighSierraPrimaryVolumeDescriptor(Stream data, short sectorLength)
+        {
+            var obj = new PrimaryVolumeDescriptor();
+
+            obj.Type = VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR;
+            obj.Identifier = data.ReadBytes(5);
+            obj.Version = data.ReadByteValue();
+            obj.UnusedByte = data.ReadByteValue();
+            obj.SystemIdentifier = data.ReadBytes(32);
+            obj.VolumeIdentifier = data.ReadBytes(32);
+            obj.Unused8Bytes = data.ReadBytes(8);
+            obj.VolumeSpaceSize = data.ReadInt32BothEndian();
+            obj.Unused32Bytes = data.ReadBytes(32);
+            obj.VolumeSetSize = data.ReadInt16BothEndian();
+            obj.VolumeSequenceNumber = data.ReadInt16BothEndian();
+            obj.LogicalBlockSize = data.ReadInt16BothEndian();
+            obj.PathTableSize = data.ReadInt32BothEndian();
+            obj.PathTableLocationL = data.ReadInt32LittleEndian();
+            obj.OptionalPathTableLocationL = data.ReadInt32LittleEndian();
+            _ = data.ReadBytes(8);
+            obj.PathTableLocationM = data.ReadInt32BigEndian();
+            obj.OptionalPathTableLocationM = data.ReadInt32BigEndian();
+            _ = data.ReadBytes(8);
+
+            obj.RootDirectoryRecord = ParseHighSierraRootDirectoryRecord(data);
+
+            obj.VolumeSetIdentifier = data.ReadBytes(128);
+            obj.PublisherIdentifier = data.ReadBytes(128);
+            obj.DataPreparerIdentifier = data.ReadBytes(128);
+            obj.ApplicationIdentifier = data.ReadBytes(128);
+            obj.CopyrightFileIdentifier = data.ReadBytes(32);
+            obj.AbstractFileIdentifier = data.ReadBytes(32);
+            obj.BibliographicFileIdentifier = [];
+
+            obj.VolumeCreationDateTime = ParseDecDateTime(data, true);
+            obj.VolumeModificationDateTime = ParseDecDateTime(data, true);
+            obj.VolumeExpirationDateTime = ParseDecDateTime(data, true);
+            obj.VolumeEffectiveDateTime = ParseDecDateTime(data, true);
+
+            obj.FileStructureVersion = data.ReadByteValue();
+            obj.ReservedByte = data.ReadByteValue();
+            obj.ApplicationUse = data.ReadBytes(512);
+            obj.Reserved653Bytes = data.ReadBytes(680);
+
+            // Skip remainder of the logical sector
+            if (sectorLength > Constants.MinimumSectorSize)
+                _ = data.ReadBytes(sectorLength - Constants.MinimumSectorSize);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse the root directory record of a High Sierra volume descriptor
+        /// </summary>
+        /// <remarks>
+        /// Some High Sierra discs record this one directory record in the ISO 9660 layout, with the file flags one byte later.
+        /// The directory flag tells the two layouts apart, both have the same length.
+        /// </remarks>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryRecord</returns>
+        private static DirectoryRecord ParseHighSierraRootDirectoryRecord(Stream data)
+        {
+            long position = data.Position;
+            var obj = ParseDirectoryRecord(data, true, true);
+            if ((obj.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
+                return obj;
+
+            data.SeekIfPossible(position, SeekOrigin.Begin);
+            return ParseDirectoryRecord(data, true, false);
+        }
+
+        /// <summary>
+        /// Parse a Stream into a High Sierra VolumeDescriptorSetTerminator
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <returns>Filled VolumeDescriptorSetTerminator</returns>
+        public static VolumeDescriptorSetTerminator ParseHighSierraVolumeDescriptorSetTerminator(Stream data, short sectorLength)
+        {
+            var obj = new VolumeDescriptorSetTerminator();
+
+            obj.Type = VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR;
+            obj.Identifier = data.ReadBytes(5);
+            obj.Version = data.ReadByteValue();
+            obj.Reserved2041Bytes = data.ReadBytes(2033);
+
+            // Skip remainder of the logical sector
+            if (sectorLength > Constants.MinimumSectorSize)
+                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a High Sierra GenericVolumeDescriptor
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="type">Type of the volume descriptor</param>
+        /// <returns>Filled GenericVolumeDescriptor</returns>
+        public static GenericVolumeDescriptor ParseHighSierraGenericVolumeDescriptor(Stream data, short sectorLength, VolumeDescriptorType type)
+        {
+            var obj = new GenericVolumeDescriptor();
+
+            obj.Type = type;
+            obj.Identifier = data.ReadBytes(5);
+            obj.Version = data.ReadByteValue();
+            obj.Data = data.ReadBytes(2033);
+
+            // Skip remainder of the logical sector
+            if (sectorLength > Constants.MinimumSectorSize)
+                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+
+            return obj;
         }
 
         /// <summary>
@@ -455,30 +655,31 @@ namespace SabreTools.Serialization.Readers
 
             var groups = new List<PathTableGroup>();
             short blockLength = vd.GetLogicalBlockSize(sectorLength);
+            bool highSierra = IsHighSierra(vd);
 
             var groupL = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationL * blockLength, SeekOrigin.Begin);
-                groupL.PathTableL = ParsePathTable(data, sizeL, true);
+                groupL.PathTableL = ParsePathTable(data, sizeL, true, highSierra);
             }
 
             if (locationL2 != 0 && ((locationL2 * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationL2 * blockLength, SeekOrigin.Begin);
-                groupL.OptionalPathTableL = ParsePathTable(data, sizeL, true);
+                groupL.OptionalPathTableL = ParsePathTable(data, sizeL, true, highSierra);
             }
 
             if (locationM != 0 && ((locationM * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationM * blockLength, SeekOrigin.Begin);
-                groupL.PathTableM = ParsePathTable(data, sizeL, false);
+                groupL.PathTableM = ParsePathTable(data, sizeL, false, highSierra);
             }
 
             if (locationM2 != 0 && ((locationM2 * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationM2 * blockLength, SeekOrigin.Begin);
-                groupL.OptionalPathTableM = ParsePathTable(data, sizeL, false);
+                groupL.OptionalPathTableM = ParsePathTable(data, sizeL, false, highSierra);
             }
 
             // If no valid path tables were found, don't add the table group
@@ -494,25 +695,25 @@ namespace SabreTools.Serialization.Readers
             if (locationL != 0 && ((locationL * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationL * blockLength, SeekOrigin.Begin);
-                groupB.PathTableL = ParsePathTable(data, sizeB, true);
+                groupB.PathTableL = ParsePathTable(data, sizeB, true, highSierra);
             }
 
             if (locationL2 != 0 && ((locationL2 * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationL2 * blockLength, SeekOrigin.Begin);
-                groupB.OptionalPathTableL = ParsePathTable(data, sizeB, true);
+                groupB.OptionalPathTableL = ParsePathTable(data, sizeB, true, highSierra);
             }
 
             if (locationM != 0 && ((locationM * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationM * blockLength, SeekOrigin.Begin);
-                groupB.PathTableM = ParsePathTable(data, sizeB, false);
+                groupB.PathTableM = ParsePathTable(data, sizeB, false, highSierra);
             }
 
             if (locationM2 != 0 && ((locationM2 * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationM2 * blockLength, SeekOrigin.Begin);
-                groupB.OptionalPathTableM = ParsePathTable(data, sizeB, false);
+                groupB.OptionalPathTableM = ParsePathTable(data, sizeB, false, highSierra);
             }
 
             // If no valid path tables were found, don't add the table group
@@ -530,6 +731,11 @@ namespace SabreTools.Serialization.Readers
         /// <param name="littleEndian">True if path table is little endian, false if big endian</param>
         /// <returns>Filled array of path table records on success, null on error</returns>
         public static PathTableRecord[]? ParsePathTable(Stream data, int tableSize, bool littleEndian)
+            => ParsePathTable(data, tableSize, littleEndian, false);
+
+        /// <inheritdoc cref="ParsePathTable(Stream, int, bool)" />
+        /// <param name="highSierra">True if the path table is recorded in the High Sierra layout, false otherwise</param>
+        public static PathTableRecord[]? ParsePathTable(Stream data, int tableSize, bool littleEndian, bool highSierra)
         {
             var pathTable = new List<PathTableRecord>();
 
@@ -539,6 +745,14 @@ namespace SabreTools.Serialization.Readers
             while (pos < tableSize)
             {
                 var record = new PathTableRecord();
+
+                // High Sierra records the extent location and extended attribute record length first
+                if (highSierra)
+                {
+                    record.ExtentLocation = littleEndian ? data.ReadInt32LittleEndian() : data.ReadInt32BigEndian();
+                    record.ExtendedAttributeRecordLength = data.ReadByteValue();
+                }
+
                 var directoryIdentifierLength = data.ReadByteValue();
 
                 // Check that the current record can fit within the current path table size
@@ -553,19 +767,14 @@ namespace SabreTools.Serialization.Readers
                 }
 
                 record.DirectoryIdentifierLength = directoryIdentifierLength;
-                record.ExtendedAttributeRecordLength = data.ReadByteValue();
+                if (!highSierra)
+                {
+                    record.ExtendedAttributeRecordLength = data.ReadByteValue();
+                    record.ExtentLocation = littleEndian ? data.ReadInt32LittleEndian() : data.ReadInt32BigEndian();
+                }
 
                 // Read numerics with correct endianness
-                if (littleEndian)
-                {
-                    record.ExtentLocation = data.ReadInt32LittleEndian();
-                    record.ParentDirectoryNumber = data.ReadInt16LittleEndian();
-                }
-                else
-                {
-                    record.ExtentLocation = data.ReadInt32BigEndian();
-                    record.ParentDirectoryNumber = data.ReadInt16BigEndian();
-                }
+                record.ParentDirectoryNumber = littleEndian ? data.ReadInt16LittleEndian() : data.ReadInt16BigEndian();
 
                 // Read the directory identifier
                 record.DirectoryIdentifier = data.ReadBytes(record.DirectoryIdentifierLength);
@@ -618,7 +827,7 @@ namespace SabreTools.Serialization.Readers
                 short blockLength = vd.GetLogicalBlockSize(sectorLength);
 
                 // Queue the root directory pointed to from the base volume descriptor
-                QueueExtent(data, blockLength, rootDirectoryRecord, pending);
+                QueueExtent(data, blockLength, rootDirectoryRecord, IsHighSierra(vd), pending);
             }
 
             // Read the queued extents in volume order
@@ -651,18 +860,19 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
         /// <param name="dr">Directory record pointing to the extent</param>
+        /// <param name="highSierra">True if the directory records are in the High Sierra layout, false otherwise</param>
         /// <param name="pending">Queued extents, sorted by offset</param>
-        private static void QueueExtent(Stream data, short blockLength, DirectoryRecord dr, List<PendingExtent> pending)
+        private static void QueueExtent(Stream data, short blockLength, DirectoryRecord dr, bool highSierra, List<PendingExtent> pending)
         {
             // Only directories and files with an extended attribute record are read
             if ((dr.FileFlags & FileFlags.DIRECTORY) != FileFlags.DIRECTORY && dr.ExtendedAttributeRecordLength == 0)
                 return;
 
-            QueueExtent(data, blockLength, dr, false, pending);
+            QueueExtent(data, blockLength, dr, false, highSierra, pending);
 
             // If the extent location field is ambiguous, also queue the big-endian extent
             if (!dr.ExtentLocation.IsValid)
-                QueueExtent(data, blockLength, dr, true, pending);
+                QueueExtent(data, blockLength, dr, true, highSierra, pending);
         }
 
         /// <summary>
@@ -672,13 +882,14 @@ namespace SabreTools.Serialization.Readers
         /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
         /// <param name="dr">Directory record pointing to the extent</param>
         /// <param name="bigEndian">True if the Big Endian extent location/length should be used</param>
+        /// <param name="highSierra">True if the directory records are in the High Sierra layout, false otherwise</param>
         /// <param name="pending">Queued extents, sorted by offset</param>
-        private static void QueueExtent(Stream data, short blockLength, DirectoryRecord dr, bool bigEndian, List<PendingExtent> pending)
+        private static void QueueExtent(Stream data, short blockLength, DirectoryRecord dr, bool bigEndian, bool highSierra, List<PendingExtent> pending)
         {
             if (!TryGetExtent(data, blockLength, dr, bigEndian, out int extentLocation, out long extentOffset, out uint extentLength))
                 return;
 
-            var extent = new PendingExtent(extentLocation, extentOffset, extentLength, blockLength, dr);
+            var extent = new PendingExtent(extentLocation, extentOffset, extentLength, blockLength, highSierra, dr);
             int index = pending.BinarySearch(extent, PendingExtentComparer.Instance);
             pending.Insert(index < 0 ? ~index : index, extent);
         }
@@ -691,7 +902,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Index of the next extent to read</returns>
         private static int FindNextExtent(List<PendingExtent> pending, long position)
         {
-            var probe = new PendingExtent(0, position, 0, 0, null);
+            var probe = new PendingExtent(0, position, 0, 0, false, null);
             int index = pending.BinarySearch(probe, PendingExtentComparer.Instance);
             if (index < 0)
             {
@@ -727,7 +938,7 @@ namespace SabreTools.Serialization.Readers
             if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
             {
                 // Read all directory records in this directory
-                var records = ParseDirectoryRecords(data, sectorLength, extent.Length);
+                var records = ParseDirectoryRecords(data, sectorLength, extent.Length, extent.HighSierra);
                 if (records is null)
                     return;
 
@@ -744,7 +955,7 @@ namespace SabreTools.Serialization.Readers
                     if (record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
                         continue;
 
-                    QueueExtent(data, extent.BlockLength, record, pending);
+                    QueueExtent(data, extent.BlockLength, record, extent.HighSierra, pending);
                 }
             }
             else if (dr.ExtendedAttributeRecordLength > 0)
@@ -798,8 +1009,9 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse, positioned at the start of the directory extent</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="extentLength">Number of bytes in the directory extent</param>
+        /// <param name="highSierra">True if the directory records are in the High Sierra layout, false otherwise</param>
         /// <returns>Filled list of DirectoryRecord on success, null if the directory is invalid</returns>
-        private static List<DirectoryRecord>? ParseDirectoryRecords(Stream data, short sectorLength, uint extentLength)
+        private static List<DirectoryRecord>? ParseDirectoryRecords(Stream data, short sectorLength, uint extentLength, bool highSierra)
         {
             // Start of directory should not be 0
             int firstRecordLength = data.PeekByteValue();
@@ -840,7 +1052,7 @@ namespace SabreTools.Serialization.Readers
                     break;
 
                 // Get the next directory record
-                var directoryRecord = ParseDirectoryRecord(data, false);
+                var directoryRecord = ParseDirectoryRecord(data, false, highSierra);
 
                 // Compare recordLength with number of bytes in directoryRecord and ignore the directory if mismatch
                 var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField is null ? 0 : 1) + directoryRecord.SystemUse.Length;
@@ -877,6 +1089,7 @@ namespace SabreTools.Serialization.Readers
 
             // Determine logical block size
             short blockLength = vd.GetLogicalBlockSize(sectorLength);
+            bool highSierra = IsHighSierra(vd);
 
             // TODO: Better encoding detection (EscapeSequences)
             var encoding = vd is SupplementaryVolumeDescriptor ? Encoding.BigEndianUnicode : Encoding.UTF8;
@@ -892,9 +1105,9 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // If the extent location field is ambiguous, also search the big-endian directory extent
-                var found = FindInDirectory(data, sectorLength, blockLength, current, false, encoding, names[i]);
+                var found = FindInDirectory(data, sectorLength, blockLength, current, false, highSierra, encoding, names[i]);
                 if (found is null && !current.ExtentLocation.IsValid)
-                    found = FindInDirectory(data, sectorLength, blockLength, current, true, encoding, names[i]);
+                    found = FindInDirectory(data, sectorLength, blockLength, current, true, highSierra, encoding, names[i]);
 
                 if (found is null)
                     return null;
@@ -916,10 +1129,11 @@ namespace SabreTools.Serialization.Readers
         /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
         /// <param name="dr">Directory record pointing to the directory extent</param>
         /// <param name="bigEndian">True if the Big Endian extent location/length should be used</param>
+        /// <param name="highSierra">True if the directory records are in the High Sierra layout, false otherwise</param>
         /// <param name="encoding">Encoding of the file identifiers</param>
         /// <param name="name">Name to find</param>
         /// <returns>Filled array of DirectoryRecord on success, null if the name was not found</returns>
-        private static DirectoryRecord[]? FindInDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr, bool bigEndian, Encoding encoding, string name)
+        private static DirectoryRecord[]? FindInDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr, bool bigEndian, bool highSierra, Encoding encoding, string name)
         {
             if (!TryGetExtent(data, blockLength, dr, bigEndian, out _, out long extentOffset, out uint extentLength))
                 return null;
@@ -927,7 +1141,7 @@ namespace SabreTools.Serialization.Readers
             // Move stream to directory location
             data.SeekIfPossible(extentOffset, SeekOrigin.Begin);
 
-            var records = ParseDirectoryRecords(data, sectorLength, extentLength);
+            var records = ParseDirectoryRecords(data, sectorLength, extentLength, highSierra);
             if (records is null)
                 return null;
 
@@ -1015,7 +1229,7 @@ namespace SabreTools.Serialization.Readers
 #endif
             {
                 // Read all directory records in this directory
-                var records = ParseDirectoryRecords(data, sectorLength, extentLength);
+                var records = ParseDirectoryRecords(data, sectorLength, extentLength, false);
                 if (records is null)
                     return null;
 
@@ -1093,6 +1307,12 @@ namespace SabreTools.Serialization.Readers
         /// <param name="root">true if root directory record, false otherwise</param>
         /// <returns>Filled DirectoryRecord on success, null on error</returns>
         public static DirectoryRecord ParseDirectoryRecord(Stream data, bool root)
+            => ParseDirectoryRecord(data, root, false);
+
+        /// <inheritdoc cref="ParseDirectoryRecord(Stream, bool)" />
+        /// <param name="highSierra">True if the directory record is in the High Sierra layout, false otherwise</param>
+        /// <remarks>High Sierra records the file flags before a reserved byte, which is not kept</remarks>
+        public static DirectoryRecord ParseDirectoryRecord(Stream data, bool root, bool highSierra)
         {
             var obj = new DirectoryRecord();
 
@@ -1101,9 +1321,12 @@ namespace SabreTools.Serialization.Readers
             obj.ExtentLocation = data.ReadInt32BothEndian();
             obj.ExtentLength = data.ReadUInt32BothEndian();
 
-            obj.RecordingDateTime = ParseDirectoryRecordDateTime(data);
+            obj.RecordingDateTime = ParseDirectoryRecordDateTime(data, highSierra);
 
             obj.FileFlags = (FileFlags)data.ReadByteValue();
+            if (highSierra)
+                _ = data.ReadByteValue();
+
             obj.FileUnitSize = data.ReadByteValue();
             obj.InterleaveGapSize = data.ReadByteValue();
             obj.VolumeSequenceNumber = data.ReadInt16BothEndian();
@@ -1199,6 +1422,11 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled DirectoryRecordDateTime on success, null on error</returns>
         public static DirectoryRecordDateTime ParseDirectoryRecordDateTime(Stream data)
+            => ParseDirectoryRecordDateTime(data, false);
+
+        /// <inheritdoc cref="ParseDirectoryRecordDateTime(Stream)" />
+        /// <param name="highSierra">True if the date has no time zone offset (High Sierra), false otherwise</param>
+        public static DirectoryRecordDateTime ParseDirectoryRecordDateTime(Stream data, bool highSierra)
         {
             var obj = new DirectoryRecordDateTime();
 
@@ -1208,7 +1436,8 @@ namespace SabreTools.Serialization.Readers
             obj.Hour = data.ReadByteValue();
             obj.Minute = data.ReadByteValue();
             obj.Second = data.ReadByteValue();
-            obj.TimezoneOffset = data.ReadByteValue();
+            if (!highSierra)
+                obj.TimezoneOffset = data.ReadByteValue();
 
             return obj;
         }
@@ -1221,6 +1450,11 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled DecDateTime on success, null on error</returns>
         public static DecDateTime ParseDecDateTime(Stream data)
+            => ParseDecDateTime(data, false);
+
+        /// <inheritdoc cref="ParseDecDateTime(Stream)" />
+        /// <param name="highSierra">True if the date has no time zone offset (High Sierra), false otherwise</param>
+        public static DecDateTime ParseDecDateTime(Stream data, bool highSierra)
         {
             var obj = new DecDateTime();
 
@@ -1231,7 +1465,8 @@ namespace SabreTools.Serialization.Readers
             obj.Minute = data.ReadBytes(2);
             obj.Second = data.ReadBytes(2);
             obj.Centisecond = data.ReadBytes(2);
-            obj.TimezoneOffset = data.ReadByteValue();
+            if (!highSierra)
+                obj.TimezoneOffset = data.ReadByteValue();
 
             return obj;
         }
@@ -1262,16 +1497,22 @@ namespace SabreTools.Serialization.Readers
             public short BlockLength { get; }
 
             /// <summary>
+            /// True if the directory records of the extent are in the High Sierra layout
+            /// </summary>
+            public bool HighSierra { get; }
+
+            /// <summary>
             /// Directory record pointing to the extent
             /// </summary>
             public DirectoryRecord? Record { get; }
 
-            public PendingExtent(int location, long offset, uint length, short blockLength, DirectoryRecord? record)
+            public PendingExtent(int location, long offset, uint length, short blockLength, bool highSierra, DirectoryRecord? record)
             {
                 Location = location;
                 Offset = offset;
                 Length = length;
                 BlockLength = blockLength;
+                HighSierra = highSierra;
                 Record = record;
             }
         }

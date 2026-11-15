@@ -202,6 +202,128 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal(25, Assert.Single(actual).ExtentLocation.LittleEndian);
         }
 
+        [Fact]
+        public void HighSierra_ReadsVolumeDescriptors()
+        {
+            byte[] image = CreateHighSierraImage(false);
+            var deserializer = new ISO9660();
+
+            var actual = deserializer.Deserialize(new MemoryStream(image));
+
+            Assert.NotNull(actual);
+            Assert.Equal(2, actual.VolumeDescriptorSet.Length);
+            var pvd = Assert.IsType<PrimaryVolumeDescriptor>(actual.VolumeDescriptorSet[0]);
+            Assert.Equal(Constants.HighSierraIdentifier, pvd.Identifier);
+            Assert.Equal("HSFTEST", Encoding.ASCII.GetString(pvd.VolumeIdentifier, 0, 7));
+            Assert.Equal(2048, pvd.LogicalBlockSize.LittleEndian);
+            Assert.Equal(18, pvd.PathTableLocationL);
+            Assert.Equal(19, pvd.PathTableLocationM);
+            Assert.Equal(FileFlags.DIRECTORY, pvd.RootDirectoryRecord.FileFlags);
+            Assert.Equal("ABSTRACT.TXT", Encoding.ASCII.GetString(pvd.AbstractFileIdentifier, 0, 12));
+            Assert.Equal(1, pvd.FileStructureVersion);
+            Assert.Equal("APP", Encoding.ASCII.GetString(pvd.ApplicationUse, 0, 3));
+            Assert.Equal(VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR, actual.VolumeDescriptorSet[1].Type);
+        }
+
+        [Fact]
+        public void HighSierra_ReadsPathTables()
+        {
+            byte[] image = CreateHighSierraImage(false);
+            var deserializer = new ISO9660();
+
+            var actual = deserializer.Deserialize(new MemoryStream(image));
+
+            Assert.NotNull(actual);
+            var group = Assert.Single(actual.PathTableGroups);
+            Assert.NotNull(group.PathTableL);
+            Assert.NotNull(group.PathTableM);
+            foreach (var record in new[] { Assert.Single(group.PathTableL), Assert.Single(group.PathTableM) })
+            {
+                Assert.Equal(20, record.ExtentLocation);
+                Assert.Equal(1, record.DirectoryIdentifierLength);
+                Assert.Equal(1, record.ParentDirectoryNumber);
+            }
+        }
+
+        [Fact]
+        public void HighSierra_ReadsFileFlagsBeforeReservedByte()
+        {
+            byte[] image = CreateHighSierraImage(false);
+            var deserializer = new ISO9660();
+
+            var actual = deserializer.Deserialize(new MemoryStream(image));
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 20, 21 }, actual.DirectoryDescriptors.Keys.OrderBy(k => k));
+            var root = Assert.IsType<DirectoryExtent>(actual.DirectoryDescriptors[20]);
+            Assert.Equal(FileFlags.DIRECTORY, root.DirectoryRecords.Single(r => r.ExtentLocation.LittleEndian == 21).FileFlags);
+            Assert.Equal(NoFlags, root.DirectoryRecords.Single(r => r.ExtentLocation.LittleEndian == 22).FileFlags);
+            var sub = Assert.IsType<DirectoryExtent>(actual.DirectoryDescriptors[21]);
+            Assert.Equal(NoFlags, sub.DirectoryRecords.Single(r => r.ExtentLocation.LittleEndian == 23).FileFlags);
+        }
+
+        [Fact]
+        public void HighSierra_IsoLayoutRootRecord_ReadsRootDirectory()
+        {
+            byte[] image = CreateHighSierraImage(true);
+            var deserializer = new ISO9660();
+
+            var actual = deserializer.Deserialize(new MemoryStream(image));
+
+            Assert.NotNull(actual);
+            var pvd = Assert.IsType<PrimaryVolumeDescriptor>(actual.VolumeDescriptorSet[0]);
+            Assert.Equal(FileFlags.DIRECTORY, pvd.RootDirectoryRecord.FileFlags);
+            Assert.Equal(new[] { 20, 21 }, actual.DirectoryDescriptors.Keys.OrderBy(k => k));
+        }
+
+        [Fact]
+        public void HighSierra_FindDirectoryRecords_ReadsFileFlagsBeforeReservedByte()
+        {
+            byte[] image = CreateHighSierraImage(false);
+            var stream = new MemoryStream(image);
+            stream.Seek(16 * 2048, SeekOrigin.Begin);
+            var pvd = Assert.IsType<PrimaryVolumeDescriptor>(ISO9660.ParseVolumeDescriptor(stream, 2048));
+
+            var actual = ISO9660.FindDirectoryRecords(stream, 2048, pvd, "FILE.TXT");
+
+            Assert.NotNull(actual);
+            var record = Assert.Single(actual);
+            Assert.Equal(22, record.ExtentLocation.LittleEndian);
+            Assert.Equal(NoFlags, record.FileFlags);
+        }
+
+        [Fact]
+        public void ParseVolumeDescriptor_HighSierraIdentifierInIsoSystemIdentifier_ReadsIso()
+        {
+            // An ISO 9660 primary volume descriptor whose system identifier puts "CDROM" at byte 9
+            byte[] sector = new byte[2048];
+            sector[0] = (byte)VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR;
+            Constants.StandardIdentifier.CopyTo(sector, 1);
+            sector[6] = 1;
+            Encoding.ASCII.GetBytes("XCDROM").CopyTo(sector, 8);
+            WriteRecord(sector, 156, Constants.CurrentDirectory, 20, FileFlags.DIRECTORY);
+
+            var actual = ISO9660.ParseVolumeDescriptor(new MemoryStream(sector), 2048);
+
+            var pvd = Assert.IsType<PrimaryVolumeDescriptor>(actual);
+            Assert.Equal(Constants.StandardIdentifier, pvd.Identifier);
+            Assert.Equal("XCDROM", Encoding.ASCII.GetString(pvd.SystemIdentifier, 0, 6));
+        }
+
+        [Fact]
+        public void ParseVolumeDescriptorSet_ShortTail_ReturnsSet()
+        {
+            // A set terminator followed by fewer bytes than a volume descriptor header
+            byte[] image = new byte[2048 + 8];
+            image[0] = (byte)VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR;
+            Constants.StandardIdentifier.CopyTo(image, 1);
+            image[6] = 1;
+
+            var actual = ISO9660.ParseVolumeDescriptorSet(new MemoryStream(image), 2048);
+
+            Assert.Equal(VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR, Assert.Single(actual).Type);
+        }
+
         /// <summary>
         /// Create a primary volume descriptor with 2048-byte blocks and a one-sector root directory
         /// </summary>
@@ -266,6 +388,99 @@ namespace SabreTools.Serialization.Readers.Test
                 image[offset + i] = (byte)(value >> (8 * i));
                 image[offset + 7 - i] = (byte)(value >> (8 * i));
             }
+        }
+
+        /// <summary>
+        /// Write an integer of the given size in little-endian or big-endian format
+        /// </summary>
+        private static void WriteInteger(byte[] image, int offset, int value, int size, bool bigEndian)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                image[offset + (bigEndian ? size - 1 - i : i)] = (byte)(value >> (8 * i));
+            }
+        }
+
+        /// <summary>
+        /// Create a High Sierra image whose root directory at sector 20 holds SUB at sector 21 and FILE.TXT;1 at sector 22,
+        /// SUB holds DEEP.TXT;1 at sector 23
+        /// </summary>
+        /// <param name="isoRootRecord">True to record the root directory record of the volume descriptor in the ISO 9660 layout</param>
+        private static byte[] CreateHighSierraImage(bool isoRootRecord)
+        {
+            byte[] image = new byte[24 * 2048];
+
+            // Standard file structure volume descriptor
+            int vd = 16 * 2048;
+            WriteHighSierraVolumeDescriptorHeader(image, 16, VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR);
+            Encoding.ASCII.GetBytes("HSFTEST").CopyTo(image, vd + 48);
+            WriteBothEndian(image, vd + 88, 24);
+            WriteInteger(image, vd + 136, 2048, 2, false);
+            WriteInteger(image, vd + 138, 2048, 2, true);
+            WriteBothEndian(image, vd + 140, 10);
+            WriteInteger(image, vd + 148, 18, 4, false);
+            WriteInteger(image, vd + 164, 19, 4, true);
+            if (isoRootRecord)
+                WriteRecord(image, vd + 180, Constants.CurrentDirectory, 20, FileFlags.DIRECTORY);
+            else
+                WriteHighSierraRecord(image, vd + 180, Constants.CurrentDirectory, 20, FileFlags.DIRECTORY);
+
+            Encoding.ASCII.GetBytes("ABSTRACT.TXT").CopyTo(image, vd + 758);
+            image[vd + 854] = 1;
+            Encoding.ASCII.GetBytes("APP").CopyTo(image, vd + 856);
+
+            WriteHighSierraVolumeDescriptorHeader(image, 17, VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR);
+
+            // Path tables with the root directory only, in both byte orders
+            foreach (var (sector, bigEndian) in new[] { (18, false), (19, true) })
+            {
+                int offset = sector * 2048;
+                WriteInteger(image, offset, 20, 4, bigEndian);
+                image[offset + 5] = 1;
+                WriteInteger(image, offset + 6, 1, 2, bigEndian);
+            }
+
+            WriteHighSierraDirectory(image, 20, ("SUB", 21, FileFlags.DIRECTORY), ("FILE.TXT;1", 22, NoFlags));
+            WriteHighSierraDirectory(image, 21, ("DEEP.TXT;1", 23, NoFlags));
+            return image;
+        }
+
+        /// <summary>
+        /// Write the start of a High Sierra volume descriptor
+        /// </summary>
+        private static void WriteHighSierraVolumeDescriptorHeader(byte[] image, int sector, VolumeDescriptorType type)
+        {
+            int offset = sector * 2048;
+            WriteBothEndian(image, offset, sector);
+            image[offset + 8] = (byte)type;
+            Constants.HighSierraIdentifier.CopyTo(image, offset + 9);
+            image[offset + 14] = 1;
+        }
+
+        /// <summary>
+        /// Write a one-sector High Sierra directory extent with self and parent records and the given entries
+        /// </summary>
+        private static void WriteHighSierraDirectory(byte[] image, int sector, params (string Name, int Location, FileFlags Flags)[] entries)
+        {
+            int offset = sector * 2048;
+            offset = WriteHighSierraRecord(image, offset, Constants.CurrentDirectory, sector, FileFlags.DIRECTORY);
+            offset = WriteHighSierraRecord(image, offset, Constants.ParentDirectory, sector, FileFlags.DIRECTORY);
+            foreach (var (name, location, flags) in entries)
+            {
+                offset = WriteHighSierraRecord(image, offset, Encoding.ASCII.GetBytes(name), location, flags);
+            }
+        }
+
+        /// <summary>
+        /// Write a High Sierra directory record for a one-sector extent, returns the offset after the record
+        /// </summary>
+        /// <remarks>The file flags are at byte 24, the reserved byte 25 holds garbage as found on pressed discs</remarks>
+        private static int WriteHighSierraRecord(byte[] image, int offset, byte[] identifier, int location, FileFlags flags)
+        {
+            int next = WriteRecord(image, offset, identifier, location, NoFlags);
+            image[offset + 24] = (byte)flags;
+            image[offset + 25] = 0x8B;
+            return next;
         }
 
         /// <summary>
