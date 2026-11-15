@@ -64,7 +64,6 @@ if ($USE_ALL.IsPresent) {
 }
 
 # Create the filter arrays
-$SINGLE_FILE_CAPABLE = @('net5.0', 'net6.0', 'net7.0', 'net8.0', 'net9.0', 'net10.0', 'net11.0')
 $VALID_APPLE_FRAMEWORKS = @('net6.0', 'net7.0', 'net8.0', 'net9.0', 'net10.0', 'net11.0')
 $VALID_CROSS_PLATFORM_FRAMEWORKS = @('netcoreapp3.1', 'net5.0', 'net6.0', 'net7.0', 'net8.0', 'net9.0', 'net10.0', 'net11.0')
 $VALID_CROSS_PLATFORM_RUNTIMES = @('win-arm64', 'linux-x64', 'linux-arm64', 'osx-x64', 'osx-arm64')
@@ -76,21 +75,21 @@ if (!$NO_BUILD.IsPresent) {
     dotnet restore
 
     # Create published Nuget Package
-    dotnet pack SabreTools.Serialization\SabreTools.Serialization.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.Serialization\SabreTools.Serialization.csproj --output $BUILD_FOLDER -c Debug
 
     # Create unpublished Nuget Packages
     if ($INCLUDE_UNPUBLISHED.IsPresent) {
-        dotnet pack SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.Data.Models\SabreTools.Data.Models.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.Metadata.DatFiles\SabreTools.Metadata.DatFiles.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.Metadata.DatItems\SabreTools.Metadata.DatItems.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.Metadata.Filter\SabreTools.Metadata.Filter.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.Metadata.Reports\SabreTools.Metadata.Reports.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.ObjectIdentifier\SabreTools.ObjectIdentifier.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.Serialization.CrossModel\SabreTools.Serialization.CrossModel.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.Serialization.Readers\SabreTools.Serialization.Readers.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.Serialization.Writers\SabreTools.Serialization.Writers.csproj --output $BUILD_FOLDER
-        dotnet pack SabreTools.Wrappers\SabreTools.Wrappers.csproj --output $BUILD_FOLDER
+        dotnet pack SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj --output $BUILD_FOLDER -c Debug
+        dotnet pack SabreTools.Data.Models\SabreTools.Data.Models.csproj --output $BUILD_FOLDER -c Debug
+        dotnet pack SabreTools.Metadata.DatFiles\SabreTools.Metadata.DatFiles.csproj --output $BUILD_FOLDER -c Debug
+        dotnet pack SabreTools.Metadata.DatItems\SabreTools.Metadata.DatItems.csproj --output $BUILD_FOLDER -c Debug
+        dotnet pack SabreTools.Metadata.Filter\SabreTools.Metadata.Filter.csproj --output $BUILD_FOLDER -c Debug
+        dotnet pack SabreTools.Metadata.Reports\SabreTools.Metadata.Reports.csproj --output $BUILD_FOLDER -c Debug
+        dotnet pack SabreTools.ObjectIdentifier\SabreTools.ObjectIdentifier.csproj --output $BUILD_FOLDER -c Debug
+        dotnet pack SabreTools.Serialization.CrossModel\SabreTools.Serialization.CrossModel.csproj --output $BUILD_FOLDER -c Debug
+        dotnet pack SabreTools.Serialization.Readers\SabreTools.Serialization.Readers.csproj --output $BUILD_FOLDER -c Debug
+        dotnet pack SabreTools.Serialization.Writers\SabreTools.Serialization.Writers.csproj --output $BUILD_FOLDER -c Debug
+        dotnet pack SabreTools.Wrappers\SabreTools.Wrappers.csproj --output $BUILD_FOLDER -c Debug
     }
 
     # Build ExtractionTool and InfoPrint
