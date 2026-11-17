@@ -185,6 +185,19 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void FindDirectoryRecords_AssociatedFile_ReturnsFileRecord()
+        {
+            // PLAYER.;1 is recorded twice, the associated file at sector 25 comes first, the file itself at sector 26
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("PLAYER.;1", 25, FileFlags.ASSOCIATED_FILE), ("PLAYER.;1", 26, NoFlags));
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, CreatePrimaryVolumeDescriptor(20), "PLAYER");
+
+            Assert.NotNull(actual);
+            Assert.Equal(26, Assert.Single(actual).ExtentLocation.LittleEndian);
+        }
+
+        [Fact]
         public void FindDirectoryRecords_SupplementaryVolumeDescriptor_UsesUnicodeNames()
         {
             byte[] image = new byte[32 * 2048];

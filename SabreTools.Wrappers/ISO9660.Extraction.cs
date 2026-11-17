@@ -31,6 +31,12 @@ namespace SabreTools.Wrappers
         /// <remarks>Used to update the sizes in the header when a further extent is appended</remarks>
         private readonly List<string> waveFiles = [];
 
+        /// <summary>
+        /// List of extracted associated files by their output path, with their sector offset
+        /// </summary>
+        /// <remarks>Empty associated files can share their sector offset with each other and with an empty file</remarks>
+        private readonly Dictionary<string, int> extractedAssociatedFiles = [];
+
         #endregion
 
         /// <summary>
@@ -50,6 +56,7 @@ namespace SabreTools.Wrappers
             extractedFiles.Clear();
             multiExtentFiles.Clear();
             waveFiles.Clear();
+            extractedAssociatedFiles.Clear();
 
             bool allExtracted = true;
 
@@ -190,8 +197,11 @@ namespace SabreTools.Wrappers
             if (value is not DirectoryExtent dir)
                 return succeeded;
 
-            foreach (var dr in dir.DirectoryRecords)
+            var records = dir.DirectoryRecords;
+            for (int i = 0; i < records.Length; i++)
             {
+                var dr = records[i];
+
                 // Recurse if record is directory
 #if NET20 || NET35
                 if ((dr.FileFlags & FileFlags.DIRECTORY) != 0)
@@ -220,6 +230,19 @@ namespace SabreTools.Wrappers
                 }
                 else
                 {
+                    // Associated files are written to an AppleDouble file, the file of the same name follows in its own record
+#if NET20 || NET35
+                    if ((dr.FileFlags & FileFlags.ASSOCIATED_FILE) != 0)
+#else
+                    if (dr.FileFlags.HasFlag(FileFlags.ASSOCIATED_FILE))
+#endif
+                    {
+                        int last = GetLastExtentIndex(records, i);
+                        succeeded &= ExtractAssociatedFile(records, i, last, encoding, blockLength, outputDirectory, includeDebug);
+                        i = last;
+                        continue;
+                    }
+
                     // Record is a simple file extent, extract file
                     succeeded &= ExtractFile(dr, encoding, blockLength, false, outputDirectory, includeDebug);
 
@@ -252,15 +275,7 @@ namespace SabreTools.Wrappers
             if (extractedFiles.ContainsKey(extentLocation))
                 return true;
 
-            // TODO: Decode properly (Use VD's separator characters and encoding)
-            string filename = encoding.GetString(dr.FileIdentifier);
-            int index = filename.LastIndexOf(';');
-            if (index > 0)
-#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
-                filename = filename[..index];
-#else
-                filename = filename.Substring(0, index);
-#endif
+            string filename = GetFileName(dr, encoding);
 
             // Get the output file path
             var filepath = Path.Combine(outputDirectory, filename);
@@ -332,6 +347,212 @@ namespace SabreTools.Wrappers
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Extract an associated file to an AppleDouble file next to the file it belongs to
+        /// </summary>
+        /// <param name="records">Directory records of the directory</param>
+        /// <param name="first">Index of the first record of the associated file</param>
+        /// <param name="last">Index of the last record of the associated file</param>
+        /// <remarks>
+        /// With the Apple extensions to ISO 9660, the associated file is the resource fork of the file, and the
+        /// System Use field holds its Finder type, creator and flags. The AppleDouble file is written in the layout
+        /// macOS uses on volumes without forks, macOS reads both from it as attributes of the file.
+        /// </remarks>
+        private bool ExtractAssociatedFile(DirectoryRecord[] records, int first, int last, Encoding encoding, int blockLength, string outputDirectory, bool includeDebug)
+        {
+            var dr = records[first];
+            int extentLocation = dr.ExtentLocation.LittleEndian;
+
+            // Get the output file path
+            string filename = $"._{GetFileName(dr, encoding)}";
+            var filepath = Path.Combine(outputDirectory, filename);
+
+            // Check that the associated file hasn't been extracted already
+            if (extractedAssociatedFiles.TryGetValue(filepath, out int extractedLocation) && extractedLocation == extentLocation)
+                return true;
+
+            // Currently cannot extract interleaved files
+            uint length = 0;
+            for (int i = first; i <= last; i++)
+            {
+                if (records[i].FileUnitSize != 0 || records[i].InterleaveGapSize != 0)
+                {
+                    Console.WriteLine($"Extraction of interleaved files is currently not supported: {filename}");
+                    return false;
+                }
+
+                length += records[i].ExtentLength;
+            }
+
+            // Check that the output file doesn't already exist
+            if (File.Exists(filepath) || Directory.Exists(filepath))
+            {
+                if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
+                return false;
+            }
+
+            // Take the Finder info from the file, which directly follows, or else from the associated file
+            byte[] finderInfo = new byte[32];
+            bool fromFile = last + 1 < records.Length
+                && records[last + 1].FileIdentifier.EqualsExactly(dr.FileIdentifier)
+                && ReadFinderInfo(records[last + 1].SystemUse, finderInfo);
+            if (!fromFile)
+                ReadFinderInfo(dr.SystemUse, finderInfo);
+
+            const uint chunkSize = 2048 * 1024;
+            lock (_dataSourceLock)
+            {
+                // Make sure no extent will EOF
+                for (int i = first; i <= last; i++)
+                {
+                    uint extentLength = records[i].ExtentLength;
+                    if (GetFileOffset(records[i], blockLength) + extentLength > _dataSource.Length)
+                        return false;
+                }
+
+                // Write the AppleDouble header, followed by the resource fork
+                if (includeDebug) Console.WriteLine($"Extracting: {filepath}");
+                using var fs = File.Open(filepath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                byte[] header = GetAppleDoubleHeader(finderInfo, length);
+                fs.Write(header, 0, header.Length);
+                for (int i = first; i <= last; i++)
+                {
+                    _dataSource.SeekIfPossible(GetFileOffset(records[i], blockLength), SeekOrigin.Begin);
+                    uint remaining = records[i].ExtentLength;
+                    while (remaining > 0)
+                    {
+                        int bytesToRead = (int)Math.Min(remaining, chunkSize);
+
+                        byte[] buffer = _dataSource.ReadBytes(bytesToRead);
+                        fs.Write(buffer, 0, bytesToRead);
+
+                        remaining -= (uint)bytesToRead;
+                    }
+                }
+
+                // Mark the associated file as extracted
+                extractedAssociatedFiles[filepath] = extentLocation;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Get the index of the last record of a file recorded in multiple extents
+        /// </summary>
+        /// <param name="records">Directory records of the directory</param>
+        /// <param name="index">Index of the first record of the file</param>
+        private static int GetLastExtentIndex(DirectoryRecord[] records, int index)
+        {
+            // Every extent but the last has the multi-extent flag, the next one follows with the same name and kind
+            while (index + 1 < records.Length
+                && (records[index].FileFlags & FileFlags.MULTI_EXTENT) != 0
+                && (records[index + 1].FileFlags & FileFlags.ASSOCIATED_FILE) == (records[index].FileFlags & FileFlags.ASSOCIATED_FILE)
+                && records[index + 1].FileIdentifier.EqualsExactly(records[index].FileIdentifier))
+            {
+                index++;
+            }
+
+            return index;
+        }
+
+        /// <summary>
+        /// Get the name of the file of a directory record, without its version number
+        /// </summary>
+        private static string GetFileName(DirectoryRecord dr, Encoding encoding)
+        {
+            // TODO: Decode properly (Use VD's separator characters and encoding)
+            string filename = encoding.GetString(dr.FileIdentifier);
+            int index = filename.LastIndexOf(';');
+            if (index > 0)
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+                filename = filename[..index];
+#else
+                filename = filename.Substring(0, index);
+#endif
+
+            return filename;
+        }
+
+        /// <summary>
+        /// Get the offset of the data of a file
+        /// </summary>
+        private static long GetFileOffset(DirectoryRecord dr, int blockLength)
+            => ((long)dr.ExtentLocation.LittleEndian + dr.ExtendedAttributeRecordLength) * blockLength;
+
+        /// <summary>
+        /// Read the Finder type, creator and flags from the Apple extension in a System Use field
+        /// </summary>
+        /// <param name="systemUse">System Use field of a directory record</param>
+        /// <param name="finderInfo">Finder info to fill</param>
+        /// <returns>True if the System Use field holds the Apple extension for HFS, false otherwise</returns>
+        private static bool ReadFinderInfo(byte[] systemUse, byte[] finderInfo)
+        {
+            // The System Use entries follow the CD-ROM XA system use information, if there is any
+            int offset = systemUse.Length >= 14 && systemUse[6] == 'X' && systemUse[7] == 'A' ? 14 : 0;
+
+            // Every entry starts with a signature of 2 bytes and its length
+            while (offset + 4 <= systemUse.Length)
+            {
+                int entryLength = systemUse[offset + 2];
+                if (entryLength < 4 || offset + entryLength > systemUse.Length)
+                    return false;
+
+                // Apple extension for HFS: type, creator and Finder flags
+                if (systemUse[offset] == 'A' && systemUse[offset + 1] == 'A' && entryLength == 14 && systemUse[offset + 3] == 2)
+                {
+                    Array.Copy(systemUse, offset + 4, finderInfo, 0, 10);
+                    return true;
+                }
+
+                offset += entryLength;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Get the header of an AppleDouble file in the layout macOS writes, the resource fork follows it
+        /// </summary>
+        /// <param name="finderInfo">Finder info of the file</param>
+        /// <param name="resourceForkLength">Length of the resource fork</param>
+        private static byte[] GetAppleDoubleHeader(byte[] finderInfo, uint resourceForkLength)
+        {
+            const int finderInfoOffset = 0x32;
+            const int attributesOffset = 0x54;
+            const int resourceForkOffset = 0xEE2;
+
+            byte[] header = new byte[resourceForkOffset];
+            int offset = 0;
+
+            // Magic number, version and filler
+            header.WriteBigEndian(ref offset, 0x00051607u);
+            header.WriteBigEndian(ref offset, 0x00020000u);
+            header.Write(ref offset, Encoding.ASCII.GetBytes("Mac OS X        "));
+
+            // Finder info entry, which macOS extends by an empty extended attributes header, and resource fork entry
+            header.WriteBigEndian(ref offset, (ushort)2);
+            header.WriteBigEndian(ref offset, 9u);
+            header.WriteBigEndian(ref offset, (uint)finderInfoOffset);
+            header.WriteBigEndian(ref offset, (uint)(resourceForkOffset - finderInfoOffset));
+            header.WriteBigEndian(ref offset, 2u);
+            header.WriteBigEndian(ref offset, (uint)resourceForkOffset);
+            header.WriteBigEndian(ref offset, resourceForkLength);
+
+            // Finder info
+            offset = finderInfoOffset;
+            header.Write(ref offset, finderInfo);
+
+            // Extended attributes header: magic number, debug tag, total size and start of the attribute data
+            offset = attributesOffset;
+            header.Write(ref offset, Encoding.ASCII.GetBytes("ATTR"));
+            header.WriteBigEndian(ref offset, 0u);
+            header.WriteBigEndian(ref offset, (uint)resourceForkOffset);
+            header.WriteBigEndian(ref offset, 0x78u);
+
+            return header;
         }
     }
 }
