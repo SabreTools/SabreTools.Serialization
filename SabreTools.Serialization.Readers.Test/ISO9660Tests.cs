@@ -125,6 +125,28 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void ParseDirectory_ZeroLengthDirectoryRecord_UsesCurrentDirectoryLength()
+        {
+            // Sector 1 holds directory A at sector 2 with a record of length 0, the "." record of A holds the length
+            byte[] image = new byte[4 * 2048];
+            WriteDirectory(image, 1, ("A", 2, FileFlags.DIRECTORY));
+            WriteDirectory(image, 2, ("B", 3, FileFlags.DIRECTORY));
+            WriteDirectory(image, 3);
+            WriteBothEndian(image, (1 * 2048) + 68 + 10, 0);
+            var dr = new DirectoryRecord
+            {
+                ExtentLocation = 1,
+                ExtentLength = 2048,
+                FileFlags = FileFlags.DIRECTORY,
+            };
+
+            var actual = ISO9660.ParseDirectory(new MemoryStream(image), 2048, 2048, dr, false);
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 1, 2, 3 }, actual.Keys.OrderBy(k => k));
+        }
+
+        [Fact]
         public void ParseDirectoryDescriptors_ReadsExtentsInVolumeOrder()
         {
             // Root at sector 20 holds A at sector 30 and B at sector 22, A holds C at sector 21
@@ -143,6 +165,135 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void ParseDirectoryDescriptors_ZeroLengthDirectoryRecord_UsesCurrentDirectoryLength()
+        {
+            // The record of A at sector 21 has length 0, the "." record of A holds the length
+            byte[] image = new byte[24 * 2048];
+            WriteDirectory(image, 20, ("A", 21, FileFlags.DIRECTORY));
+            WriteDirectory(image, 21, ("B", 22, FileFlags.DIRECTORY));
+            WriteDirectory(image, 22);
+            WriteBothEndian(image, (20 * 2048) + 68 + 10, 0);
+
+            var actual = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, [CreatePrimaryVolumeDescriptor(20)]);
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 20, 21, 22 }, actual.Keys.OrderBy(k => k));
+        }
+
+        [Fact]
+        public void ParseDirectoryDescriptors_ZeroLengthRecordWithoutCurrentDirectory_SkipsExtent()
+        {
+            // The record of A at sector 21 has length 0, the extent does not start with a "." record
+            byte[] image = new byte[24 * 2048];
+            WriteDirectory(image, 20, ("A", 21, FileFlags.DIRECTORY));
+            WriteRecord(image, 21 * 2048, Encoding.ASCII.GetBytes("X"), 22, FileFlags.DIRECTORY);
+            WriteBothEndian(image, (20 * 2048) + 68 + 10, 0);
+
+            var actual = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, [CreatePrimaryVolumeDescriptor(20)]);
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 20 }, actual.Keys);
+        }
+
+        [Fact]
+        public void ParseDirectoryDescriptors_ZeroLengthRecordPastEnd_SkipsExtent()
+        {
+            // The record of A has length 0 and points past the end of the image, B at sector 22 is still read
+            byte[] image = new byte[24 * 2048];
+            WriteDirectory(image, 20, ("A", 30, FileFlags.DIRECTORY), ("B", 22, FileFlags.DIRECTORY));
+            WriteDirectory(image, 22);
+            WriteBothEndian(image, (20 * 2048) + 68 + 10, 0);
+
+            var actual = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, [CreatePrimaryVolumeDescriptor(20)]);
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 20, 22 }, actual.Keys.OrderBy(k => k));
+        }
+
+        [Fact]
+        public void ParseDirectoryDescriptors_ZeroLengthRecordCurrentDirectoryPastEnd_SkipsExtent()
+        {
+            // The record of A at sector 23 has length 0, the "." record of A ends past the end of the image
+            byte[] image = new byte[24 * 2048];
+            WriteDirectory(image, 20, ("A", 23, FileFlags.DIRECTORY), ("B", 22, FileFlags.DIRECTORY));
+            WriteDirectory(image, 22);
+            WriteDirectory(image, 23);
+            WriteBothEndian(image, (20 * 2048) + 68 + 10, 0);
+            WriteBothEndian(image, (23 * 2048) + 10, 2 * 2048);
+
+            var actual = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, [CreatePrimaryVolumeDescriptor(20)]);
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 20, 22 }, actual.Keys.OrderBy(k => k));
+        }
+
+        [Fact]
+        public void ParseDirectoryDescriptors_LengthNotWholeBlocks_UsesCurrentDirectoryLength()
+        {
+            // The root record has length 1, the "." record of the root holds the length
+            byte[] image = new byte[24 * 2048];
+            WriteDirectory(image, 20, ("A", 21, FileFlags.DIRECTORY));
+            WriteDirectory(image, 21);
+            var pvd = CreatePrimaryVolumeDescriptor(20);
+            pvd.RootDirectoryRecord.ExtentLength = 1;
+
+            var actual = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, [pvd]);
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 20, 21 }, actual.Keys.OrderBy(k => k));
+        }
+
+        [Fact]
+        public void ParseDirectoryDescriptors_LengthNotWholeBlocksCurrentDirectoryShorter_KeepsLength()
+        {
+            // The record of A has length 3000 and the "." record of A 2048, B is recorded in the second sector of A
+            byte[] image = new byte[24 * 2048];
+            WriteDirectory(image, 20, ("A", 21, FileFlags.DIRECTORY));
+            WriteDirectory(image, 21);
+            WriteRecord(image, 22 * 2048, Encoding.ASCII.GetBytes("B"), 23, FileFlags.DIRECTORY);
+            WriteDirectory(image, 23);
+            WriteBothEndian(image, (20 * 2048) + 68 + 10, 3000);
+
+            var actual = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, [CreatePrimaryVolumeDescriptor(20)]);
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 20, 21, 23 }, actual.Keys.OrderBy(k => k));
+        }
+
+        [Fact]
+        public void ParseDirectoryDescriptors_LengthNotWholeBlocksCurrentDirectoryPastEnd_KeepsLength()
+        {
+            // The record of A at sector 23 has length 102 (its three records), the "." record of A ends past the end of the image
+            byte[] image = new byte[24 * 2048];
+            WriteDirectory(image, 20, ("A", 23, FileFlags.DIRECTORY));
+            WriteDirectory(image, 22);
+            WriteDirectory(image, 23, ("B", 22, FileFlags.DIRECTORY));
+            WriteBothEndian(image, (20 * 2048) + 68 + 10, 102);
+            WriteBothEndian(image, (23 * 2048) + 10, 2 * 2048);
+
+            var actual = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, [CreatePrimaryVolumeDescriptor(20)]);
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 20, 22, 23 }, actual.Keys.OrderBy(k => k));
+        }
+
+        [Fact]
+        public void ParseDirectoryDescriptors_FileWithExtendedAttributeRecord_ReadsExtentOnce()
+        {
+            // F at sector 22 has an extended attribute record and a length of 100 bytes, its extent is read once for the record
+            byte[] image = new byte[24 * 2048];
+            WriteDirectory(image, 20, ("F;1", 22, NoFlags));
+            image[(20 * 2048) + 68 + 1] = 1;
+            WriteBothEndian(image, (20 * 2048) + 68 + 10, 100);
+            var stream = new SeekCountingStream(image);
+
+            var actual = ISO9660.ParseDirectoryDescriptors(stream, 2048, [CreatePrimaryVolumeDescriptor(20)]);
+
+            Assert.NotNull(actual);
+            Assert.Equal(1, stream.SeeksTo(22 * 2048));
+        }
+
+        [Fact]
         public void FindDirectoryRecords_NestedPath_ReadsOnlyDirectoriesOnPath()
         {
             // Root at sector 20 holds OTHER at sector 22 and SUB at sector 30, SUB holds FILE.TXT;1 at sector 25
@@ -157,6 +308,21 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(actual);
             Assert.Equal(25, Assert.Single(actual).ExtentLocation.LittleEndian);
             Assert.Equal(new long[] { 20 * 2048, 30 * 2048 }, stream.SeekOrder);
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_ZeroLengthDirectoryRecord_UsesCurrentDirectoryLength()
+        {
+            // The record of SUB at sector 30 has length 0, the "." record of SUB holds the length
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("SUB", 30, FileFlags.DIRECTORY));
+            WriteDirectory(image, 30, ("FILE.TXT;1", 25, NoFlags));
+            WriteBothEndian(image, (20 * 2048) + 68 + 10, 0);
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, CreatePrimaryVolumeDescriptor(20), "SUB/FILE.TXT");
+
+            Assert.NotNull(actual);
+            Assert.Equal(25, Assert.Single(actual).ExtentLocation.LittleEndian);
         }
 
         [Fact]
