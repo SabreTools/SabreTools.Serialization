@@ -842,10 +842,18 @@ namespace SabreTools.Serialization.Readers
                 // Get the next directory record
                 var directoryRecord = ParseDirectoryRecord(data, false);
 
-                // Compare recordLength with number of bytes in directoryRecord and ignore the directory if mismatch
+                // Compare recordLength with number of bytes in directoryRecord and ignore the rest of the directory if mismatch
                 var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField is null ? 0 : 1) + directoryRecord.SystemUse.Length;
                 if (readLength != recordLength)
-                    return null;
+                {
+                    // Records directly before it with mismatched extent locations are damaged as well
+                    while (records.Count > 0 && !records[records.Count - 1].ExtentLocation.IsValid)
+                    {
+                        records.RemoveAt(records.Count - 1);
+                    }
+
+                    return records.Count > 0 ? records : null;
+                }
 
                 records.Add(directoryRecord);
             }
@@ -1116,15 +1124,13 @@ namespace SabreTools.Serialization.Readers
                 obj.FileIdentifier = data.ReadBytes(obj.FileIdentifierLength);
 
             // If file identifier length is even, there is a padding field byte
-            if (obj.FileIdentifierLength % 2 == 0)
+            // A record that ends after the file identifier has no padding field
+            if (obj.FileIdentifierLength % 2 == 0 && obj.DirectoryRecordLength > 33 + obj.FileIdentifierLength)
                 obj.PaddingField = data.ReadByteValue();
 
             // Root directory within the volume descriptor has no system use bytes, fixed at 34bytes
             if (root)
                 return obj;
-
-            // Calculate actual size of record
-            int totalBytes = 33 + obj.FileIdentifierLength;
 
             // Calculate the size of the system use section (remaining allocated bytes)
             int systemUseLength = obj.DirectoryRecordLength - 33 - obj.FileIdentifierLength;
@@ -1132,24 +1138,14 @@ namespace SabreTools.Serialization.Readers
             // Account for padding field after file identifier
             if (obj.FileIdentifierLength % 2 == 0)
             {
-                totalBytes += 1;
                 systemUseLength -= 1;
             }
 
             // If System Use is empty, or if DirectoryRecordLength is bad, return early
             if (systemUseLength < 1)
             {
-                // Total record size must be even, read a padding byte
-                if (totalBytes % 2 != 0)
-                    obj.SystemUse = data.ReadBytes(1);
-
                 return obj;
             }
-
-            // Total used bytes must be even, read a padding byte
-            totalBytes += systemUseLength;
-            if (totalBytes % 2 != 0)
-                systemUseLength += 1;
 
             // Read system use field
             obj.SystemUse = data.ReadBytes(systemUseLength);

@@ -79,6 +79,77 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void FindDirectoryRecords_RecordWithoutPaddingField_FindsNextFile()
+        {
+            // README.TXT;1 has an even identifier length, but its record ends after the identifier
+            byte[] image = new byte[32 * 2048];
+            int offset = WriteDirectory(image, 20);
+            offset = WriteRecord(image, offset, Encoding.ASCII.GetBytes("README.TXT;1"), 25, NoFlags, 33 + 12);
+            WriteRecord(image, offset, Encoding.ASCII.GetBytes("NEXT.TXT;1"), 26, NoFlags);
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, CreatePrimaryVolumeDescriptor(20), "NEXT.TXT");
+
+            Assert.NotNull(actual);
+            Assert.Equal(26, Assert.Single(actual).ExtentLocation.LittleEndian);
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_OddRecordLength_FindsNextFile()
+        {
+            // FIRST.TXT;1 has a one-byte system use field, which makes the record length odd
+            byte[] image = new byte[32 * 2048];
+            int offset = WriteDirectory(image, 20);
+            offset = WriteRecord(image, offset, Encoding.ASCII.GetBytes("FIRST.TXT;1"), 25, NoFlags, 33 + 11 + 1);
+            WriteRecord(image, offset, Encoding.ASCII.GetBytes("NEXT.TXT;1"), 26, NoFlags);
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, CreatePrimaryVolumeDescriptor(20), "NEXT.TXT");
+
+            Assert.NotNull(actual);
+            Assert.Equal(26, Assert.Single(actual).ExtentLocation.LittleEndian);
+        }
+
+        [Fact]
+        public void ParseDirectory_TooShortRecord_KeepsRecordsBeforeIt()
+        {
+            // Sector 1 holds FIRST.TXT;1, DAMAGED.TXT;1 with mismatched extent locations and NEXT.TXT;1, which is too short for its identifier
+            byte[] image = new byte[4 * 2048];
+            int damaged = WriteDirectory(image, 1, ("FIRST.TXT;1", 2, NoFlags));
+            int offset = WriteRecord(image, damaged, Encoding.ASCII.GetBytes("DAMAGED.TXT;1"), 3, NoFlags);
+            image[damaged + 6] = 0xFF;
+            WriteRecord(image, offset, Encoding.ASCII.GetBytes("NEXT.TXT;1"), 3, NoFlags, 40);
+            var dr = new DirectoryRecord
+            {
+                ExtentLocation = 1,
+                ExtentLength = 2048,
+                FileFlags = FileFlags.DIRECTORY,
+            };
+
+            var actual = ISO9660.ParseDirectory(new MemoryStream(image), 2048, 2048, dr, false);
+
+            Assert.NotNull(actual);
+            var directory = Assert.IsType<DirectoryExtent>(actual[1]);
+            Assert.Equal(3, directory.DirectoryRecords.Length);
+            Assert.Equal("FIRST.TXT;1", Encoding.ASCII.GetString(directory.DirectoryRecords[2].FileIdentifier));
+        }
+
+        [Fact]
+        public void ParseDirectory_TooShortFirstRecord_Null()
+        {
+            byte[] image = new byte[4 * 2048];
+            WriteRecord(image, 1 * 2048, Constants.CurrentDirectory, 1, FileFlags.DIRECTORY, 20);
+            var dr = new DirectoryRecord
+            {
+                ExtentLocation = 1,
+                ExtentLength = 2048,
+                FileFlags = FileFlags.DIRECTORY,
+            };
+
+            var actual = ISO9660.ParseDirectory(new MemoryStream(image), 2048, 2048, dr, false);
+
+            Assert.Null(actual);
+        }
+
+        [Fact]
         public void ParseDirectory_AmbiguousExtentLocation_ParsesBothExtents()
         {
             // Little-endian location points to sector 1, big-endian location to sector 2
@@ -220,15 +291,15 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         /// <summary>
-        /// Write a one-sector directory extent with self and parent records and the given entries
+        /// Write a one-sector directory extent with self and parent records and the given entries, returns the offset after the last record
         /// </summary>
-        private static void WriteDirectory(byte[] image, int sector, params (string Name, int Location, FileFlags Flags)[] entries)
+        private static int WriteDirectory(byte[] image, int sector, params (string Name, int Location, FileFlags Flags)[] entries)
             => WriteDirectory(image, sector, Encoding.ASCII, entries);
 
         /// <summary>
-        /// Write a one-sector directory extent with self and parent records and the given entries
+        /// Write a one-sector directory extent with self and parent records and the given entries, returns the offset after the last record
         /// </summary>
-        private static void WriteDirectory(byte[] image, int sector, Encoding encoding, params (string Name, int Location, FileFlags Flags)[] entries)
+        private static int WriteDirectory(byte[] image, int sector, Encoding encoding, params (string Name, int Location, FileFlags Flags)[] entries)
         {
             int offset = sector * 2048;
             offset = WriteRecord(image, offset, Constants.CurrentDirectory, sector, FileFlags.DIRECTORY);
@@ -237,14 +308,21 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 offset = WriteRecord(image, offset, encoding.GetBytes(name), location, flags);
             }
+
+            return offset;
         }
 
         /// <summary>
         /// Write a directory record for a one-sector extent, returns the offset after the record
         /// </summary>
         private static int WriteRecord(byte[] image, int offset, byte[] identifier, int location, FileFlags flags)
+            => WriteRecord(image, offset, identifier, location, flags, 33 + identifier.Length + (identifier.Length % 2 == 0 ? 1 : 0));
+
+        /// <summary>
+        /// Write a directory record with the given record length for a one-sector extent, returns the offset after the record
+        /// </summary>
+        private static int WriteRecord(byte[] image, int offset, byte[] identifier, int location, FileFlags flags, int length)
         {
-            int length = 33 + identifier.Length + (identifier.Length % 2 == 0 ? 1 : 0);
             image[offset] = (byte)length;
             WriteBothEndian(image, offset + 2, location);
             WriteBothEndian(image, offset + 10, 2048);
