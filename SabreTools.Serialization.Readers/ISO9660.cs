@@ -157,14 +157,6 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Check whether a volume descriptor was read from a High Sierra volume
-        /// </summary>
-        /// <param name="vd">Volume descriptor to check</param>
-        /// <returns>True if the volume descriptor has the High Sierra identifier, false otherwise</returns>
-        private static bool IsHighSierra(VolumeDescriptor vd)
-            => vd.Identifier.EqualsExactly(Constants.HighSierraIdentifier);
-
-        /// <summary>
         /// Check whether a volume descriptor header holds an identifier at an offset
         /// </summary>
         /// <param name="header">Start of the volume descriptor</param>
@@ -183,49 +175,42 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into a High Sierra VolumeDescriptor
+        /// Parse a Stream into a HighSierraVolumeDescriptor
         /// </summary>
-        /// <remarks>
-        /// High Sierra volume descriptors start with their own logical block number, which is not kept.
-        /// The standard file structure volume descriptor is read into a PrimaryVolumeDescriptor.
-        /// </remarks>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <returns>Filled VolumeDescriptor</returns>
-        public static VolumeDescriptor ParseHighSierraVolumeDescriptor(Stream data, short sectorLength)
+        /// <returns>Filled HighSierraVolumeDescriptor</returns>
+        public static HighSierraVolumeDescriptor ParseHighSierraVolumeDescriptor(Stream data, short sectorLength)
         {
-            _ = data.ReadBytes(8);
-            var type = (VolumeDescriptorType)data.ReadByteValue();
+            // The type follows the logical block number of the volume descriptor
+            var type = (VolumeDescriptorType)data.PeekBytes(9)[8];
 
             return type switch
             {
-                // High Sierra Volume Descriptors with an ISO9660 model
+                // Known High Sierra Volume Descriptors
                 VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR => ParseHighSierraPrimaryVolumeDescriptor(data, sectorLength),
                 VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR => ParseHighSierraVolumeDescriptorSetTerminator(data, sectorLength),
 
                 // Other and unknown High Sierra Volume Descriptors
-                VolumeDescriptorType.BOOT_RECORD_VOLUME_DESCRIPTOR => ParseHighSierraGenericVolumeDescriptor(data, sectorLength, type),
-                VolumeDescriptorType.SUPPLEMENTARY_VOLUME_DESCRIPTOR => ParseHighSierraGenericVolumeDescriptor(data, sectorLength, type),
-                VolumeDescriptorType.VOLUME_PARTITION_DESCRIPTOR => ParseHighSierraGenericVolumeDescriptor(data, sectorLength, type),
-                _ => ParseHighSierraGenericVolumeDescriptor(data, sectorLength, type),
+                VolumeDescriptorType.BOOT_RECORD_VOLUME_DESCRIPTOR => ParseHighSierraGenericVolumeDescriptor(data, sectorLength),
+                VolumeDescriptorType.SUPPLEMENTARY_VOLUME_DESCRIPTOR => ParseHighSierraGenericVolumeDescriptor(data, sectorLength),
+                VolumeDescriptorType.VOLUME_PARTITION_DESCRIPTOR => ParseHighSierraGenericVolumeDescriptor(data, sectorLength),
+                _ => ParseHighSierraGenericVolumeDescriptor(data, sectorLength),
             };
         }
 
         /// <summary>
-        /// Parse a Stream into a PrimaryVolumeDescriptor from a High Sierra standard file structure volume descriptor
+        /// Parse a Stream into a HighSierraPrimaryVolumeDescriptor
         /// </summary>
-        /// <remarks>
-        /// High Sierra records two more optional path tables of each byte order, which are not kept.
-        /// It has no bibliographic file identifier, and its dates have no time zone offset.
-        /// </remarks>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <returns>Filled PrimaryVolumeDescriptor</returns>
-        public static PrimaryVolumeDescriptor ParseHighSierraPrimaryVolumeDescriptor(Stream data, short sectorLength)
+        /// <returns>Filled HighSierraPrimaryVolumeDescriptor</returns>
+        public static HighSierraPrimaryVolumeDescriptor ParseHighSierraPrimaryVolumeDescriptor(Stream data, short sectorLength)
         {
-            var obj = new PrimaryVolumeDescriptor();
+            var obj = new HighSierraPrimaryVolumeDescriptor();
 
-            obj.Type = VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR;
+            obj.LogicalBlockNumber = data.ReadInt32BothEndian();
+            obj.Type = (VolumeDescriptorType)data.ReadByteValue();
             obj.Identifier = data.ReadBytes(5);
             obj.Version = data.ReadByteValue();
             obj.UnusedByte = data.ReadByteValue();
@@ -240,10 +225,12 @@ namespace SabreTools.Serialization.Readers
             obj.PathTableSize = data.ReadInt32BothEndian();
             obj.PathTableLocationL = data.ReadInt32LittleEndian();
             obj.OptionalPathTableLocationL = data.ReadInt32LittleEndian();
-            _ = data.ReadBytes(8);
+            obj.SecondOptionalPathTableLocationL = data.ReadInt32LittleEndian();
+            obj.ThirdOptionalPathTableLocationL = data.ReadInt32LittleEndian();
             obj.PathTableLocationM = data.ReadInt32BigEndian();
             obj.OptionalPathTableLocationM = data.ReadInt32BigEndian();
-            _ = data.ReadBytes(8);
+            obj.SecondOptionalPathTableLocationM = data.ReadInt32BigEndian();
+            obj.ThirdOptionalPathTableLocationM = data.ReadInt32BigEndian();
 
             obj.RootDirectoryRecord = ParseHighSierraRootDirectoryRecord(data);
 
@@ -253,7 +240,6 @@ namespace SabreTools.Serialization.Readers
             obj.ApplicationIdentifier = data.ReadBytes(128);
             obj.CopyrightFileIdentifier = data.ReadBytes(32);
             obj.AbstractFileIdentifier = data.ReadBytes(32);
-            obj.BibliographicFileIdentifier = [];
 
             obj.VolumeCreationDateTime = ParseDecDateTime(data, true);
             obj.VolumeModificationDateTime = ParseDecDateTime(data, true);
@@ -263,7 +249,7 @@ namespace SabreTools.Serialization.Readers
             obj.FileStructureVersion = data.ReadByteValue();
             obj.ReservedByte = data.ReadByteValue();
             obj.ApplicationUse = data.ReadBytes(512);
-            obj.Reserved653Bytes = data.ReadBytes(680);
+            obj.Reserved680Bytes = data.ReadBytes(680);
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
@@ -293,46 +279,47 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into a High Sierra VolumeDescriptorSetTerminator
+        /// Parse a Stream into a HighSierraVolumeDescriptorSetTerminator
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <returns>Filled VolumeDescriptorSetTerminator</returns>
-        public static VolumeDescriptorSetTerminator ParseHighSierraVolumeDescriptorSetTerminator(Stream data, short sectorLength)
+        /// <returns>Filled HighSierraVolumeDescriptorSetTerminator</returns>
+        public static HighSierraVolumeDescriptorSetTerminator ParseHighSierraVolumeDescriptorSetTerminator(Stream data, short sectorLength)
         {
-            var obj = new VolumeDescriptorSetTerminator();
+            var obj = new HighSierraVolumeDescriptorSetTerminator();
 
-            obj.Type = VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR;
+            obj.LogicalBlockNumber = data.ReadInt32BothEndian();
+            obj.Type = (VolumeDescriptorType)data.ReadByteValue();
             obj.Identifier = data.ReadBytes(5);
             obj.Version = data.ReadByteValue();
-            obj.Reserved2041Bytes = data.ReadBytes(2033);
+            obj.Reserved2033Bytes = data.ReadBytes(2033);
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                _ = data.ReadBytes(sectorLength - Constants.MinimumSectorSize);
 
             return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a High Sierra GenericVolumeDescriptor
+        /// Parse a Stream into a HighSierraGenericVolumeDescriptor
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <param name="type">Type of the volume descriptor</param>
-        /// <returns>Filled GenericVolumeDescriptor</returns>
-        public static GenericVolumeDescriptor ParseHighSierraGenericVolumeDescriptor(Stream data, short sectorLength, VolumeDescriptorType type)
+        /// <returns>Filled HighSierraGenericVolumeDescriptor</returns>
+        public static HighSierraGenericVolumeDescriptor ParseHighSierraGenericVolumeDescriptor(Stream data, short sectorLength)
         {
-            var obj = new GenericVolumeDescriptor();
+            var obj = new HighSierraGenericVolumeDescriptor();
 
-            obj.Type = type;
+            obj.LogicalBlockNumber = data.ReadInt32BothEndian();
+            obj.Type = (VolumeDescriptorType)data.ReadByteValue();
             obj.Identifier = data.ReadBytes(5);
             obj.Version = data.ReadByteValue();
             obj.Data = data.ReadBytes(2033);
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                _ = data.ReadBytes(sectorLength - Constants.MinimumSectorSize);
 
             return obj;
         }
@@ -648,6 +635,15 @@ namespace SabreTools.Serialization.Readers
                 locationM = svd.PathTableLocationM;
                 locationM2 = svd.OptionalPathTableLocationM;
             }
+            else if (vd is HighSierraPrimaryVolumeDescriptor hspvd)
+            {
+                sizeL = hspvd.PathTableSize.LittleEndian;
+                sizeB = hspvd.PathTableSize.BigEndian;
+                locationL = hspvd.PathTableLocationL;
+                locationL2 = hspvd.OptionalPathTableLocationL;
+                locationM = hspvd.PathTableLocationM;
+                locationM2 = hspvd.OptionalPathTableLocationM;
+            }
             else
             {
                 return [];
@@ -655,7 +651,7 @@ namespace SabreTools.Serialization.Readers
 
             var groups = new List<PathTableGroup>();
             short blockLength = vd.GetLogicalBlockSize(sectorLength);
-            bool highSierra = IsHighSierra(vd);
+            bool highSierra = vd is HighSierraVolumeDescriptor;
 
             var groupL = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
@@ -820,6 +816,8 @@ namespace SabreTools.Serialization.Readers
                     rootDirectoryRecord = pvd.RootDirectoryRecord;
                 else if (vd is SupplementaryVolumeDescriptor svd)
                     rootDirectoryRecord = svd.RootDirectoryRecord;
+                else if (vd is HighSierraPrimaryVolumeDescriptor hspvd)
+                    rootDirectoryRecord = hspvd.RootDirectoryRecord;
                 else
                     continue;
 
@@ -827,7 +825,7 @@ namespace SabreTools.Serialization.Readers
                 short blockLength = vd.GetLogicalBlockSize(sectorLength);
 
                 // Queue the root directory pointed to from the base volume descriptor
-                QueueExtent(data, blockLength, rootDirectoryRecord, IsHighSierra(vd), pending);
+                QueueExtent(data, blockLength, rootDirectoryRecord, vd is HighSierraVolumeDescriptor, pending);
             }
 
             // Read the queued extents in volume order
@@ -1084,12 +1082,14 @@ namespace SabreTools.Serialization.Readers
                 current = pvd.RootDirectoryRecord;
             else if (vd is SupplementaryVolumeDescriptor svd)
                 current = svd.RootDirectoryRecord;
+            else if (vd is HighSierraPrimaryVolumeDescriptor hspvd)
+                current = hspvd.RootDirectoryRecord;
             else
                 return null;
 
             // Determine logical block size
             short blockLength = vd.GetLogicalBlockSize(sectorLength);
-            bool highSierra = IsHighSierra(vd);
+            bool highSierra = vd is HighSierraVolumeDescriptor;
 
             // TODO: Better encoding detection (EscapeSequences)
             var encoding = vd is SupplementaryVolumeDescriptor ? Encoding.BigEndianUnicode : Encoding.UTF8;
@@ -1311,7 +1311,7 @@ namespace SabreTools.Serialization.Readers
 
         /// <inheritdoc cref="ParseDirectoryRecord(Stream, bool)" />
         /// <param name="highSierra">True if the directory record is in the High Sierra layout, false otherwise</param>
-        /// <remarks>High Sierra records the file flags before a reserved byte, which is not kept</remarks>
+        /// <remarks>High Sierra records the file flags before a reserved byte</remarks>
         public static DirectoryRecord ParseDirectoryRecord(Stream data, bool root, bool highSierra)
         {
             var obj = new DirectoryRecord();
@@ -1325,7 +1325,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.FileFlags = (FileFlags)data.ReadByteValue();
             if (highSierra)
-                _ = data.ReadByteValue();
+                obj.ReservedByte = data.ReadByteValue();
 
             obj.FileUnitSize = data.ReadByteValue();
             obj.InterleaveGapSize = data.ReadByteValue();

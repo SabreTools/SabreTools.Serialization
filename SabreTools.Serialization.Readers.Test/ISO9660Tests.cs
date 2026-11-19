@@ -212,8 +212,12 @@ namespace SabreTools.Serialization.Readers.Test
 
             Assert.NotNull(actual);
             Assert.Equal(2, actual.VolumeDescriptorSet.Length);
-            var pvd = Assert.IsType<PrimaryVolumeDescriptor>(actual.VolumeDescriptorSet[0]);
+            var pvd = Assert.IsType<HighSierraPrimaryVolumeDescriptor>(actual.VolumeDescriptorSet[0]);
+            Assert.Equal(16, pvd.LogicalBlockNumber.LittleEndian);
+            Assert.Equal(16, pvd.LogicalBlockNumber.BigEndian);
+            Assert.Equal(VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR, pvd.Type);
             Assert.Equal(Constants.HighSierraIdentifier, pvd.Identifier);
+            Assert.Equal(1, pvd.Version);
             Assert.Equal("HSFTEST", Encoding.ASCII.GetString(pvd.VolumeIdentifier, 0, 7));
             Assert.Equal(2048, pvd.LogicalBlockSize.LittleEndian);
             Assert.Equal(18, pvd.PathTableLocationL);
@@ -222,7 +226,88 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("ABSTRACT.TXT", Encoding.ASCII.GetString(pvd.AbstractFileIdentifier, 0, 12));
             Assert.Equal(1, pvd.FileStructureVersion);
             Assert.Equal("APP", Encoding.ASCII.GetString(pvd.ApplicationUse, 0, 3));
-            Assert.Equal(VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR, actual.VolumeDescriptorSet[1].Type);
+            var terminator = Assert.IsType<HighSierraVolumeDescriptorSetTerminator>(actual.VolumeDescriptorSet[1]);
+            Assert.Equal(17, terminator.LogicalBlockNumber.LittleEndian);
+            Assert.Equal(VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR, terminator.Type);
+            Assert.Equal(Constants.HighSierraIdentifier, terminator.Identifier);
+        }
+
+        [Fact]
+        public void HighSierra_KeepsAllVolumeDescriptorBytes()
+        {
+            byte[] image = CreateHighSierraImage(false);
+            int vd = 16 * 2048;
+            image[vd + 15] = 0x01;
+            image[vd + 80] = 0x02;
+            image[vd + 96] = 0x03;
+            WriteInteger(image, vd + 156, 4, 4, false);
+            WriteInteger(image, vd + 160, 5, 4, false);
+            WriteInteger(image, vd + 172, 6, 4, true);
+            WriteInteger(image, vd + 176, 7, 4, true);
+            image[vd + 855] = 0x08;
+            image[vd + 1368] = 0x09;
+            image[vd + 2047] = 0x0A;
+            image[(17 * 2048) + 15] = 0x0B;
+            image[(17 * 2048) + 2047] = 0x0C;
+            var deserializer = new ISO9660();
+
+            var actual = deserializer.Deserialize(new MemoryStream(image));
+
+            Assert.NotNull(actual);
+            var pvd = Assert.IsType<HighSierraPrimaryVolumeDescriptor>(actual.VolumeDescriptorSet[0]);
+            Assert.Equal(0x01, pvd.UnusedByte);
+            Assert.Equal(0x02, pvd.Unused8Bytes[0]);
+            Assert.Equal(0x03, pvd.Unused32Bytes[0]);
+            Assert.Equal(4, pvd.SecondOptionalPathTableLocationL);
+            Assert.Equal(5, pvd.ThirdOptionalPathTableLocationL);
+            Assert.Equal(6, pvd.SecondOptionalPathTableLocationM);
+            Assert.Equal(7, pvd.ThirdOptionalPathTableLocationM);
+            Assert.Equal(0x08, pvd.ReservedByte);
+            Assert.Equal(680, pvd.Reserved680Bytes.Length);
+            Assert.Equal(0x09, pvd.Reserved680Bytes[0]);
+            Assert.Equal(0x0A, pvd.Reserved680Bytes[679]);
+            var terminator = Assert.IsType<HighSierraVolumeDescriptorSetTerminator>(actual.VolumeDescriptorSet[1]);
+            Assert.Equal(2033, terminator.Reserved2033Bytes.Length);
+            Assert.Equal(0x0B, terminator.Reserved2033Bytes[0]);
+            Assert.Equal(0x0C, terminator.Reserved2033Bytes[2032]);
+        }
+
+        [Fact]
+        public void ParseVolumeDescriptor_HighSierraBootRecord_ReadsGeneric()
+        {
+            byte[] image = new byte[18 * 2048];
+            WriteHighSierraVolumeDescriptorHeader(image, 16, VolumeDescriptorType.BOOT_RECORD_VOLUME_DESCRIPTOR);
+            image[(16 * 2048) + 15] = 0x01;
+            image[(16 * 2048) + 2047] = 0x02;
+            var stream = new MemoryStream(image);
+            stream.Seek(16 * 2048, SeekOrigin.Begin);
+
+            var actual = ISO9660.ParseVolumeDescriptor(stream, 2048);
+
+            var gvd = Assert.IsType<HighSierraGenericVolumeDescriptor>(actual);
+            Assert.Equal(16, gvd.LogicalBlockNumber.LittleEndian);
+            Assert.Equal(VolumeDescriptorType.BOOT_RECORD_VOLUME_DESCRIPTOR, gvd.Type);
+            Assert.Equal(2033, gvd.Data.Length);
+            Assert.Equal(0x01, gvd.Data[0]);
+            Assert.Equal(0x02, gvd.Data[2032]);
+            Assert.Equal(17 * 2048, stream.Position);
+        }
+
+        [Theory]
+        [InlineData(VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR)]
+        [InlineData(VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR)]
+        [InlineData(VolumeDescriptorType.BOOT_RECORD_VOLUME_DESCRIPTOR)]
+        public void ParseVolumeDescriptor_HighSierraLongSector_SkipsRemainder(VolumeDescriptorType type)
+        {
+            byte[] image = new byte[2 * 4096];
+            WriteHighSierraVolumeDescriptorHeader(image, 0, type);
+            WriteHighSierraRecord(image, 180, Constants.CurrentDirectory, 20, FileFlags.DIRECTORY);
+            var stream = new MemoryStream(image);
+
+            var actual = ISO9660.ParseVolumeDescriptor(stream, 4096);
+
+            Assert.Equal(type, Assert.IsAssignableFrom<HighSierraVolumeDescriptor>(actual).Type);
+            Assert.Equal(4096, stream.Position);
         }
 
         [Fact]
@@ -258,6 +343,7 @@ namespace SabreTools.Serialization.Readers.Test
             var root = Assert.IsType<DirectoryExtent>(actual.DirectoryDescriptors[20]);
             Assert.Equal(FileFlags.DIRECTORY, root.DirectoryRecords.Single(r => r.ExtentLocation.LittleEndian == 21).FileFlags);
             Assert.Equal(NoFlags, root.DirectoryRecords.Single(r => r.ExtentLocation.LittleEndian == 22).FileFlags);
+            Assert.All(root.DirectoryRecords, r => Assert.Equal((byte)0x8B, r.ReservedByte));
             var sub = Assert.IsType<DirectoryExtent>(actual.DirectoryDescriptors[21]);
             Assert.Equal(NoFlags, sub.DirectoryRecords.Single(r => r.ExtentLocation.LittleEndian == 23).FileFlags);
         }
@@ -271,8 +357,9 @@ namespace SabreTools.Serialization.Readers.Test
             var actual = deserializer.Deserialize(new MemoryStream(image));
 
             Assert.NotNull(actual);
-            var pvd = Assert.IsType<PrimaryVolumeDescriptor>(actual.VolumeDescriptorSet[0]);
+            var pvd = Assert.IsType<HighSierraPrimaryVolumeDescriptor>(actual.VolumeDescriptorSet[0]);
             Assert.Equal(FileFlags.DIRECTORY, pvd.RootDirectoryRecord.FileFlags);
+            Assert.Null(pvd.RootDirectoryRecord.ReservedByte);
             Assert.Equal(new[] { 20, 21 }, actual.DirectoryDescriptors.Keys.OrderBy(k => k));
         }
 
@@ -282,7 +369,7 @@ namespace SabreTools.Serialization.Readers.Test
             byte[] image = CreateHighSierraImage(false);
             var stream = new MemoryStream(image);
             stream.Seek(16 * 2048, SeekOrigin.Begin);
-            var pvd = Assert.IsType<PrimaryVolumeDescriptor>(ISO9660.ParseVolumeDescriptor(stream, 2048));
+            var pvd = Assert.IsType<HighSierraPrimaryVolumeDescriptor>(ISO9660.ParseVolumeDescriptor(stream, 2048));
 
             var actual = ISO9660.FindDirectoryRecords(stream, 2048, pvd, "FILE.TXT");
 
@@ -290,6 +377,7 @@ namespace SabreTools.Serialization.Readers.Test
             var record = Assert.Single(actual);
             Assert.Equal(22, record.ExtentLocation.LittleEndian);
             Assert.Equal(NoFlags, record.FileFlags);
+            Assert.Equal((byte)0x8B, record.ReservedByte);
         }
 
         [Fact]
@@ -308,6 +396,7 @@ namespace SabreTools.Serialization.Readers.Test
             var pvd = Assert.IsType<PrimaryVolumeDescriptor>(actual);
             Assert.Equal(Constants.StandardIdentifier, pvd.Identifier);
             Assert.Equal("XCDROM", Encoding.ASCII.GetString(pvd.SystemIdentifier, 0, 6));
+            Assert.Null(pvd.RootDirectoryRecord.ReservedByte);
         }
 
         [Fact]
