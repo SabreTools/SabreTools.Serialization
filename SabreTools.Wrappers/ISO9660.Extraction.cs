@@ -230,7 +230,7 @@ namespace SabreTools.Wrappers
                 }
                 else
                 {
-                    // Associated files are written to an AppleDouble file, the file of the same name follows in its own record
+                    // Associated files are written to a file of their own, the file of the same name follows in its own record
 #if NET20 || NET35
                     if ((dr.FileFlags & FileFlags.ASSOCIATED_FILE) != 0)
 #else
@@ -350,7 +350,7 @@ namespace SabreTools.Wrappers
         }
 
         /// <summary>
-        /// Extract an associated file to an AppleDouble file next to the file it belongs to
+        /// Extract an associated file to a file next to the file it belongs to
         /// </summary>
         /// <param name="records">Directory records of the directory</param>
         /// <param name="first">Index of the first record of the associated file</param>
@@ -359,14 +359,23 @@ namespace SabreTools.Wrappers
         /// With the Apple extensions to ISO 9660, the associated file is the resource fork of the file, and the
         /// System Use field holds its Finder type, creator and flags. The AppleDouble file is written in the layout
         /// macOS uses on volumes without forks, macOS reads both from it as attributes of the file.
+        /// Without the Apple extensions, ISO 9660 does not specify what the associated file holds, so it is written
+        /// as it is recorded, to the name of the file with ".associated" appended.
         /// </remarks>
         private bool ExtractAssociatedFile(DirectoryRecord[] records, int first, int last, Encoding encoding, int blockLength, string outputDirectory, bool includeDebug)
         {
             var dr = records[first];
             int extentLocation = dr.ExtentLocation.LittleEndian;
 
+            // Take the Finder info from the file, which directly follows, or else from the associated file
+            byte[] finderInfo = new byte[32];
+            bool appleExtensions = (last + 1 < records.Length
+                && records[last + 1].FileIdentifier.EqualsExactly(dr.FileIdentifier)
+                && ReadFinderInfo(records[last + 1].SystemUse, finderInfo))
+                || ReadFinderInfo(dr.SystemUse, finderInfo);
+
             // Get the output file path
-            string filename = $"._{GetFileName(dr, encoding)}";
+            string filename = appleExtensions ? $"._{GetFileName(dr, encoding)}" : $"{GetFileName(dr, encoding)}.associated";
             var filepath = Path.Combine(outputDirectory, filename);
 
             // Check that the associated file hasn't been extracted already
@@ -393,14 +402,6 @@ namespace SabreTools.Wrappers
                 return false;
             }
 
-            // Take the Finder info from the file, which directly follows, or else from the associated file
-            byte[] finderInfo = new byte[32];
-            bool fromFile = last + 1 < records.Length
-                && records[last + 1].FileIdentifier.EqualsExactly(dr.FileIdentifier)
-                && ReadFinderInfo(records[last + 1].SystemUse, finderInfo);
-            if (!fromFile)
-                ReadFinderInfo(dr.SystemUse, finderInfo);
-
             const uint chunkSize = 2048 * 1024;
             lock (_dataSourceLock)
             {
@@ -412,11 +413,15 @@ namespace SabreTools.Wrappers
                         return false;
                 }
 
-                // Write the AppleDouble header, followed by the resource fork
+                // Write the AppleDouble header if there is one, followed by the associated file
                 if (includeDebug) Console.WriteLine($"Extracting: {filepath}");
                 using var fs = File.Open(filepath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                byte[] header = GetAppleDoubleHeader(finderInfo, length);
-                fs.Write(header, 0, header.Length);
+                if (appleExtensions)
+                {
+                    byte[] header = GetAppleDoubleHeader(finderInfo, length);
+                    fs.Write(header, 0, header.Length);
+                }
+
                 for (int i = first; i <= last; i++)
                 {
                     _dataSource.SeekIfPossible(GetFileOffset(records[i], blockLength), SeekOrigin.Begin);

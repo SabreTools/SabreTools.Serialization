@@ -33,12 +33,27 @@ namespace SabreTools.Wrappers.Test
         {
             // The associated file of DATA.BIN is recorded first, in its own extent
             string outputDirectory = Extract(BuildImage(30,
+                ("DATA.BIN", 25, (3 * BlockLength) + 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("rsrcRSED", 0)),
+                ("DATA.BIN", 22, BlockLength + 50, NoFlags, [])), expected: true);
+
+            Assert.Equal(ExpectedData(22, BlockLength + 50), File.ReadAllBytes(Path.Combine(outputDirectory, "DATA.BIN")));
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("rsrcRSED", 0), ExpectedData(25, (3 * BlockLength) + 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._DATA.BIN")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "DATA.BIN.associated")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileWithoutAppleExtensions_WritesItAsRecorded()
+        {
+            string outputDirectory = Extract(BuildImage(30,
                 ("DATA.BIN", 25, (3 * BlockLength) + 100, FileFlags.ASSOCIATED_FILE, []),
                 ("DATA.BIN", 22, BlockLength + 50, NoFlags, [])), expected: true);
 
             Assert.Equal(ExpectedData(22, BlockLength + 50), File.ReadAllBytes(Path.Combine(outputDirectory, "DATA.BIN")));
-            Assert.Equal(ExpectedAppleDouble(new byte[10], ExpectedData(25, (3 * BlockLength) + 100)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._DATA.BIN")));
+            Assert.Equal(ExpectedData(25, (3 * BlockLength) + 100),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "DATA.BIN.associated")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "._DATA.BIN")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
@@ -51,8 +66,7 @@ namespace SabreTools.Wrappers.Test
                 ("HELP.TXT", 25, 0, NoFlags, [])), expected: true);
 
             Assert.Empty(File.ReadAllBytes(Path.Combine(outputDirectory, "HELP.TXT")));
-            Assert.Equal(ExpectedAppleDouble(new byte[10], ExpectedData(25, 500)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._HELP.TXT")));
+            Assert.Equal(ExpectedData(25, 500), File.ReadAllBytes(Path.Combine(outputDirectory, "HELP.TXT.associated")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
@@ -77,6 +91,19 @@ namespace SabreTools.Wrappers.Test
 
             Assert.Equal(ExpectedAppleDouble(FinderInfo("APPLDPI6", 0x2000), ExpectedData(25, 100)),
                 File.ReadAllBytes(Path.Combine(outputDirectory, "._PLAYER")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AppleExtensionOnFileOnly_TakesFinderInfoOfFile()
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("README", 22, 10, NoFlags, AppleSystemUse("TEXTttxt", 0x0100))), expected: true);
+
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("TEXTttxt", 0x0100), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._README")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "README.associated")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
@@ -120,9 +147,9 @@ namespace SabreTools.Wrappers.Test
             string outputDirectory = Extract(BuildImage(30,
                 ("APP", 22, BlockLength, FileFlags.ASSOCIATED_FILE | FileFlags.MULTI_EXTENT, []),
                 ("APP", 25, 100, FileFlags.ASSOCIATED_FILE, []),
-                ("APP", 27, 10, NoFlags, [])), expected: true);
+                ("APP", 27, 10, NoFlags, AppleSystemUse("APPLaapl", 0))), expected: true);
 
-            Assert.Equal(ExpectedAppleDouble(new byte[10], [.. ExpectedData(22, BlockLength), .. ExpectedData(25, 100)]),
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("APPLaapl", 0), [.. ExpectedData(22, BlockLength), .. ExpectedData(25, 100)]),
                 File.ReadAllBytes(Path.Combine(outputDirectory, "._APP")));
             Assert.Equal(ExpectedData(27, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "APP")));
             Directory.Delete(outputDirectory, recursive: true);
@@ -139,15 +166,11 @@ namespace SabreTools.Wrappers.Test
                 ("CFG", 25, 100, FileFlags.ASSOCIATED_FILE, []),
                 ("ZZZ", 24, BlockLength, FileFlags.ASSOCIATED_FILE | FileFlags.MULTI_EXTENT, [])), expected: true);
 
-            Assert.Equal(ExpectedAppleDouble(new byte[10], ExpectedData(22, BlockLength)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._APP")));
+            Assert.Equal(ExpectedData(22, BlockLength), File.ReadAllBytes(Path.Combine(outputDirectory, "APP.associated")));
             Assert.Equal(ExpectedData(27, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "APP")));
-            Assert.Equal(ExpectedAppleDouble(new byte[10], ExpectedData(23, BlockLength)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._BIN")));
-            Assert.Equal(ExpectedAppleDouble(new byte[10], ExpectedData(25, 100)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._CFG")));
-            Assert.Equal(ExpectedAppleDouble(new byte[10], ExpectedData(24, BlockLength)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._ZZZ")));
+            Assert.Equal(ExpectedData(23, BlockLength), File.ReadAllBytes(Path.Combine(outputDirectory, "BIN.associated")));
+            Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "CFG.associated")));
+            Assert.Equal(ExpectedData(24, BlockLength), File.ReadAllBytes(Path.Combine(outputDirectory, "ZZZ.associated")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
@@ -160,8 +183,7 @@ namespace SabreTools.Wrappers.Test
                 ("APP", 25, 100, FileFlags.ASSOCIATED_FILE, []),
                 ("APP", 27, 10, NoFlags, [])), expected: false);
 
-            Assert.Equal(ExpectedAppleDouble(new byte[10], ExpectedData(22, BlockLength)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._APP")));
+            Assert.Equal(ExpectedData(22, BlockLength), File.ReadAllBytes(Path.Combine(outputDirectory, "APP.associated")));
             Assert.Equal(ExpectedData(27, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "APP")));
             Directory.Delete(outputDirectory, recursive: true);
         }
@@ -177,8 +199,7 @@ namespace SabreTools.Wrappers.Test
                 ("README", 22, 10, NoFlags, []));
             string outputDirectory = Extract(image, expected: true);
 
-            Assert.Equal(ExpectedAppleDouble(new byte[10], ExpectedData(25, 100)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._README")));
+            Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "README.associated")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
@@ -193,8 +214,7 @@ namespace SabreTools.Wrappers.Test
                 ("README", 22, 10, NoFlags, []));
             string outputDirectory = Extract(image, expected: false);
 
-            Assert.Equal(ExpectedAppleDouble(new byte[10], ExpectedData(25, 100)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._README")));
+            Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "README.associated")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
@@ -203,7 +223,7 @@ namespace SabreTools.Wrappers.Test
         {
             string outputDirectory = Extract(BuildImage(30,
                 ("._HELP.TXT", 22, 100, NoFlags, []),
-                ("HELP.TXT", 25, 500, FileFlags.ASSOCIATED_FILE, []),
+                ("HELP.TXT", 25, 500, FileFlags.ASSOCIATED_FILE, AppleSystemUse("TEXTttxt", 0)),
                 ("HELP.TXT", 23, 10, NoFlags, [])), expected: false);
 
             Assert.Equal(ExpectedData(22, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "._HELP.TXT")));
@@ -224,7 +244,7 @@ namespace SabreTools.Wrappers.Test
             image[(RootDirectory * BlockLength) + 34 + 34 + field] = 1;
             string outputDirectory = Extract(image, expected: false);
 
-            Assert.False(File.Exists(Path.Combine(outputDirectory, "._README")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "README.associated")));
             Assert.Equal(ExpectedData(22, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "README")));
             Directory.Delete(outputDirectory, recursive: true);
         }
@@ -238,13 +258,13 @@ namespace SabreTools.Wrappers.Test
                 ("APP", 40, 100, FileFlags.ASSOCIATED_FILE, []),
                 ("APP", 27, 10, NoFlags, [])), expected: false);
 
-            Assert.False(File.Exists(Path.Combine(outputDirectory, "._APP")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "APP.associated")));
             Assert.Equal(ExpectedData(27, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "APP")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
         [Fact]
-        public void Extract_AgainAfterOutputRemoved_WritesAppleDoubleFileAgain()
+        public void Extract_AgainAfterOutputRemoved_WritesAssociatedFileAgain()
         {
             var iso = ISO9660.Create(new MemoryStream(BuildImage(30,
                 ("README", 25, 100, FileFlags.ASSOCIATED_FILE, []),
@@ -258,26 +278,37 @@ namespace SabreTools.Wrappers.Test
             Directory.CreateDirectory(outputDirectory);
             Assert.True(iso.Extract(outputDirectory, includeDebug: false));
 
-            Assert.Equal(ExpectedAppleDouble(new byte[10], ExpectedData(25, 100)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._README")));
+            Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "README.associated")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
         [Theory]
-        [InlineData("41410E0254455854747478740100", "54455854747478740100")]
-        [InlineData("4E4D05004141410E0254455854747478740100", "54455854747478740100")]
-        [InlineData("41410E0154455854747478740100", "00000000000000000000")]
-        [InlineData("41410C025445585474747874", "00000000000000000000")]
-        [InlineData("5A5A0341410E0254455854747478740100", "00000000000000000000")]
-        [InlineData("000000000000584100000000000041410E0254455854", "00000000000000000000")]
-        public void Extract_SystemUseField_ReadsAppleExtension(string systemUse, string finderInfo)
+        [InlineData("41410E0254455854747478740100")]
+        [InlineData("4E4D05004141410E0254455854747478740100")]
+        public void Extract_SystemUseField_ReadsAppleExtension(string systemUse)
         {
             string outputDirectory = Extract(BuildImage(30,
                 ("README", 25, 100, FileFlags.ASSOCIATED_FILE, Convert.FromHexString(systemUse)),
                 ("README", 22, 10, NoFlags, [])), expected: true);
 
-            Assert.Equal(ExpectedAppleDouble(Convert.FromHexString(finderInfo), ExpectedData(25, 100)),
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("TEXTttxt", 0x0100), ExpectedData(25, 100)),
                 File.ReadAllBytes(Path.Combine(outputDirectory, "._README")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Theory]
+        [InlineData("41410E0154455854747478740100")]
+        [InlineData("41410C025445585474747874")]
+        [InlineData("5A5A0341410E0254455854747478740100")]
+        [InlineData("000000000000584100000000000041410E0254455854")]
+        public void Extract_SystemUseFieldWithoutAppleExtension_WritesItAsRecorded(string systemUse)
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, Convert.FromHexString(systemUse)),
+                ("README", 22, 10, NoFlags, [])), expected: true);
+
+            Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "README.associated")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "._README")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
