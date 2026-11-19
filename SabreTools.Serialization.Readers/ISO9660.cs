@@ -788,6 +788,18 @@ namespace SabreTools.Serialization.Readers
                     extentLength = bigEndian ? dr.ExtentLength.LittleEndian : dr.ExtentLength.BigEndian;
             }
 
+            // A directory fills whole logical blocks, so a length of 0 or one that does not is wrong:
+            // take the length from its own "." record if that one is longer and ends within the stream
+            bool isDirectory = (dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY;
+            if (isDirectory && (extentLength == 0 || extentLength % blockLength != 0) && extentOffset + blockLength <= data.Length)
+            {
+                data.SeekIfPossible(extentOffset, SeekOrigin.Begin);
+                var currentDirectory = ParseDirectoryRecord(data, false);
+                uint currentLength = bigEndian ? currentDirectory.ExtentLength.BigEndian : currentDirectory.ExtentLength.LittleEndian;
+                if (currentDirectory.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) && currentLength > extentLength && extentOffset + currentLength <= data.Length)
+                    extentLength = currentLength;
+            }
+
             // Validate extent length
             return extentLength > 0 && extentFinal <= data.Length;
         }
@@ -989,22 +1001,7 @@ namespace SabreTools.Serialization.Readers
             var directories = new Dictionary<int, FileExtent>();
             int blocksPerSector = sectorLength / blockLength;
 
-            // Use provided extent endinanness
-            int extentLocation = bigEndian ? dr.ExtentLocation.BigEndian : dr.ExtentLocation.LittleEndian;
-            uint extentLength = bigEndian ? dr.ExtentLength.BigEndian : dr.ExtentLength.LittleEndian;
-            long extentOffset = extentLocation * (long)blockLength;
-            long extentFinal = extentOffset + extentLength;
-
-            // Deal with extent length ambiguity
-            if (!dr.ExtentLength.IsValid)
-            {
-                // If provided extent length is invalid, use the other value
-                if (extentLength <= 0 || extentFinal > data.Length)
-                    extentLength = bigEndian ? dr.ExtentLength.LittleEndian : dr.ExtentLength.BigEndian;
-            }
-
-            // Validate extent length
-            if (extentLength <= 0 || extentFinal > data.Length)
+            if (!TryGetExtent(data, blockLength, dr, bigEndian, out int extentLocation, out long extentOffset, out uint extentLength))
                 return null;
 
             // Move stream to directory location
