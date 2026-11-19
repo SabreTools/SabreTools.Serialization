@@ -825,11 +825,6 @@ namespace SabreTools.Serialization.Readers
                     if (pos >= extentLength)
                         break;
 
-                    // Start of sector should not be 0, ignore entire directory
-                    int nextRecordLength = data.PeekByteValue();
-                    if (nextRecordLength <= 0)
-                        return null;
-
                     continue;
                 }
 

@@ -243,6 +243,39 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void FindDirectoryRecords_UnusedLastDirectorySector_FindsFile()
+        {
+            // Root at sector 20 is two sectors long, FILE.TXT;1 is in the first sector and the second sector is unused
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("FILE.TXT;1", 25, NoFlags));
+            WriteBothEndian(image, (20 * 2048) + 10, 2 * 2048);
+            var pvd = CreatePrimaryVolumeDescriptor(20);
+            pvd.RootDirectoryRecord.ExtentLength = 2 * 2048;
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, pvd, "FILE.TXT");
+
+            Assert.NotNull(actual);
+            Assert.Equal(25, Assert.Single(actual).ExtentLocation.LittleEndian);
+        }
+
+        [Fact]
+        public void FindDirectoryRecords_UnusedDirectorySectorBeforeRecords_FindsFile()
+        {
+            // Root at sector 20 is three sectors long, the second sector is unused and FILE.TXT;1 is in the third sector
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20);
+            WriteBothEndian(image, (20 * 2048) + 10, 3 * 2048);
+            WriteRecord(image, 22 * 2048, Encoding.ASCII.GetBytes("FILE.TXT;1"), 25, NoFlags);
+            var pvd = CreatePrimaryVolumeDescriptor(20);
+            pvd.RootDirectoryRecord.ExtentLength = 3 * 2048;
+
+            var actual = ISO9660.FindDirectoryRecords(new MemoryStream(image), 2048, pvd, "FILE.TXT");
+
+            Assert.NotNull(actual);
+            Assert.Equal(25, Assert.Single(actual).ExtentLocation.LittleEndian);
+        }
+
+        [Fact]
         public void FindDirectoryRecords_MultiExtentFile_ReturnsAllRecords()
         {
             // BIG.BIN;1 is recorded in two extents, at sectors 25 and 26
