@@ -56,6 +56,8 @@ namespace SabreTools.Wrappers
                     rootDirectoryRecord = pvd.RootDirectoryRecord;
                 else if (vd is SupplementaryVolumeDescriptor svd)
                     rootDirectoryRecord = svd.RootDirectoryRecord;
+                else if (vd is HighSierraPrimaryVolumeDescriptor hspvd)
+                    rootDirectoryRecord = hspvd.RootDirectoryRecord;
                 else
                     continue;
 
