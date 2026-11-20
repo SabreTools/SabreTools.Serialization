@@ -37,6 +37,10 @@ namespace SabreTools.Serialization.Readers
                 if (tableOffset < initialOffset || tableOffset >= data.Length)
                     return null;
 
+                // Every entry is at least 17 bytes, so the table cannot hold more entries than fit before the end
+                if (footer.EntryCount > (data.Length - tableOffset) / 17)
+                    return null;
+
                 // Seek to the entry table
                 data.SeekIfPossible(tableOffset, SeekOrigin.Begin);
 
