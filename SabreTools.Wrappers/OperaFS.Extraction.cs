@@ -43,8 +43,35 @@ namespace SabreTools.Wrappers
                 }
 
                 if (includeDebug) Console.WriteLine($"Extracting from root directory at sector {VolumeDescriptor.RootDirectoryAvatarList[i]}");
-                allExtracted |= ExtractDirectory(outputDirectory, includeDebug, rootDirectory);
+                allExtracted |= ExtractDirectory(outputDirectory, includeDebug, VolumeDescriptor.RootDirectoryAvatarList[i], VolumeDescriptor.RootDirectoryBlockCount);
                 extractedDirectories.Add(rootDirectory);
+            }
+
+            return allExtracted;
+        }
+
+        /// <summary>
+        /// Extract a directory from its first block and the next blocks
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <param name="sector">Sector of the first block</param>
+        /// <param name="blockCount">Number of blocks of the directory</param>
+        /// <returns>True if all files extracted, false otherwise</returns>
+        public bool ExtractDirectory(string outputDirectory, bool includeDebug, uint sector, uint blockCount)
+        {
+            var dir = Directories[sector];
+            bool allExtracted = ExtractDirectory(outputDirectory, includeDebug, dir);
+
+            // The next block is relative to the first block, and -1 for the last block
+            var blocks = new HashSet<uint> { sector };
+            while (dir.NextBlock >= 0 && dir.NextBlock < blockCount)
+            {
+                uint blockSector = sector + (uint)dir.NextBlock;
+                if (!blocks.Add(blockSector) || !Directories.TryGetValue(blockSector, out dir))
+                    break;
+
+                allExtracted &= ExtractDirectory(outputDirectory, includeDebug, dir);
             }
 
             return allExtracted;
@@ -127,8 +154,14 @@ namespace SabreTools.Wrappers
                     // Iterate over all avatars, in case they're not identical
                     for (int i = 0; i <= dr.LastAvatarIndex; i++)
                     {
+                        // Skip directories that could not be read
+                        if (!Directories.TryGetValue(dr.AvatarList[i], out var childDir))
+                        {
+                            if (includeDebug) Console.WriteLine($"Directory missing at sector {dr.AvatarList[i]}");
+                            continue;
+                        }
+
                         // Check whether directory is already extracted
-                        var childDir = Directories[dr.AvatarList[i]];
                         if (extractedDirectories.Contains(childDir))
                         {
                             if (includeDebug) Console.WriteLine($"Directory duplicate at sector {dr.AvatarList[i]}");
@@ -139,8 +172,10 @@ namespace SabreTools.Wrappers
                         {
                             if (includeDebug) Console.WriteLine($"Extracting directory {filename} at sector {dr.AvatarList[i]}");
                             var outputPath = Path.Combine(outputDirectory, filename);
-                            allExtracted |= ExtractDirectory(outputPath, includeDebug, childDir);
+
+                            // Mark the directory first, so that a directory that records itself is extracted once
                             extractedDirectories.Add(childDir);
+                            allExtracted |= ExtractDirectory(outputPath, includeDebug, dr.AvatarList[i], dr.BlockCount);
                         }
                         catch
                         {
