@@ -60,6 +60,53 @@ namespace SabreTools.Data.Extensions.Test
             Assert.Equal(expected, actual);
         }
 
-        // TODO: Figure out how to add UserDataStream tests
+        [Fact]
+        public void UserDataStreamMode2ToMode1ReadTest()
+        {
+            byte[] data = CreateSectors(0x02, 0x01, 0x01);
+            var stream = new CDROMExtensions.UserDataStream(new MemoryStream(data));
+
+            byte[] actual = new byte[3 * 2048];
+            int read = stream.Read(actual, 0, actual.Length);
+
+            Assert.Equal(actual.Length, read);
+            for (int i = 0; i < actual.Length; i++)
+            {
+                Assert.Equal((byte)(i / 2048), actual[i]);
+            }
+        }
+
+        [Fact]
+        public void UserDataStreamMode2ToMode1PositionTest()
+        {
+            byte[] data = CreateSectors(0x02, 0x01, 0x01);
+            var stream = new CDROMExtensions.UserDataStream(new MemoryStream(data));
+
+            byte[] actual = new byte[2048];
+            _ = stream.Read(actual, 0, actual.Length);
+
+            Assert.Equal(2048, stream.Position);
+        }
+
+        /// <summary>
+        /// Create raw sectors with the given modes, filling each user data area with the sector index
+        /// </summary>
+        private static byte[] CreateSectors(params byte[] modes)
+        {
+            byte[] data = new byte[modes.Length * Constants.CDROMSectorSize];
+            for (int i = 0; i < modes.Length; i++)
+            {
+                long sectorStart = i * Constants.CDROMSectorSize;
+                data[sectorStart + 15] = modes[i];
+
+                long userDataStart = sectorStart + (modes[i] == 0x02 ? Constants.Mode2Form1UserDataStart : Constants.Mode1UserDataStart);
+                for (long j = 0; j < 2048; j++)
+                {
+                    data[userDataStart + j] = (byte)i;
+                }
+            }
+
+            return data;
+        }
     }
 }

@@ -246,8 +246,10 @@ namespace SabreTools.Data.Extensions
 
                     // Update state for base stream
                     _position = _baseStream.Position;
+
+                    // Move to the start of the next sector if this one was read to the end, as its mode may be different
                     if (bytesToRead == (_isoSectorSize - sectorOffset))
-                        _position += Constants.CDROMSectorSize - _userDataEnd + _userDataStart;
+                        _position = baseStreamOffset - (baseStreamOffset % Constants.CDROMSectorSize) + Constants.CDROMSectorSize;
 
                     // Update state for ISO stream
                     totalRead += bytesRead;
