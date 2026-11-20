@@ -953,6 +953,10 @@ namespace SabreTools.Serialization.Readers
                 if (records[i].FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || records[i].FileIdentifier.EqualsExactly(Constants.ParentDirectory))
                     continue;
 
+                // Skip associated files, the file of the same name follows in its own record
+                if ((records[i].FileFlags & FileFlags.ASSOCIATED_FILE) == FileFlags.ASSOCIATED_FILE)
+                    continue;
+
                 if (!string.Equals(TrimIdentifier(encoding.GetString(records[i].FileIdentifier)), wanted, StringComparison.OrdinalIgnoreCase))
                     continue;
 
