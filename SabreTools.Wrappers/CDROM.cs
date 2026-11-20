@@ -12,6 +12,18 @@ namespace SabreTools.Wrappers
 
         #endregion
 
+        #region Extraction State
+
+        /// <summary>
+        /// Raw 2352-byte sectors the user data was read from, if created from them
+        /// </summary>
+        private Stream? _rawSectorSource;
+
+        /// <inheritdoc/>
+        protected override Stream? RawSectorSource => _rawSectorSource;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
@@ -84,7 +96,7 @@ namespace SabreTools.Wrappers
                 // Reset stream
                 userData.Seek(currentOffset, SeekOrigin.Begin);
 
-                return new CDROM(model, userData, userData.Position);
+                return new CDROM(model, userData, userData.Position) { _rawSectorSource = data };
             }
             catch
             {
