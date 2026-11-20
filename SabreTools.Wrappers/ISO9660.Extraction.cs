@@ -25,6 +25,12 @@ namespace SabreTools.Wrappers
         private readonly HashSet<int> earlierExtractedFiles = [];
 
         /// <summary>
+        /// List of written files by their sector offset
+        /// </summary>
+        /// <remarks>Files of one directory hierarchy can share a sector offset, like an empty file and the file after it, so they are marked as extracted when the next directory hierarchy starts</remarks>
+        private readonly Dictionary<int, uint> writtenFiles = [];
+
+        /// <summary>
         /// List of multi-extent files written, by their FileIdentifier
         /// </summary>
         /// <remarks>Used as last-extent has mutli-extent flag=0</remarks>
@@ -41,6 +47,7 @@ namespace SabreTools.Wrappers
 
             // Clear the extraction state
             extractedFiles.Clear();
+            writtenFiles.Clear();
             multiExtentFiles.Clear();
 
             bool allExtracted = true;
@@ -72,6 +79,11 @@ namespace SabreTools.Wrappers
                     encoding = Encoding.BigEndianUnicode;
 
                 // Note the files extracted from the directory hierarchies before this one
+                foreach (var writtenFile in writtenFiles)
+                {
+                    extractedFiles[writtenFile.Key] = writtenFile.Value;
+                }
+
                 earlierExtractedFiles.Clear();
                 foreach (int extractedLocation in extractedFiles.Keys)
                 {
@@ -346,6 +358,10 @@ namespace SabreTools.Wrappers
                 // If it's the last extent of a multi-extent file, continue to append
                 if (!multiExtentFiles.Exists(item => item.EqualsExactly(dr.FileIdentifier)))
                 {
+                    // A file sharing the location of a written file is only extracted if its name is free
+                    if (writtenFiles.ContainsKey(extentLocation))
+                        return true;
+
                     if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
                     return false;
                 }
@@ -377,7 +393,7 @@ namespace SabreTools.Wrappers
                 }
 
                 // Mark the file as extracted
-                extractedFiles.Add(extentLocation, dr.ExtentLength);
+                writtenFiles[extentLocation] = dr.ExtentLength;
             }
 
             return true;

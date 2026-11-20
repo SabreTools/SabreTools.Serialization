@@ -98,7 +98,89 @@ namespace SabreTools.Wrappers.Test
 
             string outputDirectory = Extract(new ISO9660(volume, CreateData()));
 
-            Assert.Equal(new[] { "A", "A/FILE.TXT", "B" }, Entries(outputDirectory));
+            Assert.Equal(new[] { "A", "A/FILE.TXT", "B", "B/FILE.TXT" }, Entries(outputDirectory));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_EmptyFileSharingLocationInOneHierarchy_ExtractsEach()
+        {
+            // EMPTY.TXT is recorded with the location of README.TXT
+            var emptyFile = FileEntry("EMPTY.TXT", 40);
+            emptyFile.ExtentLength = 0;
+            var directories = new Dictionary<int, FileExtent>
+            {
+                [PrimaryRootDirectory] = Listing(PrimaryRootDirectory, PrimaryRootDirectory, emptyFile, FileEntry("README.TXT", 40)),
+            };
+
+            var volume = CreateVolume(directories);
+            volume.VolumeDescriptorSet = [volume.VolumeDescriptorSet[0]];
+
+            string outputDirectory = Extract(new ISO9660(volume, CreateData()));
+
+            Assert.Equal(new[] { "EMPTY.TXT", "README.TXT" }, Entries(outputDirectory));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_FileRecordedTwiceInOneHierarchy_IsExtractedOnce()
+        {
+            // The root directory lists README.TXT twice
+            var directories = new Dictionary<int, FileExtent>
+            {
+                [PrimaryRootDirectory] = Listing(PrimaryRootDirectory, PrimaryRootDirectory, FileEntry("README.TXT", 40), FileEntry("README.TXT", 40)),
+            };
+
+            var volume = CreateVolume(directories);
+            volume.VolumeDescriptorSet = [volume.VolumeDescriptorSet[0]];
+
+            string outputDirectory = Extract(new ISO9660(volume, CreateData()));
+
+            Assert.Equal(new[] { "README.TXT" }, Entries(outputDirectory));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_EmptyFileSharingLocationInEarlierHierarchy_IsNotExtractedAgain()
+        {
+            // Both volume descriptors record an empty file with the location of the file after it
+            var emptyFile = FileEntry("EMPTY.TXT", 40);
+            emptyFile.ExtentLength = 0;
+            var unicodeEmptyFile = FileEntry("Empty file.txt", 40, Unicode);
+            unicodeEmptyFile.ExtentLength = 0;
+            var directories = new Dictionary<int, FileExtent>
+            {
+                [PrimaryRootDirectory] = Listing(PrimaryRootDirectory, PrimaryRootDirectory, emptyFile, FileEntry("README.TXT", 40)),
+                [SupplementaryRootDirectory] = Listing(SupplementaryRootDirectory, SupplementaryRootDirectory, unicodeEmptyFile, FileEntry("Read me.txt", 40, Unicode)),
+            };
+
+            string outputDirectory = Extract(new ISO9660(CreateVolume(directories), CreateData()));
+
+            Assert.Equal(new[] { "Empty file.txt", "Read me.txt" }, Entries(outputDirectory));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_EmptyFileSharingLocationWithInterleavedFile_IsExtracted()
+        {
+            // EMPTY.TXT is recorded with the location of MOVIE.STR
+            var emptyFile = FileEntry("EMPTY.TXT", 40);
+            emptyFile.ExtentLength = 0;
+            var interleavedFile = FileEntry("MOVIE.STR", 40);
+            interleavedFile.FileUnitSize = 1;
+            interleavedFile.InterleaveGapSize = 1;
+            var directories = new Dictionary<int, FileExtent>
+            {
+                [PrimaryRootDirectory] = Listing(PrimaryRootDirectory, PrimaryRootDirectory, DirectoryEntry("MOVIES", 30)),
+                [30] = Listing(30, PrimaryRootDirectory, emptyFile, interleavedFile),
+            };
+
+            var volume = CreateVolume(directories);
+            volume.VolumeDescriptorSet = [volume.VolumeDescriptorSet[0]];
+
+            string outputDirectory = Extract(new ISO9660(volume, CreateData()));
+
+            Assert.True(File.Exists(Path.Combine(outputDirectory, "MOVIES", "EMPTY.TXT")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
