@@ -219,6 +219,58 @@ namespace SabreTools.Wrappers.Test
         }
 
         [Fact]
+        public void Extract_AssociatedFileOfFileFromOtherHierarchy_IsSkipped()
+        {
+            // The Joliet directory hierarchy records the same file and associated file under another name
+            byte[] image = BuildImage(30,
+                ("READ_ME", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("READ_ME", 22, 10, NoFlags, AppleSystemUse("TEXTttxt", 0)));
+            AddJolietHierarchy(image, 21, 29,
+                ("Read Me", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("Read Me", 22, 10, NoFlags, AppleSystemUse("TEXTttxt", 0)));
+            string outputDirectory = Extract(image, expected: true);
+
+            Assert.Equal(ExpectedData(22, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "Read Me")));
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("TEXTttxt", 0), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._Read Me")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "._READ_ME")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileWithoutFileFromOtherHierarchy_IsSkipped()
+        {
+            // The record after the associated file belongs to another file, which only the primary volume records
+            byte[] image = BuildImage(30,
+                ("ICON", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("iconMACS", 0x4000)),
+                ("ZZZ", 23, 10, NoFlags, []));
+            AddJolietHierarchy(image, 21, 29,
+                ("Icon", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("iconMACS", 0x4000)));
+            string outputDirectory = Extract(image, expected: true);
+
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("iconMACS", 0x4000), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._Icon")));
+            Assert.Equal(ExpectedData(23, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "ZZZ")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "._ICON")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileOfEmptyFileAtLocationOfOtherFile_IsWritten()
+        {
+            // APP has an empty data fork, which is recorded at the location of ABOUT
+            string outputDirectory = Extract(BuildImage(30,
+                ("ABOUT", 22, 10, NoFlags, []),
+                ("APP", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("APP", 22, 0, NoFlags, AppleSystemUse("APPLaapl", 0x2000))), expected: true);
+
+            Assert.Equal(ExpectedData(22, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "ABOUT")));
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("APPLaapl", 0x2000), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._APP")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
         public void Extract_FileNamedLikeAppleDoubleFile_IsKept()
         {
             string outputDirectory = Extract(BuildImage(30,
@@ -268,7 +320,8 @@ namespace SabreTools.Wrappers.Test
         {
             var iso = ISO9660.Create(new MemoryStream(BuildImage(30,
                 ("README", 25, 100, FileFlags.ASSOCIATED_FILE, []),
-                ("README", 22, 10, NoFlags, []))));
+                ("README", 22, 10, NoFlags, []),
+                ("ZZZ", 26, 100, FileFlags.ASSOCIATED_FILE, []))));
             Assert.NotNull(iso);
 
             string outputDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -279,6 +332,7 @@ namespace SabreTools.Wrappers.Test
             Assert.True(iso.Extract(outputDirectory, includeDebug: false));
 
             Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "README.associated")));
+            Assert.Equal(ExpectedData(26, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "ZZZ.associated")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
@@ -372,7 +426,7 @@ namespace SabreTools.Wrappers.Test
             BinaryPrimitives.WriteInt32BigEndian(pathTable[2..], RootDirectory);
             BinaryPrimitives.WriteInt16BigEndian(pathTable[6..], 1);
 
-            WriteDirectory(image, RootDirectory, files);
+            WriteDirectory(image, RootDirectory, Encoding.ASCII, files);
             return image;
         }
 
@@ -383,13 +437,34 @@ namespace SabreTools.Wrappers.Test
         {
             BinaryPrimitives.WriteInt32BigEndian(image.AsSpan((16 * BlockLength) + 156 + 6), block);
             image.AsSpan(block * BlockLength, BlockLength).Clear();
-            WriteDirectory(image, block, files);
+            WriteDirectory(image, block, Encoding.ASCII, files);
+        }
+
+        /// <summary>
+        /// Add a Joliet supplementary volume descriptor with the given records in its root directory
+        /// </summary>
+        /// <remarks>It takes the place of the terminator, which takes the place of the little-endian path table</remarks>
+        private static void AddJolietHierarchy(byte[] image, int block, int pathTableBlock, params (string Name, int Location, int Length, FileFlags Flags, byte[] SystemUse)[] files)
+        {
+            Array.Copy(image, 18 * BlockLength, image, pathTableBlock * BlockLength, BlockLength);
+            BinaryPrimitives.WriteInt32LittleEndian(image.AsSpan((16 * BlockLength) + 140), pathTableBlock);
+            Array.Copy(image, 17 * BlockLength, image, 18 * BlockLength, BlockLength);
+            Array.Copy(image, 16 * BlockLength, image, 17 * BlockLength, BlockLength);
+
+            // Supplementary volume descriptor with the escape sequence of UCS-2 Level 3
+            var svd = image.AsSpan(17 * BlockLength, BlockLength);
+            svd[0] = 2;
+            Encoding.ASCII.GetBytes("%/E").CopyTo(svd[88..]);
+            WriteBothEndian(svd[(156 + 2)..], block);
+
+            image.AsSpan(block * BlockLength, BlockLength).Clear();
+            WriteDirectory(image, block, Encoding.BigEndianUnicode, files);
         }
 
         /// <summary>
         /// Write a directory with the given records after its current and parent directory records
         /// </summary>
-        private static void WriteDirectory(byte[] image, int block, (string Name, int Location, int Length, FileFlags Flags, byte[] SystemUse)[] files)
+        private static void WriteDirectory(byte[] image, int block, Encoding encoding, (string Name, int Location, int Length, FileFlags Flags, byte[] SystemUse)[] files)
         {
             List<byte[]> records =
             [
@@ -398,7 +473,7 @@ namespace SabreTools.Wrappers.Test
             ];
             foreach (var (name, location, length, flags, systemUse) in files)
             {
-                records.Add(DirectoryRecord(Encoding.ASCII.GetBytes($"{name};1"), location, length, flags, systemUse));
+                records.Add(DirectoryRecord(encoding.GetBytes($"{name};1"), location, length, flags, systemUse));
             }
 
             int position = block * BlockLength;

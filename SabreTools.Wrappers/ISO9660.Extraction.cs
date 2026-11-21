@@ -37,6 +37,11 @@ namespace SabreTools.Wrappers
         /// <remarks>Empty associated files can share their sector offset with each other and with an empty file</remarks>
         private readonly Dictionary<string, int> extractedAssociatedFiles = [];
 
+        /// <summary>
+        /// List of extracted associated files by their sector offset
+        /// </summary>
+        private readonly HashSet<int> extractedAssociatedFileLocations = [];
+
         #endregion
 
         /// <summary>
@@ -57,6 +62,7 @@ namespace SabreTools.Wrappers
             multiExtentFiles.Clear();
             waveFiles.Clear();
             extractedAssociatedFiles.Clear();
+            extractedAssociatedFileLocations.Clear();
 
             bool allExtracted = true;
 
@@ -368,10 +374,9 @@ namespace SabreTools.Wrappers
             int extentLocation = dr.ExtentLocation.LittleEndian;
 
             // Take the Finder info from the file, which directly follows, or else from the associated file
+            bool fileFollows = last + 1 < records.Length && records[last + 1].FileIdentifier.EqualsExactly(dr.FileIdentifier);
             byte[] finderInfo = new byte[32];
-            bool appleExtensions = (last + 1 < records.Length
-                && records[last + 1].FileIdentifier.EqualsExactly(dr.FileIdentifier)
-                && ReadFinderInfo(records[last + 1].SystemUse, finderInfo))
+            bool appleExtensions = (fileFollows && ReadFinderInfo(records[last + 1].SystemUse, finderInfo))
                 || ReadFinderInfo(dr.SystemUse, finderInfo);
 
             // Get the output file path
@@ -381,6 +386,15 @@ namespace SabreTools.Wrappers
             // Check that the associated file hasn't been extracted already
             if (extractedAssociatedFiles.TryGetValue(filepath, out int extractedLocation) && extractedLocation == extentLocation)
                 return true;
+
+            // Check that the associated file hasn't been extracted under another name, like in the other directory
+            // hierarchy of a volume with Joliet, unless it has a file that wasn't extracted yet, as empty associated
+            // files can share their sector offset
+            if (extractedAssociatedFileLocations.Contains(extentLocation)
+                && (!fileFollows || extractedFiles.ContainsKey(records[last + 1].ExtentLocation.LittleEndian)))
+            {
+                return true;
+            }
 
             // Currently cannot extract interleaved files
             uint length = 0;
@@ -439,6 +453,7 @@ namespace SabreTools.Wrappers
 
                 // Mark the associated file as extracted
                 extractedAssociatedFiles[filepath] = extentLocation;
+                extractedAssociatedFileLocations.Add(extentLocation);
             }
 
             return true;
