@@ -163,6 +163,16 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void EmptyDirectory_NoRecords()
+        {
+            // "Deep" has no entries, and the rest of its block is filler
+            var volume = new OperaFS().Deserialize(new MemoryStream(OperaFSImageBuilder.Build(emptyDeep: true)));
+
+            Assert.NotNull(volume);
+            Assert.Empty(volume.Directories[10].DirectoryRecords);
+        }
+
+        [Fact]
         public void UnreadableBlock_OtherBlocksRead()
         {
             // The second block of the root directory is all 0xFF

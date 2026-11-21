@@ -237,6 +237,8 @@ namespace SabreTools.Serialization.Readers
         {
             var directory = new DirectoryDescriptor();
 
+            // The first free byte is relative to the start of the block
+            long startPosition = data.Position;
             directory.NextBlock = data.ReadInt32BigEndian();
             directory.PreviousBlock = data.ReadInt32BigEndian();
             directory.Flags = data.ReadUInt32BigEndian();
@@ -245,7 +247,6 @@ namespace SabreTools.Serialization.Readers
 
             var directoryRecords = new List<DirectoryRecord>();
 
-            long startPosition = data.Position;
             while (data.Position < startPosition + directory.FirstFreeByte)
             {
                 var directoryRecord = ParseDirectoryRecord(data);

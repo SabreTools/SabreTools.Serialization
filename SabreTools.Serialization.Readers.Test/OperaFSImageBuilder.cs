@@ -43,7 +43,8 @@ namespace SabreTools.Serialization.Readers.Test
         /// <param name="subCopyNextBlock">Next block in the first block of the copy of "Sub", the same as <paramref name="subNextBlock"/> if null</param>
         /// <param name="deepSector">Sector of "Deep" in its entry</param>
         /// <param name="otherCopySector">Sector of the copy of "Other" in its entry</param>
-        public static byte[] Build(uint subBlockCount = 2, int subNextBlock = 1, int? subCopyNextBlock = null, uint deepSector = 10, uint otherCopySector = 14)
+        /// <param name="emptyDeep">True to write "Deep" without entries, with filler after its header</param>
+        public static byte[] Build(uint subBlockCount = 2, int subNextBlock = 1, int? subCopyNextBlock = null, uint deepSector = 10, uint otherCopySector = 14, bool emptyDeep = false)
         {
             var image = new byte[Sectors * SectorSize];
 
@@ -69,7 +70,10 @@ namespace SabreTools.Serialization.Readers.Test
             WriteAscii(image, 8 * SectorSize, "deep");
             WriteAscii(image, 9 * SectorSize, "other");
 
-            WriteBlock(image, 10, -1, -1, Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, "DEEP.BIN", 4, 1, 8));
+            if (emptyDeep)
+                WriteEmptyBlock(image, 10);
+            else
+                WriteBlock(image, 10, -1, -1, Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, "DEEP.BIN", 4, 1, 8));
 
             WriteBlock(image, 11, -1, -1, Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, "OTHER.BIN", 5, 1, 9));
             WriteBlock(image, 14, -1, -1, Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, "OTHER.BIN", 5, 1, 9));
@@ -119,6 +123,19 @@ namespace SabreTools.Serialization.Readers.Test
             image.WriteBigEndian(ref offset, 0u);
             image.WriteBigEndian(ref offset, firstFreeByte);
             image.WriteBigEndian(ref offset, 20u);
+        }
+
+        /// <summary>
+        /// Write a directory block without entries, with filler after the header
+        /// </summary>
+        private static void WriteEmptyBlock(byte[] image, int sector)
+        {
+            for (int offset = sector * SectorSize; offset < (sector + 1) * SectorSize; offset += 8)
+            {
+                WriteAscii(image, offset, "iamaduck");
+            }
+
+            WriteBlock(image, sector, -1, -1);
         }
 
         /// <summary>

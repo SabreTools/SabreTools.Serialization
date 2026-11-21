@@ -195,6 +195,27 @@ namespace SabreTools.Wrappers.Test
         }
 
         [Fact]
+        public void EmptyDirectory_Extract()
+        {
+            // "Deep" has no entries, and the rest of its block is filler
+            var wrapper = OperaFS.Create(new MemoryStream(OperaFSImageBuilder.Build(emptyDeep: true)));
+            Assert.NotNull(wrapper);
+
+            string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            try
+            {
+                Directory.CreateDirectory(output);
+                Assert.True(wrapper.Extract(output, false));
+                Assert.Empty(Directory.GetFileSystemEntries(Path.Combine(output, "Sub", "Deep")));
+            }
+            finally
+            {
+                if (Directory.Exists(output))
+                    Directory.Delete(output, true);
+            }
+        }
+
+        [Fact]
         public void UnreadableDirectory_OtherFilesExtracted()
         {
             // The first block of "Sub" is all 0xFF
