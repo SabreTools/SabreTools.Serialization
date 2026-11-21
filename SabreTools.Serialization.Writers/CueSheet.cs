@@ -25,13 +25,14 @@ namespace SabreTools.Serialization.Writers
             // Setup the writer and output
             var stream = new MemoryStream();
 #if NET20 || NET35 || NET40
-            var writer = new StreamWriter(stream, Encoding.ASCII, 1024);
+            var writer = new StreamWriter(stream, new UTF8Encoding(false), 1024);
 #else
-            var writer = new StreamWriter(stream, Encoding.ASCII, 1024, true);
+            var writer = new StreamWriter(stream, new UTF8Encoding(false), 1024, true);
 #endif
 
             // Write the file
             WriteCueSheet(obj, writer);
+            writer.Flush();
 
             // Return the stream
             stream.SeekIfPossible(0, SeekOrigin.Begin);
@@ -58,13 +59,13 @@ namespace SabreTools.Serialization.Writers
                 sw.WriteLine($"CDTEXTFILE {cueSheet.CdTextFile}");
 
             if (!string.IsNullOrEmpty(cueSheet.Performer))
-                sw.WriteLine($"PERFORMER {cueSheet.Performer}");
+                sw.WriteLine($"PERFORMER \"{cueSheet.Performer}\"");
 
             if (!string.IsNullOrEmpty(cueSheet.Songwriter))
-                sw.WriteLine($"SONGWRITER {cueSheet.Songwriter}");
+                sw.WriteLine($"SONGWRITER \"{cueSheet.Songwriter}\"");
 
             if (!string.IsNullOrEmpty(cueSheet.Title))
-                sw.WriteLine($"TITLE {cueSheet.Title}");
+                sw.WriteLine($"TITLE \"{cueSheet.Title}\"");
 
             foreach (var cueFile in cueSheet.Files)
             {
@@ -115,13 +116,13 @@ namespace SabreTools.Serialization.Writers
                 sw.WriteLine($"    ISRC {cueTrack.ISRC}");
 
             if (!string.IsNullOrEmpty(cueTrack.Performer))
-                sw.WriteLine($"    PERFORMER {cueTrack.Performer}");
+                sw.WriteLine($"    PERFORMER \"{cueTrack.Performer}\"");
 
             if (!string.IsNullOrEmpty(cueTrack.Songwriter))
-                sw.WriteLine($"    SONGWRITER {cueTrack.Songwriter}");
+                sw.WriteLine($"    SONGWRITER \"{cueTrack.Songwriter}\"");
 
             if (!string.IsNullOrEmpty(cueTrack.Title))
-                sw.WriteLine($"    TITLE {cueTrack.Title}");
+                sw.WriteLine($"    TITLE \"{cueTrack.Title}\"");
 
             if (cueTrack.PreGap is not null)
                 WritePreGap(cueTrack.PreGap, sw);
