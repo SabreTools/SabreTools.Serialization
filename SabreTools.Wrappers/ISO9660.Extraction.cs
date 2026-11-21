@@ -15,9 +15,25 @@ namespace SabreTools.Wrappers
         #region Extraction State
 
         /// <summary>
+        /// List of extracted directories by their sector offset
+        /// </summary>
+        private readonly HashSet<int> extractedDirectories = [];
+
+        /// <summary>
         /// List of extracted files by their sector offset
         /// </summary>
         private readonly Dictionary<int, uint> extractedFiles = [];
+
+        /// <summary>
+        /// List of files extracted from the directory hierarchies before the current one, by their sector offset
+        /// </summary>
+        private readonly HashSet<int> earlierExtractedFiles = [];
+
+        /// <summary>
+        /// List of written files by their sector offset
+        /// </summary>
+        /// <remarks>Files of one directory hierarchy can share a sector offset, like an empty file and the file after it, so they are marked as extracted when the next directory hierarchy starts</remarks>
+        private readonly Dictionary<int, uint> writtenFiles = [];
 
         /// <summary>
         /// List of multi-extent files written, by their FileIdentifier
@@ -35,7 +51,9 @@ namespace SabreTools.Wrappers
                 return true;
 
             // Clear the extraction state
+            extractedDirectories.Clear();
             extractedFiles.Clear();
+            writtenFiles.Clear();
             multiExtentFiles.Clear();
 
             bool allExtracted = true;
@@ -66,6 +84,18 @@ namespace SabreTools.Wrappers
                 if (vd is SupplementaryVolumeDescriptor)
                     encoding = Encoding.BigEndianUnicode;
 
+                // Note the files extracted from the directory hierarchies before this one
+                foreach (var writtenFile in writtenFiles)
+                {
+                    extractedFiles[writtenFile.Key] = writtenFile.Value;
+                }
+
+                earlierExtractedFiles.Clear();
+                foreach (int extractedLocation in extractedFiles.Keys)
+                {
+                    earlierExtractedFiles.Add(extractedLocation);
+                }
+
                 // Extract all files within root directory hierarchy
                 allExtracted &= ExtractExtent(rootDirectoryRecord.ExtentLocation.LittleEndian, encoding, blockLength, outputDirectory, includeDebug);
 
@@ -75,6 +105,9 @@ namespace SabreTools.Wrappers
                     if (includeDebug) Console.WriteLine($"Extracting from volume descriptor (big endian root dir location)");
                     allExtracted &= ExtractExtent(rootDirectoryRecord.ExtentLocation.BigEndian, encoding, blockLength, outputDirectory, includeDebug);
                 }
+
+                // Also extract the directories that are only recorded in a path table
+                ExtractPathTableDirectories(rootDirectoryRecord, encoding, blockLength, outputDirectory, includeDebug);
             }
 
             return allExtracted;
@@ -111,7 +144,9 @@ namespace SabreTools.Wrappers
                     if (includeDebug) Console.WriteLine($"Extracting to directory: {outputPath}");
 
                     // Create directory (even if empty)
-                    if (!string.IsNullOrEmpty(outputPath) && !Directory.Exists(outputPath))
+                    // Note: A directory whose files were all extracted from an earlier directory hierarchy is skipped
+                    // Note: A directory with an ambiguous extent location is always created, as both extents are extracted
+                    if (!string.IsNullOrEmpty(outputPath) && !Directory.Exists(outputPath) && (!dr.ExtentLocation.IsValid || !IsExtractedDirectory(dr.ExtentLocation.LittleEndian)))
                         Directory.CreateDirectory(outputPath);
 
                     // Recursively extract from LittleEndian extent location
@@ -133,7 +168,114 @@ namespace SabreTools.Wrappers
                 }
             }
 
+            // Mark the directory as extracted
+            extractedDirectories.Add(extentLocation);
+
             return succeeded;
+        }
+
+        /// <summary>
+        /// Extract the directories that are recorded in the path tables of a directory hierarchy but not extracted yet
+        /// </summary>
+        private void ExtractPathTableDirectories(DirectoryRecord rootDirectoryRecord, Encoding encoding, int blockLength, string outputDirectory, bool includeDebug)
+        {
+            foreach (var group in PathTableGroups)
+            {
+                foreach (var pathTable in new[] { group.PathTableL, group.OptionalPathTableL, group.PathTableM, group.OptionalPathTableM })
+                {
+                    // The path tables of a directory hierarchy start with its root directory
+                    if (pathTable is null || pathTable[0].ExtentLocation != rootDirectoryRecord.ExtentLocation.LittleEndian)
+                        continue;
+
+                    // Each directory follows its parent directory, which is numbered from 1 in path table order
+                    var paths = new string?[pathTable.Length];
+                    paths[0] = string.Empty;
+                    for (int i = 1; i < pathTable.Length; i++)
+                    {
+                        int parent = pathTable[i].ParentDirectoryNumber - 1;
+                        if (parent < 0 || parent >= i || paths[parent] is not string parentPath)
+                            continue;
+
+                        string path = Path.Combine(parentPath, encoding.GetString(pathTable[i].DirectoryIdentifier));
+                        paths[i] = path;
+
+                        // Each directory is extracted once
+                        int extentLocation = pathTable[i].ExtentLocation;
+                        if (extractedDirectories.Contains(extentLocation) || !DirectoryDescriptors.TryGetValue(extentLocation, out FileExtent? value) || value is not DirectoryExtent)
+                            continue;
+
+                        string outputPath = Path.Combine(outputDirectory, path);
+                        if (includeDebug) Console.WriteLine($"Extracting to directory: {outputPath}");
+
+                        // Create directory (even if empty)
+                        // Note: A directory whose files were all extracted from an earlier directory hierarchy is skipped
+                        if (!Directory.Exists(outputPath) && !IsExtractedDirectory(extentLocation))
+                            Directory.CreateDirectory(outputPath);
+
+                        ExtractExtent(extentLocation, encoding, blockLength, outputPath, includeDebug);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check if all files of a directory were extracted from an earlier directory hierarchy
+        /// </summary>
+        /// <param name="extentLocation">Extent location of the directory</param>
+        /// <returns>True if the directory and its subdirectories have files and all of them were extracted from an earlier directory hierarchy, false otherwise</returns>
+        /// <remarks>Such a directory is the record of an extracted directory in another directory hierarchy, like the primary volume's record of a Joliet directory</remarks>
+        private bool IsExtractedDirectory(int extentLocation)
+        {
+            bool hasFiles = false;
+            return HasOnlyEarlierExtractedFiles(extentLocation, ref hasFiles) && hasFiles;
+        }
+
+        /// <summary>
+        /// Check if all files of a directory and its subdirectories were extracted from an earlier directory hierarchy
+        /// </summary>
+        /// <param name="extentLocation">Extent location of the directory</param>
+        /// <param name="hasFiles">Set to true if the directory or a subdirectory has a file</param>
+        /// <returns>False if a file was not extracted from an earlier directory hierarchy, true otherwise</returns>
+        private bool HasOnlyEarlierExtractedFiles(int extentLocation, ref bool hasFiles)
+        {
+            if (!DirectoryDescriptors.TryGetValue(extentLocation, out FileExtent? value) || value is not DirectoryExtent dir)
+                return true;
+
+            foreach (var dr in dir.DirectoryRecords)
+            {
+#if NET20 || NET35
+                if ((dr.FileFlags & FileFlags.DIRECTORY) != 0)
+#else
+                if (dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
+#endif
+                {
+                    // Don't check up or self
+                    if (dr.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || dr.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
+                        continue;
+
+                    if (!HasOnlyEarlierExtractedFiles(dr.ExtentLocation.LittleEndian, ref hasFiles))
+                        return false;
+                }
+#if NET20 || NET35
+                else if ((dr.FileFlags & FileFlags.ASSOCIATED_FILE) != 0)
+#else
+                else if (dr.FileFlags.HasFlag(FileFlags.ASSOCIATED_FILE))
+#endif
+                {
+                    // Don't count associated files as extracted, so their directory is always created
+                    return false;
+                }
+                else if (earlierExtractedFiles.Contains(dr.ExtentLocation.LittleEndian))
+                {
+                    hasFiles = true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -194,6 +336,10 @@ namespace SabreTools.Wrappers
                 // If it's the last extent of a multi-extent file, continue to append
                 if (!multiExtentFiles.Exists(item => item.EqualsExactly(dr.FileIdentifier)))
                 {
+                    // A file sharing the location of a written file is only extracted if its name is free
+                    if (writtenFiles.ContainsKey(extentLocation))
+                        return true;
+
                     if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
                     return false;
                 }
@@ -225,7 +371,7 @@ namespace SabreTools.Wrappers
                 }
 
                 // Mark the file as extracted
-                extractedFiles.Add(extentLocation, dr.ExtentLength);
+                writtenFiles[extentLocation] = dr.ExtentLength;
             }
 
             return true;
