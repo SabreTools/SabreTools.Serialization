@@ -255,10 +255,77 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal(2, file.Tracks.Length);
         }
 
+        [Fact]
+        public void Latin1Text_Kept()
+        {
+            // CD-Text bytes as DiscImageCreator writes them for Clockwork Aquario - Original Soundtrack
+            string[] lines =
+            [
+                "FILE \"Disc Name (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    TITLE \"Blast\u00fcfEm Up (Boss!!)\"",
+                "    INDEX 01 00:00:00",
+            ];
+            var stream = CreateStream(lines, Encoding.GetEncoding(28591));
+
+            var actual = new CueSheet().Deserialize(stream);
+
+            Assert.NotNull(actual);
+            Assert.Equal("Blast\u00fcfEm Up (Boss!!)", actual.Files[0].Tracks[0].Title);
+        }
+
+        [Fact]
+        public void Latin1TextAtEnd_Kept()
+        {
+            // The last byte starts a UTF-8 sequence that never ends
+            byte[] bytes = Encoding.GetEncoding(28591).GetBytes(
+                "FILE \"Disc Name (Track 1).bin\" BINARY\n  TRACK 01 AUDIO\n    INDEX 01 00:00:00\n    TITLE Caf\u00e9");
+            var stream = new MemoryStream(bytes);
+
+            var actual = new CueSheet().Deserialize(stream);
+
+            Assert.NotNull(actual);
+            Assert.Equal("Caf\u00e9", actual.Files[0].Tracks[0].Title);
+        }
+
+        [Fact]
+        public void Utf8TextAcrossReadBuffer_Kept()
+        {
+            // The two bytes of the last letter are on both sides of the first 4096 bytes
+            string start = "FILE \"Disc Name (Track 1).bin\" BINARY\n  TRACK 01 AUDIO\n    INDEX 01 00:00:00\n    TITLE \"";
+            string title = $"{new string('a', 4095 - start.Length)}\u00e8";
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes($"{start}{title}\"\n"));
+
+            var actual = new CueSheet().Deserialize(stream);
+
+            Assert.NotNull(actual);
+            Assert.Equal(title, actual.Files[0].Tracks[0].Title);
+        }
+
+        [Fact]
+        public void StreamAfterStart_ReadFromPosition()
+        {
+            string[] lines =
+            [
+                "TITLE \"Before\"",
+                "FILE \"Disc Name (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+            ];
+            var stream = CreateStream(lines);
+            stream.Position = "TITLE \"Before\"\n".Length;
+
+            var actual = new CueSheet().Deserialize(stream);
+
+            Assert.NotNull(actual);
+            Assert.Null(actual.Title);
+            Assert.Single(actual.Files);
+        }
+
         /// <summary>
-        /// Create a stream with the given lines, each ending with a line feed
+        /// Create a stream with the given lines, each ending with a line feed, in UTF-8 or the given encoding
         /// </summary>
-        private static MemoryStream CreateStream(string[] lines)
+        private static MemoryStream CreateStream(string[] lines, Encoding? encoding = null)
         {
             var builder = new StringBuilder();
             foreach (string line in lines)
@@ -266,7 +333,7 @@ namespace SabreTools.Serialization.Readers.Test
                 builder.Append($"{line}\n");
             }
 
-            return new MemoryStream(Encoding.UTF8.GetBytes(builder.ToString()));
+            return new MemoryStream((encoding ?? Encoding.UTF8).GetBytes(builder.ToString()));
         }
     }
 }

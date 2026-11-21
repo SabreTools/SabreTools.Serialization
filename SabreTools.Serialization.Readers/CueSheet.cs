@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Readers
             try
             {
                 // Setup the reader and output
-                var reader = new StreamReader(data, Encoding.UTF8);
+                var reader = new StreamReader(data, GetEncoding(data));
                 var cueSheet = new Data.Models.CueSheets.CueSheet();
                 var cueFiles = new List<CueFile>();
 
@@ -511,6 +511,40 @@ namespace SabreTools.Serialization.Readers
         }
 
         #region Helpers
+
+        /// <summary>
+        /// Get the encoding of a cue sheet: UTF-8, or ISO 8859-1 if the bytes are not valid UTF-8
+        /// </summary>
+        /// <remarks>DiscImageCreator writes CD-Text as the bytes on the disc, which can be ISO 8859-1 (character code 0x00)</remarks>
+        private static Encoding GetEncoding(Stream data)
+        {
+            long position = data.Position;
+            var encoding = new UTF8Encoding(false, true);
+            var decoder = encoding.GetDecoder();
+            byte[] bytes = new byte[4096];
+            char[] chars = new char[encoding.GetMaxCharCount(bytes.Length)];
+            try
+            {
+                // The decoder keeps a sequence that is split between two reads
+                int read;
+                while ((read = data.Read(bytes, 0, bytes.Length)) > 0)
+                {
+                    decoder.GetChars(bytes, 0, read, chars, 0, false);
+                }
+
+                // An incomplete sequence at the end is not valid UTF-8 either
+                decoder.GetChars(bytes, 0, 0, chars, 0, true);
+                return Encoding.UTF8;
+            }
+            catch (DecoderFallbackException)
+            {
+                return Encoding.GetEncoding(28591);
+            }
+            finally
+            {
+                data.Seek(position, SeekOrigin.Begin);
+            }
+        }
 
         /// <summary>
         /// Split a line on whitespace, keeping quoted values together
