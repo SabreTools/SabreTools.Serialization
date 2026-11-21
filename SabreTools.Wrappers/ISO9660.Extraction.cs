@@ -15,6 +15,11 @@ namespace SabreTools.Wrappers
         #region Extraction State
 
         /// <summary>
+        /// List of extracted directories by their sector offset
+        /// </summary>
+        private readonly HashSet<int> extractedDirectories = [];
+
+        /// <summary>
         /// List of extracted files by their sector offset
         /// </summary>
         private readonly Dictionary<int, uint> extractedFiles = [];
@@ -46,6 +51,7 @@ namespace SabreTools.Wrappers
                 return true;
 
             // Clear the extraction state
+            extractedDirectories.Clear();
             extractedFiles.Clear();
             writtenFiles.Clear();
             multiExtentFiles.Clear();
@@ -101,18 +107,7 @@ namespace SabreTools.Wrappers
                 }
 
                 // Also extract the directories that are only recorded in a path table
-                foreach (var directory in GetPathTableDirectories(rootDirectoryRecord, encoding))
-                {
-                    string outputPath = Path.Combine(outputDirectory, directory.Value);
-                    if (includeDebug) Console.WriteLine($"Extracting to directory: {outputPath}");
-
-                    // Create directory (even if empty)
-                    // Note: A directory whose files were all extracted from an earlier directory hierarchy is skipped
-                    if (!Directory.Exists(outputPath) && !IsExtractedDirectory(directory.Key))
-                        Directory.CreateDirectory(outputPath);
-
-                    ExtractExtent(directory.Key, encoding, blockLength, outputPath, includeDebug);
-                }
+                ExtractPathTableDirectories(rootDirectoryRecord, encoding, blockLength, outputDirectory, includeDebug);
             }
 
             return allExtracted;
@@ -173,22 +168,17 @@ namespace SabreTools.Wrappers
                 }
             }
 
+            // Mark the directory as extracted
+            extractedDirectories.Add(extentLocation);
+
             return succeeded;
         }
 
         /// <summary>
-        /// Get the directories that are recorded in the path tables of a directory hierarchy but not reached from its root directory
+        /// Extract the directories that are recorded in the path tables of a directory hierarchy but not extracted yet
         /// </summary>
-        /// <param name="rootDirectoryRecord">Root directory record of the directory hierarchy</param>
-        /// <param name="encoding">Encoding of the directory identifiers</param>
-        /// <returns>Extent location and path of each directory, in path table order</returns>
-        private List<KeyValuePair<int, string>> GetPathTableDirectories(DirectoryRecord rootDirectoryRecord, Encoding encoding)
+        private void ExtractPathTableDirectories(DirectoryRecord rootDirectoryRecord, Encoding encoding, int blockLength, string outputDirectory, bool includeDebug)
         {
-            List<KeyValuePair<int, string>> directories = [];
-            Dictionary<int, bool> reached = [];
-            AddReachedDirectories(rootDirectoryRecord.ExtentLocation.LittleEndian, reached);
-            AddReachedDirectories(rootDirectoryRecord.ExtentLocation.BigEndian, reached);
-
             foreach (var group in PathTableGroups)
             {
                 foreach (var pathTable in new[] { group.PathTableL, group.OptionalPathTableL, group.PathTableM, group.OptionalPathTableM })
@@ -209,35 +199,23 @@ namespace SabreTools.Wrappers
                         string path = Path.Combine(parentPath, encoding.GetString(pathTable[i].DirectoryIdentifier));
                         paths[i] = path;
 
-                        // Each directory hierarchy is extracted once
-                        if (AddReachedDirectories(pathTable[i].ExtentLocation, reached))
-                            directories.Add(new KeyValuePair<int, string>(pathTable[i].ExtentLocation, path));
+                        // Each directory is extracted once
+                        int extentLocation = pathTable[i].ExtentLocation;
+                        if (extractedDirectories.Contains(extentLocation) || !DirectoryDescriptors.TryGetValue(extentLocation, out FileExtent? value) || value is not DirectoryExtent)
+                            continue;
+
+                        string outputPath = Path.Combine(outputDirectory, path);
+                        if (includeDebug) Console.WriteLine($"Extracting to directory: {outputPath}");
+
+                        // Create directory (even if empty)
+                        // Note: A directory whose files were all extracted from an earlier directory hierarchy is skipped
+                        if (!Directory.Exists(outputPath) && !IsExtractedDirectory(extentLocation))
+                            Directory.CreateDirectory(outputPath);
+
+                        ExtractExtent(extentLocation, encoding, blockLength, outputPath, includeDebug);
                     }
                 }
             }
-
-            return directories;
-        }
-
-        /// <summary>
-        /// Add a directory and the directories its directory records point to, if it was not reached yet
-        /// </summary>
-        /// <param name="extentLocation">Extent location of the directory</param>
-        /// <param name="reached">Extent locations of the reached directories</param>
-        /// <returns>True if a directory was reached, false otherwise</returns>
-        private bool AddReachedDirectories(int extentLocation, Dictionary<int, bool> reached)
-        {
-            if (reached.ContainsKey(extentLocation) || !DirectoryDescriptors.TryGetValue(extentLocation, out FileExtent? value) || value is not DirectoryExtent dir)
-                return false;
-
-            reached[extentLocation] = true;
-            foreach (var dr in dir.DirectoryRecords)
-            {
-                AddReachedDirectories(dr.ExtentLocation.LittleEndian, reached);
-                AddReachedDirectories(dr.ExtentLocation.BigEndian, reached);
-            }
-
-            return true;
         }
 
         /// <summary>
