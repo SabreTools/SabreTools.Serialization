@@ -63,6 +63,9 @@ namespace SabreTools.Serialization.Readers
 
                 volume.DirectoryDescriptors = dirs;
 
+                // Parse the directories that are only recorded in a path table
+                ParsePathTableDirectories(data, sectorLength, volume.VolumeDescriptorSet, ptgs, dirs);
+
                 return volume;
             }
             catch
@@ -762,6 +765,80 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
+        /// Parse the directories that are recorded in a path table but not reached from the root directory
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="vdSet">Set of volume descriptors for a volume</param>
+        /// <param name="pathTableGroups">Path table groups of the volume</param>
+        /// <param name="directories">Map of sector numbers to parsed extents, the directories are added to it</param>
+        public static void ParsePathTableDirectories(Stream data, short sectorLength, VolumeDescriptor[] vdSet, PathTableGroup[] pathTableGroups, Dictionary<int, FileExtent> directories)
+        {
+            foreach (VolumeDescriptor vd in vdSet)
+            {
+                // Only primary and supplementary volume descriptors have a root directory
+                if (vd is not BaseVolumeDescriptor bvd)
+                    continue;
+
+                // Determine logical block size
+                short blockLength = vd.GetLogicalBlockSize(sectorLength);
+
+                foreach (var group in pathTableGroups)
+                {
+                    foreach (var pathTable in new[] { group.PathTableL, group.OptionalPathTableL, group.PathTableM, group.OptionalPathTableM })
+                    {
+                        // The path tables of a directory hierarchy start with its root directory
+                        if (pathTable is null || pathTable[0].ExtentLocation != bvd.RootDirectoryRecord.ExtentLocation.LittleEndian)
+                            continue;
+
+                        foreach (var record in pathTable)
+                        {
+                            ParsePathTableDirectory(data, sectorLength, blockLength, record.ExtentLocation, directories);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parse a directory recorded in a path table and the directories below it, if it was not parsed yet
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="extentLocation">Logical block number of the directory</param>
+        /// <param name="directories">Map of sector numbers to parsed extents</param>
+        private static void ParsePathTableDirectory(Stream data, short sectorLength, short blockLength, int extentLocation, Dictionary<int, FileExtent> directories)
+        {
+            // Directories reached from the root directory are parsed already
+            if (directories.ContainsKey(extentLocation))
+                return;
+
+            // The first block of the directory has to be within the volume
+            long extentOffset = extentLocation * (long)blockLength;
+            if (extentLocation < 0 || extentOffset + blockLength > data.Length)
+                return;
+
+            // A directory starts with a directory record that points to itself
+            data.SeekIfPossible(extentOffset, SeekOrigin.Begin);
+            var dr = ParseDirectoryRecord(data, false);
+            if (dr.ExtentLocation.LittleEndian != extentLocation)
+                return;
+
+            // Parse the directory like a root directory
+            var vd = new PrimaryVolumeDescriptor { LogicalBlockSize = blockLength, RootDirectoryRecord = dr };
+            var parsed = ParseDirectoryDescriptors(data, sectorLength, [vd]);
+            if (parsed is null)
+                return;
+
+            foreach (var kvp in parsed)
+            {
+                if (!directories.ContainsKey(kvp.Key))
+                    directories.Add(kvp.Key, kvp.Value);
+            }
+        }
+
+        /// <summary>
         /// Get the extent a directory record points to, using one endianness
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -786,6 +863,18 @@ namespace SabreTools.Serialization.Readers
                 // If provided extent length is invalid, use the other value
                 if (extentLength <= 0 || extentFinal > data.Length)
                     extentLength = bigEndian ? dr.ExtentLength.LittleEndian : dr.ExtentLength.BigEndian;
+            }
+
+            // A directory fills whole logical blocks, so a length of 0 or one that does not is wrong:
+            // take the length from its own "." record if that one is longer and ends within the stream
+            bool isDirectory = (dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY;
+            if (isDirectory && (extentLength == 0 || extentLength % blockLength != 0) && extentOffset + blockLength <= data.Length)
+            {
+                data.SeekIfPossible(extentOffset, SeekOrigin.Begin);
+                var currentDirectory = ParseDirectoryRecord(data, false);
+                uint currentLength = bigEndian ? currentDirectory.ExtentLength.BigEndian : currentDirectory.ExtentLength.LittleEndian;
+                if (currentDirectory.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) && currentLength > extentLength && extentOffset + currentLength <= data.Length)
+                    extentLength = currentLength;
             }
 
             // Validate extent length
@@ -825,11 +914,6 @@ namespace SabreTools.Serialization.Readers
                     if (pos >= extentLength)
                         break;
 
-                    // Start of sector should not be 0, ignore entire directory
-                    int nextRecordLength = data.PeekByteValue();
-                    if (nextRecordLength <= 0)
-                        return null;
-
                     continue;
                 }
 
@@ -842,10 +926,18 @@ namespace SabreTools.Serialization.Readers
                 // Get the next directory record
                 var directoryRecord = ParseDirectoryRecord(data, false);
 
-                // Compare recordLength with number of bytes in directoryRecord and ignore the directory if mismatch
+                // Compare recordLength with number of bytes in directoryRecord and ignore the rest of the directory if mismatch
                 var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField is null ? 0 : 1) + directoryRecord.SystemUse.Length;
                 if (readLength != recordLength)
-                    return null;
+                {
+                    // Records directly before it with mismatched extent locations are damaged as well
+                    while (records.Count > 0 && !records[records.Count - 1].ExtentLocation.IsValid)
+                    {
+                        records.RemoveAt(records.Count - 1);
+                    }
+
+                    return records.Count > 0 ? records : null;
+                }
 
                 records.Add(directoryRecord);
             }
@@ -990,22 +1082,7 @@ namespace SabreTools.Serialization.Readers
             var directories = new Dictionary<int, FileExtent>();
             int blocksPerSector = sectorLength / blockLength;
 
-            // Use provided extent endinanness
-            int extentLocation = bigEndian ? dr.ExtentLocation.BigEndian : dr.ExtentLocation.LittleEndian;
-            uint extentLength = bigEndian ? dr.ExtentLength.BigEndian : dr.ExtentLength.LittleEndian;
-            long extentOffset = extentLocation * (long)blockLength;
-            long extentFinal = extentOffset + extentLength;
-
-            // Deal with extent length ambiguity
-            if (!dr.ExtentLength.IsValid)
-            {
-                // If provided extent length is invalid, use the other value
-                if (extentLength <= 0 || extentFinal > data.Length)
-                    extentLength = bigEndian ? dr.ExtentLength.LittleEndian : dr.ExtentLength.BigEndian;
-            }
-
-            // Validate extent length
-            if (extentLength <= 0 || extentFinal > data.Length)
+            if (!TryGetExtent(data, blockLength, dr, bigEndian, out int extentLocation, out long extentOffset, out uint extentLength))
                 return null;
 
             // Move stream to directory location
@@ -1120,15 +1197,13 @@ namespace SabreTools.Serialization.Readers
                 obj.FileIdentifier = data.ReadBytes(obj.FileIdentifierLength);
 
             // If file identifier length is even, there is a padding field byte
-            if (obj.FileIdentifierLength % 2 == 0)
+            // A record that ends after the file identifier has no padding field
+            if (obj.FileIdentifierLength % 2 == 0 && obj.DirectoryRecordLength > 33 + obj.FileIdentifierLength)
                 obj.PaddingField = data.ReadByteValue();
 
             // Root directory within the volume descriptor has no system use bytes, fixed at 34bytes
             if (root)
                 return obj;
-
-            // Calculate actual size of record
-            int totalBytes = 33 + obj.FileIdentifierLength;
 
             // Calculate the size of the system use section (remaining allocated bytes)
             int systemUseLength = obj.DirectoryRecordLength - 33 - obj.FileIdentifierLength;
@@ -1136,24 +1211,14 @@ namespace SabreTools.Serialization.Readers
             // Account for padding field after file identifier
             if (obj.FileIdentifierLength % 2 == 0)
             {
-                totalBytes += 1;
                 systemUseLength -= 1;
             }
 
             // If System Use is empty, or if DirectoryRecordLength is bad, return early
             if (systemUseLength < 1)
             {
-                // Total record size must be even, read a padding byte
-                if (totalBytes % 2 != 0)
-                    obj.SystemUse = data.ReadBytes(1);
-
                 return obj;
             }
-
-            // Total used bytes must be even, read a padding byte
-            totalBytes += systemUseLength;
-            if (totalBytes % 2 != 0)
-                systemUseLength += 1;
 
             // Read system use field
             obj.SystemUse = data.ReadBytes(systemUseLength);

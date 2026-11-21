@@ -219,15 +219,11 @@ namespace SabreTools.Wrappers
 
                             newDirectoryName = newDirectoryName.Replace("%", string.Empty);
 
-                            // Remove wildcards from end of the path
-                            if (newDirectoryName.EndsWith("*.*"))
-#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
-                                newDirectoryName = newDirectoryName[..^4];
-#else
-                                newDirectoryName = newDirectoryName.Substring(0, newDirectoryName.Length - 4);
-#endif
-
-                            Directory.CreateDirectory(newDirectoryName);
+                            // The path ends in a separator, a wildcard ("*.*", "*") or a file name ("Name.lnk"),
+                            // so the directory to create is everything before the last separator
+                            string? parentDirectory = Path.GetDirectoryName(newDirectoryName);
+                            if (parentDirectory is not null)
+                                Directory.CreateDirectory(parentDirectory);
                         }
                         catch
                         {
