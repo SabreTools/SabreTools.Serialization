@@ -15,6 +15,11 @@ namespace SabreTools.Wrappers
         #region Extraction State
 
         /// <summary>
+        /// List of extracted directories by their sector offset
+        /// </summary>
+        private readonly HashSet<int> extractedDirectories = [];
+
+        /// <summary>
         /// List of extracted files by their sector offset
         /// </summary>
         private readonly Dictionary<int, uint> extractedFiles = [];
@@ -35,6 +40,7 @@ namespace SabreTools.Wrappers
                 return true;
 
             // Clear the extraction state
+            extractedDirectories.Clear();
             extractedFiles.Clear();
             multiExtentFiles.Clear();
 
@@ -75,6 +81,9 @@ namespace SabreTools.Wrappers
                     if (includeDebug) Console.WriteLine($"Extracting from volume descriptor (big endian root dir location)");
                     allExtracted &= ExtractExtent(rootDirectoryRecord.ExtentLocation.BigEndian, encoding, blockLength, outputDirectory, includeDebug);
                 }
+
+                // Also extract the directories that are only recorded in a path table
+                ExtractPathTableDirectories(rootDirectoryRecord, encoding, blockLength, outputDirectory, includeDebug);
             }
 
             return allExtracted;
@@ -133,7 +142,53 @@ namespace SabreTools.Wrappers
                 }
             }
 
+            // Mark the directory as extracted
+            extractedDirectories.Add(extentLocation);
+
             return succeeded;
+        }
+
+        /// <summary>
+        /// Extract the directories that are recorded in the path tables of a directory hierarchy but not extracted yet
+        /// </summary>
+        private void ExtractPathTableDirectories(DirectoryRecord rootDirectoryRecord, Encoding encoding, int blockLength, string outputDirectory, bool includeDebug)
+        {
+            foreach (var group in PathTableGroups)
+            {
+                foreach (var pathTable in new[] { group.PathTableL, group.OptionalPathTableL, group.PathTableM, group.OptionalPathTableM })
+                {
+                    // The path tables of a directory hierarchy start with its root directory
+                    if (pathTable is null || pathTable[0].ExtentLocation != rootDirectoryRecord.ExtentLocation.LittleEndian)
+                        continue;
+
+                    // Each directory follows its parent directory, which is numbered from 1 in path table order
+                    var paths = new string?[pathTable.Length];
+                    paths[0] = string.Empty;
+                    for (int i = 1; i < pathTable.Length; i++)
+                    {
+                        int parent = pathTable[i].ParentDirectoryNumber - 1;
+                        if (parent < 0 || parent >= i || paths[parent] is not string parentPath)
+                            continue;
+
+                        string path = Path.Combine(parentPath, encoding.GetString(pathTable[i].DirectoryIdentifier));
+                        paths[i] = path;
+
+                        // Each directory is extracted once
+                        int extentLocation = pathTable[i].ExtentLocation;
+                        if (extractedDirectories.Contains(extentLocation) || !DirectoryDescriptors.TryGetValue(extentLocation, out FileExtent? value) || value is not DirectoryExtent)
+                            continue;
+
+                        string outputPath = Path.Combine(outputDirectory, path);
+                        if (includeDebug) Console.WriteLine($"Extracting to directory: {outputPath}");
+
+                        // Create directory (even if empty)
+                        if (!Directory.Exists(outputPath))
+                            Directory.CreateDirectory(outputPath);
+
+                        ExtractExtent(extentLocation, encoding, blockLength, outputPath, includeDebug);
+                    }
+                }
+            }
         }
 
         /// <summary>

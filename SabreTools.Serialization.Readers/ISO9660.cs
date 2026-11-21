@@ -63,6 +63,9 @@ namespace SabreTools.Serialization.Readers
 
                 volume.DirectoryDescriptors = dirs;
 
+                // Parse the directories that are only recorded in a path table
+                ParsePathTableDirectories(data, sectorLength, volume.VolumeDescriptorSet, ptgs, dirs);
+
                 return volume;
             }
             catch
@@ -758,6 +761,80 @@ namespace SabreTools.Serialization.Readers
                 // Put the file extent is the dictionary
                 if (!directories.ContainsKey(extent.Location))
                     directories.Add(extent.Location, fileExtent);
+            }
+        }
+
+        /// <summary>
+        /// Parse the directories that are recorded in a path table but not reached from the root directory
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="vdSet">Set of volume descriptors for a volume</param>
+        /// <param name="pathTableGroups">Path table groups of the volume</param>
+        /// <param name="directories">Map of sector numbers to parsed extents, the directories are added to it</param>
+        public static void ParsePathTableDirectories(Stream data, short sectorLength, VolumeDescriptor[] vdSet, PathTableGroup[] pathTableGroups, Dictionary<int, FileExtent> directories)
+        {
+            foreach (VolumeDescriptor vd in vdSet)
+            {
+                // Only primary and supplementary volume descriptors have a root directory
+                if (vd is not BaseVolumeDescriptor bvd)
+                    continue;
+
+                // Determine logical block size
+                short blockLength = vd.GetLogicalBlockSize(sectorLength);
+
+                foreach (var group in pathTableGroups)
+                {
+                    foreach (var pathTable in new[] { group.PathTableL, group.OptionalPathTableL, group.PathTableM, group.OptionalPathTableM })
+                    {
+                        // The path tables of a directory hierarchy start with its root directory
+                        if (pathTable is null || pathTable[0].ExtentLocation != bvd.RootDirectoryRecord.ExtentLocation.LittleEndian)
+                            continue;
+
+                        foreach (var record in pathTable)
+                        {
+                            ParsePathTableDirectory(data, sectorLength, blockLength, record.ExtentLocation, directories);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parse a directory recorded in a path table and the directories below it, if it was not parsed yet
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="extentLocation">Logical block number of the directory</param>
+        /// <param name="directories">Map of sector numbers to parsed extents</param>
+        private static void ParsePathTableDirectory(Stream data, short sectorLength, short blockLength, int extentLocation, Dictionary<int, FileExtent> directories)
+        {
+            // Directories reached from the root directory are parsed already
+            if (directories.ContainsKey(extentLocation))
+                return;
+
+            // The first block of the directory has to be within the volume
+            long extentOffset = extentLocation * (long)blockLength;
+            if (extentLocation < 0 || extentOffset + blockLength > data.Length)
+                return;
+
+            // A directory starts with a directory record that points to itself
+            data.SeekIfPossible(extentOffset, SeekOrigin.Begin);
+            var dr = ParseDirectoryRecord(data, false);
+            if (dr.ExtentLocation.LittleEndian != extentLocation)
+                return;
+
+            // Parse the directory like a root directory
+            var vd = new PrimaryVolumeDescriptor { LogicalBlockSize = blockLength, RootDirectoryRecord = dr };
+            var parsed = ParseDirectoryDescriptors(data, sectorLength, [vd]);
+            if (parsed is null)
+                return;
+
+            foreach (var kvp in parsed)
+            {
+                if (!directories.ContainsKey(kvp.Key))
+                    directories.Add(kvp.Key, kvp.Value);
             }
         }
 
