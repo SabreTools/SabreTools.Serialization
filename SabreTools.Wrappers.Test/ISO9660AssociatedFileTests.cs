@@ -242,16 +242,16 @@ namespace SabreTools.Wrappers.Test
         {
             // The record after the associated file belongs to another file, which only the primary volume records
             byte[] image = BuildImage(30,
-                ("ICON", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("iconMACS", 0x4000)),
+                ("MY_ICON", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("iconMACS", 0x4000)),
                 ("ZZZ", 23, 10, NoFlags, []));
             AddJolietHierarchy(image, 21, 29,
-                ("Icon", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("iconMACS", 0x4000)));
+                ("My Icon", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("iconMACS", 0x4000)));
             string outputDirectory = Extract(image, expected: true);
 
             Assert.Equal(ExpectedAppleDouble(FinderInfo("iconMACS", 0x4000), ExpectedData(25, 100)),
-                File.ReadAllBytes(Path.Combine(outputDirectory, "._Icon")));
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._My Icon")));
             Assert.Equal(ExpectedData(23, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "ZZZ")));
-            Assert.False(File.Exists(Path.Combine(outputDirectory, "._ICON")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "._MY_ICON")));
             Directory.Delete(outputDirectory, recursive: true);
         }
 
