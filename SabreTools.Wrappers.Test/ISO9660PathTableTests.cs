@@ -145,6 +145,24 @@ namespace SabreTools.Wrappers.Test
         }
 
         [Fact]
+        public void Extract_PathTableEntryOfFileExtent_Ignored()
+        {
+            // Block 40 holds the extended attribute record of a file
+            var directories = new Dictionary<int, FileExtent>
+            {
+                [RootDirectory] = Listing(RootDirectory, RootDirectory),
+                [40] = new FileExtent(),
+            };
+
+            PathTableRecord[] pathTable = [PathTableEntry(RootDirectory, 1, "\0"), PathTableEntry(40, 1, "FILE")];
+
+            string outputDirectory = Extract(CreateVolume(RootDirectory, directories, pathTable));
+
+            Assert.Empty(Entries(outputDirectory));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
         public void Extract_SupplementaryVolumeDescriptor_UsesItsOwnPathTable()
         {
             // The supplementary volume descriptor has its root directory at block 21 and Secret at block 31
@@ -174,12 +192,50 @@ namespace SabreTools.Wrappers.Test
             Directory.Delete(outputDirectory, recursive: true);
         }
 
+        [Fact]
+        public void Extract_Twice_ExtractsDirectoryOnlyInPathTableAgain()
+        {
+            var directories = new Dictionary<int, FileExtent>
+            {
+                [RootDirectory] = Listing(RootDirectory, RootDirectory),
+                [30] = Listing(30, RootDirectory, FileEntry("FILE.TXT", 26)),
+            };
+
+            PathTableRecord[] pathTable = [PathTableEntry(RootDirectory, 1, "\0"), PathTableEntry(30, 1, "HIDDEN")];
+            var iso = CreateWrapper(CreateVolume(RootDirectory, directories, pathTable));
+
+            string firstOutputDirectory = Extract(iso);
+            string secondOutputDirectory = Extract(iso);
+
+            Assert.Equal(new[] { "HIDDEN", "HIDDEN/FILE.TXT" }, Entries(firstOutputDirectory));
+            Assert.Equal(new[] { "HIDDEN", "HIDDEN/FILE.TXT" }, Entries(secondOutputDirectory));
+            Directory.Delete(firstOutputDirectory, recursive: true);
+            Directory.Delete(secondOutputDirectory, recursive: true);
+        }
+
         #region Helpers
 
         /// <summary>
         /// Extract a volume whose blocks are filled with the low byte of their block number into a new directory
         /// </summary>
         private static string Extract(Volume volume)
+            => Extract(CreateWrapper(volume));
+
+        /// <summary>
+        /// Extract a wrapper into a new directory
+        /// </summary>
+        private static string Extract(ISO9660 iso)
+        {
+            string outputDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(outputDirectory);
+            iso.Extract(outputDirectory, includeDebug: false);
+            return outputDirectory;
+        }
+
+        /// <summary>
+        /// Create a wrapper of a volume whose blocks are filled with the low byte of their block number
+        /// </summary>
+        private static ISO9660 CreateWrapper(Volume volume)
         {
             byte[] data = new byte[64 * BlockLength];
             for (int block = 0; block < 64; block++)
@@ -187,10 +243,7 @@ namespace SabreTools.Wrappers.Test
                 data.AsSpan(block * BlockLength, BlockLength).Fill((byte)block);
             }
 
-            string outputDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(outputDirectory);
-            new ISO9660(volume, data).Extract(outputDirectory, includeDebug: false);
-            return outputDirectory;
+            return new ISO9660(volume, data);
         }
 
         /// <summary>
