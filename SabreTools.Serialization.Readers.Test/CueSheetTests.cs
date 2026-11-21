@@ -322,6 +322,141 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Single(actual.Files);
         }
 
+        [Fact]
+        public void Remarks_None_Zero()
+        {
+            string[] lines =
+            [
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "  TRACK 02 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+
+            var tracks = GetTracks(lines);
+
+            Assert.Equal([0, 0], tracks.Select(t => t.Session));
+            Assert.Equal([CueDensityArea.None, CueDensityArea.None], tracks.Select(t => t.DensityArea));
+        }
+
+        [Fact]
+        public void Remarks_RemSessionBeforeFile_Parsed()
+        {
+            // Layout written by redump: the second REM SESSION follows the indices of the previous track
+            string[] lines =
+            [
+                "REM SESSION 01",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "  TRACK 02 AUDIO",
+                "    INDEX 00 00:00:00",
+                "    INDEX 01 00:02:00",
+                "REM SESSION 02",
+                "FILE \"a (Track 3).bin\" BINARY",
+                "  TRACK 03 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+
+            Assert.Equal([1, 1, 2], GetTracks(lines).Select(t => t.Session));
+        }
+
+        [Fact]
+        public void Remarks_RemSessionBeforeTrack_Parsed()
+        {
+            string[] lines =
+            [
+                "REM SESSION 01",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "REM SESSION 02",
+                "  TRACK 02 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+
+            Assert.Equal([1, 2], GetTracks(lines).Select(t => t.Session));
+        }
+
+        [Fact]
+        public void Remarks_DensityAreas_Parsed()
+        {
+            // Layout written by redump for a GD-ROM
+            string[] lines =
+            [
+                "REM SINGLE-DENSITY AREA",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 MODE1/2352",
+                "    INDEX 01 00:00:00",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "  TRACK 02 AUDIO",
+                "    INDEX 00 00:00:00",
+                "    INDEX 01 00:02:00",
+                "REM HIGH-DENSITY AREA",
+                "FILE \"a (Track 3).bin\" BINARY",
+                "  TRACK 03 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+
+            var tracks = GetTracks(lines);
+
+            Assert.Equal(
+                [CueDensityArea.SingleDensity, CueDensityArea.SingleDensity, CueDensityArea.HighDensity],
+                tracks.Select(t => t.DensityArea));
+            Assert.Equal([0, 0, 0], tracks.Select(t => t.Session));
+        }
+
+        [Fact]
+        public void Remarks_OtherRem_Ignored()
+        {
+            string[] lines =
+            [
+                "REM",
+                "REM SESSION",
+                "REM DATE 1999",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+            ];
+
+            var track = Assert.Single(GetTracks(lines));
+
+            Assert.Equal(0, track.Session);
+            Assert.Equal(CueDensityArea.None, track.DensityArea);
+        }
+
+        [Fact]
+        public void Remarks_SessionNotNumber_Ignored()
+        {
+            string[] lines =
+            [
+                "REM SESSION 01",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM SESSION X",
+                "  TRACK 02 AUDIO",
+                "    INDEX 01 00:02:00",
+            ];
+
+            Assert.Equal([1, 1], GetTracks(lines).Select(t => t.Session));
+        }
+
+        /// <summary>
+        /// Read a cue sheet with the given lines and return the tracks of all files
+        /// </summary>
+        private static CueTrack[] GetTracks(string[] lines)
+        {
+            var stream = CreateStream(lines);
+            var actual = new CueSheet().Deserialize(stream);
+            Assert.NotNull(actual);
+            return [.. actual.Files.SelectMany(f => f.Tracks)];
+        }
+
         /// <summary>
         /// Create a stream with the given lines, each ending with a line feed, in UTF-8 or the given encoding
         /// </summary>

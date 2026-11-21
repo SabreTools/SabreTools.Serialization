@@ -19,6 +19,17 @@ namespace SabreTools.Data.Models.CueSheets
         public CueTrackDataType DataType { get; set; }
 
         /// <summary>
+        /// Session from the last REM SESSION line before the track
+        /// </summary>
+        /// <remarks>0 if no REM SESSION line comes before the track</remarks>
+        public int Session { get; set; }
+
+        /// <summary>
+        /// GD-ROM density area from the last REM SINGLE-DENSITY AREA or REM HIGH-DENSITY AREA line before the track
+        /// </summary>
+        public CueDensityArea DensityArea { get; set; }
+
+        /// <summary>
         /// FLAGS
         /// </summary>
         public CueTrackFlag Flags { get; set; }
