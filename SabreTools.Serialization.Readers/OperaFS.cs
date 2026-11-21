@@ -160,12 +160,18 @@ namespace SabreTools.Serialization.Readers
                         var avatarBlocks = ParseDirectoryBlocks(data, dr.AvatarList[i], dr.BlockCount, initialOffset);
                         foreach (var kvp in avatarBlocks)
                         {
-                            // Add reference to original directory if avatar is identical
-                            // TODO: Check equality of all previously added unique avatars too
-                            if (blocks.TryGetValue(dr.AvatarList[0] + (kvp.Key - dr.AvatarList[i]), out var block) && kvp.Value.EqualsExactly(block))
-                                childDirectories.Add(kvp.Key, block);
-                            else
-                                childDirectories.Add(kvp.Key, kvp.Value);
+                            // Add reference to the block of an earlier avatar if it is identical
+                            var block = kvp.Value;
+                            for (int j = 0; j < i; j++)
+                            {
+                                if (childDirectories.TryGetValue(dr.AvatarList[j] + (kvp.Key - dr.AvatarList[i]), out var other) && kvp.Value.EqualsExactly(other))
+                                {
+                                    block = other;
+                                    break;
+                                }
+                            }
+
+                            childDirectories.Add(kvp.Key, block);
                         }
                     }
                 }

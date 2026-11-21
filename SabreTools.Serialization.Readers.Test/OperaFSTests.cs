@@ -99,6 +99,17 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void AvatarIdenticalToEarlierCopy_SharesBlock()
+        {
+            // Both copies of "Other" record its file in lower case
+            var volume = new OperaFS().Deserialize(new MemoryStream(OperaFSImageBuilder.Build(otherCopyFilename: "other.bin", otherSecondCopy: true)));
+
+            Assert.NotNull(volume);
+            Assert.NotSame(volume.Directories[11], volume.Directories[14]);
+            Assert.Same(volume.Directories[14], volume.Directories[17]);
+        }
+
+        [Fact]
         public void NextBlockLoop_Stops()
         {
             var volume = new OperaFS().Deserialize(new MemoryStream(OperaFSImageBuilder.Build(subNextBlock: 0)));

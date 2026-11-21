@@ -15,15 +15,16 @@ namespace SabreTools.Serialization.Readers.Test
     ///  3-4 copy of "Sub"
     ///  5-9 data of "README.TXT", "DATA.BIN", "LAST.BIN", "DEEP.BIN" and "OTHER.BIN"
     /// 10 "Deep" directory: "DEEP.BIN"
-    /// 11 "Other" directory with avatars at sectors 11 and 14: "OTHER.BIN"
+    /// 11 "Other" directory with avatars at sectors 11 and 14 (and 17): "OTHER.BIN"
     /// 12-13 "Sub" directory with avatars at sectors 12 and 3: "DATA.BIN" (block 0), "Deep" and "LAST.BIN" (block 1)
     /// 14 copy of "Other"
     /// 15-16 root directory: "README.TXT" (block 0), "Sub" and "Other" (block 1)
+    /// 17 second copy of "Other", if any
     /// </remarks>
     internal static class OperaFSImageBuilder
     {
         public const int SectorSize = 2048;
-        public const int Sectors = 17;
+        public const int Sectors = 18;
 
         /// <summary>
         /// Flags of a file record as recorded on discs
@@ -44,7 +45,9 @@ namespace SabreTools.Serialization.Readers.Test
         /// <param name="deepSector">Sector of "Deep" in its entry</param>
         /// <param name="otherCopySector">Sector of the copy of "Other" in its entry</param>
         /// <param name="emptyDeep">True to write "Deep" without entries, with filler after its header</param>
-        public static byte[] Build(uint subBlockCount = 2, int subNextBlock = 1, int? subCopyNextBlock = null, uint deepSector = 10, uint otherCopySector = 14, bool emptyDeep = false)
+        /// <param name="otherCopyFilename">Name of the file of "Other" in its copies</param>
+        /// <param name="otherSecondCopy">True to add a second copy of "Other" at sector 17</param>
+        public static byte[] Build(uint subBlockCount = 2, int subNextBlock = 1, int? subCopyNextBlock = null, uint deepSector = 10, uint otherCopySector = 14, bool emptyDeep = false, string otherCopyFilename = "OTHER.BIN", bool otherSecondCopy = false)
         {
             var image = new byte[Sectors * SectorSize];
 
@@ -76,13 +79,16 @@ namespace SabreTools.Serialization.Readers.Test
                 WriteBlock(image, 10, -1, -1, Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, "DEEP.BIN", 4, 1, 8));
 
             WriteBlock(image, 11, -1, -1, Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, "OTHER.BIN", 5, 1, 9));
-            WriteBlock(image, 14, -1, -1, Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, "OTHER.BIN", 5, 1, 9));
+            WriteBlock(image, 14, -1, -1, Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, otherCopyFilename, 5, 1, 9));
+            if (otherSecondCopy)
+                WriteBlock(image, 17, -1, -1, Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, otherCopyFilename, 5, 1, 9));
 
             WriteSub(image, 12, subNextBlock, deepSector);
             WriteSub(image, 3, subCopyNextBlock ?? subNextBlock, deepSector);
 
-            WriteRoot(image, 15, subBlockCount, otherCopySector);
-            WriteRoot(image, 1, subBlockCount, otherCopySector);
+            var otherAvatars = otherSecondCopy ? new uint[] { 11, otherCopySector, 17 } : new uint[] { 11, otherCopySector };
+            WriteRoot(image, 15, subBlockCount, otherAvatars);
+            WriteRoot(image, 1, subBlockCount, otherAvatars);
 
             return image;
         }
@@ -95,12 +101,12 @@ namespace SabreTools.Serialization.Readers.Test
                 Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, "LAST.BIN", 4, 1, 7));
         }
 
-        private static void WriteRoot(byte[] image, int sector, uint subBlockCount, uint otherCopySector)
+        private static void WriteRoot(byte[] image, int sector, uint subBlockCount, uint[] otherAvatars)
         {
             WriteBlock(image, sector, 1, -1, Entry(FileFlags | DirectoryRecordFlags.BLOCK_FINAL, "README.TXT", 11, 1, 5));
             WriteBlock(image, sector + 1, -1, 0,
                 Entry(DirectoryFlags, "Sub", subBlockCount * SectorSize, subBlockCount, 12, 3),
-                Entry(DirectoryFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, "Other", SectorSize, 1, 11, otherCopySector));
+                Entry(DirectoryFlags | DirectoryRecordFlags.BLOCK_FINAL | DirectoryRecordFlags.DIRECTORY_FINAL, "Other", SectorSize, 1, otherAvatars));
         }
 
         /// <summary>
