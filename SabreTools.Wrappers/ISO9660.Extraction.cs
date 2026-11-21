@@ -229,7 +229,7 @@ namespace SabreTools.Wrappers
                         continue;
 
                     // Append directory name
-                    string outputPath = Path.Combine(outputDirectory, encoding.GetString(dr.FileIdentifier));
+                    string outputPath = Path.Combine(outputDirectory, GetSafeName(encoding.GetString(dr.FileIdentifier)));
                     if (includeDebug) Console.WriteLine($"Extracting to directory: {outputPath}");
 
                     // Create directory (even if empty)
@@ -296,7 +296,7 @@ namespace SabreTools.Wrappers
                         if (parent < 0 || parent >= i || paths[parent] is not string parentPath)
                             continue;
 
-                        string path = Path.Combine(parentPath, encoding.GetString(pathTable[i].DirectoryIdentifier));
+                        string path = Path.Combine(parentPath, GetSafeName(encoding.GetString(pathTable[i].DirectoryIdentifier)));
                         paths[i] = path;
 
                         // Each directory is extracted once
@@ -534,7 +534,7 @@ namespace SabreTools.Wrappers
         }
 
         /// <summary>
-        /// Get the name of the file of a directory record, without its version number
+        /// Get the name of the file of a directory record, without its version number, as a name for the output file
         /// </summary>
         private static string GetFileName(DirectoryRecord dr, Encoding encoding)
         {
@@ -548,7 +548,36 @@ namespace SabreTools.Wrappers
                 filename = filename.Substring(0, index);
 #endif
 
-            return filename;
+            return GetSafeName(filename);
+        }
+
+        /// <summary>
+        /// Get a name that can be used as one component of an output path
+        /// </summary>
+        /// <remarks>
+        /// Characters that are invalid in a file name on the current platform, the path separators among them, are
+        /// replaced with "_", and so are the dots of the names "." and "..", so that every name is written inside its
+        /// directory. On Windows, periods and spaces at the end of a name are removed, as Windows does when it creates
+        /// the file or directory, so that a directory is found again under that name, and a name of only periods and
+        /// spaces is replaced with "_" characters.
+        /// </remarks>
+        private static string GetSafeName(string name)
+        {
+            if (name == "." || name == "..")
+                return new string('_', name.Length);
+
+            foreach (char invalid in Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(invalid, '_');
+            }
+
+            if (Path.DirectorySeparatorChar == '\\')
+            {
+                string trimmed = name.TrimEnd('.', ' ');
+                name = trimmed.Length > 0 ? trimmed : new string('_', name.Length);
+            }
+
+            return name;
         }
 
         /// <summary>
