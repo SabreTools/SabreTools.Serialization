@@ -1,34 +1,22 @@
 using System;
 using System.Buffers.Binary;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using SabreTools.Data.Models.ISO9660;
 using Xunit;
+using static SabreTools.Wrappers.Test.ISO9660ImageBuilder;
 
 namespace SabreTools.Wrappers.Test
 {
     public class CDROMExtractionTests
     {
-        private const int BlockLength = 2048;
-
         private const int SectorLength = 2352;
-
-        /// <summary>
-        /// Sector of the root directory in the test image
-        /// </summary>
-        private const int RootDirectory = 20;
 
         /// <summary>
         /// Sectors of the data track in the test image, followed by the audio sectors
         /// </summary>
         private const int DataSectors = 30;
-
-        /// <summary>
-        /// File flags of a plain file record
-        /// </summary>
-        private const FileFlags NoFlags = 0;
 
         [Fact]
         public void Extract_CDDAFile_WritesWaveFileOfRawSectors()
@@ -206,61 +194,10 @@ namespace SabreTools.Wrappers.Test
         /// </remarks>
         private static byte[] BuildImage(int audioSectors, params (string Name, int Location, int Length, FileFlags Flags, byte[] SystemUse)[] files)
         {
-            const int pathTableL = 18, pathTableM = 19;
-            byte[] userData = new byte[DataSectors * BlockLength];
-            for (int block = RootDirectory + 1; block < DataSectors; block++)
-            {
-                userData.AsSpan(block * BlockLength, BlockLength).Fill((byte)block);
-            }
+            byte[] userData = ISO9660ImageBuilder.BuildImage(DataSectors, files);
 
-            // Primary volume descriptor
-            var pvd = userData.AsSpan(16 * BlockLength, BlockLength);
-            pvd[0] = 1;
-            Encoding.ASCII.GetBytes("CD001").CopyTo(pvd[1..]);
-            pvd[6] = 1;
-            WriteBothEndian(pvd[80..], DataSectors + audioSectors);
-            WriteBothEndian16(pvd[120..], 1);
-            WriteBothEndian16(pvd[124..], 1);
-            WriteBothEndian16(pvd[128..], BlockLength);
-            WriteBothEndian(pvd[132..], 10);
-            BinaryPrimitives.WriteInt32LittleEndian(pvd[140..], pathTableL);
-            BinaryPrimitives.WriteInt32BigEndian(pvd[148..], pathTableM);
-            DirectoryRecord([0], RootDirectory, BlockLength, FileFlags.DIRECTORY, []).CopyTo(pvd[156..]);
-            pvd[881] = 1;
-
-            // Volume descriptor set terminator
-            var terminator = userData.AsSpan(17 * BlockLength, BlockLength);
-            terminator[0] = 255;
-            Encoding.ASCII.GetBytes("CD001").CopyTo(terminator[1..]);
-            terminator[6] = 1;
-
-            // Path tables with the root directory only
-            var pathTable = userData.AsSpan(pathTableL * BlockLength);
-            pathTable[0] = 1;
-            BinaryPrimitives.WriteInt32LittleEndian(pathTable[2..], RootDirectory);
-            BinaryPrimitives.WriteInt16LittleEndian(pathTable[6..], 1);
-            pathTable = userData.AsSpan(pathTableM * BlockLength);
-            pathTable[0] = 1;
-            BinaryPrimitives.WriteInt32BigEndian(pathTable[2..], RootDirectory);
-            BinaryPrimitives.WriteInt16BigEndian(pathTable[6..], 1);
-
-            // Root directory
-            List<byte[]> records =
-            [
-                DirectoryRecord([0], RootDirectory, BlockLength, FileFlags.DIRECTORY, []),
-                DirectoryRecord([1], RootDirectory, BlockLength, FileFlags.DIRECTORY, []),
-            ];
-            foreach (var (name, location, length, flags, systemUse) in files)
-            {
-                records.Add(DirectoryRecord(Encoding.ASCII.GetBytes($"{name};1"), location, length, flags, systemUse));
-            }
-
-            int position = RootDirectory * BlockLength;
-            foreach (byte[] record in records)
-            {
-                record.CopyTo(userData, position);
-                position += record.Length;
-            }
+            // The volume space also holds the audio sectors
+            WriteBothEndian(userData.AsSpan((16 * BlockLength) + 80), DataSectors + audioSectors);
 
             // Mode 1 sectors: sync pattern, header (address as minutes, seconds, frames, then the mode), user data
             byte[] image = new byte[(DataSectors + audioSectors) * SectorLength];
@@ -315,12 +252,6 @@ namespace SabreTools.Wrappers.Test
         }
 
         /// <summary>
-        /// Data of a file recorded at the given block, as BuildImage fills it
-        /// </summary>
-        private static byte[] ExpectedData(int location, int length)
-            => [.. Enumerable.Range(0, length).Select(i => (byte)(location + (i / BlockLength)))];
-
-        /// <summary>
         /// System Use field with CD-ROM XA system use information
         /// </summary>
         private static byte[] XASystemUse(ushort attributes)
@@ -331,33 +262,8 @@ namespace SabreTools.Wrappers.Test
             return systemUse;
         }
 
-        private static byte[] DirectoryRecord(byte[] identifier, int location, int length, FileFlags flags, byte[] systemUse)
-        {
-            // Pad the identifier and the System Use field to an even record length
-            byte[] record = [.. new byte[33], .. identifier, .. new byte[1 - (identifier.Length % 2)], .. systemUse, .. new byte[systemUse.Length % 2]];
-            record[0] = (byte)record.Length;
-            WriteBothEndian(record.AsSpan(2), location);
-            WriteBothEndian(record.AsSpan(10), length);
-            record[25] = (byte)flags;
-            WriteBothEndian16(record.AsSpan(28), 1);
-            record[32] = (byte)identifier.Length;
-            return record;
-        }
-
         private static byte ToBcd(int value)
             => (byte)(((value / 10) << 4) | (value % 10));
-
-        private static void WriteBothEndian(Span<byte> destination, int value)
-        {
-            BinaryPrimitives.WriteInt32LittleEndian(destination, value);
-            BinaryPrimitives.WriteInt32BigEndian(destination[4..], value);
-        }
-
-        private static void WriteBothEndian16(Span<byte> destination, short value)
-        {
-            BinaryPrimitives.WriteInt16LittleEndian(destination, value);
-            BinaryPrimitives.WriteInt16BigEndian(destination[2..], value);
-        }
 
         #endregion
     }
