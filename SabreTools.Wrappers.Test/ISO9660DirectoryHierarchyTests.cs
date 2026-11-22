@@ -1,18 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.Numerics;
 using Xunit;
+using static SabreTools.Wrappers.Test.ISO9660ModelBuilder;
 
 namespace SabreTools.Wrappers.Test
 {
     public class ISO9660DirectoryHierarchyTests
     {
-        private const int BlockLength = 2048;
-
         /// <summary>
         /// Block of the root directory of the primary volume descriptor
         /// </summary>
@@ -189,20 +186,6 @@ namespace SabreTools.Wrappers.Test
         #region Helpers
 
         /// <summary>
-        /// Data of 64 blocks that are filled with the low byte of their block number
-        /// </summary>
-        private static byte[] CreateData()
-        {
-            byte[] data = new byte[64 * BlockLength];
-            for (int block = 0; block < 64; block++)
-            {
-                data.AsSpan(block * BlockLength, BlockLength).Fill((byte)block);
-            }
-
-            return data;
-        }
-
-        /// <summary>
         /// Extract a volume into a new directory
         /// </summary>
         private static string Extract(ISO9660 iso)
@@ -212,14 +195,6 @@ namespace SabreTools.Wrappers.Test
             Assert.True(iso.Extract(outputDirectory, includeDebug: false));
             return outputDirectory;
         }
-
-        /// <summary>
-        /// Paths of all extracted files and directories, relative to the output directory and sorted
-        /// </summary>
-        private static string[] Entries(string outputDirectory)
-            => [.. Directory.GetFileSystemEntries(outputDirectory, "*", SearchOption.AllDirectories)
-                .Select(path => Path.GetRelativePath(outputDirectory, path).Replace(Path.DirectorySeparatorChar, '/'))
-                .OrderBy(path => path, StringComparer.Ordinal)];
 
         /// <summary>
         /// Create a volume with a primary and a supplementary volume descriptor and their directories
@@ -243,58 +218,6 @@ namespace SabreTools.Wrappers.Test
                 ],
                 PathTableGroups = [],
                 DirectoryDescriptors = directories,
-            };
-        }
-
-        /// <summary>
-        /// Directory extent with current and parent directory records and the given records
-        /// </summary>
-        private static DirectoryExtent Listing(int location, int parent, params DirectoryRecord[] records)
-            => new() { DirectoryRecords = [DirectoryEntry(Constants.CurrentDirectory, location), DirectoryEntry(Constants.ParentDirectory, parent), .. records] };
-
-        /// <summary>
-        /// Directory record of a subdirectory
-        /// </summary>
-        private static DirectoryRecord DirectoryEntry(string name, int location, Encoding? encoding = null)
-            => DirectoryEntry((encoding ?? Encoding.ASCII).GetBytes(name), location);
-
-        /// <summary>
-        /// Directory record of a subdirectory
-        /// </summary>
-        private static DirectoryRecord DirectoryEntry(byte[] identifier, int location)
-        {
-            return new DirectoryRecord
-            {
-                ExtentLocation = location,
-                ExtentLength = BlockLength,
-                FileFlags = FileFlags.DIRECTORY,
-                FileIdentifier = identifier,
-            };
-        }
-
-        /// <summary>
-        /// Directory record of a 10-byte file
-        /// </summary>
-        private static DirectoryRecord FileEntry(string name, int location, Encoding? encoding = null)
-        {
-            return new DirectoryRecord
-            {
-                ExtentLocation = location,
-                ExtentLength = 10,
-                FileIdentifier = (encoding ?? Encoding.ASCII).GetBytes($"{name};1"),
-            };
-        }
-
-        /// <summary>
-        /// Path table record of a directory
-        /// </summary>
-        private static PathTableRecord PathTableEntry(int location, short parent, string name)
-        {
-            return new PathTableRecord
-            {
-                ExtentLocation = location,
-                ParentDirectoryNumber = parent,
-                DirectoryIdentifier = Encoding.ASCII.GetBytes(name),
             };
         }
 
