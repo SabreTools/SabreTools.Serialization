@@ -10,6 +10,15 @@ namespace SabreTools.Serialization.Readers
 {
     public class CueSheet : BaseBinaryReader<Data.Models.CueSheets.CueSheet>
     {
+        /// <summary>
+        /// Commands of a cue sheet
+        /// </summary>
+        private static readonly string[] Commands =
+        [
+            "CATALOG", "CDTEXTFILE", "FILE", "FLAGS", "INDEX", "ISRC", "PERFORMER", "POSTGAP", "PREGAP", "REM",
+            "SONGWRITER", "TITLE", "TRACK",
+        ];
+
         /// <inheritdoc/>
         public override Data.Models.CueSheets.CueSheet? Deserialize(Stream? data)
         {
@@ -66,26 +75,17 @@ namespace SabreTools.Serialization.Readers
 
                         // Read CD-Text enhanced performer
                         case "PERFORMER":
-                            if (splitLine.Length < 2)
-                                throw new FormatException($"PERFORMER line malformed: {line}");
-
-                            cueSheet.Performer = GetTextValue(line, splitLine[0]);
+                            cueSheet.Performer = GetTextValue(line, splitLine[0], reader, out lastLine);
                             break;
 
                         // Read CD-Text enhanced songwriter
                         case "SONGWRITER":
-                            if (splitLine.Length < 2)
-                                throw new FormatException($"SONGWRITER line malformed: {line}");
-
-                            cueSheet.Songwriter = GetTextValue(line, splitLine[0]);
+                            cueSheet.Songwriter = GetTextValue(line, splitLine[0], reader, out lastLine);
                             break;
 
                         // Read CD-Text enhanced title
                         case "TITLE":
-                            if (splitLine.Length < 2)
-                                throw new FormatException($"TITLE line malformed: {line}");
-
-                            cueSheet.Title = GetTextValue(line, splitLine[0]);
+                            cueSheet.Title = GetTextValue(line, splitLine[0], reader, out lastLine);
                             break;
 
                         // Read file information
@@ -239,7 +239,7 @@ namespace SabreTools.Serialization.Readers
             cueTrack.Session = remarks.Session;
             cueTrack.DensityArea = remarks.DensityArea;
 
-            while (!reader.EndOfStream)
+            while (lastLine is not null || !reader.EndOfStream)
             {
                 string? line = lastLine ?? reader.ReadLine();
                 lastLine = null;
@@ -278,26 +278,17 @@ namespace SabreTools.Serialization.Readers
 
                     // Read CD-Text enhanced performer
                     case "PERFORMER":
-                        if (splitLine.Length < 2)
-                            throw new FormatException($"PERFORMER line malformed: {line}");
-
-                        cueTrack.Performer = GetTextValue(line, splitLine[0]);
+                        cueTrack.Performer = GetTextValue(line, splitLine[0], reader, out lastLine);
                         break;
 
                     // Read CD-Text enhanced songwriter
                     case "SONGWRITER":
-                        if (splitLine.Length < 2)
-                            throw new FormatException($"SONGWRITER line malformed: {line}");
-
-                        cueTrack.Songwriter = GetTextValue(line, splitLine[0]);
+                        cueTrack.Songwriter = GetTextValue(line, splitLine[0], reader, out lastLine);
                         break;
 
                     // Read CD-Text enhanced title
                     case "TITLE":
-                        if (splitLine.Length < 2)
-                            throw new FormatException($"TITLE line malformed: {line}");
-
-                        cueTrack.Title = GetTextValue(line, splitLine[0]);
+                        cueTrack.Title = GetTextValue(line, splitLine[0], reader, out lastLine);
                         break;
 
                     // Read pregap information
@@ -619,11 +610,42 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Get the value of a CD-Text line: the rest of the line after the keyword, without one pair of enclosing quotes
         /// </summary>
-        /// <remarks>Values can contain quotes themselves, e.g. TITLE "Symphony No. 9 "From the New World""</remarks>
-        private static string GetTextValue(string line, string keyword)
+        /// <param name="line">Line with the keyword</param>
+        /// <param name="keyword">Keyword of the line</param>
+        /// <param name="reader">StreamReader to get the following lines of a value from</param>
+        /// <param name="nextLine">Line after the value that was read to find its end, if any</param>
+        /// <remarks>
+        /// Values can contain quotes themselves, e.g. TITLE "Symphony No. 9 "From the New World"". They can also
+        /// contain newlines, so a value that starts with a quote and does not end with one on its line goes on over
+        /// the following lines up to the next command.
+        /// </remarks>
+        private static string GetTextValue(string line, string keyword, StreamReader reader, out string? nextLine)
         {
+            nextLine = null;
             string value = line.TrimStart().Substring(keyword.Length).Trim();
-            if (value[0] == '"' && value[value.Length - 1] == '"')
+            if (value.Length == 0)
+                throw new FormatException($"{keyword} line malformed: {line}");
+
+            if (value[0] == '"' && (value.Length == 1 || value[value.Length - 1] != '"'))
+            {
+                var builder = new StringBuilder(line.TrimStart().Substring(keyword.Length));
+                while (!reader.EndOfStream)
+                {
+                    string next = reader.ReadLine() ?? string.Empty;
+                    var splitLine = SplitLine(next);
+                    if (splitLine.Length > 0 && Array.IndexOf(Commands, splitLine[0]) > -1)
+                    {
+                        nextLine = next;
+                        break;
+                    }
+
+                    builder.Append('\n').Append(next);
+                }
+
+                value = builder.ToString().Trim();
+            }
+
+            if (value.Length > 1 && value[0] == '"' && value[value.Length - 1] == '"')
                 value = value.Substring(1, value.Length - 2);
 
             return value;
