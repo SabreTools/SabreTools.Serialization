@@ -18,6 +18,8 @@ namespace SabreTools.Data.Extensions
                 blockSize = pvd.LogicalBlockSize;
             else if (vd is SupplementaryVolumeDescriptor svd)
                 blockSize = svd.LogicalBlockSize;
+            else if (vd is HighSierraPrimaryVolumeDescriptor hspvd)
+                blockSize = hspvd.LogicalBlockSize;
             else
                 return sectorLength;
 

@@ -74,6 +74,8 @@ namespace SabreTools.Wrappers
                     rootDirectoryRecord = pvd.RootDirectoryRecord;
                 else if (vd is SupplementaryVolumeDescriptor svd)
                     rootDirectoryRecord = svd.RootDirectoryRecord;
+                else if (vd is HighSierraPrimaryVolumeDescriptor hspvd)
+                    rootDirectoryRecord = hspvd.RootDirectoryRecord;
                 else
                     continue;
 
@@ -311,8 +313,9 @@ namespace SabreTools.Wrappers
             var filepath = Path.Combine(outputDirectory, filename);
 
             bool multiExtent = false;
+            bool interleaved = false;
 
-            // Currently cannot extract multi-extent or interleaved files
+            // Check for multi-extent and interleaved files
 #if NET20 || NET35
             if ((dr.FileFlags & FileFlags.MULTI_EXTENT) != 0)
 #else
@@ -323,11 +326,19 @@ namespace SabreTools.Wrappers
                 multiExtentFiles.Add(dr.FileIdentifier);
                 multiExtent = true;
             }
-            else if (dr.FileUnitSize != 0 || dr.InterleaveGapSize != 0)
+
+            // Each file section records its own interleaving
+            if (dr.FileUnitSize != 0 || dr.InterleaveGapSize != 0)
             {
-                Console.WriteLine($"Extraction of interleaved files is currently not supported: {filename}");
-                extractedFiles.Add(extentLocation, dr.ExtentLength);
-                return false;
+                // An interleaved file needs a file unit size
+                if (dr.FileUnitSize == 0)
+                {
+                    Console.WriteLine($"Interleaved file has no file unit size, cannot extract: {filename}");
+                    extractedFiles.Add(extentLocation, dr.ExtentLength);
+                    return false;
+                }
+
+                interleaved = true;
             }
 
             // Check that the output file doesn't already exist
@@ -348,26 +359,48 @@ namespace SabreTools.Wrappers
             const uint chunkSize = 2048 * 1024;
             lock (_dataSourceLock)
             {
-                long fileOffset = ((long)extentLocation + dr.ExtendedAttributeRecordLength) * blockLength;
+                // An interleaved file is recorded in file units of FileUnitSize logical blocks,
+                // each followed by a gap of InterleaveGapSize logical blocks (ECMA-119 6.4.3)
+                long unitLength = interleaved ? (long)dr.FileUnitSize * blockLength : dr.ExtentLength;
+                long unitDistance = interleaved ? (long)(dr.FileUnitSize + dr.InterleaveGapSize) * blockLength : 0;
+
+                // The extended attribute record precedes the file data, in interleaved mode it fills the first file unit
+                long fileOffset = (long)extentLocation * blockLength;
+                if (interleaved && dr.ExtendedAttributeRecordLength != 0)
+                    fileOffset += unitDistance;
+                else
+                    fileOffset += (long)dr.ExtendedAttributeRecordLength * blockLength;
+
                 _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
                 // Get the length, and make sure it won't EOF
                 uint length = dr.ExtentLength;
-                if (length > _dataSource.Length - _dataSource.Position)
+                long lastUnit = length == 0 ? 0 : (length - 1) / unitLength;
+                if (fileOffset + (lastUnit * unitDistance) + (length - (lastUnit * unitLength)) > _dataSource.Length)
                     return false;
 
                 // Write the output file
                 if (includeDebug) Console.WriteLine($"Extracting: {filepath}");
                 using var fs = File.Open(filepath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+                long unitRemaining = unitLength;
                 while (length > 0)
                 {
-                    int bytesToRead = (int)Math.Min(length, chunkSize);
+                    // Move to the next file unit
+                    if (unitRemaining == 0)
+                    {
+                        fileOffset += unitDistance;
+                        unitRemaining = unitLength;
+                        _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
+                    }
+
+                    int bytesToRead = (int)Math.Min(Math.Min(length, chunkSize), unitRemaining);
 
                     byte[] buffer = _dataSource.ReadBytes(bytesToRead);
                     fs.Write(buffer, 0, bytesToRead);
                     fs.Flush();
 
                     length -= (uint)bytesToRead;
+                    unitRemaining -= bytesToRead;
                 }
 
                 // Mark the file as extracted

@@ -65,13 +65,6 @@ namespace SabreTools.Wrappers
                 }
                 else
                 {
-                    // Skip invalid file size
-                    if (dr.ExtentSize == 0)
-                    {
-                        if (includeDebug) Console.WriteLine($"Zero file size for file {dr.Filename} at sector {dr.ExtentOffset}");
-                        continue;
-                    }
-
                     // Skip invalid file location
                     if ((((long)dr.ExtentOffset) * Constants.SectorSize) + dr.ExtentSize > _dataSource.Length)
                     {
@@ -80,7 +73,8 @@ namespace SabreTools.Wrappers
                     }
 
                     // Check that the file hasn't been extracted already
-                    if (extractedFiles.ContainsKey(dr.ExtentOffset))
+                    // An empty file reads no data, so it can share its sector with any other file
+                    if (dr.ExtentSize > 0 && extractedFiles.ContainsKey(dr.ExtentOffset))
                     {
                         if (includeDebug) Console.WriteLine($"File {dr.Filename} at sector {dr.ExtentOffset} already extracted");
                         continue;
@@ -114,7 +108,8 @@ namespace SabreTools.Wrappers
                     }
 
                     // Mark the file as extracted
-                    extractedFiles.Add(dr.ExtentOffset, dr.ExtentSize);
+                    if (dr.ExtentSize > 0)
+                        extractedFiles.Add(dr.ExtentOffset, dr.ExtentSize);
 
                     // Don't set any file attributes if file is normal
                     if ((dr.FileFlags & FileFlags.NORMAL) == FileFlags.NORMAL)

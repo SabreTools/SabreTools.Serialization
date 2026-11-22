@@ -107,18 +107,19 @@ namespace SabreTools.Serialization.Readers
         {
             var directories = new Dictionary<uint, DirectoryDescriptor>();
 
-            data.SeekIfPossible(initialOffset + (volumeDescriptor.RootDirectoryAvatarList[0] * Constants.SectorSize), SeekOrigin.Begin);
-            var rootDirectory = ParseDirectory(data);
+            uint rootSector = volumeDescriptor.RootDirectoryAvatarList[0];
+            var rootBlocks = ParseDirectoryBlocks(data, rootSector, volumeDescriptor.RootDirectoryBlockCount, initialOffset);
             for (int i = 0; i <= volumeDescriptor.RootDirectoryLastAvatarIndex; i++)
             {
-                directories.Add(volumeDescriptor.RootDirectoryAvatarList[i], rootDirectory);
+                foreach (var kvp in rootBlocks)
+                {
+                    directories.Add(volumeDescriptor.RootDirectoryAvatarList[i] + (kvp.Key - rootSector), kvp.Value);
+                }
             }
 
-            var childDirectories = ParseChildDirectories(data, rootDirectory, initialOffset);
-            foreach (var kvp in childDirectories)
+            foreach (var rootDirectory in rootBlocks.Values)
             {
-                if (!directories.ContainsKey(kvp.Key))
-                    directories.Add(kvp.Key, kvp.Value);
+                ParseChildDirectories(data, rootDirectory, initialOffset, directories);
             }
 
             return directories;
@@ -128,43 +129,109 @@ namespace SabreTools.Serialization.Readers
         /// Parse a Stream into an map of OperaFS directories from a directory
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled map of directories on success, null on error</returns>
-        public static Dictionary<uint, DirectoryDescriptor> ParseChildDirectories(Stream data, DirectoryDescriptor parent, long initialOffset)
+        /// <param name="parent">Directory block to read the directory records from</param>
+        /// <param name="initialOffset">Offset of the file system in the stream</param>
+        /// <param name="directories">Map of directories to add to, directories already in it are not read again</param>
+        public static void ParseChildDirectories(Stream data, DirectoryDescriptor parent, long initialOffset, Dictionary<uint, DirectoryDescriptor> directories)
         {
-            var directories = new Dictionary<uint, DirectoryDescriptor>();
-
             foreach (var dr in parent.DirectoryRecords)
             {
                 // Skip file records
                 if ((dr.DirectoryRecordFlags & DirectoryRecordFlags.DIRECTORY) == 0)
                     continue;
 
-                data.SeekIfPossible(initialOffset + (dr.AvatarList[0] * Constants.SectorSize), SeekOrigin.Begin);
-                var directory = ParseDirectory(data);
-                directories.Add(dr.AvatarList[0], directory);
-                for (int i = 1; i <= dr.LastAvatarIndex; i++)
-                {
-                    // Read avatar
-                    data.SeekIfPossible(initialOffset + (dr.AvatarList[i] * Constants.SectorSize), SeekOrigin.Begin);
-                    var avatar = ParseDirectory(data);
+                // Skip directories that are already read, like a directory that records itself
+                if (directories.ContainsKey(dr.AvatarList[0]))
+                    continue;
 
-                    // Add reference to original directory if avatar is identical
-                    // TODO: Check equality of all previously added unique avatars too
-                    if (avatar.EqualsExactly(directory))
-                        directories.Add(dr.AvatarList[i], directory);
-                    else
-                        directories.Add(dr.AvatarList[i], avatar);
+                Dictionary<uint, DirectoryDescriptor> blocks;
+                var childDirectories = new Dictionary<uint, DirectoryDescriptor>();
+                try
+                {
+                    blocks = ParseDirectoryBlocks(data, dr.AvatarList[0], dr.BlockCount, initialOffset);
+                    foreach (var kvp in blocks)
+                    {
+                        childDirectories.Add(kvp.Key, kvp.Value);
+                    }
+
+                    for (int i = 1; i <= dr.LastAvatarIndex; i++)
+                    {
+                        // Read avatar
+                        var avatarBlocks = ParseDirectoryBlocks(data, dr.AvatarList[i], dr.BlockCount, initialOffset);
+                        foreach (var kvp in avatarBlocks)
+                        {
+                            // Add reference to the block of an earlier avatar if it is identical
+                            var block = kvp.Value;
+                            for (int j = 0; j < i; j++)
+                            {
+                                if (childDirectories.TryGetValue(dr.AvatarList[j] + (kvp.Key - dr.AvatarList[i]), out var other) && kvp.Value.EqualsExactly(other))
+                                {
+                                    block = other;
+                                    break;
+                                }
+                            }
+
+                            childDirectories.Add(kvp.Key, block);
+                        }
+                    }
+                }
+                catch
+                {
+                    // Skip directories that cannot be read
+                    continue;
                 }
 
-                var childDirectories = ParseChildDirectories(data, directory, initialOffset);
                 foreach (var kvp in childDirectories)
                 {
                     if (!directories.ContainsKey(kvp.Key))
                         directories.Add(kvp.Key, kvp.Value);
                 }
+
+                foreach (var directory in blocks.Values)
+                {
+                    ParseChildDirectories(data, directory, initialOffset, directories);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parse a Stream into a map of the blocks of an OperaFS directory, from its first block and the next blocks
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sector">Sector of the first block</param>
+        /// <param name="blockCount">Number of blocks of the directory</param>
+        /// <param name="initialOffset">Offset of the file system in the stream</param>
+        /// <returns>Filled map of directory blocks by their sector, in the order of the blocks</returns>
+        public static Dictionary<uint, DirectoryDescriptor> ParseDirectoryBlocks(Stream data, uint sector, uint blockCount, long initialOffset)
+        {
+            var blocks = new Dictionary<uint, DirectoryDescriptor>();
+
+            data.SeekIfPossible(initialOffset + (sector * Constants.SectorSize), SeekOrigin.Begin);
+            var block = ParseDirectory(data);
+            blocks.Add(sector, block);
+
+            // The next block is relative to the first block, and -1 for the last block
+            while (block.NextBlock >= 0 && block.NextBlock < blockCount)
+            {
+                uint blockSector = sector + (uint)block.NextBlock;
+                if (blocks.ContainsKey(blockSector))
+                    break;
+
+                try
+                {
+                    data.SeekIfPossible(initialOffset + (blockSector * Constants.SectorSize), SeekOrigin.Begin);
+                    block = ParseDirectory(data);
+                }
+                catch
+                {
+                    // A block that cannot be read ends the directory
+                    break;
+                }
+
+                blocks.Add(blockSector, block);
             }
 
-            return directories;
+            return blocks;
         }
 
         /// <summary>
@@ -176,6 +243,8 @@ namespace SabreTools.Serialization.Readers
         {
             var directory = new DirectoryDescriptor();
 
+            // The first free byte is relative to the start of the block
+            long startPosition = data.Position;
             directory.NextBlock = data.ReadInt32BigEndian();
             directory.PreviousBlock = data.ReadInt32BigEndian();
             directory.Flags = data.ReadUInt32BigEndian();
@@ -184,7 +253,6 @@ namespace SabreTools.Serialization.Readers
 
             var directoryRecords = new List<DirectoryRecord>();
 
-            long startPosition = data.Position;
             while (data.Position < startPosition + directory.FirstFreeByte)
             {
                 var directoryRecord = ParseDirectoryRecord(data);
