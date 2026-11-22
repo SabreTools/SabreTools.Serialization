@@ -61,14 +61,18 @@ namespace SabreTools.Serialization.Readers
                 if (!HasLogicalVolume(volume))
                     return null;
 
-                // Read the File Entries of Metadata Files, needed to map Metadata Partition blocks
+                // Read the Sparing Tables and the Virtual Allocation Table, needed to map Sparable and Virtual Partition blocks
                 var lvd = volume.GetLogicalVolumeDescriptor()!;
+                ReadSparingTables(data, volume, lvd);
+                ReadVirtualAllocationTable(data, volume, lvd, lastSector);
+
+                // Read the File Entries of Metadata Files, needed to map Metadata Partition blocks
                 foreach (var map in lvd.PartitionMaps)
                 {
                     if (map is not MetadataPartitionMap metadata)
                         continue;
 
-                    int physical = lvd.GetType1PartitionReference(metadata.PartitionNumber);
+                    int physical = lvd.GetPhysicalPartitionReference(metadata.PartitionNumber);
                     if (physical < 0)
                         continue;
 
@@ -326,7 +330,8 @@ namespace SabreTools.Serialization.Readers
                 TagIdentifier.LOGICAL_VOLUME_DESCRIPTOR => ParseLogicalVolumeDescriptor(block, ref offset, tag),
 
                 // Other descriptors are kept as raw data
-                TagIdentifier.ANCHOR_VOLUME_DESCRIPTOR_POINTER
+                TagIdentifier.SPARING_TABLE
+                    or TagIdentifier.ANCHOR_VOLUME_DESCRIPTOR_POINTER
                     or TagIdentifier.IMPLEMENTATION_USE_VOLUME_DESCRIPTOR
                     or TagIdentifier.UNALLOCATED_SPACE_DESCRIPTOR
                     or TagIdentifier.TERMINATING_DESCRIPTOR
@@ -496,9 +501,13 @@ namespace SabreTools.Serialization.Readers
 
                 int identifierOffset = 0;
                 string? name = identifier.Identifier.ReadNullTerminatedAnsiString(ref identifierOffset);
-                Type2PartitionMap type2 = name == Constants.MetadataPartitionIdentifier
-                    ? new MetadataPartitionMap()
-                    : new Type2PartitionMap();
+                Type2PartitionMap type2 = name switch
+                {
+                    Constants.MetadataPartitionIdentifier => new MetadataPartitionMap(),
+                    Constants.SparablePartitionIdentifier => new SparablePartitionMap(),
+                    Constants.VirtualPartitionIdentifier => new VirtualPartitionMap(),
+                    _ => new Type2PartitionMap(),
+                };
 
                 type2.PartitionMapType = data.ReadByteValue(ref offset);
                 type2.PartitionMapLength = data.ReadByteValue(ref offset);
@@ -516,6 +525,21 @@ namespace SabreTools.Serialization.Readers
                     metadata.Flags = data.ReadByteValue(ref offset);
                     metadata.Reserved2 = data.ReadBytes(ref offset, 5);
                 }
+                else if (type2 is SparablePartitionMap sparable)
+                {
+                    sparable.PacketLength = data.ReadUInt16LittleEndian(ref offset);
+                    sparable.NumberOfSparingTables = data.ReadByteValue(ref offset);
+                    sparable.Reserved2 = data.ReadByteValue(ref offset);
+                    sparable.SizeOfEachSparingTable = data.ReadUInt32LittleEndian(ref offset);
+                    for (int i = 0; i < sparable.LocationsOfSparingTables.Length; i++)
+                    {
+                        sparable.LocationsOfSparingTables[i] = data.ReadUInt32LittleEndian(ref offset);
+                    }
+                }
+                else if (type2 is VirtualPartitionMap virtualMap)
+                {
+                    virtualMap.Reserved2 = data.ReadBytes(ref offset, 24);
+                }
                 else
                 {
                     type2.PartitionTypeData = data.ReadBytes(ref offset, 24);
@@ -530,6 +554,224 @@ namespace SabreTools.Serialization.Readers
             unknown.PartitionMapLength = data.ReadByteValue(ref offset);
             unknown.PartitionTypeData = data.ReadBytes(ref offset, Math.Max(0, length - 2));
             return unknown;
+        }
+
+        /// <summary>
+        /// Read the Sparing Table of each Sparable Partition, the first valid copy
+        /// </summary>
+        private static void ReadSparingTables(Stream data, Volume volume, LogicalVolumeDescriptor lvd)
+        {
+            for (int i = 0; i < lvd.PartitionMaps.Length; i++)
+            {
+                if (lvd.PartitionMaps[i] is not SparablePartitionMap sparable)
+                    continue;
+
+                int copies = Math.Min(sparable.NumberOfSparingTables, sparable.LocationsOfSparingTables.Length);
+                for (int copy = 0; copy < copies; copy++)
+                {
+                    SparingTable? table = null;
+                    try
+                    {
+                        table = ParseSparingTable(data, sparable.LocationsOfSparingTables[copy]);
+                    }
+                    catch (IOException)
+                    {
+                        // Unreadable copy, try the next one
+                    }
+
+                    if (table is not null)
+                    {
+                        volume.SparingTables[(ushort)i] = table;
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parse a Sparing Table, whose map entries may continue in the following sectors
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sector">Logical sector of the table</param>
+        /// <returns>Filled SparingTable on success, null on error</returns>
+        public static SparingTable? ParseSparingTable(Stream data, long sector)
+        {
+            byte[] block = ReadSectors(data, sector, 1);
+            int length = 56 + (8 * block.ToUInt16LittleEndian(48));
+            if (length > block.Length)
+                block = ReadSectors(data, sector, (length + Constants.SectorSize - 1) / Constants.SectorSize);
+
+            if (!block.IsValidDescriptor(0, block.Length, (uint)sector))
+                return null;
+
+            int offset = 0;
+            var tag = ParseDescriptorTag(block, ref offset);
+            if (tag.TagIdentifier != TagIdentifier.SPARING_TABLE)
+                return null;
+
+            var obj = new SparingTable();
+
+            obj.DescriptorTag = tag;
+            obj.SparingIdentifier = ParseEntityIdentifier(block, ref offset);
+            int identifierOffset = 0;
+            if (obj.SparingIdentifier.Identifier.ReadNullTerminatedAnsiString(ref identifierOffset) != Constants.SparingTableIdentifier)
+                return null;
+
+            obj.ReallocationTableLength = block.ReadUInt16LittleEndian(ref offset);
+            obj.Reserved = block.ReadUInt16LittleEndian(ref offset);
+            obj.SequenceNumber = block.ReadUInt32LittleEndian(ref offset);
+            obj.MapEntries = new SparingEntry[obj.ReallocationTableLength];
+            for (int i = 0; i < obj.MapEntries.Length; i++)
+            {
+                obj.MapEntries[i] = ParseSparingEntry(block, ref offset);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a map entry of a Sparing Table
+        /// </summary>
+        private static SparingEntry ParseSparingEntry(byte[] data, ref int offset)
+        {
+            var obj = new SparingEntry();
+
+            obj.OriginalLocation = data.ReadUInt32LittleEndian(ref offset);
+            obj.MappedLocation = data.ReadUInt32LittleEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Read the Virtual Allocation Table of the Virtual Partition, whose File Entry is recorded in the last sector,
+        /// or in one of the 3 sectors before it (searched like Linux does, udf_find_vat_block)
+        /// </summary>
+        private static void ReadVirtualAllocationTable(Stream data, Volume volume, LogicalVolumeDescriptor lvd, long lastSector)
+        {
+            foreach (var map in lvd.PartitionMaps)
+            {
+                if (map is not VirtualPartitionMap virtualMap)
+                    continue;
+
+                int physical = lvd.GetPhysicalPartitionReference(virtualMap.PartitionNumber);
+                var pd = volume.GetPartitionDescriptor(virtualMap.PartitionNumber);
+                if (physical < 0 || pd is null)
+                    return;
+
+                long first = Math.Max(pd.PartitionStartingLocation, lastSector - Constants.VirtualAllocationTableSearchSectors + 1);
+                for (long sector = lastSector; sector >= first; sector--)
+                {
+                    var vat = ReadVirtualAllocationTable(data, volume, (ushort)physical, (uint)(sector - pd.PartitionStartingLocation), pd.PartitionLength);
+                    if (vat is not null)
+                    {
+                        volume.VirtualAllocationTable = vat;
+                        return;
+                    }
+                }
+
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Read a Virtual Allocation Table whose File Entry may be recorded in a logical block
+        /// </summary>
+        /// <returns>Filled VirtualAllocationTable on success, null if the block holds none</returns>
+        private static VirtualAllocationTable? ReadVirtualAllocationTable(Stream data, Volume volume, ushort physical, uint block, uint partitionLength)
+        {
+            long key = UDFExtensions.GetKey(physical, block);
+            if (!volume.TryGetSector(key, out long sector))
+                return null;
+
+            try
+            {
+                var entry = ParseFileEntry(ReadSectors(data, sector, 1), block);
+                if (entry is null
+                    || (entry.ICBTag.FileType != FileType.VIRTUAL_ALLOCATION_TABLE && entry.ICBTag.FileType != FileType.UNSPECIFIED))
+                {
+                    return null;
+                }
+
+                // A header of at most 65535 bytes, at most one entry for each block of the write-once partition
+                if (entry.InformationLength > Math.Min(int.MaxValue, ushort.MaxValue + (4UL * partitionLength)))
+                    return null;
+
+                volume.FileEntries[key] = entry;
+                byte[]? contents = ReadFileContents(data, volume, key, entry);
+                var vat = contents is null ? null : ParseVirtualAllocationTable(contents, entry.ICBTag.FileType);
+                if (vat is null)
+                    volume.FileEntries.Remove(key);
+
+                return vat;
+            }
+            catch (IOException)
+            {
+                // Sectors after the last recorded one may be unreadable
+                volume.FileEntries.Remove(key);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Parse the contents of a Virtual Allocation Table
+        /// </summary>
+        /// <param name="data">Contents of the table's file</param>
+        /// <param name="fileType">File type of the table's File Entry: 248 for UDF 2.00 and later, 0 for UDF 1.50</param>
+        /// <returns>Filled VirtualAllocationTable on success, null on error</returns>
+        public static VirtualAllocationTable? ParseVirtualAllocationTable(byte[] data, FileType fileType)
+        {
+            var obj = new VirtualAllocationTable();
+
+            int offset = 0;
+            int end = data.Length;
+            if (fileType == FileType.VIRTUAL_ALLOCATION_TABLE)
+            {
+                // UDF 2.00 and later: header, then the entries
+                if (data.Length < Constants.VirtualAllocationTableHeaderLength)
+                    return null;
+
+                obj.LengthOfHeader = data.ReadUInt16LittleEndian(ref offset);
+                if (obj.LengthOfHeader < Constants.VirtualAllocationTableHeaderLength || obj.LengthOfHeader > data.Length)
+                    return null;
+
+                obj.LengthOfImplementationUse = data.ReadUInt16LittleEndian(ref offset);
+                obj.LogicalVolumeIdentifier = data.ReadBytes(ref offset, 128);
+                obj.PreviousVATICBLocation = data.ReadUInt32LittleEndian(ref offset);
+                obj.NumberOfFiles = data.ReadUInt32LittleEndian(ref offset);
+                obj.NumberOfDirectories = data.ReadUInt32LittleEndian(ref offset);
+                obj.MinimumUDFReadRevision = data.ReadUInt16LittleEndian(ref offset);
+                obj.MinimumUDFWriteRevision = data.ReadUInt16LittleEndian(ref offset);
+                obj.MaximumUDFWriteRevision = data.ReadUInt16LittleEndian(ref offset);
+                obj.Reserved = data.ReadUInt16LittleEndian(ref offset);
+                obj.ImplementationUse = data.ReadBytes(ref offset, obj.LengthOfHeader - Constants.VirtualAllocationTableHeaderLength);
+            }
+            else if (fileType == FileType.UNSPECIFIED)
+            {
+                // UDF 1.50: the entries, then the identifier and the previous VAT ICB location
+                if (data.Length < Constants.VirtualAllocationTableTrailerLength)
+                    return null;
+
+                end = data.Length - Constants.VirtualAllocationTableTrailerLength;
+                int trailer = end;
+                obj.Identifier = ParseEntityIdentifier(data, ref trailer);
+                obj.PreviousVATICBLocation = data.ReadUInt32LittleEndian(ref trailer);
+
+                int identifierOffset = 0;
+                if (obj.Identifier.Identifier.ReadNullTerminatedAnsiString(ref identifierOffset) != Constants.VirtualAllocationTableIdentifier)
+                    return null;
+            }
+            else
+            {
+                return null;
+            }
+
+            obj.Entries = new uint[(end - offset) / 4];
+            for (int i = 0; i < obj.Entries.Length; i++)
+            {
+                obj.Entries[i] = data.ReadUInt32LittleEndian(ref offset);
+            }
+
+            return obj;
         }
 
         #endregion
@@ -881,6 +1123,59 @@ namespace SabreTools.Serialization.Readers
             return data.ReadBytes(count * Constants.SectorSize);
         }
 
+        /// <summary>
+        /// Read the contents of a file whose File Entry is in the volume, following its Allocation Extent Descriptors
+        /// </summary>
+        /// <returns>Contents on success (extents that are not recorded read as zeros), null if they could not be mapped</returns>
+        private static byte[]? ReadFileContents(Stream data, Volume volume, long key, FileEntry entry)
+        {
+            int length = (int)entry.InformationLength;
+            if (entry.ICBTag.GetAllocationDescriptorType() == AllocationDescriptorType.EMBEDDED)
+            {
+                if (length > entry.AllocationDescriptors.Length)
+                    return null;
+
+                var embedded = new byte[length];
+                Array.Copy(entry.AllocationDescriptors, 0, embedded, 0, length);
+                return embedded;
+            }
+
+            var state = new HierarchyState(data, volume, includeDirectories: false);
+            state.QueueEntry(key);
+            state.Run();
+
+            var descriptors = volume.GetAllocationDescriptors(key, entry);
+            if (descriptors is null)
+                return null;
+
+            var contents = new byte[length];
+            int offset = 0;
+            foreach (var ad in descriptors)
+            {
+                int extentLength = (int)Math.Min(UDFExtensions.GetExtentLength(ad.ExtentLength), (uint)(length - offset));
+                if (UDFExtensions.GetExtentType(ad.ExtentLength) == ExtentType.RECORDED_AND_ALLOCATED)
+                {
+                    // Read the extent in runs of blocks recorded in consecutive sectors
+                    var extents = volume.GetSectorExtents(ad.ExtentLocation, (uint)extentLength);
+                    if (extents is null)
+                        return null;
+
+                    int done = 0;
+                    foreach (var extent in extents)
+                    {
+                        int runLength = (int)extent.ExtentLength;
+                        byte[] sectors = ReadSectors(data, extent.ExtentLocation, (runLength + Constants.SectorSize - 1) / Constants.SectorSize);
+                        Array.Copy(sectors, 0, contents, offset + done, runLength);
+                        done += runLength;
+                    }
+                }
+
+                offset += extentLength;
+            }
+
+            return contents;
+        }
+
         #endregion
 
         #region Directory Hierarchy
@@ -1193,20 +1488,27 @@ namespace SabreTools.Serialization.Readers
                     int extentLength = (int)Math.Min(UDFExtensions.GetExtentLength(ad.ExtentLength), (uint)(length - offset));
                     if (UDFExtensions.GetExtentType(ad.ExtentLength) == ExtentType.RECORDED_AND_ALLOCATED)
                     {
-                        if (!_volume.TryGetSector(ad.ExtentLocation.GetKey(), out long sector))
+                        // Read the extent in runs of blocks recorded in consecutive sectors
+                        var extents = _volume.GetSectorExtents(ad.ExtentLocation, (uint)extentLength);
+                        if (extents is null)
                             return;
 
-                        int count = (extentLength + Constants.SectorSize - 1) / Constants.SectorSize;
-                        reads.Add(new PendingRead
+                        int done = 0;
+                        foreach (var extent in extents)
                         {
-                            Sector = sector,
-                            Count = count,
-                            Kind = ReadKind.DirectoryData,
-                            Key = key,
-                            Directory = directory,
-                            DirectoryOffset = offset,
-                            Length = extentLength,
-                        });
+                            int runLength = (int)extent.ExtentLength;
+                            reads.Add(new PendingRead
+                            {
+                                Sector = extent.ExtentLocation,
+                                Count = (runLength + Constants.SectorSize - 1) / Constants.SectorSize,
+                                Kind = ReadKind.DirectoryData,
+                                Key = key,
+                                Directory = directory,
+                                DirectoryOffset = offset + done,
+                                Length = runLength,
+                            });
+                            done += runLength;
+                        }
                     }
 
                     offset += extentLength;

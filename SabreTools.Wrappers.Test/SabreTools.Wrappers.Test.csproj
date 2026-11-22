@@ -34,7 +34,10 @@
 
     <ItemGroup>
         <Compile Include="..\SabreTools.Serialization.Readers.Test\OperaFSImageBuilder.cs" Link="OperaFSImageBuilder.cs" />
+        <Compile Include="..\SabreTools.Serialization.Readers.Test\SparingTableDamage.cs" Link="SparingTableDamage.cs" />
         <Compile Include="..\SabreTools.Serialization.Readers.Test\UDFImageBuilder.cs" Link="UDFImageBuilder.cs" />
+        <Compile Include="..\SabreTools.Serialization.Readers.Test\UDFLayout.cs" Link="UDFLayout.cs" />
+        <Compile Include="..\SabreTools.Serialization.Readers.Test\VatCandidate.cs" Link="VatCandidate.cs" />
     </ItemGroup>
 
     <ItemGroup>

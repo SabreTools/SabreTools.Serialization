@@ -26,6 +26,14 @@ namespace SabreTools.Wrappers
             Print(builder, Model.VolumeRecognitionSequence);
             Print(builder, Model.AnchorVolumeDescriptorPointer);
             Print(builder, Model.VolumeDescriptorSequence);
+            foreach (var pair in Model.SparingTables)
+            {
+                Print(builder, pair.Value, pair.Key);
+            }
+
+            if (Model.VirtualAllocationTable is not null)
+                Print(builder, Model.VirtualAllocationTable);
+
             Print(builder, Model.FileSetDescriptor);
 
             if (Model.FileSetDescriptor is not null)
@@ -176,6 +184,22 @@ namespace SabreTools.Wrappers
                     builder.AppendLine(metadata.Flags, "      Flags");
                     break;
 
+                case SparablePartitionMap sparable:
+                    Print(builder, sparable.PartitionTypeIdentifier, "      Partition Type Identifier");
+                    builder.AppendLine(sparable.VolumeSequenceNumber, "      Volume Sequence Number");
+                    builder.AppendLine(sparable.PartitionNumber, "      Partition Number");
+                    builder.AppendLine(sparable.PacketLength, "      Packet Length");
+                    builder.AppendLine(sparable.NumberOfSparingTables, "      Number of Sparing Tables");
+                    builder.AppendLine(sparable.SizeOfEachSparingTable, "      Size of Each Sparing Table");
+                    builder.AppendLine(sparable.LocationsOfSparingTables, "      Locations of Sparing Tables");
+                    break;
+
+                case VirtualPartitionMap virtualMap:
+                    Print(builder, virtualMap.PartitionTypeIdentifier, "      Partition Type Identifier");
+                    builder.AppendLine(virtualMap.VolumeSequenceNumber, "      Volume Sequence Number");
+                    builder.AppendLine(virtualMap.PartitionNumber, "      Partition Number");
+                    break;
+
                 case Type2PartitionMap type2:
                     Print(builder, type2.PartitionTypeIdentifier, "      Partition Type Identifier");
                     builder.AppendLine(type2.VolumeSequenceNumber, "      Volume Sequence Number");
@@ -187,6 +211,49 @@ namespace SabreTools.Wrappers
                     // Unknown partition map types are not parsed further
                     break;
             }
+        }
+
+        private static void Print(StringBuilder builder, SparingTable table, ushort partitionReference)
+        {
+            builder.AppendLine($"  Sparing Table (Partition Reference Number {partitionReference}):");
+            builder.AppendLine("  -------------------------");
+            Print(builder, table.DescriptorTag, "    ");
+            Print(builder, table.SparingIdentifier, "    Sparing Identifier");
+            builder.AppendLine(table.ReallocationTableLength, "    Reallocation Table Length");
+            builder.AppendLine(table.SequenceNumber, "    Sequence Number");
+
+            // Only relocated packets, available and defective spare packets are not listed
+            foreach (var entry in table.MapEntries)
+            {
+                if (entry.OriginalLocation < Constants.SparingEntryNotRelocated)
+                    builder.AppendLine(entry.MappedLocation, $"    Packet {entry.OriginalLocation} Relocated To Sector");
+            }
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, VirtualAllocationTable vat)
+        {
+            builder.AppendLine("  Virtual Allocation Table:");
+            builder.AppendLine("  -------------------------");
+            if (vat.Identifier is not null)
+            {
+                Print(builder, vat.Identifier, "    Identifier");
+            }
+            else
+            {
+                builder.AppendLine(vat.LengthOfHeader, "    Length of Header");
+                builder.AppendLine(vat.LogicalVolumeIdentifier.DecodeDString(), "    Logical Volume Identifier");
+                builder.AppendLine(vat.NumberOfFiles, "    Number of Files");
+                builder.AppendLine(vat.NumberOfDirectories, "    Number of Directories");
+                builder.AppendLine(vat.MinimumUDFReadRevision, "    Minimum UDF Read Revision");
+                builder.AppendLine(vat.MinimumUDFWriteRevision, "    Minimum UDF Write Revision");
+                builder.AppendLine(vat.MaximumUDFWriteRevision, "    Maximum UDF Write Revision");
+            }
+
+            builder.AppendLine(vat.PreviousVATICBLocation, "    Previous VAT ICB Location");
+            builder.AppendLine(vat.Entries.Length, "    Number of Entries");
+            builder.AppendLine();
         }
 
         private static void Print(StringBuilder builder, FileSetDescriptor? fsd)
