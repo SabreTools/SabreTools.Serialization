@@ -1,6 +1,5 @@
 using System;
 using System.Buffers.Binary;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SabreTools.Data.Models.ISO9660;
@@ -15,7 +14,7 @@ namespace SabreTools.Wrappers.Test
         public const int BlockLength = 2048;
 
         /// <summary>
-        /// Block of the root directory in the test image
+        /// Block of the root directory in the test image, counted from the start of the volume
         /// </summary>
         public const int RootDirectory = 20;
 
@@ -30,30 +29,48 @@ namespace SabreTools.Wrappers.Test
         /// <remarks>Every byte of a block after the root directory holds the low byte of the block number</remarks>
         public static byte[] BuildImage(int blockCount, params (string Name, int Location, int Length, FileFlags Flags, byte[] SystemUse)[] files)
         {
-            const int pathTableL = 18, pathTableM = 19;
             byte[] image = new byte[blockCount * BlockLength];
             for (int block = RootDirectory + 1; block < blockCount; block++)
             {
                 image.AsSpan(block * BlockLength, BlockLength).Fill((byte)block);
             }
 
+            WriteVolume(image, 0, files);
+            return image;
+        }
+
+        /// <summary>
+        /// Write a primary volume descriptor, terminator, path tables and root directory with the given records,
+        /// for a volume that starts at the given block
+        /// </summary>
+        public static void WriteVolume(byte[] image, int start, params (string Name, int Location, int Length, FileFlags Flags, byte[] SystemUse)[] files)
+            => WriteVolume(image, start, Records(Encoding.ASCII, files));
+
+        /// <summary>
+        /// Write a primary volume descriptor, terminator, path tables and root directory with the given directory
+        /// records, for a volume that starts at the given block
+        /// </summary>
+        public static void WriteVolume(byte[] image, int start, byte[][] records)
+        {
+            int pathTableL = start + 18, pathTableM = start + 19, rootDirectory = start + RootDirectory;
+
             // Primary volume descriptor
-            var pvd = image.AsSpan(16 * BlockLength, BlockLength);
+            var pvd = image.AsSpan((start + 16) * BlockLength, BlockLength);
             pvd[0] = 1;
             Encoding.ASCII.GetBytes("CD001").CopyTo(pvd[1..]);
             pvd[6] = 1;
-            WriteBothEndian(pvd[80..], blockCount);
+            WriteBothEndian(pvd[80..], image.Length / BlockLength);
             WriteBothEndian16(pvd[120..], 1);
             WriteBothEndian16(pvd[124..], 1);
             WriteBothEndian16(pvd[128..], BlockLength);
             WriteBothEndian(pvd[132..], 10);
             BinaryPrimitives.WriteInt32LittleEndian(pvd[140..], pathTableL);
             BinaryPrimitives.WriteInt32BigEndian(pvd[148..], pathTableM);
-            DirectoryRecord([0], RootDirectory, BlockLength, FileFlags.DIRECTORY, []).CopyTo(pvd[156..]);
+            DirectoryRecord([0], rootDirectory, BlockLength, FileFlags.DIRECTORY, []).CopyTo(pvd[156..]);
             pvd[881] = 1;
 
             // Volume descriptor set terminator
-            var terminator = image.AsSpan(17 * BlockLength, BlockLength);
+            var terminator = image.AsSpan((start + 17) * BlockLength, BlockLength);
             terminator[0] = 255;
             Encoding.ASCII.GetBytes("CD001").CopyTo(terminator[1..]);
             terminator[6] = 1;
@@ -61,35 +78,37 @@ namespace SabreTools.Wrappers.Test
             // Path tables with the root directory only
             var pathTable = image.AsSpan(pathTableL * BlockLength);
             pathTable[0] = 1;
-            BinaryPrimitives.WriteInt32LittleEndian(pathTable[2..], RootDirectory);
+            BinaryPrimitives.WriteInt32LittleEndian(pathTable[2..], rootDirectory);
             BinaryPrimitives.WriteInt16LittleEndian(pathTable[6..], 1);
             pathTable = image.AsSpan(pathTableM * BlockLength);
             pathTable[0] = 1;
-            BinaryPrimitives.WriteInt32BigEndian(pathTable[2..], RootDirectory);
+            BinaryPrimitives.WriteInt32BigEndian(pathTable[2..], rootDirectory);
             BinaryPrimitives.WriteInt16BigEndian(pathTable[6..], 1);
 
             // Root directory
-            WriteDirectory(image, RootDirectory, Encoding.ASCII, files);
-            return image;
+            WriteDirectory(image, rootDirectory, records);
         }
 
         /// <summary>
         /// Write a directory with the given records after its current and parent directory records
         /// </summary>
         public static void WriteDirectory(byte[] image, int block, Encoding encoding, (string Name, int Location, int Length, FileFlags Flags, byte[] SystemUse)[] files)
+            => WriteDirectory(image, block, Records(encoding, files));
+
+        /// <summary>
+        /// Write a directory with the given directory records after its current and parent directory records
+        /// </summary>
+        private static void WriteDirectory(byte[] image, int block, byte[][] records)
         {
-            List<byte[]> records =
+            byte[][] all =
             [
                 DirectoryRecord([0], block, BlockLength, FileFlags.DIRECTORY, []),
                 DirectoryRecord([1], block, BlockLength, FileFlags.DIRECTORY, []),
+                .. records,
             ];
-            foreach (var (name, location, length, flags, systemUse) in files)
-            {
-                records.Add(DirectoryRecord(encoding.GetBytes($"{name};1"), location, length, flags, systemUse));
-            }
 
             int position = block * BlockLength;
-            foreach (byte[] record in records)
+            foreach (byte[] record in all)
             {
                 record.CopyTo(image, position);
                 position += record.Length;
@@ -97,19 +116,28 @@ namespace SabreTools.Wrappers.Test
         }
 
         /// <summary>
+        /// Directory records of the given files, with their names in the given encoding
+        /// </summary>
+        private static byte[][] Records(Encoding encoding, (string Name, int Location, int Length, FileFlags Flags, byte[] SystemUse)[] files)
+            => [.. files.Select(file => DirectoryRecord(encoding.GetBytes($"{file.Name};1"), file.Location, file.Length, file.Flags, file.SystemUse))];
+
+        /// <summary>
         /// Data of a file recorded at the given block, as BuildImage fills it
         /// </summary>
         public static byte[] ExpectedData(int location, int length)
             => [.. Enumerable.Range(0, length).Select(i => (byte)(location + (i / BlockLength)))];
 
-        public static byte[] DirectoryRecord(byte[] identifier, int location, int length, FileFlags flags, byte[] systemUse)
+        public static byte[] DirectoryRecord(byte[] identifier, int location, int length, FileFlags flags, byte[] systemUse, byte fileUnitSize = 0, byte interleaveGapSize = 0, byte extendedAttributeRecordLength = 0)
         {
             // Pad the identifier and the System Use field to an even record length
             byte[] record = [.. new byte[33], .. identifier, .. new byte[1 - (identifier.Length % 2)], .. systemUse, .. new byte[systemUse.Length % 2]];
             record[0] = (byte)record.Length;
+            record[1] = extendedAttributeRecordLength;
             WriteBothEndian(record.AsSpan(2), location);
             WriteBothEndian(record.AsSpan(10), length);
             record[25] = (byte)flags;
+            record[26] = fileUnitSize;
+            record[27] = interleaveGapSize;
             WriteBothEndian16(record.AsSpan(28), 1);
             record[32] = (byte)identifier.Length;
             return record;
