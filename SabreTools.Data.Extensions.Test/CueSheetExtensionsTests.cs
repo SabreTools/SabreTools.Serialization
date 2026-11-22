@@ -32,5 +32,31 @@ namespace SabreTools.Data.Extensions.Test
             int? actual = CueSheetExtensions.GetSession(remark);
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData("SESSION 02", 2, CueDensityArea.SingleDensity)]
+        [InlineData("HIGH-DENSITY AREA", 1, CueDensityArea.HighDensity)]
+        [InlineData("SESSION X", 1, CueDensityArea.SingleDensity)]
+        [InlineData("LBA: 0", 1, CueDensityArea.SingleDensity)]
+        [InlineData("", 1, CueDensityArea.SingleDensity)]
+        public void ReadRemarkTest(string remark, int expectedSession, CueDensityArea expectedDensityArea)
+        {
+            int session = 1;
+            var densityArea = CueDensityArea.SingleDensity;
+            CueSheetExtensions.ReadRemark(remark, ref session, ref densityArea);
+            Assert.Equal(expectedSession, session);
+            Assert.Equal(expectedDensityArea, densityArea);
+        }
+
+        [Theory]
+        [InlineData("", new string[0])]
+        [InlineData("  TRACK 01 MODE1/2352", new string[] { "TRACK", "01", "MODE1/2352" })]
+        [InlineData("FILE \"Track 01.bin\" BINARY", new string[] { "FILE", "\"Track 01.bin\"", "BINARY" })]
+        [InlineData("SESSION 02\"Second\"", new string[] { "SESSION", "02", "\"Second\"" })]
+        public void SplitLineTest(string line, string[] expected)
+        {
+            string[] actual = CueSheetExtensions.SplitLine(line);
+            Assert.Equal(expected, actual);
+        }
     }
 }
