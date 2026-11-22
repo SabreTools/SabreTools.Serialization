@@ -186,6 +186,14 @@ namespace SabreTools.Wrappers
             // Reset position in stream
             stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
 
+            // Try to get an XDVDFS wrapper (Xbox / Xbox 360 game partition without the video partition)
+            var xdvdfsWrapper = XDVDFS.Create(stream);
+            if (xdvdfsWrapper is not null)
+                return xdvdfsWrapper;
+
+            // Reset position in stream
+            stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
+
             // Try NintendoDisc (GameCube / Wii)
             // This has to be later due to slight possibility of false positives
             var nintendoWrapper = NintendoDisc.Create(stream);
@@ -1136,8 +1144,6 @@ namespace SabreTools.Wrappers
             #endregion
 
             #region XDVDFS
-
-            // TODO: Overload .iso wrapper to call both ISO and XDVDFS wrappers if present
 
             if (extension.Equals("xiso", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.XDVDFS;
