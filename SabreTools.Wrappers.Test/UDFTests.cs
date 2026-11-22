@@ -199,6 +199,57 @@ namespace SabreTools.Wrappers.Test
         }
 
         [Fact]
+        public void Session_FirstSession_Extract()
+        {
+            byte[] image = UDFImageBuilder.BuildSessions(UDFImageBuilder.Build(subName: "First"), UDFImageBuilder.Build(subName: "Second"), 400);
+            var wrapper = UDF.Create(new MemoryStream(image), 0);
+            Assert.NotNull(wrapper);
+
+            string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            try
+            {
+                Directory.CreateDirectory(output);
+                Assert.True(wrapper.Extract(output, false));
+                Assert.Equal(UDFImageBuilder.DataBinLength, new FileInfo(Path.Combine(output, "First", "data.bin")).Length);
+                Assert.False(Directory.Exists(Path.Combine(output, "Second")));
+            }
+            finally
+            {
+                if (Directory.Exists(output))
+                    Directory.Delete(output, true);
+            }
+        }
+
+        [Theory]
+        [InlineData(UDFLayout.Type1)]
+        [InlineData(UDFLayout.Virtual)]
+        [InlineData(UDFLayout.Virtual150)]
+        public void Session_LaterSession_PartitionFromDiscStart(UDFLayout layout)
+        {
+            // The partition of the second session starts at sector 660 of the stream, not 260 sectors after the session
+            byte[] image = UDFImageBuilder.BuildSessions(UDFImageBuilder.Build(subName: "First"), UDFImageBuilder.Build(subName: "Second", layout: layout), 400);
+            var wrapper = UDF.Create(new MemoryStream(image), 400);
+            Assert.NotNull(wrapper);
+
+            byte[] data = UDFImageBuilder.Contents(UDFImageBuilder.DataBinLength, UDFImageBuilder.DataBinByte);
+
+            string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            try
+            {
+                Directory.CreateDirectory(output);
+                Assert.True(wrapper.Extract(output, false));
+                Assert.Equal("hello world", File.ReadAllText(Path.Combine(output, "README.TXT")));
+                Assert.Equal(data, File.ReadAllBytes(Path.Combine(output, "Second", "data.bin")));
+                Assert.False(Directory.Exists(Path.Combine(output, "First")));
+            }
+            finally
+            {
+                if (Directory.Exists(output))
+                    Directory.Delete(output, true);
+            }
+        }
+
+        [Fact]
         public void StreamAtOffset_WrapperFactoryUDF()
         {
             var stream = new MemoryStream([.. new byte[3 * UDFImageBuilder.SectorSize], .. UDFImageBuilder.Build()]);

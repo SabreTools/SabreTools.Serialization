@@ -29,9 +29,22 @@ namespace SabreTools.Serialization.Readers
         /// </param>
         /// <remarks>Logical sectors are addressed from the start of the stream</remarks>
         public Volume? Deserialize(Stream? data, bool includeDirectories)
+            => Deserialize(data, 0, includeDirectories);
+
+        /// <inheritdoc cref="Deserialize(Stream?, bool)" />
+        /// <param name="sessionStart">
+        /// Logical sector of the start of the session, which records its Volume Recognition Sequence 16 sectors
+        /// and its first anchor 256 sectors after it
+        /// </param>
+        /// <remarks>
+        /// Logical sectors are addressed from the start of the stream, which holds the whole disc from sector 0;
+        /// the other anchors and the Virtual Allocation Table are looked for at the end of the stream, where the last
+        /// session ends
+        /// </remarks>
+        public Volume? Deserialize(Stream? data, long sessionStart, bool includeDirectories)
         {
             // If the data is invalid
-            if (data is null || !data.CanRead || !data.CanSeek)
+            if (data is null || !data.CanRead || !data.CanSeek || sessionStart < 0)
                 return null;
 
             try
@@ -40,10 +53,10 @@ namespace SabreTools.Serialization.Readers
                 var volume = new Volume();
 
                 // Read the Volume Recognition Sequence
-                volume.VolumeRecognitionSequence = ParseVolumeRecognitionSequence(data);
+                volume.VolumeRecognitionSequence = ParseVolumeRecognitionSequence(data, sessionStart);
 
-                // Read the Anchor Volume Descriptor Pointer at sector 256, then at N - 256 and N (anchor points, ECMA-167 3/8.4.2.1)
-                var anchor = ParseAnchorVolumeDescriptorPointer(data, Constants.AnchorVolumeDescriptorPointerSector);
+                // Read the Anchor Volume Descriptor Pointer at sector 256 of the session, then at N - 256 and N (anchor points, ECMA-167 3/8.4.2.1)
+                var anchor = ParseAnchorVolumeDescriptorPointer(data, sessionStart + Constants.AnchorVolumeDescriptorPointerSector);
                 long lastSector = (data.Length / Constants.SectorSize) - 1;
                 if (anchor is null && lastSector > Constants.AnchorVolumeDescriptorPointerSector)
                     anchor = ParseAnchorVolumeDescriptorPointer(data, lastSector - Constants.AnchorVolumeDescriptorPointerSector);
@@ -205,10 +218,19 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <returns>Volume Structure Descriptors up to the first unknown one</returns>
         public static VolumeStructureDescriptor[] ParseVolumeRecognitionSequence(Stream data)
+            => ParseVolumeRecognitionSequence(data, 0);
+
+        /// <summary>
+        /// Parse the Volume Recognition Sequence starting at sector 16 of a session
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sessionStart">Logical sector of the start of the session</param>
+        /// <returns>Volume Structure Descriptors up to the first unknown one</returns>
+        public static VolumeStructureDescriptor[] ParseVolumeRecognitionSequence(Stream data, long sessionStart)
         {
             List<VolumeStructureDescriptor> obj = [];
 
-            long sector = Constants.VolumeRecognitionSequenceSector;
+            long sector = sessionStart + Constants.VolumeRecognitionSequenceSector;
             while (true)
             {
                 byte[] block = ReadSectors(data, sector, 1);

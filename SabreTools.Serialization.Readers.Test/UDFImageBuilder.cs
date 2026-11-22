@@ -54,6 +54,7 @@ namespace SabreTools.Serialization.Readers.Test
         /// <param name="firstSparingTable">Damage to the first copy of the Sparing Table</param>
         /// <param name="vatCandidate">File Entry in the last sector that is not the Virtual Allocation Table</param>
         /// <param name="danglingVirtualMap">True to add a Type 1 map and a Virtual map of partition 1, which has no Partition Descriptor</param>
+        /// <param name="anchorInLastSector">True to record a second Anchor Volume Descriptor Pointer in the last sector (Type 1 only)</param>
         public static byte[] Build(bool corruptRootEntry = false,
             bool corruptRootEntryCrc = false,
             bool emptyPartitionMap = false,
@@ -68,7 +69,8 @@ namespace SabreTools.Serialization.Readers.Test
             int sparingTableLength = 4,
             SparingTableDamage firstSparingTable = SparingTableDamage.None,
             VatCandidate vatCandidate = VatCandidate.None,
-            bool danglingVirtualMap = false)
+            bool danglingVirtualMap = false,
+            bool anchorInLastSector = false)
         {
             var image = new byte[Sectors * SectorSize];
             bool isVirtual = layout == UDFLayout.Virtual || layout == UDFLayout.Virtual150;
@@ -243,6 +245,42 @@ namespace SabreTools.Serialization.Readers.Test
             else if (isVirtual)
             {
                 image = MoveToVirtualPartition(image, layout, vatCandidate);
+            }
+
+            if (anchorInLastSector)
+            {
+                Array.Copy(image, 256 * SectorSize, image, (Sectors - 1) * SectorSize, SectorSize);
+                Retag(image, Sectors - 1);
+            }
+
+            return image;
+        }
+
+        /// <summary>
+        /// Build a two-session image: the first session from sector 0, the second one from the given sector
+        /// </summary>
+        /// <remarks>
+        /// Both sessions are images from Build. The sector addresses of the second one (its anchor, the Volume
+        /// Descriptor Sequence and the partition start) are moved to the session start, its partition blocks are
+        /// not, and its Volume Recognition Sequence records NSR03 instead of NSR02 to tell the sessions apart
+        /// </remarks>
+        public static byte[] BuildSessions(byte[] first, byte[] second, int sessionStart)
+        {
+            var image = new byte[(sessionStart * SectorSize) + second.Length];
+            Array.Copy(first, image, first.Length);
+            Array.Copy(second, 0, image, sessionStart * SectorSize, second.Length);
+
+            WriteStructure(image, sessionStart + 17, "NSR03");
+
+            int avdp = (sessionStart + 256) * SectorSize;
+            WriteUInt32(image, avdp + 20, sessionStart + 32);
+            WriteUInt32(image, avdp + 28, sessionStart + 32);
+            Retag(image, sessionStart + 256);
+
+            WriteUInt32(image, ((sessionStart + 33) * SectorSize) + 188, sessionStart + PartitionStart);
+            for (int sector = 32; sector < 36; sector++)
+            {
+                Retag(image, sessionStart + sector);
             }
 
             return image;
@@ -538,6 +576,17 @@ namespace SabreTools.Serialization.Readers.Test
             }
 
             image[offset + 4] = checksum;
+        }
+
+        /// <summary>
+        /// Write the descriptor tag of a sector again, for the sector as its location
+        /// </summary>
+        private static void Retag(byte[] image, int sector)
+        {
+            int offset = sector * SectorSize;
+            ushort identifier = (ushort)(image[offset] | (image[offset + 1] << 8));
+            int length = (image[offset + 10] | (image[offset + 11] << 8)) + 16;
+            WriteTag(image, offset, identifier, (uint)sector, length);
         }
 
         private static ushort Crc(byte[] data, int offset, int length)

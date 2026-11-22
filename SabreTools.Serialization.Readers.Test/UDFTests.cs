@@ -469,6 +469,44 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void Session_LaterSession_SectorsFromDiscStart()
+        {
+            // The second session starts at sector 400: its anchor is in sector 656, its partition starts at sector 660
+            byte[] image = UDFImageBuilder.BuildSessions(UDFImageBuilder.Build(subName: "First"), UDFImageBuilder.Build(subName: "Second"), 400);
+            var volume = new UDF().Deserialize(new MemoryStream(image), 400, includeDirectories: true);
+
+            Assert.NotNull(volume);
+            Assert.Equal("NSR03", Encoding.ASCII.GetString(volume.VolumeRecognitionSequence[1].StandardIdentifier));
+            Assert.NotNull(volume.AnchorVolumeDescriptorPointer);
+            Assert.Equal(656u, volume.AnchorVolumeDescriptorPointer.DescriptorTag.TagLocation);
+            Assert.Equal(660u, volume.GetPartitionDescriptor(0)!.PartitionStartingLocation);
+            Assert.Equal("Second", volume.Directories[UDFExtensions.GetKey(0, 2)][3].FileIdentifier.DecodeDCharacters());
+            Assert.Equal(5, volume.FileEntries.Count);
+        }
+
+        [Fact]
+        public void Session_LaterSessionVirtual_VirtualAllocationTableRead()
+        {
+            byte[] image = UDFImageBuilder.BuildSessions(UDFImageBuilder.Build(), UDFImageBuilder.Build(layout: UDFLayout.Virtual), 400);
+            var volume = new UDF().Deserialize(new MemoryStream(image), 400, includeDirectories: true);
+
+            Assert.NotNull(volume);
+            Assert.NotNull(volume.VirtualAllocationTable);
+            Assert.Equal(UDFImageBuilder.VirtualBlocks, volume.VirtualAllocationTable.Entries.Length);
+            Assert.Equal(7, volume.FileEntries.Count);
+        }
+
+        [Fact]
+        public void Session_NegativeStart_Null()
+        {
+            // A start that misses the first anchor still finds the one in the last sector, a negative start does not
+            byte[] image = UDFImageBuilder.Build(anchorInLastSector: true);
+
+            Assert.NotNull(new UDF().Deserialize(new MemoryStream(image), 1, includeDirectories: true));
+            Assert.Null(new UDF().Deserialize(new MemoryStream(image), -1, includeDirectories: true));
+        }
+
+        [Fact]
         public void ParseVirtualAllocationTable_Header_EntriesAfterIt()
         {
             // Header with 8 bytes of implementation use, then 2 entries and 3 bytes
