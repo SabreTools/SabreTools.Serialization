@@ -13,7 +13,7 @@ namespace SabreTools.Data.Extensions
         /// <returns>Density area of a REM SINGLE-DENSITY AREA or REM HIGH-DENSITY AREA line, otherwise None</returns>
         public static CueDensityArea GetDensityArea(string remark)
         {
-            string[] parts = SplitRemark(remark);
+            string[] parts = SplitLine(remark);
             if (parts.Length < 2)
                 return CueDensityArea.None;
 
@@ -32,7 +32,7 @@ namespace SabreTools.Data.Extensions
         /// <returns>Session of a REM SESSION line, otherwise null</returns>
         public static int? GetSession(string remark)
         {
-            string[] parts = SplitRemark(remark);
+            string[] parts = SplitLine(remark);
             if (parts.Length < 2 || parts[0] != "SESSION")
                 return null;
 
@@ -44,11 +44,31 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
-        /// Split the text of a REM line on whitespace, keeping quoted values together like the cue sheet reader
+        /// Read the session or density area from the text of a REM line, other REM lines do not change them
         /// </summary>
-        private static string[] SplitRemark(string remark)
+        /// <param name="remark">Text after the REM keyword</param>
+        /// <param name="session">Session of the last REM SESSION line</param>
+        /// <param name="densityArea">Density area of the last REM SINGLE-DENSITY AREA or REM HIGH-DENSITY AREA line</param>
+        public static void ReadRemark(string remark, ref int session, ref CueDensityArea densityArea)
         {
-            var matches = Regex.Matches(remark, @"[^\s""]+|""[^""]*""");
+            int? remarkSession = GetSession(remark);
+            if (remarkSession is not null)
+                session = remarkSession.Value;
+
+            var remarkDensityArea = GetDensityArea(remark);
+            if (remarkDensityArea != CueDensityArea.None)
+                densityArea = remarkDensityArea;
+        }
+
+        /// <summary>
+        /// Split a line of a cue sheet on whitespace, keeping quoted values together
+        /// </summary>
+        /// <param name="line">Line to split</param>
+        /// <returns>Parts of the line, a quoted value with its quotes</returns>
+        public static string[] SplitLine(string line)
+        {
+            // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
+            var matches = Regex.Matches(line, @"[^\s""]+|""[^""]*""");
             var parts = new string[matches.Count];
             for (int i = 0; i < matches.Count; i++)
             {
