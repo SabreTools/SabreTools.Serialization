@@ -88,6 +88,36 @@ namespace SabreTools.Data.Models.UDF
         /// </summary>
         public const string VirtualPartitionIdentifier = "*UDF Virtual Partition";
 
+        /// <summary>
+        /// Sparing identifier of a UDF Sparing Table
+        /// </summary>
+        public const string SparingTableIdentifier = "*UDF Sparing Table";
+
+        /// <summary>
+        /// Lowest Sparing Table original location that is not a relocated packet (0xFFFFFFF0 defective, 0xFFFFFFFF available)
+        /// </summary>
+        public const uint SparingEntryNotRelocated = 0xFFFFFFF0;
+
+        /// <summary>
+        /// Identifier at the end of a UDF 1.50 Virtual Allocation Table
+        /// </summary>
+        public const string VirtualAllocationTableIdentifier = "*UDF Virtual Alloc Tbl";
+
+        /// <summary>
+        /// Length of the fixed fields of a Virtual Allocation Table header (UDF 2.00 and later)
+        /// </summary>
+        public const int VirtualAllocationTableHeaderLength = 152;
+
+        /// <summary>
+        /// Length of the identifier and previous VAT ICB location after the entries of a UDF 1.50 Virtual Allocation Table
+        /// </summary>
+        public const int VirtualAllocationTableTrailerLength = 36;
+
+        /// <summary>
+        /// Number of sectors at the end of the volume searched for the Virtual Allocation Table's File Entry
+        /// </summary>
+        public const int VirtualAllocationTableSearchSectors = 4;
+
         #endregion
 
         #region Character Set Constants
