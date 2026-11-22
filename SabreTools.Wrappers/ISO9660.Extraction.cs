@@ -321,13 +321,12 @@ namespace SabreTools.Wrappers
             lock (_dataSourceLock)
             {
                 long fileOffset = ((long)extentLocation + dr.ExtendedAttributeRecordLength) * blockLength;
+                _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
                 // CD-DA files are extracted as WAVE files of their raw sectors, if the volume was read from raw sectors
                 var rawSectorSource = RawSectorSource;
                 if (rawSectorSource is not null && dr.IsCDDA())
                     return ExtractCDDAFile(rawSectorSource, dr, extentLocation, fileOffset, filepath, includeDebug);
-
-                _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
                 // Get the length, and make sure it won't EOF
                 uint length = dr.ExtentLength;
