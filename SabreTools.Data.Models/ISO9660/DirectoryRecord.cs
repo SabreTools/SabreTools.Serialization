@@ -34,12 +34,21 @@ namespace SabreTools.Data.Models.ISO9660
         /// Datetime of recording for the Directory Record
         /// If not specified, all values are 0x00
         /// </summary>
+        /// <remarks>
+        /// The High Sierra layout records no time zone offset, TimezoneOffset is 0
+        /// </remarks>
         public DirectoryRecordDateTime RecordingDateTime { get; set; } = new();
 
         /// <summary>
         /// Flags for indicating attributes of the directory record
         /// </summary>
         public FileFlags FileFlags { get; set; }
+
+        /// <summary>
+        /// 1 reserved byte after the file flags, only present in the High Sierra layout
+        /// Optional field
+        /// </summary>
+        public byte? ReservedByte { get; set; }
 
         /// <summary>
         /// Assigned file unit size for the file section (interleaved mode)

@@ -44,6 +44,19 @@ namespace SabreTools.Data.Models.ISO9660
 
         #endregion
 
+        #region High Sierra Constants
+
+        /// <summary>
+        /// Identifier present on High Sierra discs, "CDROM"
+        /// </summary>
+        /// <remarks>
+        /// Recorded at bytes 9-13 of a High Sierra volume descriptor,
+        /// after its logical block number (bytes 0-7) and type (byte 8)
+        /// </remarks>
+        public static readonly byte[] HighSierraIdentifier = [0x43, 0x44, 0x52, 0x4F, 0x4D];
+
+        #endregion
+
         #region Primary/Supplementary Volume Descriptors Constants
 
         /// <summary>
