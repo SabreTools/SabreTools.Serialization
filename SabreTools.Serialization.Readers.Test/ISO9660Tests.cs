@@ -1,3 +1,5 @@
+using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -168,6 +170,144 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(actual);
             Assert.True(actual.ContainsKey(1));
             Assert.True(actual.ContainsKey(2));
+        }
+
+        [Fact]
+        public void Deserialize_DirectoryOnlyInPathTable_ParsesIt()
+        {
+            // The root directory at sector 20 does not hold HIDDEN at sector 30, the path table at sector 18 does
+            byte[] image = new byte[32 * 2048];
+            WriteVolumeDescriptorSet(image, 20, 18, 24);
+            int offset = WritePathTableRecord(image, 18 * 2048, [0], 20, 1);
+            WritePathTableRecord(image, offset, Encoding.ASCII.GetBytes("HIDDEN"), 30, 1);
+            WriteDirectory(image, 20);
+            WriteDirectory(image, 30);
+            var deserializer = new ISO9660();
+
+            var actual = deserializer.Deserialize(new MemoryStream(image));
+
+            Assert.NotNull(actual);
+            Assert.Equal(new[] { 20, 30 }, actual.DirectoryDescriptors.Keys.OrderBy(k => k));
+        }
+
+        [Fact]
+        public void ParsePathTableDirectories_DirectoryOnlyInPathTable_ParsesItsHierarchy()
+        {
+            // The root directory at sector 20 holds A at sector 21 but not HIDDEN at sector 30,
+            // which holds SUB at sector 31 and A
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("A", 21, FileFlags.DIRECTORY));
+            WriteDirectory(image, 21);
+            WriteDirectory(image, 30, ("SUB", 31, FileFlags.DIRECTORY), ("A", 21, FileFlags.DIRECTORY));
+            WriteDirectory(image, 31);
+            var vdSet = new VolumeDescriptor[] { CreatePrimaryVolumeDescriptor(20) };
+            var directories = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, vdSet)!;
+
+            ISO9660.ParsePathTableDirectories(new MemoryStream(image), 2048, vdSet, [CreatePathTableGroup(20, 21, 30, 31)], directories);
+
+            Assert.Equal(new[] { 20, 21, 30, 31 }, directories.Keys.OrderBy(k => k));
+            Assert.Equal(4, Assert.IsType<DirectoryExtent>(directories[30]).DirectoryRecords.Length);
+        }
+
+        [Fact]
+        public void ParsePathTableDirectories_ReachedDirectories_ReadsNothing()
+        {
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20, ("A", 30, FileFlags.DIRECTORY));
+            WriteDirectory(image, 30);
+            var vdSet = new VolumeDescriptor[] { CreatePrimaryVolumeDescriptor(20) };
+            var directories = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, vdSet)!;
+            var stream = new SeekCountingStream(image);
+
+            ISO9660.ParsePathTableDirectories(stream, 2048, vdSet, [CreatePathTableGroup(20, 30)], directories);
+
+            Assert.Empty(stream.SeekOrder);
+            Assert.Equal(2, directories.Count);
+        }
+
+        [Fact]
+        public void ParsePathTableDirectories_OtherDirectoryHierarchy_Ignored()
+        {
+            // The path table starts with sector 25 instead of the root directory
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20);
+            WriteDirectory(image, 30);
+            var vdSet = new VolumeDescriptor[] { CreatePrimaryVolumeDescriptor(20) };
+            var directories = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, vdSet)!;
+
+            ISO9660.ParsePathTableDirectories(new MemoryStream(image), 2048, vdSet, [CreatePathTableGroup(25, 30)], directories);
+
+            Assert.Equal(new[] { 20 }, directories.Keys);
+        }
+
+        [Fact]
+        public void ParsePathTableDirectories_SupplementaryVolumeDescriptor_ParsesItsHierarchy()
+        {
+            // The path table starts with the root directory of the supplementary volume descriptor at sector 24
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20);
+            WriteDirectory(image, 24);
+            WriteDirectory(image, 30);
+            var svd = new SupplementaryVolumeDescriptor
+            {
+                LogicalBlockSize = 2048,
+                RootDirectoryRecord = CreatePrimaryVolumeDescriptor(24).RootDirectoryRecord,
+            };
+
+            var vdSet = new VolumeDescriptor[] { CreatePrimaryVolumeDescriptor(20), svd };
+            var directories = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, vdSet)!;
+
+            ISO9660.ParsePathTableDirectories(new MemoryStream(image), 2048, vdSet, [CreatePathTableGroup(24, 30)], directories);
+
+            Assert.Equal(new[] { 20, 24, 30 }, directories.Keys.OrderBy(k => k));
+        }
+
+        [Fact]
+        public void ParsePathTableDirectories_NotStartOfDirectory_Ignored()
+        {
+            // Sector 30 starts with a directory record for sector 31, which holds a directory
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20);
+            WriteRecord(image, 30 * 2048, Constants.CurrentDirectory, 31, FileFlags.DIRECTORY);
+            WriteDirectory(image, 31);
+            var vdSet = new VolumeDescriptor[] { CreatePrimaryVolumeDescriptor(20) };
+            var directories = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, vdSet)!;
+
+            ISO9660.ParsePathTableDirectories(new MemoryStream(image), 2048, vdSet, [CreatePathTableGroup(20, 30)], directories);
+
+            Assert.Equal(new[] { 20 }, directories.Keys);
+        }
+
+        [Fact]
+        public void ParsePathTableDirectories_NotDirectory_Ignored()
+        {
+            // Sector 30 starts with a directory record for itself without the directory flag
+            byte[] image = new byte[32 * 2048];
+            WriteDirectory(image, 20);
+            WriteRecord(image, 30 * 2048, Constants.CurrentDirectory, 30, NoFlags);
+            var vdSet = new VolumeDescriptor[] { CreatePrimaryVolumeDescriptor(20) };
+            var directories = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, vdSet)!;
+
+            ISO9660.ParsePathTableDirectories(new MemoryStream(image), 2048, vdSet, [CreatePathTableGroup(20, 30)], directories);
+
+            Assert.Equal(new[] { 20 }, directories.Keys);
+        }
+
+        [Fact]
+        public void ParsePathTableDirectories_OutsideImage_Ignored()
+        {
+            // The image ends 20 bytes into sector 32, and the stream is at its end
+            // as after reading a directory in its last sector
+            byte[] image = new byte[(32 * 2048) + 20];
+            WriteDirectory(image, 20);
+            var vdSet = new VolumeDescriptor[] { CreatePrimaryVolumeDescriptor(20) };
+            var directories = ISO9660.ParseDirectoryDescriptors(new MemoryStream(image), 2048, vdSet)!;
+            var stream = new MemoryStream(image);
+            stream.Seek(0, SeekOrigin.End);
+
+            ISO9660.ParsePathTableDirectories(stream, 2048, vdSet, [CreatePathTableGroup(20, 32, 40, -1)], directories);
+
+            Assert.Equal(new[] { 20 }, directories.Keys);
         }
 
         [Fact]
@@ -742,6 +882,46 @@ namespace SabreTools.Serialization.Readers.Test
             image[offset + 32] = (byte)identifier.Length;
             identifier.CopyTo(image, offset + 33);
             return offset + length;
+        }
+
+        /// <summary>
+        /// Create a path table group with a little-endian path table that records the given directory extents
+        /// </summary>
+        private static PathTableGroup CreatePathTableGroup(params int[] locations)
+            => new() { PathTableL = [.. locations.Select(location => new PathTableRecord { ExtentLocation = location })] };
+
+        /// <summary>
+        /// Write a primary volume descriptor with 2048-byte blocks and a little-endian path table at sector 16,
+        /// followed by a volume descriptor set terminator
+        /// </summary>
+        private static void WriteVolumeDescriptorSet(byte[] image, int rootSector, int pathTableSector, int pathTableSize)
+        {
+            int offset = 16 * 2048;
+            image[offset] = (byte)VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR;
+            Constants.StandardIdentifier.CopyTo(image, offset + 1);
+            image[offset + 6] = 1;
+            BinaryPrimitives.WriteInt16LittleEndian(image.AsSpan(offset + 128), 2048);
+            BinaryPrimitives.WriteInt16BigEndian(image.AsSpan(offset + 130), 2048);
+            WriteBothEndian(image, offset + 132, pathTableSize);
+            BinaryPrimitives.WriteInt32LittleEndian(image.AsSpan(offset + 140), pathTableSector);
+            WriteRecord(image, offset + 156, [0], rootSector, FileFlags.DIRECTORY);
+
+            offset = 17 * 2048;
+            image[offset] = (byte)VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR;
+            Constants.StandardIdentifier.CopyTo(image, offset + 1);
+            image[offset + 6] = 1;
+        }
+
+        /// <summary>
+        /// Write a little-endian path table record, returns the offset after the record
+        /// </summary>
+        private static int WritePathTableRecord(byte[] image, int offset, byte[] identifier, int location, short parent)
+        {
+            image[offset] = (byte)identifier.Length;
+            BinaryPrimitives.WriteInt32LittleEndian(image.AsSpan(offset + 2), location);
+            BinaryPrimitives.WriteInt16LittleEndian(image.AsSpan(offset + 6), parent);
+            identifier.CopyTo(image, offset + 8);
+            return offset + 8 + identifier.Length + (identifier.Length % 2);
         }
 
         /// <summary>
