@@ -354,6 +354,66 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void MultiLineTextValues_Joined()
+        {
+            // CD-Text values can contain a newline, which is written as it is between the quotes
+            string[] lines =
+            [
+                "PERFORMER \"Artist Name",
+                "\"",
+                "FILE \"Disc Name (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    TITLE \"Line 1 ",
+                "Line 2\"",
+                "",
+                "    SONGWRITER \"",
+                "Name\"",
+                "    INDEX 01 00:00:00",
+                "  TRACK 02 AUDIO",
+                "    INDEX 01 00:02:00",
+            ];
+            var stream = CreateStream(lines);
+
+            var actual = new CueSheet().Deserialize(stream);
+
+            Assert.NotNull(actual);
+            Assert.Equal("Artist Name\n", actual.Performer);
+            var file = Assert.Single(actual.Files);
+            Assert.Equal(2, file.Tracks.Length);
+            Assert.Equal("Line 1 \nLine 2", file.Tracks[0].Title);
+            Assert.Equal("\nName", file.Tracks[0].Songwriter);
+            Assert.Single(file.Tracks[0].Indices);
+            Assert.Equal(2, file.Tracks[1].Number);
+        }
+
+        [Fact]
+        public void UnclosedTextValues_Kept()
+        {
+            // A value that is not closed before the next command keeps its quote
+            string[] lines =
+            [
+                "FILE \"Disc Name (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    TITLE \"",
+                "    INDEX 01 00:00:00",
+                "  TRACK 02 AUDIO",
+                "    TITLE \"Unclosed",
+                "    INDEX 01 00:02:00",
+            ];
+            var stream = CreateStream(lines);
+
+            var actual = new CueSheet().Deserialize(stream);
+
+            Assert.NotNull(actual);
+            var file = Assert.Single(actual.Files);
+            Assert.Equal(2, file.Tracks.Length);
+            Assert.Equal("\"", file.Tracks[0].Title);
+            Assert.Single(file.Tracks[0].Indices);
+            Assert.Equal("\"Unclosed", file.Tracks[1].Title);
+            Assert.Single(file.Tracks[1].Indices);
+        }
+
+        [Fact]
         public void BlankLines_Skipped()
         {
             string[] lines =
