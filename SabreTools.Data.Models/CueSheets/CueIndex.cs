@@ -29,5 +29,10 @@ namespace SabreTools.Data.Models.CueSheets
         /// </summary>
         /// <remarks>There are 75 frames per second</remarks>
         public int Frames { get; set; }
+
+        /// <summary>
+        /// Text after the REM keyword of each REM line after the INDEX line, up to the next INDEX, TRACK or FILE
+        /// </summary>
+        public string[] Remarks { get; set; } = [];
     }
 }

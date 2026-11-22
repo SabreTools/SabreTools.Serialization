@@ -175,6 +175,158 @@ namespace SabreTools.Serialization.Writers.Test
         }
 
         [Fact]
+        public void SerializeStream_Remarks_WrittenInPlace()
+        {
+            var track = CreateTrack(1, CueTrackDataType.MODE1_2352);
+            track.Title = "Data";
+            track.Remarks = ["Before the pregap"];
+            track.PreGap = new PreGap { Seconds = 2 };
+            track.Indices[0].Remarks = ["LBA: 0", ""];
+            var file = CreateFile("a.bin", track);
+            file.Remarks = ["ORIGINAL MEDIA-TYPE: CD-RW"];
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Catalog = "0000000000000",
+                Remarks = ["GENRE Game"],
+                Files = [file],
+            };
+
+            string[] expected =
+            [
+                "CATALOG 0000000000000",
+                "REM GENRE Game",
+                "FILE \"a.bin\" BINARY",
+                "REM ORIGINAL MEDIA-TYPE: CD-RW",
+                "  TRACK 01 MODE1/2352",
+                "    TITLE \"Data\"",
+                "REM Before the pregap",
+                "    PREGAP 00:02:00",
+                "    INDEX 01 00:00:00",
+                "REM LBA: 0",
+                "REM",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_NullRemarks_Skipped()
+        {
+            var track = CreateTrack(1, CueTrackDataType.MODE1_2352);
+            track.Remarks = null!;
+            track.Indices[0].Remarks = null!;
+            var file = CreateFile("a.bin", track);
+            file.Remarks = null!;
+            var cueSheet = new Data.Models.CueSheets.CueSheet { Remarks = null!, Files = [file] };
+
+            string[] expected =
+            [
+                "FILE \"a.bin\" BINARY",
+                "  TRACK 01 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_RemSessionInRemarks_NotRepeated()
+        {
+            // Layout written by IsoBuster
+            var first = CreateTrack(1, CueTrackDataType.AUDIO, session: 1);
+            first.Indices[0].Remarks = ["LEAD-OUT 02:00:00 (*)", "SESSION 02        (*)"];
+            var file = CreateFile("a.bin", first, CreateTrack(2, CueTrackDataType.MODE2_2352, session: 2));
+            file.Remarks = ["SESSION 01        (*)"];
+            var cueSheet = new Data.Models.CueSheets.CueSheet { Files = [file] };
+
+            string[] expected =
+            [
+                "FILE \"a.bin\" BINARY",
+                "REM SESSION 01        (*)",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM LEAD-OUT 02:00:00 (*)",
+                "REM SESSION 02        (*)",
+                "  TRACK 02 MODE2/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_RemSessionInRemarksDiffers_RemSessionWritten()
+        {
+            // The session of the track is written after a REM line with another session
+            var first = CreateTrack(1, CueTrackDataType.AUDIO, session: 1);
+            first.Indices[0].Remarks = ["SESSION 02"];
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files = [CreateFile("a.bin", first, CreateTrack(2, CueTrackDataType.AUDIO, session: 1))],
+            };
+
+            string[] expected =
+            [
+                "REM SESSION 01",
+                "FILE \"a.bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM SESSION 02",
+                "REM SESSION 01",
+                "  TRACK 02 AUDIO",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_FileRemarks_RemSessionAfterThem()
+        {
+            // The REM lines of the file could note the session themselves
+            var file = CreateFile("a.bin", CreateTrack(1, CueTrackDataType.AUDIO, session: 1));
+            file.Remarks = ["ORIGINAL MEDIA-TYPE: CD-RW"];
+            var cueSheet = new Data.Models.CueSheets.CueSheet { Files = [file] };
+
+            string[] expected =
+            [
+                "FILE \"a.bin\" BINARY",
+                "REM ORIGINAL MEDIA-TYPE: CD-RW",
+                "REM SESSION 01",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_DensityAreaInRemarks_NotRepeated()
+        {
+            // Layout written by redump for a GD-ROM
+            var first = CreateTrack(1, CueTrackDataType.MODE1_2352, densityArea: CueDensityArea.SingleDensity);
+            first.Indices[0].Remarks = ["HIGH-DENSITY AREA", "Comment"];
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Remarks = ["SINGLE-DENSITY AREA"],
+                Files =
+                [
+                    CreateFile("a (Track 1).bin", first),
+                    CreateFile("a (Track 2).bin", CreateTrack(2, CueTrackDataType.MODE1_2352, densityArea: CueDensityArea.HighDensity)),
+                ],
+            };
+
+            string[] expected =
+            [
+                "REM SINGLE-DENSITY AREA",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 MODE1/2352",
+                "    INDEX 01 00:00:00",
+                "REM HIGH-DENSITY AREA",
+                "REM Comment",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "  TRACK 02 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
         public void SerializeStream_NullTrack_Throws()
         {
             var cueSheet = new Data.Models.CueSheets.CueSheet

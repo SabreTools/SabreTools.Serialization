@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.CueSheets;
 using SabreTools.IO.Extensions;
 
@@ -68,6 +69,7 @@ namespace SabreTools.Serialization.Writers
                 sw.WriteLine($"TITLE \"{cueSheet.Title}\"");
 
             var remarks = new RemarkState();
+            WriteRemarkLines(cueSheet.Remarks, sw, remarks);
             foreach (var cueFile in cueSheet.Files)
             {
                 WriteCueFile(cueFile, sw, remarks);
@@ -88,14 +90,18 @@ namespace SabreTools.Serialization.Writers
             else if (cueFile.Tracks.Length == 0)
                 throw new ArgumentException("No tracks provided to write");
 
-            // A session or density area that starts with the file is noted before the FILE line
-            WriteRemarks(cueFile.Tracks[0], sw, remarks);
+            // A session or density area that starts with the file is noted before the FILE line,
+            // or after the REM lines of the file if it has any, as they could note it themselves
+            if (cueFile.Remarks is null || cueFile.Remarks.Length == 0)
+                WriteRemarks(cueFile.Tracks[0], sw, remarks);
+
             sw.WriteLine($"FILE \"{cueFile.FileName}\" {FromFileType(cueFile.FileType)}");
+            WriteRemarkLines(cueFile.Remarks, sw, remarks);
 
             foreach (var track in cueFile.Tracks)
             {
                 WriteRemarks(track, sw, remarks);
-                WriteCueTrack(track, sw);
+                WriteCueTrack(track, sw, remarks);
             }
         }
 
@@ -113,6 +119,31 @@ namespace SabreTools.Serialization.Writers
             /// Density area of the last REM SINGLE-DENSITY AREA or REM HIGH-DENSITY AREA line
             /// </summary>
             public CueDensityArea DensityArea { get; set; }
+        }
+
+        /// <summary>
+        /// Write REM lines of the model and read their session or density area like the reader
+        /// </summary>
+        /// <param name="lines">Text after the REM keyword of each line</param>
+        /// <param name="sw">StreamWriter to write to</param>
+        /// <param name="remarks">Session and density area from the REM lines written so far</param>
+        private static void WriteRemarkLines(string[]? lines, StreamWriter sw, RemarkState remarks)
+        {
+            if (lines is null)
+                return;
+
+            foreach (string remark in lines)
+            {
+                sw.WriteLine(remark.Length == 0 ? "REM" : $"REM {remark}");
+
+                int? session = CueSheetExtensions.GetSession(remark);
+                if (session is not null)
+                    remarks.Session = session.Value;
+
+                var densityArea = CueSheetExtensions.GetDensityArea(remark);
+                if (densityArea != CueDensityArea.None)
+                    remarks.DensityArea = densityArea;
+            }
         }
 
         /// <summary>
@@ -159,7 +190,8 @@ namespace SabreTools.Serialization.Writers
         /// </summary>
         /// <param name="cueFile">CueFile to write</param>
         /// <param name="sw">StreamWriter to write to</param>
-        private static void WriteCueTrack(CueTrack? cueTrack, StreamWriter sw)
+        /// <param name="remarks">Session and density area from the REM lines written so far</param>
+        private static void WriteCueTrack(CueTrack? cueTrack, StreamWriter sw, RemarkState remarks)
         {
             // If we don't have any indices, it's invalid
             if (cueTrack?.Indices is null)
@@ -184,12 +216,14 @@ namespace SabreTools.Serialization.Writers
             if (!string.IsNullOrEmpty(cueTrack.Title))
                 sw.WriteLine($"    TITLE \"{cueTrack.Title}\"");
 
+            WriteRemarkLines(cueTrack.Remarks, sw, remarks);
+
             if (cueTrack.PreGap is not null)
                 WritePreGap(cueTrack.PreGap, sw);
 
             foreach (var index in cueTrack.Indices)
             {
-                WriteCueIndex(index, sw);
+                WriteCueIndex(index, sw, remarks);
             }
 
             if (cueTrack.PostGap is not null)
@@ -211,12 +245,14 @@ namespace SabreTools.Serialization.Writers
         /// </summary>
         /// <param name="cueIndex">CueIndex to write</param>
         /// <param name="sw">StreamWriter to write to</param>
-        private static void WriteCueIndex(CueIndex? cueIndex, StreamWriter sw)
+        /// <param name="remarks">Session and density area from the REM lines written so far</param>
+        private static void WriteCueIndex(CueIndex? cueIndex, StreamWriter sw, RemarkState remarks)
         {
             if (cueIndex is null)
                 throw new ArgumentNullException(nameof(cueIndex));
 
             sw.WriteLine($"    INDEX {cueIndex.Index:D2} {cueIndex.Minutes:D2}:{cueIndex.Seconds:D2}:{cueIndex.Frames:D2}");
+            WriteRemarkLines(cueIndex.Remarks, sw, remarks);
         }
 
         /// <summary>

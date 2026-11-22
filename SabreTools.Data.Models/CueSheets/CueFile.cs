@@ -19,6 +19,11 @@ namespace SabreTools.Data.Models.CueSheets
         public CueFileType FileType { get; set; }
 
         /// <summary>
+        /// Text after the REM keyword of each REM line between the FILE line and its first TRACK
+        /// </summary>
+        public string[] Remarks { get; set; } = [];
+
+        /// <summary>
         /// List of TRACK in FILE
         /// </summary>
         public CueTrack[] Tracks { get; set; } = [];

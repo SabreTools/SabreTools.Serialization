@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.CueSheets;
 
 #pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
@@ -24,6 +25,7 @@ namespace SabreTools.Serialization.Readers
                 var cueSheet = new Data.Models.CueSheets.CueSheet();
                 var cueFiles = new List<CueFile>();
                 var remarks = new RemarkState();
+                List<string> sheetRemarks = [];
 
                 // Read the next line from the input
                 string? lastLine = null;
@@ -45,7 +47,9 @@ namespace SabreTools.Serialization.Readers
                     {
                         // Read comments
                         case "REM":
-                            ReadRemark(splitLine, remarks);
+                            string remark = GetRemark(line);
+                            ReadRemark(remark, remarks);
+                            sheetRemarks.Add(remark);
                             break;
 
                         // Read MCN
@@ -109,6 +113,7 @@ namespace SabreTools.Serialization.Readers
                 if (cueFiles.Count == 0)
                     return null;
 
+                cueSheet.Remarks = [.. sheetRemarks];
                 cueSheet.Files = [.. cueFiles];
                 return cueSheet;
             }
@@ -135,6 +140,7 @@ namespace SabreTools.Serialization.Readers
             // Create the holding objects
             lastLine = null;
             var cueTracks = new List<CueTrack>();
+            List<string> fileRemarks = [];
 
             while (lastLine is not null || !reader.EndOfStream)
             {
@@ -154,7 +160,9 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Read comments
                     case "REM":
-                        ReadRemark(splitLine, remarks);
+                        string remark = GetRemark(line);
+                        ReadRemark(remark, remarks);
+                        fileRemarks.Add(remark);
                         break;
 
                     // Read track information
@@ -179,6 +187,7 @@ namespace SabreTools.Serialization.Readers
                         {
                             FileName = fileName.Trim('"'),
                             FileType = GetFileType(fileType),
+                            Remarks = [.. fileRemarks],
                             Tracks = [.. cueTracks],
                         };
 
@@ -192,6 +201,7 @@ namespace SabreTools.Serialization.Readers
                         {
                             FileName = fileName.Trim('"'),
                             FileType = GetFileType(fileType),
+                            Remarks = [.. fileRemarks],
                             Tracks = [.. cueTracks],
                         };
                 }
@@ -204,6 +214,7 @@ namespace SabreTools.Serialization.Readers
             {
                 FileName = fileName.Trim('"'),
                 FileType = GetFileType(fileType),
+                Remarks = [.. fileRemarks],
                 Tracks = [.. cueTracks],
             };
         }
@@ -233,6 +244,7 @@ namespace SabreTools.Serialization.Readers
             lastLine = null;
             var cueTrack = new CueTrack();
             var cueIndices = new List<CueIndex>();
+            List<string> cueRemarks = [];
 
             cueTrack.Number = parsedNumber;
             cueTrack.DataType = GetDataType(dataType);
@@ -257,7 +269,9 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Read comments
                     case "REM":
-                        ReadRemark(splitLine, remarks);
+                        string remark = GetRemark(line);
+                        ReadRemark(remark, remarks);
+                        cueRemarks.Add(remark);
                         break;
 
                     // Read flag information
@@ -321,6 +335,7 @@ namespace SabreTools.Serialization.Readers
                         if (index == default)
                             throw new FormatException($"INDEX line malformed: {line}");
 
+                        SetRemarks(cueTrack, cueIndices, cueRemarks);
                         cueIndices.Add(index);
                         break;
 
@@ -340,17 +355,20 @@ namespace SabreTools.Serialization.Readers
                     case "TRACK":
                     case "FILE":
                         lastLine = line;
+                        SetRemarks(cueTrack, cueIndices, cueRemarks);
                         cueTrack.Indices = [.. cueIndices];
                         return cueTrack;
 
                     // Default means return
                     default:
                         lastLine = line;
+                        SetRemarks(cueTrack, cueIndices, cueRemarks);
                         cueTrack.Indices = [.. cueIndices];
                         return cueTrack;
                 }
             }
 
+            SetRemarks(cueTrack, cueIndices, cueRemarks);
             if (cueIndices.Count > 0)
                 cueTrack.Indices = [.. cueIndices];
 
@@ -584,36 +602,43 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Read the session or density area from a REM line, other REM lines are ignored
+        /// Get the text of a REM line: the rest of the line after the keyword
         /// </summary>
-        /// <param name="splitLine">Split REM line</param>
-        /// <param name="remarks">Session and density area to update</param>
-        private static void ReadRemark(string[] splitLine, RemarkState remarks)
+        private static string GetRemark(string line)
         {
-            if (splitLine.Length < 3)
-                return;
+            return line.TrimStart().Substring("REM".Length).Trim();
+        }
 
-            switch (splitLine[1])
-            {
-                case "SESSION":
-                    // A value that is not a number is ignored like any other comment
-                    if (int.TryParse(splitLine[2], out int session))
-                        remarks.Session = session;
+        /// <summary>
+        /// Read the session or density area from the text of a REM line, other REM lines do not change them
+        /// </summary>
+        /// <param name="remark">Text after the REM keyword</param>
+        /// <param name="remarks">Session and density area to update</param>
+        private static void ReadRemark(string remark, RemarkState remarks)
+        {
+            int? session = CueSheetExtensions.GetSession(remark);
+            if (session is not null)
+                remarks.Session = session.Value;
 
-                    break;
+            var densityArea = CueSheetExtensions.GetDensityArea(remark);
+            if (densityArea != CueDensityArea.None)
+                remarks.DensityArea = densityArea;
+        }
 
-                case "SINGLE-DENSITY":
-                    remarks.DensityArea = CueDensityArea.SingleDensity;
-                    break;
+        /// <summary>
+        /// Set the REM lines read since the TRACK line or the last INDEX line on the track or on that index
+        /// </summary>
+        /// <param name="cueTrack">Track that is read</param>
+        /// <param name="cueIndices">Indices of the track read so far</param>
+        /// <param name="cueRemarks">REM lines read since the TRACK line or the last INDEX line, cleared afterwards</param>
+        private static void SetRemarks(CueTrack cueTrack, List<CueIndex> cueIndices, List<string> cueRemarks)
+        {
+            if (cueIndices.Count == 0)
+                cueTrack.Remarks = [.. cueRemarks];
+            else
+                cueIndices[cueIndices.Count - 1].Remarks = [.. cueRemarks];
 
-                case "HIGH-DENSITY":
-                    remarks.DensityArea = CueDensityArea.HighDensity;
-                    break;
-
-                default:
-                    // Other REM lines are not part of the model
-                    break;
-            }
+            cueRemarks.Clear();
         }
 
         /// <summary>

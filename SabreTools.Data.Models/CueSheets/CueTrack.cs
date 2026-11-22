@@ -56,6 +56,11 @@ namespace SabreTools.Data.Models.CueSheets
         public string? Title { get; set; }
 
         /// <summary>
+        /// Text after the REM keyword of each REM line between the TRACK line and its first INDEX
+        /// </summary>
+        public string[] Remarks { get; set; } = [];
+
+        /// <summary>
         /// PREGAP
         /// </summary>
         public PreGap? PreGap { get; set; }
