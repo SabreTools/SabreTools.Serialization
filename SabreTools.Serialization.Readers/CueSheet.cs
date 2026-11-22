@@ -141,6 +141,7 @@ namespace SabreTools.Serialization.Readers
             lastLine = null;
             var cueTracks = new List<CueTrack>();
             List<string> fileRemarks = [];
+            List<CueIndex> fileIndices = [];
 
             while (lastLine is not null || !reader.EndOfStream)
             {
@@ -162,7 +163,18 @@ namespace SabreTools.Serialization.Readers
                     case "REM":
                         string remark = GetRemark(line);
                         ReadRemark(remark, remarks);
-                        fileRemarks.Add(remark);
+
+                        // A comment after an index belongs to that index
+                        if (fileIndices.Count == 0)
+                            fileRemarks.Add(remark);
+                        else
+                            fileIndices[fileIndices.Count - 1].Remarks = [.. fileIndices[fileIndices.Count - 1].Remarks, remark];
+
+                        break;
+
+                    // Read index information of the last track of the previous file
+                    case "INDEX":
+                        fileIndices.Add(CreateCueIndex(splitLine[1], splitLine[2]));
                         break;
 
                     // Read track information
@@ -180,7 +192,7 @@ namespace SabreTools.Serialization.Readers
                     // Next file found, return
                     case "FILE":
                         lastLine = line;
-                        if (cueTracks.Count == 0)
+                        if (cueTracks.Count == 0 && fileIndices.Count == 0)
                             return null;
 
                         return new CueFile
@@ -188,6 +200,7 @@ namespace SabreTools.Serialization.Readers
                             FileName = fileName.Trim('"'),
                             FileType = GetFileType(fileType),
                             Remarks = [.. fileRemarks],
+                            Indices = [.. fileIndices],
                             Tracks = [.. cueTracks],
                         };
 
@@ -202,12 +215,13 @@ namespace SabreTools.Serialization.Readers
                             FileName = fileName.Trim('"'),
                             FileType = GetFileType(fileType),
                             Remarks = [.. fileRemarks],
+                            Indices = [.. fileIndices],
                             Tracks = [.. cueTracks],
                         };
                 }
             }
 
-            if (cueTracks.Count == 0)
+            if (cueTracks.Count == 0 && fileIndices.Count == 0)
                 return null;
 
             return new CueFile
@@ -215,6 +229,7 @@ namespace SabreTools.Serialization.Readers
                 FileName = fileName.Trim('"'),
                 FileType = GetFileType(fileType),
                 Remarks = [.. fileRemarks],
+                Indices = [.. fileIndices],
                 Tracks = [.. cueTracks],
             };
         }
