@@ -102,6 +102,40 @@ namespace SabreTools.Wrappers
             }
         }
 
+        /// <summary>
+        /// Create an ISO9660 Volume from one session of a multisession disc
+        /// </summary>
+        /// <param name="data">Stream holding the whole disc, one 2048-byte sector per sector address, sector 0 first</param>
+        /// <param name="sessionStart">Sector address of the first track of the session</param>
+        /// <returns>An ISO9660 Volume wrapper on success, null on failure</returns>
+        /// <remarks>
+        /// The volume descriptors of a session follow its own system area, but the extent locations recorded
+        /// in it count from sector 0 of the disc, so files are read relative to the start of the stream
+        /// </remarks>
+        public static ISO9660? Create(Stream? data, long sessionStart)
+        {
+            // If the data is invalid
+            if (data is null)
+                return null;
+
+            try
+            {
+                // Seek throws for a negative start or a stream that cannot seek
+                data.Seek(sessionStart * Constants.MinimumSectorSize, SeekOrigin.Begin);
+
+                var model = new Serialization.Readers.ISO9660().Deserialize(data);
+                if (model is null)
+                    return null;
+
+                // Extent locations count from sector 0, not from the session
+                return new ISO9660(model, data, 0);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         #endregion
     }
 }
