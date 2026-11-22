@@ -190,7 +190,9 @@ namespace SabreTools.Serialization.Writers
             else if (cueTrack.Indices.Length == 0)
                 throw new ArgumentException("No indices provided to write");
 
-            sw.WriteLine($"  TRACK {cueTrack.Number:D2} {FromDataType(cueTrack.DataType)}");
+            // A datatype that is not known is written as it was read
+            string? dataType = string.IsNullOrEmpty(cueTrack.UnknownDataType) ? FromDataType(cueTrack.DataType) : cueTrack.UnknownDataType;
+            sw.WriteLine($"  TRACK {cueTrack.Number:D2} {dataType}");
 
             if (cueTrack.Flags != 0)
                 sw.WriteLine($"    FLAGS {FromFlags(cueTrack.Flags)}");

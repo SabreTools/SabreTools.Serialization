@@ -264,6 +264,11 @@ namespace SabreTools.Serialization.Readers
 
             cueTrack.Number = parsedNumber;
             cueTrack.DataType = GetDataType(dataType);
+
+            // A datatype that is not known is read as AUDIO, so keep its text
+            if (cueTrack.DataType == CueTrackDataType.AUDIO && !string.Equals(dataType, "AUDIO", StringComparison.OrdinalIgnoreCase))
+                cueTrack.UnknownDataType = dataType;
+
             cueTrack.Session = session;
             cueTrack.DensityArea = densityArea;
 

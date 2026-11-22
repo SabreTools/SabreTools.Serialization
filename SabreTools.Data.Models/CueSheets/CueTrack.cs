@@ -19,6 +19,12 @@ namespace SabreTools.Data.Models.CueSheets
         public CueTrackDataType DataType { get; set; }
 
         /// <summary>
+        /// Track datatype from the TRACK line if it is not a known datatype, e.g. MODEx/2xxx
+        /// </summary>
+        /// <remarks>DataType is AUDIO then; written instead of DataType if set</remarks>
+        public string? UnknownDataType { get; set; }
+
+        /// <summary>
         /// Session from the last REM SESSION line before the track
         /// </summary>
         /// <remarks>0 if no REM SESSION line comes before the track</remarks>
