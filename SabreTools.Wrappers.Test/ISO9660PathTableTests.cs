@@ -1,27 +1,19 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.Numerics;
 using Xunit;
+using static SabreTools.Wrappers.Test.ISO9660ModelBuilder;
 
 namespace SabreTools.Wrappers.Test
 {
     public class ISO9660PathTableTests
     {
-        private const int BlockLength = 2048;
-
         /// <summary>
         /// Block of the root directory of the primary volume descriptor
         /// </summary>
         private const int RootDirectory = 20;
-
-        /// <summary>
-        /// File flags of a plain file record
-        /// </summary>
-        private const FileFlags NoFlags = 0;
 
         [Fact]
         public void Extract_DirectoryOnlyInPathTable_ExtractsItsHierarchy()
@@ -236,29 +228,7 @@ namespace SabreTools.Wrappers.Test
         /// Create a wrapper of a volume whose blocks are filled with the low byte of their block number
         /// </summary>
         private static ISO9660 CreateWrapper(Volume volume)
-        {
-            byte[] data = new byte[64 * BlockLength];
-            for (int block = 0; block < 64; block++)
-            {
-                data.AsSpan(block * BlockLength, BlockLength).Fill((byte)block);
-            }
-
-            return new ISO9660(volume, data);
-        }
-
-        /// <summary>
-        /// Paths of all extracted files and directories, relative to the output directory and sorted
-        /// </summary>
-        private static string[] Entries(string outputDirectory)
-            => [.. Directory.GetFileSystemEntries(outputDirectory, "*", SearchOption.AllDirectories)
-                .Select(path => Path.GetRelativePath(outputDirectory, path).Replace(Path.DirectorySeparatorChar, '/'))
-                .OrderBy(path => path, StringComparer.Ordinal)];
-
-        /// <summary>
-        /// Data of a 10-byte file recorded at the given block
-        /// </summary>
-        private static byte[] ExpectedData(int location)
-            => [.. Enumerable.Repeat((byte)location, 10)];
+            => new(volume, CreateData());
 
         /// <summary>
         /// Create a volume with a primary volume descriptor, its directories and one path table
@@ -277,59 +247,6 @@ namespace SabreTools.Wrappers.Test
                 ],
                 PathTableGroups = [new PathTableGroup { PathTableL = pathTable }],
                 DirectoryDescriptors = directories,
-            };
-        }
-
-        /// <summary>
-        /// Directory extent with current and parent directory records and the given records
-        /// </summary>
-        private static DirectoryExtent Listing(int location, int parent, params DirectoryRecord[] records)
-            => new() { DirectoryRecords = [DirectoryEntry(Constants.CurrentDirectory, location), DirectoryEntry(Constants.ParentDirectory, parent), .. records] };
-
-        /// <summary>
-        /// Directory record of a subdirectory
-        /// </summary>
-        private static DirectoryRecord DirectoryEntry(string name, int location)
-            => DirectoryEntry(Encoding.ASCII.GetBytes(name), location);
-
-        /// <summary>
-        /// Directory record of a subdirectory
-        /// </summary>
-        private static DirectoryRecord DirectoryEntry(byte[] identifier, int location)
-        {
-            return new DirectoryRecord
-            {
-                ExtentLocation = location,
-                ExtentLength = BlockLength,
-                FileFlags = FileFlags.DIRECTORY,
-                FileIdentifier = identifier,
-            };
-        }
-
-        /// <summary>
-        /// Directory record of a 10-byte file
-        /// </summary>
-        private static DirectoryRecord FileEntry(string name, int location, Encoding? encoding = null)
-        {
-            return new DirectoryRecord
-            {
-                ExtentLocation = location,
-                ExtentLength = 10,
-                FileFlags = NoFlags,
-                FileIdentifier = (encoding ?? Encoding.ASCII).GetBytes($"{name};1"),
-            };
-        }
-
-        /// <summary>
-        /// Path table record of a directory
-        /// </summary>
-        private static PathTableRecord PathTableEntry(int location, short parent, string name, Encoding? encoding = null)
-        {
-            return new PathTableRecord
-            {
-                ExtentLocation = location,
-                ParentDirectoryNumber = parent,
-                DirectoryIdentifier = (encoding ?? Encoding.ASCII).GetBytes(name),
             };
         }
 
