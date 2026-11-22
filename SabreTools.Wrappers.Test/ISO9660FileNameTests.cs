@@ -2,16 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using SabreTools.Data.Models.ISO9660;
 using Xunit;
+using static SabreTools.Wrappers.Test.ISO9660ModelBuilder;
 
 namespace SabreTools.Wrappers.Test
 {
     public class ISO9660FileNameTests
     {
-        private const int BlockLength = 2048;
-
         /// <summary>
         /// Block of the root directory of the primary volume descriptor
         /// </summary>
@@ -141,7 +139,7 @@ namespace SabreTools.Wrappers.Test
         {
             var directories = new Dictionary<int, FileExtent>
             {
-                [RootDirectory] = Listing(RootDirectory, RootDirectory, FileEntry("../FILE.TXT", 25, FileFlags.ASSOCIATED_FILE), FileEntry("../FILE.TXT", 26)),
+                [RootDirectory] = Listing(RootDirectory, RootDirectory, FileEntry("../FILE.TXT", 25, flags: FileFlags.ASSOCIATED_FILE), FileEntry("../FILE.TXT", 26)),
             };
 
             string root = Extract(CreateVolume(directories));
@@ -159,32 +157,12 @@ namespace SabreTools.Wrappers.Test
         /// </summary>
         private static string Extract(Volume volume)
         {
-            byte[] data = new byte[64 * BlockLength];
-            for (int block = 0; block < 64; block++)
-            {
-                data.AsSpan(block * BlockLength, BlockLength).Fill((byte)block);
-            }
-
             string root = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             string outputDirectory = Path.Combine(root, "out", "sub");
             Directory.CreateDirectory(outputDirectory);
-            Assert.True(new ISO9660(volume, data).Extract(outputDirectory, includeDebug: false));
+            Assert.True(new ISO9660(volume, CreateData()).Extract(outputDirectory, includeDebug: false));
             return root;
         }
-
-        /// <summary>
-        /// Paths of all files and directories, relative to the given directory and sorted
-        /// </summary>
-        private static string[] Entries(string root)
-            => [.. Directory.GetFileSystemEntries(root, "*", SearchOption.AllDirectories)
-                .Select(path => Path.GetRelativePath(root, path).Replace(Path.DirectorySeparatorChar, '/'))
-                .OrderBy(path => path, StringComparer.Ordinal)];
-
-        /// <summary>
-        /// Data of a 10-byte file recorded at the given block
-        /// </summary>
-        private static byte[] ExpectedData(int location)
-            => [.. Enumerable.Repeat((byte)location, 10)];
 
         /// <summary>
         /// Create a volume with a primary volume descriptor, its directories and an optional path table
@@ -203,59 +181,6 @@ namespace SabreTools.Wrappers.Test
                 ],
                 PathTableGroups = pathTable is null ? [] : [new PathTableGroup { PathTableL = pathTable }],
                 DirectoryDescriptors = directories,
-            };
-        }
-
-        /// <summary>
-        /// Directory extent with current and parent directory records and the given records
-        /// </summary>
-        private static DirectoryExtent Listing(int location, int parent, params DirectoryRecord[] records)
-            => new() { DirectoryRecords = [DirectoryEntry(Constants.CurrentDirectory, location), DirectoryEntry(Constants.ParentDirectory, parent), .. records] };
-
-        /// <summary>
-        /// Directory record of a subdirectory
-        /// </summary>
-        private static DirectoryRecord DirectoryEntry(string name, int location)
-            => DirectoryEntry(Encoding.ASCII.GetBytes(name), location);
-
-        /// <summary>
-        /// Directory record of a subdirectory
-        /// </summary>
-        private static DirectoryRecord DirectoryEntry(byte[] identifier, int location)
-        {
-            return new DirectoryRecord
-            {
-                ExtentLocation = location,
-                ExtentLength = BlockLength,
-                FileFlags = FileFlags.DIRECTORY,
-                FileIdentifier = identifier,
-            };
-        }
-
-        /// <summary>
-        /// Directory record of a 10-byte file
-        /// </summary>
-        private static DirectoryRecord FileEntry(string name, int location, FileFlags flags = 0)
-        {
-            return new DirectoryRecord
-            {
-                ExtentLocation = location,
-                ExtentLength = 10,
-                FileFlags = flags,
-                FileIdentifier = Encoding.ASCII.GetBytes($"{name};1"),
-            };
-        }
-
-        /// <summary>
-        /// Path table record of a directory
-        /// </summary>
-        private static PathTableRecord PathTableEntry(int location, short parent, string name)
-        {
-            return new PathTableRecord
-            {
-                ExtentLocation = location,
-                ParentDirectoryNumber = parent,
-                DirectoryIdentifier = Encoding.ASCII.GetBytes(name),
             };
         }
 
