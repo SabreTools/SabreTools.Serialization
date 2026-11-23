@@ -125,6 +125,29 @@ namespace SabreTools.Wrappers.Test
         }
 
         [Fact]
+        public void EntryNotWritable_OtherFilesExtracted()
+        {
+            // A file named "Sub" in the output directory keeps the directory "Sub" from being created
+            var wrapper = UDF.Create(new MemoryStream(UDFImageBuilder.Build()));
+            Assert.NotNull(wrapper);
+
+            string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            try
+            {
+                Directory.CreateDirectory(output);
+                File.WriteAllBytes(Path.Combine(output, "Sub"), []);
+                Assert.False(wrapper.Extract(output, false));
+                Assert.True(File.Exists(Path.Combine(output, "README.TXT")));
+                Assert.Equal(100, new FileInfo(Path.Combine(output, "Media")).Length);
+            }
+            finally
+            {
+                if (Directory.Exists(output))
+                    Directory.Delete(output, true);
+            }
+        }
+
+        [Fact]
         public void StreamAtOffset_VolumeAtOffsetExtracted()
         {
             // Another volume comes first, so reading from the start of the stream would find "Outer" instead of "Inner"

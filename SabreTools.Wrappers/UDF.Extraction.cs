@@ -56,19 +56,29 @@ namespace SabreTools.Wrappers
                 }
 
                 string childPath = Path.Combine(outputPath, name!);
-                if (entry.ICBTag.FileType == FileType.DIRECTORY)
+                try
                 {
-                    if (includeDebug) Console.WriteLine($"Extracting to directory: {childPath}");
-                    if (!Directory.Exists(childPath))
-                        Directory.CreateDirectory(childPath);
+                    if (entry.ICBTag.FileType == FileType.DIRECTORY)
+                    {
+                        if (includeDebug) Console.WriteLine($"Extracting to directory: {childPath}");
+                        if (!Directory.Exists(childPath))
+                            Directory.CreateDirectory(childPath);
 
-                    // Directories reachable twice (hard links, loops) are extracted once
-                    if (visited.Add(childKey))
-                        succeeded &= ExtractDirectory(childKey, childPath, visited, includeDebug);
+                        // Directories reachable twice (hard links, loops) are extracted once
+                        if (visited.Add(childKey))
+                            succeeded &= ExtractDirectory(childKey, childPath, visited, includeDebug);
+                    }
+                    else
+                    {
+                        succeeded &= ExtractFile(childKey, entry, childPath, includeDebug);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    succeeded &= ExtractFile(childKey, entry, childPath, includeDebug);
+                    // An entry that cannot be written does not stop the extraction of the others
+                    if (includeDebug) Console.Error.WriteLine(ex);
+
+                    succeeded = false;
                 }
             }
 
