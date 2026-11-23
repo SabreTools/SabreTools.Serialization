@@ -68,6 +68,8 @@ namespace SabreTools.Wrappers
                         rootDirectoryRecord = pvd.RootDirectoryRecord;
                     else if (vd is SupplementaryVolumeDescriptor svd)
                         rootDirectoryRecord = svd.RootDirectoryRecord;
+                    else if (vd is HighSierraPrimaryVolumeDescriptor hspvd)
+                        rootDirectoryRecord = hspvd.RootDirectoryRecord;
                     else
                         continue;
 
@@ -219,6 +221,12 @@ namespace SabreTools.Wrappers
                     Print(builder, vdst);
                 else if (vd is GenericVolumeDescriptor gvd)
                     Print(builder, gvd);
+                else if (vd is HighSierraPrimaryVolumeDescriptor hspvd)
+                    Print(builder, hspvd);
+                else if (vd is HighSierraVolumeDescriptorSetTerminator hsvdst)
+                    Print(builder, hsvdst);
+                else if (vd is HighSierraGenericVolumeDescriptor hsgvd)
+                    Print(builder, hsgvd);
                 else
                 {
                     builder.AppendLine("  Unknown Volume Descriptor");
@@ -401,6 +409,115 @@ namespace SabreTools.Wrappers
             builder.AppendLine();
         }
 
+        private static void Print(StringBuilder builder, HighSierraPrimaryVolumeDescriptor vd)
+        {
+            builder.AppendLine("    High Sierra Standard File Structure Volume Descriptor:");
+            builder.AppendLine("    -------------------------");
+
+            // Default to UTF-8 decoding, as for the Primary Volume Descriptor
+            Encoding encoding = Encoding.UTF8;
+
+            builder.AppendLineBothEndian(vd.LogicalBlockNumber, "    Logical Block Number");
+            builder.AppendLine(vd.UnusedByte, "    Unused Byte");
+
+            builder.AppendLine(encoding.GetString(vd.SystemIdentifier), "    System Identifier");
+            builder.AppendLine(encoding.GetString(vd.VolumeIdentifier), "    Volume Identifier");
+
+            if (vd.Unused8Bytes is not null && Array.TrueForAll(vd.Unused8Bytes, b => b == 0))
+                builder.AppendLine("Zeroed", "    Unused 8 Bytes");
+            else
+                builder.AppendLine(vd.Unused8Bytes, "    Unused 8 Bytes");
+
+            builder.AppendLineBothEndian(vd.VolumeSpaceSize, "    Volume Space Size");
+
+            if (vd.Unused32Bytes is not null && Array.TrueForAll(vd.Unused32Bytes, b => b == 0))
+                builder.AppendLine("Zeroed", "    Unused 32 Bytes");
+            else
+                builder.AppendLine(vd.Unused32Bytes, "    Unused 32 Bytes");
+
+            builder.AppendLineBothEndian(vd.VolumeSetSize, "    Volume Set Size");
+            builder.AppendLineBothEndian(vd.VolumeSequenceNumber, "    Volume Sequence Number");
+            builder.AppendLineBothEndian(vd.LogicalBlockSize, "    Logical Block Size");
+            builder.AppendLineBothEndian(vd.PathTableSize, "    Path Table Size");
+            builder.AppendLine(vd.PathTableLocationL, "    Type-L Path Table Location");
+            builder.AppendLine(vd.OptionalPathTableLocationL, "    Optional Type-L Path Table Location");
+            builder.AppendLine(vd.SecondOptionalPathTableLocationL, "    Second Optional Type-L Path Table Location");
+            builder.AppendLine(vd.ThirdOptionalPathTableLocationL, "    Third Optional Type-L Path Table Location");
+            builder.AppendLine(vd.PathTableLocationM, "    Type-M Path Table Location");
+            builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
+            builder.AppendLine(vd.SecondOptionalPathTableLocationM, "    Second Optional Type-M Path Table Location");
+            builder.AppendLine(vd.ThirdOptionalPathTableLocationM, "    Third Optional Type-M Path Table Location");
+
+            builder.AppendLine("    Root Directory Record:");
+            Print(builder, vd.RootDirectoryRecord, encoding);
+
+            builder.AppendLine(encoding.GetString(vd.VolumeSetIdentifier), "    Volume Set Identifier");
+            builder.AppendLine(encoding.GetString(vd.PublisherIdentifier), "    Publisher Identifier");
+            builder.AppendLine(encoding.GetString(vd.DataPreparerIdentifier), "    Data Preparer Identifier");
+            builder.AppendLine(encoding.GetString(vd.ApplicationIdentifier), "    Application Identifier");
+            builder.AppendLine(encoding.GetString(vd.CopyrightFileIdentifier), "    Copyright Identifier");
+            builder.AppendLine(encoding.GetString(vd.AbstractFileIdentifier), "    Abstract Identifier");
+
+            builder.AppendLine(Format(vd.VolumeCreationDateTime), "    Volume Creation Date Time:");
+            builder.AppendLine(Format(vd.VolumeModificationDateTime), "    Volume Modification Date Time:");
+            builder.AppendLine(Format(vd.VolumeExpirationDateTime), "    Volume Expiration Date Time:");
+            builder.AppendLine(Format(vd.VolumeEffectiveDateTime), "    Volume Effective Date Time:");
+
+            builder.AppendLine(vd.FileStructureVersion, "    File Structure Version");
+
+            builder.AppendLine(vd.ReservedByte, "    Reserved Byte");
+
+            if (vd.ApplicationUse.Length == 0)
+                builder.AppendLine(vd.ApplicationUse, "    Application Use");
+            else if (Array.TrueForAll(vd.ApplicationUse, b => b == 0))
+                builder.AppendLine("Zeroed", "    Application Use");
+            else
+                builder.AppendLine("Not Zeroed", "    Application Use");
+
+            if (vd.Reserved680Bytes.Length == 0)
+                builder.AppendLine(vd.Reserved680Bytes, "    Reserved 680 Bytes");
+            else if (Array.TrueForAll(vd.Reserved680Bytes, b => b == 0))
+                builder.AppendLine("Zeroed", "    Reserved 680 Bytes");
+            else
+                builder.AppendLine("Not Zeroed", "    Reserved 680 Bytes");
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, HighSierraVolumeDescriptorSetTerminator vd)
+        {
+            builder.AppendLine("    High Sierra Volume Descriptor Set Terminator:");
+            builder.AppendLine("    -------------------------");
+
+            builder.AppendLineBothEndian(vd.LogicalBlockNumber, "    Logical Block Number");
+
+            if (vd.Reserved2033Bytes.Length == 0)
+                builder.AppendLine(vd.Reserved2033Bytes, "    Reserved Bytes");
+            else if (Array.TrueForAll(vd.Reserved2033Bytes, b => b == 0))
+                builder.AppendLine("Zeroed", "    Reserved Bytes");
+            else
+                builder.AppendLine("Not Zeroed", "    Reserved Bytes");
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, HighSierraGenericVolumeDescriptor vd)
+        {
+            builder.AppendLine("    Unidentified High Sierra Volume Descriptor:");
+            builder.AppendLine("    -------------------------");
+
+            builder.AppendLineBothEndian(vd.LogicalBlockNumber, "    Logical Block Number");
+
+            if (vd.Data.Length == 0)
+                builder.AppendLine(vd.Data, "    Data");
+            else if (Array.TrueForAll(vd.Data, b => b == 0))
+                builder.AppendLine("Zeroed", "    Data");
+            else
+                builder.AppendLine("Not Zeroed", "    Data");
+
+            builder.AppendLine();
+        }
+
         #endregion
 
         #region Path Tables
@@ -564,6 +681,9 @@ namespace SabreTools.Wrappers
             builder.AppendLine((dr.FileFlags & FileFlags.RESERVED_BIT5) == FileFlags.RESERVED_BIT5, "        Reserved Flag (Bit 5)");
             builder.AppendLine((dr.FileFlags & FileFlags.RESERVED_BIT6) == FileFlags.RESERVED_BIT6, "        Reserved Flag (Bit 6)");
             builder.AppendLine((dr.FileFlags & FileFlags.MULTI_EXTENT) == FileFlags.MULTI_EXTENT, "        Multi-Extent");
+
+            if (dr.ReservedByte is not null)
+                builder.AppendLine(dr.ReservedByte, "      Reserved Byte");
 
             builder.AppendLine(dr.FileUnitSize, "      File Unit Size");
             builder.AppendLine(dr.InterleaveGapSize, "      Interleave Gap Size");
