@@ -33,6 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Include="..\SabreTools.Serialization.Readers.Test\OperaFSImageBuilder.cs" Link="OperaFSImageBuilder.cs" />
         <Compile Include="..\SabreTools.Serialization.Readers.Test\UDFImageBuilder.cs" Link="UDFImageBuilder.cs" />
     </ItemGroup>
 
