@@ -10,15 +10,6 @@ namespace SabreTools.Serialization.Readers
 {
     public class CueSheet : BaseBinaryReader<Data.Models.CueSheets.CueSheet>
     {
-        /// <summary>
-        /// Commands of a cue sheet
-        /// </summary>
-        private static readonly string[] Commands =
-        [
-            "CATALOG", "CDTEXTFILE", "FILE", "FLAGS", "INDEX", "ISRC", "PERFORMER", "POSTGAP", "PREGAP", "REM",
-            "SONGWRITER", "TITLE", "TRACK",
-        ];
-
         /// <inheritdoc/>
         public override Data.Models.CueSheets.CueSheet? Deserialize(Stream? data)
         {
@@ -579,7 +570,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     string next = reader.ReadLine() ?? string.Empty;
                     var splitLine = SplitLine(next);
-                    if (splitLine.Length > 0 && Array.IndexOf(Commands, splitLine[0]) > -1)
+                    if (splitLine.Length > 0 && Array.IndexOf(Constants.Commands, splitLine[0]) > -1)
                     {
                         nextLine = next;
                         break;
