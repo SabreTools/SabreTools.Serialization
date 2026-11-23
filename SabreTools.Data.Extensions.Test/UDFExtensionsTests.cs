@@ -51,6 +51,23 @@ namespace SabreTools.Data.Extensions.Test
 
         #endregion
 
+        #region GetSectorSize
+
+        [Fact]
+        public void GetSectorSize_LogicalBlockSize()
+        {
+            var volume = new Volume { VolumeDescriptorSequence = [new LogicalVolumeDescriptor { LogicalBlockSize = 512 }] };
+            Assert.Equal(512, volume.GetSectorSize());
+        }
+
+        [Fact]
+        public void GetSectorSize_NoLogicalVolumeDescriptor_2048()
+        {
+            Assert.Equal(2048, new Volume().GetSectorSize());
+        }
+
+        #endregion
+
         #region TryGetSector
 
         [Fact]
@@ -285,20 +302,23 @@ namespace SabreTools.Data.Extensions.Test
 
         #region GetSectorExtents
 
-        [Fact]
-        public void GetSectorExtents_Virtual_ExtentPerRun()
+        [Theory]
+        [InlineData(2048u)]
+        [InlineData(512u)]
+        [InlineData(4096u)]
+        public void GetSectorExtents_Virtual_ExtentPerRun(uint sectorSize)
         {
             // Blocks 0-2 are recorded in sectors 1005-1007, block 3 in sector 1020
-            var volume = CreateVolume(new Type1PartitionMap { PartitionNumber = 0 }, new VirtualPartitionMap { PartitionNumber = 0 });
+            var volume = CreateVolume(sectorSize, new Type1PartitionMap { PartitionNumber = 0 }, new VirtualPartitionMap { PartitionNumber = 0 });
             volume.VirtualAllocationTable = new VirtualAllocationTable { Entries = [5, 6, 7, 20, 0xFFFFFFFF, 30, 31] };
             var location = new LogicalBlockAddress { LogicalBlockNumber = 0, PartitionReferenceNumber = 1 };
 
-            var extents = volume.GetSectorExtents(location, (3 * 2048) + 1);
+            var extents = volume.GetSectorExtents(location, (3 * sectorSize) + 1);
 
             Assert.NotNull(extents);
             Assert.Equal(2, extents.Count);
             Assert.Equal(1005u, extents[0].ExtentLocation);
-            Assert.Equal(3u * 2048, extents[0].ExtentLength);
+            Assert.Equal(3 * sectorSize, extents[0].ExtentLength);
             Assert.Equal(1020u, extents[1].ExtentLocation);
             Assert.Equal(1u, extents[1].ExtentLength);
         }
@@ -475,13 +495,19 @@ namespace SabreTools.Data.Extensions.Test
         /// Volume with partition 0 at sector 1000 (length 50) and the given partition maps
         /// </summary>
         private static Volume CreateVolume(params PartitionMap[] maps)
+            => CreateVolume(2048, maps);
+
+        /// <summary>
+        /// Volume with logical sectors of the given size, partition 0 at sector 1000 (length 50) and the given partition maps
+        /// </summary>
+        private static Volume CreateVolume(uint sectorSize, params PartitionMap[] maps)
         {
             return new Volume
             {
                 VolumeDescriptorSequence =
                 [
                     new PartitionDescriptor { PartitionNumber = 0, PartitionStartingLocation = 1000, PartitionLength = 50 },
-                    new LogicalVolumeDescriptor { LogicalBlockSize = 2048, PartitionMaps = maps },
+                    new LogicalVolumeDescriptor { LogicalBlockSize = sectorSize, PartitionMaps = maps },
                 ],
             };
         }

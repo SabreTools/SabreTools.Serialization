@@ -80,6 +80,31 @@ namespace SabreTools.Wrappers.Test
             }
         }
 
+        [Theory]
+        [InlineData(512)]
+        [InlineData(1024)]
+        [InlineData(4096)]
+        public void SectorSize_Extract(int sectorSize)
+        {
+            var wrapper = UDF.Create(new MemoryStream(UDFImageBuilder.BuildWithSectorSize(sectorSize)));
+            Assert.NotNull(wrapper);
+
+            string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            try
+            {
+                Directory.CreateDirectory(output);
+                Assert.True(wrapper.Extract(output, false));
+
+                byte[] data = UDFImageBuilder.Contents(UDFImageBuilder.SectorSizeDataLength, UDFImageBuilder.DataBinByte);
+                Assert.Equal(data, File.ReadAllBytes(Path.Combine(output, "data.bin")));
+            }
+            finally
+            {
+                if (Directory.Exists(output))
+                    Directory.Delete(output, true);
+            }
+        }
+
         [Fact]
         public void ParentDirectoryName_NotExtracted()
         {

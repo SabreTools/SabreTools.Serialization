@@ -34,6 +34,7 @@ namespace SabreTools.Serialization.Readers.Test
         public const int BigBinLength = (8 * SectorSize) - 100;
         public const int PacketLength = 4;
         public const int VirtualBlocks = 25;
+        public const int SectorSizeDataLength = 9000;
         public static readonly int[] SparingTableSectors = [40, 44];
 
         /// <summary>
@@ -104,12 +105,7 @@ namespace SabreTools.Serialization.Readers.Test
 
             // Logical Volume Descriptor: block size, domain, File Set Descriptor at block 0, the partition maps
             int lvd = 34 * SectorSize;
-            WriteUInt32(image, lvd + 16, 2);
-            WriteDString(image, lvd + 84, 128, "TESTVOLUME");
-            WriteUInt32(image, lvd + 212, SectorSize);
-            WriteAscii(image, lvd + 217, "*OSTA UDF Compliant");
-            image[lvd + 240] = 0x02;
-            image[lvd + 241] = 0x01;
+            WriteLogicalVolumeHeader(image, lvd, SectorSize);
             WriteLongAd(image, lvd + 248, SectorSize, 0, reference);
 
             int map = lvd + 440;
@@ -287,6 +283,140 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         /// <summary>
+        /// Build a minimal UDF 1.02 image with logical sectors of the given size, as on hard disks and flash media
+        /// </summary>
+        /// <remarks>
+        /// Volume Recognition Sequence from byte 32768 of the session, one descriptor every 2048 bytes or every sector if
+        /// sectors are larger; anchor in sector 256, Volume Descriptor Sequence in sectors 128-131, partition 0 at sector
+        /// 260 of the session. Partition blocks:
+        ///  0 File Set Descriptor
+        ///  1 root directory File Entry, contents in block 2: parent, "data.bin"
+        ///  3 "data.bin" File Entry, one extent from block 4 over more than 2 blocks of each size (byte i = i % 251)
+        /// </remarks>
+        /// <param name="sectorSize">Logical sector size, also the logical block size</param>
+        /// <param name="nsrDescriptor">False to record no NSR descriptor in the Volume Recognition Sequence</param>
+        /// <param name="sessionStart">Sector the volume starts at, the sectors before it are empty</param>
+        /// <param name="logicalBlockSize">Logical block size of the main Logical Volume Descriptor, the sector size if null</param>
+        /// <param name="spacing">Bytes from one Volume Structure Descriptor to the next, 2048 or the sector size if larger if null</param>
+        /// <param name="reserveSequence">
+        /// True to record the Reserve Volume Descriptor Sequence in sectors 132-135, with the sector size as the logical
+        /// block size; false to point the anchor at the main sequence for both
+        /// </param>
+        public static byte[] BuildWithSectorSize(int sectorSize,
+            bool nsrDescriptor = true,
+            int sessionStart = 0,
+            int? logicalBlockSize = null,
+            int? spacing = null,
+            bool reserveSequence = false)
+        {
+            var image = new byte[(sessionStart + Sectors) * sectorSize];
+
+            // Volume Recognition Sequence
+            string[] identifiers = nsrDescriptor ? ["BEA01", "NSR02", "TEA01"] : ["BEA01", "TEA01"];
+            for (int i = 0; i < identifiers.Length; i++)
+            {
+                int vsd = (sessionStart * sectorSize) + (16 * SectorSize) + (i * (spacing ?? Math.Max(SectorSize, sectorSize)));
+                WriteAscii(image, vsd + 1, identifiers[i]);
+                image[vsd + 6] = 1;
+            }
+
+            // Anchor Volume Descriptor Pointer: main sequence at sector 128, after the Volume Recognition Sequence for every
+            // sector size, reserve sequence at sector 128 or 132, 4 sectors each
+            int reserve = reserveSequence ? 132 : 128;
+            int avdp = (sessionStart + 256) * sectorSize;
+            WriteUInt32(image, avdp + 16, 4 * sectorSize);
+            WriteUInt32(image, avdp + 20, sessionStart + 128);
+            WriteUInt32(image, avdp + 24, 4 * sectorSize);
+            WriteUInt32(image, avdp + 28, sessionStart + reserve);
+            WriteTag(image, avdp, 2, (uint)(sessionStart + 256), 512);
+
+            WriteVolumeDescriptorSequence(image, sectorSize, sessionStart + 128, sessionStart, logicalBlockSize ?? sectorSize);
+            if (reserveSequence)
+                WriteVolumeDescriptorSequence(image, sectorSize, sessionStart + reserve, sessionStart, sectorSize);
+
+            // File Set Descriptor: root directory ICB at block 1
+            int partition = (sessionStart + PartitionStart) * sectorSize;
+            WriteDString(image, partition + 304, 32, "TESTSET");
+            WriteLongAd(image, partition + 400, sectorSize, 1, 0);
+            WriteTag(image, partition, 256, 0, 512);
+
+            // Root directory contents
+            int root = partition + (2 * sectorSize);
+            int length = WriteFid(image, root, 2, 0x0A, 1, [], 0, icbLength: sectorSize);
+            length += WriteFid(image, root + length, 2, 0x00, 3, Name8("data.bin"), 0, icbLength: sectorSize);
+            WriteFileEntry(image, partition + sectorSize, 1, 4, 0, length, ShortAd(length, 2));
+
+            // "data.bin", one extent
+            WriteFileEntry(image, partition + (3 * sectorSize), 3, 5, 0, SectorSizeDataLength, ShortAd(SectorSizeDataLength, 4));
+            for (int i = 0; i < SectorSizeDataLength; i++)
+            {
+                image[partition + (4 * sectorSize) + i] = DataBinByte(i);
+            }
+
+            return image;
+        }
+
+        /// <summary>
+        /// Write a Volume Descriptor Sequence of an image with logical sectors of the given size in 4 sectors
+        /// </summary>
+        /// <remarks>
+        /// Primary Volume Descriptor, Partition Descriptor (partition 0 at sector 260 of the session), Logical Volume
+        /// Descriptor (domain, File Set Descriptor at block 0, one Type 1 map) and Terminating Descriptor
+        /// </remarks>
+        private static void WriteVolumeDescriptorSequence(byte[] image, int sectorSize, int sector, int sessionStart, int logicalBlockSize)
+        {
+            // Primary Volume Descriptor
+            int pvd = sector * sectorSize;
+            WriteDString(image, pvd + 24, 32, "TESTVOLUME");
+            WriteTag(image, pvd, 1, (uint)sector, 512);
+
+            // Partition Descriptor
+            int pd = (sector + 1) * sectorSize;
+            WriteUInt32(image, pd + 16, 1);
+            WriteUInt32(image, pd + 188, sessionStart + PartitionStart);
+            WriteUInt32(image, pd + 192, PartitionLength);
+            WriteTag(image, pd, 5, (uint)(sector + 1), 512);
+
+            // Logical Volume Descriptor
+            int lvd = (sector + 2) * sectorSize;
+            WriteLogicalVolumeHeader(image, lvd, logicalBlockSize);
+            WriteLongAd(image, lvd + 248, sectorSize, 0, 0);
+            WriteUInt32(image, lvd + 264, 6);
+            WriteUInt32(image, lvd + 268, 1);
+            image[lvd + 440] = 1;
+            image[lvd + 441] = 6;
+            image[lvd + 442] = 1;
+            WriteTag(image, lvd, 6, (uint)(sector + 2), 446);
+
+            // Terminating Descriptor
+            WriteTag(image, (sector + 3) * sectorSize, 8, (uint)(sector + 3), 512);
+        }
+
+        /// <summary>
+        /// Write the Volume Descriptor Sequence Number, the identifier, the logical block size and the domain of a
+        /// Logical Volume Descriptor
+        /// </summary>
+        private static void WriteLogicalVolumeHeader(byte[] image, int lvd, int logicalBlockSize)
+        {
+            WriteUInt32(image, lvd + 16, 2);
+            WriteDString(image, lvd + 84, 128, "TESTVOLUME");
+            WriteUInt32(image, lvd + 212, logicalBlockSize);
+            WriteAscii(image, lvd + 217, "*OSTA UDF Compliant");
+            image[lvd + 240] = 0x02;
+            image[lvd + 241] = 0x01;
+        }
+
+        /// <summary>
+        /// Build an image with only a Sparing Table, in the given sector
+        /// </summary>
+        public static byte[] BuildSparingTable(int sectorSize, int sector, int entries)
+        {
+            var image = new byte[(sector + 4) * sectorSize];
+            WriteSparingTable(image, sector, entries, SparingTableDamage.None, sectorSize);
+            return image;
+        }
+
+        /// <summary>
         /// Offset of a partition block in the image
         /// </summary>
         public static int Block(int block) => (PartitionStart + block) * SectorSize;
@@ -355,10 +485,10 @@ namespace SabreTools.Serialization.Readers.Test
         /// <summary>
         /// Write a Sparing Table relocating packets 4, 16 and 24, a damaged one relocates them to empty sectors
         /// </summary>
-        private static void WriteSparingTable(byte[] image, int sector, int entries, SparingTableDamage damage)
+        private static void WriteSparingTable(byte[] image, int sector, int entries, SparingTableDamage damage, int sectorSize = SectorSize)
         {
             bool damaged = damage != SparingTableDamage.None;
-            int offset = sector * SectorSize;
+            int offset = sector * sectorSize;
             WriteAscii(image, offset + 17, damage == SparingTableDamage.SparingIdentifier ? "*UDF Sparing Tablx" : "*UDF Sparing Table");
             image[offset + 48] = (byte)entries;
             image[offset + 49] = (byte)(entries >> 8);
@@ -470,12 +600,12 @@ namespace SabreTools.Serialization.Readers.Test
             return moved;
         }
 
-        private static int WriteFid(byte[] image, int offset, uint block, byte characteristics, uint icb, byte[] name, ushort reference, int implementationUse = 0)
+        private static int WriteFid(byte[] image, int offset, uint block, byte characteristics, uint icb, byte[] name, ushort reference, int implementationUse = 0, int icbLength = SectorSize)
         {
             image[offset + 16] = 1;
             image[offset + 18] = characteristics;
             image[offset + 19] = (byte)name.Length;
-            WriteLongAd(image, offset + 20, SectorSize, icb, reference);
+            WriteLongAd(image, offset + 20, icbLength, icb, reference);
             image[offset + 36] = (byte)implementationUse;
             image[offset + 37] = (byte)(implementationUse >> 8);
             Array.Copy(name, 0, image, offset + 38 + implementationUse, name.Length);
@@ -485,15 +615,17 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         private static void WriteFileEntry(byte[] image, int block, byte fileType, ushort adType, long informationLength, byte[] ads)
+            => WriteFileEntry(image, Block(block), (uint)block, fileType, adType, informationLength, ads);
+
+        private static void WriteFileEntry(byte[] image, int offset, uint block, byte fileType, ushort adType, long informationLength, byte[] ads)
         {
-            int offset = Block(block);
             image[offset + 16 + 4] = 4;
             image[offset + 16 + 11] = fileType;
             image[offset + 16 + 18] = (byte)adType;
             WriteUInt32(image, offset + 56, (uint)informationLength);
             WriteUInt32(image, offset + 172, (uint)ads.Length);
             Array.Copy(ads, 0, image, offset + 176, ads.Length);
-            WriteTag(image, offset, 261, (uint)block, 176 + ads.Length);
+            WriteTag(image, offset, 261, block, 176 + ads.Length);
         }
 
         private static byte[] ShortAd(uint length, uint position)

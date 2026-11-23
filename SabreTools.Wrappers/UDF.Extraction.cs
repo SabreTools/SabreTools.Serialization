@@ -104,6 +104,7 @@ namespace SabreTools.Wrappers
             }
 
             const int chunkSize = 2048 * 1024;
+            int sectorSize = Model.GetSectorSize();
             using var fs = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
             long written = 0;
             foreach (var ad in descriptors)
@@ -126,7 +127,7 @@ namespace SabreTools.Wrappers
                     long sector = run.ExtentLocation;
 
                     // Make sure the run won't EOF
-                    if (recorded && (sector * Constants.SectorSize) + run.ExtentLength > _dataSource.Length)
+                    if (recorded && (sector * sectorSize) + run.ExtentLength > _dataSource.Length)
                         return false;
 
                     long done = 0;
@@ -138,7 +139,7 @@ namespace SabreTools.Wrappers
                         {
                             lock (_dataSourceLock)
                             {
-                                _dataSource.SeekIfPossible((sector * Constants.SectorSize) + done, SeekOrigin.Begin);
+                                _dataSource.SeekIfPossible((sector * sectorSize) + done, SeekOrigin.Begin);
                                 buffer = _dataSource.ReadBytes(count);
                             }
                         }

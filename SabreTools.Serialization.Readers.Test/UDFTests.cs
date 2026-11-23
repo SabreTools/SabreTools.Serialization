@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -506,6 +507,137 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Null(new UDF().Deserialize(new MemoryStream(image), -1, includeDirectories: true));
         }
 
+        [Theory]
+        [InlineData(512)]
+        [InlineData(1024)]
+        [InlineData(2048)]
+        [InlineData(4096)]
+        public void SectorSize_DirectoryHierarchy(int sectorSize)
+        {
+            var data = new MemoryStream(UDFImageBuilder.BuildWithSectorSize(sectorSize));
+            var volume = new UDF().Deserialize(data);
+
+            Assert.NotNull(volume);
+            Assert.Equal(sectorSize, volume.GetSectorSize());
+            Assert.Equal(3, volume.VolumeRecognitionSequence.Length);
+            Assert.NotNull(volume.AnchorVolumeDescriptorPointer);
+            Assert.Equal(256u, volume.AnchorVolumeDescriptorPointer.DescriptorTag.TagLocation);
+            Assert.NotNull(volume.FileSetDescriptor);
+            Assert.Equal("TESTSET", volume.FileSetDescriptor.FileSetIdentifier.DecodeDString());
+
+            var entry = UDF.FindFileEntry(data, volume, "data.bin", out long key);
+            Assert.NotNull(entry);
+            Assert.Equal(UDFExtensions.GetKey(0, 3), key);
+            Assert.Equal((ulong)UDFImageBuilder.SectorSizeDataLength, entry.InformationLength);
+        }
+
+        [Theory]
+        [InlineData(512)]
+        [InlineData(1024)]
+        [InlineData(4096)]
+        public void SectorSize_NoNSRDescriptor_Null(int sectorSize)
+        {
+            // Like Linux, other sizes than 2048 bytes are only looked for in a volume recognized as UDF
+            var volume = new UDF().Deserialize(new MemoryStream(UDFImageBuilder.BuildWithSectorSize(sectorSize, nsrDescriptor: false)));
+
+            Assert.Null(volume);
+        }
+
+        [Fact]
+        public void SectorSize2048_NoNSRDescriptor_Read()
+        {
+            var volume = new UDF().Deserialize(new MemoryStream(UDFImageBuilder.BuildWithSectorSize(2048, nsrDescriptor: false)));
+
+            Assert.NotNull(volume);
+            Assert.Equal(2, volume.VolumeRecognitionSequence.Length);
+            Assert.Equal(2, volume.FileEntries.Count);
+        }
+
+        [Theory]
+        [InlineData(512, 2048)]
+        [InlineData(2048, 512)]
+        public void SectorSize_OtherLogicalBlockSize_Null(int sectorSize, int logicalBlockSize)
+        {
+            // UDF records the logical sector size as the logical block size, which the volume is read with
+            var data = new MemoryStream(UDFImageBuilder.BuildWithSectorSize(sectorSize, logicalBlockSize: logicalBlockSize));
+
+            Assert.Null(new UDF().Deserialize(data));
+        }
+
+        [Theory]
+        [InlineData(512, 2048)]
+        [InlineData(2048, 512)]
+        public void SectorSize_OtherLogicalBlockSize_ReserveSequence(int sectorSize, int logicalBlockSize)
+        {
+            // A Main Volume Descriptor Sequence whose Logical Volume Descriptor records another block size is unusable
+            var data = new MemoryStream(UDFImageBuilder.BuildWithSectorSize(sectorSize, logicalBlockSize: logicalBlockSize, reserveSequence: true));
+            var volume = new UDF().Deserialize(data);
+
+            Assert.NotNull(volume);
+            Assert.Equal(sectorSize, volume.GetSectorSize());
+            Assert.NotNull(UDF.FindFileEntry(data, volume, "data.bin", out _));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(64)]
+        public void SectorSize4096_DescriptorEvery2048Bytes_DirectoryHierarchy(int sessionStart)
+        {
+            // Windows records the sequence on 4096-byte sectors with one descriptor every 2048 bytes, which Linux reads too
+            var data = new MemoryStream(UDFImageBuilder.BuildWithSectorSize(4096, sessionStart: sessionStart, spacing: 2048));
+            var volume = new UDF().Deserialize(data, sessionStart, includeDirectories: true);
+
+            Assert.NotNull(volume);
+            Assert.Equal(4096, volume.GetSectorSize());
+            Assert.Equal(3, volume.VolumeRecognitionSequence.Length);
+            Assert.NotNull(UDF.FindFileEntry(data, volume, "data.bin", out _));
+        }
+
+        [Theory]
+        [InlineData(512)]
+        [InlineData(1024)]
+        [InlineData(4096)]
+        public void SectorSize_Session_DirectoryHierarchy(int sectorSize)
+        {
+            // The session start counts sectors of the size the volume is looked for with
+            var data = new MemoryStream(UDFImageBuilder.BuildWithSectorSize(sectorSize, sessionStart: 64));
+            var volume = new UDF().Deserialize(data, 64, includeDirectories: true);
+
+            Assert.NotNull(volume);
+            Assert.Equal(sectorSize, volume.GetSectorSize());
+            Assert.NotNull(volume.AnchorVolumeDescriptorPointer);
+            Assert.Equal(320u, volume.AnchorVolumeDescriptorPointer.DescriptorTag.TagLocation);
+            Assert.NotNull(UDF.FindFileEntry(data, volume, "data.bin", out _));
+        }
+
+        [Theory]
+        [InlineData(512, 2048, 1)]
+        [InlineData(1024, 2048, 1)]
+        [InlineData(2048, 2048, 1)]
+        [InlineData(4096, 4096, 2)]
+        [InlineData(4096, 2048, 2)]
+        public void SectorSize_VolumeRecognitionSequence_ReadOncePerSpacing(int sectorSize, int spacing, int reads)
+        {
+            // From sector 0, every sector size records the sequence at the same bytes, with one descriptor every 2048 bytes
+            // or every sector, which only sectors larger than 2048 bytes do
+            var data = new ReadCountingStream(UDFImageBuilder.BuildWithSectorSize(sectorSize, spacing: spacing));
+
+            Assert.NotNull(new UDF().Deserialize(data));
+            Assert.Equal(reads, data.ReadsAt(32768));
+        }
+
+        [Fact]
+        public void ParseSparingTable_SectorSize_AcrossSectors()
+        {
+            // 100 entries, 856 bytes over 2 sectors of 512 bytes
+            var data = new MemoryStream(UDFImageBuilder.BuildSparingTable(512, 3, 100));
+            var table = UDF.ParseSparingTable(data, 3, 512);
+
+            Assert.NotNull(table);
+            Assert.Equal(100, table.MapEntries.Length);
+            Assert.Equal(104u, table.MapEntries[0].MappedLocation);
+        }
+
         [Fact]
         public void ParseVirtualAllocationTable_Header_EntriesAfterIt()
         {
@@ -593,6 +725,26 @@ namespace SabreTools.Serialization.Readers.Test
                     throw new IOException("Unreadable sector");
                 }
 
+                return base.Read(buffer, offset, count);
+            }
+        }
+
+        /// <summary>
+        /// Memory stream that counts the reads starting at each position
+        /// </summary>
+        private sealed class ReadCountingStream(byte[] data) : MemoryStream(data)
+        {
+            private readonly Dictionary<long, int> _reads = [];
+
+            /// <summary>
+            /// Number of reads that started at a position
+            /// </summary>
+            public int ReadsAt(long position)
+                => _reads.TryGetValue(position, out int count) ? count : 0;
+
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                _reads[Position] = ReadsAt(Position) + 1;
                 return base.Read(buffer, offset, count);
             }
         }

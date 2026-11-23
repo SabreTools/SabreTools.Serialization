@@ -74,6 +74,15 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
+        /// Get the logical sector size of a volume, the logical block size of its prevailing Logical Volume Descriptor
+        /// (UDF sets it to the logical sector size)
+        /// </summary>
+        /// <param name="volume">Volume to search</param>
+        /// <returns>Logical sector size in bytes, 2048 if no Logical Volume Descriptor was recorded</returns>
+        public static int GetSectorSize(this Volume volume)
+            => (int?)volume.GetLogicalVolumeDescriptor()?.LogicalBlockSize ?? Constants.SectorSize;
+
+        /// <summary>
         /// Get the prevailing Partition Descriptor of a partition (highest Volume Descriptor Sequence Number)
         /// </summary>
         /// <param name="volume">Volume to search</param>
@@ -237,12 +246,13 @@ namespace SabreTools.Data.Extensions
         /// </returns>
         public static List<ExtentDescriptor>? GetSectorExtents(this Volume volume, LogicalBlockAddress location, uint length)
         {
+            int sectorSize = volume.GetSectorSize();
             List<ExtentDescriptor> extents = [];
             uint block = location.LogicalBlockNumber;
             long done = 0;
             while (done < length)
             {
-                uint blocks = (uint)((length - done + Constants.SectorSize - 1) / Constants.SectorSize);
+                uint blocks = (uint)((length - done + sectorSize - 1) / sectorSize);
                 if (!volume.TryGetSectorRun(GetKey(location.PartitionReferenceNumber, block), blocks, out long sector, out uint run))
                     return null;
 
@@ -250,7 +260,7 @@ namespace SabreTools.Data.Extensions
                 if (sector > uint.MaxValue)
                     return null;
 
-                long runLength = Math.Min(length - done, (long)run * Constants.SectorSize);
+                long runLength = Math.Min(length - done, run * sectorSize);
                 extents.Add(new ExtentDescriptor { ExtentLength = (uint)runLength, ExtentLocation = (uint)sector });
                 done += runLength;
                 block += run;

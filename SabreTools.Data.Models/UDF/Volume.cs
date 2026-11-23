@@ -6,7 +6,8 @@ namespace SabreTools.Data.Models.UDF
     /// A volume (or disc image) with a UDF / ECMA-167 file system
     /// </summary>
     /// <remarks>
-    /// Logical sectors and logical blocks are 2048 bytes on optical media
+    /// Logical sectors and logical blocks are 2048 bytes on optical media, and the logical block size of the Logical
+    /// Volume Descriptor (512 to 4096 bytes) on hard disks and flash media
     /// File system structures are addressed by logical block address (partition reference number + logical block);
     /// dictionaries are keyed by ((long)PartitionReferenceNumber &lt;&lt; 32) | LogicalBlockNumber
     /// </remarks>
@@ -15,7 +16,7 @@ namespace SabreTools.Data.Models.UDF
     public sealed class Volume
     {
         /// <summary>
-        /// Volume Recognition Sequence starting at sector 16
+        /// Volume Recognition Sequence starting at byte 32768
         /// </summary>
         public VolumeStructureDescriptor[] VolumeRecognitionSequence { get; set; } = [];
 
