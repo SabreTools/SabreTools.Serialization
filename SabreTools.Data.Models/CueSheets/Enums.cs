@@ -6,6 +6,27 @@ using System;
 namespace SabreTools.Data.Models.CueSheets
 {
     /// <summary>
+    /// Density area of a GD-ROM
+    /// </summary>
+    public enum CueDensityArea
+    {
+        /// <summary>
+        /// No REM SINGLE-DENSITY AREA or REM HIGH-DENSITY AREA line
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// REM SINGLE-DENSITY AREA
+        /// </summary>
+        SingleDensity,
+
+        /// <summary>
+        /// REM HIGH-DENSITY AREA
+        /// </summary>
+        HighDensity,
+    }
+
+    /// <summary>
     /// The audio or data file’s filetype
     /// </summary>
     public enum CueFileType

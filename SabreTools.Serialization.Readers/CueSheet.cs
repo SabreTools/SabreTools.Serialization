@@ -23,6 +23,7 @@ namespace SabreTools.Serialization.Readers
                 var reader = new StreamReader(data, GetEncoding(data));
                 var cueSheet = new Data.Models.CueSheets.CueSheet();
                 var cueFiles = new List<CueFile>();
+                var remarks = new RemarkState();
 
                 // Read the next line from the input
                 string? lastLine = null;
@@ -44,7 +45,7 @@ namespace SabreTools.Serialization.Readers
                     {
                         // Read comments
                         case "REM":
-                            // We ignore all comments for now
+                            ReadRemark(splitLine, remarks);
                             break;
 
                         // Read MCN
@@ -83,7 +84,7 @@ namespace SabreTools.Serialization.Readers
                             if (splitLine.Length < 3)
                                 throw new FormatException($"FILE line malformed: {line}");
 
-                            var file = CreateCueFile(splitLine[1], splitLine[2], reader, out lastLine);
+                            var file = CreateCueFile(splitLine[1], splitLine[2], reader, remarks, out lastLine);
                             if (file == default)
                                 throw new FormatException($"FILE line malformed: {line}");
 
@@ -115,7 +116,8 @@ namespace SabreTools.Serialization.Readers
         /// <param name="fileName">File name to set</param>
         /// <param name="fileType">File type to set</param>
         /// <param name="reader">StreamReader to get lines from</param>
-        private static CueFile? CreateCueFile(string fileName, string fileType, StreamReader reader, out string? lastLine)
+        /// <param name="remarks">Session and density area from the REM lines read so far</param>
+        private static CueFile? CreateCueFile(string fileName, string fileType, StreamReader reader, RemarkState remarks, out string? lastLine)
         {
             // Check the required parameters
             if (reader is null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
@@ -143,7 +145,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Read comments
                     case "REM":
-                        // We ignore all comments for now
+                        ReadRemark(splitLine, remarks);
                         break;
 
                     // Read track information
@@ -151,7 +153,7 @@ namespace SabreTools.Serialization.Readers
                         if (splitLine.Length < 3)
                             throw new FormatException($"TRACK line malformed: {line}");
 
-                        var track = CreateCueTrack(splitLine[1], splitLine[2], reader, out lastLine);
+                        var track = CreateCueTrack(splitLine[1], splitLine[2], reader, remarks, out lastLine);
                         if (track == default)
                             throw new FormatException($"TRACK line malformed: {line}");
 
@@ -203,7 +205,8 @@ namespace SabreTools.Serialization.Readers
         /// <param name="number">Number to set</param>
         /// <param name="dataType">Data type to set</param>
         /// <param name="reader">StreamReader to get lines from</param>
-        private static CueTrack? CreateCueTrack(string number, string dataType, StreamReader reader, out string? lastLine)
+        /// <param name="remarks">Session and density area from the REM lines read so far</param>
+        private static CueTrack? CreateCueTrack(string number, string dataType, StreamReader reader, RemarkState remarks, out string? lastLine)
         {
             // Check the required parameters
             if (reader is null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
@@ -224,6 +227,8 @@ namespace SabreTools.Serialization.Readers
 
             cueTrack.Number = parsedNumber;
             cueTrack.DataType = GetDataType(dataType);
+            cueTrack.Session = remarks.Session;
+            cueTrack.DensityArea = remarks.DensityArea;
 
             while (lastLine is not null || !reader.EndOfStream)
             {
@@ -243,7 +248,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Read comments
                     case "REM":
-                        // We ignore all comments for now
+                        ReadRemark(splitLine, remarks);
                         break;
 
                     // Read flag information
@@ -542,6 +547,55 @@ namespace SabreTools.Serialization.Readers
             }
 
             return parts;
+        }
+
+        /// <summary>
+        /// Session and density area from the REM lines read so far
+        /// </summary>
+        private sealed class RemarkState
+        {
+            /// <summary>
+            /// Session from the last REM SESSION line
+            /// </summary>
+            public int Session { get; set; }
+
+            /// <summary>
+            /// Density area from the last REM SINGLE-DENSITY AREA or REM HIGH-DENSITY AREA line
+            /// </summary>
+            public CueDensityArea DensityArea { get; set; }
+        }
+
+        /// <summary>
+        /// Read the session or density area from a REM line, other REM lines are ignored
+        /// </summary>
+        /// <param name="splitLine">Split REM line</param>
+        /// <param name="remarks">Session and density area to update</param>
+        private static void ReadRemark(string[] splitLine, RemarkState remarks)
+        {
+            if (splitLine.Length < 3)
+                return;
+
+            switch (splitLine[1])
+            {
+                case "SESSION":
+                    // A value that is not a number is ignored like any other comment
+                    if (int.TryParse(splitLine[2], out int session))
+                        remarks.Session = session;
+
+                    break;
+
+                case "SINGLE-DENSITY":
+                    remarks.DensityArea = CueDensityArea.SingleDensity;
+                    break;
+
+                case "HIGH-DENSITY":
+                    remarks.DensityArea = CueDensityArea.HighDensity;
+                    break;
+
+                default:
+                    // Other REM lines are not part of the model
+                    break;
+            }
         }
 
         /// <summary>

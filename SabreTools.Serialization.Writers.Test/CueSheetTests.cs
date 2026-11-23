@@ -88,6 +88,104 @@ namespace SabreTools.Serialization.Writers.Test
             Assert.Equal(JoinLines(expected), Serialize(cueSheet));
         }
 
+        [Fact]
+        public void SerializeStream_SessionPerFile_RemSessionBeforeFile()
+        {
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files =
+                [
+                    CreateFile("a (Track 1).bin", CreateTrack(1, CueTrackDataType.AUDIO, session: 1)),
+                    CreateFile("a (Track 2).bin", CreateTrack(2, CueTrackDataType.AUDIO, session: 1)),
+                    CreateFile("a (Track 3).bin", CreateTrack(3, CueTrackDataType.MODE1_2352, session: 2)),
+                ],
+            };
+
+            string[] expected =
+            [
+                "REM SESSION 01",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "  TRACK 02 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM SESSION 02",
+                "FILE \"a (Track 3).bin\" BINARY",
+                "  TRACK 03 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_SessionInsideFile_RemSessionBeforeTrack()
+        {
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files =
+                [
+                    CreateFile("a.bin",
+                        CreateTrack(1, CueTrackDataType.AUDIO, session: 1),
+                        CreateTrack(2, CueTrackDataType.MODE1_2352, session: 2)),
+                ],
+            };
+
+            string[] expected =
+            [
+                "REM SESSION 01",
+                "FILE \"a.bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM SESSION 02",
+                "  TRACK 02 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_DensityAreas_RemBeforeFile()
+        {
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files =
+                [
+                    CreateFile("a (Track 1).bin", CreateTrack(1, CueTrackDataType.MODE1_2352, densityArea: CueDensityArea.SingleDensity)),
+                    CreateFile("a (Track 2).bin", CreateTrack(2, CueTrackDataType.AUDIO, densityArea: CueDensityArea.SingleDensity)),
+                    CreateFile("a (Track 3).bin", CreateTrack(3, CueTrackDataType.MODE1_2352, densityArea: CueDensityArea.HighDensity)),
+                ],
+            };
+
+            string[] expected =
+            [
+                "REM SINGLE-DENSITY AREA",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 MODE1/2352",
+                "    INDEX 01 00:00:00",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "  TRACK 02 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM HIGH-DENSITY AREA",
+                "FILE \"a (Track 3).bin\" BINARY",
+                "  TRACK 03 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_NullTrack_Throws()
+        {
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files = [new CueFile { FileName = "a.bin", FileType = CueFileType.BINARY, Tracks = [null!] }],
+            };
+
+            var serializer = new CueSheet();
+            Assert.Throws<InvalidDataException>(() => serializer.SerializeStream(cueSheet));
+        }
+
         /// <summary>
         /// Create a binary file with the given tracks
         /// </summary>
@@ -99,9 +197,16 @@ namespace SabreTools.Serialization.Writers.Test
         /// <summary>
         /// Create a track with index 01 at 00:00:00
         /// </summary>
-        private static CueTrack CreateTrack(int number, CueTrackDataType dataType)
+        private static CueTrack CreateTrack(int number, CueTrackDataType dataType, int session = 0, CueDensityArea densityArea = CueDensityArea.None)
         {
-            return new CueTrack { Number = number, DataType = dataType, Indices = [new CueIndex { Index = 1 }] };
+            return new CueTrack
+            {
+                Number = number,
+                DataType = dataType,
+                Session = session,
+                DensityArea = densityArea,
+                Indices = [new CueIndex { Index = 1 }],
+            };
         }
 
         /// <summary>

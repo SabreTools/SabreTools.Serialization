@@ -67,9 +67,10 @@ namespace SabreTools.Serialization.Writers
             if (!string.IsNullOrEmpty(cueSheet.Title))
                 sw.WriteLine($"TITLE \"{cueSheet.Title}\"");
 
+            var remarks = new RemarkState();
             foreach (var cueFile in cueSheet.Files)
             {
-                WriteCueFile(cueFile, sw);
+                WriteCueFile(cueFile, sw, remarks);
             }
         }
 
@@ -78,7 +79,8 @@ namespace SabreTools.Serialization.Writers
         /// </summary>
         /// <param name="cueFile">CueFile to write</param>
         /// <param name="sw">StreamWriter to write to</param>
-        private static void WriteCueFile(CueFile? cueFile, StreamWriter sw)
+        /// <param name="remarks">Session and density area from the REM lines written so far</param>
+        private static void WriteCueFile(CueFile? cueFile, StreamWriter sw, RemarkState remarks)
         {
             // If we don't have any tracks, it's invalid
             if (cueFile?.Tracks is null)
@@ -86,11 +88,69 @@ namespace SabreTools.Serialization.Writers
             else if (cueFile.Tracks.Length == 0)
                 throw new ArgumentException("No tracks provided to write");
 
+            // A session or density area that starts with the file is noted before the FILE line
+            WriteRemarks(cueFile.Tracks[0], sw, remarks);
             sw.WriteLine($"FILE \"{cueFile.FileName}\" {FromFileType(cueFile.FileType)}");
 
             foreach (var track in cueFile.Tracks)
             {
+                WriteRemarks(track, sw, remarks);
                 WriteCueTrack(track, sw);
+            }
+        }
+
+        /// <summary>
+        /// Session and density area from the REM lines written so far
+        /// </summary>
+        private sealed class RemarkState
+        {
+            /// <summary>
+            /// Session of the last REM SESSION line
+            /// </summary>
+            public int Session { get; set; }
+
+            /// <summary>
+            /// Density area of the last REM SINGLE-DENSITY AREA or REM HIGH-DENSITY AREA line
+            /// </summary>
+            public CueDensityArea DensityArea { get; set; }
+        }
+
+        /// <summary>
+        /// Write the REM lines for a track that starts a new session or density area
+        /// </summary>
+        /// <param name="cueTrack">CueTrack to check</param>
+        /// <param name="sw">StreamWriter to write to</param>
+        /// <param name="remarks">Session and density area from the REM lines written so far</param>
+        private static void WriteRemarks(CueTrack? cueTrack, StreamWriter sw, RemarkState remarks)
+        {
+            // A missing track is reported by WriteCueTrack
+            if (cueTrack is null)
+                return;
+
+            if (cueTrack.Session != remarks.Session)
+            {
+                remarks.Session = cueTrack.Session;
+                sw.WriteLine($"REM SESSION {remarks.Session:D2}");
+            }
+
+            if (cueTrack.DensityArea != remarks.DensityArea)
+            {
+                remarks.DensityArea = cueTrack.DensityArea;
+                switch (remarks.DensityArea)
+                {
+                    case CueDensityArea.SingleDensity:
+                        sw.WriteLine("REM SINGLE-DENSITY AREA");
+                        break;
+
+                    case CueDensityArea.HighDensity:
+                        sw.WriteLine("REM HIGH-DENSITY AREA");
+                        break;
+
+                    case CueDensityArea.None:
+                    default:
+                        // No REM line ends a density area
+                        break;
+                }
             }
         }
 
