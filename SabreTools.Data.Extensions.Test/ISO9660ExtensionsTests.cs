@@ -76,6 +76,27 @@ namespace SabreTools.Data.Extensions.Test
         }
 
         [Fact]
+        public void GetLogicalBlockSize_HighSierraPVD_ValidBothEndian_ValidBlockSize_BlockSize()
+        {
+            VolumeDescriptor vd = new HighSierraPrimaryVolumeDescriptor
+            {
+                LogicalBlockSize = new BothInt16(2048, 2048)
+            };
+            short sectorLength = 4096;
+            short actual = vd.GetLogicalBlockSize(sectorLength);
+            Assert.Equal(2048, actual);
+        }
+
+        [Fact]
+        public void GetLogicalBlockSize_HighSierraTerminator_SectorLength()
+        {
+            VolumeDescriptor vd = new HighSierraVolumeDescriptorSetTerminator();
+            short sectorLength = 4096;
+            short actual = vd.GetLogicalBlockSize(sectorLength);
+            Assert.Equal(sectorLength, actual);
+        }
+
+        [Fact]
         public void GetLogicalBlockSize_SVD_ValidBothEndian_ValidBlockSize_BlockSize()
         {
             VolumeDescriptor vd = new SupplementaryVolumeDescriptor
