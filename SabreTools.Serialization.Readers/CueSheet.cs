@@ -20,15 +20,15 @@ namespace SabreTools.Serialization.Readers
             try
             {
                 // Setup the reader and output
-                var reader = new StreamReader(data, Encoding.UTF8);
+                var reader = new StreamReader(data, GetEncoding(data));
                 var cueSheet = new Data.Models.CueSheets.CueSheet();
                 var cueFiles = new List<CueFile>();
 
                 // Read the next line from the input
                 string? lastLine = null;
-                while (!reader.EndOfStream)
+                while (lastLine is not null || !reader.EndOfStream)
                 {
-                    string? line = lastLine ?? ReadQuotedString(reader);
+                    string? line = lastLine ?? reader.ReadLine();
                     lastLine = null;
 
                     // If we have a null line, break from the loop
@@ -36,11 +36,10 @@ namespace SabreTools.Serialization.Readers
                         break;
 
                     // If we have an empty line, we skip
-                    if (string.IsNullOrEmpty(line))
+                    var splitLine = SplitLine(line);
+                    if (splitLine.Length == 0)
                         continue;
 
-                    // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
-                    var splitLine = Regex.Split(line, @"[^\s""]+|""[^""]*""");
                     switch (splitLine[0])
                     {
                         // Read comments
@@ -66,26 +65,17 @@ namespace SabreTools.Serialization.Readers
 
                         // Read CD-Text enhanced performer
                         case "PERFORMER":
-                            if (splitLine.Length < 2)
-                                throw new FormatException($"PERFORMER line malformed: {line}");
-
-                            cueSheet.Performer = splitLine[1].Trim('"');
+                            cueSheet.Performer = GetTextValue(line, splitLine[0], reader, out lastLine);
                             break;
 
                         // Read CD-Text enhanced songwriter
                         case "SONGWRITER":
-                            if (splitLine.Length < 2)
-                                throw new FormatException($"SONGWRITER line malformed: {line}");
-
-                            cueSheet.Songwriter = splitLine[1].Trim('"');
+                            cueSheet.Songwriter = GetTextValue(line, splitLine[0], reader, out lastLine);
                             break;
 
                         // Read CD-Text enhanced title
                         case "TITLE":
-                            if (splitLine.Length < 2)
-                                throw new FormatException($"TITLE line malformed: {line}");
-
-                            cueSheet.Title = splitLine[1].Trim('"');
+                            cueSheet.Title = GetTextValue(line, splitLine[0], reader, out lastLine);
                             break;
 
                         // Read file information
@@ -130,16 +120,14 @@ namespace SabreTools.Serialization.Readers
             // Check the required parameters
             if (reader is null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
                 throw new ArgumentNullException(nameof(reader));
-            if (reader.BaseStream.Position < 0 || reader.BaseStream.Position >= reader.BaseStream.Length)
-                throw new IndexOutOfRangeException();
 
             // Create the holding objects
             lastLine = null;
             var cueTracks = new List<CueTrack>();
 
-            while (!reader.EndOfStream)
+            while (lastLine is not null || !reader.EndOfStream)
             {
-                string? line = lastLine ?? ReadQuotedString(reader);
+                string? line = lastLine ?? reader.ReadLine();
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -147,11 +135,10 @@ namespace SabreTools.Serialization.Readers
                     break;
 
                 // If we have an empty line, we skip
-                if (string.IsNullOrEmpty(line))
+                var splitLine = SplitLine(line);
+                if (splitLine.Length == 0)
                     continue;
 
-                // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
-                var splitLine = Regex.Split(line, @"[^\s""]+|""[^""]*""");
                 switch (splitLine[0])
                 {
                     // Read comments
@@ -221,7 +208,7 @@ namespace SabreTools.Serialization.Readers
             // Check the required parameters
             if (reader is null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
                 throw new ArgumentNullException(nameof(reader));
-            if (reader.BaseStream.Position < 0 || reader.BaseStream.Position >= reader.BaseStream.Length)
+            if (reader.EndOfStream)
                 throw new IndexOutOfRangeException();
 
             // Set the current fields
@@ -238,9 +225,9 @@ namespace SabreTools.Serialization.Readers
             cueTrack.Number = parsedNumber;
             cueTrack.DataType = GetDataType(dataType);
 
-            while (!reader.EndOfStream)
+            while (lastLine is not null || !reader.EndOfStream)
             {
-                string? line = lastLine ?? ReadQuotedString(reader);
+                string? line = lastLine ?? reader.ReadLine();
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -248,11 +235,10 @@ namespace SabreTools.Serialization.Readers
                     break;
 
                 // If we have an empty line, we skip
-                if (string.IsNullOrEmpty(line))
+                var splitLine = SplitLine(line);
+                if (splitLine.Length == 0)
                     continue;
 
-                // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
-                var splitLine = Regex.Split(line, @"[^\s""]+|""[^""]*""");
                 switch (splitLine[0])
                 {
                     // Read comments
@@ -278,26 +264,17 @@ namespace SabreTools.Serialization.Readers
 
                     // Read CD-Text enhanced performer
                     case "PERFORMER":
-                        if (splitLine.Length < 2)
-                            throw new FormatException($"PERFORMER line malformed: {line}");
-
-                        cueTrack.Performer = splitLine[1].Trim('"');
+                        cueTrack.Performer = GetTextValue(line, splitLine[0], reader, out lastLine);
                         break;
 
                     // Read CD-Text enhanced songwriter
                     case "SONGWRITER":
-                        if (splitLine.Length < 2)
-                            throw new FormatException($"SONGWRITER line malformed: {line}");
-
-                        cueTrack.Songwriter = splitLine[1].Trim('"');
+                        cueTrack.Songwriter = GetTextValue(line, splitLine[0], reader, out lastLine);
                         break;
 
                     // Read CD-Text enhanced title
                     case "TITLE":
-                        if (splitLine.Length < 2)
-                            throw new FormatException($"TITLE line malformed: {line}");
-
-                        cueTrack.Title = splitLine[1].Trim('"');
+                        cueTrack.Title = GetTextValue(line, splitLine[0], reader, out lastLine);
                         break;
 
                     // Read pregap information
@@ -518,35 +495,97 @@ namespace SabreTools.Serialization.Readers
         #region Helpers
 
         /// <summary>
-        /// Read a potentially multi-line value using quotes as an indicator
+        /// Get the encoding of a cue sheet: UTF-8, or ISO 8859-1 if the bytes are not valid UTF-8
         /// </summary>
-        internal static string? ReadQuotedString(StreamReader reader)
+        /// <remarks>DiscImageCreator writes CD-Text as the bytes on the disc, which can be ISO 8859-1 (character code 0x00)</remarks>
+        private static Encoding GetEncoding(Stream data)
         {
-            // Check the required parameters
-            if (reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
-                throw new ArgumentNullException(nameof(reader));
-            if (reader.BaseStream.Position < 0 || reader.BaseStream.Position >= reader.BaseStream.Length)
-                return null;
-
-            // Use a string builder for the line
-            var lineBuilder = new StringBuilder();
-
-            // Loop until we have completed quotes
-            int quoteCount = 0;
-            do
+            long position = data.Position;
+            var encoding = new UTF8Encoding(false, true);
+            var decoder = encoding.GetDecoder();
+            byte[] bytes = new byte[4096];
+            char[] chars = new char[encoding.GetMaxCharCount(bytes.Length)];
+            try
             {
-                // Read the next line
-                string? line = reader.ReadLine();
-                if (line is null)
-                    break;
+                // The decoder keeps a sequence that is split between two reads
+                int read;
+                while ((read = data.Read(bytes, 0, bytes.Length)) > 0)
+                {
+                    decoder.GetChars(bytes, 0, read, chars, 0, false);
+                }
 
-                // Count the number of quotes and append
-                quoteCount += Array.FindAll(line.ToCharArray(), c => c == '"').Length;
-                lineBuilder.AppendLine(line);
+                // An incomplete sequence at the end is not valid UTF-8 either
+                decoder.GetChars(bytes, 0, 0, chars, 0, true);
+                return Encoding.UTF8;
             }
-            while (quoteCount % 2 != 0);
+            catch (DecoderFallbackException)
+            {
+                return Encoding.GetEncoding(28591);
+            }
+            finally
+            {
+                data.Seek(position, SeekOrigin.Begin);
+            }
+        }
 
-            return lineBuilder.ToString().TrimEnd();
+        /// <summary>
+        /// Split a line on whitespace, keeping quoted values together
+        /// </summary>
+        private static string[] SplitLine(string line)
+        {
+            // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
+            var matches = Regex.Matches(line, @"[^\s""]+|""[^""]*""");
+            var parts = new string[matches.Count];
+            for (int i = 0; i < matches.Count; i++)
+            {
+                parts[i] = matches[i].Value;
+            }
+
+            return parts;
+        }
+
+        /// <summary>
+        /// Get the value of a CD-Text line: the rest of the line after the keyword, without one pair of enclosing quotes
+        /// </summary>
+        /// <param name="line">Line with the keyword</param>
+        /// <param name="keyword">Keyword of the line</param>
+        /// <param name="reader">StreamReader to get the following lines of a value from</param>
+        /// <param name="nextLine">Line after the value that was read to find its end, if any</param>
+        /// <remarks>
+        /// Values can contain quotes themselves, e.g. TITLE "Symphony No. 9 "From the New World"". They can also
+        /// contain newlines, so a value that starts with a quote and does not end with one on its line goes on over
+        /// the following lines up to the next command.
+        /// </remarks>
+        private static string GetTextValue(string line, string keyword, StreamReader reader, out string? nextLine)
+        {
+            nextLine = null;
+            string value = line.TrimStart().Substring(keyword.Length).Trim();
+            if (value.Length == 0)
+                throw new FormatException($"{keyword} line malformed: {line}");
+
+            if (value[0] == '"' && (value.Length == 1 || value[value.Length - 1] != '"'))
+            {
+                var builder = new StringBuilder(line.TrimStart().Substring(keyword.Length));
+                while (!reader.EndOfStream)
+                {
+                    string next = reader.ReadLine() ?? string.Empty;
+                    var splitLine = SplitLine(next);
+                    if (splitLine.Length > 0 && Array.IndexOf(Constants.Commands, splitLine[0]) > -1)
+                    {
+                        nextLine = next;
+                        break;
+                    }
+
+                    builder.Append('\n').Append(next);
+                }
+
+                value = builder.ToString().Trim();
+            }
+
+            if (value.Length > 1 && value[0] == '"' && value[value.Length - 1] == '"')
+                value = value.Substring(1, value.Length - 2);
+
+            return value;
         }
 
         /// <summary>
