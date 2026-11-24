@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.CueSheets;
@@ -216,6 +217,7 @@ namespace SabreTools.Serialization.Writers.Test
             track.Indices[0].Remarks = null!;
             var file = CreateFile("a.bin", track);
             file.Remarks = null!;
+            file.Indices = null!;
             var cueSheet = new Data.Models.CueSheets.CueSheet { Remarks = null!, Files = [file] };
 
             string[] expected =
@@ -324,6 +326,61 @@ namespace SabreTools.Serialization.Writers.Test
                 "    INDEX 01 00:00:00",
             ];
             Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_FileIndices_WrittenBeforeTracks()
+        {
+            // Layout written by Exact Audio Copy and whipper, with the gap of a track at the end of the previous file
+            var second = CreateTrack(2, CueTrackDataType.AUDIO);
+            second.Indices = [new CueIndex { Index = 0, Minutes = 6, Seconds = 32, Frames = 45 }];
+            var third = CreateTrack(3, CueTrackDataType.AUDIO);
+            third.Indices = [new CueIndex { Index = 0, Minutes = 4, Seconds = 11, Frames = 3 }];
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files =
+                [
+                    CreateFile("01.bin", CreateTrack(1, CueTrackDataType.AUDIO), second),
+                    new CueFile
+                    {
+                        FileName = "02.bin",
+                        Remarks = ["Before the index"],
+                        Indices = [new CueIndex { Index = 1, Remarks = ["After the index"] }],
+                        Tracks = [third],
+                    },
+                    new CueFile { FileName = "03.bin", Indices = [new CueIndex { Index = 1 }] },
+                ],
+            };
+
+            string[] expected =
+            [
+                "FILE \"01.bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "  TRACK 02 AUDIO",
+                "    INDEX 00 06:32:45",
+                "FILE \"02.bin\" BINARY",
+                "REM Before the index",
+                "    INDEX 01 00:00:00",
+                "REM After the index",
+                "  TRACK 03 AUDIO",
+                "    INDEX 00 04:11:03",
+                "FILE \"03.bin\" BINARY",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_FileWithoutTracksOrIndices_Throws()
+        {
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files = [new CueFile { FileName = "a.bin", FileType = CueFileType.BINARY }],
+            };
+
+            var serializer = new CueSheet();
+            Assert.Throws<ArgumentException>(() => serializer.SerializeStream(cueSheet));
         }
 
         [Fact]

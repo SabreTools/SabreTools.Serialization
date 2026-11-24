@@ -89,16 +89,25 @@ namespace SabreTools.Serialization.Writers
             // If we don't have any tracks, it's invalid
             if (cueFile?.Tracks is null)
                 throw new InvalidDataException(nameof(cueFile.Tracks));
-            else if (cueFile.Tracks.Length == 0)
+
+            // A file without tracks needs the indices of the last track of the previous file
+            CueIndex[] indices = cueFile.Indices ?? [];
+            if (cueFile.Tracks.Length == 0 && indices.Length == 0)
                 throw new ArgumentException("No tracks provided to write");
 
             // A session or density area that starts with the file is noted before the FILE line,
             // or after the REM lines of the file if it has any, as they could note it themselves
-            if (cueFile.Remarks is null || cueFile.Remarks.Length == 0)
+            if ((cueFile.Remarks is null || cueFile.Remarks.Length == 0) && cueFile.Tracks.Length > 0)
                 WriteRemarks(cueFile.Tracks[0], sw, ref session, ref densityArea);
 
             sw.WriteLine($"FILE \"{cueFile.FileName}\" {FromFileType(cueFile.FileType)}");
             WriteRemarkLines(cueFile.Remarks, sw, ref session, ref densityArea);
+
+            // Indices of the last track of the previous file come before the first track of this file
+            foreach (var index in indices)
+            {
+                WriteCueIndex(index, sw, ref session, ref densityArea);
+            }
 
             foreach (var track in cueFile.Tracks)
             {

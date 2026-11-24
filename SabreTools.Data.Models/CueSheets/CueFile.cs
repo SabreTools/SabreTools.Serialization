@@ -19,9 +19,15 @@ namespace SabreTools.Data.Models.CueSheets
         public CueFileType FileType { get; set; }
 
         /// <summary>
-        /// Text after the REM keyword of each REM line between the FILE line and its first TRACK
+        /// Text after the REM keyword of each REM line between the FILE line and its first INDEX or TRACK
         /// </summary>
         public string[] Remarks { get; set; } = [];
+
+        /// <summary>
+        /// List of INDEX between the FILE line and its first TRACK, which belong to the last TRACK of the previous FILE
+        /// </summary>
+        /// <remarks>Written by audio rippers that put the gap before a track at the end of the previous file</remarks>
+        public CueIndex[] Indices { get; set; } = [];
 
         /// <summary>
         /// List of TRACK in FILE

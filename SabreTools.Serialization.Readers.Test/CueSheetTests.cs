@@ -179,6 +179,106 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void IndicesBeforeTrack_KeptOnFile()
+        {
+            // Layout written by Exact Audio Copy and whipper, with the gap of a track at the end of the previous file
+            string[] lines =
+            [
+                "FILE \"01.wav\" WAVE",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "  TRACK 02 AUDIO",
+                "    INDEX 00 06:32:45",
+                "FILE \"02.wav\" WAVE",
+                "    INDEX 01 00:00:00",
+                "  TRACK 03 AUDIO",
+                "    INDEX 00 04:11:03",
+                "FILE \"03.wav\" WAVE",
+                "    INDEX 01 00:00:00",
+                "FILE \"04.wav\" WAVE",
+                "  TRACK 04 AUDIO",
+                "    INDEX 01 00:00:00",
+                "  TRACK 05 AUDIO",
+                "    INDEX 00 02:02:22",
+                "FILE \"05.wav\" WAVE",
+                "    INDEX 01 00:00:00",
+            ];
+            var stream = CreateStream(lines);
+
+            var actual = new CueSheet().Deserialize(stream);
+
+            Assert.NotNull(actual);
+            Assert.Equal(5, actual.Files.Length);
+            Assert.Empty(actual.Files[0].Indices);
+            Assert.Equal([1, 2], actual.Files[0].Tracks.Select(t => t.Number));
+            var index = Assert.Single(actual.Files[0].Tracks[1].Indices);
+            Assert.Equal((0, 6, 32, 45), (index.Index, index.Minutes, index.Seconds, index.Frames));
+            Assert.Equal(1, Assert.Single(actual.Files[1].Indices).Index);
+            Assert.Equal(3, Assert.Single(actual.Files[1].Tracks).Number);
+            Assert.Equal(1, Assert.Single(actual.Files[2].Indices).Index);
+            Assert.Empty(actual.Files[2].Tracks);
+            Assert.Equal([4, 5], actual.Files[3].Tracks.Select(t => t.Number));
+            Assert.Equal(1, Assert.Single(actual.Files[4].Indices).Index);
+            Assert.Empty(actual.Files[4].Tracks);
+        }
+
+        [Fact]
+        public void IndicesBeforeTrack_RemarksKept()
+        {
+            string[] lines =
+            [
+                "FILE \"01.wav\" WAVE",
+                "  TRACK 01 AUDIO",
+                "    INDEX 00 00:00:00",
+                "FILE \"02.wav\" WAVE",
+                "REM Before the index",
+                "    INDEX 01 00:00:00",
+                "REM After the index",
+                "REM Second line",
+                "    INDEX 02 00:01:00",
+                "REM After the second index",
+                "  TRACK 02 AUDIO",
+                "    INDEX 01 00:02:00",
+                "UNKNOWN",
+            ];
+            var stream = CreateStream(lines);
+
+            var actual = new CueSheet().Deserialize(stream);
+
+            Assert.NotNull(actual);
+            Assert.Equal(2, actual.Files.Length);
+            var file = actual.Files[1];
+            Assert.Equal(["Before the index"], file.Remarks);
+            Assert.Equal([1, 2], file.Indices.Select(i => i.Index));
+            Assert.Equal(["After the index", "Second line"], file.Indices[0].Remarks);
+            Assert.Equal(["After the second index"], file.Indices[1].Remarks);
+            Assert.Equal(2, Assert.Single(file.Tracks).Number);
+        }
+
+        [Fact]
+        public void IndicesBeforeTrack_WrittenBack()
+        {
+            string[] lines =
+            [
+                "FILE \"01.wav\" WAVE",
+                "  TRACK 01 AUDIO",
+                "    PERFORMER \"Performer\"",
+                "    TITLE \"Track01\"",
+                "    INDEX 01 00:00:00",
+                "  TRACK 02 AUDIO",
+                "    INDEX 00 06:32:45",
+                "FILE \"02.wav\" WAVE",
+                "    INDEX 01 00:00:00",
+                "REM Comment",
+                "FILE \"03.wav\" WAVE",
+                "  TRACK 03 AUDIO",
+                "    INDEX 01 00:00:00",
+            ];
+
+            Assert.Equal(lines, ReadAndWrite(lines));
+        }
+
+        [Fact]
         public void TextValues_QuotesInsideKept()
         {
             // CD-Text values from redump cuesheets; an odd number of quotes must not join the following lines
