@@ -229,6 +229,25 @@ namespace SabreTools.Serialization.Writers.Test
             Assert.Equal(JoinLines(expected), Serialize(cueSheet));
         }
 
+        [Theory]
+        [InlineData("MODEx/2xxx", "MODEx/2xxx")]
+        [InlineData("", "MODE1/2352")]
+        [InlineData(null, "MODE1/2352")]
+        public void SerializeStream_UnknownDataType_WrittenIfSet(string? unknownDataType, string expectedDataType)
+        {
+            var track = CreateTrack(1, CueTrackDataType.MODE1_2352);
+            track.UnknownDataType = unknownDataType;
+            var cueSheet = new Data.Models.CueSheets.CueSheet { Files = [CreateFile("a.bin", track)] };
+
+            string[] expected =
+            [
+                "FILE \"a.bin\" BINARY",
+                $"  TRACK 01 {expectedDataType}",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
         [Fact]
         public void SerializeStream_RemSessionInRemarks_NotRepeated()
         {

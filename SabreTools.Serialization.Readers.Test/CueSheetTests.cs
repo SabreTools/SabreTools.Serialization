@@ -278,6 +278,44 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal(lines, ReadAndWrite(lines));
         }
 
+        [Theory]
+        [InlineData("AUDIO", CueTrackDataType.AUDIO, null)]
+        [InlineData("audio", CueTrackDataType.AUDIO, null)]
+        [InlineData("MODE1/2352", CueTrackDataType.MODE1_2352, null)]
+        [InlineData("MODEx/2xxx", CueTrackDataType.AUDIO, "MODEx/2xxx")]
+        public void DataType_UnknownKeptAsText(string dataType, CueTrackDataType expected, string? expectedUnknown)
+        {
+            string[] lines =
+            [
+                "FILE \"01.wav\" WAVE",
+                $"  TRACK 01 {dataType}",
+                "    INDEX 01 00:00:00",
+            ];
+
+            var track = Assert.Single(GetTracks(lines));
+            Assert.Equal(expected, track.DataType);
+            Assert.Equal(expectedUnknown, track.UnknownDataType);
+        }
+
+        [Fact]
+        public void DataType_Unknown_WrittenBack()
+        {
+            // Exact Audio Copy writes MODEx/2xxx for a data track
+            string[] lines =
+            [
+                "FILE \"01.iso\" BINARY",
+                "  TRACK 01 MODEx/2xxx",
+                "    INDEX 01 00:00:00",
+                "FILE \"02.wav\" WAVE",
+                "  TRACK 02 AUDIO",
+                "    INDEX 01 00:00:00",
+                "  TRACK 03 MODEx/2xxx",
+                "    INDEX 00 03:21:52",
+            ];
+
+            Assert.Equal(lines, ReadAndWrite(lines));
+        }
+
         [Fact]
         public void TextValues_QuotesInsideKept()
         {
