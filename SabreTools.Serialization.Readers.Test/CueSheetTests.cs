@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -504,6 +505,168 @@ namespace SabreTools.Serialization.Readers.Test
             ];
 
             Assert.Equal([1, 1], GetTracks(lines).Select(t => t.Session));
+        }
+
+        [Fact]
+        public void Remarks_Lines_KeptInPlace()
+        {
+            string[] lines =
+            [
+                "REM GENRE Game",
+                "CATALOG 0000000000000",
+                "REM",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "REM ORIGINAL MEDIA-TYPE: CD-RW",
+                "  TRACK 01 MODE1/2352",
+                "    REM Before the index",
+                "    FLAGS DCP",
+                "    INDEX 01 00:00:00",
+                "\tREM LBA: 0  ",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "REM Second file",
+                "  TRACK 02 AUDIO",
+                "    INDEX 00 00:00:00",
+                "    REM LBA: 4500",
+                "    INDEX 01 00:02:00",
+                "    REM LBA: 4650",
+                "REM LEAD-OUT 02:00:00",
+            ];
+            var stream = CreateStream(lines);
+
+            var actual = new CueSheet().Deserialize(stream);
+
+            Assert.NotNull(actual);
+            Assert.Equal(["GENRE Game", ""], actual.Remarks);
+            Assert.Equal(2, actual.Files.Length);
+            Assert.Equal(["ORIGINAL MEDIA-TYPE: CD-RW"], actual.Files[0].Remarks);
+            var track = Assert.Single(actual.Files[0].Tracks);
+            Assert.Equal(["Before the index"], track.Remarks);
+            Assert.Equal(["LBA: 0"], track.Indices[0].Remarks);
+            Assert.Equal(["Second file"], actual.Files[1].Remarks);
+            track = Assert.Single(actual.Files[1].Tracks);
+            Assert.Empty(track.Remarks);
+            Assert.Equal(["LBA: 4500"], track.Indices[0].Remarks);
+            Assert.Equal(["LBA: 4650", "LEAD-OUT 02:00:00"], track.Indices[1].Remarks);
+        }
+
+        [Fact]
+        public void Remarks_OtherRem_SessionAndDensityAreaKept()
+        {
+            string[] lines =
+            [
+                "REM SESSION 01",
+                "REM HIGH-DENSITY AREA",
+                "REM DATE 1999",
+                "FILE \"a.bin\" BINARY",
+                "  TRACK 01 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+
+            var track = Assert.Single(GetTracks(lines));
+
+            Assert.Equal(1, track.Session);
+            Assert.Equal(CueDensityArea.HighDensity, track.DensityArea);
+        }
+
+        [Fact]
+        public void Remarks_BeforeUnknownLine_Kept()
+        {
+            string[] lines =
+            [
+                "FILE \"a.bin\" BINARY",
+                "REM ORIGINAL MEDIA-TYPE: CD-RW",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "    REM LBA: 0",
+                "    UNKNOWN",
+            ];
+            var stream = CreateStream(lines);
+
+            var actual = new CueSheet().Deserialize(stream);
+
+            Assert.NotNull(actual);
+            var file = Assert.Single(actual.Files);
+            Assert.Equal(["ORIGINAL MEDIA-TYPE: CD-RW"], file.Remarks);
+            Assert.Equal(["LBA: 0"], Assert.Single(file.Tracks).Indices[0].Remarks);
+        }
+
+        [Fact]
+        public void Remarks_DiscImageCreatorLayout_WrittenBack()
+        {
+            // Layout written by DiscImageCreator for a disc with two sessions
+            string[] lines =
+            [
+                "REM SESSION 01",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "  TRACK 02 AUDIO",
+                "    INDEX 00 00:00:00",
+                "    INDEX 01 00:02:00",
+                "REM LEAD-OUT 01:30:00",
+                "REM SESSION 02",
+                "REM LEAD-IN 01:00:00",
+                "REM PREGAP 00:02:00",
+                "FILE \"a (Track 3).bin\" BINARY",
+                "  TRACK 03 MODE2/2352",
+                "    INDEX 01 00:00:00",
+            ];
+
+            Assert.Equal(lines, ReadAndWrite(lines));
+        }
+
+        [Fact]
+        public void Remarks_IsoBusterLayout_WrittenBack()
+        {
+            // Layout written by IsoBuster for a disc with two sessions, the written lines are not indented the same way
+            string[] lines =
+            [
+                "FILE \"a.bin\" BINARY",
+                "",
+                "REM ORIGINAL MEDIA-TYPE: CD-RW",
+                "",
+                "  REM SESSION 01        (*)",
+                "    TRACK 01 AUDIO",
+                "      INDEX 01 00:00:00",
+                "         REM LBA: 0",
+                "    TRACK 02 AUDIO",
+                "      INDEX 00 01:00:00",
+                "         REM LBA: 4500",
+                "      INDEX 01 01:02:00",
+                "         REM LBA: 4650",
+                "",
+                "  REM LEAD-OUT 02:00:00 (*)",
+                "  REM SESSION 02        (*)",
+                "    TRACK 03 MODE2/2352",
+                "      INDEX 01 04:32:00",
+                "         REM LBA: 20400",
+                "",
+                "REM (*) SESSION commands are not supported by all applications",
+            ];
+
+            Assert.Equal([1, 1, 2], GetTracks(lines).Select(t => t.Session));
+            Assert.Equal(lines.Select(l => l.Trim()).Where(l => l.Length > 0), ReadAndWrite(lines).Select(l => l.Trim()));
+        }
+
+        /// <summary>
+        /// Read a cue sheet with the given lines, write it back and return the written lines
+        /// </summary>
+        private static string[] ReadAndWrite(string[] lines)
+        {
+            var cueSheet = new CueSheet().Deserialize(CreateStream(lines));
+            Assert.NotNull(cueSheet);
+            var stream = new Writers.CueSheet().SerializeStream(cueSheet);
+            Assert.NotNull(stream);
+            var reader = new StreamReader(stream);
+            List<string> written = [];
+            string? line;
+            while ((line = reader.ReadLine()) is not null)
+            {
+                written.Add(line);
+            }
+
+            return [.. written];
         }
 
         /// <summary>
