@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.ISO9660;
+using SabreTools.IO;
 
 namespace SabreTools.Wrappers
 {
@@ -90,7 +91,8 @@ namespace SabreTools.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = new Serialization.Readers.ISO9660().Deserialize(data);
+                // The reader addresses logical blocks from the start of the stream, so it reads a view that starts here
+                var model = new Serialization.Readers.ISO9660().Deserialize(new ReadOnlyViewStream(data, currentOffset));
                 if (model is null)
                     return null;
 
