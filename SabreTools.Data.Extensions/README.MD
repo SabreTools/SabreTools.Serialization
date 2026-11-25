@@ -11,6 +11,7 @@ This library contains extension methods related to models. These extensions are 
 | `BSPExtensions` | `SabreTools.Data.Models.BSP` |
 | `CDROMExtensions` | `SabreTools.Data.Models.CDROM` |
 | `CFBExtensions` | `SabreTools.Data.Models.CFB` |
+| `CueSheetExtensions` | `SabreTools.Data.Models.CueSheets` |
 | `InstallShieldCabinetExtensions` | `SabreTools.Data.Models.InstallShieldCabinet` |
 | `ISO9660Extensions` | `SabreTools.Data.Models.ISO9660` |
 | `MetadataExtensions` | `SabreTools.Data.Models.Metadata` |

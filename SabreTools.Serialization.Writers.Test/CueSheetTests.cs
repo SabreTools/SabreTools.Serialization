@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.CueSheets;
@@ -88,6 +89,331 @@ namespace SabreTools.Serialization.Writers.Test
             Assert.Equal(JoinLines(expected), Serialize(cueSheet));
         }
 
+        [Fact]
+        public void SerializeStream_SessionPerFile_RemSessionBeforeFile()
+        {
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files =
+                [
+                    CreateFile("a (Track 1).bin", CreateTrack(1, CueTrackDataType.AUDIO, session: 1)),
+                    CreateFile("a (Track 2).bin", CreateTrack(2, CueTrackDataType.AUDIO, session: 1)),
+                    CreateFile("a (Track 3).bin", CreateTrack(3, CueTrackDataType.MODE1_2352, session: 2)),
+                ],
+            };
+
+            string[] expected =
+            [
+                "REM SESSION 01",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "  TRACK 02 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM SESSION 02",
+                "FILE \"a (Track 3).bin\" BINARY",
+                "  TRACK 03 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_SessionInsideFile_RemSessionBeforeTrack()
+        {
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files =
+                [
+                    CreateFile("a.bin",
+                        CreateTrack(1, CueTrackDataType.AUDIO, session: 1),
+                        CreateTrack(2, CueTrackDataType.MODE1_2352, session: 2)),
+                ],
+            };
+
+            string[] expected =
+            [
+                "REM SESSION 01",
+                "FILE \"a.bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM SESSION 02",
+                "  TRACK 02 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_DensityAreas_RemBeforeFile()
+        {
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files =
+                [
+                    CreateFile("a (Track 1).bin", CreateTrack(1, CueTrackDataType.MODE1_2352, densityArea: CueDensityArea.SingleDensity)),
+                    CreateFile("a (Track 2).bin", CreateTrack(2, CueTrackDataType.AUDIO, densityArea: CueDensityArea.SingleDensity)),
+                    CreateFile("a (Track 3).bin", CreateTrack(3, CueTrackDataType.MODE1_2352, densityArea: CueDensityArea.HighDensity)),
+                ],
+            };
+
+            string[] expected =
+            [
+                "REM SINGLE-DENSITY AREA",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 MODE1/2352",
+                "    INDEX 01 00:00:00",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "  TRACK 02 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM HIGH-DENSITY AREA",
+                "FILE \"a (Track 3).bin\" BINARY",
+                "  TRACK 03 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_Remarks_WrittenInPlace()
+        {
+            var track = CreateTrack(1, CueTrackDataType.MODE1_2352);
+            track.Title = "Data";
+            track.Remarks = ["Before the pregap"];
+            track.PreGap = new PreGap { Seconds = 2 };
+            track.Indices[0].Remarks = ["LBA: 0", ""];
+            var file = CreateFile("a.bin", track);
+            file.Remarks = ["ORIGINAL MEDIA-TYPE: CD-RW"];
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Catalog = "0000000000000",
+                Remarks = ["GENRE Game"],
+                Files = [file],
+            };
+
+            string[] expected =
+            [
+                "CATALOG 0000000000000",
+                "REM GENRE Game",
+                "FILE \"a.bin\" BINARY",
+                "REM ORIGINAL MEDIA-TYPE: CD-RW",
+                "  TRACK 01 MODE1/2352",
+                "    TITLE \"Data\"",
+                "REM Before the pregap",
+                "    PREGAP 00:02:00",
+                "    INDEX 01 00:00:00",
+                "REM LBA: 0",
+                "REM",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_NullRemarks_Skipped()
+        {
+            var track = CreateTrack(1, CueTrackDataType.MODE1_2352);
+            track.Remarks = null!;
+            track.Indices[0].Remarks = null!;
+            var file = CreateFile("a.bin", track);
+            file.Remarks = null!;
+            file.Indices = null!;
+            var cueSheet = new Data.Models.CueSheets.CueSheet { Remarks = null!, Files = [file] };
+
+            string[] expected =
+            [
+                "FILE \"a.bin\" BINARY",
+                "  TRACK 01 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Theory]
+        [InlineData("MODEx/2xxx", "MODEx/2xxx")]
+        [InlineData("", "MODE1/2352")]
+        [InlineData(null, "MODE1/2352")]
+        public void SerializeStream_UnknownDataType_WrittenIfSet(string? unknownDataType, string expectedDataType)
+        {
+            var track = CreateTrack(1, CueTrackDataType.MODE1_2352);
+            track.UnknownDataType = unknownDataType;
+            var cueSheet = new Data.Models.CueSheets.CueSheet { Files = [CreateFile("a.bin", track)] };
+
+            string[] expected =
+            [
+                "FILE \"a.bin\" BINARY",
+                $"  TRACK 01 {expectedDataType}",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_RemSessionInRemarks_NotRepeated()
+        {
+            // Layout written by IsoBuster
+            var first = CreateTrack(1, CueTrackDataType.AUDIO, session: 1);
+            first.Indices[0].Remarks = ["LEAD-OUT 02:00:00 (*)", "SESSION 02        (*)"];
+            var file = CreateFile("a.bin", first, CreateTrack(2, CueTrackDataType.MODE2_2352, session: 2));
+            file.Remarks = ["SESSION 01        (*)"];
+            var cueSheet = new Data.Models.CueSheets.CueSheet { Files = [file] };
+
+            string[] expected =
+            [
+                "FILE \"a.bin\" BINARY",
+                "REM SESSION 01        (*)",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM LEAD-OUT 02:00:00 (*)",
+                "REM SESSION 02        (*)",
+                "  TRACK 02 MODE2/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_RemSessionInRemarksDiffers_RemSessionWritten()
+        {
+            // The session of the track is written after a REM line with another session
+            var first = CreateTrack(1, CueTrackDataType.AUDIO, session: 1);
+            first.Indices[0].Remarks = ["SESSION 02"];
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files = [CreateFile("a.bin", first, CreateTrack(2, CueTrackDataType.AUDIO, session: 1))],
+            };
+
+            string[] expected =
+            [
+                "REM SESSION 01",
+                "FILE \"a.bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "REM SESSION 02",
+                "REM SESSION 01",
+                "  TRACK 02 AUDIO",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_FileRemarks_RemSessionAfterThem()
+        {
+            // The REM lines of the file could note the session themselves
+            var file = CreateFile("a.bin", CreateTrack(1, CueTrackDataType.AUDIO, session: 1));
+            file.Remarks = ["ORIGINAL MEDIA-TYPE: CD-RW"];
+            var cueSheet = new Data.Models.CueSheets.CueSheet { Files = [file] };
+
+            string[] expected =
+            [
+                "FILE \"a.bin\" BINARY",
+                "REM ORIGINAL MEDIA-TYPE: CD-RW",
+                "REM SESSION 01",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_DensityAreaInRemarks_NotRepeated()
+        {
+            // Layout written by redump for a GD-ROM
+            var first = CreateTrack(1, CueTrackDataType.MODE1_2352, densityArea: CueDensityArea.SingleDensity);
+            first.Indices[0].Remarks = ["HIGH-DENSITY AREA", "Comment"];
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Remarks = ["SINGLE-DENSITY AREA"],
+                Files =
+                [
+                    CreateFile("a (Track 1).bin", first),
+                    CreateFile("a (Track 2).bin", CreateTrack(2, CueTrackDataType.MODE1_2352, densityArea: CueDensityArea.HighDensity)),
+                ],
+            };
+
+            string[] expected =
+            [
+                "REM SINGLE-DENSITY AREA",
+                "FILE \"a (Track 1).bin\" BINARY",
+                "  TRACK 01 MODE1/2352",
+                "    INDEX 01 00:00:00",
+                "REM HIGH-DENSITY AREA",
+                "REM Comment",
+                "FILE \"a (Track 2).bin\" BINARY",
+                "  TRACK 02 MODE1/2352",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_FileIndices_WrittenBeforeTracks()
+        {
+            // Layout written by Exact Audio Copy and whipper, with the gap of a track at the end of the previous file
+            var second = CreateTrack(2, CueTrackDataType.AUDIO);
+            second.Indices = [new CueIndex { Index = 0, Minutes = 6, Seconds = 32, Frames = 45 }];
+            var third = CreateTrack(3, CueTrackDataType.AUDIO);
+            third.Indices = [new CueIndex { Index = 0, Minutes = 4, Seconds = 11, Frames = 3 }];
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files =
+                [
+                    CreateFile("01.bin", CreateTrack(1, CueTrackDataType.AUDIO), second),
+                    new CueFile
+                    {
+                        FileName = "02.bin",
+                        Remarks = ["Before the index"],
+                        Indices = [new CueIndex { Index = 1, Remarks = ["After the index"] }],
+                        Tracks = [third],
+                    },
+                    new CueFile { FileName = "03.bin", Indices = [new CueIndex { Index = 1 }] },
+                ],
+            };
+
+            string[] expected =
+            [
+                "FILE \"01.bin\" BINARY",
+                "  TRACK 01 AUDIO",
+                "    INDEX 01 00:00:00",
+                "  TRACK 02 AUDIO",
+                "    INDEX 00 06:32:45",
+                "FILE \"02.bin\" BINARY",
+                "REM Before the index",
+                "    INDEX 01 00:00:00",
+                "REM After the index",
+                "  TRACK 03 AUDIO",
+                "    INDEX 00 04:11:03",
+                "FILE \"03.bin\" BINARY",
+                "    INDEX 01 00:00:00",
+            ];
+            Assert.Equal(JoinLines(expected), Serialize(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_FileWithoutTracksOrIndices_Throws()
+        {
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files = [new CueFile { FileName = "a.bin", FileType = CueFileType.BINARY }],
+            };
+
+            var serializer = new CueSheet();
+            Assert.Throws<ArgumentException>(() => serializer.SerializeStream(cueSheet));
+        }
+
+        [Fact]
+        public void SerializeStream_NullTrack_Throws()
+        {
+            var cueSheet = new Data.Models.CueSheets.CueSheet
+            {
+                Files = [new CueFile { FileName = "a.bin", FileType = CueFileType.BINARY, Tracks = [null!] }],
+            };
+
+            var serializer = new CueSheet();
+            Assert.Throws<InvalidDataException>(() => serializer.SerializeStream(cueSheet));
+        }
+
         /// <summary>
         /// Create a binary file with the given tracks
         /// </summary>
@@ -99,9 +425,16 @@ namespace SabreTools.Serialization.Writers.Test
         /// <summary>
         /// Create a track with index 01 at 00:00:00
         /// </summary>
-        private static CueTrack CreateTrack(int number, CueTrackDataType dataType)
+        private static CueTrack CreateTrack(int number, CueTrackDataType dataType, int session = 0, CueDensityArea densityArea = CueDensityArea.None)
         {
-            return new CueTrack { Number = number, DataType = dataType, Indices = [new CueIndex { Index = 1 }] };
+            return new CueTrack
+            {
+                Number = number,
+                DataType = dataType,
+                Session = session,
+                DensityArea = densityArea,
+                Indices = [new CueIndex { Index = 1 }],
+            };
         }
 
         /// <summary>

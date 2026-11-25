@@ -34,6 +34,11 @@ namespace SabreTools.Data.Models.CueSheets
         public string? Title { get; set; }
 
         /// <summary>
+        /// Text after the REM keyword of each REM line before the first FILE
+        /// </summary>
+        public string[] Remarks { get; set; } = [];
+
+        /// <summary>
         /// List of FILE in cuesheet
         /// </summary>
         public CueFile[] Files { get; set; } = [];
