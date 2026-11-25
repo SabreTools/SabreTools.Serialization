@@ -150,5 +150,107 @@ namespace SabreTools.Data.Models.ISO9660
         ];
 
         #endregion
+
+        #region System Use Sharing Protocol Constants
+
+        /// <summary>
+        /// Signature of a System Use Sharing Protocol (SUSP) Continuation Area entry, "CE"
+        /// </summary>
+        public const string ContinuationAreaSignature = "CE";
+
+        /// <summary>
+        /// Signature of a System Use Sharing Protocol (SUSP) Padding Field entry, "PD"
+        /// </summary>
+        public const string PaddingFieldSignature = "PD";
+
+        /// <summary>
+        /// Signature of a System Use Sharing Protocol (SUSP) Sharing Protocol Indicator entry, "SP"
+        /// </summary>
+        public const string SharingProtocolIndicatorSignature = "SP";
+
+        /// <summary>
+        /// Signature of a System Use Sharing Protocol (SUSP) Sharing Protocol Terminator entry, "ST"
+        /// </summary>
+        public const string SharingProtocolTerminatorSignature = "ST";
+
+        /// <summary>
+        /// Signature of a System Use Sharing Protocol (SUSP) Extensions Reference entry, "ER"
+        /// </summary>
+        public const string ExtensionsReferenceSignature = "ER";
+
+        /// <summary>
+        /// Signature of a System Use Sharing Protocol (SUSP) Extension Selector entry, "ES"
+        /// </summary>
+        public const string ExtensionSelectorSignature = "ES";
+
+        /// <summary>
+        /// Check bytes of a Sharing Protocol Indicator entry, which tell it from other data
+        /// </summary>
+        public static readonly byte[] SharingProtocolCheckBytes = [0xBE, 0xEF];
+
+        #endregion
+
+        #region Rock Ridge Constants
+
+        /// <summary>
+        /// Signature of a Rock Ridge POSIX file attributes entry, "PX"
+        /// </summary>
+        public const string PosixFileAttributesSignature = "PX";
+
+        /// <summary>
+        /// Signature of a Rock Ridge POSIX device number entry, "PN"
+        /// </summary>
+        public const string PosixDeviceNumberSignature = "PN";
+
+        /// <summary>
+        /// Signature of a Rock Ridge symbolic link entry, "SL"
+        /// </summary>
+        public const string SymbolicLinkSignature = "SL";
+
+        /// <summary>
+        /// Signature of a Rock Ridge alternate name entry, "NM"
+        /// </summary>
+        public const string AlternateNameSignature = "NM";
+
+        /// <summary>
+        /// Signature of a Rock Ridge child link entry, "CL"
+        /// </summary>
+        public const string ChildLinkSignature = "CL";
+
+        /// <summary>
+        /// Signature of a Rock Ridge parent link entry, "PL"
+        /// </summary>
+        public const string ParentLinkSignature = "PL";
+
+        /// <summary>
+        /// Signature of a Rock Ridge relocated directory entry, "RE"
+        /// </summary>
+        public const string RelocatedDirectorySignature = "RE";
+
+        /// <summary>
+        /// Signature of a Rock Ridge time stamps entry, "TF"
+        /// </summary>
+        public const string TimeStampsSignature = "TF";
+
+        /// <summary>
+        /// Signature of a Rock Ridge sparse file entry, "SF"
+        /// </summary>
+        public const string SparseFileSignature = "SF";
+
+        /// <summary>
+        /// Signature of a Rock Ridge extensions in use entry, "RR"
+        /// </summary>
+        public const string ExtensionsInUseSignature = "RR";
+
+        #endregion
+
+        #region Apple Extension Constants
+
+        /// <summary>
+        /// Signature of the Apple extension entry for HFS, which holds the Finder type, creator and flags of a file, "AA"
+        /// </summary>
+        public const string AppleExtensionSignature = "AA";
+
+        #endregion
     }
 }

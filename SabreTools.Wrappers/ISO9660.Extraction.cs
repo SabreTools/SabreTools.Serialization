@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
+using SabreTools.Data.Models.ISO9660.SystemUseEntries;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
@@ -463,8 +464,8 @@ namespace SabreTools.Wrappers
             // Take the Finder info from the file, which directly follows, or else from the associated file
             bool fileFollows = last + 1 < records.Length && records[last + 1].FileIdentifier.EqualsExactly(dr.FileIdentifier);
             byte[] finderInfo = new byte[32];
-            bool appleExtensions = (fileFollows && ReadFinderInfo(records[last + 1].SystemUse, finderInfo))
-                || ReadFinderInfo(dr.SystemUse, finderInfo);
+            bool appleExtensions = (fileFollows && ReadFinderInfo(records[last + 1], finderInfo))
+                || ReadFinderInfo(dr, finderInfo);
 
             // Get the output file path
             string filename = appleExtensions ? $"._{GetFileName(dr, encoding)}" : $"{GetFileName(dr, encoding)}.associated";
@@ -619,31 +620,24 @@ namespace SabreTools.Wrappers
             => ((long)dr.ExtentLocation.LittleEndian + dr.ExtendedAttributeRecordLength) * blockLength;
 
         /// <summary>
-        /// Read the Finder type, creator and flags from the Apple extension in a System Use field
+        /// Read the Finder type, creator and flags from the Apple extension in the System Use entries of a directory record
         /// </summary>
-        /// <param name="systemUse">System Use field of a directory record</param>
+        /// <param name="dr">Directory record</param>
         /// <param name="finderInfo">Finder info to fill</param>
-        /// <returns>True if the System Use field holds the Apple extension for HFS, false otherwise</returns>
-        private static bool ReadFinderInfo(byte[] systemUse, byte[] finderInfo)
+        /// <returns>True if the System Use entries hold the Apple extension for HFS, false otherwise</returns>
+        private static bool ReadFinderInfo(DirectoryRecord dr, byte[] finderInfo)
         {
-            // The System Use entries follow the CD-ROM XA system use information, if there is any
-            int offset = systemUse.Length >= 14 && systemUse[6] == 'X' && systemUse[7] == 'A' ? 14 : 0;
-
-            // Every entry starts with a signature of 2 bytes and its length
-            while (offset + 4 <= systemUse.Length)
+            foreach (var entry in dr.SystemUseEntries)
             {
-                int entryLength = systemUse[offset + 2];
-                if (entryLength < 4 || offset + entryLength > systemUse.Length)
-                    return false;
-
                 // Apple extension for HFS: type, creator and Finder flags
-                if (systemUse[offset] == 'A' && systemUse[offset + 1] == 'A' && entryLength == 14 && systemUse[offset + 3] == 2)
+                if (entry is UnknownEntry unknownEntry
+                    && unknownEntry.Length == 14
+                    && unknownEntry.Version == 2
+                    && Encoding.ASCII.GetString(unknownEntry.Signature) == Constants.AppleExtensionSignature)
                 {
-                    Array.Copy(systemUse, offset + 4, finderInfo, 0, 10);
+                    Array.Copy(unknownEntry.Data, 0, finderInfo, 0, 10);
                     return true;
                 }
-
-                offset += entryLength;
             }
 
             return false;

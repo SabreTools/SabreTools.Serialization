@@ -10,7 +10,7 @@ using Xunit;
 
 namespace SabreTools.Serialization.Readers.Test
 {
-    public class ISO9660Tests
+    public partial class ISO9660Tests
     {
         /// <summary>
         /// File flags of a plain file record
