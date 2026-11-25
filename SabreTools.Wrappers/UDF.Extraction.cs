@@ -104,6 +104,7 @@ namespace SabreTools.Wrappers
             }
 
             const int chunkSize = 2048 * 1024;
+            int sectorSize = Model.GetSectorSize();
             using var fs = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
             long written = 0;
             foreach (var ad in descriptors)
@@ -114,35 +115,43 @@ namespace SabreTools.Wrappers
                 long length = Math.Min(UDFExtensions.GetExtentLength(ad.ExtentLength), size - written);
                 bool recorded = UDFExtensions.GetExtentType(ad.ExtentLength) == ExtentType.RECORDED_AND_ALLOCATED;
 
-                long sector = 0;
-                if (recorded && !Model.TryGetSector(ad.ExtentLocation.GetKey(), out sector))
+                // Recorded extents are read in runs of blocks recorded in consecutive sectors
+                List<ExtentDescriptor>? runs = recorded
+                    ? Model.GetSectorExtents(ad.ExtentLocation, (uint)length)
+                    : [new ExtentDescriptor { ExtentLength = (uint)length }];
+                if (runs is null)
                     return false;
 
-                // Make sure the extent won't EOF
-                if (recorded && (sector * Constants.SectorSize) + length > _dataSource.Length)
-                    return false;
-
-                long done = 0;
-                while (done < length)
+                foreach (var run in runs)
                 {
-                    int count = (int)Math.Min(chunkSize, length - done);
-                    byte[] buffer;
-                    if (recorded)
-                    {
-                        lock (_dataSourceLock)
-                        {
-                            _dataSource.SeekIfPossible((sector * Constants.SectorSize) + done, SeekOrigin.Begin);
-                            buffer = _dataSource.ReadBytes(count);
-                        }
-                    }
-                    else
-                    {
-                        // Extents that are not recorded read as zeros
-                        buffer = new byte[count];
-                    }
+                    long sector = run.ExtentLocation;
 
-                    fs.Write(buffer, 0, count);
-                    done += count;
+                    // Make sure the run won't EOF
+                    if (recorded && (sector * sectorSize) + run.ExtentLength > _dataSource.Length)
+                        return false;
+
+                    long done = 0;
+                    while (done < run.ExtentLength)
+                    {
+                        int count = (int)Math.Min(chunkSize, run.ExtentLength - done);
+                        byte[] buffer;
+                        if (recorded)
+                        {
+                            lock (_dataSourceLock)
+                            {
+                                _dataSource.SeekIfPossible((sector * sectorSize) + done, SeekOrigin.Begin);
+                                buffer = _dataSource.ReadBytes(count);
+                            }
+                        }
+                        else
+                        {
+                            // Extents that are not recorded read as zeros
+                            buffer = new byte[count];
+                        }
+
+                        fs.Write(buffer, 0, count);
+                        done += count;
+                    }
                 }
 
                 written += length;
