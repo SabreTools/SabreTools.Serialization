@@ -55,8 +55,8 @@ namespace SabreTools.Wrappers.Test
         /// <summary>
         /// Directory record of a subdirectory
         /// </summary>
-        public static DirectoryRecord DirectoryEntry(string name, int location)
-            => DirectoryEntry(Encoding.ASCII.GetBytes(name), location);
+        public static DirectoryRecord DirectoryEntry(string name, int location, Encoding? encoding = null)
+            => DirectoryEntry((encoding ?? Encoding.ASCII).GetBytes(name), location);
 
         /// <summary>
         /// Directory record of a subdirectory
