@@ -48,6 +48,23 @@ namespace SabreTools.Wrappers
         /// </summary>
         private readonly HashSet<int> extractedAssociatedFileLocations = [];
 
+        /// <summary>
+        /// List of output paths written with a Rock Ridge name, with the file identifier of their directory record
+        /// </summary>
+        /// <remarks>Paths are compared without case, so that a name taken on a case-insensitive file system is found</remarks>
+        private readonly Dictionary<string, byte[]> rockRidgePaths = new(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// List of output paths written as Rock Ridge symbolic links
+        /// </summary>
+        /// <remarks>The extent of a symbolic link holds no data, and can be the extent of the file after it</remarks>
+        private readonly HashSet<string> extractedLinks = [];
+
+        /// <summary>
+        /// Indicates if the directory hierarchy being extracted uses Rock Ridge
+        /// </summary>
+        private bool rockRidge;
+
         #endregion
 
         /// <summary>
@@ -70,6 +87,7 @@ namespace SabreTools.Wrappers
             waveFiles.Clear();
             extractedAssociatedFiles.Clear();
             extractedAssociatedFileLocations.Clear();
+            extractedLinks.Clear();
 
             bool allExtracted = true;
 
@@ -80,10 +98,20 @@ namespace SabreTools.Wrappers
 
             // Loop through all Volume Descriptors to extract files from each directory hierarchy
             // Note: This will prioritize the last volume descriptor directory hierarchies first (prioritises those filenames)
+            // Note: Directory hierarchies with Rock Ridge names come before all others, as Linux uses them instead of Joliet names
+            List<VolumeDescriptor> volumeDescriptors = [];
+            int rockRidgeCount = 0;
             for (int i = VolumeDescriptorSet.Length - 1; i >= 0; i--)
             {
                 var vd = VolumeDescriptorSet[i];
+                if (GetRockRidgeRootDirectory(vd) is DirectoryExtent root && HasRockRidgeNames(root))
+                    volumeDescriptors.Insert(rockRidgeCount++, vd);
+                else
+                    volumeDescriptors.Add(vd);
+            }
 
+            foreach (var vd in volumeDescriptors)
+            {
                 DirectoryRecord rootDirectoryRecord;
                 if (vd is PrimaryVolumeDescriptor pvd)
                     rootDirectoryRecord = pvd.RootDirectoryRecord;
@@ -95,6 +123,7 @@ namespace SabreTools.Wrappers
                     continue;
 
                 var blockLength = vd.GetLogicalBlockSize(sectorLength);
+                rockRidge = GetRockRidgeRootDirectory(vd) is not null;
 
                 // TODO: Better encoding detection (EscapeSequences)
                 var encoding = Encoding.UTF8;
@@ -220,11 +249,17 @@ namespace SabreTools.Wrappers
             {
                 var dr = records[i];
 
+                // With Rock Ridge, a relocated directory is extracted in place of the file that links to it,
+                // and not in the directory it was relocated to
+                var childLink = rockRidge ? GetSystemUseEntry<ChildLink>(dr) : null;
+                if (rockRidge && GetSystemUseEntry<RelocatedDirectory>(dr) is not null)
+                    continue;
+
                 // Recurse if record is directory
 #if NET20 || NET35
-                if ((dr.FileFlags & FileFlags.DIRECTORY) != 0)
+                if ((dr.FileFlags & FileFlags.DIRECTORY) != 0 || childLink is not null)
 #else
-                if (dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
+                if (dr.FileFlags.HasFlag(FileFlags.DIRECTORY) || childLink is not null)
 #endif
                 {
                     // Don't recurse up or self
@@ -232,7 +267,7 @@ namespace SabreTools.Wrappers
                         continue;
 
                     // Append directory name
-                    string outputPath = Path.Combine(outputDirectory, GetSafeName(encoding.GetString(dr.FileIdentifier)));
+                    string outputPath = GetOutputPath(dr, encoding, outputDirectory, GetSafeName(encoding.GetString(dr.FileIdentifier)));
                     if (includeDebug) Console.WriteLine($"Extracting to directory: {outputPath}");
 
                     // Create directory (even if empty)
@@ -240,11 +275,12 @@ namespace SabreTools.Wrappers
                         Directory.CreateDirectory(outputPath);
 
                     // Recursively extract from LittleEndian extent location
-                    ExtractExtent(dr.ExtentLocation.LittleEndian, encoding, blockLength, outputPath, includeDebug);
+                    var location = childLink?.ChildDirectoryLocation ?? dr.ExtentLocation;
+                    ExtractExtent(location.LittleEndian, encoding, blockLength, outputPath, includeDebug);
 
                     // Also extract from BigEndian values if ambiguous
-                    if (!dr.ExtentLocation.IsValid)
-                        ExtractExtent(dr.ExtentLocation.BigEndian, encoding, blockLength, outputPath, includeDebug);
+                    if (!location.IsValid)
+                        ExtractExtent(location.BigEndian, encoding, blockLength, outputPath, includeDebug);
                 }
                 else
                 {
@@ -342,7 +378,11 @@ namespace SabreTools.Wrappers
             string filename = GetFileName(dr, encoding);
 
             // Get the output file path
-            var filepath = Path.Combine(outputDirectory, filename);
+            var filepath = GetOutputPath(dr, encoding, outputDirectory, filename);
+
+            // Symbolic links don't mark their extent as extracted, so a record of the same path in another directory hierarchy is skipped by its path
+            if (extractedLinks.Contains(filepath))
+                return true;
 
             bool multiExtent = false;
             bool interleaved = false;
@@ -406,8 +446,11 @@ namespace SabreTools.Wrappers
                 if (rawSectorSource is not null && dr.IsCDDA())
                     return ExtractCDDAFile(rawSectorSource, dr, extentLocation, fileOffset, filepath, includeDebug);
 
+                // A Rock Ridge symbolic link is written as a file with the path it points to, its extent holds no data
+                byte[]? linkTarget = rockRidge ? GetSymbolicLinkTarget(dr) : null;
+
                 // Get the length, and make sure it won't EOF
-                uint length = dr.ExtentLength;
+                uint length = linkTarget is null ? dr.ExtentLength : 0;
                 long lastUnit = length == 0 ? 0 : (length - 1) / unitLength;
                 if (fileOffset + (lastUnit * unitDistance) + (length - (lastUnit * unitLength)) > _dataSource.Length)
                     return false;
@@ -415,6 +458,14 @@ namespace SabreTools.Wrappers
                 // Write the output file
                 if (includeDebug) Console.WriteLine($"Extracting: {filepath}");
                 using var fs = File.Open(filepath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+                if (linkTarget is not null)
+                {
+                    // The extent is not marked as extracted, as it can be the extent of the file after the symbolic link
+                    fs.Write(linkTarget, 0, linkTarget.Length);
+                    extractedLinks.Add(filepath);
+                    return true;
+                }
+
                 long unitRemaining = unitLength;
                 while (length > 0)
                 {
@@ -618,6 +669,166 @@ namespace SabreTools.Wrappers
         /// </summary>
         private static long GetFileOffset(DirectoryRecord dr, int blockLength)
             => ((long)dr.ExtentLocation.LittleEndian + dr.ExtendedAttributeRecordLength) * blockLength;
+
+        /// <summary>
+        /// Get the root directory of the directory hierarchy of a volume descriptor, if the directory hierarchy uses Rock Ridge
+        /// </summary>
+        /// <param name="vd">Volume descriptor</param>
+        /// <returns>Root directory if the volume descriptor is a primary volume descriptor whose directory hierarchy uses SUSP, null otherwise</returns>
+        /// <remarks>
+        /// Rock Ridge is recorded with the System Use Sharing Protocol (SUSP), which a directory hierarchy uses if the System Use
+        /// entries of the "." record of its root directory start with the Sharing Protocol Indicator. Like Linux, only the
+        /// directory hierarchy of the primary volume descriptor is read with Rock Ridge.
+        /// </remarks>
+        private DirectoryExtent? GetRockRidgeRootDirectory(VolumeDescriptor vd)
+        {
+            if (vd is not PrimaryVolumeDescriptor pvd)
+                return null;
+
+            if (!DirectoryDescriptors.TryGetValue(pvd.RootDirectoryRecord.ExtentLocation.LittleEndian, out FileExtent? value) || value is not DirectoryExtent root || root.DirectoryRecords.Length == 0)
+                return null;
+
+            var entries = root.DirectoryRecords[0].SystemUseEntries;
+            if (entries.Length == 0 || entries[0] is not SharingProtocolIndicator sp || !sp.CheckBytes.EqualsExactly(Constants.SharingProtocolCheckBytes))
+                return null;
+
+            return root;
+        }
+
+        /// <summary>
+        /// Indicates if a record of a root directory has a Rock Ridge name
+        /// </summary>
+        /// <param name="root">Root directory of a directory hierarchy that uses Rock Ridge</param>
+        /// <returns>True if a record of the root directory has a Rock Ridge name, false otherwise</returns>
+        /// <remarks>A directory hierarchy can use Rock Ridge without names, like only for the POSIX file attributes</remarks>
+        private static bool HasRockRidgeNames(DirectoryExtent root)
+        {
+            foreach (var dr in root.DirectoryRecords)
+            {
+                if (GetRockRidgeName(dr, Encoding.UTF8) is not null)
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Get the output path of a directory record, from its Rock Ridge name if the directory hierarchy uses Rock Ridge
+        /// </summary>
+        /// <param name="dr">Directory record</param>
+        /// <param name="encoding">Encoding of the names of the directory hierarchy</param>
+        /// <param name="outputDirectory">Output directory of the directory that holds the record</param>
+        /// <param name="name">Name from the file identifier, used if there is no Rock Ridge name</param>
+        /// <remarks>
+        /// A Rock Ridge name that is taken by the Rock Ridge name of another directory record, like a name that only differs
+        /// in case on a case-insensitive file system, is replaced by the name from the file identifier, so both are extracted.
+        /// </remarks>
+        private string GetOutputPath(DirectoryRecord dr, Encoding encoding, string outputDirectory, string name)
+        {
+            string? rockRidgeName = rockRidge ? GetRockRidgeName(dr, encoding) : null;
+            if (rockRidgeName is null)
+                return Path.Combine(outputDirectory, name);
+
+            // The records of a file in multiple extents share the file identifier and the path
+            string path = Path.Combine(outputDirectory, GetSafeName(rockRidgeName));
+            if (rockRidgePaths.TryGetValue(path, out byte[]? identifier) && !identifier.EqualsExactly(dr.FileIdentifier) && (File.Exists(path) || Directory.Exists(path)))
+                return Path.Combine(outputDirectory, name);
+
+            rockRidgePaths[path] = dr.FileIdentifier;
+            return path;
+        }
+
+        /// <summary>
+        /// Get the first System Use entry of a type of a directory record
+        /// </summary>
+        /// <param name="dr">Directory record</param>
+        /// <returns>First System Use entry of the type, null if there is none</returns>
+        private static T? GetSystemUseEntry<T>(DirectoryRecord dr) where T : BaseEntry
+        {
+            foreach (var entry in dr.SystemUseEntries)
+            {
+                if (entry is T typedEntry)
+                    return typedEntry;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get the Rock Ridge name of a directory record, the name contents of its "NM" entries
+        /// </summary>
+        /// <param name="dr">Directory record</param>
+        /// <param name="encoding">Encoding of the names of the directory hierarchy</param>
+        /// <returns>Rock Ridge name, null if the directory record has none</returns>
+        /// <remarks>Like Linux, an entry with any flag but CONTINUE is skipped, like one for the current or parent directory</remarks>
+        private static string? GetRockRidgeName(DirectoryRecord dr, Encoding encoding)
+        {
+            List<byte> name = [];
+            foreach (var entry in dr.SystemUseEntries)
+            {
+                if (entry is AlternateName alternateName && (alternateName.Flags & ~AlternateNameFlags.CONTINUE) == 0)
+                    name.AddRange(alternateName.NameContent);
+            }
+
+            return name.Count == 0 ? null : encoding.GetString(name.ToArray());
+        }
+
+        /// <summary>
+        /// Get the path a Rock Ridge symbolic link points to, from the component records of its "SL" entries
+        /// </summary>
+        /// <param name="dr">Directory record</param>
+        /// <returns>Path in the bytes it is recorded in, null if the directory record is not a symbolic link</returns>
+        /// <remarks>
+        /// Like Linux, a component is followed by "/" unless it is continued or it is the root directory, and the last
+        /// component of an entry only if the path is continued in the next entry. Components with other flags are left out.
+        /// </remarks>
+        private static byte[]? GetSymbolicLinkTarget(DirectoryRecord dr)
+        {
+            List<byte>? target = null;
+            foreach (var entry in dr.SystemUseEntries)
+            {
+                if (entry is not SymbolicLink symbolicLink)
+                    continue;
+
+                target ??= [];
+                for (int i = 0; i < symbolicLink.Components.Length; i++)
+                {
+                    var component = symbolicLink.Components[i];
+                    bool root = false;
+                    switch (component.Flags & ~ComponentFlags.CONTINUE)
+                    {
+                        case 0:
+                            target.AddRange(component.Content);
+                            break;
+                        case ComponentFlags.CURRENT:
+                            target.Add((byte)'.');
+                            break;
+                        case ComponentFlags.PARENT:
+                            target.Add((byte)'.');
+                            target.Add((byte)'.');
+                            break;
+                        case ComponentFlags.ROOT:
+                            target.Add((byte)'/');
+                            root = true;
+                            break;
+
+                        // Like Linux, other components only write the separator after them
+                        case ComponentFlags.CONTINUE:
+                        case ComponentFlags.VOLROOT:
+                        case ComponentFlags.HOST:
+                        default:
+                            break;
+                    }
+
+                    bool continued = (component.Flags & ComponentFlags.CONTINUE) != 0;
+                    bool last = i == symbolicLink.Components.Length - 1;
+                    if (!root && !continued && (!last || (symbolicLink.Flags & SymbolicLinkFlags.CONTINUE) != 0))
+                        target.Add((byte)'/');
+                }
+            }
+
+            return target?.ToArray();
+        }
 
         /// <summary>
         /// Read the Finder type, creator and flags from the Apple extension in the System Use entries of a directory record
