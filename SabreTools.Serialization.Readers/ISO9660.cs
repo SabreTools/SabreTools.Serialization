@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
+using SabreTools.Data.Models.ISO9660.SystemUseEntries;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
@@ -828,7 +829,7 @@ namespace SabreTools.Serialization.Readers
                 short blockLength = vd.GetLogicalBlockSize(sectorLength);
 
                 // Queue the root directory pointed to from the base volume descriptor
-                QueueExtent(data, blockLength, rootDirectoryRecord, vd is HighSierraVolumeDescriptor, pending);
+                QueueExtent(data, blockLength, rootDirectoryRecord, vd is HighSierraVolumeDescriptor, true, null, pending);
             }
 
             // Read the queued extents in volume order
@@ -862,18 +863,20 @@ namespace SabreTools.Serialization.Readers
         /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
         /// <param name="dr">Directory record pointing to the extent</param>
         /// <param name="highSierra">True if the directory records are in the High Sierra layout, false otherwise</param>
+        /// <param name="root">True if the extent is the root directory of a directory hierarchy, false otherwise</param>
+        /// <param name="systemUseSkip">Number of bytes before the System Use entries of each directory record, null if the directory hierarchy does not use SUSP</param>
         /// <param name="pending">Queued extents, sorted by offset</param>
-        private static void QueueExtent(Stream data, short blockLength, DirectoryRecord dr, bool highSierra, List<PendingExtent> pending)
+        private static void QueueExtent(Stream data, short blockLength, DirectoryRecord dr, bool highSierra, bool root, int? systemUseSkip, List<PendingExtent> pending)
         {
             // Only directories and files with an extended attribute record are read
             if ((dr.FileFlags & FileFlags.DIRECTORY) != FileFlags.DIRECTORY && dr.ExtendedAttributeRecordLength == 0)
                 return;
 
-            QueueExtent(data, blockLength, dr, false, highSierra, pending);
+            QueueExtent(data, blockLength, dr, false, highSierra, root, systemUseSkip, pending);
 
             // If the extent location field is ambiguous, also queue the big-endian extent
             if (!dr.ExtentLocation.IsValid)
-                QueueExtent(data, blockLength, dr, true, highSierra, pending);
+                QueueExtent(data, blockLength, dr, true, highSierra, root, systemUseSkip, pending);
         }
 
         /// <summary>
@@ -884,13 +887,15 @@ namespace SabreTools.Serialization.Readers
         /// <param name="dr">Directory record pointing to the extent</param>
         /// <param name="bigEndian">True if the Big Endian extent location/length should be used</param>
         /// <param name="highSierra">True if the directory records are in the High Sierra layout, false otherwise</param>
+        /// <param name="root">True if the extent is the root directory of a directory hierarchy, false otherwise</param>
+        /// <param name="systemUseSkip">Number of bytes before the System Use entries of each directory record, null if the directory hierarchy does not use SUSP</param>
         /// <param name="pending">Queued extents, sorted by offset</param>
-        private static void QueueExtent(Stream data, short blockLength, DirectoryRecord dr, bool bigEndian, bool highSierra, List<PendingExtent> pending)
+        private static void QueueExtent(Stream data, short blockLength, DirectoryRecord dr, bool bigEndian, bool highSierra, bool root, int? systemUseSkip, List<PendingExtent> pending)
         {
             if (!TryGetExtent(data, blockLength, dr, bigEndian, out int extentLocation, out long extentOffset, out uint extentLength))
                 return;
 
-            var extent = new PendingExtent(extentLocation, extentOffset, extentLength, blockLength, highSierra, dr);
+            var extent = new PendingExtent(extentLocation, extentOffset, extentLength, blockLength, highSierra, root, systemUseSkip, dr);
             int index = pending.BinarySearch(extent, PendingExtentComparer.Instance);
             pending.Insert(index < 0 ? ~index : index, extent);
         }
@@ -903,7 +908,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Index of the next extent to read</returns>
         private static int FindNextExtent(List<PendingExtent> pending, long position)
         {
-            var probe = new PendingExtent(0, position, 0, 0, false, null);
+            var probe = new PendingExtent(0, position, 0, 0, false, false, null, null);
             int index = pending.BinarySearch(probe, PendingExtentComparer.Instance);
             if (index < 0)
             {
@@ -943,6 +948,9 @@ namespace SabreTools.Serialization.Readers
                 if (records is null)
                     return;
 
+                // Parse the System Use entries, a root directory tells if its directory hierarchy uses SUSP
+                int? systemUseSkip = ParseSystemUseEntries(data, extent.BlockLength, records, extent.Root, extent.SystemUseSkip);
+
                 // Add current directory to dictionary
                 var currentDirectory = new DirectoryExtent();
                 currentDirectory.DirectoryRecords = [.. records];
@@ -956,7 +964,7 @@ namespace SabreTools.Serialization.Readers
                     if (record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
                         continue;
 
-                    QueueExtent(data, extent.BlockLength, record, extent.HighSierra, pending);
+                    QueueExtent(data, extent.BlockLength, record, extent.HighSierra, false, systemUseSkip, pending);
                 }
             }
             else if (dr.ExtendedAttributeRecordLength > 0)
@@ -1244,6 +1252,10 @@ namespace SabreTools.Serialization.Readers
                 if (records[i].FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || records[i].FileIdentifier.EqualsExactly(Constants.ParentDirectory))
                     continue;
 
+                // Skip associated files, the file of the same name follows in its own record
+                if ((records[i].FileFlags & FileFlags.ASSOCIATED_FILE) == FileFlags.ASSOCIATED_FILE)
+                    continue;
+
                 if (!string.Equals(TrimIdentifier(encoding.GetString(records[i].FileIdentifier)), wanted, StringComparison.OrdinalIgnoreCase))
                     continue;
 
@@ -1446,6 +1458,518 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
+        /// Parse the System Use entries of the directory records of one directory extent
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="records">Directory records of the directory extent</param>
+        /// <param name="root">True if the directory extent is a root directory, false otherwise</param>
+        /// <param name="systemUseSkip">Number of bytes before the System Use entries of each directory record, null if the directory hierarchy does not use SUSP</param>
+        /// <returns>Number of bytes before the System Use entries of each directory record below the directory, null if the directory hierarchy does not use SUSP</returns>
+        /// <remarks>
+        /// A directory hierarchy uses the System Use Sharing Protocol (SUSP) if the System Use field of the "." record of its
+        /// root directory starts with a Sharing Protocol Indicator, after the CD-ROM XA system use information if there is any.
+        /// The indicator gives the number of bytes skipped in the System Use fields of the other directory records.
+        /// Without SUSP, the entries of other extensions, like the Apple extension for HFS, follow the CD-ROM XA system use
+        /// information if there is any, and Continuation Areas are not read.
+        /// </remarks>
+        private static int? ParseSystemUseEntries(Stream data, short blockLength, List<DirectoryRecord> records, bool root, int? systemUseSkip)
+        {
+            // The "." record of a root directory tells if the directory hierarchy uses SUSP
+            int indicatorOffset = -1;
+            if (root && records.Count > 0)
+            {
+                indicatorOffset = FindSharingProtocolIndicator(records[0].SystemUse);
+                systemUseSkip = indicatorOffset < 0 ? null : records[0].SystemUse[indicatorOffset + 6];
+            }
+
+            for (int i = 0; i < records.Count; i++)
+            {
+                byte[] systemUse = records[i].SystemUse;
+
+                // The entries of the "." record of a root directory start with the Sharing Protocol Indicator
+                int start;
+                if (i == 0 && indicatorOffset >= 0)
+                    start = indicatorOffset;
+                else if (systemUseSkip is not null)
+                    start = systemUseSkip.Value;
+                else
+                    start = HasXASystemUse(systemUse) ? 14 : 0;
+
+                records[i].SystemUseEntries = ParseSystemUseEntries(data, blockLength, systemUse, start, systemUseSkip is not null);
+            }
+
+            return systemUseSkip;
+        }
+
+        /// <summary>
+        /// Find the Sharing Protocol Indicator in the System Use field of the "." record of a root directory
+        /// </summary>
+        /// <param name="systemUse">System Use field of the "." record of a root directory</param>
+        /// <returns>Offset of the Sharing Protocol Indicator in the System Use field, -1 if there is none</returns>
+        private static int FindSharingProtocolIndicator(byte[] systemUse)
+        {
+            // The indicator follows the CD-ROM XA system use information, if there is any
+            int offset = HasXASystemUse(systemUse) ? 14 : 0;
+            if (systemUse.Length < offset + 7)
+                return -1;
+
+            // The indicator is 7 bytes long, the check bytes tell it from other data
+            if (systemUse[offset] != Constants.SharingProtocolIndicatorSignature[0] || systemUse[offset + 1] != Constants.SharingProtocolIndicatorSignature[1])
+                return -1;
+            if (systemUse[offset + 2] != 7)
+                return -1;
+            if (systemUse[offset + 4] != Constants.SharingProtocolCheckBytes[0] || systemUse[offset + 5] != Constants.SharingProtocolCheckBytes[1])
+                return -1;
+
+            return offset;
+        }
+
+        /// <summary>
+        /// Indicates if a System Use field starts with the CD-ROM XA system use information
+        /// </summary>
+        /// <param name="systemUse">System Use field of a directory record</param>
+        /// <returns>True if the System Use field starts with the 14 bytes of the CD-ROM XA system use information, false otherwise</returns>
+        private static bool HasXASystemUse(byte[] systemUse)
+            => systemUse.Length >= 14 && systemUse[6] == 'X' && systemUse[7] == 'A';
+
+        /// <summary>
+        /// Parse the System Use entries of a System Use field and of the Continuation Areas it points to
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="systemUse">System Use field of a directory record</param>
+        /// <param name="start">Offset of the first System Use entry in the System Use field</param>
+        /// <param name="readContinuationAreas">True if Continuation Areas are read, false otherwise</param>
+        /// <returns>Filled array of System Use entries in recorded order</returns>
+        private static BaseEntry[] ParseSystemUseEntries(Stream data, short blockLength, byte[] systemUse, int start, bool readContinuationAreas)
+        {
+            // A Continuation Area can point to another one, the limit stops a loop of them
+            const int maximumContinuationAreas = 32;
+
+            List<BaseEntry> entries = [];
+            var continuationArea = ParseSystemUseArea(systemUse, start, entries);
+            for (int i = 0; readContinuationAreas && continuationArea is not null && i < maximumContinuationAreas; i++)
+            {
+                byte[]? area = ReadContinuationArea(data, blockLength, continuationArea);
+                if (area is null)
+                    break;
+
+                continuationArea = ParseSystemUseArea(area, 0, entries);
+            }
+
+            return [.. entries];
+        }
+
+        /// <summary>
+        /// Parse the System Use entries of a System Use field or of a Continuation Area
+        /// </summary>
+        /// <param name="area">System Use field or Continuation Area</param>
+        /// <param name="start">Offset of the first System Use entry in the area</param>
+        /// <param name="entries">System Use entries, the entries of the area are added to them</param>
+        /// <returns>Continuation Area the area points to, null if there is none</returns>
+        private static ContinuationArea? ParseSystemUseArea(byte[] area, int start, List<BaseEntry> entries)
+        {
+            if (start >= area.Length)
+                return null;
+
+            // Reading stops at an entry that does not fit, or after a Sharing Protocol Terminator
+            var data = new MemoryStream(area, start, area.Length - start);
+            ContinuationArea? continuationArea = null;
+            var entry = ParseSystemUseEntry(data);
+            while (entry is not null)
+            {
+                entries.Add(entry);
+                if (entry is ContinuationArea ce)
+                    continuationArea = ce;
+                else if (entry is SharingProtocolTerminator)
+                    break;
+
+                entry = ParseSystemUseEntry(data);
+            }
+
+            return continuationArea;
+        }
+
+        /// <summary>
+        /// Read the Continuation Area a Continuation Area entry points to
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="ce">Continuation Area entry</param>
+        /// <returns>Bytes of the Continuation Area, null if it is not within one logical block of the volume</returns>
+        private static byte[]? ReadContinuationArea(Stream data, short blockLength, ContinuationArea ce)
+        {
+            int location = ce.BlockLocation.LittleEndian;
+            uint offset = ce.Offset.LittleEndian;
+            uint length = ce.AreaLength.LittleEndian;
+
+            // A Continuation Area is recorded within one logical block
+            long areaOffset = (location * (long)blockLength) + offset;
+            if (location < 0 || (long)offset + length > blockLength || areaOffset + length > data.Length)
+                return null;
+
+            data.SeekIfPossible(areaOffset, SeekOrigin.Begin);
+            return data.ReadBytes((int)length);
+        }
+
+        /// <summary>
+        /// Parse a Stream into a System Use entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled System Use entry on success, null if no entry fits in the rest of the Stream</returns>
+        /// <remarks>
+        /// An entry of a known type is only parsed as that type if it has the length its specification gives,
+        /// otherwise it is an UnknownEntry that holds its bytes as recorded
+        /// </remarks>
+        public static BaseEntry? ParseSystemUseEntry(Stream data)
+        {
+            // Every entry starts with its signature, its length and its version
+            if (data.Length - data.Position < 4)
+                return null;
+
+            byte[] signature = data.ReadBytes(2);
+            byte length = data.ReadByteValue();
+            byte version = data.ReadByteValue();
+            if (length < 4 || length - 4 > data.Length - data.Position)
+                return null;
+
+            byte[] body = data.ReadBytes(length - 4);
+            var entry = ParseSystemUseEntry(Encoding.ASCII.GetString(signature), body);
+            if (entry is null)
+            {
+                var unknownEntry = new UnknownEntry();
+                unknownEntry.Data = body;
+                entry = unknownEntry;
+            }
+
+            entry.Signature = signature;
+            entry.Length = length;
+            entry.Version = version;
+            return entry;
+        }
+
+        /// <summary>
+        /// Parse the bytes after the version of a System Use entry into the entry type of its signature
+        /// </summary>
+        /// <param name="signature">Signature of the entry</param>
+        /// <param name="body">Bytes of the entry after its version</param>
+        /// <returns>Filled System Use entry on success, null if the type is unknown or the bytes do not have the length it gives</returns>
+        private static BaseEntry? ParseSystemUseEntry(string signature, byte[] body)
+        {
+            var data = new MemoryStream(body);
+            return signature switch
+            {
+                Constants.ContinuationAreaSignature when body.Length == 24 => ParseContinuationArea(data),
+                Constants.PaddingFieldSignature => ParsePaddingField(body),
+                Constants.SharingProtocolIndicatorSignature when body.Length == 3 => ParseSharingProtocolIndicator(data),
+                Constants.SharingProtocolTerminatorSignature when body.Length == 0 => new SharingProtocolTerminator(),
+                Constants.ExtensionsReferenceSignature when body.Length >= 4 => ParseExtensionsReference(data, body.Length),
+                Constants.ExtensionSelectorSignature when body.Length == 1 => ParseExtensionSelector(data),
+                Constants.PosixFileAttributesSignature when body.Length == 32 || body.Length == 40 => ParsePosixFileAttributes(data, body.Length == 40),
+                Constants.PosixDeviceNumberSignature when body.Length == 16 => ParsePosixDeviceNumber(data),
+                Constants.SymbolicLinkSignature when body.Length >= 1 => ParseSymbolicLink(data, body.Length),
+                Constants.AlternateNameSignature when body.Length >= 1 => ParseAlternateName(data, body.Length),
+                Constants.ChildLinkSignature when body.Length == 8 => ParseChildLink(data),
+                Constants.ParentLinkSignature when body.Length == 8 => ParseParentLink(data),
+                Constants.RelocatedDirectorySignature when body.Length == 0 => new RelocatedDirectory(),
+                Constants.TimeStampsSignature when body.Length >= 1 => ParseTimeStamps(data, body.Length),
+                Constants.SparseFileSignature when body.Length == 17 => ParseSparseFile(data),
+                Constants.ExtensionsInUseSignature when body.Length == 1 => ParseExtensionsInUse(data),
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ContinuationArea
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <returns>Filled ContinuationArea</returns>
+        private static ContinuationArea ParseContinuationArea(Stream data)
+        {
+            var obj = new ContinuationArea();
+
+            obj.BlockLocation = data.ReadInt32BothEndian();
+            obj.Offset = data.ReadUInt32BothEndian();
+            obj.AreaLength = data.ReadUInt32BothEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse the bytes after the version of an entry into a PaddingField
+        /// </summary>
+        /// <param name="body">Bytes of the entry after its version</param>
+        /// <returns>Filled PaddingField</returns>
+        private static PaddingField ParsePaddingField(byte[] body)
+        {
+            var obj = new PaddingField();
+
+            obj.Padding = body;
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a SharingProtocolIndicator
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <returns>Filled SharingProtocolIndicator</returns>
+        private static SharingProtocolIndicator ParseSharingProtocolIndicator(Stream data)
+        {
+            var obj = new SharingProtocolIndicator();
+
+            obj.CheckBytes = data.ReadBytes(2);
+            obj.BytesSkipped = data.ReadByteValue();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an ExtensionsReference
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <param name="length">Number of bytes of the entry after its version</param>
+        /// <returns>Filled ExtensionsReference on success, null if the identifier, descriptor and source do not fill the entry</returns>
+        private static ExtensionsReference? ParseExtensionsReference(Stream data, int length)
+        {
+            var obj = new ExtensionsReference();
+
+            obj.IdentifierLength = data.ReadByteValue();
+            obj.DescriptorLength = data.ReadByteValue();
+            obj.SourceLength = data.ReadByteValue();
+            obj.ExtensionVersion = data.ReadByteValue();
+            if (4 + obj.IdentifierLength + obj.DescriptorLength + obj.SourceLength != length)
+                return null;
+
+            obj.Identifier = data.ReadBytes(obj.IdentifierLength);
+            obj.Descriptor = data.ReadBytes(obj.DescriptorLength);
+            obj.Source = data.ReadBytes(obj.SourceLength);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an ExtensionSelector
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <returns>Filled ExtensionSelector</returns>
+        private static ExtensionSelector ParseExtensionSelector(Stream data)
+        {
+            var obj = new ExtensionSelector();
+
+            obj.ExtensionSequence = data.ReadByteValue();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a PosixFileAttributes
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <param name="serialNumber">True if the entry records the file serial number, false otherwise</param>
+        /// <returns>Filled PosixFileAttributes</returns>
+        private static PosixFileAttributes ParsePosixFileAttributes(Stream data, bool serialNumber)
+        {
+            var obj = new PosixFileAttributes();
+
+            obj.FileMode = data.ReadUInt32BothEndian();
+            obj.Links = data.ReadUInt32BothEndian();
+            obj.UserId = data.ReadUInt32BothEndian();
+            obj.GroupId = data.ReadUInt32BothEndian();
+            if (serialNumber)
+                obj.SerialNumber = data.ReadUInt32BothEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a PosixDeviceNumber
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <returns>Filled PosixDeviceNumber</returns>
+        private static PosixDeviceNumber ParsePosixDeviceNumber(Stream data)
+        {
+            var obj = new PosixDeviceNumber();
+
+            obj.DeviceNumberHigh = data.ReadUInt32BothEndian();
+            obj.DeviceNumberLow = data.ReadUInt32BothEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a SymbolicLink
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <param name="length">Number of bytes of the entry after its version</param>
+        /// <returns>Filled SymbolicLink on success, null if the components do not fill the entry</returns>
+        private static SymbolicLink? ParseSymbolicLink(Stream data, int length)
+        {
+            var obj = new SymbolicLink();
+
+            obj.Flags = (SymbolicLinkFlags)data.ReadByteValue();
+
+            // The components fill the rest of the entry
+            List<SymbolicLinkComponent> components = [];
+            int remaining = length - 1;
+            while (remaining > 0)
+            {
+                var component = ParseSymbolicLinkComponent(data, remaining);
+                if (component is null)
+                    return null;
+
+                remaining -= 2 + component.ComponentLength;
+                components.Add(component);
+            }
+
+            obj.Components = [.. components];
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a SymbolicLinkComponent
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="remaining">Number of bytes left in the entry</param>
+        /// <returns>Filled SymbolicLinkComponent on success, null if the component does not fit in the entry</returns>
+        private static SymbolicLinkComponent? ParseSymbolicLinkComponent(Stream data, int remaining)
+        {
+            if (remaining < 2)
+                return null;
+
+            var obj = new SymbolicLinkComponent();
+
+            obj.Flags = (ComponentFlags)data.ReadByteValue();
+            obj.ComponentLength = data.ReadByteValue();
+            if (obj.ComponentLength > remaining - 2)
+                return null;
+
+            obj.Content = data.ReadBytes(obj.ComponentLength);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an AlternateName
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <param name="length">Number of bytes of the entry after its version</param>
+        /// <returns>Filled AlternateName</returns>
+        private static AlternateName ParseAlternateName(Stream data, int length)
+        {
+            var obj = new AlternateName();
+
+            obj.Flags = (AlternateNameFlags)data.ReadByteValue();
+            obj.NameContent = data.ReadBytes(length - 1);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ChildLink
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <returns>Filled ChildLink</returns>
+        private static ChildLink ParseChildLink(Stream data)
+        {
+            var obj = new ChildLink();
+
+            obj.ChildDirectoryLocation = data.ReadInt32BothEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ParentLink
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <returns>Filled ParentLink</returns>
+        private static ParentLink ParseParentLink(Stream data)
+        {
+            var obj = new ParentLink();
+
+            obj.ParentDirectoryLocation = data.ReadInt32BothEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a TimeStamps
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <param name="length">Number of bytes of the entry after its version</param>
+        /// <returns>Filled TimeStamps on success, null if the time stamps the flags give do not fill the entry</returns>
+        private static TimeStamps? ParseTimeStamps(Stream data, int length)
+        {
+            var obj = new TimeStamps();
+
+            obj.Flags = (TimeStampFlags)data.ReadByteValue();
+
+            // Each of the 7 lower flag bits records one time stamp
+            int count = 0;
+            for (int bit = 0; bit < 7; bit++)
+            {
+                if (((int)obj.Flags & (1 << bit)) != 0)
+                    count++;
+            }
+
+            bool longForm = (obj.Flags & TimeStampFlags.LONG_FORM) == TimeStampFlags.LONG_FORM;
+            if (1 + (count * (longForm ? 17 : 7)) != length)
+                return null;
+
+            if (longForm)
+            {
+                obj.LongFormTimeStamps = new DecDateTime[count];
+                for (int i = 0; i < count; i++)
+                {
+                    obj.LongFormTimeStamps[i] = ParseDecDateTime(data);
+                }
+            }
+            else
+            {
+                obj.ShortFormTimeStamps = new DirectoryRecordDateTime[count];
+                for (int i = 0; i < count; i++)
+                {
+                    obj.ShortFormTimeStamps[i] = ParseDirectoryRecordDateTime(data);
+                }
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a SparseFile
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <returns>Filled SparseFile</returns>
+        private static SparseFile ParseSparseFile(Stream data)
+        {
+            var obj = new SparseFile();
+
+            obj.VirtualFileSizeHigh = data.ReadUInt32BothEndian();
+            obj.VirtualFileSizeLow = data.ReadUInt32BothEndian();
+            obj.TableDepth = data.ReadByteValue();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an ExtensionsInUse
+        /// </summary>
+        /// <param name="data">Stream to parse, positioned after the version of the entry</param>
+        /// <returns>Filled ExtensionsInUse</returns>
+        private static ExtensionsInUse ParseExtensionsInUse(Stream data)
+        {
+            var obj = new ExtensionsInUse();
+
+            obj.Flags = (ExtensionsInUseFlags)data.ReadByteValue();
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a ExtendedAttributeRecord
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -1567,17 +2091,30 @@ namespace SabreTools.Serialization.Readers
             public bool HighSierra { get; }
 
             /// <summary>
+            /// True if the extent is the root directory of a directory hierarchy
+            /// </summary>
+            public bool Root { get; }
+
+            /// <summary>
+            /// Number of bytes before the System Use entries of each directory record of the extent,
+            /// null if the directory hierarchy does not use SUSP
+            /// </summary>
+            public int? SystemUseSkip { get; }
+
+            /// <summary>
             /// Directory record pointing to the extent
             /// </summary>
             public DirectoryRecord? Record { get; }
 
-            public PendingExtent(int location, long offset, uint length, short blockLength, bool highSierra, DirectoryRecord? record)
+            public PendingExtent(int location, long offset, uint length, short blockLength, bool highSierra, bool root, int? systemUseSkip, DirectoryRecord? record)
             {
                 Location = location;
                 Offset = offset;
                 Length = length;
                 BlockLength = blockLength;
                 HighSierra = highSierra;
+                Root = root;
+                SystemUseSkip = systemUseSkip;
                 Record = record;
             }
         }

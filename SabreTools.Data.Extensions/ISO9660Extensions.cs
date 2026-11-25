@@ -45,6 +45,25 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
+        /// Indicates if a directory record describes a CD-DA file
+        /// </summary>
+        /// <param name="dr">Directory record to check</param>
+        /// <returns>True if the CD-ROM XA system use information marks the file as CD-DA, false otherwise</returns>
+        /// <remarks>
+        /// The CD-ROM XA system use information is the first 14 bytes of the System Use field,
+        /// with the signature "XA" at bytes 6 and 7 and the big-endian attributes at bytes 4 and 5.
+        /// Attribute bit 14 marks a file whose sectors are CD-DA audio sectors.
+        /// </remarks>
+        public static bool IsCDDA(this DirectoryRecord dr)
+        {
+            byte[] systemUse = dr.SystemUse;
+            if (systemUse.Length < 14 || systemUse[6] != 'X' || systemUse[7] != 'A')
+                return false;
+
+            return (systemUse[4] & 0x40) != 0;
+        }
+
+        /// <summary>
         /// Indicates if a block size is valid
         /// </summary>
         /// <param name="blockSize">Block length to check</param>

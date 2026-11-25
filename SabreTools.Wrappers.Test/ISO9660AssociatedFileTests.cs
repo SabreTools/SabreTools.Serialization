@@ -1,0 +1,445 @@
+using System;
+using System.Buffers.Binary;
+using System.IO;
+using System.Text;
+using SabreTools.Data.Models.ISO9660;
+using Xunit;
+using static SabreTools.Wrappers.Test.ISO9660ImageBuilder;
+
+namespace SabreTools.Wrappers.Test
+{
+    public class ISO9660AssociatedFileTests
+    {
+        /// <summary>
+        /// Offset of the resource fork in the AppleDouble file
+        /// </summary>
+        private const int ResourceForkOffset = 0xEE2;
+
+        [Fact]
+        public void Extract_AssociatedFileInOwnExtent_WritesAppleDoubleFile()
+        {
+            // The associated file of DATA.BIN is recorded first, in its own extent
+            string outputDirectory = Extract(BuildImage(30,
+                ("DATA.BIN", 25, (3 * BlockLength) + 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("rsrcRSED", 0)),
+                ("DATA.BIN", 22, BlockLength + 50, NoFlags, [])), expected: true);
+
+            Assert.Equal(ExpectedData(22, BlockLength + 50), File.ReadAllBytes(Path.Combine(outputDirectory, "DATA.BIN")));
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("rsrcRSED", 0), ExpectedData(25, (3 * BlockLength) + 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._DATA.BIN")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "DATA.BIN.associated")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileWithoutAppleExtensions_WritesItAsRecorded()
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("DATA.BIN", 25, (3 * BlockLength) + 100, FileFlags.ASSOCIATED_FILE, []),
+                ("DATA.BIN", 22, BlockLength + 50, NoFlags, [])), expected: true);
+
+            Assert.Equal(ExpectedData(22, BlockLength + 50), File.ReadAllBytes(Path.Combine(outputDirectory, "DATA.BIN")));
+            Assert.Equal(ExpectedData(25, (3 * BlockLength) + 100),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "DATA.BIN.associated")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "._DATA.BIN")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileSharingExtentWithEmptyFile_WritesBoth()
+        {
+            // HELP.TXT is empty and recorded at the start of the extent of its associated file
+            string outputDirectory = Extract(BuildImage(30,
+                ("HELP.TXT", 25, 500, FileFlags.ASSOCIATED_FILE, []),
+                ("HELP.TXT", 25, 0, NoFlags, [])), expected: true);
+
+            Assert.Empty(File.ReadAllBytes(Path.Combine(outputDirectory, "HELP.TXT")));
+            Assert.Equal(ExpectedData(25, 500), File.ReadAllBytes(Path.Combine(outputDirectory, "HELP.TXT.associated")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AppleExtensionOnBothRecords_TakesFinderInfoOfFile()
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("rsrcRSED", 0)),
+                ("README", 22, 10, NoFlags, AppleSystemUse("TEXTttxt", 0x0100))), expected: true);
+
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("TEXTttxt", 0x0100), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._README")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AppleExtensionOnAssociatedFileOnly_TakesFinderInfoOfAssociatedFile()
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("PLAYER", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("APPLDPI6", 0x2000)),
+                ("PLAYER", 22, 0, NoFlags, [])), expected: true);
+
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("APPLDPI6", 0x2000), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._PLAYER")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AppleExtensionOnFileOnly_TakesFinderInfoOfFile()
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("README", 22, 10, NoFlags, AppleSystemUse("TEXTttxt", 0x0100))), expected: true);
+
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("TEXTttxt", 0x0100), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._README")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "README.associated")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileWithoutFile_TakesFinderInfoOfAssociatedFile()
+        {
+            // Neither A nor C has a file, the record after A belongs to another file and C is the last record
+            string outputDirectory = Extract(BuildImage(30,
+                ("A", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("AAAAaaaa", 1)),
+                ("B", 22, 10, NoFlags, AppleSystemUse("BBBBbbbb", 2)),
+                ("C", 26, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("CCCCcccc", 3))), expected: true);
+
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("AAAAaaaa", 1), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._A")));
+            Assert.Equal(ExpectedData(22, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "B")));
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("CCCCcccc", 3), ExpectedData(26, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._C")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_EmptyAssociatedFilesSharingExtent_WritesEach()
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("LICENSE.TXT", 25, 0, FileFlags.ASSOCIATED_FILE, AppleSystemUse("ttrottxt", 0)),
+                ("LICENSE.TXT", 22, 10, NoFlags, []),
+                ("ORD_INFO", 25, 0, FileFlags.ASSOCIATED_FILE, AppleSystemUse("TEXTttxt", 0)),
+                ("ORD_INFO", 23, 10, NoFlags, [])), expected: true);
+
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("ttrottxt", 0), []),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._LICENSE.TXT")));
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("TEXTttxt", 0), []),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._ORD_INFO")));
+            Assert.Equal(ResourceForkOffset, new FileInfo(Path.Combine(outputDirectory, "._ORD_INFO")).Length);
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_MultiExtentAssociatedFile_WritesAllExtents()
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("APP", 22, BlockLength, FileFlags.ASSOCIATED_FILE | FileFlags.MULTI_EXTENT, []),
+                ("APP", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("APP", 27, 10, NoFlags, AppleSystemUse("APPLaapl", 0))), expected: true);
+
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("APPLaapl", 0), [.. ExpectedData(22, BlockLength), .. ExpectedData(25, 100)]),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._APP")));
+            Assert.Equal(ExpectedData(27, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "APP")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_MultiExtentAssociatedFileWithoutLastExtent_WritesWhatIsRecorded()
+        {
+            // The first extent of an associated file is followed by its file, by another associated file, or by nothing
+            string outputDirectory = Extract(BuildImage(30,
+                ("APP", 22, BlockLength, FileFlags.ASSOCIATED_FILE | FileFlags.MULTI_EXTENT, []),
+                ("APP", 27, 10, NoFlags, []),
+                ("BIN", 23, BlockLength, FileFlags.ASSOCIATED_FILE | FileFlags.MULTI_EXTENT, []),
+                ("CFG", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("ZZZ", 24, BlockLength, FileFlags.ASSOCIATED_FILE | FileFlags.MULTI_EXTENT, [])), expected: true);
+
+            Assert.Equal(ExpectedData(22, BlockLength), File.ReadAllBytes(Path.Combine(outputDirectory, "APP.associated")));
+            Assert.Equal(ExpectedData(27, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "APP")));
+            Assert.Equal(ExpectedData(23, BlockLength), File.ReadAllBytes(Path.Combine(outputDirectory, "BIN.associated")));
+            Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "CFG.associated")));
+            Assert.Equal(ExpectedData(24, BlockLength), File.ReadAllBytes(Path.Combine(outputDirectory, "ZZZ.associated")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_TwoAssociatedFilesOfSameName_IsReported()
+        {
+            // Neither record has the multi-extent flag, so they are not two extents of one associated file
+            string outputDirectory = Extract(BuildImage(30,
+                ("APP", 22, BlockLength, FileFlags.ASSOCIATED_FILE, []),
+                ("APP", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("APP", 27, 10, NoFlags, [])), expected: false);
+
+            Assert.Equal(ExpectedData(22, BlockLength), File.ReadAllBytes(Path.Combine(outputDirectory, "APP.associated")));
+            Assert.Equal(ExpectedData(27, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "APP")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileListedTwice_WritesItOnce()
+        {
+            byte[] image = BuildImage(30,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("README", 22, 10, NoFlags, []));
+            ListRootDirectoryAgain(image, 21,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("README", 22, 10, NoFlags, []));
+            string outputDirectory = Extract(image, expected: true);
+
+            Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "README.associated")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_OtherAssociatedFileOfSameName_IsReported()
+        {
+            byte[] image = BuildImage(30,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("README", 22, 10, NoFlags, []));
+            ListRootDirectoryAgain(image, 21,
+                ("README", 26, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("README", 22, 10, NoFlags, []));
+            string outputDirectory = Extract(image, expected: false);
+
+            Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "README.associated")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileOfFileFromOtherHierarchy_IsSkipped()
+        {
+            // The Joliet directory hierarchy records the same file and associated file under another name
+            byte[] image = BuildImage(30,
+                ("READ_ME", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("READ_ME", 22, 10, NoFlags, AppleSystemUse("TEXTttxt", 0)));
+            AddJolietHierarchy(image, 21, 29,
+                ("Read Me", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("Read Me", 22, 10, NoFlags, AppleSystemUse("TEXTttxt", 0)));
+            string outputDirectory = Extract(image, expected: true);
+
+            Assert.Equal(ExpectedData(22, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "Read Me")));
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("TEXTttxt", 0), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._Read Me")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "._READ_ME")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileWithoutFileFromOtherHierarchy_IsSkipped()
+        {
+            // The record after the associated file belongs to another file, which only the primary volume records
+            byte[] image = BuildImage(30,
+                ("MY_ICON", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("iconMACS", 0x4000)),
+                ("ZZZ", 23, 10, NoFlags, []));
+            AddJolietHierarchy(image, 21, 29,
+                ("My Icon", 25, 100, FileFlags.ASSOCIATED_FILE, AppleSystemUse("iconMACS", 0x4000)));
+            string outputDirectory = Extract(image, expected: true);
+
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("iconMACS", 0x4000), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._My Icon")));
+            Assert.Equal(ExpectedData(23, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "ZZZ")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "._MY_ICON")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileOfEmptyFileAtLocationOfOtherFile_IsWritten()
+        {
+            // APP has an empty data fork, which is recorded at the location of ABOUT
+            string outputDirectory = Extract(BuildImage(30,
+                ("ABOUT", 22, 10, NoFlags, []),
+                ("APP", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("APP", 22, 0, NoFlags, AppleSystemUse("APPLaapl", 0x2000))), expected: true);
+
+            Assert.Equal(ExpectedData(22, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "ABOUT")));
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("APPLaapl", 0x2000), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._APP")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_FileNamedLikeAppleDoubleFile_IsKept()
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("._HELP.TXT", 22, 100, NoFlags, []),
+                ("HELP.TXT", 25, 500, FileFlags.ASSOCIATED_FILE, AppleSystemUse("TEXTttxt", 0)),
+                ("HELP.TXT", 23, 10, NoFlags, [])), expected: false);
+
+            Assert.Equal(ExpectedData(22, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "._HELP.TXT")));
+            Assert.Equal(ExpectedData(23, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "HELP.TXT")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Theory]
+        [InlineData(26)]
+        [InlineData(27)]
+        public void Extract_InterleavedAssociatedFile_IsReported(int field)
+        {
+            byte[] image = BuildImage(30,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("README", 22, 10, NoFlags, []));
+
+            // File unit size (26) or interleave gap size (27) of the record after the current and parent directory records
+            image[(RootDirectory * BlockLength) + 34 + 34 + field] = 1;
+            string outputDirectory = Extract(image, expected: false);
+
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "README.associated")));
+            Assert.Equal(ExpectedData(22, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "README")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AssociatedFileBeyondEndOfImage_WritesNothingOfIt()
+        {
+            // The first extent is in the image, the second one is not
+            string outputDirectory = Extract(BuildImage(30,
+                ("APP", 22, BlockLength, FileFlags.ASSOCIATED_FILE | FileFlags.MULTI_EXTENT, []),
+                ("APP", 40, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("APP", 27, 10, NoFlags, [])), expected: false);
+
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "APP.associated")));
+            Assert.Equal(ExpectedData(27, 10), File.ReadAllBytes(Path.Combine(outputDirectory, "APP")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Fact]
+        public void Extract_AgainAfterOutputRemoved_WritesAssociatedFileAgain()
+        {
+            var iso = ISO9660.Create(new MemoryStream(BuildImage(30,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, []),
+                ("README", 22, 10, NoFlags, []),
+                ("ZZZ", 26, 100, FileFlags.ASSOCIATED_FILE, []))));
+            Assert.NotNull(iso);
+
+            string outputDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(outputDirectory);
+            Assert.True(iso.Extract(outputDirectory, includeDebug: false));
+            Directory.Delete(outputDirectory, recursive: true);
+            Directory.CreateDirectory(outputDirectory);
+            Assert.True(iso.Extract(outputDirectory, includeDebug: false));
+
+            Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "README.associated")));
+            Assert.Equal(ExpectedData(26, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "ZZZ.associated")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Theory]
+        [InlineData("41410E0254455854747478740100")]
+        [InlineData("4E4D05004141410E0254455854747478740100")]
+        public void Extract_SystemUseField_ReadsAppleExtension(string systemUse)
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, Convert.FromHexString(systemUse)),
+                ("README", 22, 10, NoFlags, [])), expected: true);
+
+            Assert.Equal(ExpectedAppleDouble(FinderInfo("TEXTttxt", 0x0100), ExpectedData(25, 100)),
+                File.ReadAllBytes(Path.Combine(outputDirectory, "._README")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        [Theory]
+        [InlineData("41410E0154455854747478740100")]
+        [InlineData("41410C025445585474747874")]
+        [InlineData("5A5A0341410E0254455854747478740100")]
+        [InlineData("000000000000584100000000000041410E0254455854")]
+        public void Extract_SystemUseFieldWithoutAppleExtension_WritesItAsRecorded(string systemUse)
+        {
+            string outputDirectory = Extract(BuildImage(30,
+                ("README", 25, 100, FileFlags.ASSOCIATED_FILE, Convert.FromHexString(systemUse)),
+                ("README", 22, 10, NoFlags, [])), expected: true);
+
+            Assert.Equal(ExpectedData(25, 100), File.ReadAllBytes(Path.Combine(outputDirectory, "README.associated")));
+            Assert.False(File.Exists(Path.Combine(outputDirectory, "._README")));
+            Directory.Delete(outputDirectory, recursive: true);
+        }
+
+        #region Test Image
+
+        /// <summary>
+        /// Extract an image to a new directory
+        /// </summary>
+        private static string Extract(byte[] image, bool expected)
+        {
+            var iso = ISO9660.Create(new MemoryStream(image));
+            Assert.NotNull(iso);
+
+            string outputDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(outputDirectory);
+            Assert.Equal(expected, iso.Extract(outputDirectory, includeDebug: false));
+            return outputDirectory;
+        }
+
+        /// <summary>
+        /// List a second root directory at the big-endian extent location of the root directory record
+        /// </summary>
+        private static void ListRootDirectoryAgain(byte[] image, int block, params (string Name, int Location, int Length, FileFlags Flags, byte[] SystemUse)[] files)
+        {
+            BinaryPrimitives.WriteInt32BigEndian(image.AsSpan((16 * BlockLength) + 156 + 6), block);
+            image.AsSpan(block * BlockLength, BlockLength).Clear();
+            WriteDirectory(image, block, Encoding.ASCII, files);
+        }
+
+        /// <summary>
+        /// Add a Joliet supplementary volume descriptor with the given records in its root directory
+        /// </summary>
+        /// <remarks>It takes the place of the terminator, which takes the place of the little-endian path table</remarks>
+        private static void AddJolietHierarchy(byte[] image, int block, int pathTableBlock, params (string Name, int Location, int Length, FileFlags Flags, byte[] SystemUse)[] files)
+        {
+            Array.Copy(image, 18 * BlockLength, image, pathTableBlock * BlockLength, BlockLength);
+            BinaryPrimitives.WriteInt32LittleEndian(image.AsSpan((16 * BlockLength) + 140), pathTableBlock);
+            Array.Copy(image, 17 * BlockLength, image, 18 * BlockLength, BlockLength);
+            Array.Copy(image, 16 * BlockLength, image, 17 * BlockLength, BlockLength);
+
+            // Supplementary volume descriptor with the escape sequence of UCS-2 Level 3
+            var svd = image.AsSpan(17 * BlockLength, BlockLength);
+            svd[0] = 2;
+            Encoding.ASCII.GetBytes("%/E").CopyTo(svd[88..]);
+            WriteBothEndian(svd[(156 + 2)..], block);
+
+            image.AsSpan(block * BlockLength, BlockLength).Clear();
+            WriteDirectory(image, block, Encoding.BigEndianUnicode, files);
+        }
+
+        /// <summary>
+        /// AppleDouble file with the given Finder type, creator and flags and resource fork
+        /// </summary>
+        private static byte[] ExpectedAppleDouble(byte[] finderInfo, byte[] resourceFork)
+        {
+            // Header as macOS writes it to a FAT volume, up to the end of its empty extended attributes header
+            byte[] appleDouble = new byte[ResourceForkOffset + resourceFork.Length];
+            Convert.FromHexString("00051607000200004D6163204F53205820202020202020200002000000090000003200000EB00000000200000EE2").CopyTo(appleDouble, 0);
+            BinaryPrimitives.WriteInt32BigEndian(appleDouble.AsSpan(0x2E), resourceFork.Length);
+            finderInfo.CopyTo(appleDouble, 0x32);
+            Convert.FromHexString("415454520000000000000EE200000078").CopyTo(appleDouble, 0x54);
+            resourceFork.CopyTo(appleDouble, ResourceForkOffset);
+            return appleDouble;
+        }
+
+        /// <summary>
+        /// Finder type and creator, followed by the Finder flags
+        /// </summary>
+        private static byte[] FinderInfo(string typeAndCreator, ushort flags)
+        {
+            byte[] finderInfo = new byte[10];
+            Encoding.ASCII.GetBytes(typeAndCreator).CopyTo(finderInfo, 0);
+            BinaryPrimitives.WriteUInt16BigEndian(finderInfo.AsSpan(8), flags);
+            return finderInfo;
+        }
+
+        /// <summary>
+        /// System Use field with CD-ROM XA system use information and the Apple extension for HFS
+        /// </summary>
+        private static byte[] AppleSystemUse(string typeAndCreator, ushort flags)
+        {
+            byte[] systemUse = new byte[28];
+            Encoding.ASCII.GetBytes("XA").CopyTo(systemUse, 6);
+            Encoding.ASCII.GetBytes("AA").CopyTo(systemUse, 14);
+            systemUse[16] = 14;
+            systemUse[17] = 2;
+            FinderInfo(typeAndCreator, flags).CopyTo(systemUse, 18);
+            return systemUse;
+        }
+
+        #endregion
+    }
+}

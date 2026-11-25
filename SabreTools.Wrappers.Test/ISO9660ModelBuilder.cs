@@ -75,13 +75,13 @@ namespace SabreTools.Wrappers.Test
         /// <summary>
         /// Directory record of a 10-byte file
         /// </summary>
-        public static DirectoryRecord FileEntry(string name, int location, Encoding? encoding = null)
+        public static DirectoryRecord FileEntry(string name, int location, Encoding? encoding = null, FileFlags flags = NoFlags)
         {
             return new DirectoryRecord
             {
                 ExtentLocation = location,
                 ExtentLength = 10,
-                FileFlags = NoFlags,
+                FileFlags = flags,
                 FileIdentifier = (encoding ?? Encoding.ASCII).GetBytes($"{name};1"),
             };
         }

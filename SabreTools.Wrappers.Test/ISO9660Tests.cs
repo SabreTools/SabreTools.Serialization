@@ -1,11 +1,10 @@
 using System;
-using System.Buffers.Binary;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using SabreTools.Data.Models.ISO9660;
 using Xunit;
+using static SabreTools.Wrappers.Test.ISO9660ImageBuilder;
 
 namespace SabreTools.Wrappers.Test
 {
@@ -163,8 +162,6 @@ namespace SabreTools.Wrappers.Test
 
         #region Test Image
 
-        private const int BlockLength = 2048;
-
         /// <summary>
         /// File in a test image
         /// </summary>
@@ -187,68 +184,20 @@ namespace SabreTools.Wrappers.Test
         /// </remarks>
         private static byte[] BuildImage(int blockCount, params TestFile[] files)
         {
-            const int pathTableL = 18, pathTableM = 19, rootDirectory = 20;
             byte[] image = new byte[blockCount * BlockLength];
-            for (int offset = (rootDirectory + 1) * BlockLength; offset < image.Length; offset += 4)
+            for (int offset = (RootDirectory + 1) * BlockLength; offset < image.Length; offset += 4)
             {
                 Encoding.ASCII.GetBytes("GAP ").CopyTo(image, offset);
             }
 
-            // Primary volume descriptor
-            var pvd = image.AsSpan(16 * BlockLength, BlockLength);
-            pvd[0] = 1;
-            Encoding.ASCII.GetBytes("CD001").CopyTo(pvd[1..]);
-            pvd[6] = 1;
-            WriteBothEndian(pvd[80..], blockCount);
-            WriteBothEndian16(pvd[120..], 1);
-            WriteBothEndian16(pvd[124..], 1);
-            WriteBothEndian16(pvd[128..], BlockLength);
-            WriteBothEndian(pvd[132..], 10);
-            BinaryPrimitives.WriteInt32LittleEndian(pvd[140..], pathTableL);
-            BinaryPrimitives.WriteInt32BigEndian(pvd[148..], pathTableM);
-            DirectoryRecord([0], rootDirectory, BlockLength, 2, 0, 0, 0).CopyTo(pvd[156..]);
-            pvd[881] = 1;
-
-            // Volume descriptor set terminator
-            var terminator = image.AsSpan(17 * BlockLength, BlockLength);
-            terminator[0] = 255;
-            Encoding.ASCII.GetBytes("CD001").CopyTo(terminator[1..]);
-            terminator[6] = 1;
-
-            // Path tables with the root directory only
-            var pathTable = image.AsSpan(pathTableL * BlockLength);
-            pathTable[0] = 1;
-            BinaryPrimitives.WriteInt32LittleEndian(pathTable[2..], rootDirectory);
-            BinaryPrimitives.WriteInt16LittleEndian(pathTable[6..], 1);
-            pathTable = image.AsSpan(pathTableM * BlockLength);
-            pathTable[0] = 1;
-            BinaryPrimitives.WriteInt32BigEndian(pathTable[2..], rootDirectory);
-            BinaryPrimitives.WriteInt16BigEndian(pathTable[6..], 1);
-
-            // Root directory
-            List<byte[]> records =
-            [
-                DirectoryRecord([0], rootDirectory, BlockLength, 2, 0, 0, 0),
-                DirectoryRecord([1], rootDirectory, BlockLength, 2, 0, 0, 0),
-            ];
-            foreach (var file in files)
-            {
-                records.Add(DirectoryRecord(Encoding.ASCII.GetBytes($"{file.Name};1"),
-                    file.Location,
-                    file.Length,
-                    file.FileFlags,
-                    file.FileUnitSize,
-                    file.InterleaveGapSize,
-                    file.ExtendedAttributeRecordLength));
-            }
-
-            var directory = image.AsSpan(rootDirectory * BlockLength, BlockLength);
-            int position = 0;
-            foreach (byte[] record in records)
-            {
-                record.CopyTo(directory[position..]);
-                position += record.Length;
-            }
+            WriteVolume(image, 0, [.. files.Select(file => DirectoryRecord(Encoding.ASCII.GetBytes($"{file.Name};1"),
+                file.Location,
+                file.Length,
+                (FileFlags)file.FileFlags,
+                [],
+                file.FileUnitSize,
+                file.InterleaveGapSize,
+                file.ExtendedAttributeRecordLength))]);
 
             foreach (var file in files)
             {
@@ -282,34 +231,6 @@ namespace SabreTools.Wrappers.Test
         {
             byte[] text = Encoding.ASCII.GetBytes($"{file.Name}@{file.Location} block {index:D4} ");
             return [.. Enumerable.Range(0, BlockLength).Select(i => text[i % text.Length])];
-        }
-
-        private static byte[] DirectoryRecord(byte[] identifier, int location, int length, byte flags, byte fileUnitSize, byte interleaveGapSize, byte extendedAttributeRecordLength)
-        {
-            // Pad the record to an even length
-            byte[] record = [.. new byte[33], .. identifier, .. new byte[1 - (identifier.Length % 2)]];
-            record[0] = (byte)record.Length;
-            record[1] = extendedAttributeRecordLength;
-            WriteBothEndian(record.AsSpan(2), location);
-            WriteBothEndian(record.AsSpan(10), length);
-            record[25] = flags;
-            record[26] = fileUnitSize;
-            record[27] = interleaveGapSize;
-            WriteBothEndian16(record.AsSpan(28), 1);
-            record[32] = (byte)identifier.Length;
-            return record;
-        }
-
-        private static void WriteBothEndian(Span<byte> destination, int value)
-        {
-            BinaryPrimitives.WriteInt32LittleEndian(destination, value);
-            BinaryPrimitives.WriteInt32BigEndian(destination[4..], value);
-        }
-
-        private static void WriteBothEndian16(Span<byte> destination, short value)
-        {
-            BinaryPrimitives.WriteInt16LittleEndian(destination, value);
-            BinaryPrimitives.WriteInt16BigEndian(destination[2..], value);
         }
 
         #endregion
