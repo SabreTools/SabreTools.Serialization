@@ -30,7 +30,19 @@ namespace SabreTools.Wrappers
         /// <remarks>Used as last-extent has mutli-extent flag=0</remarks>
         private readonly List<byte[]> multiExtentFiles = [];
 
+        /// <summary>
+        /// List of CD-DA files written with a WAVE header, by their output path
+        /// </summary>
+        /// <remarks>Used to update the sizes in the header when a further extent is appended</remarks>
+        private readonly List<string> waveFiles = [];
+
         #endregion
+
+        /// <summary>
+        /// Source of the volume as raw 2352-byte CD-ROM sectors, if the volume was read from one
+        /// </summary>
+        /// <remarks>CD-DA files are extracted from it, as audio sectors have no 2048-byte user data</remarks>
+        protected virtual Stream? RawSectorSource => null;
 
         /// <inheritdoc/>
         public virtual bool Extract(string outputDirectory, bool includeDebug)
@@ -43,6 +55,7 @@ namespace SabreTools.Wrappers
             extractedDirectories.Clear();
             extractedFiles.Clear();
             multiExtentFiles.Clear();
+            waveFiles.Clear();
 
             bool allExtracted = true;
 
@@ -89,6 +102,90 @@ namespace SabreTools.Wrappers
             }
 
             return allExtracted;
+        }
+
+        /// <summary>
+        /// Extract a CD-DA file as a WAVE file of the raw sectors it is recorded in
+        /// </summary>
+        /// <remarks>
+        /// The file starts with the 44-byte RIFF/WAVE header that Windows (CDFS) puts in front of CD-DA files,
+        /// 16-bit stereo PCM at 44100 Hz, followed by the raw sectors. The extent length counts 2048-byte units,
+        /// so every sector the extent touches is written in full (2352 bytes). Sectors past the end of the source
+        /// are reported and left out. A further extent of the file is appended, and the sizes in the header are
+        /// updated if the header was written by this extraction.
+        /// </remarks>
+        private bool ExtractCDDAFile(Stream rawSectorSource, DirectoryRecord dr, int extentLocation, long fileOffset, string filepath, bool includeDebug)
+        {
+            const long userDataSize = Data.Models.CDROM.Constants.Mode1DataSize;
+            const long sectorSize = Data.Models.CDROM.Constants.CDROMSectorSize;
+            const long sectorsPerChunk = 1024;
+
+            // Get the sectors of the extent, and how many of them the source holds
+            long firstSector = fileOffset / userDataSize;
+            long sectorCount = ((fileOffset + dr.ExtentLength + userDataSize - 1) / userDataSize) - firstSector;
+            long sectorsInSource = (rawSectorSource.Length / sectorSize) - firstSector;
+            if (sectorsInSource <= 0)
+            {
+                Console.WriteLine($"CD-DA file starts past the end of the image, cannot extract: {filepath}");
+                return false;
+            }
+
+            // Write the output file
+            long sectorsToWrite = Math.Min(sectorCount, sectorsInSource);
+            if (includeDebug) Console.WriteLine($"Extracting CD-DA file as WAVE, a 44-byte header added before the raw sectors: {filepath}");
+
+            using (var fs = File.Open(filepath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                // A new file starts with the WAVE header, its sizes are set below
+                if (fs.Length == 0)
+                {
+                    fs.WriteLittleEndian(0x46464952u); // "RIFF"
+                    fs.WriteLittleEndian(0u); // Size of the file - 8
+                    fs.WriteLittleEndian(0x45564157u); // "WAVE"
+                    fs.WriteLittleEndian(0x20746D66u); // "fmt "
+                    fs.WriteLittleEndian(16u); // Size of the format chunk
+                    fs.WriteLittleEndian((ushort)1); // PCM
+                    fs.WriteLittleEndian((ushort)2); // Channels
+                    fs.WriteLittleEndian(44100u); // Samples per second
+                    fs.WriteLittleEndian((uint)(sectorSize * 75)); // Bytes per second
+                    fs.WriteLittleEndian((ushort)4); // Block align
+                    fs.WriteLittleEndian((ushort)16); // Bits per sample
+                    fs.WriteLittleEndian(0x61746164u); // "data"
+                    fs.WriteLittleEndian(0u); // Size of the file - 44
+                    waveFiles.Add(filepath);
+                }
+
+                fs.Seek(0, SeekOrigin.End);
+                rawSectorSource.SeekIfPossible(firstSector * sectorSize, SeekOrigin.Begin);
+                for (long written = 0; written < sectorsToWrite; written += sectorsPerChunk)
+                {
+                    int bytesToRead = (int)(Math.Min(sectorsToWrite - written, sectorsPerChunk) * sectorSize);
+
+                    byte[] buffer = rawSectorSource.ReadBytes(bytesToRead);
+                    fs.Write(buffer, 0, bytesToRead);
+                }
+
+                // Set the sizes in the header to the length of the file
+                if (waveFiles.Contains(filepath))
+                {
+                    long fileLength = fs.Length;
+                    fs.Seek(4, SeekOrigin.Begin);
+                    fs.WriteLittleEndian((uint)(fileLength - 8));
+                    fs.Seek(40, SeekOrigin.Begin);
+                    fs.WriteLittleEndian((uint)(fileLength - 44));
+                }
+            }
+
+            // Mark the file as extracted
+            extractedFiles.Add(extentLocation, dr.ExtentLength);
+
+            if (sectorsToWrite < sectorCount)
+            {
+                Console.WriteLine($"CD-DA file ends past the end of the image, extracted {sectorsToWrite} of {sectorCount} sectors: {filepath}");
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -281,6 +378,11 @@ namespace SabreTools.Wrappers
                     fileOffset += (long)dr.ExtendedAttributeRecordLength * blockLength;
 
                 _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
+
+                // CD-DA files are extracted as WAVE files of their raw sectors, if the volume was read from raw sectors
+                var rawSectorSource = RawSectorSource;
+                if (rawSectorSource is not null && dr.IsCDDA())
+                    return ExtractCDDAFile(rawSectorSource, dr, extentLocation, fileOffset, filepath, includeDebug);
 
                 // Get the length, and make sure it won't EOF
                 uint length = dr.ExtentLength;

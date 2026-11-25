@@ -155,5 +155,27 @@ namespace SabreTools.Data.Extensions.Test
             short actual = vd.GetLogicalBlockSize(sectorLength);
             Assert.Equal(sectorLength, actual);
         }
+
+        [Theory]
+        [InlineData("0000000041115841000000000000", true)]
+        [InlineData("000000004111584100000000000041410E0254455854747478740000", true)]
+        [InlineData("0000000040005841000000000000", true)]
+        [InlineData("000000000D555841000000000000", false)]
+        [InlineData("00000000BF005841000000000000", false)]
+        [InlineData("0000000041115858000000000000", false)]
+        [InlineData("0000000041110041000000000000", false)]
+        [InlineData("00000000411158410000000000", false)]
+        [InlineData("00", false)]
+        [InlineData("", false)]
+        public void IsCDDA_SystemUse_ReadsCDDAAttribute(string systemUse, bool expected)
+        {
+            var dr = new DirectoryRecord
+            {
+                SystemUse = System.Convert.FromHexString(systemUse)
+            };
+
+            bool actual = dr.IsCDDA();
+            Assert.Equal(expected, actual);
+        }
     }
 }
