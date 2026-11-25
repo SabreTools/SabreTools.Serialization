@@ -9,6 +9,11 @@ namespace SabreTools.Data.Models.UDF
     public enum TagIdentifier : ushort
     {
         /// <summary>
+        /// UDF Sparing Table (UDF 2.2.12)
+        /// </summary>
+        SPARING_TABLE = 0,
+
+        /// <summary>
         /// Primary Volume Descriptor (3/10.1)
         /// </summary>
         PRIMARY_VOLUME_DESCRIPTOR = 1,
