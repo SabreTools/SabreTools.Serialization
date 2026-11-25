@@ -311,6 +311,24 @@ namespace SabreTools.Serialization.Readers.Test
         }
 
         [Fact]
+        public void ParsePathTableGroup_PathTableBeyond2GiB_ReadsIt()
+        {
+            // The path table at block 1048576 starts 2 GiB into the volume
+            byte[] pathTable = new byte[10];
+            WritePathTableRecord(pathTable, 0, [0], 20, 1);
+            var vd = CreatePrimaryVolumeDescriptor(20);
+            vd.PathTableSize = pathTable.Length;
+            vd.PathTableLocationL = 1048576;
+            var stream = new SparseStream(1048577L * 2048, 1048576L * 2048, pathTable);
+
+            var actual = ISO9660.ParsePathTableGroup(stream, 2048, vd);
+
+            var group = Assert.Single(actual);
+            Assert.NotNull(group.PathTableL);
+            Assert.Equal(20, Assert.Single(group.PathTableL).ExtentLocation);
+        }
+
+        [Fact]
         public void ParseDirectory_ConsistentExtentLocation_ReadsEachDirectoryOnce()
         {
             // Sector 1 holds directory A at sector 2, which holds directory B at sector 3
@@ -1056,6 +1074,50 @@ namespace SabreTools.Serialization.Readers.Test
 
                 return base.Seek(offset, loc);
             }
+        }
+
+        /// <summary>
+        /// Read-only stream that holds data at an offset and zeroes everywhere else, without allocating its length
+        /// </summary>
+        private sealed class SparseStream(long length, long dataOffset, byte[] data) : Stream
+        {
+            public override bool CanRead => true;
+            public override bool CanSeek => true;
+            public override bool CanWrite => false;
+            public override long Length => length;
+            public override long Position { get; set; }
+
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                int read = (int)Math.Min(count, length - Position);
+                for (int i = 0; i < read; i++)
+                {
+                    long index = Position + i - dataOffset;
+                    buffer[offset + i] = index >= 0 && index < data.Length ? data[index] : (byte)0;
+                }
+
+                Position += read;
+                return read;
+            }
+
+            public override long Seek(long offset, SeekOrigin origin)
+            {
+                Position = origin switch
+                {
+                    SeekOrigin.Begin => offset,
+                    SeekOrigin.Current => Position + offset,
+                    SeekOrigin.End => length + offset,
+                    _ => throw new ArgumentOutOfRangeException(nameof(origin)),
+                };
+
+                return Position;
+            }
+
+            public override void Flush() { }
+
+            public override void SetLength(long value) => throw new NotSupportedException();
+
+            public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
         }
     }
 }

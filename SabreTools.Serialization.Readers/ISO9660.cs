@@ -653,8 +653,10 @@ namespace SabreTools.Serialization.Readers
             }
 
             var groups = new List<PathTableGroup>();
-            short blockLength = vd.GetLogicalBlockSize(sectorLength);
             bool highSierra = vd is HighSierraVolumeDescriptor;
+
+            // Path tables can start more than 2 GiB into the volume, so their offsets are calculated as long
+            long blockLength = vd.GetLogicalBlockSize(sectorLength);
 
             var groupL = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
