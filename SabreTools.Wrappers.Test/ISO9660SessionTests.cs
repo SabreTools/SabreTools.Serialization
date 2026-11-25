@@ -57,6 +57,34 @@ namespace SabreTools.Wrappers.Test
         }
 
         [Fact]
+        public void StreamPosition_ExtentsFromVolumeStart()
+        {
+            // The disc follows 25 sectors of other data, so the volume of its first session starts there
+            byte[] image = BuildTwoSessionImage();
+            var data = new MemoryStream();
+            data.Write(new byte[25 * Constants.MinimumSectorSize], 0, 25 * Constants.MinimumSectorSize);
+            data.Write(image, 0, image.Length);
+            data.Position = 25 * Constants.MinimumSectorSize;
+
+            var wrapper = ISO9660.Create(data);
+            Assert.NotNull(wrapper);
+
+            string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            try
+            {
+                Directory.CreateDirectory(output);
+                Assert.True(wrapper.Extract(output, false));
+                Assert.Equal(Sector(0xA1), File.ReadAllBytes(Path.Combine(output, "FILE.BIN")));
+                Assert.False(File.Exists(Path.Combine(output, "NEW.BIN")));
+            }
+            finally
+            {
+                if (Directory.Exists(output))
+                    Directory.Delete(output, true);
+            }
+        }
+
+        [Fact]
         public void NegativeStart_Null()
         {
             var actual = ISO9660.Create(new MemoryStream(BuildTwoSessionImage()), -1);
