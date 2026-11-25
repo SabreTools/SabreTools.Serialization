@@ -30,6 +30,16 @@ namespace SabreTools.Data.Models.UDF
         public Descriptor[] VolumeDescriptorSequence { get; set; } = [];
 
         /// <summary>
+        /// Sparing Table of each Sparable Partition (the first valid copy), by partition reference number
+        /// </summary>
+        public Dictionary<ushort, SparingTable> SparingTables { get; set; } = [];
+
+        /// <summary>
+        /// Virtual Allocation Table of the Virtual Partition
+        /// </summary>
+        public VirtualAllocationTable? VirtualAllocationTable { get; set; }
+
+        /// <summary>
         /// File Set Descriptor
         /// </summary>
         public FileSetDescriptor? FileSetDescriptor { get; set; }
