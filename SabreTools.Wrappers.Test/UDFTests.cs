@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using System.Text;
 using SabreTools.Serialization.Readers.Test;
 using Xunit;
 
@@ -102,11 +103,13 @@ namespace SabreTools.Wrappers.Test
             }
         }
 
-        [Fact]
-        public void RecordedPastEnd_OtherFilesExtracted()
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void RecordedPastEnd_OtherFilesExtracted(bool pastPartition)
         {
-            // "Media" is recorded in a partition block past the end of the image
-            var wrapper = UDF.Create(new MemoryStream(UDFImageBuilder.Build(mediaPastEnd: true)));
+            // "Media" is recorded in a partition block past the end of the image, or in a block past the end of the partition
+            var wrapper = UDF.Create(new MemoryStream(UDFImageBuilder.Build(mediaPastEnd: !pastPartition, mediaPastPartition: pastPartition)));
             Assert.NotNull(wrapper);
 
             string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -141,6 +144,103 @@ namespace SabreTools.Wrappers.Test
                 Assert.True(wrapper.Extract(output, false));
                 Assert.Equal(UDFImageBuilder.DataBinLength, new FileInfo(Path.Combine(output, "Inner", "data.bin")).Length);
                 Assert.False(Directory.Exists(Path.Combine(output, "Outer")));
+            }
+            finally
+            {
+                if (Directory.Exists(output))
+                    Directory.Delete(output, true);
+            }
+        }
+
+        [Theory]
+        [InlineData(UDFLayout.Sparable)]
+        [InlineData(UDFLayout.Virtual)]
+        [InlineData(UDFLayout.Virtual150)]
+        public void PartitionLayout_Extract(UDFLayout layout)
+        {
+            var wrapper = UDF.Create(new MemoryStream(UDFImageBuilder.Build(layout: layout)));
+            Assert.NotNull(wrapper);
+
+            byte[] data = UDFImageBuilder.Contents(UDFImageBuilder.DataBinLength, UDFImageBuilder.DataBinByte);
+            byte[] big = UDFImageBuilder.Contents(UDFImageBuilder.BigBinLength, UDFImageBuilder.BigBinByte);
+
+            string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            try
+            {
+                Directory.CreateDirectory(output);
+                Assert.True(wrapper.Extract(output, false));
+                Assert.Equal("hello world", File.ReadAllText(Path.Combine(output, "README.TXT")));
+                Assert.Equal(data, File.ReadAllBytes(Path.Combine(output, "Sub", "data.bin")));
+                Assert.Equal(big, File.ReadAllBytes(Path.Combine(output, "Sub", "big.bin")));
+            }
+            finally
+            {
+                if (Directory.Exists(output))
+                    Directory.Delete(output, true);
+            }
+        }
+
+        [Theory]
+        [InlineData(UDFLayout.Type1)]
+        [InlineData(UDFLayout.Sparable)]
+        [InlineData(UDFLayout.Virtual)]
+        [InlineData(UDFLayout.Virtual150)]
+        public void PartitionLayout_PrintInformation(UDFLayout layout)
+        {
+            var wrapper = UDF.Create(new MemoryStream(UDFImageBuilder.Build(layout: layout)));
+            Assert.NotNull(wrapper);
+
+            var builder = new StringBuilder();
+            wrapper.PrintInformation(builder, false);
+            string text = builder.ToString();
+
+            Assert.Equal(layout == UDFLayout.Sparable, text.Contains("Sparing Table (Partition Reference Number 0):"));
+            Assert.Equal(layout == UDFLayout.Virtual || layout == UDFLayout.Virtual150, text.Contains("Virtual Allocation Table:"));
+        }
+
+        [Fact]
+        public void Session_FirstSession_Extract()
+        {
+            byte[] image = UDFImageBuilder.BuildSessions(UDFImageBuilder.Build(subName: "First"), UDFImageBuilder.Build(subName: "Second"), 400);
+            var wrapper = UDF.Create(new MemoryStream(image), 0);
+            Assert.NotNull(wrapper);
+
+            string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            try
+            {
+                Directory.CreateDirectory(output);
+                Assert.True(wrapper.Extract(output, false));
+                Assert.Equal(UDFImageBuilder.DataBinLength, new FileInfo(Path.Combine(output, "First", "data.bin")).Length);
+                Assert.False(Directory.Exists(Path.Combine(output, "Second")));
+            }
+            finally
+            {
+                if (Directory.Exists(output))
+                    Directory.Delete(output, true);
+            }
+        }
+
+        [Theory]
+        [InlineData(UDFLayout.Type1)]
+        [InlineData(UDFLayout.Virtual)]
+        [InlineData(UDFLayout.Virtual150)]
+        public void Session_LaterSession_PartitionFromDiscStart(UDFLayout layout)
+        {
+            // The partition of the second session starts at sector 660 of the stream, not 260 sectors after the session
+            byte[] image = UDFImageBuilder.BuildSessions(UDFImageBuilder.Build(subName: "First"), UDFImageBuilder.Build(subName: "Second", layout: layout), 400);
+            var wrapper = UDF.Create(new MemoryStream(image), 400);
+            Assert.NotNull(wrapper);
+
+            byte[] data = UDFImageBuilder.Contents(UDFImageBuilder.DataBinLength, UDFImageBuilder.DataBinByte);
+
+            string output = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            try
+            {
+                Directory.CreateDirectory(output);
+                Assert.True(wrapper.Extract(output, false));
+                Assert.Equal("hello world", File.ReadAllText(Path.Combine(output, "README.TXT")));
+                Assert.Equal(data, File.ReadAllBytes(Path.Combine(output, "Second", "data.bin")));
+                Assert.False(Directory.Exists(Path.Combine(output, "First")));
             }
             finally
             {

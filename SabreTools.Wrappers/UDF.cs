@@ -107,6 +107,26 @@ namespace SabreTools.Wrappers
             }
         }
 
+        /// <summary>
+        /// Create a UDF Volume from one session of a multisession disc
+        /// </summary>
+        /// <param name="data">Stream holding the whole disc, one 2048-byte sector per sector address, sector 0 first</param>
+        /// <param name="sessionStart">Sector address of the first track of the session</param>
+        /// <returns>A UDF Volume wrapper on success, null on failure</returns>
+        /// <remarks>
+        /// The Volume Recognition Sequence and the first anchor of a session follow its start, but the sector
+        /// addresses recorded in it count from sector 0 of the disc, so the whole stream is read from its start
+        /// </remarks>
+        public static UDF? Create(Stream? data, long sessionStart)
+        {
+            var model = new Serialization.Readers.UDF().Deserialize(data, sessionStart, includeDirectories: true);
+            if (model is null)
+                return null;
+
+            // Sector addresses count from sector 0 of the disc, not from the session
+            return new UDF(model, data!, 0);
+        }
+
         #endregion
     }
 }

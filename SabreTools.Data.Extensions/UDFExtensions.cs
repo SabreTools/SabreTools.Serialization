@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using SabreTools.Data.Models.UDF;
@@ -112,19 +113,58 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
+        /// Get the partition reference number of the Type 1 or Sparable Partition Map for a partition number,
+        /// the partition that Virtual and Metadata Partitions are recorded in
+        /// </summary>
+        /// <param name="lvd">Logical Volume Descriptor holding the partition maps</param>
+        /// <param name="partitionNumber">Partition number</param>
+        /// <returns>Partition reference number on success, -1 if there is no such map</returns>
+        public static int GetPhysicalPartitionReference(this LogicalVolumeDescriptor lvd, ushort partitionNumber)
+        {
+            for (int i = 0; i < lvd.PartitionMaps.Length; i++)
+            {
+                var map = lvd.PartitionMaps[i];
+                if ((map is Type1PartitionMap type1 && type1.PartitionNumber == partitionNumber)
+                    || (map is SparablePartitionMap sparable && sparable.PartitionNumber == partitionNumber))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
         /// Map a logical block of a partition to a logical sector of the volume
-        /// Supports Type 1 partitions and Metadata Partitions (the Metadata File's File Entry must be in FileEntries)
         /// </summary>
         /// <param name="volume">Volume containing the Volume Descriptor Sequence</param>
         /// <param name="key">Logical block address key, see GetKey</param>
         /// <param name="sector">Logical sector on success</param>
         /// <returns>True if the block could be mapped, false otherwise</returns>
+        /// <see cref="TryGetSectorRun"/>
         public static bool TryGetSector(this Volume volume, long key, out long sector)
+            => volume.TryGetSectorRun(key, 1, out sector, out _);
+
+        /// <summary>
+        /// Map logical blocks of a partition to logical sectors of the volume, as many as are recorded in consecutive sectors
+        /// </summary>
+        /// <remarks>
+        /// Supports Type 1, Sparable, Virtual and Metadata Partitions (the Sparing Table, the Virtual Allocation Table
+        /// and the Metadata File's File Entry must be in the volume)
+        /// </remarks>
+        /// <param name="volume">Volume containing the Volume Descriptor Sequence</param>
+        /// <param name="key">Logical block address key of the first block, see GetKey</param>
+        /// <param name="blocks">Number of blocks wanted, at least 1</param>
+        /// <param name="sector">Logical sector of the first block on success</param>
+        /// <param name="run">Number of blocks recorded in consecutive sectors from the first one on success, 1 to blocks</param>
+        /// <returns>True if the first block could be mapped, false otherwise</returns>
+        public static bool TryGetSectorRun(this Volume volume, long key, uint blocks, out long sector, out uint run)
         {
             sector = -1;
+            run = 0;
 
             var lvd = volume.GetLogicalVolumeDescriptor();
-            if (lvd is null)
+            if (lvd is null || blocks == 0)
                 return false;
 
             int partitionReference = (int)(key >> 32);
@@ -135,39 +175,148 @@ namespace SabreTools.Data.Extensions
             var map = lvd.PartitionMaps[partitionReference];
             if (map is Type1PartitionMap type1)
             {
-                var pd = volume.GetPartitionDescriptor(type1.PartitionNumber);
-                if (pd is null || block >= pd.PartitionLength)
+                return TryGetPhysicalRun(volume, type1.PartitionNumber, block, blocks, out sector, out run);
+            }
+            else if (map is SparablePartitionMap sparable)
+            {
+                if (!TryGetPhysicalRun(volume, sparable.PartitionNumber, block, blocks, out sector, out run))
                     return false;
 
-                sector = (long)pd.PartitionStartingLocation + block;
+                if (volume.SparingTables.TryGetValue((ushort)partitionReference, out var table))
+                    ApplySparingTable(table, sparable.PacketLength, block, ref sector, ref run);
+
                 return true;
+            }
+            else if (map is VirtualPartitionMap virtualMap)
+            {
+                // The Virtual Allocation Table maps each block to a block of the partition it is recorded in
+                var vat = volume.VirtualAllocationTable;
+                int physical = lvd.GetPhysicalPartitionReference(virtualMap.PartitionNumber);
+                if (vat is null || physical < 0 || block >= vat.Entries.Length)
+                    return false;
+
+                // Unused blocks (0xFFFFFFFF) map past the end of the partition
+                uint first = vat.Entries[block];
+                uint count = 1;
+                while (count < blocks && (long)block + count < vat.Entries.Length && vat.Entries[block + count] == first + count)
+                {
+                    count++;
+                }
+
+                return volume.TryGetSectorRun(GetKey((ushort)physical, first), count, out sector, out run);
             }
             else if (map is MetadataPartitionMap metadata)
             {
-                // The Metadata File (or its mirror) is recorded in the Type 1 partition of the same partition number
-                int physical = lvd.GetType1PartitionReference(metadata.PartitionNumber);
+                // The Metadata File (or its mirror) is recorded in the Type 1 or Sparable partition of the same partition number
+                int physical = lvd.GetPhysicalPartitionReference(metadata.PartitionNumber);
                 if (physical < 0)
                     return false;
 
-                if (!TryGetMetadataFileBlock(volume, lvd, GetKey((ushort)physical, metadata.MetadataFileLocation), block, out long physicalKey)
-                    && !TryGetMetadataFileBlock(volume, lvd, GetKey((ushort)physical, metadata.MetadataMirrorFileLocation), block, out physicalKey))
+                if (!TryGetMetadataFileBlock(volume, lvd, GetKey((ushort)physical, metadata.MetadataFileLocation), block, out long physicalKey, out uint extentBlocks)
+                    && !TryGetMetadataFileBlock(volume, lvd, GetKey((ushort)physical, metadata.MetadataMirrorFileLocation), block, out physicalKey, out extentBlocks))
                 {
                     return false;
                 }
 
-                return volume.TryGetSector(physicalKey, out sector);
+                return volume.TryGetSectorRun(physicalKey, Math.Min(blocks, extentBlocks), out sector, out run);
             }
 
-            // Virtual and Sparable partitions are not supported
+            // Unknown partition types are not supported
             return false;
+        }
+
+        /// <summary>
+        /// Map a recorded extent of a partition to extents of logical sectors of the volume
+        /// </summary>
+        /// <param name="volume">Volume containing the Volume Descriptor Sequence</param>
+        /// <param name="location">Logical block address of the extent</param>
+        /// <param name="length">Number of bytes of the extent to map</param>
+        /// <returns>
+        /// Extents of logical sectors in the order of the extent, one for each run of blocks recorded in consecutive sectors;
+        /// null if a block could not be mapped
+        /// </returns>
+        public static List<ExtentDescriptor>? GetSectorExtents(this Volume volume, LogicalBlockAddress location, uint length)
+        {
+            List<ExtentDescriptor> extents = [];
+            uint block = location.LogicalBlockNumber;
+            long done = 0;
+            while (done < length)
+            {
+                uint blocks = (uint)((length - done + Constants.SectorSize - 1) / Constants.SectorSize);
+                if (!volume.TryGetSectorRun(GetKey(location.PartitionReferenceNumber, block), blocks, out long sector, out uint run))
+                    return null;
+
+                // Logical sector numbers are recorded in 32 bits
+                if (sector > uint.MaxValue)
+                    return null;
+
+                long runLength = Math.Min(length - done, (long)run * Constants.SectorSize);
+                extents.Add(new ExtentDescriptor { ExtentLength = (uint)runLength, ExtentLocation = (uint)sector });
+                done += runLength;
+                block += run;
+            }
+
+            return extents;
+        }
+
+        /// <summary>
+        /// Map logical blocks of a partition recorded from its starting location
+        /// </summary>
+        private static bool TryGetPhysicalRun(Volume volume, ushort partitionNumber, uint block, uint blocks, out long sector, out uint run)
+        {
+            sector = -1;
+            run = 0;
+
+            var pd = volume.GetPartitionDescriptor(partitionNumber);
+            if (pd is null || block >= pd.PartitionLength)
+                return false;
+
+            sector = (long)pd.PartitionStartingLocation + block;
+            run = blocks;
+            return true;
+        }
+
+        /// <summary>
+        /// Apply the relocations of a Sparing Table to a run of a Sparable Partition: a relocated packet is a run of its own,
+        /// other runs end before the next relocated packet
+        /// </summary>
+        /// <remarks>
+        /// Entries are looked up like Linux does (udf_get_pblock_spar15): in order, until one past the packet;
+        /// available and defective entries (0xFFFFFFF0 and up) are past every packet
+        /// </remarks>
+        private static void ApplySparingTable(SparingTable table, ushort packetLength, uint block, ref long sector, ref uint run)
+        {
+            if (packetLength == 0)
+                return;
+
+            long packet = block - (block % packetLength);
+            foreach (var entry in table.MapEntries)
+            {
+                if (entry.OriginalLocation == packet)
+                {
+                    sector = entry.MappedLocation + (block - packet);
+                    run = (uint)Math.Min(run, packet + packetLength - block);
+                    return;
+                }
+
+                if (entry.OriginalLocation > packet)
+                {
+                    // Packets are relocated as a whole, the next one that can be relocated starts at or after this entry
+                    long next = ((long)entry.OriginalLocation + packetLength - 1) / packetLength * packetLength;
+                    run = (uint)Math.Min(run, next - block);
+                    return;
+                }
+            }
         }
 
         /// <summary>
         /// Map a logical block of a Metadata Partition through the Metadata File's allocation descriptors
         /// </summary>
-        private static bool TryGetMetadataFileBlock(Volume volume, LogicalVolumeDescriptor lvd, long fileKey, uint block, out long physicalKey)
+        /// <param name="extentBlocks">Number of blocks from the block to the end of its extent on success</param>
+        private static bool TryGetMetadataFileBlock(Volume volume, LogicalVolumeDescriptor lvd, long fileKey, uint block, out long physicalKey, out uint extentBlocks)
         {
             physicalKey = -1;
+            extentBlocks = 0;
             if (!volume.FileEntries.TryGetValue(fileKey, out var fileEntry))
                 return false;
 
@@ -186,6 +335,7 @@ namespace SabreTools.Data.Extensions
                         return false;
 
                     physicalKey = GetKey(ad.ExtentLocation.PartitionReferenceNumber, (uint)(ad.ExtentLocation.LogicalBlockNumber + (block - first)));
+                    extentBlocks = (uint)(first + blocks - block);
                     return true;
                 }
 
