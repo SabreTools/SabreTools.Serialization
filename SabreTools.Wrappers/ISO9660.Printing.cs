@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
+using SabreTools.Data.Models.ISO9660.SystemUseEntries;
 using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
 using SabreTools.Text.Extensions;
@@ -703,6 +704,138 @@ namespace SabreTools.Wrappers
                 builder.AppendLine($"Zeroed ({dr.SystemUse.Length} bytes)", "      System Use");
             else
                 builder.AppendLine($"Not Zeroed ({dr.SystemUse.Length} bytes)", "      System Use");
+
+            Print(builder, dr.SystemUseEntries);
+        }
+
+        private static void Print(StringBuilder builder, BaseEntry[] entries)
+        {
+            builder.AppendLine("      System Use Entries:");
+            if (entries.Length == 0)
+            {
+                builder.AppendLine("        No System Use entries");
+                return;
+            }
+
+            for (int entryNum = 0; entryNum < entries.Length; entryNum++)
+            {
+                var entry = entries[entryNum];
+                builder.AppendLine($"        System Use Entry {entryNum}: {Encoding.ASCII.GetString(entry.Signature)}");
+                builder.AppendLine(entry.Signature, "          Signature");
+                builder.AppendLine(entry.Length, "          Length");
+                builder.AppendLine(entry.Version, "          Version");
+                Print(builder, entry);
+            }
+        }
+
+        private static void Print(StringBuilder builder, BaseEntry entry)
+        {
+            switch (entry)
+            {
+                case ContinuationArea ce:
+                    builder.AppendLineBothEndian(ce.BlockLocation, "          Block Location");
+                    builder.AppendLineBothEndian(ce.Offset, "          Offset");
+                    builder.AppendLineBothEndian(ce.AreaLength, "          Area Length");
+                    break;
+
+                case PaddingField pd:
+                    builder.AppendLine(pd.Padding, "          Padding");
+                    break;
+
+                case SharingProtocolIndicator sp:
+                    builder.AppendLine(sp.CheckBytes, "          Check Bytes");
+                    builder.AppendLine(sp.BytesSkipped, "          Bytes Skipped");
+                    break;
+
+                case ExtensionsReference er:
+                    builder.AppendLine(er.IdentifierLength, "          Identifier Length");
+                    builder.AppendLine(er.DescriptorLength, "          Descriptor Length");
+                    builder.AppendLine(er.SourceLength, "          Source Length");
+                    builder.AppendLine(er.ExtensionVersion, "          Extension Version");
+                    builder.AppendLine(Encoding.ASCII.GetString(er.Identifier), "          Identifier");
+                    builder.AppendLine(Encoding.ASCII.GetString(er.Descriptor), "          Descriptor");
+                    builder.AppendLine(Encoding.ASCII.GetString(er.Source), "          Source");
+                    break;
+
+                case ExtensionSelector es:
+                    builder.AppendLine(es.ExtensionSequence, "          Extension Sequence");
+                    break;
+
+                case PosixFileAttributes px:
+                    builder.AppendLineBothEndian(px.FileMode, "          File Mode");
+                    builder.AppendLineBothEndian(px.Links, "          Links");
+                    builder.AppendLineBothEndian(px.UserId, "          User ID");
+                    builder.AppendLineBothEndian(px.GroupId, "          Group ID");
+                    if (px.SerialNumber is not null)
+                        builder.AppendLineBothEndian(px.SerialNumber, "          Serial Number");
+
+                    break;
+
+                case PosixDeviceNumber pn:
+                    builder.AppendLineBothEndian(pn.DeviceNumberHigh, "          Device Number High");
+                    builder.AppendLineBothEndian(pn.DeviceNumberLow, "          Device Number Low");
+                    break;
+
+                case SymbolicLink sl:
+                    builder.AppendLine($"{sl.Flags} (0x{(byte)sl.Flags:X2})", "          Flags");
+                    for (int componentNum = 0; componentNum < sl.Components.Length; componentNum++)
+                    {
+                        var component = sl.Components[componentNum];
+                        builder.AppendLine($"          Component {componentNum}:");
+                        builder.AppendLine($"{component.Flags} (0x{(byte)component.Flags:X2})", "            Flags");
+                        builder.AppendLine(component.ComponentLength, "            Component Length");
+                        builder.AppendLine(component.Content, "            Content");
+                        builder.AppendLine(Encoding.UTF8.GetString(component.Content), "            Content (Decoded)");
+                    }
+
+                    break;
+
+                case AlternateName nm:
+                    builder.AppendLine($"{nm.Flags} (0x{(byte)nm.Flags:X2})", "          Flags");
+                    builder.AppendLine(nm.NameContent, "          Name Content");
+                    builder.AppendLine(Encoding.UTF8.GetString(nm.NameContent), "          Name Content (Decoded)");
+                    break;
+
+                case ChildLink cl:
+                    builder.AppendLineBothEndian(cl.ChildDirectoryLocation, "          Child Directory Location");
+                    break;
+
+                case ParentLink pl:
+                    builder.AppendLineBothEndian(pl.ParentDirectoryLocation, "          Parent Directory Location");
+                    break;
+
+                case TimeStamps tf:
+                    builder.AppendLine($"{tf.Flags} (0x{(byte)tf.Flags:X2})", "          Flags");
+                    foreach (var timeStamp in tf.ShortFormTimeStamps)
+                    {
+                        builder.AppendLine(Format(timeStamp), "          Time Stamp");
+                    }
+
+                    foreach (var timeStamp in tf.LongFormTimeStamps)
+                    {
+                        builder.AppendLine(Format(timeStamp), "          Time Stamp");
+                    }
+
+                    break;
+
+                case SparseFile sf:
+                    builder.AppendLineBothEndian(sf.VirtualFileSizeHigh, "          Virtual File Size High");
+                    builder.AppendLineBothEndian(sf.VirtualFileSizeLow, "          Virtual File Size Low");
+                    builder.AppendLine(sf.TableDepth, "          Table Depth");
+                    break;
+
+                case ExtensionsInUse rr:
+                    builder.AppendLine($"{rr.Flags} (0x{(byte)rr.Flags:X2})", "          Flags");
+                    break;
+
+                case UnknownEntry unknown:
+                    builder.AppendLine(unknown.Data, "          Data");
+                    break;
+
+                default:
+                    // Other entries have no fields after the version
+                    break;
+            }
         }
 
         private static void Print(StringBuilder builder, DirectoryRecordDateTime drdt)
@@ -715,8 +848,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine(drdt.Hour, "        Hour");
             builder.AppendLine(drdt.Minute, "        Minute");
             builder.AppendLine(drdt.Second, "        Second");
-            string tz = $"{(drdt.TimezoneOffset - 48) * 15 / 60:+0;-0}:{(((drdt.TimezoneOffset - 48) * 15 % 60) + 60) % 60:00} (0x{drdt.TimezoneOffset:X2})";
-            builder.AppendLine(tz, "        Timezone Offset");
+            builder.AppendLine(FormatTimezoneOffset(drdt.TimezoneOffset), "        Timezone Offset");
         }
 
         private static void Print(StringBuilder builder, ExtendedAttributeRecord? ear, Encoding encoding)
@@ -787,9 +919,13 @@ namespace SabreTools.Wrappers
                 ? Encoding.ASCII.GetString(dt.Centisecond)
                 : BitConverter.ToString(dt.Centisecond).Replace('-', ' ');
 
-            string tz = $"{(dt.TimezoneOffset - 48) * 15 / 60:+0;-0}:{(((dt.TimezoneOffset - 48) * 15 % 60) + 60) % 60:00} (0x{dt.TimezoneOffset:X2})";
-
-            return $"{year}-{month}-{day} {hour}:{minute}:{second}.{csecond} [{tz}]";
+            return $"{year}-{month}-{day} {hour}:{minute}:{second}.{csecond} [{FormatTimezoneOffset(dt.TimezoneOffset)}]";
         }
+
+        private static string Format(DirectoryRecordDateTime drdt)
+            => $"{1900 + drdt.YearsSince1990:0000}-{drdt.Month:00}-{drdt.Day:00} {drdt.Hour:00}:{drdt.Minute:00}:{drdt.Second:00} [{FormatTimezoneOffset(drdt.TimezoneOffset)}]";
+
+        private static string FormatTimezoneOffset(byte timezoneOffset)
+            => $"{(timezoneOffset - 48) * 15 / 60:+0;-0}:{(((timezoneOffset - 48) * 15 % 60) + 60) % 60:00} (0x{timezoneOffset:X2})";
     }
 }

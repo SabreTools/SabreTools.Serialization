@@ -1,3 +1,4 @@
+using SabreTools.Data.Models.ISO9660.SystemUseEntries;
 using SabreTools.Numerics;
 
 namespace SabreTools.Data.Models.ISO9660
@@ -94,5 +95,11 @@ namespace SabreTools.Data.Models.ISO9660
         /// Optional field
         /// </summary>
         public byte[] SystemUse { get; set; } = [];
+
+        /// <summary>
+        /// System Use Entries of the System Use field, followed by those of its Continuation Areas, in recorded order
+        /// Reading stops at an entry that does not fit, the System Use field keeps all bytes
+        /// </summary>
+        public BaseEntry[] SystemUseEntries { get; set; } = [];
     }
 }
